@@ -1,0 +1,60 @@
+# LT Consultant competency framework — source of truth for coverage tracking.
+# Mirrors the Notion "LT Consultant Competencies" database (42 competencies, 6 categories).
+# Source: https://lingtransoft.info/competencies (consulted 2026-06-17)
+#
+# Module frontmatter `competencies:` values MUST match these names EXACTLY,
+# or gen_coverage.py will warn and the module won't count toward coverage.
+
+Core Technical:
+  - Computer Hardware
+  - OS Basics
+  - Fonts & Encoding
+  - Keyboards
+  - Malware
+
+Technology Domain:
+  - Translation Tools
+  - Lexical Tools
+  - Grammar Tools
+  - Phonetic Tools
+  - Phonology Tools
+  - Literacy Tools
+  - Recording Tools
+  - Language Documentation
+  - Digital and Print Publishing
+  - Archiving and Copyright Tools
+  - Lexical Import
+  - Data Conversion
+  - Software Development
+  - Typesetting
+  - Keyboard Development
+  - Digital Vitality
+  - Computational and Corpus Linguistics
+
+Core:
+  - Program Design and Engagement
+  - Consulting Process Skills
+  - Working in a Multicultural Environment
+  - Mentoring
+  - Professional Networking
+  - Adult Education
+  - Technology for Consulting
+  - Language Use
+  - Scholarship and Documentation
+  - Interpersonal Skills
+
+Professional:
+  - English Language
+  - Problem Solving
+  - Responsive Feedback
+  - Community of Practice Involvement
+
+Education:
+  - Translation
+  - Literacy or MLE
+  - Scripture Engagement
+  - General
+  - Linguistics
+
+Meta:
+  - Uncategorized

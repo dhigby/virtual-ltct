@@ -1,0 +1,45 @@
+# Contributing — no command line required
+
+You can build training modules here entirely in your web browser or with GitHub Desktop.
+Pick whichever feels easier.
+
+## Option A — Edit in the browser (simplest)
+
+1. Open the module you want to work on, e.g. `modules/bloom/README.md`, on github.com.
+2. Click the **pencil (✏️) "Edit this file"** button.
+3. Write your content in markdown below the `---` frontmatter block. (Leave the
+   frontmatter at the top alone unless you're changing competencies — see below.)
+4. Scroll down, add a short note in **"Commit changes"**, and choose
+   **"Create a new branch and start a pull request"** (recommended) or commit directly.
+5. A maintainer reviews and merges. The coverage report updates automatically.
+
+## Option B — GitHub Desktop (good for bigger edits / many files)
+
+1. Install **GitHub Desktop** and sign in.
+2. **File → Clone repository →** `dhigby/virtual-ltct`.
+3. Edit files in any text editor (VS Code, Notepad, Obsidian — the files are plain markdown).
+4. In GitHub Desktop: write a summary, click **Commit to main** (or create a branch),
+   then **Push origin**.
+
+## Adding a brand-new module
+
+Open an issue using the **"Add a training module"** template (Issues → New issue). A
+maintainer will create the module folder and add it to the board.
+
+## Editing the frontmatter (the part between the `---` lines)
+
+Most of the time you only edit the content below the frontmatter. If you change which
+competencies a module teaches, edit the `competencies:` list — and each name **must match
+exactly** one in [`competencies.yaml`](competencies.yaml), or it won't count toward
+coverage. Don't edit `status`/`priority` here — those live on the Project board.
+
+## What not to commit
+
+- Large video files. Link to Vimeo or Google Drive instead (put the URL under
+  `external_links:` in the frontmatter). Small images are fine under the module's
+  `assets/` folder.
+- `COVERAGE.md` — it's generated automatically; don't hand-edit it.
+
+## Questions
+
+Open an issue, or ask in the team channel.

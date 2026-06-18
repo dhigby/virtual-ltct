@@ -1,0 +1,17 @@
+# Python
+__pycache__/
+*.pyc
+.venv/
+.env
+
+# OS
+Thumbs.db
+.DS_Store
+
+# Export working files (regenerable from Notion; not the source of truth)
+scripts/_export_manifest.json
+scripts/_media_report.csv
+
+# Notion archive exports (kept outside the repo)
+.notion-vault/
+*.tmp

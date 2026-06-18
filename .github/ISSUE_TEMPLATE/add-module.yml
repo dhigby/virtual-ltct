@@ -1,0 +1,39 @@
+name: Add a training module
+description: Propose or track a new LTC training module
+title: "[Module] <course title>"
+labels: []
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Use this to add a module to the tracker. After the issue is created, a maintainer
+        adds it to the **LTC Training Modules** project board and sets its fields
+        (Module Status, Priority, Consultant Tier, Target Outcome Level). Add a
+        `competency: …` label for each competency the module develops.
+  - type: input
+    id: title
+    attributes:
+      label: Course title
+      placeholder: e.g. Introduction to Paratext
+    validations:
+      required: true
+  - type: textarea
+    id: summary
+    attributes:
+      label: What will this module teach?
+      placeholder: One or two sentences.
+    validations:
+      required: true
+  - type: input
+    id: competencies
+    attributes:
+      label: Competencies developed
+      description: List names exactly as in competencies.yaml (comma-separated).
+      placeholder: e.g. Translation Tools, Adult Education
+    validations:
+      required: true
+  - type: input
+    id: folder
+    attributes:
+      label: Module folder (if content already drafted)
+      placeholder: modules/<slug>/README.md

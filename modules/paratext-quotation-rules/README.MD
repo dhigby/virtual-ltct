@@ -870,3 +870,4 @@ After seeding, run the Quotation check and confirm all five items appear in the 
 - **Scenario C (Waku):** The em-dash scenario is the hardest. It is appropriate as a stretch exercise or for learners who have completed Modules 1–4 confidently and want a challenge.
 
 Add quotation rules course content
+Update Menda configuration — add Third level

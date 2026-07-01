@@ -1,0 +1,39 @@
+name: Publish site
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'competencies/**'
+      - 'competencies.yaml'
+      - 'COVERAGE.md'
+      - 'mkdocs.yml'
+      - 'scripts/gen_site.py'
+      - 'docs/**'
+      - 'docs-requirements.txt'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Cache MkDocs build deps
+        uses: actions/cache@v4
+        with:
+          key: mkdocs-material-${{ github.sha }}
+          restore-keys: mkdocs-material-
+          path: ~/.cache
+      - run: pip install -r docs-requirements.txt
+      - name: Build and deploy to gh-pages
+        run: mkdocs gh-deploy --force

@@ -1,0 +1,47 @@
+site_name: LT Consultant Competencies
+site_description: >-
+  The Language Technology Consultant competency framework — rationale, target
+  outcomes, and progression for each competency.
+site_url: https://dhigby.github.io/virtual-ltct/
+repo_url: https://github.com/dhigby/virtual-ltct
+repo_name: dhigby/virtual-ltct
+edit_uri: edit/main/
+docs_dir: docs
+
+theme:
+  name: material
+  features:
+    - navigation.sections
+    - navigation.top
+    - toc.follow
+    - search.suggest
+    - search.highlight
+    - content.action.edit
+  palette:
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: teal
+      toggle:
+        icon: material/weather-night
+        name: Switch to dark mode
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: teal
+      toggle:
+        icon: material/weather-sunny
+        name: Switch to light mode
+
+plugins:
+  - search
+  - gen-files:
+      scripts:
+        - scripts/gen_site.py
+  - literate-nav:
+      nav_file: SUMMARY.md
+
+markdown_extensions:
+  - admonition
+  - attr_list
+  - tables
+  - toc:
+      permalink: true

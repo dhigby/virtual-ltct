@@ -49,6 +49,7 @@ for p in sorted((ROOT / "competencies").glob("*.md")):
 # Per-competency pages + nav, grouped by category in canonical competencies.yaml order.
 nav_lines = ["* [Home](index.md)"]
 counts = {}
+page_by_name = {}  # framework name -> its page path (relative to the docs root)
 for category, names in CATS.items():
     present = [n for n in names if n in by_name]
     counts[category] = len(present)
@@ -59,6 +60,7 @@ for category, names in CATS.items():
     for name in present:
         d = by_name[name]
         page = f"{cat_dir}/{d['slug']}.md"
+        page_by_name[name] = page
         with mkdocs_gen_files.open(page, "w") as f:
             f.write(d["body"])
         # ✏️ edit button jumps to the real source file, not the generated page.
@@ -88,12 +90,29 @@ overview += ["", "See the [Coverage](coverage.md) page for which competencies ha
 with mkdocs_gen_files.open("index.md", "w") as f:
     f.write("\n".join(overview) + "\n")
 
-# Coverage page — reuse the committed COVERAGE.md (single source), minus its edit banner.
+# Coverage page — reuse the committed COVERAGE.md (single source), minus its edit banner,
+# with every competency name linked to its page (both table rows and the gaps list).
+def linkify_coverage(text):
+    out = []
+    for line in text.splitlines():
+        row = re.match(r"\| (.+?) \| (.+)$", line)
+        if row and row.group(1) not in ("Competency", "---"):
+            name = row.group(1)
+            if name in page_by_name:
+                line = f"| [{name}]({page_by_name[name]}) | {row.group(2)}"
+        elif line.startswith("- "):
+            name = line[2:].strip()
+            if name in page_by_name:
+                line = f"- [{name}]({page_by_name[name]})"
+        out.append(line)
+    return "\n".join(out)
+
+
 cov = ROOT / "COVERAGE.md"
 if cov.exists():
     text = re.sub(r"<!--.*?-->\n?", "", cov.read_text(encoding="utf-8"), count=1)
     with mkdocs_gen_files.open("coverage.md", "w") as f:
-        f.write(text)
+        f.write(linkify_coverage(text))
     nav_lines.append("* [Coverage](coverage.md)")
 
 with mkdocs_gen_files.open("SUMMARY.md", "w") as f:

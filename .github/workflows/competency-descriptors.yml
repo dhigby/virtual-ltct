@@ -6,13 +6,13 @@ on:
       - 'competencies/**'
       - 'competencies.yaml'
       - 'scripts/check_competency_descriptors.py'
-      - 'scripts/import_competency_descriptors.py'
+      - 'import-seeds/import_competency_descriptors.py'
   pull_request:
     paths:
       - 'competencies/**'
       - 'competencies.yaml'
       - 'scripts/check_competency_descriptors.py'
-      - 'scripts/import_competency_descriptors.py'
+      - 'import-seeds/import_competency_descriptors.py'
 
 jobs:
   sync-check:

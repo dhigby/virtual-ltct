@@ -58,9 +58,34 @@ python scripts/gen_coverage.py    # rewrites COVERAGE.md; exits 1 on unknown com
 Requires `pyyaml`. Run this after any frontmatter `competencies:` change and commit the
 result together with the content change.
 
+## Competency descriptors (`competencies/`)
+
+`competencies.yaml` is only the canonical *name list*. The richer, teachable detail for
+each competency — rationale, target statement, and either a per-level activity ladder or
+sub-competencies with observable criteria — lives in **generated** descriptor files under
+[`competencies/`](competencies/), one per framework competency.
+
+- **Never hand-edit `competencies/*.md`** (they carry a generated banner). They come from
+  two sources: `Lang Tech Competencies.xlsx` (leveled: Technical/Domain/Professional/
+  Education) and `CBC Guide for Non-technical Competencies…md` (the Core category). To
+  change a descriptor, edit the source (or the generator's mapping) and regenerate.
+- `Meta: Uncategorized` intentionally has no descriptor (no source content); it is exempt
+  in the sync check.
+
+```bash
+python scripts/import_competency_descriptors.py   # wipes + rewrites competencies/*.md
+python scripts/check_competency_descriptors.py    # exits 1 if descriptors ⇄ framework drift
+```
+The check (every framework name has a descriptor and vice versa) also runs in CI on any
+change to `competencies/**`, `competencies.yaml`, or these scripts.
+
 ## Maintainer scripts (`scripts/`)
 
 - `gen_coverage.py` — regenerates `COVERAGE.md` (also run by CI).
+- `import_competency_descriptors.py` — regenerates `competencies/*.md` from the workbook
+  and the CBC guide. Requires `pyyaml` + `openpyxl`.
+- `check_competency_descriptors.py` — validates descriptors stay in sync with the
+  framework (run by CI). Requires `pyyaml`.
 - `export_from_notion.py` — idempotent export from the old Notion DB; won't overwrite
   content authored here.
 - `bootstrap_github.py` — creates labels, issues, and Project fields from the export.

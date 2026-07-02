@@ -26,6 +26,23 @@ Pick whichever feels easier.
 Open an issue using the **"Add a training module"** template (Issues → New issue). A
 maintainer will create the module folder and add it to the board.
 
+## Module content package
+
+Every **content** module (not a stub) should eventually have the same set of files —
+copy [`modules/_template/`](modules/_template/) as a starting point:
+
+| File | Purpose |
+| --- | --- |
+| `README.md` | Frontmatter + learner-facing intro and table of contents. |
+| `01-*.md`, `02-*.md`, … | Numbered lesson content. |
+| `NN-scenario-bank.md` | Applied practice scenarios, foundational → complex. |
+| `NN-mentor-guide.md` | Facilitator notes and answer guidance for the scenario bank. |
+| `NN-quiz.md` | Assessment questions with a pass threshold and answer key in the body. |
+| `NN-video-script.md` | Script for the video-recording step before upload to Cypher. |
+
+Sub-files don't carry their own frontmatter — only `README.md` does. See
+`modules/_template/README.md` for the full explanation and a frontmatter example.
+
 ## Editing the frontmatter (the part between the `---` lines)
 
 Most of the time you only edit the content below the frontmatter. If you change which

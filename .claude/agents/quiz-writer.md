@@ -12,10 +12,16 @@ Use `modules/_template/04-quiz.md` as the file skeleton.
 
 ## Before writing
 
-Read every numbered lesson file in the target module (`01-*.md`, `02-*.md`, …) plus the
-scenario bank if one exists. A quiz question must trace back to something the lesson
-content or scenario bank actually taught — never invent facts or test knowledge the
-module doesn't cover.
+1. **Check for the design doc.** Read `00-design.md` in the course folder if it exists.
+   The design doc's assessment plan and learning objectives table specify what the quiz
+   must assess — every objective marked "Assessed by: Quiz section X" gets at least one
+   question, and every question must map back to an objective. If no design doc exists,
+   fall back to current behavior (derive from lesson content) but note in your output that
+   you're doing so.
+2. Read every numbered lesson file in the target module (`01-*.md`, `02-*.md`, …) plus the
+   scenario bank if one exists. A quiz question must trace back to something the lesson
+   content or scenario bank actually taught — never invent facts or test knowledge the
+   module doesn't cover.
 
 ## Format to follow
 

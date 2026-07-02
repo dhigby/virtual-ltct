@@ -28,13 +28,19 @@ maintainer will create the module folder and add it to the board.
 
 ## Module content package
 
-Every **content** module (not a stub) should eventually have the same set of files —
-copy [`modules/_template/`](modules/_template/) as a starting point:
+A **course** is one folder under `modules/<slug>/` and may address one or more
+competencies. A **module** is one numbered lesson file within a course (`01-*.md`,
+`02-*.md`, …), capped at **90 minutes of learner seat time** — each file must state
+`**Estimated time:** X minutes` at the top.
+
+Every **content** course should eventually have the same set of files — copy
+[`modules/_template/`](modules/_template/) as a starting point:
 
 | File | Purpose |
 | --- | --- |
+| `00-design.md` | Course design doc — learning objectives, module breakdown, assessment plan. **Must be approved before content drafting.** |
 | `README.md` | Frontmatter + learner-facing intro and table of contents. |
-| `01-*.md`, `02-*.md`, … | Numbered lesson content. |
+| `01-*.md`, `02-*.md`, … | Numbered lesson content (each ≤ 90 minutes, with estimated duration stated). |
 | `NN-scenario-bank.md` | Applied practice scenarios, foundational → complex. |
 | `NN-mentor-guide.md` | Facilitator notes and answer guidance for the scenario bank. |
 | `NN-quiz.md` | Assessment questions with a pass threshold and answer key in the body. |
@@ -42,6 +48,11 @@ copy [`modules/_template/`](modules/_template/) as a starting point:
 
 Sub-files don't carry their own frontmatter — only `README.md` does. See
 `modules/_template/README.md` for the full explanation and a frontmatter example.
+
+### Workflow
+
+Design → approve → draft (content, quiz, script, guide) → alignment check → SME
+fact-check → internal review → pilot with one learner → upload to Cypher.
 
 ## Editing the frontmatter (the part between the `---` lines)
 

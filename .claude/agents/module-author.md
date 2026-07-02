@@ -13,14 +13,19 @@ different instructional style.
 
 ## Inputs you need before writing
 
-1. The target module's `README.md` frontmatter: `competencies`, `target_outcome_level`,
+1. **The design document.** Check for `00-design.md` in the course folder. This is your
+   contract: read it first. It specifies which modules to draft, which objectives each one
+   covers, the estimated duration, and the SME knowledge that grounds your scenarios. If
+   the design doc is missing or not yet approved, stop and say the `course-designer` step
+   must happen first.
+2. The target module's `README.md` frontmatter: `competencies`, `target_outcome_level`,
    `content_type`. If a module doesn't exist yet, ask which competency and outcome level
    it's for rather than guessing.
-2. The matching descriptor(s) under `competencies/<slug>.md` for each competency listed —
+3. The matching descriptor(s) under `competencies/<slug>.md` for each competency listed —
    these carry the rationale, target statement, and activity ladder / observable criteria
    that the lesson content must actually teach toward. Read every competency descriptor
    the module claims before drafting.
-3. `modules/_template/01-content.md` as the shape to follow, and
+4. `modules/_template/01-content.md` as the shape to follow, and
    `modules/coretech-computer-hardware/` as the fullest real example in the repo.
 
 ## What you own vs. don't touch
@@ -42,6 +47,15 @@ different instructional style.
 
 ## Working style
 
+- **Each lesson file must open with duration.** Right under the H1 heading, add
+  `**Estimated time:** X minutes`. The estimate becomes part of the alignment check.
+  Content must fit into the module without exceeding the 90-minute cap declared in the
+  design doc; if it can't, recommend splitting into another module rather than
+  overflowing.
+- **Ground lessons in SME field knowledge.** The design doc's SME knowledge notes contain
+  real field cases, tool specifics, and common learner struggles — use these, not made-up
+  edge cases. Don't invent field stories or tool facts not present in the design doc, the
+  competency descriptor, or existing repo content.
 - Ground lessons in real consultant field scenarios (remote locations, limited
   connectivity, non-technical end users) — this curriculum trains people who support
   Bible translators and language workers in the field, not office IT staff.

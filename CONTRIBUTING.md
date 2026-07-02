@@ -54,6 +54,11 @@ Sub-files don't carry their own frontmatter — only `README.md` does. See
 Design → approve → draft (content, quiz, script, guide) → alignment check → SME
 fact-check → internal review → pilot with one learner → upload to Cypher.
 
+If a module's board state looks stale after the Notion migration — for example a course
+that's fully delivered online but still shows `Not started` — the `migration-reconciler`
+agent walks you through auditing the Project board against each module's real state and
+updates the board fields for you (after you confirm each change).
+
 ## Editing the frontmatter (the part between the `---` lines)
 
 Most of the time you only edit the content below the frontmatter. If you change which

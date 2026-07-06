@@ -1,10 +1,13 @@
 # Lesson 1: [Topic]
 
+**Estimated time:** [X] minutes
+
 [Replace this file with `01-<topic>.md`, `02-<topic>.md`, etc. — one file per lesson,
 numbered in the order a learner works through them. Follow the Learning That Lasts
 adult-learner framework (see the `training-content` skill) rather than a lecture-style
 info dump: state the real-world task this lesson prepares the learner for, teach the
-minimum needed to attempt it, then hand off to the scenario bank for practice.]
+minimum needed to attempt it, then hand off to the scenario bank for practice. Keep the
+`**Estimated time:**` header above — it must be ≤ 90 minutes and is checked by CI.]
 
 ## What you'll be able to do after this lesson
 

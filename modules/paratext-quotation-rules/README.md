@@ -1,3 +1,11 @@
+---
+title: Configuring Quotation Rules in Paratext
+slug: paratext-quotation-rules
+target_outcome_level: With Assistance
+competencies:
+  - Translation Tools
+content_type: content
+---
 
 # Configuring Quotation Rules in Paratext
 ### An Interactive Course for Intermediate Users

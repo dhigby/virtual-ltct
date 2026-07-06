@@ -11,9 +11,13 @@ progress is tracked on the GitHub Project board.
 
 | What | Where |
 | --- | --- |
-| **Module content** | [`modules/<slug>/README.md`](modules/) — one folder per module, plain markdown |
+| **Course content** | [`modules/<slug>/`](modules/) — one folder per course, plain markdown |
+| **How we build courses** | [`process/PROCESS.md`](process/PROCESS.md) — the 8-stage production pipeline, roles, and agents |
+| **New to the team?** | [`ONBOARDING.md`](ONBOARDING.md) — setup and your first contribution |
 | **Progress tracking** | The **LTC Training Modules** GitHub Project (board) — status, priority, owner |
-| **Competency coverage / gaps** | [`COVERAGE.md`](COVERAGE.md) — auto-generated; shows which competencies still have no module |
+| **Coverage roadmap** | [`ROADMAP.md`](ROADMAP.md) — which gap competencies we're committing to close |
+| **Legacy content backfill** | [`BACKFILL.md`](BACKFILL.md) — importing Cypher-delivered courses into the repo |
+| **Competency coverage / gaps** | [`COVERAGE.md`](COVERAGE.md) — auto-generated; shows which competencies still have no course |
 | **The framework** | [`competencies.yaml`](competencies.yaml) — the 42 competencies (source of truth) |
 
 ## How tracking maps from the old Notion table
@@ -39,8 +43,10 @@ lives on the **Project board**. This keeps the two from drifting.
 
 ## Contributing
 
-You do **not** need to use Git on the command line. See [CONTRIBUTING.md](CONTRIBUTING.md)
-for editing in the browser or with GitHub Desktop.
+Team members build courses with **Claude Code** — start at [`ONBOARDING.md`](ONBOARDING.md),
+then run `/next-step <course-slug>` to see what to do next. The full method is in
+[`process/PROCESS.md`](process/PROCESS.md); editing mechanics are in
+[CONTRIBUTING.md](CONTRIBUTING.md) (small fixes can still be made in the browser).
 
 ## Maintainer scripts (`scripts/`)
 

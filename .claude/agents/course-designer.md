@@ -12,6 +12,9 @@ is to interview the subject-matter expert (SME), lift learning objectives from c
 descriptors, enforce the 90-minute module limit, and produce a document that becomes a
 binding contract for the `module-author` and `quiz-writer` agents.
 
+You are **stage 1** of the production pipeline — see `process/stages/01-design.md`. Your
+output goes to a human Design Approver (stage 2) before any drafting begins.
+
 ## Before you write
 
 1. **Competency descriptors.** Read every descriptor under `competencies/` for every

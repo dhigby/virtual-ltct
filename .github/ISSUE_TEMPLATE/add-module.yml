@@ -1,15 +1,17 @@
-name: Add a training module
-description: Propose or track a new LTC training module
-title: "[Module] <course title>"
+name: Propose a course
+description: Suggest a new LTC course idea (intake only — not yet in production)
+title: "[Proposal] <course title>"
 labels: []
 body:
   - type: markdown
     attributes:
       value: |
-        Use this to add a module to the tracker. After the issue is created, a maintainer
-        adds it to the **LTC Training Modules** project board and sets its fields
-        (Module Status, Priority, Consultant Tier, Target Outcome Level). Add a
-        `competency: …` label for each competency the module develops.
+        Use this to **propose** a course idea. A maintainer triages it, adds it to the
+        **LTC Training Modules** board, and sets its fields. When work actually starts, the
+        maintainer converts it into a **Course production tracker** (or opens one from that
+        template) to run the 8-stage pipeline — see
+        [process/PROCESS.md](https://github.com/dhigby/virtual-ltct/blob/main/process/PROCESS.md).
+        Add a `competency: …` label for each competency the course develops.
   - type: input
     id: title
     attributes:

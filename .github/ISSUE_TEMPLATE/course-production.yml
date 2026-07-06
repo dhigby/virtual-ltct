@@ -1,0 +1,60 @@
+name: Course production tracker
+description: Track a course through the full 8-stage production pipeline
+title: "[Course] <title>"
+labels: ["course-production"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        One tracker per course. After creating it, a **maintainer** adds it to the
+        **LTC Training Modules** board and sets Module Status to `Design`.
+
+        Run `/next-step <slug>` in Claude Code any time to see exactly where this course is
+        and what to do next. Each checkbox links to that stage's one-page how-to.
+        Full process: [process/PROCESS.md](https://github.com/dhigby/virtual-ltct/blob/main/process/PROCESS.md).
+  - type: input
+    id: title
+    attributes:
+      label: Course title
+      placeholder: e.g. Introduction to Paratext
+    validations:
+      required: true
+  - type: input
+    id: slug
+    attributes:
+      label: Course folder slug
+      description: The folder under modules/ (create it from modules/_template/).
+      placeholder: e.g. introduction-to-paratext
+    validations:
+      required: true
+  - type: input
+    id: competencies
+    attributes:
+      label: Competencies addressed
+      description: List names exactly as in competencies.yaml (comma-separated).
+      placeholder: e.g. Translation Tools, Adult Education
+    validations:
+      required: true
+  - type: input
+    id: approver
+    attributes:
+      label: Design approver
+      description: Who will sign off the design doc (must not be the author).
+      placeholder: e.g. @username
+  - type: checkboxes
+    id: pipeline
+    attributes:
+      label: Production checklist
+      description: Tick each stage as it completes. `/next-step` treats the repo files as truth and flags any box that disagrees.
+      options:
+        - label: "[1. Design doc drafted](https://github.com/dhigby/virtual-ltct/blob/main/process/stages/01-design.md)"
+        - label: "[2. Design approved](https://github.com/dhigby/virtual-ltct/blob/main/process/stages/02-approve.md)"
+        - label: "[3a. Lessons drafted](https://github.com/dhigby/virtual-ltct/blob/main/process/stages/03-draft.md)"
+        - label: "[3b. Scenario bank + mentor guide drafted](https://github.com/dhigby/virtual-ltct/blob/main/process/stages/03-draft.md)"
+        - label: "[3c. Quiz written](https://github.com/dhigby/virtual-ltct/blob/main/process/stages/03-draft.md)"
+        - label: "[3d. Video script drafted](https://github.com/dhigby/virtual-ltct/blob/main/process/stages/03-draft.md)"
+        - label: "[4. Alignment check passed](https://github.com/dhigby/virtual-ltct/blob/main/process/stages/04-alignment.md)"
+        - label: "[5. SME fact-check passed](https://github.com/dhigby/virtual-ltct/blob/main/process/stages/05-sme-factcheck.md)"
+        - label: "[6. Internal review passed](https://github.com/dhigby/virtual-ltct/blob/main/process/stages/06-internal-review.md)"
+        - label: "[7. Piloted with one learner](https://github.com/dhigby/virtual-ltct/blob/main/process/stages/07-pilot.md)"
+        - label: "[8. Recorded & published to Cypher](https://github.com/dhigby/virtual-ltct/blob/main/process/stages/08-publish.md)"

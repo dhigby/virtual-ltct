@@ -31,11 +31,16 @@ Converting a stub to authored content is a *separate* decision that belongs to
 - The migration baseline: `scripts/_export_manifest.json` (the Notion Status/Priority captured
   at 2026-06-18) and `scripts/_issues.json` (the slug → GitHub issue URL map). Use these to see
   what the board was seeded from and to resolve which issue backs which module.
-- The field vocabulary is fixed — copy option names verbatim, never invent new ones:
-  - **Module Status**: `Not started` · `In progress` · `Internal Review` · `Online`
+- The field vocabulary is fixed — copy option names verbatim, never invent new ones. Module
+  Status is the 8-stage pipeline vocabulary (see `process/PROCESS.md`); the old `In progress`
+  option was renamed to `Drafting`:
+  - **Module Status**: `Not started` · `Design` · `Drafting` · `SME Check` · `Internal Review` · `Pilot` · `Publishing` · `Online`
   - **Priority**: `Low` · `Medium` · `High`
   - **Consultant Tier**: `Practitioner` · `Trainer` · `Expert`
   - **Target Outcome Level**: `Has knowledge` · `With Assistance`
+  A course legitimately mid-pipeline may sit in any of `Design`, `Drafting`, `SME Check`,
+  `Pilot`, or `Publishing` — don't treat those as drift; only flag values that contradict the
+  evidence (e.g. a delivered course still `Not started`).
 
 ## Audit phase
 
@@ -44,10 +49,10 @@ each of these, one finding per row (module, current board value, evidence, propo
 
 a. **Delivered but "Not started."** Board `Module Status: Not started` yet the module has
    `external_links` pointing at live course material, or numbered lesson files exist. Candidate:
-   `Online` (delivered externally) or `In progress` — the human decides which.
+   `Online` (delivered externally) or `Drafting` — the human decides which.
 
 b. **Authored but stalled.** `content_type: content` with real lesson files present, board still
-   `Not started`. Candidate: at least `In progress`.
+   `Not started`. Candidate: at least `Drafting`.
 
 c. **Outcome-level drift.** Board Target Outcome Level ≠ frontmatter `target_outcome_level`, or
    one side is set and the other blank.

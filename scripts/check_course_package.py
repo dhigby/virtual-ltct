@@ -27,17 +27,19 @@ MODULES = REPO / "modules"
 
 TIME_RE = re.compile(r"^\*\*Estimated time:\*\*\s*(\d+)\s*minutes", re.MULTILINE)
 DESIGN_STATUS_RE = re.compile(r"^\|\s*\*\*Design status\*\*\s*\|(.+)\|", re.MULTILINE)
-ANSWER_KEY_RE = re.compile(r"^\s*1\.\s*\S+(\s*\|\s*\d+\.\s*\S+)+", re.MULTILINE)
-THRESHOLD_RE = re.compile(r"\b\d{1,3}\s*%|\bpass\b", re.IGNORECASE)
+ANSWER_KEY_RE = re.compile(r"^\s*1\.\s*\S+(\s*\\?\|\s*\d+\.\s*\S+)+", re.MULTILINE)
+THRESHOLD_RE = re.compile(r"\b\d{1,3}\s*%|\bto pass\b", re.IGNORECASE)
 MAX_MINUTES = 90
 
 
 def is_lesson(name):
-    # 01-*.md, 02-*.md, ... but not the -scenario-bank / -mentor-guide / -quiz / -video-script
+    # 01-*.md, 02-*.md, ... but not the package's own non-lesson files
     if not re.match(r"^\d{2}-", name):
         return False
-    return not any(k in name for k in
-                   ("design", "scenario-bank", "mentor-guide", "quiz", "video-script"))
+    if re.fullmatch(r"\d{2}-design\.md", name):
+        return False
+    return not name.endswith(("-scenario-bank.md", "-mentor-guide.md",
+                              "-quiz.md", "-video-script.md"))
 
 
 def check_course(folder):
@@ -53,6 +55,12 @@ def check_course(folder):
         m = DESIGN_STATUS_RE.search(text)
         if not m:
             errors.append(f"{slug}/00-design.md: no '**Design status**' line found")
+        else:
+            status = m.group(1).strip()
+            if status != "Draft" and not re.fullmatch(
+                    r"Approved by .+ on \d{4}-\d{2}-\d{2}", status):
+                errors.append(f"{slug}/00-design.md: malformed design status '{status}' "
+                              f"(expected 'Draft' or 'Approved by <name> on <YYYY-MM-DD>')")
 
     # --- lessons + scenario bank: duration header ---
     timed = [p for name, p in files.items()

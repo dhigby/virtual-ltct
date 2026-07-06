@@ -15,7 +15,9 @@ The requested course slug is: `$ARGUMENTS`
 Show the fleet overview:
 
 1. `Glob` for `modules/*/00-design.md` — these are the courses that have opted into the
-   pipeline.
+   pipeline. **Skip `modules/_template/`** — it is the package skeleton, not a course
+   (`check_course_package.py` excludes it for the same reason). If nothing else matches,
+   there are no courses in the pipeline yet.
 2. For each, determine its current stage using the **Stage detection** rules below (repo
    evidence only; you may skip the `gh` lookups for the overview).
 3. Print a table: `Course | Current stage | Next action`.

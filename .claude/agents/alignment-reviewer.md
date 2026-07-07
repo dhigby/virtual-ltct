@@ -1,6 +1,6 @@
 ---
 name: alignment-reviewer
-description: Validates course content against its design doc, checking objective coverage, assessment traceability, module durations, and quiz format. Use before a course goes to Internal Review to ensure design-to-content alignment.
+description: Validates course content against its design doc, checking objective coverage, assessment traceability, module durations, lesson structure (Learning That Lasts phases), and quiz format. Use before a course goes to Internal Review to ensure design-to-content alignment.
 tools: Read, Glob, Grep
 model: inherit
 ---
@@ -55,7 +55,15 @@ Format: a table with "Check", "Status", and "Finding" columns. Mark as ✓ (pass
   Flag any file without a stated duration, any module exceeding 90 minutes, or any
   mismatch with the design.
 
-### d. Quiz format compliance
+### d. Lesson structure (Learning That Lasts)
+
+- **Check:** Every numbered lesson file (01-, 02-, …) contains the four *Learning That
+  Lasts* phase sections as H2 headings, in order: `## Connect`, `## Content`,
+  `## Challenge`, `## Change`. (The scenario bank, mentor guide, quiz, and video script
+  are exempt — they have their own formats.)
+- **Finding:** List any lesson missing a phase section or with the phases out of order.
+
+### e. Quiz format compliance
 
 - **Check:** The quiz file (`NN-quiz.md`) follows house style:
   - Questions are grouped into labeled sections (e.g., "Section 1: Workflow & Integration
@@ -69,7 +77,7 @@ Format: a table with "Check", "Status", and "Finding" columns. Mark as ✓ (pass
 - **Finding:** Describe what the quiz includes and what it's missing. Flag any format
   violations.
 
-### e. Competency name accuracy
+### f. Competency name accuracy
 
 - **Check:** All competency names appearing in the course frontmatter, the design doc, or
   the lesson/quiz content match `competencies.yaml` verbatim (including `&` and

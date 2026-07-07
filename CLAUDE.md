@@ -135,9 +135,13 @@ Preview locally with `pip install -r docs-requirements.txt && mkdocs serve`.
 
 ## Authoring style
 
-This curriculum follows the **Learning That Lasts** adult-learner framework — there is a
-`training-content` skill for authoring workshop/training material. Prefer it when drafting
-or revising module content.
+This curriculum follows the **Learning That Lasts** adult-learner framework: every lesson
+body is structured as four `##` phases in order — **Connect → Content → Challenge →
+Change** — budgeted by the lesson's `**Estimated time:**` header (roughly 10 / 25–30 /
+15–20 / 5–10 minutes for a 60-minute lesson). The `training-content` skill, committed at
+[`.claude/skills/training-content/`](.claude/skills/training-content/SKILL.md), defines
+the methodology — prefer it when drafting or revising module content. The alignment
+reviewer (stage 4) verifies the four phases are present in each lesson.
 
 See [README.md](README.md) and [CONTRIBUTING.md](CONTRIBUTING.md) for the human-facing
 contributor workflow (browser editing, GitHub Desktop, adding modules via issue template).

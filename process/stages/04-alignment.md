@@ -22,6 +22,8 @@ It returns a pass/fail checklist covering:
   scenarios.
 - **Durations** — every lesson + scenario bank has `**Estimated time:**`, none over 90, and
   the total matches the design doc.
+- **Lesson structure** — every lesson has the four *Learning That Lasts* phase sections,
+  in order: `## Connect`, `## Content`, `## Challenge`, `## Change`.
 - **Quiz format** — sections, pass threshold, mixed question types, answer key.
 - **Competency names** — verbatim match to `competencies.yaml`.
 

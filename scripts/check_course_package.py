@@ -8,6 +8,8 @@ for them. See process/PROCESS.md for the pipeline this enforces.
 Two severities:
   ERROR (exit 1) — a hard format violation in an opted-in course:
     * a lesson file or scenario bank missing `**Estimated time:** N minutes`, or N > 90
+    * a lesson file missing one of the four Learning That Lasts phase headings
+      (## Connect, ## Content, ## Challenge, ## Change), or having them out of order
     * a quiz file present but missing a pass threshold or a pipe-separated answer key
     * a malformed `**Design status**` line in 00-design.md
   WARNING (exit 0) — package files not yet present. Mid-pipeline courses are legitimately
@@ -30,6 +32,10 @@ DESIGN_STATUS_RE = re.compile(r"^\|\s*\*\*Design status\*\*\s*\|(.+)\|", re.MULT
 ANSWER_KEY_RE = re.compile(r"^\s*1\.\s*\S+(\s*\\?\|\s*\d+\.\s*\S+)+", re.MULTILINE)
 THRESHOLD_RE = re.compile(r"\b\d{1,3}\s*%|\bto pass\b", re.IGNORECASE)
 MAX_MINUTES = 90
+
+# The Learning That Lasts four-phase lesson structure, as H2s in this order.
+PHASES = ("Connect", "Content", "Challenge", "Change")
+PHASE_RES = {p: re.compile(rf"^##\s+{p}\b", re.MULTILINE) for p in PHASES}
 
 
 def is_lesson(name):
@@ -71,6 +77,23 @@ def check_course(folder):
             errors.append(f"{slug}/{p.name}: missing '**Estimated time:** N minutes' header")
         elif int(m.group(1)) > MAX_MINUTES:
             errors.append(f"{slug}/{p.name}: {m.group(1)} minutes exceeds the {MAX_MINUTES}-minute cap")
+
+    # --- lessons: Learning That Lasts phase headings, in order ---
+    for p in sorted(pp for name, pp in files.items() if is_lesson(name)):
+        text = p.read_text(encoding="utf-8")
+        positions = {}
+        for phase in PHASES:
+            m = PHASE_RES[phase].search(text)
+            if m:
+                positions[phase] = m.start()
+        missing = [phase for phase in PHASES if phase not in positions]
+        if missing:
+            errors.append(f"{slug}/{p.name}: missing phase heading(s): "
+                          + ", ".join(f"## {phase}" for phase in missing))
+        elif list(positions) != sorted(positions, key=positions.get):
+            found_order = sorted(positions, key=positions.get)
+            errors.append(f"{slug}/{p.name}: phase headings out of order "
+                          f"(found {' -> '.join(found_order)})")
 
     # --- quiz format (only if a quiz exists) ---
     quiz = next((p for name, p in files.items() if name.endswith("-quiz.md")), None)

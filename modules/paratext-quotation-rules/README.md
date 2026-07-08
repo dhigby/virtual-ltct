@@ -566,8 +566,11 @@ Word-medial punctuation: add `’` (U+2019) in ☰ > Project settings > Language
 |-------|---------|---------|---------|---------|
 | First level | `«` | U+00AB | `»` | U+00BB |
 | Second level | `›` | U+203A | `‹` | U+2039 |
+| Third level | `«` | U+00AB | `»` | U+00BB |
 
 Note: At Second level Menda uses **single guillemets in reversed order** — the `›` (U+203A, right-pointing) opens the embedded speech and `‹` (U+2039, left-pointing) closes it. This is unusual and easy to get wrong.
+
+At Third level Menda returns to **double guillemets** — `«` opens and `»` closes, the same characters as First level. Third level is rare; John 19:21 is the key example.
 
 > **[SCREENSHOT]** The Quote marks tab for the Menda project, with Second level Opening set to › and Second level Closing set to ‹. The Example section at the bottom shows the marks in correct nested order.
 
@@ -575,6 +578,7 @@ Note: At Second level Menda uses **single guillemets in reversed order** — the
 - Why might it be confusing that the opening mark for Second level is the right-pointing single guillemet? What would happen if you entered it in the Closing field by mistake?
 - How would you verify which direction the single guillemet in the text actually points? (Hint: use the dropdown list on each field — hover each character option to read its name in the list.)
 - If a verse shows `«Il a dit ‹oui›»` and the check flags Second level as having incorrect marks, what is the most likely cause?
+- John 19:21 nests speech three levels deep. What characters does Menda use at the Third level, and what will the check report at 19:21 if the Third level cells are left blank?
 
 **Expected configuration:**
 
@@ -582,6 +586,7 @@ Note: At Second level Menda uses **single guillemets in reversed order** — the
 |-------|---------|----------------------------------|--------|
 | First level | `«` | *(blank)* | `»` |
 | Second level | `›` | *(blank)* | `‹` |
+| Third level | `«` | *(blank)* | `»` |
 
 Continuation: none. Apostrophe handling: not needed — Menda's Quote marks tab does not use U+2019, so no Word-medial punctuation setting is required.
 
@@ -589,6 +594,7 @@ Continuation: none. Apostrophe handling: not needed — Menda's Quote marks tab 
 - Run the check on John (contains clear nested dialogue). Verify that `«...›...‹...»` structures pass without errors.
 - If the check fires on every Second level opening mark, the Opening and Closing fields for Second level are likely reversed. Confirm which character is right-pointing (`›`) and which is left-pointing (`‹`).
 - After entering Second level, check the Example section at the bottom. If › opens and ‹ closes in the example, you have the correct order. The visual difference between `›` and `‹` is easy to miss — use the Example to confirm before clicking OK.
+- John 19:21 contains Menda's rare Third level quotation. Verify it passes once Third level is configured — if 19:21 is flagged, the Third level cells are probably still empty.
 
 ---
 
@@ -849,8 +855,8 @@ Each Module 5 project needs enough text to produce meaningful check results, but
 | Project | Quotation style | Minimum books suggested |
 |---------|----------------|-------------------------|
 | `runda` | Guillemet outer (`«` / `»`), curly single inner (`‘` / `’`) — Guillemet style (Scenario A). Include words with `’` (U+2019) as apostrophes so learners encounter the apostrophe conflict. | Matthew, Luke, John (dialogue-heavy) |
-| `menda` | Double guillemets outer, reversed single guillemets inner: `«...›...‹...»` (Scenario B) | Matthew, Luke |
-| `waku` | Em dash as both opener and closer: `—...—`, with em dash continuation mark (Scenario C) | Matthew, Luke (stretch exercise) |
+| `menda` | Double guillemets outer, reversed single guillemets inner: `«...›...‹...»`; Third level returns to `«...»` — include at least one third-level quote (John 19:21) (Scenario B) | John (dialogue-heavy, contains the 19:21 third-level example) |
+| `waku` | Em dash as both opener and closer: `—...—`, with em dash continuation mark (Scenario C) | Matthew, Luke, Acts (stretch exercise; Acts is required — the scenario's check steps use its extended multi-paragraph speeches) |
 
 Apply the correct quotation characters for each language throughout the text. Leave all Quote marks tab and Rules settings blank — learners configure them as part of the scenario.
 
@@ -876,6 +882,3 @@ After seeding, run the Quotation check and confirm all five items appear in the 
 
 - **Discovery-first ordering:** Each module shows the answer key *after* the discovery prompts, not before. Encourage learners to write down their prediction before scrolling to the expected configuration.
 - **Scenario C (Waku):** The em-dash scenario is the hardest. It is appropriate as a stretch exercise or for learners who have completed Modules 1–4 confidently and want a challenge.
-
-Add quotation rules course content
-Update Menda configuration — add Third level

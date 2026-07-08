@@ -18,3 +18,18 @@ scripts/_media_report.csv
 # Notion archive exports (kept outside the repo)
 .notion-vault/
 *.tmp
+
+# Video files — never commit; upload to Vimeo/CYPHER and link via external_links: in frontmatter
+*.mp4
+*.mov
+
+# Generated CYPHER LMS paste artifacts (produced from module markdown by the
+# cypher-html-conversion skill; the markdown is the source of truth)
+*-cypher.html
+*-cypher.bak
+
+# Shared 4Cs section images — hosted on the LMS at /files/7780768/, not per-module assets
+connect.png
+content.png
+challenge.png
+change.png

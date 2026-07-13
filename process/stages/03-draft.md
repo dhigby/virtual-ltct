@@ -10,6 +10,15 @@ on the tracker. Do them in order — later artifacts depend on earlier ones bein
 > content doesn't fit, split it into another numbered file. The alignment check (stage 4)
 > and CI both verify this.
 
+> **The lesson shape (the "4 Cs").** Every lesson body follows the *Learning That Lasts*
+> four-phase structure, as `##` sections in order: **Connect** (activate prior
+> knowledge), **Content** (core instruction, ending in Key Takeaways), **Challenge**
+> (hands-on practice), **Change** (transfer to real work). For a 60-minute lesson budget
+> roughly 10 / 25–30 / 15–20 / 5–10 minutes across the phases, scaled to the lesson's
+> estimated time. The [`training-content` skill](../../.claude/skills/training-content/SKILL.md)
+> defines the methodology; `modules/_template/01-content.md` shows the shape. The
+> alignment check (stage 4) verifies the four sections are present.
+
 ## Entry criteria
 
 - `00-design.md` is **approved** (stage 2). If it isn't, stop — the agents will refuse and
@@ -55,6 +64,8 @@ estimate. ✅ Tick **"3d. Video script drafted"**.
 - All package files present: numbered lessons, `NN-scenario-bank.md`, `NN-mentor-guide.md`,
   `NN-quiz.md`, `NN-video-script.md`.
 - Every lesson and the scenario bank state `**Estimated time:** X minutes`, none over 90.
+- Every lesson contains the four *Learning That Lasts* phase sections, in order:
+  `## Connect`, `## Content`, `## Challenge`, `## Change`.
 
 ## Then
 

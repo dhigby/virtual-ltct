@@ -15,7 +15,7 @@
 | **Competencies addressed** | Translation Tools |
 | **Target outcome level** | With Assistance |
 | **SME(s) consulted** | _(pending — retro-fit; SME fact-check not yet run)_ |
-| **Design status** | Draft (retro-fit from delivered content — pending approval) |
+| **Design status** | Draft |
 <!-- On approval (stage 2), the Design Approver replaces the line above with:
      | **Design status** | Approved by <name> on <YYYY-MM-DD> | -->
 

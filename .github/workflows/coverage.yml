@@ -7,12 +7,17 @@ on:
       - 'modules/**'
       - 'competencies.yaml'
       - 'scripts/gen_coverage.py'
+  pull_request:
+    paths:
+      - 'modules/**'
+      - 'competencies.yaml'
+      - 'scripts/gen_coverage.py'
 
 permissions:
   contents: write
 
 concurrency:
-  group: coverage
+  group: coverage-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
@@ -27,6 +32,7 @@ jobs:
       - name: Regenerate COVERAGE.md
         run: python scripts/gen_coverage.py
       - name: Commit if changed
+        if: github.event_name == 'push'
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"

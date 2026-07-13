@@ -33,7 +33,7 @@ noise. Now you give it the first thing it needs: the actual characters your lang
 - Have you ever seen a checker flag an apostrophe *inside* a word — a contraction or a glottal
   stop — as a broken quotation? What did you do about it?
 
-Hold those in mind. Two of the three tasks in this lesson are exactly these situations.
+Hold those in mind. Two of the three exercises in this lesson are exactly these situations.
 
 ## Content
 
@@ -82,7 +82,7 @@ quotation or marking a contraction or possessive. In Paratext 9.5 you resolve th
 the Quotation Rules dialog, but in **☰ > Project settings > Language Settings > Other
 Characters** tab, using the **Word-medial punctuation** field. Any character listed there is
 treated as part of a word when it appears between two alphabetic characters, so the checker
-won't misread it as a closing mark. You'll apply this in the third task below.
+won't misread it as a closing mark. You'll apply this in the third exercise below.
 
 **Key takeaways**
 
@@ -98,10 +98,10 @@ won't misread it as a closing mark. You'll apply this in the third task below.
 ## Challenge
 
 You will configure two real (fictional) projects and then untangle the apostrophe conflict.
-Each task produces a configured tab a mentor can inspect against the language's convention
+Each exercise produces a configured tab a mentor can inspect against the language's convention
 table in the README.
 
-### Task 2.1 — Enter quote marks for Tamba
+### Exercise 2.1 — Enter quote marks for Tamba
 
 Open the Tamba project's Quotation Rules dialog (☰ > Project settings > Quotation Rules) and
 click the **Quote marks** tab.
@@ -135,7 +135,7 @@ character.
 **TIP** Hover over any column or row label ("Opening", "Closing", "Quotes (First level)",
 etc.) to see a description of that field in the status bar at the bottom of the dialog.
 
-### Task 2.2 — Enter quote marks for Runda
+### Exercise 2.2 — Enter quote marks for Runda
 
 Open the Runda project and navigate to ☰ > Project settings > Quotation Rules > Quote marks
 tab.
@@ -171,7 +171,7 @@ blank. Why? Because Runda repeats the guillemet at the start of each continued p
 while Tamba closes and reopens fully. The convention table drives the configuration — never
 the other way around.
 
-### Task 2.3 — Handle word-medial punctuation (the apostrophe conflict)
+### Exercise 2.3 — Handle word-medial punctuation (the apostrophe conflict)
 
 Recall from the Content section: some languages use the same character as a **closing mark**
 at the single-quote level *and* as an **apostrophe** within words, and Paratext resolves the
@@ -206,7 +206,7 @@ Runda does use `’` as an apostrophe.
 4. Re-run the quotation check on a chapter that has both apostrophes and single-quote speech.
    Verify that apostrophes inside words no longer generate false quotation errors.
 
-**✏️ Produce this (a mentor will review it).** After all three tasks, jot 2–3 sentences: which
+**✏️ Produce this (a mentor will review it).** After all three exercises, jot 2–3 sentences: which
 project needed a Quote Continuer and why, and how you confirmed the apostrophe fix worked. A
 mentor will check your configured Quote marks tabs against the README convention tables.
 

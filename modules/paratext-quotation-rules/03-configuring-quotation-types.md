@@ -144,9 +144,9 @@ speech categories.
 ## Challenge
 
 You are configuring the Tamba project's quotation types after a working session with the
-translation team. Each task produces settings a mentor can check against Tamba's conventions.
+translation team. Each exercise produces settings a mentor can check against Tamba's conventions.
 
-### Task 3.1 — Read Tamba's current quotation types
+### Exercise 3.1 — Read Tamba's current quotation types
 
 Open the Tamba project and navigate to ☰ > Project settings > Quotation Rules > Quotation types
 tab.
@@ -165,7 +165,7 @@ tab.
 
 Tamba's settings should match the recommended defaults above. Confirm this before moving on.
 
-### Task 3.2 — Customize quotation types for Tamba
+### Exercise 3.2 — Customize quotation types for Tamba
 
 After reviewing Tamba's text with the translation team, you have determined the following three
 things:

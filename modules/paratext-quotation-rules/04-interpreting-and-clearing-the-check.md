@@ -70,7 +70,7 @@ The `tamba` project is in **Phase B**: fully configured, but seeded with five de
 issues. Your job is to triage them correctly, then clear a book to zero. Your filled-in tables
 and reasoning are what a mentor reviews.
 
-### Task 4.1 — Triage a dirty result set
+### Exercise 4.1 — Triage a dirty result set
 
 The `tamba` project has been seeded with the following issues. **Before reading further, fill
 in the Your prediction column for all five rows — write 1 (Real error) or 2 (Configuration
@@ -110,7 +110,7 @@ discovery prompts and open the verses.
 | 4 | Real error | Tamba restarts quotation marks at every paragraph break, but the Psalm 16 citation runs from 2:25 to 2:28 as one unbroken Second level span. Edit the text: close with `’` (U+2019) at the end of each paragraph and reopen with `‘` (U+2018) at the start of the next, so every paragraph carries a complete pair. |
 | 5 | Configuration problem | The `’` (U+2019) in Romans 1:1 is an apostrophe inside a word, which Paratext reads as the Second level closing mark with no matching opener. Navigate to ☰ > Project settings > Language Settings > Other Characters tab and add `’` (U+2019) to the Word-medial punctuation field. |
 
-### Task 4.2 — Reach zero actionable errors
+### Exercise 4.2 — Reach zero actionable errors
 
 **Goal:** Work through the full result list for the `tamba` project until every result has been
 cleared by fixing the text or adjusting the configuration.

@@ -69,6 +69,8 @@ finding marks — not confirming their absence. The check is reporting silence, 
 
 ## Challenge
 
+### Exercise 1.1 — Observe an unconfigured check
+
 **The situation.** You are supporting the **Tamba New Testament** team. The team lead has run
 the Quotations check for the first time, seen the results, and messaged you: *"The quotation
 check is giving me hundreds of errors — is our punctuation really this bad?"* Your job is to

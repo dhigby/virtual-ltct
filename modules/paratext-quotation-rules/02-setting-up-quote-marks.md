@@ -5,11 +5,45 @@
 > This lesson uses the `tamba` and `runda` fictional projects. See the
 > [course README](README.md#the-fictional-project) for their quotation conventions.
 
-**Learning objectives:** By the end of this lesson you will be able to (1) navigate to the Quote marks tab and enter the correct characters for each nesting level, (2) configure the Quote Continuer at new paragraph for languages that use continuation marks, and (3) resolve the word-medial punctuation conflict when the same character serves as both a closing mark and apostrophe.
+**Purpose:** Every language marks speech differently — curly quotes, guillemets, a character
+that doubles as an apostrophe. On a real project your job is to translate those conventions
+into Paratext's Quote marks grid correctly, so the Quotation check finally has something
+meaningful to look for. This lesson gives the check the first of its two inputs.
 
-## Concept
+## Learning objectives
 
-The **Quote marks** tab tells Paratext which characters your language uses to open and close quotations at each nesting level, and which character (if any) continues a speech across a paragraph break. Navigate to:
+By the end of this lesson you will be able to:
+
+- Navigate to the Quote marks tab and enter the correct characters for each nesting level.
+- Configure the Quote Continuer at new paragraph for languages that use continuation marks.
+- Resolve the word-medial punctuation conflict when the same character serves as both a
+  closing mark and an apostrophe.
+
+## Connect
+
+In [Lesson 1](01-what-the-quotation-check-does.md) you saw that an unconfigured check is just
+noise. Now you give it the first thing it needs: the actual characters your language uses.
+
+**✏️ Reflection.** Picture the language project you work with (or one you expect to support):
+
+- What characters does it use to open and close direct speech? Are they curly quotes (`“ ”`),
+  guillemets (`« »`), straight quotes, or something else?
+- When speech is quoted *inside* other speech, does the language use a different mark for that
+  inner level?
+- Have you ever seen a checker flag an apostrophe *inside* a word — a contraction or a glottal
+  stop — as a broken quotation? What did you do about it?
+
+Hold those in mind. Two of the three tasks in this lesson are exactly these situations.
+
+## Content
+
+*Configuring the Quote marks tab is the first half of the **Translation Tools** competency's
+"use and troubleshoot" skill for this check. Get the inventory of characters right here and
+most of the false positives from Lesson 1 disappear.*
+
+The **Quote marks** tab tells Paratext which characters your language uses to open and close
+quotations at each nesting level, and which character (if any) continues a speech across a
+paragraph break. Navigate to:
 
 project menu **☰ > Project settings > Quotation Rules**, then click the **Quote marks** tab.
 
@@ -20,28 +54,60 @@ The tab has a grid with three rows and three columns.
 **Rows — nesting levels:**
 - **Quotes (First level)** — primary speech
 - **Quotes within Quotes (Second level)** — speech embedded within a First level quotation
-- **Quotes within Quotes within Quotes (Third level)** — speech embedded within a Second level quotation
+- **Quotes within Quotes within Quotes (Third level)** — speech embedded within a Second level
+  quotation
 
 **Columns:**
 - **Opening** — the character that starts a quotation at that level
-- **Quote Continuer at new paragraph** — the character repeated at the beginning of a new paragraph when a quotation continues (many languages leave this blank)
+- **Quote Continuer at new paragraph** — the character repeated at the beginning of a new
+  paragraph when a quotation continues (many languages leave this blank)
 - **Closing** — the character that ends a quotation at that level
 
-Below the grid the tab has several additional checkboxes (such as **Closing quotes close**, **List all quote marks...**, and **Continuer required at...**). Hover over any label to see its description in the status bar at the bottom of the dialog.
+Below the grid the tab has several additional checkboxes (such as **Closing quotes close**,
+**List all quote marks...**, and **Continuer required at...**). Hover over any label to see its
+description in the status bar at the bottom of the dialog.
 
 At the bottom of the dialog:
-- **Example** — a live text preview showing how your configured marks look in a sample passage. Use this to visually confirm that you have selected the correct characters.
-- **Copy quote mark settings...** button — imports character settings from another project (useful when a related project uses the same conventions).
+- **Example** — a live text preview showing how your configured marks look in a sample
+  passage. Use this to visually confirm that you have selected the correct characters.
+- **Copy quote mark settings...** button — imports character settings from another project
+  (useful when a related project uses the same conventions).
 
 ![The Quote marks tab with the three-row, three-column grid visible, showing the additional settings below the grid.](ss-L172-quote-marks-tab-layout.png)
 
----
+**One more setting lives elsewhere.** Some languages use the same character for two purposes:
+as the **closing quotation mark** at the single-quote level *and* as an **apostrophe** within
+words. When Paratext sees that character inside a word it cannot tell whether it is ending a
+quotation or marking a contraction or possessive. In Paratext 9.5 you resolve this **not** in
+the Quotation Rules dialog, but in **☰ > Project settings > Language Settings > Other
+Characters** tab, using the **Word-medial punctuation** field. Any character listed there is
+treated as part of a word when it appears between two alphabetic characters, so the checker
+won't misread it as a closing mark. You'll apply this in the third task below.
 
-### Exercise 2.1 — Entering Quote Marks for Tamba
+**Key takeaways**
 
-Open the Tamba project’s Quotation Rules dialog (☰ > Project settings > Quotation Rules) and click the **Quote marks** tab.
+- The Quote marks tab grid has three rows (First, Second, Third level) and three columns
+  (Opening, Quote Continuer at new paragraph, Closing).
+- Always verify every character you enter using the **Example** section at the bottom of the
+  dialog — confirm the code point, not just the shape.
+- The Quote Continuer at new paragraph is optional; leave it blank if your language closes and
+  reopens the marks at each paragraph break.
+- When a closing-quote character doubles as an apostrophe, resolve it in Language Settings >
+  Other Characters > Word-medial punctuation — not in Quotation Rules.
 
-The Tamba project is in Phase A: the Quote marks tab is blank. Enter the following settings using the dropdown arrow (▼) on each cell:
+## Challenge
+
+You will configure two real (fictional) projects and then untangle the apostrophe conflict.
+Each task produces a configured tab a mentor can inspect against the language's convention
+table in the README.
+
+### Task 2.1 — Enter quote marks for Tamba
+
+Open the Tamba project's Quotation Rules dialog (☰ > Project settings > Quotation Rules) and
+click the **Quote marks** tab.
+
+The Tamba project is in Phase A: the Quote marks tab is blank. Enter the following settings
+using the dropdown arrow (▼) on each cell:
 
 | Level | Opening | Quote Continuer at new paragraph | Closing |
 | --- | --- | --- | --- |
@@ -50,23 +116,29 @@ The Tamba project is in Phase A: the Quote marks tab is blank. Enter the followi
 | Third level | `“` (U+201C) | *(leave blank)* | `”` (U+201D) |
 
 **Steps:**
-1. Click the dropdown (▼) on the **Opening** cell for First level. Select `“` (Left double quotation mark, U+201C).
+1. Click the dropdown (▼) on the **Opening** cell for First level. Select `“` (Left double
+   quotation mark, U+201C).
 2. Leave the **Quote Continuer at new paragraph** cell for First level blank.
-3. Click the dropdown on the **Closing** cell for First level. Select `”` (Right double quotation mark, U+201D).
+3. Click the dropdown on the **Closing** cell for First level. Select `”` (Right double
+   quotation mark, U+201D).
 4. Repeat for Second level: Opening = `‘` (U+2018), Continuer = blank, Closing = `’` (U+2019).
 5. Repeat for Third level: Opening = `“` (U+201C), Continuer = blank, Closing = `”` (U+201D).
-6. Check the **Example** section at the bottom of the dialog. The sample text should show `“…‘…’…”` — curly double quotes at the outer level and curly single quotes for embedded speech.
+6. Check the **Example** section at the bottom of the dialog. The sample text should show
+   `“…‘…’…”` — curly double quotes at the outer level and curly single quotes for embedded
+   speech.
 7. Click **OK**.
 
-Tamba uses English-style curly quotes at all three levels with no Quote Continuer — Tamba closes and reopens quotation marks at each paragraph break rather than using a continuation character.
+Tamba uses English-style curly quotes at all three levels with no Quote Continuer — Tamba
+closes and reopens quotation marks at each paragraph break rather than using a continuation
+character.
 
-> **Tip:** Hover over any column or row label (“Opening”, “Closing”, “Quotes (First level)”, etc.) to see a description of that field in the status bar at the bottom of the dialog.
+**TIP** Hover over any column or row label ("Opening", "Closing", "Quotes (First level)",
+etc.) to see a description of that field in the status bar at the bottom of the dialog.
 
----
+### Task 2.2 — Enter quote marks for Runda
 
-### Exercise 2.2 — Entering Quote Marks for Runda
-
-Open the Runda project and navigate to ☰ > Project settings > Quotation Rules > Quote marks tab.
+Open the Runda project and navigate to ☰ > Project settings > Quotation Rules > Quote marks
+tab.
 
 Runda is a new project with no quote marks configured. Enter the following settings:
 
@@ -76,67 +148,97 @@ Runda is a new project with no quote marks configured. Enter the following setti
 | Second level | `‘` (U+2018) | *(leave blank)* | `’` (U+2019) |
 | Third level | *(leave blank)* | *(leave blank)* | *(leave blank)* |
 
-Runda uses French-style guillemets at the first level with no continuation mark at the second level.
+Runda uses French-style guillemets at the first level with no continuation mark at the second
+level.
 
 **Steps:**
-1. Click the dropdown arrow (▼) on the **Opening** cell for First level. Select « from the list.
-2. Click the dropdown arrow on the **Quote Continuer at new paragraph** cell for First level. Select «.
+1. Click the dropdown arrow (▼) on the **Opening** cell for First level. Select « from the
+   list.
+2. Click the dropdown arrow on the **Quote Continuer at new paragraph** cell for First level.
+   Select «.
 3. Click the dropdown arrow on the **Closing** cell for First level. Select ».
 4. Click the dropdown arrow on the **Opening** cell for Second level. Select ‘ (U+2018).
 5. Click the dropdown arrow on the **Closing** cell for Second level. Select ’ (U+2019).
 6. Leave all Third level cells at **\*none\***.
-7. Check the **Example** section at the bottom of the dialog. You should see «...» for First level speech and ‘...’ for embedded speech.
+7. Check the **Example** section at the bottom of the dialog. You should see «...» for First
+   level speech and ‘...’ for embedded speech.
 8. Click **OK**.
 
 ![The Quote marks tab for Runda after entry, showing « and » in First level cells and the Second level Opening/Closing filled.](ss-L227-runda-quote-marks.png)
 
----
+**✏️ Compare.** Runda fills the Quote Continuer cell at First level (`«`) but Tamba leaves it
+blank. Why? Because Runda repeats the guillemet at the start of each continued paragraph,
+while Tamba closes and reopens fully. The convention table drives the configuration — never
+the other way around.
 
-### Exercise 2.3 — Handling Word-Medial Punctuation (the Apostrophe Conflict)
+### Task 2.3 — Handle word-medial punctuation (the apostrophe conflict)
 
-Some languages use the same character for two distinct purposes: as the **closing quotation mark** at the single-quote level, and as an **apostrophe** within words. When Paratext sees that character inside a word it cannot know whether it is ending a quotation or marking a contraction or possessive.
+Recall from the Content section: some languages use the same character as a **closing mark**
+at the single-quote level *and* as an **apostrophe** within words, and Paratext resolves the
+ambiguity in Language Settings, not in Quotation Rules.
 
-In Paratext 9.5 this conflict is resolved **not** in the Quotation Rules dialog, but in Language Settings:
-
-**☰ > Project settings > Language Settings**
-
-In the Language Settings dialog, click the **Other Characters** tab. This tab has a **Word-medial punctuation** field. Any character listed there is treated as part of a word when it appears between two alphabetic characters, so the quotation checker will not misread it as a closing mark.
+**☰ > Project settings > Language Settings**, then click the **Other Characters** tab. This tab
+has a **Word-medial punctuation** field. Any character listed there is treated as part of a
+word when it appears between two alphabetic characters, so the quotation checker will not
+misread it as a closing mark.
 
 ![The Language Settings dialog open on the Other Characters tab, showing the Word-medial punctuation field with a right single quotation mark entered.](ss-L241-language-settings-other-chars.png)
 
 **When to use this:**
 - Your Second or Third level closing mark is `’` (U+2019), AND
-- The same character also appears as an apostrophe inside words (contractions, possessives, glottal stops written with that character)
+- The same character also appears as an apostrophe inside words (contractions, possessives,
+  glottal stops written with that character)
 
-If both conditions apply, add `’` to the Word-medial punctuation field in Language Settings. The quotation checker will then treat `’` as part of a word when it is flanked by letters, and will only read it as a closing mark when it appears at the end of a quotation.
+If both conditions apply, add `’` to the Word-medial punctuation field in Language Settings.
+The quotation checker will then treat `’` as part of a word when it is flanked by letters, and
+will only read it as a closing mark when it appears at the end of a quotation.
 
-**Tamba scenario:** Tamba’s Second level closing mark is `’` (U+2019). Tamba does not use contractions with apostrophes, so no word-medial punctuation setting is needed. But if Tamba began using `’` as an apostrophe, you would add it to the Word-medial punctuation field.
+**Tamba scenario:** Tamba's Second level closing mark is `’` (U+2019). Tamba does not use
+contractions with apostrophes, so no word-medial punctuation setting is needed. But if Tamba
+began using `’` as an apostrophe, you would add it to the Word-medial punctuation field.
 
-**Exercise steps (Runda):**
-Runda also uses `’` (U+2019) as its Second level closing mark. Suppose Runda does use `’` as an apostrophe.
+**Do it (Runda):** Runda also uses `’` (U+2019) as its Second level closing mark. Suppose
+Runda does use `’` as an apostrophe.
 
 1. Navigate to ☰ > Project settings > Language Settings > Other Characters tab.
 2. In the **Word-medial punctuation** field, enter `’` (U+2019).
 3. Click **OK**.
-4. Re-run the quotation check on a chapter that has both apostrophes and single-quote speech. Verify that apostrophes inside words no longer generate false quotation errors.
+4. Re-run the quotation check on a chapter that has both apostrophes and single-quote speech.
+   Verify that apostrophes inside words no longer generate false quotation errors.
 
-## Lesson 2 summary
-- The Quote marks tab grid has three rows (First, Second, Third level) and three columns (Opening, Quote Continuer at new paragraph, Closing).
-- Verify every character you enter by checking the Example section at the bottom of the dialog.
-- The Quote Continuer at new paragraph is optional; leave it blank if your language does not use one.
-- When a closing-quote character doubles as an apostrophe, resolve the conflict in ☰ > Project settings > Language Settings > Other Characters tab > Word-medial punctuation.
+**✏️ Produce this (a mentor will review it).** After all three tasks, jot 2–3 sentences: which
+project needed a Quote Continuer and why, and how you confirmed the apostrophe fix worked. A
+mentor will check your configured Quote marks tabs against the README convention tables.
 
-## Check your understanding
+## Change
 
-1. A language uses `««` (U+00AB U+00AB) and `»»` (U+00BB U+00BB) for First level speech and `«` / `»` for Second level speech. Where do you enter these characters in PT 9.5?
-2. What is the Quote Continuer at new paragraph column for? Give an example of when you would leave it blank.
-3. Your Second level closing mark is `’` (U+2019). The quotation check is flagging apostrophes inside words as unclosed quotations. Where in PT 9.5 do you resolve this, and what do you enter?
+**Self-assessment — can you explain it to a colleague?**
 
-**Answers**
+1. A language uses `««` (U+00AB U+00AB) and `»»` (U+00BB U+00BB) for First level speech and `«`
+   / `»` for Second level speech. Where do you enter these characters in PT 9.5?
+2. What is the Quote Continuer at new paragraph column for? Give an example of when you would
+   leave it blank.
+3. Your Second level closing mark is `’` (U+2019). The quotation check is flagging apostrophes
+   inside words as unclosed quotations. Where in PT 9.5 do you resolve this, and what do you
+   enter?
 
-1. In the **Quote marks tab** of the Quotation Rules dialog (☰ > Project settings > Quotation Rules). Enter `««` in the Opening cell for First level, `»»` in the Closing cell for First level, `«` in the Opening cell for Second level, and `»` in the Closing cell for Second level.
-2. The Quote Continuer at new paragraph character is repeated at the beginning of each new paragraph when a single speech spans multiple paragraphs. Leave it blank if your language closes and reopens the quotation marks at each paragraph break rather than using a continuation mark (most Western European languages do this).
-3. Navigate to ☰ > Project settings > Language Settings > Other Characters tab. Enter `’` (U+2019) in the **Word-medial punctuation** field. This tells the checker to treat that character as part of a word when it appears between two alphabetic characters.
+*You should be able to say:* (1) In the **Quote marks tab** of the Quotation Rules dialog (☰ >
+Project settings > Quotation Rules) — `««` in the First level Opening cell, `»»` in the First
+level Closing cell, `«` in the Second level Opening cell, and `»` in the Second level Closing
+cell. (2) It is the character repeated at the start of each new paragraph when one speech spans
+multiple paragraphs; leave it blank when the language closes and reopens the marks at each
+paragraph break (as most Western European languages do). (3) In ☰ > Project settings >
+Language Settings > Other Characters tab — enter `’` (U+2019) in the **Word-medial
+punctuation** field, so the checker treats it as part of a word between two letters.
+
+**✏️ Take it to your context.** For one real language you support, write the three-row Quote
+marks table (First/Second/Third level, Opening / Continuer / Closing) as you believe it should
+be configured. Note any character that doubles as an apostrophe — that's your word-medial
+punctuation candidate.
+
+**Next step.** The Quote marks tab tells Paratext *which characters* are quote marks. In
+[Lesson 3](03-configuring-quotation-types.md) you give it the second input — the **Quotation
+types** tab, which tells the check *when* marks are expected for each kind of speech.
 
 ---
 

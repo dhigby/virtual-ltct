@@ -12,6 +12,12 @@ Two severities:
       (## Connect, ## Content, ## Challenge, ## Change), or having them out of order
     * a quiz file present but missing a pass threshold or a pipe-separated answer key
     * a malformed `**Design status**` line in 00-design.md
+
+  Retro-fit / backfilled courses (a `00-design.md` whose design status is a retro-fit note)
+  are faithful imports of already-delivered content and are grandfathered out of the 4Cs
+  phase-heading requirement — see process/backfill.md. They are still checked for duration
+  headers and quiz format.
+
   WARNING (exit 0) — package files not yet present. Mid-pipeline courses are legitimately
     incomplete; full-package presence is enforced by humans at internal review, surfaced by
     /next-step. So missing files are reported, not failed.
@@ -55,6 +61,7 @@ def check_course(folder):
     files = {p.name: p for p in folder.glob("*.md")}
 
     # --- 00-design.md status line ---
+    retrofit = False
     design = files.get("00-design.md")
     if design:
         text = design.read_text(encoding="utf-8")
@@ -63,10 +70,16 @@ def check_course(folder):
             errors.append(f"{slug}/00-design.md: no '**Design status**' line found")
         else:
             status = m.group(1).strip()
-            if status != "Draft" and not re.fullmatch(
+            # A retro-fit course records its faithful-import provenance in the status line
+            # (e.g. "Draft (retro-fit from delivered content — pending approval)"). Such
+            # courses are grandfathered out of the 4Cs phase-heading check below.
+            retrofit = "retro-fit" in status.lower() or "retrofit" in status.lower()
+            # Accept: "Draft", "Draft (<note>)", or "Approved by <name> on <YYYY-MM-DD>".
+            if not re.fullmatch(r"Draft(\s*\(.+\))?", status) and not re.fullmatch(
                     r"Approved by .+ on \d{4}-\d{2}-\d{2}", status):
                 errors.append(f"{slug}/00-design.md: malformed design status '{status}' "
-                              f"(expected 'Draft' or 'Approved by <name> on <YYYY-MM-DD>')")
+                              f"(expected 'Draft', 'Draft (<note>)', or "
+                              f"'Approved by <name> on <YYYY-MM-DD>')")
 
     # --- lessons + scenario bank: duration header ---
     timed = [p for name, p in files.items()
@@ -79,7 +92,9 @@ def check_course(folder):
             errors.append(f"{slug}/{p.name}: {m.group(1)} minutes exceeds the {MAX_MINUTES}-minute cap")
 
     # --- lessons: Learning That Lasts phase headings, in order ---
-    for p in sorted(pp for name, pp in files.items() if is_lesson(name)):
+    # Retro-fit / backfilled courses are faithful imports of delivered content and are
+    # grandfathered out of the 4Cs structure (see process/backfill.md).
+    for p in [] if retrofit else sorted(pp for name, pp in files.items() if is_lesson(name)):
         text = p.read_text(encoding="utf-8")
         positions = {}
         for phase in PHASES:

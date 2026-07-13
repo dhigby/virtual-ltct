@@ -19,16 +19,15 @@ step before content gets uploaded into Cypher for Business.
 
 | File | Purpose |
 | --- | --- |
-| `00-design.md` | Course design doc — learning objectives, module breakdown, assessment plan. Must be approved before content drafting. |
 | `README.md` | Frontmatter (source of truth for competencies/outcome level/links) + learner-facing intro and a linked table of contents to the numbered files below. |
-| `01-*.md`, `02-*.md`, … | Numbered lesson content, one file per lesson/topic (each ≤ 90 minutes, with estimated duration stated). |
+| `01-*.md`, `02-*.md`, … | Numbered lesson content, one file per lesson/topic. |
 | `NN-scenario-bank.md` | Applied practice scenarios for learners, sequenced foundational → complex. |
 | `NN-mentor-guide.md` | Facilitator notes: what to look for in learner responses, how to give feedback, answer guidance for the scenario bank. |
 | `NN-quiz.md` | Assessment questions with an explicit pass threshold and an answer key, in the body — not frontmatter. |
 | `NN-video-script.md` | Script for the video-recording step (talking points, on-screen/slide cues, runtime estimate) before the module is transcribed into Cypher. |
 
 `NN` continues the module's own numbering — keep files in the order a learner would
-use them (design doc first, then content, scenario bank, mentor guide, quiz, video script), matching
+use them (content first, then scenario bank, mentor guide, quiz, video script), matching
 the existing convention in `coretech-computer-hardware`.
 
 ## What a real module's `README.md` frontmatter looks like
@@ -54,7 +53,6 @@ any tooling and would just be sprawl.
 
 ## Sub-modules
 
-- [Design doc](00-design.md)
 - [Lesson 1](01-content.md)
 - [Scenario bank](02-scenario-bank.md)
 - [Mentor guide](03-mentor-guide.md)

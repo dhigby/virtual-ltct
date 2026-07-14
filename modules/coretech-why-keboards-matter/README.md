@@ -1,6 +1,6 @@
 ---
-title: "CoreTech: Why Keboards Matter"
-slug: coretech-why-keboards-matter
+title: "CoreTech: Why Keyboards Matter"
+slug: coretech-why-keyboards-matter
 notion_id: 37e598a5-fd40-80b6-bc04-c7aa84f6395f
 notion_data_source: 7ebb2ef5-9f57-4723-8de0-9cc1ca47ff8e
 competencies:
@@ -9,7 +9,7 @@ content_type: content
 last_exported: 2026-06-18
 ---
 
-# CoreTech: Why Keboards Matter
+# CoreTech: Why Keyboards Matter
 
 **Target Audience:** Trainee Language Technology Consultants
 **Duration:** 20–30 minutes

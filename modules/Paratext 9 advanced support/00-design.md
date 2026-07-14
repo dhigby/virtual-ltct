@@ -158,6 +158,7 @@ To find where a file was deleted in the project, close Paratext, and in Tortoise
 If you know the file was recently deleted, you can find it by inspecting the recent history points. For instance in this example, one user's note file was deleted. ![note file deleted](image-1.png).   
 
 
+
 ## Handoff
 
 - **Learning objectives:** 5, one per SME-specified scenario, drawn from the Translation

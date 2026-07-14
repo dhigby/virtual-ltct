@@ -154,7 +154,8 @@ This is not strictly speaking a scenario but a point to be aware of. The Mercuri
 **Exact procedures for scenario**
 Mercurial keeps a detailed record of changes to the notes files and other project settings just like it does for the project text. But the Paratext project history does not show these details. You need to have a way to connect to Mercurial more directly than through Paratext to look for these. You can do this either by downloading the TortoiseHG tool, or by running Mercurial commands directly in a command prompt. 
 Downloading TortoiseHG: Go to https://tortoisehg.bitbucket.io/download/index.html and download the latest version for 64 bit Windows. (If you do have 32 bit Windows, you would download that version. All Windows 11 versions are 64 bit, some Windows 10 or earlier versions were 32 bit. You can verify which kind you have by looking up the Windows version info in Windows settings)
-To find where a file was deleted in the project, in Tortoise HG bring up the 
+To find where a file was deleted in the project, close Paratext, and in Tortoise HG bring up the HG workbench. (In File Viewer, right click on the project folder, choose "show more options" then pick HG Workbench in the Tortoise HG section)
+If you know the file was recently deleted, you can find it by inspecting the recent history points. For instance in this example, one user's note file was deleted. ![note file deleted](image-1.png).   
 
 
 ## Handoff

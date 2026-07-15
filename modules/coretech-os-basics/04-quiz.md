@@ -4,11 +4,11 @@
 from the three lesson files (`01-module-1.md`, `02-module-2.md`, `03-module-3.md`)
 rather than from a design-doc assessment plan.]
 
-## Assessment Quiz (20 questions)
+## Assessment Quiz (22 questions)
 
 This quiz covers all three modules of CoreTech: OS Basics — OS Fundamentals and
 Identification, Installation and Configuration, and Troubleshooting and Maintenance.
-You need **80% (16/20)** to pass.
+You need **80% (18/22)** to pass.
 
 ### Section 1: What an OS Does & the Three-Jobs Framework (Questions 1-3)
 
@@ -134,8 +134,22 @@ You need **80% (16/20)** to pass.
 - C) Severe malware infection that can't be cleaned
 - D) System corruption so severe the OS won't start at all
 
+### Section 7: Installation Preparation & Ongoing Maintenance (Questions 21-22)
+
+**Question 21:** A colleague's laptop is being reinstalled next week. She's copied her Documents folder to a USB drive and feels ready to go. Based on the module's pre-installation checklist, what is she still missing?
+- A) Nothing — copying her documents is all the preparation needed
+- B) She should also back up application data, email, and browser data (not just documents), and test that the backup actually restores before the system is wiped
+- C) She should buy a second USB drive instead of using the one she has
+- D) She should escalate to IT before backing up anything at all
+
+**Question 22:** You're helping Grace, a team leader, set up a simple recurring maintenance routine for the five laptops her translation team uses, so disk-space problems are caught before they slow anyone down. Which task belongs specifically in the *monthly* maintenance checklist, according to Module 3?
+- A) Perform a full system backup
+- B) Check available disk space and confirm at least 20% is free
+- C) Install OS feature updates
+- D) Physically clean dust out of the computer's vents
+
 ---
 
 ## Answer Key
 
-1. A | 2. C | 3. B | 4. B | 5. C | 6. B | 7. B | 8. C | 9. C | 10. B | 11. C | 12. A | 13. B | 14. B | 15. C | 16. A | 17. B | 18. B | 19. B | 20. A
+1. A | 2. C | 3. B | 4. B | 5. C | 6. B | 7. B | 8. C | 9. C | 10. B | 11. C | 12. A | 13. B | 14. B | 15. C | 16. A | 17. B | 18. B | 19. B | 20. A | 21. B | 22. B

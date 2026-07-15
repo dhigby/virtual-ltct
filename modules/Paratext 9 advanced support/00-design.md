@@ -155,8 +155,28 @@ This is not strictly speaking a scenario but a point to be aware of. The Mercuri
 Mercurial keeps a detailed record of changes to the notes files and other project settings just like it does for the project text. But the Paratext project history does not show these details. You need to have a way to connect to Mercurial more directly than through Paratext to look for these. You can do this either by downloading the TortoiseHG tool, or by running Mercurial commands directly in a command prompt. 
 Downloading TortoiseHG: Go to https://tortoisehg.bitbucket.io/download/index.html and download the latest version for 64 bit Windows. (If you do have 32 bit Windows, you would download that version. All Windows 11 versions are 64 bit, some Windows 10 or earlier versions were 32 bit. You can verify which kind you have by looking up the Windows version info in Windows settings)
 To find where a file was deleted in the project, close Paratext, and in Tortoise HG bring up the HG workbench. (In File Viewer, right click on the project folder, choose "show more options" then pick HG Workbench in the Tortoise HG section)
-If you know the file was recently deleted, you can find it by inspecting the recent history points. For instance in this example, one user's note file was deleted. ![note file deleted](image-1.png).   
+If you know the file was recently deleted, you can find it by inspecting the recent history points. For instance in this example, one user's note file was deleted. ![note file deleted](image-1.png). 
+If you cannot find it, search for a file deletion by typing **removes("*.*")** in the revision set query box![alt text](image-3.png). If the revision set query box is not visible, click in the list of revisions and press Ctrl-S
+To recover the deleted file, go to the history point just before the file was deleted, right click on the file and choose "save at revision" 
+![alt text](image-2.png)  
+The save dialog will suggest adding @ followed by the version number to the file you save, in this example you want to delete those characters to save as the original file name. Now you can restart Paratext, see the missing notes, and do a send/receive to circulate the notes to other project users.
 
+![alt text](image-7.png)
+In the case where the user has some recent notes visible, but older notes were lost, this probably means the file was deleted a while ago, and then the user created some new notes. How can you merge an old notes file with a new one? As above, close Paratext if it is open.
+1) find the deleted file and save from the previous revision as above. In this case though, keep the @NN at the end of the filename, otherwise you would replace the new notes file, losing the new notes.
+2) edit the new file in Notepad (or another text editor) and delete the first two lines, that read 
+**<?xml version="1.0" encoding="utf-8"?>
+<CommentList>**
+3) open the old file and delete the last line, that reads
+**</CommentList>**
+4) select all the old file, then paste it above the contents of the new file, and save your changes. 
+Now start Paratext.
+
+Paratext should now show all the notes. If Paratext says the notes file is corrupt, you did something wrong in the edit.
+Open the corrupt notes file (Paratext will rename it **Notes_User Name.corrupt**) and check for:
+1. the first line is **<?xml version="1.0" encoding="utf-8"?>** (and that line occurs nowhere else in the file)
+2. the second line is **<CommentList>** (and that occurs nowhere else in the file)
+3. the last line is **</CommentList>** (and that line occurs nowhere else in the file) The last line differs from the second line because there is a **/** between **<** and **CommentList>**
 
 
 ## Handoff

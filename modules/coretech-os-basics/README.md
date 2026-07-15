@@ -18,4 +18,6 @@ last_exported: 2026-06-18
 - [Module 2: Installation and Configuration](02-module-2.md)
 - [Module 3: Troubleshooting and Maintenance](03-module-3.md)
 - [Assessment Quiz](04-quiz.md)
-- [Video Script](05-video-script.md)
+- [Video Script: Module 1](05-video-script-module-1.md)
+- [Video Script: Module 2](05-video-script-module-2.md)
+- [Video Script: Module 3](05-video-script-module-3.md)

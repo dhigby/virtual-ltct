@@ -5,7 +5,6 @@ notion_id: ad50e7f3-7d5b-4416-aa38-13de25b22700
 notion_data_source: 7ebb2ef5-9f57-4723-8de0-9cc1ca47ff8e
 target_outcome_level: With Assistance
 competencies:
-  - Lexical Tools
   - Grammar Tools
 content_type: stub
 external_links:

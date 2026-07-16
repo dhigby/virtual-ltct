@@ -20,7 +20,7 @@ _Last generated: 2026-07-16._
 | Competency | Modules | Status |
 | --- | --- | --- |
 | Translation Tools | 7 | ✅ |
-| Lexical Tools | 2 | ✅ |
+| Lexical Tools | 1 | ✅ |
 | Grammar Tools | 1 | ✅ |
 | Phonetic Tools | 0 | ⛔ gap |
 | Phonology Tools | 0 | ⛔ gap |

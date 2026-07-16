@@ -3,7 +3,7 @@
 ## Assessment quiz (10 questions)
 
 This quiz covers all five lessons of the Advanced Paratext Support module — installing
-open-source texts as resource projects, why project history isn't always chronological,
+open-source texts as editable projects, why project history isn't always chronological,
 why user-role edit restrictions aren't foolproof, recovering lost notes and settings, and
 snapshotting an earlier project state into a reference project. You need **80% (8/10)** to
 pass. Questions are a mix of recall, scenario-based application, and true/false. Everything
@@ -13,7 +13,7 @@ is verified; this quiz checks the conceptual and diagnostic knowledge behind it.
 
 ---
 
-### Section 1: Installing Open-Source Texts as a Resource Project (Questions 1-2)
+### Section 1: Installing an Open-Source Text as an Editable Project (Questions 1-2)
 
 **Question 1:** A translator downloads the Berean Standard Bible (BSB), aware that it's
 public domain, and adds it to Paratext — but then finds she cannot type into it. What

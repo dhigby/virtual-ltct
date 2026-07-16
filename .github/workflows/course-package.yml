@@ -1,0 +1,26 @@
+name: Course package check
+
+on:
+  pull_request:
+    paths:
+      - 'modules/**'
+      - 'scripts/check_course_package.py'
+  push:
+    branches: [main]
+    paths:
+      - 'modules/**'
+      - 'scripts/check_course_package.py'
+
+permissions:
+  contents: read
+
+jobs:
+  package:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Validate opted-in course packages
+        run: python scripts/check_course_package.py

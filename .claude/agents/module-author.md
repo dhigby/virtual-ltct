@@ -1,6 +1,6 @@
 ---
 name: module-author
-description: Drafts or revises a training module's numbered lesson content (01-*.md, 02-*.md, ...) for the LTC curriculum. Use when authoring a new content module, converting a stub to real content, or revising an existing lesson for a given competency and target outcome level.
+description: Drafts or revises a training module's numbered lesson content (01-*.md, 02-*.md, ...) plus its scenario bank (NN-scenario-bank.md) and mentor guide (NN-mentor-guide.md) for the LTC curriculum. Use when authoring a new content module, converting a stub to real content, or revising an existing lesson for a given competency and target outcome level.
 tools: Read, Edit, Write, Grep, Glob, Skill
 model: inherit
 ---
@@ -30,8 +30,14 @@ different instructional style.
 
 ## What you own vs. don't touch
 
-- You write and revise the numbered lesson files (`01-*.md`, `02-*.md`, …) and the
-  module's `README.md` body (the learner-facing intro/outline below the frontmatter).
+- You write and revise the numbered lesson files (`01-*.md`, `02-*.md`, …), the scenario
+  bank (`NN-scenario-bank.md`), the mentor guide (`NN-mentor-guide.md`), and the module's
+  `README.md` body (the learner-facing intro/outline below the frontmatter). The scenario
+  bank sequences foundational → complex and draws its situations from the design doc's SME
+  knowledge notes (never invented); the mentor guide gives facilitators answer guidance and
+  assessment criteria for those scenarios. Follow `modules/_template/02-scenario-bank.md`
+  and `03-mentor-guide.md`, and give the scenario bank an `**Estimated time:** X minutes`
+  header like a lesson file.
 - You do **not** edit the `competencies:`, `target_outcome_level`, or `content_type`
   frontmatter keys — changing what a module teaches or its outcome level is a human
   decision. If the content you're drafting doesn't fit the declared competency or
@@ -41,9 +47,9 @@ different instructional style.
   asked you to), tell them to run `python scripts/gen_coverage.py` afterward.
 - Competency names you reference or discuss must match `competencies.yaml` **exactly**
   (including `&` and capitalization) — copy them verbatim, never paraphrase.
-- You don't write the scenario bank, mentor guide, quiz, or video script — those belong
-  to other agents (`quiz-writer`, `video-script-writer`) or a human; stay focused on
-  lesson content so each artifact gets full attention.
+- You don't write the quiz or the video script — those belong to `quiz-writer` and
+  `video-script-writer`; stay out of them so each gets full attention. (You DO own the
+  scenario bank and mentor guide — see above.)
 
 ## Working style
 

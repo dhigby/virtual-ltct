@@ -24,9 +24,14 @@ CATS = yaml.safe_load((REPO_DIR / "competencies.yaml").read_text(encoding="utf-8
 CAT_COLOR = {"Core Technical": "1f77b4", "Technology Domain": "2ca02c", "Core": "ff7f0e",
              "Professional": "9467bd", "Education": "e6c200", "Meta": "7f7f7f"}
 
-# Project single-select fields and the manifest key each reads from
+# Project single-select fields and the manifest key each reads from.
+# NOTE: "Module Status" here is the full 8-stage pipeline vocabulary (see process/PROCESS.md).
+# This list is only used when bootstrapping a board FROM SCRATCH — it does NOT migrate an
+# existing board. To expand an already-populated board, follow process/board-admin.md
+# (rename "In progress" -> "Drafting" in the UI so item values survive).
 FIELDS = {
-    "Module Status": ("status", ["Not started", "In progress", "Internal Review", "Online"]),
+    "Module Status": ("status", ["Not started", "Design", "Drafting", "SME Check",
+                                 "Internal Review", "Pilot", "Publishing", "Online"]),
     "Priority": ("priority", ["Low", "Medium", "High"]),
     "Consultant Tier": ("consultant_tier", ["Practitioner", "Trainer", "Expert"]),
     "Target Outcome Level": ("target_outcome_level", ["Has knowledge", "With Assistance"]),
@@ -100,6 +105,9 @@ def cmd_project():
         iid = item["id"]
         for fname, (mkey, _) in FIELDS.items():
             val = m.get(mkey)
+            # The Notion export used the old status vocabulary; map the one renamed option.
+            if fname == "Module Status" and val == "In progress":
+                val = "Drafting"
             if not val or fname not in fmap:
                 continue
             fid, omap = fmap[fname]

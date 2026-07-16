@@ -1,6 +1,6 @@
 # Course Design Document
 
-> **Before proceeding:** Copy this file into your new course folder as `00-design.md`. Content drafting must not begin until this document is approved by a human reviewer.
+> **Before proceeding:** Copy this file into your new course folder as `00-design.md`. Content drafting must not begin until this document is approved by a human reviewer. This is stage 1 of the [production pipeline](../../process/PROCESS.md) — see [`process/stages/01-design.md`](../../process/stages/01-design.md) and [`02-approve.md`](../../process/stages/02-approve.md).
 
 ## Course overview
 
@@ -10,7 +10,10 @@
 | **Competencies addressed** | [List verbatim competency names from `competencies.yaml`, one per line] |
 | **Target outcome level** | [Has knowledge \| With Assistance] |
 | **SME(s) consulted** | [Name(s) and affiliation] |
-| **Design status** | Draft / Approved by _________ on _________ |
+| **Design status** | Draft |
+<!-- On approval (stage 2), the Design Approver replaces the line above with:
+     | **Design status** | Approved by <name> on <YYYY-MM-DD> | -->
+
 
 ## Learning objectives
 

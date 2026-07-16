@@ -12,6 +12,28 @@ not an application. There is no build/test/run loop; the "checks" are content + 
   competencies across 6 categories — is the **source of truth** for coverage.
 - Migrated from a Notion database (2026-06-18); content now lives here as markdown.
 
+**Terminology:** a **course** is one folder under `modules/<slug>/`; a **lesson** is one
+numbered file inside it (`01-*.md`, …), capped at 90 minutes. (The board field "Module
+Status" predates this terminology — read "Module" there as *course*.)
+
+## The production process
+
+New content courses are built through an 8-stage pipeline — Design → approve → draft →
+alignment check → SME fact-check → internal review → pilot → publish — documented in
+[`process/PROCESS.md`](process/PROCESS.md) with a one-page how-to per stage under
+[`process/stages/`](process/stages/). Each course has one **Course production tracker**
+issue on the board; its checkboxes are the per-course to-do list. The
+[`/next-step`](.claude/commands/next-step.md) command tells a contributor exactly where a
+course is and what to run next. Seven per-stage subagents live in
+[`.claude/agents/`](.claude/agents/).
+
+**Board "Module Status" values** (the pipeline vocabulary):
+`Not started · Design · Drafting · SME Check · Internal Review · Pilot · Publishing · Online`.
+
+**Backfill** of legacy Cypher-delivered courses (making this repo the source of truth) is a
+separate faithful-import workstream — see [`process/backfill.md`](process/backfill.md) and
+[`BACKFILL.md`](BACKFILL.md); backfilled courses are grandfathered and skip the full package.
+
 ## Conventions you MUST follow (these are easy to get wrong)
 
 1. **Source-of-truth split.** A module's `competencies`, `target_outcome_level`,
@@ -33,6 +55,10 @@ not an application. There is no build/test/run loop; the "checks" are content + 
 
 5. **Don't commit large video files.** Link to Vimeo/Google Drive under `external_links:`
    in frontmatter instead. Small images are fine in the module folder (e.g. `assets/`).
+
+6. **Lesson duration header.** Every numbered lesson file and the scenario bank opens, right
+   under the H1, with `**Estimated time:** X minutes` — no lesson exceeds 90 minutes. This is
+   verified by the alignment-reviewer agent and by `scripts/check_course_package.py`.
 
 ## Module frontmatter shape
 
@@ -94,6 +120,9 @@ Preview locally with `pip install -r docs-requirements.txt && mkdocs serve`.
 ## Maintainer scripts (`scripts/`)
 
 - `gen_coverage.py` — regenerates `COVERAGE.md` (also run by CI).
+- `check_course_package.py` — validates a course package's completeness/format (run by CI).
+  Only checks courses that have opted into the pipeline (those with a `00-design.md`); all
+  legacy courses are untouched. `--course <slug>` runs it for one course.
 - `gen_site.py` — `mkdocs-gen-files` build hook; generates the site pages + nav from
   `competencies.yaml` and `competencies/*.md`. Not run by hand; invoked by `mkdocs`.
 - `check_competency_descriptors.py` — validates descriptors stay in sync with the
@@ -106,9 +135,13 @@ Preview locally with `pip install -r docs-requirements.txt && mkdocs serve`.
 
 ## Authoring style
 
-This curriculum follows the **Learning That Lasts** adult-learner framework — there is a
-`training-content` skill for authoring workshop/training material. Prefer it when drafting
-or revising module content.
+This curriculum follows the **Learning That Lasts** adult-learner framework: every lesson
+body is structured as four `##` phases in order — **Connect → Content → Challenge →
+Change** — budgeted by the lesson's `**Estimated time:**` header (roughly 10 / 25–30 /
+15–20 / 5–10 minutes for a 60-minute lesson). The `training-content` skill, committed at
+[`.claude/skills/training-content/`](.claude/skills/training-content/SKILL.md), defines
+the methodology — prefer it when drafting or revising module content. The alignment
+reviewer (stage 4) verifies the four phases are present in each lesson.
 
 See [README.md](README.md) and [CONTRIBUTING.md](CONTRIBUTING.md) for the human-facing
 contributor workflow (browser editing, GitHub Desktop, adding modules via issue template).

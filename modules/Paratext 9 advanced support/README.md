@@ -45,7 +45,7 @@ Work through the numbered files in order:
 
 | File | What it is | Estimated time |
 | --- | --- | --- |
-| [`01-installing-open-source-texts.md`](01-installing-open-source-texts.md) | Lesson 1 — installing an open-source/openly-licensed text as an editable resource project | 35 min |
+| [`01-installing-open-source-texts.md`](01-installing-open-source-texts.md) | Lesson 1 — installing an open-source/openly-licensed text as an editable project | 35 min |
 | [`02-project-history-accuracy.md`](02-project-history-accuracy.md) | Lesson 2 — why Paratext's chronological project-history view isn't always accurate | 40 min |
 | [`03-user-roles-and-edit-access.md`](03-user-roles-and-edit-access.md) | Lesson 3 — why per-book edit-role restrictions aren't foolproof, and the safe recovery response | 30 min |
 | [`04-recovering-notes-and-settings.md`](04-recovering-notes-and-settings.md) | Lesson 4 — recovering lost notes, term renderings, and other non-text project settings with TortoiseHG | 40 min |

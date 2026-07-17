@@ -1,4 +1,4 @@
-# Installing an Open-Source Text as a Resource Project
+# Installing an Open-Source Text as an Editable Project
 
 **Estimated time:** 35 minutes
 
@@ -8,7 +8,7 @@ translation project rather than as a locked Paratext resource.
 
 ## Learning objectives
 
-- You will be able to install an openly-licensed/open-source Scripture text as a readable
+- You will be able to install an openly-licensed/open-source Scripture text as an editable
   project in Paratext, distinct from the team's own translation draft project.
 
 ## Connect

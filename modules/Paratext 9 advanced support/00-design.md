@@ -43,7 +43,7 @@ rather than pre-emptively.
 
 | # | Objective | Source | Assessed by |
 | --- | --- | --- | --- |
-| 1 | Learner can install an openly-licensed/open-source Scripture text as a readable (resource) project in Paratext, distinct from the team's own translation draft project. | Translation Tools, 3.0 — Scripture Markup and Import, Practitioner ("Convert and import data from other formats (plain text, Word document, etc) into translation software.") | Scenario Bank #1 |
+| 1 | Learner can install an openly-licensed/open-source Scripture text as an editable project in Paratext, distinct from the team's own translation draft project. | Translation Tools, 3.0 — Scripture Markup and Import, Practitioner ("Convert and import data from other formats (plain text, Word document, etc) into translation software.") | Scenario Bank #1 |
 | 2 | Learner can diagnose why Paratext's chronological project-history view does not always reflect the true order of edits, and determine the actual sequence of changes using the tools available. | Translation Tools, 5.0 — Scripture Collaboration, Practitioner ("Advise users in best-practices for collaboration and data safety … such as the use of Send/Receive.") — approximate match; the descriptor names Send/Receive and data safety generally but does not specifically call out history-view accuracy. Closest existing row. | Scenario Bank #2; Quiz |
 | 3 | Learner can explain why Paratext's per-book user-role edit restrictions are not an absolute guarantee — that a book file can be altered outside Paratext (crashes, file-system corruption, an external history restore) and that change will propagate to the whole team via Send/Receive — and can apply the correct response (delete-project-and-resync, not an immediate Send/Receive) when a user's local files may be corrupted. | Translation Tools, 5.0 — Scripture Collaboration, Practitioner ("Advise users in best-practices for collaboration and data safety … such as the use of Send/Receive.") — approximate match; the descriptor's general data-safety language covers this failure mode without naming it specifically. | Scenario Bank #3; Quiz |
 | 4 | Learner can recover a previous version of project notes, term renderings, or other non-text project settings that are not restored by a plain text rollback. | Translation Tools, 5.0 — Scripture Collaboration, Practitioner ("Advise users in best-practices for collaboration and data safety … such as the use of Send/Receive.") — **flagged: no clean match.** The descriptor's data-safety language does not enumerate recovery of notes/renderings/non-text settings specifically; this is the closest existing row, included because the SME named it as a real, recurring support case. | Scenario Bank #4; Quiz |
@@ -53,12 +53,12 @@ rather than pre-emptively.
 
 | File | Topic | Objectives covered | Estimated minutes |
 | --- | --- | --- | --- |
-| `01-installing-open-source-texts.md` | Installing an open-source/openly-licensed text as a readable resource project | 1 | 35 |
+| `01-installing-open-source-texts.md` | Installing an open-source/openly-licensed text as an editable project (not a Paratext resource) | 1 | 35 |
 | `02-project-history-accuracy.md` | Understanding and troubleshooting Paratext's chronological project-history view | 2 | 40 |
 | `03-user-roles-and-edit-access.md` | Why Paratext's per-book edit-role restrictions aren't foolproof, and the safe recovery response when a user's local files may be corrupted | 3 | 30 |
 | `04-recovering-notes-and-settings.md` | Recovering previous versions of project notes, term renderings, and other non-text settings | 4 | 40 |
 | `05-snapshotting-to-a-reference-project.md` | Saving an earlier text state into a reference project | 5 | 30 |
-| `06-scenario-bank.md` | Applied practice: five "here's a broken/at-risk project — fix it" recovery scenarios, one per topic, sequenced simplest (resource install) → most complex (notes/settings recovery via TortoiseHG) | 1, 2, 3, 4, 5 | 80 |
+| `06-scenario-bank.md` | Applied practice: five "here's a broken/at-risk project — fix it" recovery scenarios, one per topic, sequenced simplest (editable-project install) → most complex (notes/settings recovery via TortoiseHG) | 1, 2, 3, 4, 5 | 80 |
 | `07-mentor-guide.md` | Facilitator notes: rubric for grading each scenario, what a complete recovery looks like, common wrong turns | — | — |
 | `08-quiz.md` | Assessment | 1, 2, 3, 4, 5 | 20 (not counted — see below) |
 | **Total learner seat time** | | | **255** |

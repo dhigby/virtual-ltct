@@ -15,15 +15,15 @@ last_exported: 2026-06-18
 # Analyzing texts with Fieldworks
 
 Grammar/interlinear-focused FieldWorks Language Explorer (FLEx) training: project setup,
-interlinearizing texts, and (coming in Module 3) parsing, concordance, and text charting.
-See `00-design.md` for the full course design, including SME notes on live-verified FLEx
-9.3.9 procedures.
+interlinearizing texts, and parsing, concordance, and text charting. See `00-design.md` for
+the full course design, including SME notes on live-verified FLEx 9.3.9 procedures.
 
 ## Sub-modules
 
 - [Module 1: FLEx Fundamentals & Project Setup](01-module-1.md)
 - [Module 2: Interlinearizing Texts](02-module-2.md)
-- Module 3: Parsing, Concordance & Text Charting — not yet drafted
+- [Module 3: Parsing, Concordance & Text Charting](03-module-3.md)
+- Assessment quiz — not yet drafted
 
 **Source material:** adapted from [lingtran.net/FLEx-8](https://lingtran.net/FLEx-8), a FLEx 8
 facilitator-led workshop course. Only the grammar/interlinear/parsing lessons are in scope

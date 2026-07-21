@@ -34,3 +34,13 @@ The PDF quick guide referenced in the Cypher draft is saved to this folder as
 they're the draft this revision started from, not the current source of truth. The
 "Revision with chipp.ai" section (an interactive AI tutor tool, not static lesson content)
 was never in scope for backfill.
+
+**Deployment note:** the `Cypher-module_N.html` files reference four decorative
+section-divider icons (`connect.png`, `content.png`, `challenge.png`, `change.png`) at
+Cypher-internal paths. These are dropped from this repo's markdown (replaced with plain
+bold section labels) since they're presentation, not content — but the same icon
+filenames and file path appear across other courses too (e.g. `coretech-os-basics`),
+suggesting they're a standard, reusable Connect/Content/Challenge/Change icon set already
+built into Cypher's page template for this curriculum. Whoever re-inserts this course's
+content back into Cypher should apply that same standard icon set there, rather than
+treating it as missing content to recreate.

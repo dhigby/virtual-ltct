@@ -36,6 +36,10 @@ One row per planned numbered lesson file, per the Claude.ai-chat draft:
 
 **Open question:** the Claude-chat draft roughly doubles-to-triples the original course's stated pacing. Confirm with the SME whether this expanded scope/depth is wanted, or whether the draft should be tightened back toward the original course's lighter pace before being adopted.
 
+## Video script
+
+**No `NN-video-script.md` file is needed for this course.** Module 1 references one video, `why.mp4`, which already exists (recorded, not something to plan/script) — its transcript is embedded directly in `01-module-1.md` as a NOTE callout, per the SME's convention of putting an existing video's transcript at the end of the relevant module as reference detail. Modules 2-4 don't reference any video. A `video-script.md` file is only for planning/recording a video that doesn't exist yet — since that doesn't apply here, this course is complete without one.
+
 ## Assessment plan
 
 The original Cypher course's two quizzes (Module 1 check-in + Final Assessment, both already faithfully backfilled into `05-quiz.md`) may or may not still map cleanly onto the new module content once it changes — recheck once the new modules are finalized.

@@ -1,8 +1,9 @@
 # Legacy content backfill
 
-These courses were delivered in **Cypher for Business** (or on Google Sites / as PDFs) and
-came into this repo only as stubs or rough README imports. **Backfill** brings their real
-content into the repo so this becomes the source of truth. Procedure:
+These courses were developed and drafted in **Cypher for Business** (or on Google Sites / as
+PDFs) — not necessarily delivered to any learners yet — and came into this repo only as
+stubs or rough README imports. **Backfill** brings their real content into the repo so this
+becomes the source of truth. Procedure:
 [`process/backfill.md`](process/backfill.md). Conversion is done by the
 [`content-backfiller`](.claude/agents/content-backfiller.md) agent.
 
@@ -22,7 +23,7 @@ lossy (garbled headers, `<empty-block/>` markers) or never happened.
 | `coretech-fonts-unicode` | Vimeo: https://vimeo.com/1178428863 | Not started | |
 | `coretech-malware` | _(locate in Cypher)_ | Not started | |
 | `coretech-os-basics` | _(locate in Cypher)_ | Not started | |
-| `coretech-why-keboards-matter` | _(locate in Cypher)_ | Not started | |
+| `coretech-why-keyboards-matter` | Cypher for Business (LMS) | Graduated to the full pipeline (see `00-design.md`) — the SME chose a Claude.ai-chat-drafted revision over a faithful backfill; every specific technical claim was verified live against Windows 11 + Keyman before being adopted. No longer tracked here as a pure fidelity import. | Jenni Beadle |
 | `cross-cultural` | Google Site: https://sites.google.com/sil.org/language-technology-academy/courses/general/cross-cultural | Not started | |
 | `data-manipulation-skills` | _(locate in Cypher)_ | Not started | |
 | `dbl-submission-for-translators` | _(locate in Cypher)_ | Not started | |

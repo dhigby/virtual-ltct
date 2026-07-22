@@ -26,11 +26,12 @@ feedback has been gathered yet.
 
 - [Using the RegEx Pal User Menu](01-using-the-regex-pal-user-menu.md)
 
+`userMenu.txt` (the ready-made User Menu file this lesson's activities depend on) is now
+included in this folder — see the lesson's "Before you start" step for how learners install
+it.
+
 ## Pending items
 
-- **`userMenu.txt`** — the RegEx Pal User Menu file used in this lesson (with Phil's
-  extended set of pre-built operations) is not yet attached to this module. It needs to be
-  copied in so learners can import it into their own Paratext projects.
 - **Screenshots** — the five images originally embedded in this lesson are no longer
   accessible (broken internal links from the Notion export). New screenshots are being
   retaken.

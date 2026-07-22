@@ -74,9 +74,15 @@ effectiveness is unconfirmed.
   processed "all books" only because all books happened to be selected in Choose Books at
   the time, not because the operation ignores that setting).
 
+**`userMenu.txt` (Phil's extended User Menu file) is now attached to this module folder.**
+Installing it (copy into `My Paratext 9 Projects` or `My Paratext 8 Projects`, depending on
+installed version) is a prerequisite step in the lesson — without it, none of the lesson's
+four named operations (Find close codes preceded by a space, Count all cap words, Extract
+all footnotes, Replace missing space after `\v`) would exist in a learner's own User Menu.
+`Tools > Edit User Menu...` is a distinct feature (for authoring individual new entries one
+at a time) and is not how this file gets installed.
+
 **Known pending items (tracked in `README.md`):**
-- `userMenu.txt` (Phil's extended User Menu file, referenced by the lesson) is not yet
-  attached to this module folder.
 - Five screenshots originally embedded in the lesson are inaccessible (broken Notion export
   links); new ones are being retaken by the SME.
 - The companion video (linked in `README.md`'s `external_links`) has a known, unfixed error

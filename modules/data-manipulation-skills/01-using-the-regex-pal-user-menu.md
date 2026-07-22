@@ -34,7 +34,14 @@ Take a few minutes to think about these questions. You may find it helpful to jo
 
 The **User Menu** in Paratext RegEx Pal is a list of saved regex operations that you can run on your project with a single click. Someone has already done the work of writing the regex — all you need to do is select the right operation and run it.
 
-To open it, click **User** in the menu bar. You will see a list of items. Your list may look different from your mentor's list or a colleague's list — that is completely normal. User menus can be customised over time, and can grow quite long (some experienced typesetters build up user menus with dozens of specialised entries).
+To open it, click **User** in the menu bar. You will see a list of items. Your list may look different from your mentor's list or a colleague's list — that is completely normal. User menus can be customised over time, and can grow quite long (some experienced typesetters build up user menus with dozens of specialised entries — one typesetter's own menu runs to nearly 60 entries, most of them well beyond what this lesson covers).
+
+**Before you start:** the four operations used as examples in this lesson (Find close codes preceded by a space, Count all cap words, Extract all footnotes, Replace missing space after `\v`) need to already be in your User Menu. This module includes a ready-made menu file, `userMenu.txt`, with these and other operations already defined. To add it:
+1. Close RegEx Pal and Paratext if they're open.
+2. Copy `userMenu.txt` into your **My Paratext 9 Projects** folder (or **My Paratext 8 Projects**, depending on your installed version).
+3. Reopen Paratext and RegEx Pal. Click **User** in the menu bar to confirm the new operations are listed.
+
+**NOTE** `Tools > Edit User Menu...` is a different thing — that's for writing and adding your *own* individual regex entries one at a time (likely how the original author of `userMenu.txt` built theirs up over time). You don't need it just to use a menu file someone else has already prepared.
 
 The operations in the menu fall into four categories:
 - **Find** — locate potential problems in the text

@@ -30,6 +30,19 @@ Take a few minutes to think about these questions. You may find it helpful to jo
 
 ## Content
 
+### Opening RegEx Pal
+
+RegEx Pal is a separate program, but the easiest way to open it is from within Paratext. To do so:
+1. In the project you want to work in, click that project's menu icon (each open project window has its own menu, separate from Paratext's main menu).
+2. Go to **Advanced**.
+3. Click **RegEx Pal...**.
+
+Once open, RegEx Pal has its own **Find**, **Replace**, and **Count/Extract** modes, and a **User** menu of ready-made operations, shown here running a live search on a project:
+
+![RegEx Pal open on a Spanish project, with a Find pattern matching capitalised words after "rey" (king), highlighting matches for review.](RegExPal-pp.png)
+
+**NOTE** RegEx Pal opens scoped to whichever project you opened it from. If you need to work with a different project, close RegEx Pal and reopen it from that project's menu instead.
+
 ### What Is the User Menu?
 
 The **User Menu** in Paratext RegEx Pal is a list of saved regex operations that you can run on your project with a single click. Someone has already done the work of writing the regex — all you need to do is select the right operation and run it.
@@ -92,7 +105,11 @@ This counts words written entirely in capital letters. All-cap words can appear 
 1. Use **Tools > Choose Books** to select one book.
 2. Click **User** in the menu bar.
 3. Click **Count all cap words**.
-4. Note the number returned.
+4. Look at the results.
+
+![RegEx Pal showing the results of Count all cap words on a French exercise project — each distinct all-cap word listed with its occurrence count and references, plus a total row.](countAllCaps.png)
+
+**What the results look like:** each distinct all-cap word appears in the list along with how many times it occurred and its references — for example, `3: ACTES [ACT 1:0, ACT 1:0, ACT 1:0]` means "ACTES" occurred 3 times, at those three locations. A **TOTAL** row at the end sums every match.
 
 **What to do with the result:**
 - Think about whether the number seems right for the book you selected.

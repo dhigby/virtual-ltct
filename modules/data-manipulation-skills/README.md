@@ -32,9 +32,10 @@ it.
 
 ## Pending items
 
-- **Screenshots** — the five images originally embedded in this lesson are no longer
-  accessible (broken internal links from the Notion export). New screenshots are being
-  retaken.
+- **Screenshots** — two of the five original images have been replaced: `RegExPal-pp.png`
+  (illustrating the RegEx Pal window, embedded in "Opening RegEx Pal") and `countAllCaps.png`
+  (a real Count all cap words result, embedded in Category 2). Three more are still needed
+  for the Find, Extract, and Replace sections.
 - **Video correction** — the companion Vimeo video (linked above) has a known error around
   4:36-4:48 that needs fixing before this is treated as final; noted inline in the lesson
   file as a TODO.

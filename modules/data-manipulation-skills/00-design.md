@@ -100,8 +100,14 @@ on their mentor's availability. Target outcome level remains **With Assistance**
 - Three of five original screenshots (Find, Extract, and the Replace confirmation dialog) are
   still missing; considered optional polish, not blocking, since the lesson text already
   describes each accurately from live verification.
-- The companion video (linked in `README.md`'s `external_links`) has a known, unfixed error
-  around 4:36-4:48 — noted as an inline TODO in the lesson file, not exposed to learners.
+
+**Video error — resolved by documentation, not by editing the video.** The companion video
+(`RegEx: A Consultant's Guide`) has a known error at 4:36-4:48 (on-screen text shows `/`
+where it should show `\`). Editing the video itself (NotebookLM-generated) proved too tedious
+for the value gained, and the video wasn't referenced anywhere in the lesson body to begin
+with — only in `README.md`'s frontmatter link. Decision: add the correction as a learner-facing
+NOTE in `README.md`'s new "Companion video" section (where the link now lives) rather than
+attempt a video edit or bury the correction in an internal-only comment.
 
 Do not invent details beyond what's confirmed above — anything about RegEx Pal's actual UI
 behavior not covered here should be checked live before being added to the lesson.

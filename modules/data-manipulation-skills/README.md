@@ -24,6 +24,13 @@ no learner feedback has been gathered yet. Every trainee is allocated a mentor, 
 availability varies — the lesson's mentor check-ins now also say what to do in the meantime
 if an immediate check-in isn't possible, rather than blocking on mentor availability.
 
+## Companion video
+
+[RegEx: A Consultant's Guide](https://vimeo.com/1179288729)
+
+**NOTE** At 4:36-4:48 in this video, the on-screen text shows `/` — this should read `\`
+(backslash). The narration itself is correct; only the on-screen character is wrong.
+
 ## Sub-modules
 
 - [Using the RegEx Pal User Menu](01-using-the-regex-pal-user-menu.md)
@@ -39,9 +46,10 @@ it.
   (a real Count all cap words result, embedded in Category 2). The remaining three (Find,
   Extract, Replace) are optional polish, not blocking — the lesson text already describes
   each accurately from live verification.
-- **Video correction** — the companion Vimeo video (linked above) has a known error around
-  4:36-4:48 that needs fixing before this is treated as final; noted inline in the lesson
-  file as a TODO.
+- **Shorter menu for smaller screens** — Phil's `userMenu.txt` (nearly 60 entries) is hard to
+  scroll through on a smaller screen. Consider adding guidance for reverting to a shorter/
+  default User Menu, or trimming `userMenu.txt` down, once the default menu (currently being
+  located by the SME) is available to reference.
 
 ## Possible future expansion
 

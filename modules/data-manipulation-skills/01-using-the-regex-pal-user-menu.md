@@ -232,5 +232,3 @@ If you have access to a test project, try the full **Replace missing space after
 ### Looking Ahead
 
 Once you are comfortable using the User Menu with guidance, the next step is to use these tools independently — selecting the right operation for a given situation, interpreting the results without assistance, and deciding what action to take.
-
-<!-- TODO: video has a known error at 4:36-4:48 that needs correcting to \\ — NotebookLM-generated videos are difficult to edit; fix separately before treating this as final. -->

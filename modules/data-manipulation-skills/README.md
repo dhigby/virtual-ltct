@@ -19,8 +19,10 @@ finding, counting, extracting, and replacing patterns in a translation project, 
 needing to write regex yourself.
 
 Written for **AILTW** (An Indian Language Technology Workshop) 2026, after previous attempts
-to teach regex directly to African colleagues were set aside. Delivered once; no learner
-feedback has been gathered yet.
+to teach regex directly to African colleagues were set aside. Delivered once (mentor-supported);
+no learner feedback has been gathered yet. Every trainee is allocated a mentor, but
+availability varies — the lesson's mentor check-ins now also say what to do in the meantime
+if an immediate check-in isn't possible, rather than blocking on mentor availability.
 
 ## Sub-modules
 
@@ -34,8 +36,9 @@ it.
 
 - **Screenshots** — two of the five original images have been replaced: `RegExPal-pp.png`
   (illustrating the RegEx Pal window, embedded in "Opening RegEx Pal") and `countAllCaps.png`
-  (a real Count all cap words result, embedded in Category 2). Three more are still needed
-  for the Find, Extract, and Replace sections.
+  (a real Count all cap words result, embedded in Category 2). The remaining three (Find,
+  Extract, Replace) are optional polish, not blocking — the lesson text already describes
+  each accurately from live verification.
 - **Video correction** — the companion Vimeo video (linked above) has a known error around
   4:36-4:48 that needs fixing before this is treated as final; noted inline in the lesson
   file as a TODO.

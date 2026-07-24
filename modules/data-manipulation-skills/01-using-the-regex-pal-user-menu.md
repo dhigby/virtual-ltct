@@ -91,7 +91,7 @@ In USFM, a closing marker like `\f*` or `\nd*` must follow the text directly, wi
 
 **Key Point:** Find operations are always safe. They never change your text. You can run them as many times as you like.
 
-> **Check in with your mentor:** Share your results. How many did you find? Were any of them surprising? Your mentor can help you decide which results need attention.
+> **Check your results:** How many did you find? Were any of them surprising? Share your results with your mentor when you next connect — they can help you decide which need attention. If your mentor isn't available right now, use the "What to do with the results" guidance above to make an initial judgment yourself, then follow up with them.
 
 ### Category 2: Count
 
@@ -116,9 +116,9 @@ This counts words written entirely in capital letters. All-cap words can appear 
 - If your project uses all-cap words for a specific purpose, does the count match what you would expect?
 - If the number seems unexpectedly high, make a note to investigate further using a Find operation.
 
-**Key Point:** A Count result on its own does not tell you whether something is right or wrong — you need to know your project's conventions first. If you are unsure how to interpret the number, discuss it with your mentor.
+**Key Point:** A Count result on its own does not tell you whether something is right or wrong — you need to know your project's conventions first. If you are unsure how to interpret the number, discuss it with your mentor, or in the meantime compare it against a similar book in the same project.
 
-> **Check in with your mentor:** Share the number you got. Does it seem consistent with the project's conventions? Your mentor can help you decide whether it warrants further investigation.
+> **Check your result:** Does the number seem consistent with the project's conventions? Share what you got with your mentor and talk it through together. If they're not available right away, compare it with the same count on a different book in the same project in the meantime — a big difference between books is usually worth a closer look.
 
 ### Category 3: Extract
 
@@ -143,7 +143,7 @@ Note that Paratext's own Checklist view is often more useful for detailed footno
 
 **Key Point:** Extract operations are always safe. The original text is never changed — the operation only copies content into the results list.
 
-> **Check in with your mentor:** Share anything you noticed in the extracted list. Your mentor can help you decide whether any of the footnotes need attention.
+> **Check what you noticed:** Share anything unusual you spotted in the extracted list with your mentor and talk through whether it needs attention. If they're busy right now, flag it in your notes so you don't lose track of it, and bring it to them when you can.
 
 ### Category 4: Replace
 
@@ -165,7 +165,7 @@ In USFM, a verse marker must be followed by a space before the verse number: `\v
 
 **Key Point:** This operation gives you two layers of safety: a Find preview beforehand (steps 3-4) showing the full scope, and an interactive confirmation for every match during the Replace itself (steps 5-6). Use both — don't skip the Find preview just because the Replace is already interactive.
 
-> **Check in with your mentor:** Walk through this operation together if possible, especially the first time. Your mentor can confirm you're reading each match correctly before confirming it.
+> **Take extra care here:** This is the one operation in this lesson that changes your text, so try to have your mentor walk through it with you the first time. If they're not available right when you're ready to try this, go slowly on your own — read the reference and the Find/Replace pattern for every match before choosing Yes, and use **No** or **Cancel** rather than guess if anything looks unfamiliar. Follow up with your mentor afterward to confirm you read the matches correctly.
 
 ### Key Takeaways
 
@@ -179,7 +179,7 @@ In USFM, a verse marker must be followed by a space before the verse number: `\v
 
 ### Activity: Try It On Your Own Project
 
-Work through each step below using a Paratext project. Take your time — there is no rush. If you are unsure about a result at any point, make a note and discuss it with your mentor.
+Work through each step below using a Paratext project. Take your time — there is no rush. If you are unsure about a result at any point, make a note to discuss with your mentor, and revisit the relevant section above in the meantime.
 
 **Step 1 — Find**
 
@@ -194,7 +194,7 @@ Run **Find close codes preceded by a space** on one book of your project.
 Run **Count all cap words** on the same book.
 - What number did you get?
 - Does that seem consistent with how your project uses all-cap words?
-- Make a note of the number so you can discuss it with your mentor.
+- Make a note of the number to discuss with your mentor.
 
 **Step 3 — Extract**
 
@@ -208,7 +208,7 @@ Run **Extract all footnotes** on the same book.
 Select **Replace missing space after \v** from the User Menu on a test book, then switch to **Tools > Find** to preview the matches before changing anything.
 - How many matches did the Find preview show?
 - Now switch to **Tools > Replace** and watch each match as it's presented, deciding Yes, No, or Yes To All for each one.
-- If anything looks unexpected, choose Cancel and check with your mentor before continuing.
+- If anything looks unexpected, choose Cancel and check with your mentor. If they're not available right away, don't proceed until you're confident you understand what the pattern would change.
 
 ### Reflection Question
 

@@ -88,9 +88,18 @@ all footnotes, Replace missing space after `\v`) would exist in a learner's own 
 `Tools > Edit User Menu...` is a distinct feature (for authoring individual new entries one
 at a time) and is not how this file gets installed.
 
+**Design decision: works around mentor availability, not mentor absence.** Every trainee is
+allocated a mentor — the real constraint is that some mentors are busier or less immediately
+available than others, not that a learner might have none. The lesson's "Check in with your
+mentor" checkpoints keep the mentor as the expected point of contact throughout, but where an
+immediate check-in might not be possible, each checkpoint now also says what to do in the
+meantime (make a note, compare against another book, etc.) so a learner isn't blocked waiting
+on their mentor's availability. Target outcome level remains **With Assistance**.
+
 **Known pending items (tracked in `README.md`):**
-- Five screenshots originally embedded in the lesson are inaccessible (broken Notion export
-  links); new ones are being retaken by the SME.
+- Three of five original screenshots (Find, Extract, and the Replace confirmation dialog) are
+  still missing; considered optional polish, not blocking, since the lesson text already
+  describes each accurately from live verification.
 - The companion video (linked in `README.md`'s `external_links`) has a known, unfixed error
   around 4:36-4:48 — noted as an inline TODO in the lesson file, not exposed to learners.
 

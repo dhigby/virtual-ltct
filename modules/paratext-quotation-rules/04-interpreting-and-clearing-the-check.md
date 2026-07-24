@@ -150,11 +150,15 @@ only for configuration problems.
 3. The check shows an unexpected Second level quotation mark in Romans 8:1, a verse with no
    dialogue. What is the most likely cause and correct action?
 
-*You should be able to say:* (1) A configuration problem — check whether a paragraph marker
-(`\p`) sits between verses 35 and 38; if so the check expects either a closing mark at each
-paragraph break or a First level Quote Continuer. Configure the First level Quote Continuer if
-Tamba carries speech across paragraphs without reopening, or verify the USFM has no unexpected
-paragraph breaks in the speech. (2) They are configuration problems, not text errors — review
+*You should be able to say:* (1) Check whether a paragraph marker (`\p`) sits between verses 35
+and 38. If it does, Tamba's First level Quote Continuer (`“`, already configured in Lesson 2)
+should appear at the head of that new paragraph — a "Missing closing quotation mark" result on
+a speech that legitimately spans the break usually means the continuer character itself is
+missing from the text. That makes this a **real error**, not a configuration problem: open the
+intervening paragraph(s), confirm each one opens with `“`, and add it wherever it's missing. If
+no paragraph break exists between 35 and 38, look instead for an unclosed Second or Third level
+quotation nested inside the speech, since Tamba's inner levels close and reopen fully rather
+than using a continuer. (2) They are configuration problems, not text errors — review
 each to find the missing rule or setting (e.g. a Quotation types setting that doesn't match how
 the language uses marks there), adjust, and re-run until they clear. (3) A real error — a stray
 quotation character, likely copied from a source text; open the verse, find the stray mark, and

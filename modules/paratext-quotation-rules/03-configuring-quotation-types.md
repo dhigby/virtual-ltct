@@ -172,20 +172,26 @@ things:
 
 1. Tamba does not mark narrator scripture citations with quote marks — these appear as plain
    narrative text.
-2. Tamba does not use continuation marks; each paragraph of a long speech closes and reopens.
+2. Tamba's First level uses a Quote Continuer at new paragraph: a long First level speech
+   repeats the opening mark `“` at the head of each continued paragraph rather than closing and
+   reopening. (Second and Third level have no continuer — those close and reopen fully instead,
+   so they never produce a "Continued quotation" instance.)
 3. When a character quotes their own earlier words (a self-quote), Tamba treats it the same as
    any other direct speech: it **must** be marked with quotation marks.
 
 **Step 1** — Confirm that the current recommended settings handle items 1 and 2 correctly:
 - Quotation from another source = Quote marks are optional (narrator citations not flagged) ✓
-- Continued quotation = Never use quote marks (no continuation marks expected) ✓
+- Continued quotation = Never use quote marks — **this does not match Tamba.** Tamba's First
+  level continuer means a mark (`“`) is expected at the head of every continued paragraph;
+  "Never use quote marks" would flag that expected continuer as an error. This needs to change,
+  alongside item 3.
 
-**Step 2** — For item 3, check the current recommended setting for **Self quote**. The
-recommended default is **Quote marks are optional**. Tamba requires marks for self-quotes, so
-this must change.
+**Step 2** — Check the current recommended setting for **Self quote**. The recommended default
+is **Quote marks are optional**. Tamba requires marks for self-quotes, so this must change too.
 
 Click **Custom settings** at the top of the tab. This switches all drop-downs to editable mode.
-Change **Self quote** from *Quote marks are optional* to **Use quote marks**.
+Change **Self quote** from *Quote marks are optional* to **Use quote marks**, and change
+**Continued quotation** from *Never use quote marks* to **Use quote marks**.
 
 The correct final settings for Tamba:
 
@@ -194,7 +200,7 @@ The correct final settings for Tamba:
 | Normal | Use quote marks | Tamba marks all direct speech |
 | Quotation from another source | Quote marks are optional | Narrator scripture citations are not marked |
 | Self quote | **Use quote marks** | Tamba treats self-quotes the same as Normal speech |
-| Continued quotation | Never use quote marks | Tamba closes and reopens at each paragraph |
+| Continued quotation | **Use quote marks** | Tamba's First level continuer means a mark is expected at every continued paragraph |
 | Potential | Quote marks are optional | Uncertain cases should not generate errors |
 | Indirect | Never use quote marks | Reported speech is not marked |
 | Hypothetical | Never use quote marks | Hypothetical speech is not marked |
@@ -206,6 +212,9 @@ The correct final settings for Tamba:
   source = Optional means no marks are required.
 - Check a verse with indirect speech. With Indirect = Never use quote marks, it should not be
   flagged.
+- Confirm that Matthew 5:4–5:11 (each verse reopening with the First level continuer `“`) is
+  *not* flagged, now that Continued quotation = Use quote marks recognizes the continuer as
+  expected rather than treating it as a stray mark.
 
 **✏️ Produce this (a mentor will review it).** Write one sentence per changed type explaining
 *why* Tamba diverges from (or keeps) the recommended default. A mentor will compare your final

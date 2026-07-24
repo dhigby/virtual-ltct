@@ -60,7 +60,9 @@ All dialogue in the required passages must use the correct Tamba quotation chara
 
 **Apostrophes:** Phase A text should contain **no contractions or possessives** — Tamba’s fictional conventions do not include apostrophes in Phase A, consistent with Exercise 2.3 (which uses Runda as the apostrophe-conflict example, not Tamba). For Phase B, in the text near Romans 1:1 include a word with `’` (U+2019) as an apostrophe — the same character as Tamba’s Second level closing mark. This seeds the configuration-problem scenario in Exercise 4.1, item 5.
 
-**Paragraph-spanning speech:** Matthew 5:3–12 is the key example. Each verse is its own `\p` paragraph. The speech opens with `“` (U+201C) at verse 5:3 and closes with `”` (U+201D) at verse 5:12. No continuation mark appears at the start of verses 5:4–5:12 — Tamba restarts a full open/close pair at each paragraph boundary. This is what the learner configures in Exercise 3.1.
+**Paragraph-spanning speech:** Matthew 5:3–12 is the key example. Each verse is its own `\p` paragraph. The speech opens with `“` (U+201C) at verse 5:3. Because Tamba's First level uses a Quote Continuer, each of verses 5:4–5:11 also opens with `“` (U+201C) — the same character, repeated to signal the speech continues from the previous paragraph. Only verse 5:12, the final paragraph of the speech, also carries the closing mark `”` (U+201D) at its end. This is what the learner configures in Exercise 2.1 (Quote marks tab — the continuer character) and Exercise 3.2 (Quotation types tab — Continued quotation = Use quote marks).
+
+**SME verification needed:** this course relies on the assumption that the Quotation types "Continued quotation" setting governs whether Paratext expects a configured continuer character at a paragraph break, independent of Second/Third level's close-and-reopen behavior. Confirm this against actual Paratext 9.5 behavior on a built `tamba` project before pilot — if the real check behaves differently, Exercise 3.2's Continued quotation setting and the Matthew 5 seeding above will need to be revised together.
 
 Do **not** configure the Quote marks tab or Rules at this stage. The project should arrive at learners with a blank quotation configuration.
 
@@ -116,7 +118,7 @@ The five result items in Exercise 4.1 must be manually introduced into the Phase
 
 | # | Location | What to do in the text |
 |---|----------|------------------------|
-| 1 | Matthew 5:3–12 | Delete the closing `”` (U+201D) at the end of verse 5:12. The speech runs from 5:3 to 5:12 as a single First level quote; removing the closing mark creates an unclosed-quote result reported at Matthew 5:3. |
+| 1 | Matthew 5:3–12 | Delete the closing `”` (U+201D) at the end of verse 5:12 only — leave the First level continuer `“` (U+201C) in place at the head of verses 5:4–5:11. The speech runs from 5:3 through 5:12, linked paragraph to paragraph by the continuer; removing only the final closing mark creates an unclosed-quote result reported back at Matthew 5:3. |
 | 2 | Luke 4:18 | Insert a stray `“` (U+201C) immediately before the first word of the Isaiah citation. Tamba does not mark narrator scripture citations; the stray mark mimics a translator adding a dialogue opener by mistake. |
 | 3 | John 3:16 | Replace the Second level opening mark `‘` (U+2018) with a straight `"` (U+0022) at the start of Jesus's embedded statement within his speech to Nicodemus. |
 | 4 | Acts 2:25–28 | Mark Peter's Psalm 16 citation as a single continuous Second level block: add `‘` (U+2018) at the start of verse 2:25 and `’` (U+2019) at the end of verse 2:28. Do **not** close and reopen at the intermediate paragraph breaks (make sure the text has at least one \p break inside 2:25–28 — the seed depends on it). Tamba restarts marks at every paragraph, so the check reports the span as unclosed; learners identify it as a real error and add the close/reopen pairs. |

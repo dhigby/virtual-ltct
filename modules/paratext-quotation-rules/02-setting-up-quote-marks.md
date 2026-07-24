@@ -111,14 +111,15 @@ using the dropdown arrow (▼) on each cell:
 
 | Level | Opening | Quote Continuer at new paragraph | Closing |
 | --- | --- | --- | --- |
-| First level | `“` (U+201C) | *(leave blank)* | `”` (U+201D) |
+| First level | `“` (U+201C) | `“` (U+201C) | `”` (U+201D) |
 | Second level | `‘` (U+2018) | *(leave blank)* | `’` (U+2019) |
 | Third level | `“` (U+201C) | *(leave blank)* | `”` (U+201D) |
 
 **Steps:**
 1. Click the dropdown (▼) on the **Opening** cell for First level. Select `“` (Left double
    quotation mark, U+201C).
-2. Leave the **Quote Continuer at new paragraph** cell for First level blank.
+2. Click the dropdown on the **Quote Continuer at new paragraph** cell for First level. Select
+   `“` (U+201C) — the same character as the Opening mark.
 3. Click the dropdown on the **Closing** cell for First level. Select `”` (Right double
    quotation mark, U+201D).
 4. Repeat for Second level: Opening = `‘` (U+2018), Continuer = blank, Closing = `’` (U+2019).
@@ -128,9 +129,11 @@ using the dropdown arrow (▼) on each cell:
    speech.
 7. Click **OK**.
 
-Tamba uses English-style curly quotes at all three levels with no Quote Continuer — Tamba
-closes and reopens quotation marks at each paragraph break rather than using a continuation
-character.
+Tamba uses English-style curly quotes at all three levels. First level speech that spans a
+paragraph break repeats the opening mark `“` (U+201C) as a Quote Continuer at the head of each
+new paragraph; the closing mark `”` (U+201D) appears only once, at the very end of the whole
+speech. Second and Third level have no continuer — a quotation at either of those levels that
+spans a paragraph break closes fully and reopens fully at each new paragraph instead.
 
 **TIP** Hover over any column or row label ("Opening", "Closing", "Quotes (First level)",
 etc.) to see a description of that field in the status bar at the bottom of the dialog.
@@ -166,10 +169,13 @@ level.
 
 ![The Quote marks tab for Runda after entry, showing « and » in First level cells and the Second level Opening/Closing filled.](ss-L227-runda-quote-marks.png)
 
-**✏️ Compare.** Runda fills the Quote Continuer cell at First level (`«`) but Tamba leaves it
-blank. Why? Because Runda repeats the guillemet at the start of each continued paragraph,
-while Tamba closes and reopens fully. The convention table drives the configuration — never
-the other way around.
+**✏️ Compare.** Runda and Tamba both fill the Quote Continuer cell at First level — Runda with
+`«`, Tamba with `“` — because both languages repeat the opening mark at the start of each
+continued paragraph rather than closing and reopening. Now compare Second level: both leave it
+blank there, since embedded quotations in both languages close and reopen fully rather than
+continuing across a paragraph break. The convention table drives the configuration — never the
+other way around, so don't assume one language's pattern applies to another, or that every
+nesting level within the same language behaves the same way.
 
 ### Exercise 2.3 — Handle word-medial punctuation (the apostrophe conflict)
 
@@ -207,8 +213,9 @@ Runda does use `’` as an apostrophe.
    Verify that apostrophes inside words no longer generate false quotation errors.
 
 **✏️ Produce this (a mentor will review it).** After all three exercises, jot 2–3 sentences: which
-project needed a Quote Continuer and why, and how you confirmed the apostrophe fix worked. A
-mentor will check your configured Quote marks tabs against the README convention tables.
+project(s) and level(s) needed a Quote Continuer and why, and how you confirmed the apostrophe
+fix worked. A mentor will check your configured Quote marks tabs against the README convention
+tables.
 
 ## Change
 

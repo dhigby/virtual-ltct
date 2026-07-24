@@ -30,7 +30,7 @@ and troubleshooting one specific check (Quotations), which is squarely "With Ass
 | --- | --- | --- | --- |
 | 1 | Learner can explain why the Quotation check produces no trustworthy results before it is configured, and name the two inputs it needs (inventory + rules). | Translation Tools §2.0 (use/troubleshoot) | Quiz §1; Lesson 1 exercise 1.1 |
 | 2 | Learner can enter the correct opening/closing quote-mark characters for each nesting level on the Quote marks tab and verify them via the Example preview. | Translation Tools §2.0 | Quiz §2; Lesson 2 exercises 2.1–2.2 |
-| 3 | Learner can configure the Quote Continuer at new paragraph and resolve the word-medial apostrophe conflict in Language Settings. | Translation Tools §2.0 (troubleshoot) | Quiz §2; Lesson 2 exercise 2.3 |
+| 3 | Learner can configure the Quote Continuer at new paragraph and resolve the word-medial apostrophe conflict in Language Settings. | Translation Tools §2.0 (troubleshoot) | Quiz §2; Lesson 2 exercises 2.1–2.2 (continuer), 2.3 (apostrophe) |
 | 4 | Learner can configure each of the seven Quotation types for a given language's conventions and distinguish recommended vs. custom settings. | Translation Tools §2.0 | Quiz §3; Lesson 3 exercises 3.1–3.2 |
 | 5 | Learner can classify a check result as a real error or a configuration problem and take the correct corrective action for each. | Translation Tools §2.0 (troubleshoot) | Quiz §4; Lesson 4 exercise 4.1 |
 | 6 | Learner can work a result set to zero actionable errors, book by book, without silencing correct text. | Translation Tools §2.0 | Quiz §4; Lesson 4 exercise 4.2 |

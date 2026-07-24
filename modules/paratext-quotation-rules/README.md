@@ -73,7 +73,8 @@ Lessons 1–4 use a single fictional project called **Tamba New Testament** (`ta
 | Third level | Tertiary (rare) | `“` | U+201C | `”` | U+201D |
 
 **Additional facts about Tamba quotation style:**
-- Quotation marks restart at the beginning of each new paragraph of continued speech (no mid-paragraph continuation marks).
+- First level (primary speech) uses a Quote Continuer at new paragraph: continued speech repeats the opening mark `“` (U+201C) at the start of each new paragraph, with the closing mark `”` (U+201D) appearing only once, at the very end of the whole speech.
+- Second and Third level have no continuer — a Second or Third level quotation that spans a paragraph break closes fully and reopens fully at each new paragraph instead.
 - Third level is used only in Matthew, John, and Revelation where a character quotes scripture inside dialogue.
 - Poetry lines (`\q`, `\q2`, `\q3`) are never marked with quotation characters; only prose speech uses marks.
 

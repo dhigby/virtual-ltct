@@ -143,6 +143,10 @@ Note that Paratext's own Checklist view is often more useful for detailed footno
 3. Click **Extract all footnotes**.
 4. Look through the list of results.
 
+![RegEx Pal showing the results of Extract all footnotes on a French exercise project — the Yes/No/Yes To All/Cancel buttons are greyed out, since Extract has already produced its list and doesn't need per-match confirmation.](extract%20footnotes.png)
+
+**NOTE** You'll see the same Yes/No/Yes To All/Cancel buttons here as in Find and Replace, but they're greyed out for Extract — the list is already complete, so there's nothing left to confirm.
+
 **What to do with the results:**
 - Read through the extracted footnotes.
 - Check whether they look consistent in style and format.
@@ -169,6 +173,10 @@ In USFM, a verse marker must be followed by a space before the verse number: `\v
 4. When you're ready, switch back to **Tools > Replace** (or Ctrl+H).
 5. RegEx Pal steps through your selected book(s) and stops at each match it finds. A dialog shows the project, the reference (e.g. GEN 1), the Find pattern it matched (`\\v(\d)`), and the Replace pattern it's about to apply (`\\v \1`).
 6. For each match, choose **Yes** to apply that one fix, **No** to skip it, **Yes To All** to apply the fix to every remaining match without further prompts, or **Cancel** to stop.
+
+![RegEx Pal's Replace confirmation dialog, showing a match for \v8 (highlighted, top panel) about to become \v 8 (highlighted, bottom panel) with the space added, alongside Yes/No/Yes To All/Cancel.](RegEx-replace.png)
+
+**NOTE** Switching between **Tools > Find** and **Tools > Replace** keeps your loaded pattern, but clears whatever results list was showing — that's expected, not a sign you've lost your pattern. Each mode simply shows its own results.
 
 **Key Point:** This operation gives you two layers of safety: a Find preview beforehand (steps 3-4) showing the full scope, and an interactive confirmation for every match during the Replace itself (steps 5-6). Use both — don't skip the Find preview just because the Replace is already interactive.
 

@@ -106,6 +106,20 @@ live, and out of scope for this lesson's depth.
 `Tools > Edit User Menu...` is a distinct feature (for authoring individual new entries one
 at a time) and is not how either file gets installed.
 
+**Confirmed via live screenshots (SME, 2026-07-25/26):**
+- Switching between **Tools > Find** and **Tools > Replace** keeps the loaded pattern intact
+  — only the results panel clears when you switch modes. This is expected behavior, not a
+  sign the pattern was lost; the lesson's "preview with Find, then switch to Replace" guidance
+  is accurate as written.
+- The Replace confirmation dialog matches what was documented earlier (Find/Replace patterns
+  shown, Yes/No/Yes To All/Cancel), now also confirmed with a real before/after example
+  (`\v8` → `\v 8`).
+- Extract all footnotes *does* show the same Yes/No/Yes To All/Cancel button row as Find and
+  Replace, but they are **greyed out/inactive** for Extract — the operation has already
+  produced its complete list, so there's nothing left to confirm per match. Confirms the
+  lesson's existing "Extract is always safe, one-click" description is accurate; the shared
+  button row is just a UI artifact of a common dialog template across Find/Replace/Extract.
+
 **Design decision: works around mentor availability, not mentor absence.** Every trainee is
 allocated a mentor — the real constraint is that some mentors are busier or less immediately
 available than others, not that a learner might have none. The lesson's "Check in with your

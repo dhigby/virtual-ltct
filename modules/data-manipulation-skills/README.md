@@ -44,11 +44,10 @@ folder — see the lesson's "Before you start" step for details and installation
 
 ## Pending items
 
-- **Screenshots** — two of the five original images have been replaced: `RegExPal-pp.png`
-  (illustrating the RegEx Pal window, embedded in "Opening RegEx Pal") and `countAllCaps.png`
-  (a real Count all cap words result, embedded in Category 2). The remaining three (Find,
-  Extract, Replace) are optional polish, not blocking — the lesson text already describes
-  each accurately from live verification.
+- **Screenshots** — four of the five original images have been replaced: `RegExPal-pp.png`
+  (Opening RegEx Pal), `countAllCaps.png` (Count), `extract footnotes.png` (Extract), and
+  `RegEx-replace.png` (Replace). Only the Find screenshot is still missing — optional polish,
+  not blocking, since the lesson text already describes it accurately.
 
 ## Possible future expansion
 

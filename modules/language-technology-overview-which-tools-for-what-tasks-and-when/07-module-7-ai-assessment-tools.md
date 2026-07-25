@@ -9,7 +9,7 @@ How can you stay current while also ensuring teams use AI tools wisely and ethic
 Play the video AI and Assessment Tools
 **AI Tools for Language Work**
 **AQuA (Augmented Quality Assessment)** - Translation quality copilot
-- Developed by SIL International
+- Developed by SIL Global
 - Develops capacity and increases thoroughness of quality assurance
 - Gives the big picture on translation quality
 - Helps teams identify issues systematically

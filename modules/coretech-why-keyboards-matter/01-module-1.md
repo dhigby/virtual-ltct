@@ -47,7 +47,7 @@ Knowing how to set up a virtual keyboard is one of the most practical things you
 
 ### A quick note about Keyman
 
-Keyman was developed by SIL International. It's free, open-source, and actively supported. This isn't a workaround or a temporary fix — it's a proper tool, used by serious language work around the world.
+Keyman was developed by SIL Global. It's free, open-source, and actively supported. This isn't a workaround or a temporary fix — it's a proper tool, used by serious language work around the world.
 
 **TIP** You can find keyboards for hundreds of languages at [keyman.com/en/keyboards](https://keyman.com/en/keyboards/). It's worth exploring even before you need to install anything.
 

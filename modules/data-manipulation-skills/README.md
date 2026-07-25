@@ -35,9 +35,12 @@ if an immediate check-in isn't possible, rather than blocking on mentor availabi
 
 - [Using the RegEx Pal User Menu](01-using-the-regex-pal-user-menu.md)
 
-`userMenu.txt` (the ready-made User Menu file this lesson's activities depend on) is now
-included in this folder — see the lesson's "Before you start" step for how learners install
-it.
+Two ready-made User Menu files this lesson's activities depend on are included in this
+folder — see the lesson's "Before you start" step for details and installation instructions:
+- **`userMenu.txt`** — a shorter ~20-entry menu, recommended for smaller screens.
+- **`userMenu-Phil.txt`** — one typesetter's much larger ~60-entry personal menu. Paratext
+  only recognizes a file literally named `userMenu.txt`, so this one must be renamed after
+  copying it into place.
 
 ## Pending items
 
@@ -46,10 +49,6 @@ it.
   (a real Count all cap words result, embedded in Category 2). The remaining three (Find,
   Extract, Replace) are optional polish, not blocking — the lesson text already describes
   each accurately from live verification.
-- **Shorter menu for smaller screens** — Phil's `userMenu.txt` (nearly 60 entries) is hard to
-  scroll through on a smaller screen. Consider adding guidance for reverting to a shorter/
-  default User Menu, or trimming `userMenu.txt` down, once the default menu (currently being
-  located by the SME) is available to reference.
 
 ## Possible future expansion
 

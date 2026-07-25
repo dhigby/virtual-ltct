@@ -80,13 +80,31 @@ effectiveness is unconfirmed.
   "≡ Project > Advanced", matching the confirmed-current path used in the lesson. The
   corrected slide is the one embedded in the lesson; the outdated version was not kept.
 
-**`userMenu.txt` (Phil's extended User Menu file) is now attached to this module folder.**
-Installing it (copy into `My Paratext 9 Projects` or `My Paratext 8 Projects`, depending on
-installed version) is a prerequisite step in the lesson — without it, none of the lesson's
-four named operations (Find close codes preceded by a space, Count all cap words, Extract
-all footnotes, Replace missing space after `\v`) would exist in a learner's own User Menu.
+**Two menu files are now attached to this module folder — resolving the smaller-screen
+pending item.** A new Paratext installation's User Menu starts empty; installing one of these
+(copy into `My Paratext 9 Projects` or `My Paratext 8 Projects`, depending on installed
+version) is a prerequisite step in the lesson — without it, none of the lesson's four named
+operations (Find close codes preceded by a space, Count all cap words, Extract all footnotes,
+Replace missing space after `\v`) would exist in a learner's own User Menu.
+
+- `userMenu.txt` — a shorter ~20-entry menu. **Not** "Paratext's default" (the SME was unsure
+  whether this file corresponds to any built-in default, and Paratext's actual out-of-the-box
+  menu is believed to be empty) — it's simply the shorter of two options this module
+  provides, recommended for smaller screens.
+- `userMenu-Phil.txt` — the same ~60-entry extended menu previously named `userMenu.txt`,
+  renamed to coexist with the shorter file in this repo. Paratext only recognizes a file
+  literally named `userMenu.txt`, so learners must rename their copy after installing this
+  one.
+
+Confirmed: all four operations this lesson uses exist in both files (their exact regex
+patterns match, e.g. `Replace missing space after \v` is `\\v(\d)` → `\\v \1` in both) — one
+minor difference noted, not exposed to learners: `Extract all footnotes` uses a greedy
+quantifier in the shorter menu (`\\f .*\\f\*`) vs. non-greedy in Phil's (`\\f .*?\\f\*`),
+which could in theory behave differently on a line with multiple footnotes — not verified
+live, and out of scope for this lesson's depth.
+
 `Tools > Edit User Menu...` is a distinct feature (for authoring individual new entries one
-at a time) and is not how this file gets installed.
+at a time) and is not how either file gets installed.
 
 **Design decision: works around mentor availability, not mentor absence.** Every trainee is
 allocated a mentor — the real constraint is that some mentors are busier or less immediately

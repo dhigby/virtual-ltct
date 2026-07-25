@@ -49,10 +49,17 @@ The **User Menu** in Paratext RegEx Pal is a list of saved regex operations that
 
 To open it, click **User** in the menu bar. You will see a list of items. Your list may look different from your mentor's list or a colleague's list — that is completely normal. User menus can be customised over time, and can grow quite long (some experienced typesetters build up user menus with dozens of specialised entries — one typesetter's own menu runs to nearly 60 entries, most of them well beyond what this lesson covers).
 
-**Before you start:** the four operations used as examples in this lesson (Find close codes preceded by a space, Count all cap words, Extract all footnotes, Replace missing space after `\v`) need to already be in your User Menu. This module includes a ready-made menu file, `userMenu.txt`, with these and other operations already defined. To add it:
+**Before you start:** a new Paratext installation's User Menu starts empty — none of the operations in this lesson (Find close codes preceded by a space, Count all cap words, Extract all footnotes, Replace missing space after `\v`) will be there until you install a menu file. This module provides two options:
+
+- **`userMenu.txt`** — a shorter menu (about 20 entries) covering the essentials this lesson uses. Recommended if you're on a smaller screen.
+- **`userMenu-Phil.txt`** — one experienced typesetter's much larger personal menu (nearly 60 entries), with many advanced operations well beyond this lesson. Everything used in this lesson is in here too, but it can be slower to scroll through.
+
+Both include all four operations this lesson uses — pick whichever suits your screen and needs. To install one:
 1. Close RegEx Pal and Paratext if they're open.
-2. Copy `userMenu.txt` into your **My Paratext 9 Projects** folder (or **My Paratext 8 Projects**, depending on your installed version).
+2. Copy your chosen file into your **My Paratext 9 Projects** folder (or **My Paratext 8 Projects**, depending on your installed version). **Paratext only recognizes a file named exactly `userMenu.txt`** — if you're using `userMenu-Phil.txt`, rename your copy to `userMenu.txt` once it's in that folder.
 3. Reopen Paratext and RegEx Pal. Click **User** in the menu bar to confirm the new operations are listed.
+
+You can switch between the two at any time by repeating these steps with the other file — the new one simply replaces whichever `userMenu.txt` is currently there.
 
 **NOTE** `Tools > Edit User Menu...` is a different thing — that's for writing and adding your *own* individual regex entries one at a time (likely how the original author of `userMenu.txt` built theirs up over time). You don't need it just to use a menu file someone else has already prepared.
 

@@ -1,0 +1,78 @@
+﻿Find All words with 2 or more capital letters#f#(\p{Lu}{2,}\s*)+
+Find lines that do not start with backslash code#f#\r\n[^\\]
+Find close codes preceded by a space# \\\w+\* ?
+Find long poetic lines#f#\\q(\s+\\v )?[^\r]{70,}
+Find non-word characters before footnote callers#f#[^\w]\\f\s
+Find missing capitals after period#f#\.\s+["¿¡'?]*[a-z]
+Count SFM clusters#c#\\\S+
+Count all cap words#cr#\b[A-Z][A-Z]+\b
+Count footnote marker patterns#cni#\\f .*\\f\*
+Count cross reference marker patterns#cni#\\x .*\\x\*
+Count book reference abbreviations#c#[A-Z]\w\w?\.(?=\s*\d)
+Count verse number patterns#ci#\\v\s+\S+
+Count chapter/verse patterns#crd#\d[\-\d.:;, ]+
+Extract (...)#e#\([^\)]+\)|<[^>]+>
+Extract cross references#e#\\x .*\\x\*
+Extract all footnotes#e#\\f .*?\\f\*
+Extract and sort all lines#es#\\.*
+Extract outlines#e#(\\id ...|\\io.*)
+Extract when ms1 and io1 should match (ms2/io2 etc)#e#(\\id ...|\\ms1.*|\\io1.*)
+Replace Mt 3-4 => Mt 3--4#r#([A-Z]\w\w*\.? \d+)-(\d+)#\1--\2
+Replace missing space after \v#r#\\v(\d)#\\v \1
+subtitulos mas de 50 caracteres#f#\\s1 .{50,}
+Buscar nombres despues de mar#f#\b[mM]ar \p{Lu}\p{L}*
+REPLACE va 2 vp basic#r#\\v ([\d-]+[ab]?)\s\\va \(([\d-]+[ab]?)\)\s*\\va\*#\\v \1 \\va \2\\va* \\vp \1 (\2)\\vp*
+REPLACE va 2 vp with chapter#r#\\v ([\d-]+[ab]?)\s\\va \((\d+)\.([\d-]+[ab]?)\)\\va\*#\\v \1 \\va \3\\va* \\vp \1 (\2.\3)\\vp*
+REPLACE va 2 vp Psalm 1#r#\\d \\va \(([\dab-]+)\)\\va\*#\\d \\va \1\\va* \\vp (\1)\\vp*
+*CRX move p to before next verse#r#(\\v\s+\d+)\s+\\p\s+(.*\s+)(\\v)#\1 \2\\p\n\3
+*CRX Remove extra p#r#(?<=\\p\s+(\\v\s.*\s+)+)\\p\s#
+Mover \p a otra lugar#r#(?<=\\v \d+\s+)(\\p )(.+\s+)(\\v)#\2\1\3
+Mover \p cuando hay puente#r#(?<=\\v \d+-\d+\s+)(\\p )(.+\s+)(\\v)#\2\1\3
+Work with Spanish team#f#,\s*(\\f .*?\\f\*|\\x .*?\\x\*|\\fig .*?\\fig\*)?\s*\p{Lu}[\p{L}\p{M}]*
+Prueba de buscar mayuscula despues de coma#f#[,;]\s*(\\f .*?\\f\*|\\x .*?\\x\*|\\fig .*?\\fig\*)?\s*(\\v\s*\d+(\-\d+)?)?\s*(\\f .*?\\f\*|\\x .*?\\x\*|\\fig .*?\\fig\*)?\s*\p{Lu}[\p{L}\p{M}]*
+Compare \toc1 to \mt#e#(?<=\\toc1 |\\mt.* ).*
+Add () to \r#r#\\r ([^(].*)\r#\\r (\1)
+minuscula despues de . final#ei#\.(\\[fx] .*?\\[fx]\*)?\s*(\\v \d+)?\s\p{Ll}
+Quotes without quotation marks#f#:\s+\\q\d\s+(\\v \d+\s)?[^\s“«\\]
+Extract all \s1 markers#ei#\\s1 .*
+Fix consecutive origin to -#r#(\\[xofr]{2} \d+\.\d+)[,-](\d+)#\1-\2
+Add \xt for certain ()#r#\(([^)]+?:[\d-,]+)\)#(\\xt \1\\xt*)
+Find hyphenated words#csd#\b\w{2,}(-\w{2,}){2}\b
+Extract short first line followed by \p#ei#\\v 1 .{,67}\s+\\p
+Add q1 at final punctuation within q1#r#(?s)\\q1\s+?[\\v\d- ]*?\s*?.*?\\[mps]:::([.?!][”’\s]*)(?=\p{L}|[“‘]|\\v)#\1\r\n\\q1 
+Add q2 at comma in q1#r#(?s)\\q1\s+?[\\v\d- ]*?\s*?.*?\\[mps]:::(.{25,}[,][”’\s]*)(?=\p{L}|[“‘])#\1\r\n\\q2 
+Buscar palabras de 7 or más characteres#f#\b\p{L}{7,}
+———MARKERS: ADD MISSING 1 TO LEVEL 1———#f#
+       M-01   - identify level markers such as \q,\q1,q2 in order to see level-1 inconsistencies#cs#(\\(q|qm|li|mt|mte|ms|s|imt|is|iq|io))(\b|\d)
+       M-02   - change \q to \q1 (only if there are \q2)--modify to \mt and \s and rerun as needed#r#(\\q\b)#\11
+       M-03   - Move section head & parallel passage ref from BEFORE to AFTER chapter numbers#r#(\\c .*?\r\n)(\\s .*?\r\n)(\\r .*?\r\n)?#\2\3\1
+       M-04   - Move section head & parallel passage ref from AFTER  to BEFORE chapter numbers#r#(\\s .*?\r\n)(\\r .*?\r\n)?(\\c .*?\r\n)#\3\1\2
+ # x
+——CLEAN UP BASIC CV & CH SYNTAX IN REFERENCES—————————#f#
+     ———\v VS NUMBER SYNTAX—————————#f#
+       CV-05   Add missng \ to verse no. markup (\v)#r#(?<![\\\S])(v \d)#\\\1
+       CV-06   add missing v to \v markup#r#(\\)( \d)#\1v\2
+     ———CH:VS SEPARATOR—————————#f#
+       CV-11a   a- ANALYZE ch:vs separators#csd#(\d)[:.] ?(\d)(?!\d\d)
+       CV-11 :   :- STANDARDIZE to : colon ch:vs separators-approve these one by one#r#(\d)[:.] ?(\d)(?!\d\d)#\1:\2
+       CV-11 .   .- STANDARDIZE to . period/full stop as ch:vs separators-approve these one by one#r#(\d)[:.] ?(\d)(?!\d\d)#\1.\2
+       CV-12   :_ REMOVE space after chapter vs separator-approve these one by one#r#(\d[:.]) (\d+)(?! \p{Lu})#\1\2
+     ———CHAPTER SEPARATORS ";"—————————#f#
+       CS-25c  9.9,9.9  a- COUNT invalid chapter separators#csd#(?<=\d)([^;\d\p{Pd}] ?)(?=\d+[:.][\d\-]+)
+       CS-25L    LIST invalid chapter separators#ei#(\d+[.:][\d\-a-f]+)[^;\p{Pd}] ?(\d+[.:]\d)
+       CS-25f  ,->;  b- FIX invalid chapter separator ONE AT A TIME#r#(?<=\d)([^;\d\p{Pd}] ?)(?=\d+[:.][\d\-]+)#; 
+       CS-22;_  9;9  a- COUNT missing spaces after chapter separators ";"#csd#(\d+[:.][\d, \p{Pd}abc\p{Lu}]+)(\d?;)\d[^\\]+
+       CS-22;9  9; 9 b- ADD missing space after chapter separator ";"-->"; "#r#(\d+[:.][\d, \p{Pd}abc\p{Lu}]+)(\d?;)(\d)#\1\2 \3
+    ———BOOK SEPARATORS/BRIDGES—————————#f#
+       BB-31a     L- List all book bridges#edi#(?<=[12] ?\p{Lu}[\w]* \d+[:.][\d,\-a-f]+)\p{Pd}+(?=[12] ?\p{Lu}[\w]+ \d+[:.])
+       BB-31m     m- Make all book bridges be  emdash (u2014) as in 2Sa 9.91Ki 9.9#r#(?<=[12] ?\p{Lu}[\w]* \d+[:.][\d,\-a-f]+)\p{Pd}+(?=[12] ?\p{Lu}[\w]+ \d+[:.])#\u2014
+       BB-31n     n- Make all book bridges be  endash (u2013) as in 2Sa 9.91Ki 9.9#r#(?<=[12] ?\p{Lu}[\w]* \d+[:.][\d,\-a-f]+)\p{Pd}+(?=[12] ?\p{Lu}[\w]+ \d+[:.])#\u2013
+       BS-33   +;   a- ADD missing ; bk sep before \xdc#r#(?<=\\x .*?\\x(dc|ot|nt|t) ).*?\\x\*:::(\d+)( \\x(dc|ot|nt|t))#\1;\2
+     ———CHAPTER BRIDGE—————————#f#
+       CB-41a  a- ANALYZE chapter bridge separators#csd#(\d+[.:][\dabc]+(, ?)?[\dabc]*)\s*[\p{Pd}]+\s*(\d+[.:]\d)
+       CB-41n   n- STANDARDIZE to N-dash (u2013) as chapter bridge separator#r#(\d+[.:][\dabc]+(, ?)?[\dabc]*)\s*[\p{Pd}]+\s*(\d+[.:]\d)#\1\u2013\3
+       CB-41m   m- STANDARDIZE to M-dash (u2014) as chapter bridge separator#r#(\d+[.:][\dabc]+(, ?)?[\dabc]*)\s*[\p{Pd}]+\s*(\d+[.:]\d)#\1\u2014\3
+     ———VERSE SEPARATOR—————————#f#
+       CV-51a   c- ANALYZE verse separators ", " or "," inside ch/vs refs--Are there more ", " or ","? Go with majority.#cd#[:.]([\d, \-:.abc]+):::, ?.
+       CV-51b   ,- REMOVE space in ", " vs. sep.#r#[:.]([\d, \p{Pd}:.abc]+):::, (?=\S)#,
+       CV-51c  , - ADD space after "," in vs. sep.#r#[:.]([\d, \-:.abc]+):::,(?=\S)#, 

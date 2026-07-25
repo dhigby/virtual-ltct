@@ -66,7 +66,7 @@ Play the video Scripture Translation Tools
 - Automates nearly all Adobe InDesign layout operations
 - Eliminates manual typesetting tasks
 **InDesign** - Industry-standard layout software
-- Main program SIL International Publishing Services uses
+- Main program SIL Global Publishing Services uses
 - Professional-grade typesetting
 **XeTeX** - Alternative typesetting program
 - Another option for Scripture layout

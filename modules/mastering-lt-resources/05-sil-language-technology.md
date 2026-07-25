@@ -13,7 +13,7 @@
 
 **Why should you use the software.sil.org website?**
 
-Software.sil.org is the official software distribution website of **SIL International** (formerly Summer Institute of Linguistics), a nonprofit organization focused on language development, literacy, and Bible translation for minority language communities worldwide.
+Software.sil.org is the official software distribution website of **SIL Global** (formerly Summer Institute of Linguistics), a nonprofit organization focused on language development, literacy, and Bible translation for minority language communities worldwide.
 
 Here are the key reasons to use it:
 

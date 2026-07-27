@@ -29,7 +29,7 @@ lossy (garbled headers, `<empty-block/>` markers) or never happened.
 | `dbl-submission-for-translators` | _(locate in Cypher)_ | Not started | |
 | `edit-ai-drafted-translation` | _(locate in Cypher)_ | Not started | |
 | `publish-scripture-early-and-often-print` | _(locate in Cypher)_ | Not started | |
-| `software-support-and-troubleshooting-for-translation-teams` | Vimeo: https://vimeo.com/1160540654 | Not started | |
+| `software-support-and-troubleshooting-for-translation-teams` | Vimeo: https://vimeo.com/1160540654 | Verified | Steve White, Jenni Beadle (human); Claude.Chat, Claude Code (automated fidelity check) |
 | `teaching-a-language-technology-workshop` | Google Site: https://sites.google.com/sil.org/language-technology-academy/courses/general/teaching-a-workshop | Not started | |
 
 ## Stubs

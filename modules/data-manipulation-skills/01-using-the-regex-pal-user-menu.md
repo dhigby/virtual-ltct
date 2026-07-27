@@ -170,6 +170,9 @@ In USFM, a verse marker must be followed by a space before the verse number: `\v
 1. Use **Tools > Choose Books** to select a test book — ideally not your main working book while you are learning.
 2. Click **User** in the menu bar, then click **Replace missing space after \v**. This loads the Find pattern (`\\v(\d)`) and Replace pattern (`\\v \1`), and puts you in Replace mode.
 3. Switch to **Tools > Find** (or Ctrl+F) to run that same pattern as a Find first — this shows you every match without changing anything, so you can see the full scope before committing to anything.
+
+![RegEx Pal in Find mode, previewing the same \v(\d) pattern used by Replace missing space after \v — the match (\v8) is highlighted, and the Yes/No/Yes To All/Cancel buttons are greyed out since Find mode never changes text.](Regex-Find2.png)
+
 4. When you're ready, switch back to **Tools > Replace** (or Ctrl+H).
 5. RegEx Pal steps through your selected book(s) and stops at each match it finds. A dialog shows the project, the reference (e.g. GEN 1), the Find pattern it matched (`\\v(\d)`), and the Replace pattern it's about to apply (`\\v \1`).
 6. For each match, choose **Yes** to apply that one fix, **No** to skip it, **Yes To All** to apply the fix to every remaining match without further prompts, or **Cancel** to stop.

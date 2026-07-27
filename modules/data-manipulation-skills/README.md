@@ -46,8 +46,10 @@ folder — see the lesson's "Before you start" step for details and installation
 
 - **Screenshots** — four of the five original images have been replaced: `RegExPal-pp.png`
   (Opening RegEx Pal), `countAllCaps.png` (Count), `extract footnotes.png` (Extract), and
-  `RegEx-replace.png` (Replace). Only the Find screenshot is still missing — optional polish,
-  not blocking, since the lesson text already describes it accurately.
+  `RegEx-replace.png` (Replace). A bonus screenshot (`Regex-Find2.png`) was also added
+  illustrating the Find-preview step before Replace. The Category 1 "Find close codes
+  preceded by a space" screenshot is the one still missing — optional polish, not blocking,
+  since the lesson text already describes it accurately.
 
 ## Possible future expansion
 

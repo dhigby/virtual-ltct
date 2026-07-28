@@ -20,6 +20,7 @@ lossy (garbled headers, `<empty-block/>` markers) or never happened.
 
 | Course | Source to pull from | Status | Verified by |
 | --- | --- | --- | --- |
+| `coretech-computer-hardware` | Cypher for Business (LMS) | In repo — Module 3 and the Consultant's Triage Guide backfilled from pasted Cypher HTML (2026-07-28); Modules 1–2, scenario bank, and mentor guide were already faithful. The empty `07-discussion.md` stub was a failed discussion-assessment attempt, not real content, and was deleted. | |
 | `coretech-fonts-unicode` | Vimeo: https://vimeo.com/1178428863 | Not started | |
 | `coretech-malware` | _(locate in Cypher)_ | Not started | |
 | `coretech-os-basics` | _(locate in Cypher)_ | Not started | |

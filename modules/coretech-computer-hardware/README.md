@@ -36,5 +36,9 @@ reviewed by Claude.AI
 - [scenario bank](04-scenario-bank.md)
 - [mentor guide](05-mentor-guide.md)
 - [Consultant’s Triage Guide](06-consultant-s-triage-guide.md)
-- [Discussion](07-discussion.md)
+
+## Internal notes
+
+Not delivered to learners in Cypher — kept in the repo as an internal QA record only.
+
 - [Reviewed by Gemini 28 Mar 2026](08-reviewed-by-gemini-28-mar-2026.md)

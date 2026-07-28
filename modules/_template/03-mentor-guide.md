@@ -1,7 +1,7 @@
 # Mentor guide
 
 **Purpose:** Guide for mentors assessing learner responses to the scenario bank.
-Matches the pattern in `modules/coretech-computer-hardware/05-mentor-guide.md`.
+Matches the pattern in `modules/coretech-computer-hardware/06-mentor-guide.md`.
 
 ## What you're evaluating
 

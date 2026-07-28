@@ -4,7 +4,7 @@
 
 **Purpose:** Applied practice scenarios learners work through after the lesson content,
 before the quiz. **Format:** sequence from foundational → intermediate → complex, matching
-the pattern in `modules/coretech-computer-hardware/04-scenario-bank.md`.
+the pattern in `modules/coretech-computer-hardware/05-scenario-bank.md`.
 
 ## How to use these scenarios
 

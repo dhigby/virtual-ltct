@@ -20,7 +20,7 @@ lossy (garbled headers, `<empty-block/>` markers) or never happened.
 
 | Course | Source to pull from | Status | Verified by |
 | --- | --- | --- | --- |
-| `coretech-computer-hardware` | Cypher for Business (LMS) | In repo — Module 3 and the Consultant's Triage Guide backfilled from pasted Cypher HTML (2026-07-28); Modules 1–2, scenario bank, and mentor guide were already faithful. The empty `07-discussion.md` stub was a failed discussion-assessment attempt, not real content, and was deleted. | |
+| `coretech-computer-hardware` | Cypher for Business (LMS) | **Backfill complete, and course has since LEFT the backfill track.** Module 3, the triage guide and the mentor guide were backfilled from pasted Cypher HTML (2026-07-28); Modules 1–2 and the scenario bank were already faithful. An SME review then found 18 technical issues — three of them actively harmful (CHKDSK on a failing drive, compressed air destroying fans, swollen batteries absent entirely) — so the course entered the **8-stage pipeline** as a substantive revision per `process/backfill.md`. It now has a `00-design.md`, a new Module 4 (power, safety, data protection), a 25-question quiz, and 16 scenarios. Track it on the board from here, not in this table. **Mentor guide remains partial**: keys exist for C3–C5; F1–F3, I1–I3, C1 and C2 were never recovered from Cypher. The empty `07-discussion.md` stub was a failed discussion-assessment attempt, not real content, and was deleted. | |
 | `coretech-fonts-unicode` | Vimeo: https://vimeo.com/1178428863 | Not started | |
 | `coretech-malware` | _(locate in Cypher)_ | Not started | |
 | `coretech-os-basics` | _(locate in Cypher)_ | Not started | |

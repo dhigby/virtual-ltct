@@ -12,33 +12,51 @@ last_exported: 2026-06-18
 
 # CoreTech: Computer Hardware
 
-**CoreTech: Computer Hardware with Claude.AI**
-**Access code: XGYH-SVYO<br>7 modules **
-<page url="https://app.notion.com/p/336598a5fd40802da577c2c11e5a331b">** Module 1**</page>
-<page url="https://app.notion.com/p/336598a5fd408079b738c03755f3a356">**Module 2**</page>
-<page url="https://app.notion.com/p/336598a5fd4080cd9805f329b6eb9978">**Module 3 **</page>
-<page url="https://app.notion.com/p/336598a5fd40804b8796ec3938d4a3da">**scenario bank **</page>
-<page url="https://app.notion.com/p/336598a5fd40802d9c6ec1620ae7394a">**mentor guide **</page>
-<page url="https://app.notion.com/p/336598a5fd4080f59ffaf863f44da4df">**Consultant’s Triage Guide **</page>
-<page url="https://app.notion.com/p/336598a5fd4080beb227cfddd9899f1d">**Discussion**</page>
-<page url="https://app.notion.com/p/331598a5fd408030a00ac59c58b0b09b">Reviewed by Gemini 28 Mar 2026</page>
-Reviewed by (human): ?
-reviewed by Claude.AI
-<empty-block/>
-<empty-block/>
+Hardware troubleshooting for language technology consultants supporting colleagues in remote
+field locations — understanding laptop components, diagnosing problems systematically, making
+practical repair/escalate/replace decisions under real resource constraints, and protecting
+equipment and irreplaceable language data against field conditions.
 
+Originally delivered in Cypher for Business as *CoreTech: Computer Hardware with Claude.AI* and
+backfilled into this repo as the source of truth. **Now under substantive revision in the
+8-stage pipeline** — see [`00-design.md`](00-design.md) for why, and
+[`BACKFILL.md`](../../BACKFILL.md) for the import history.
 
-## Sub-modules
+## Lessons
 
-- [Module 1](01-module-1.md)
-- [Module 2](02-module-2.md)
-- [Module 3](03-module-3.md)
-- [scenario bank](04-scenario-bank.md)
-- [mentor guide](05-mentor-guide.md)
-- [Consultant’s Triage Guide](06-consultant-s-triage-guide.md)
+| File | Estimated time |
+|---|---|
+| [Module 1 — Understanding Laptop Systems](01-module-1.md) | 65 min |
+| [Module 2 — Diagnosing Hardware Problems](02-module-2.md) | 85 min |
+| [Module 3 — Practical Decisions and Application](03-module-3.md) | 65 min |
+| [Module 4 — Power, Safety & Data Protection in the Field](04-module-4.md) | 70 min |
 
-## Internal notes
+## Package
 
-Not delivered to learners in Cypher — kept in the repo as an internal QA record only.
+- [Design document](00-design.md) — objectives, module breakdown, SME knowledge notes
+- [Scenario bank](05-scenario-bank.md) — 15 assessment scenarios (F1–F3, I1–I3, C1–C5, P1–P4)
+- [Mentor guide](06-mentor-guide.md) — assessment criteria and answer keys
+- [Quiz](07-quiz.md) — 27 questions, 80% (22/27) to pass
+- [Consultant's Triage Card](consultant-triage-card.md) — job aid submitted with each scenario
 
-- [Reviewed by Gemini 28 Mar 2026](08-reviewed-by-gemini-28-mar-2026.md)
+Not yet produced: **video script** (the remaining stage-3 artifact).
+
+## Review status
+
+| Review | Status |
+| --- | --- |
+| Design approval (stage 2) | Approved by Doug Higby, 2026-07-28 |
+| Alignment check (stage 4) | Passed 2026-07-28 on re-run (6 blocking issues found on the first pass, all remediated) |
+| AI technical review (Claude, Gemini) | 18 findings, all addressed in this revision |
+| **Human SME fact-check (stage 5)** | **Outstanding** — current board status. Required before internal review |
+
+Priority checks for the human SME are listed at the end of
+[`00-design.md`](00-design.md#notes-for-the-human-sme-at-stage-5): per-vendor LED blink patterns,
+vendor battery charge-limit setting names, the thermal threshold figures, and whether the
+AVR-vs-UPS recommendation matches what the organisation can actually procure and ship.
+
+## Board note
+
+Taken **off `Online`** and set to `SME Check` on 2026-07-28 — no learner is part-way through the
+course, so there is nothing to disrupt by revising in place. The earlier version remains uploaded
+to Cypher and will be replaced when this revision completes stage 8.

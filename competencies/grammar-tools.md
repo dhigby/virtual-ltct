@@ -11,7 +11,14 @@ outcome_levels:
   - Trainer/Proficient
   - Expert
 resources:
-  - http://lingtransoft.info/competencies/morphological-parsing
+  - title: FLEx Parsing Manual (Andy Black)
+    url: http://downloads.sil.org/FieldWorks/WW-ConceptualIntro/ConceptualIntroduction.htm
+  - title: FLEx Grammar
+    url: https://software.sil.org/fieldworks/resources/tutorial/grammar/
+  - title: The SIL FieldWorks Language Explorer Approach to Morphological Parsing
+    url: https://scholars.sil.org/sites/scholars/files/gary_f_simons/preprint/flexparser_preprint.pdf
+  - title: Language Journal
+    url: https://www.linguisticsociety.org/content/open-access-content-archive
 source: Lang Tech Competencies.xlsx
 last_updated: 2026-07-01
 ---

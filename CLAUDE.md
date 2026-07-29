@@ -94,6 +94,9 @@ source of truth for that content, and it is published to GitHub Pages (see below
 
 - **Edit `competencies/*.md` directly.** A frontmatter `name:` MUST match
   `competencies.yaml` exactly (copy verbatim, incl. `&`/capitalization), or CI fails.
+- **`resources:` entries are `{title, url}` mappings**, not bare URLs — `gen_site.py`
+  renders them as each page's **Further Information** section, and the descriptor check
+  rejects any other shape. They are hand-maintained (no upstream sync); use `[]` for none.
 - The files were first seeded from `import-seeds/` (`Lang Tech Competencies.xlsx` +
   `CBC Guide for Non-technical Competencies…md`) via
   `import-seeds/import_competency_descriptors.py`. That importer is retained for

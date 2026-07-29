@@ -10,7 +10,18 @@ outcome_levels:
   - Practitioner
   - Trainer
 resources:
-  - http://lingtransoft.info/competencies/computer-hardware
+  - title: iFixit (Repair manuals for many devices)
+    url: https://www.ifixit.com/
+  - title: Identifying Failing Components
+    url: https://www.howtogeek.com/174068/how-to-identify-which-hardware-component-is-failing-in-your-computer/
+  - title: Windows 10 Hardware Troubleshooting
+    url: https://www.techrepublic.com/article/how-to-more-effectively-troubleshoot-hardware-issues-in-windows-10-with-device-managers-views/
+  - title: CompTIA A+ Certification Video for more advance users
+    url: https://www.youtube.com/watch?v=2eLe7uz-7CM
+  - title: Computer Basic Parts
+    url: https://edu.gcfglobal.org/en/computerbasics/basic-parts-of-a-computer/1/
+  - title: Net Literacy
+    url: https://drive.google.com/file/d/1sVyGCUqFEVLMSbajZw8hnRr4anSkcn7A/view
 source: Lang Tech Competencies.xlsx
 last_updated: 2026-07-01
 ---

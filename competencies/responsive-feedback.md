@@ -10,7 +10,16 @@ outcome_levels:
   - Practitioner
   - Trainer
 resources:
-  - http://lingtransoft.info/competencies/responsive-feedback
+  - title: How to write a quality bug report?
+    url: https://rubygarage.org/blog/how-to-write-a-quality-bug-report
+  - title: How to write good bug report?
+    url: https://musescore.org/en/handbook/developers-handbook/getting-started/how-write-good-bug-report-step-step-instructions
+  - title: What makes a good bug report?
+    url: https://www.boxuk.com/insight/what-makes-a-good-bug-report/
+  - title: A Humorous but true article on Bug Reporting (Simon Tatham)
+    url: https://www.chiark.greenend.org.uk/~sgtatham/bugs.html
+  - title: Github Issues
+    url: https://guides.github.com/features/issues/
 source: Lang Tech Competencies.xlsx
 last_updated: 2026-07-01
 ---

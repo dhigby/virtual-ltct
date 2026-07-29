@@ -11,8 +11,32 @@ outcome_levels:
   - Trainer/Proficient
   - Expert
 resources:
-  - http://lingtransoft.info/competencies/translation-tools
-  - http://lingtransoft.info/competencies/scripture-markup
+  - title: Paratext Support
+    url: https://paratext.org/support/
+  - title: Paratext training videos
+    url: https://paratext.org/videos/
+  - title: Paratext training materials
+    url: https://lingtran.net/Paratext
+  - title: Paratext 9 training materials
+    url: https://lingtran.net/Paratext-9-Materials
+  - title: Bibledit
+    url: https://bibledit.org/
+  - title: Render Admin Setup
+    url: https://lingtran.net/Render-Admin-Setup
+  - title: Render YouTube Channel
+    url: https://www.youtube.com/channel/UCKBaokWhs4MkTmBHnpBxrBA
+  - title: BART
+    url: https://www.sil.org/resources/publications/tw/bart
+  - title: Logos 4 Video Tutorials
+    url: https://wiki.logos.com/Logos_4_Video_Tutorials
+  - title: Logos Bible Software Wiki
+    url: https://wiki.logos.com/Logos_Bible_Software_Wiki
+  - title: USFM documentation
+    url: https://ubsicap.github.io/usfm/
+  - title: Scripture Encoding Standards
+    url: http://markups.paratext.org/
+  - title: Unified Standard Format Markers
+    url: https://paratext.org/usfm/
 source: Lang Tech Competencies.xlsx
 last_updated: 2026-07-01
 ---

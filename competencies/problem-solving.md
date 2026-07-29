@@ -10,7 +10,22 @@ outcome_levels:
   - Practitioner
   - Trainer
 resources:
-  - http://lingtransoft.info/competencies/problem-solving
+  - title: What is problem solving?
+    url: https://www.mindtools.com/pages/article/newTMC_00.htm
+  - title: Problem Solving on SkiilsYouNeed.com
+    url: https://www.skillsyouneed.com/ips/problem-solving.html
+  - title: Introduction to Problem Solving Skills
+    url: https://ccmit.mit.edu/problem-solving/
+  - title: The Problem-Solving Process
+    url: https://asq.org/quality-resources/problem-solving
+  - title: What arer problem-solving skills and why are they important?
+    url: https://www.careerbuilder.com/advice/what-are-problemsolving-skills-and-why-are-they-important
+  - title: How to improve your problems solving skills
+    url: https://www.topuniversities.com/blog/how-improve-your-problem-solving-skills
+  - title: Six ways to enhance your problem solving skills
+    url: https://www.lifehack.org/articles/productivity/6-ways-to-enhance-your-problem-solving-skills.html
+  - title: Building Students' Problem-Solving Skills Through Complex Challenges
+    url: http://www.ascd.org/Publications/Books/Overview/What-If-Building-Students-Problem-Solving-Skills-Through-Complex-Challenges.aspx
 source: Lang Tech Competencies.xlsx
 last_updated: 2026-07-01
 ---

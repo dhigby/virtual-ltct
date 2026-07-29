@@ -6,7 +6,8 @@ hand-authored `competencies/*.md`, and emits — into the in-memory docs tree, s
 duplicated in git:
 
   * index.md      — framework overview with per-category counts
-  * <category>/<slug>.md  — one page per competency (descriptor body, frontmatter stripped)
+  * <category>/<slug>.md  — one page per competency (descriptor body, frontmatter stripped,
+                            plus a Further Information section built from `resources:`)
   * coverage.md   — the committed COVERAGE.md, if present
   * SUMMARY.md    — the nav tree (consumed by mkdocs-literate-nav), grouped by category
 
@@ -37,6 +38,28 @@ def split_frontmatter(text):
     return {}, text
 
 
+def resources_section(resources):
+    """Render a descriptor's frontmatter `resources:` as a Further Information section.
+
+    Entries are `{title, url}` mappings. A bare URL string is also accepted — a hand-edit
+    that drops the title still renders (labelled with the URL) rather than failing the
+    build. Returns "" when there are no resources, so those pages are left unchanged.
+    """
+    items = []
+    for r in resources or []:
+        if isinstance(r, dict):
+            url = str(r.get("url") or "").strip()
+            label = str(r.get("title") or url).strip()
+        else:
+            url = label = str(r).strip()
+        if url:
+            label = label.replace("]", "\\]")  # a bracket in a title would break the link
+            items.append(f"- [{label}]({url})")
+    if not items:
+        return ""
+    return "\n## Further Information\n\n" + "\n".join(items) + "\n"
+
+
 # Load every hand-authored descriptor, keyed by its framework name.
 by_name = {}
 for p in sorted((ROOT / "competencies").glob("*.md")):
@@ -61,8 +84,12 @@ for category, names in CATS.items():
         d = by_name[name]
         page = f"{cat_dir}/{d['slug']}.md"
         page_by_name[name] = page
+        body = d["body"]
+        further = resources_section(d["fm"].get("resources"))
+        if further:
+            body = body.rstrip("\n") + "\n" + further
         with mkdocs_gen_files.open(page, "w") as f:
-            f.write(d["body"])
+            f.write(body)
         # ✏️ edit button jumps to the real source file, not the generated page.
         mkdocs_gen_files.set_edit_path(page, f"competencies/{d['slug']}.md")
         nav_lines.append(f"    * [{name}]({page})")

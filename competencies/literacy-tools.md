@@ -11,7 +11,28 @@ outcome_levels:
   - Trainer/Proficient
   - Expert
 resources:
-  - http://lingtransoft.info/competencies/literacy-tools
+  - title: SIL Literacy and Education
+    url: https://www.sil.org/literacy-education
+  - title: SIL Literacy and education (ILS)
+    url: https://sites.google.com/d/1WRbBXpgVYdTHgcS0jLOdXOSggI17FruM/p/1Kx_uPz4kEIYT2iMXVr7q8gNsonSGXzfJ/edit
+  - title: Bloom Library
+    url: http://bloomlibrary.org
+  - title: Bloom 4 Training Plan
+    url: https://lingtran.net/Bloom-4
+  - title: Bloom Resources from SIL LEAD
+    url: https://www.sil-lead.org/bloom-accessible-books
+  - title: PrimerPro
+    url: https://software.sil.org/primerpro/
+  - title: PrimerPro training videos
+    url: https://vimeo.com/showcase/3521179
+  - title: SIL Principles of Literacy course
+    url: https://elearning.sil.org/enrol/index.php?id=370
+  - title: PrimerPrep
+    url: https://software.sil.org/primerprep/
+  - title: Reading App Builder
+    url: https://software.sil.org/readingappbuilder/
+  - title: SIL Africa learning and Development
+    url: https://africa.sil.org/
 source: Lang Tech Competencies.xlsx
 last_updated: 2026-07-01
 ---

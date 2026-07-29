@@ -11,7 +11,26 @@ outcome_levels:
   - Trainer/Proficient
   - Expert
 resources:
-  - http://lingtransoft.info/competencies/data-conversion
+  - title: Regular Expressions.info (Jan Goyvaerts)
+    url: http://www.regular-expressions.info/
+  - title: Regex Golf (Game)
+    url: https://alf.nu/RegexGolf
+  - title: RegexOne tutorial
+    url: https://regexone.com/
+  - title: Notepad++ - Regular Expressions
+    url: https://npp-user-manual.org/docs/searching/#regular-expressions
+  - title: Python Documentation
+    url: https://docs.python.org/
+  - title: Beginner's Guide to Python
+    url: https://wiki.python.org/moin/BeginnersGuide
+  - title: SIL Converters
+    url: https://software.sil.org/silconverters/
+  - title: SIL Converters 4.0
+    url: https://scripts.sil.org/cms/scripts/page.php?site_id=nrsi&id=enccnvtrs
+  - title: Learn Python the Hard Way
+    url: https://learnpythonthehardway.org/book/
+  - title: Consistent Changes Program
+    url: https://software.sil.org/cc/
 source: Lang Tech Competencies.xlsx
 last_updated: 2026-07-01
 ---

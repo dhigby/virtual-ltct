@@ -11,7 +11,7 @@ outcome_levels:
   - Trainer/Proficient
   - Expert
 resources:
-  - http://lingtransoft.info/competencies/lexical-markup
+  []
 source: Lang Tech Competencies.xlsx
 last_updated: 2026-07-01
 ---

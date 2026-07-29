@@ -11,7 +11,16 @@ outcome_levels:
   - Trainer/Proficient
   - Expert
 resources:
-  - http://lingtransoft.info/competencies/keyboards
+  - title: Keyman
+    url: https://keyman.com/
+  - title: Keyman Unicode Keyboards
+    url: http://scripts.sil.org/cms/scripts/page.php?site_id=nrsi&id=KeymanKeyboardLinks
+  - title: How to Identify International Physical Keyboards
+    url: https://keyshorts.com/blogs/blog/44712961-how-to-identify-laptop-keyboard-localization
+  - title: Dell Keyboard Troubleshooting
+    url: http://www.dell.com/support/article/us/en/19/sln305029/keyboard-usage-and-troubleshooting-guide?lang=en
+  - title: How to change keyboard layouts in Windows 11
+    url: https://windowsreport.com/keyboard-layout-windows-11/
 source: Lang Tech Competencies.xlsx
 last_updated: 2026-07-01
 ---

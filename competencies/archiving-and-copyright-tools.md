@@ -12,7 +12,18 @@ outcome_levels:
   - Trainer/Proficient
   - Expert
 resources:
-  - http://lingtransoft.info/competencies/archiving-and-copyright
+  - title: Creative Commons Licenses
+    url: https://creativecommons.org/licenses/
+  - title: SIL Language and Culture Archives
+    url: https://www.sil.org/resources/language-culture-archives
+  - title: Introducing RAMP
+    url: https://www.sil.org/resources/archives/43211
+  - title: REAP
+    url: https://reap.sil.org/
+  - title: SIL elearning course on Intellectual property (basics)
+    url: https://elearning.sil.org/course/view.php?id=257
+  - title: SIL Elearning course for content creators
+    url: https://elearning.sil.org/course/view.php?id=258
 source: Lang Tech Competencies.xlsx
 last_updated: 2026-07-01
 ---

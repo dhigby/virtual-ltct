@@ -1,9 +1,7 @@
-# Module 3
-
 # MODULE 3: PRACTICAL DECISIONS AND APPLICATION
+
+**Estimated time:** 65 minutes
 **Target Audience:** Trainee Language Technology Consultants
-**Duration:** 60 minutes
-**Level:** Has Knowledge
 **Format:** Asynchronous self-paced learning
 
 ## Learning Objectives
@@ -17,7 +15,7 @@ By the end of this module, you will be able to:
 
 ---
 
-**CONNECT**
+## Connect
 
 In Modules 1 and 2, you built the technical foundation — understanding components, diagnosing problems, and recognising failure patterns. Module 3 is where that knowledge meets real-world judgment.
 
@@ -27,12 +25,12 @@ In your learning journal, reflect briefly: what do you think is the hardest part
 
 ---
 
-**CONTENT**
+## Content
 
-_The diagnostic approach you'll use in this course — observe carefully, isolate the likely cause, test systematically, then decide on action — is the same underlying thinking you'll find across all courses in this program. Whether you're diagnosing an overheating laptop, a font that won't display, or an operating system problem, the mindset is the same: gather information before you act, and work methodically rather than by guesswork. In this course, we apply that thinking to computer hardware._
+_Same four steps as always — observe, isolate, test, decide. What changes in this module is the last one. Deciding is where technical diagnosis meets the constraints your users actually live with: what parts can reach them, what they can safely attempt themselves, and what their work can't wait for._
 
-## Section 3.1: The Consultant's Judgment Calls
-**Time:** 15 minutes
+### Section 3.1: The Consultant's Judgment Calls
+**Time:** 15 minutes (includes Activity 3.1)
 
 You've learned to diagnose hardware problems. But diagnosis is only part of your job. You also need to make **practical recommendations** considering resource availability, user capability, cost vs. benefit, urgency and timelines, and work continuity. These aren't purely technical decisions — they require judgment.
 
@@ -41,9 +39,20 @@ For every problem, you have three possible paths:
 #### Path 1: User Can Fix (with guidance)
 **When appropriate:** problem is clearly diagnosed, solution is within user capability, risk is low (won't make things worse), you can provide clear guidance, user expresses comfort with the task.
 
-**Examples:** cleaning dust from vents, freeing up disk space, reseating RAM (if user comfortable), using external mouse for touchpad issue, basic troubleshooting steps.
+**Examples:** cleaning dust from vents, freeing up disk space, reseating RAM (if the model has removable RAM *and* the user is comfortable), using external mouse for touchpad issue, basic troubleshooting steps.
 
 **How to decide if user can do it:** Can I explain this clearly in writing? What's the worst that could happen if they make a mistake? Does this require special tools? Have they done anything like this before?
+
+**Before routing anything to Path 1, confirm the part is actually serviceable.** Modern laptops are increasingly not. RAM and storage are often soldered to the motherboard, and batteries are frequently glued in rather than clipped. Check the model on iFixit or with the Crucial system scanner *before* you ask a user to open anything. A teardown that ends in "there's nothing here to reseat" costs the user an afternoon, some anxiety, and sometimes a broken clip — and it should have been a five-minute lookup on your side.
+
+**Preparing a user for any internal work — the safety and prep sequence:**
+
+1. **Back up first.** Anything that opens a case might not close successfully. Data comes off before the screwdriver comes out.
+2. **Power off, unplug, and if the battery is removable, take it out.** Then hold the power button 30 seconds to drain residual charge.
+3. **Discharge yourself.** Touch a bare metal part of the chassis before touching any component. Static damage is much less common than hobbyist forums suggest, but it is not zero — and it rises sharply in exactly the conditions your users work in: dry season, high altitude, synthetic clothing. Working on a hard non-carpeted surface handles most of the risk.
+4. **Use the right screwdriver.** A **Philips #00** and a **T5 Torx** cover the great majority of laptops (Apple needs pentalobe). Using a knife blade or an oversized driver strips the screw heads, and a stripped screw turns a 10-minute job into a destroyed bottom cover. If the user doesn't have the right driver, that alone is a reason to choose a different path.
+5. **Photograph each step**, and keep screws in order — laptop screws are often different lengths, and a long screw in a short hole punctures the board.
+6. **Never force, pry near, or puncture the battery.** If the battery looks swollen, stop entirely and go to [Module 4](04-module-4.md).
 
 **Always provide:** clear step-by-step instructions, safety warnings, photos/diagrams if possible, "if you're not comfortable, it's okay to escalate," and what to do if it doesn't work.
 
@@ -85,17 +94,17 @@ Not good: _"I don't know what's wrong, contact IT."_
 
 **B — Replace:** multiple failing systems, clicking hard drive = imminent failure risk, 2-week deadline can't wait for complex repairs. IMMEDIATE: back up data, request replacement, minimise use.
 
-**C — User can fix:** classic RAM unseated from transport, computer is relatively new (worth fixing), reseating RAM is straightforward. Walk user through it, or escalate if they're not comfortable. Good prevention opportunity (padded transport case).
+**C — User can fix, conditionally:** classic RAM unseated from transport, computer is relatively new (worth fixing), reseating RAM is straightforward *if the RAM is removable*. Check the model on iFixit first — a 1-year-old thin-and-light may well have soldered memory, in which case this becomes an escalation, not a user fix. Walk the user through it if it's serviceable and they're comfortable; escalate otherwise. Good prevention opportunity (padded transport case).
 
 **D — Replace adapter immediately:** frayed cable is a safety hazard (fire risk, shock risk), will fail completely soon. This is urgent — don't let user keep using it.
 
 **E — Depends on context:** if reliable power and no need for portability, live with it. If user needs mobility, replace battery. Also consider: if computer is otherwise near end of life, replace entire computer instead of investing in a battery. Key insight: these aren't always technical decisions — they're practical judgments based on context, resources, risk, and user needs.
 
 **DANGER**
-A frayed power adapter cable is not a "wait and see" situation — it is a fire and electric shock risk. Do not let users continue using a visibly damaged adapter. Replace it immediately, even if it still works. This applies to Scenario D above and any similar situation you encounter in the field.
+Generalise Scenario D: any visibly damaged power adapter — frayed, cracked, exposed conductor, scorch mark — is a fire and shock risk, and "it still works if I hold it right" is not a reason to keep it in service. Treat visible damage as the failure itself, not a warning of one.
 
-## Section 3.2: Resource Constraints and Workarounds
-**Time:** 10 minutes
+### Section 3.2: Resource Constraints and Workarounds
+**Time:** 10 minutes (includes Activity 3.2)
 
 Your users aren't in cities with easy access to computer repair shops. They face limited or no replacement parts locally, weeks or months for parts to arrive, no local technical support, work that can't stop while waiting, and budget constraints. **Your job: help them keep working despite these constraints.**
 
@@ -103,7 +112,7 @@ Your users aren't in cities with easy access to computer repair shops. They face
 1. **Identify what CAN work.** Don't focus only on what's broken. Display broken? Use external monitor. Touchpad issues? Use USB mouse. Battery dead? Work plugged in. Keyboard keys not working? Use external keyboard or on-screen keyboard. Port not working? Use a different port.
 2. **Prioritise partial solutions.** A solution that's 80% effective NOW is often better than a perfect solution in 6 weeks. Example: laptop overheats and shuts down after 30 minutes. Perfect solution: replace cooling system (6 weeks for parts). Partial solution now: aggressive cleaning, cooling pad, work in short sessions, save frequently. Result: user can continue working carefully while waiting for parts.
 3. **Creative problem-solving.** Can the user borrow equipment from another worker temporarily? Can some work be done on a phone or tablet while the laptop is down? Can two users share one working computer? Is there a regional office that might have spare parts? Can the user travel to the city for repair if the deadline is critical?
-4. **Preventive triage.** When resources are limited, prevention becomes even more critical: surge protector (cheap, prevents expensive failures), regular cleaning (free, prevents overheating), good backups (essential, enables recovery), careful handling (free, prevents damage). A $20 surge protector prevents an $800 motherboard replacement — this math matters in resource-constrained environments.
+4. **Preventive triage.** When resources are limited, prevention becomes even more critical: **power protection matched to the site's actual power profile** (see [Module 4](04-module-4.md) — a surge strip is the cheapest option but addresses only spikes, and on a site with sagging voltage it will not prevent the adapter failures you're trying to avoid), regular cleaning (free, prevents overheating), good backups (essential, enables recovery), careful handling (free, prevents damage). The economics genuinely favour prevention here — a correctly specified AVR costs a fraction of the laptops it protects, and far less than the weeks of lost work when one dies. Just make sure you're buying protection against the problem the site actually has.
 
 ### Activity 3.2: Find the Workaround
 **Time:** 5 minutes — for each situation, identify a workaround that lets the user continue working while waiting for the permanent solution. Write your answers before reading the sample solutions.
@@ -112,17 +121,30 @@ Your users aren't in cities with easy access to computer repair shops. They face
 Hard drive is clicking and failing. Replacement will take 6 weeks. User has backed up data. How can they keep working?
 
 **TIP**
-If there's another language worker nearby: borrow their laptop temporarily, restore from backup. If organisation has spare equipment: request temporary loaner. If neither available: reduce computer use to only critical tasks, use internet café/library computers for non-sensitive work, work on borrowed computer with cloud-based tools. Key principle: workarounds don't have to be elegant — they just have to let work continue.
+If there's another language worker nearby: borrow their laptop temporarily, restore from backup. If organisation has spare equipment: request temporary loaner. If neither available: reduce computer use to only critical tasks, work on a borrowed computer with cloud-based tools.
+
+**WARNING**
+**Shared and public computers are not an option for language data.** An internet café or library machine may be fine for answering email, but language documentation data must never touch one. Recordings and transcripts of named speakers, unpublished translation drafts, and community material held under agreement are exactly the data that cannot be allowed to persist on a machine you don't control — and public machines routinely have keyloggers, cached credentials, and files left in temp folders and recycle bins long after the user leaves. There is also usually a consent dimension: speakers agreed to be recorded by a project, not to have their interviews sitting on a café hard drive.
+
+If a shared machine is genuinely the only option, restrict it to work with no personal or community data in it at all, and never sign in to project accounts or cloud storage from it. When in doubt, delaying the work is the safer trade.
 
 #### Situation 2: Constant Overheating
 Laptop constantly overheats and shuts down. Fan replacement parts not available locally. User has critical deadline in 2 weeks.
 
 **TIP**
-**Immediate cooling measures:** work in coolest location/time of day, aggressive vent cleaning, elevate laptop for maximum airflow, work in 20-minute sessions and let cool between, use temperature monitoring and stop before shutdown, cooling pad if available locally.
+**Immediate cooling measures:** work in coolest location/time of day, careful vent cleaning (brush or bulb blower — hold the fan still if using compressed air), elevate laptop for maximum airflow, work in 20-minute sessions and let cool between, use temperature monitoring and stop before shutdown, cooling pad if available locally.
 
-**Reduce heat generation:** close all unnecessary programs, lower screen brightness, disable background processes, work with fewer programs simultaneously.
+**Reduce heat generation:** close all unnecessary programs, lower screen brightness, disable background processes, work with fewer programs simultaneously. On Windows, capping the processor at 90–99% of maximum in the power plan disables turbo boost and can drop peak temperatures substantially for a small performance cost — a good trade when the alternative is shutdowns.
 
 **Work process adaptation:** save frequently (expect shutdowns), break work into smaller chunks, do heat-intensive tasks only when absolutely necessary, consider whether some work could be done on phone/tablet.
+
+**The repair nobody thinks of — replace the thermal paste.** Thermal paste is the compound between the CPU and the heat sink that carries heat across the gap. It dries out over about three to five years, faster in heat, and when it does the cooling system can be spotless and still not work. This is a genuine repair, not a workaround, and it is uniquely well suited to constrained settings:
+
+- A tube costs a few dollars and is enough for many laptops.
+- It is tiny and ships easily — no customs difficulty, no 8-week lead time on a specific part number.
+- It requires no model-specific component. The same tube fixes any laptop.
+
+For a hot 4-year-old machine where a fan is unobtainable, repasting is often the single highest-value intervention available. It does require opening the machine and reaching the heat sink, so it's a Path 1 job only for a confident user, and a good candidate for local hands-on help. Worth stocking proactively in any regional office.
 
 #### Situation 3: Broken Keyboard Keys
 Four keys on keyboard don't work (water damage). Keyboard replacement will take 8 weeks. User does a lot of typing.
@@ -130,10 +152,29 @@ Four keys on keyboard don't work (water damage). Keyboard replacement will take 
 **TIP**
 **External USB keyboard** — often available locally, inexpensive, best solution for desk work. **On-screen keyboard** — built into OS, slower but works everywhere. **Remap keys** — use other rarely-used keys for the broken ones (software solution). **Combination approach** — external keyboard for desk work, on-screen for portable work.
 
-## Section 3.3: Building Your Troubleshooting Toolkit
-**Time:** 10 minutes
+### Section 3.3: Building Your Troubleshooting Toolkit
+**Time:** 15 minutes (includes Activity 3.3)
 
-Good consultants don't memorise everything — they build systems for finding answers quickly.
+Good consultants don't memorise everything — they build systems for finding answers quickly. Your toolkit has three parts: software you can direct a user to, **physical tools that need to exist somewhere near the user**, and reference material you can find fast.
+
+#### The Physical Kit
+
+This is the part most consultants skip, and in a setting where a specific replacement part takes six to eight weeks to arrive, it's the part that actually unblocks work. Everything on this list is small, cheap, generic, and ships without difficulty — which is precisely why it beats waiting on a model-specific component.
+
+| Item | Why it matters |
+| --- | --- |
+| **Philips #00 screwdriver** | Opens the majority of laptop bottom covers. The single most useful item here. |
+| **T5 Torx driver** | Covers most of the rest. (Apple laptops need a **pentalobe** driver as well.) |
+| **Plastic spudger / guitar pick** | Releases clips without gouging the case or shorting a board the way a metal blade can. |
+| **Manual bulb blower** | Safe, reusable dust removal. Can't over-spin a fan, unlike a can of compressed air. |
+| **Soft brush** | Surface dust on vents and grilles. |
+| **Thermal paste** | A few dollars, fixes overheating on any laptop, ships anywhere. |
+| **Silica gel packets** | Humidity and condensation control in storage. Rechargeable in an oven. |
+| **A known-good spare power adapter** | The fastest way to confirm or eliminate an adapter fault — and the most common failed part. |
+| **A Ventoy USB stick** | Your diagnostic environment, and the definitive hardware-vs-software test. |
+| **A known-good USB mouse and keyboard** | Instantly works around touchpad and keyboard faults, and isolates them diagnostically. |
+
+Two notes on getting this right. First, a **stripped screw head** turns a ten-minute job into a destroyed bottom cover, so the correct driver size genuinely matters more than it sounds — if the only tool available is a kitchen knife, that's a reason to choose a different path, not to improvise. Second, this kit belongs **where the users are**, not with you. A regional office that stocks these items serves every worker in the region; the same kit in a consultant's desk drawer three countries away helps nobody.
 
 #### Diagnostic Software
 **Temperature Monitoring:** HWMonitor (Windows) — shows all system temperatures. Core Temp (Windows) — CPU temperature. Macs Fan Control (Mac) — temperature and fan control.
@@ -147,14 +188,18 @@ Good consultants don't memorise everything — they build systems for finding an
 **Memory Testing:** Windows Memory Diagnostic (built-in). MemTest86 (advanced, thorough).
 
 **INFO**
-**Ventoy** is a modern tool that allows consultants to put multiple ISOs (diagnostics, Linux live environments, installers) on one USB drive — a Swiss Army Knife for field consultants. Worth learning once you're comfortable with the basics.
+**Ventoy** lets you put multiple ISOs (diagnostics, Linux live environments, installers) on a single USB drive — you copy ISO files onto it like ordinary files and pick one from a menu at boot. It is the Swiss Army knife of field support, and it is worth building one before you need it.
+
+What makes it more than a convenience: a **Linux live environment on that stick is the definitive hardware-vs-software test** from Module 2. Boot the machine from USB and you are running a complete, known-good operating system that never touches the installed one. Clean from USB means the hardware is fine and the problem is the OS or the drive. Faulty from USB means hardware, regardless of how many times the user has reinstalled Windows.
+
+It also solves a problem specific to your context: it works **entirely offline**. You build the stick once, where bandwidth exists, and it then diagnoses machines that can't download a single megabyte. Put a Linux live ISO and a memory tester (MemTest86) on it at minimum. If you can get one stick to each region, do that — mailing a USB drive is far easier than mailing a laptop part.
 
 #### Reference Resources
 **For specific hardware info:** manufacturer websites (drivers, diagnostics, specifications), [iFixit.com](https://www.ifixit.com) (teardowns, repair guides, identify components), Crucial.com system scanner (identifies compatible RAM/storage).
 
 **For troubleshooting:** manufacturer support forums (others' experiences with same model), Tom's Hardware and AnandTech (detailed technical discussions), Reddit r/techsupport (community troubleshooting), YouTube (visual repair guides).
 
-**For beep codes:** search "[manufacturer name] beep codes" — each manufacturer uses different codes.
+**For startup (POST) failure codes:** search "[manufacturer name] [model] beep codes" **and** "[manufacturer name] LED blink codes" — each manufacturer uses different codes, and most modern laptops blink an LED rather than beeping at all (see Module 2, Pattern 5). Keep the lookup page for the models your users actually have.
 
 **Quick reference guides to create for yourself:**
 - Failure pattern checklist (overheating, battery, display, storage, RAM, power symptoms and checks)
@@ -182,15 +227,17 @@ Create a quick reference guide for **one** common problem. Choose: overheating d
 
 ---
 
-**CHALLENGE**
+## Challenge
 
-## Section 3.4: Complex Scenario Assessments
+### Section 3.4: Complex Scenario Assessments
 **Time:** 20 minutes
 
 You've learned the components, the diagnostic process, the patterns, and the decision-making frameworks. Now apply everything to complex, realistic scenarios. **These scenarios will be assessed by your mentor.** Take your time, think systematically, and write detailed responses.
 
+Submit a completed [Consultant's Triage Card](consultant-triage-card.md) with each of the three scenarios below, in addition to your written analysis. All three are drawn from the [scenario bank](05-scenario-bank.md) (C1–C3).
+
 #### Scenario 1: The Cascade of Problems
-Lisa in Ethiopia contacts you. Two days ago, there was a severe thunderstorm and power surge. Her notebook was plugged in at the time (no surge protector). After the storm, the computer seemed to work, but the battery icon showed "not charging." She continued working on battery power. Yesterday, the computer shut down (battery depleted), and now when she tries to start it: power light comes on briefly then goes off, she hears a clicking sound from inside, screen remains black, and sometimes she smells a faint burning odour.
+Lisa in Ethiopia contacts you. Two days ago, there was a severe thunderstorm and power surge. Her laptop was plugged in at the time (no surge protector). After the storm, the computer seemed to work, but the battery icon showed "not charging." She continued working on battery power. Yesterday, the computer shut down (battery depleted), and now when she tries to start it: power light comes on briefly then goes off, she hears a clicking sound from inside, screen remains black, and sometimes she smells a faint burning odour.
 
 **DANGER**
 If a user smells burning, they must **immediately stop trying to power it on**. This indicates a short circuit that could lead to a fire. This is not a troubleshooting situation — it is a safety situation. The computer must not be used until IT has inspected it.
@@ -208,7 +255,7 @@ Lisa is 4 hours from the nearest city where replacement parts might be available
 #### Scenario 2: The Gradual Decline
 Robert in Cameroon describes a pattern developing over several months: 3 months ago — occasional unexplained restarts. 2 months ago — programs started crashing more frequently. 1 month ago — display sometimes shows coloured lines or flickers. This week — computer sometimes doesn't recognise his external hard drive when plugged in, and Windows gave an error message about a "hardware malfunction."
 
-The computer still works, but Robert is worried about losing data and wants to know if he should request a replacement or if these issues can be resolved. He works in a hot, dusty environment, backs up weekly but hasn't backed up in 10 days. The nearest IT support is a 6-hour journey. Requesting and receiving a replacement notebook typically takes 2–3 months.
+The computer still works, but Robert is worried about losing data and wants to know if he should request a replacement or if these issues can be resolved. He works in a hot, dusty environment, backs up weekly but hasn't backed up in 10 days. The nearest IT support is a 6-hour journey. Requesting and receiving a replacement laptop typically takes 2–3 months.
 
 **Provide detailed written responses covering:**
 1. **Pattern analysis:** what pattern do you see in these symptoms, and what does it suggest about the underlying problem(s)?
@@ -233,11 +280,12 @@ Kenji works in a mountainous region with temperature extremes (very cold at nigh
 
 ---
 
-**CHANGE**
+## Change
 
-## Section 3.5: Final Reflections and Next Steps
+### Section 3.5: Final Reflections and Next Steps
+**Time:** 5 minutes
 
-### Self-Assessment
+#### Self-Assessment
 Before finishing, reflect on your readiness. In your learning journal, note which of these you feel confident about and which you want to strengthen:
 - Identify major computer components and their functions
 - Distinguish hardware from software problems
@@ -251,14 +299,14 @@ Before finishing, reflect on your readiness. In your learning journal, note whic
 
 Write 2–3 specific areas you'll focus on during mentorship.
 
-### Your Next Steps
+#### Your Next Steps
 **1. Submit your assessment scenarios** (from Section 3.4) to your mentor for review — Scenario 1 (The Cascade of Problems), Scenario 2 (The Gradual Decline), Scenario 3 (The Diagnostic Challenge).
 
-**2. Schedule a debrief call** with your mentor to discuss your scenario responses, areas of strength and development, questions from the course, and next steps in your mentorship.
+**2. Continue to [Module 4](04-module-4.md).** You now know how to diagnose a fault and decide what to do about it. Module 4 covers the three things that determine whether a laptop survives a field posting at all: the quality of the power feeding it, the safety hazards that end troubleshooting instead of continuing it, and how to keep irreplaceable language data alive when hardware fails.
 
-**3. Begin your mentorship program** — start working on real-world cases with your mentor's guidance.
+**3. Then schedule a debrief call** with your mentor to discuss your scenario responses, areas of strength and development, questions from the course, and next steps in your mentorship.
 
-### Remember
+#### Remember
 - You don't need to know everything — you need to know how to figure things out systematically
 - It's okay to escalate — knowing your limits is professional
 - Every case teaches you something — document what you learn
@@ -269,16 +317,7 @@ When you're stuck, remember the systematic process: gather more information (obs
 
 Language workers around the world depend on their computers to do transformative work. When technology breaks, they can't do their jobs. **You're not just fixing computers — you're enabling mission-critical language work.**
 
-### You've Completed the Hardware Course!
-Across the three modules, you've learned: what's inside a notebook computer and how components interact, how to systematically diagnose hardware problems, common failure patterns and how to recognise them, how to make practical decisions about repair, escalation, and replacement, how to work within resource constraints, and how to build your troubleshooting toolkit.
+### Three Modules Down, One to Go
+You've now covered: what's inside a laptop and how components interact, how to systematically diagnose hardware problems, common failure patterns and how to recognise them, how to make practical decisions about repair, escalation and replacement, how to work within resource constraints, and how to build your toolkit.
 
-**Keep learning:** iFixit (new teardowns and repair guides), manufacturer forums (model-specific issues), your organisation's support community (shared experiences), YouTube — Linus Tech Tips (consumer tech), JayzTwoCents (hardware), Louis Rossmann (advanced repair — for understanding, not doing).
-
-**Stay current:** hardware evolves — new failure modes, new solutions. Share your learnings with other consultants. Update your reference materials based on real experiences.
-
-### Course Materials Checklist
-**Module 1:** iFixit.com teardown guides, System Information tools (built into Windows and Mac), Battery health reports (built into Windows and Mac).
-
-**Module 2 — Diagnostic Software:** HWMonitor/Core Temp (temperature), CrystalDiskInfo/DriveDx (disk health), Windows Memory Diagnostic/MemTest86 (memory testing), Speccy/CPU-Z (system information). Reference sites: iFixit.com, manufacturer support forums, Tom's Hardware, AnandTech, Reddit r/techsupport.
-
-**Module 3 — Documentation Templates:** intake form, troubleshooting log, escalation form, quick reference guides. Contact network: IT support team, fellow language tech consultants, regional equipment managers, local technical contacts.
+Module 4 is the field-conditions module — power, safety, and data. It's where the difference between a consultant who has read about remote support and one who can actually keep a rural office running shows up.

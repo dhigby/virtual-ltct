@@ -11,7 +11,14 @@ outcome_levels:
   - Trainer/Proficient
   - Expert
 resources:
-  - http://lingtransoft.info/competencies/digital-vitality
+  - title: CLDR - Common Repository for Locales
+    url: http://cldr.unicode.org/
+  - title: SLDR - SIL's Repository for Minority Language Locales
+    url: https://github.com/silnrsi/sldr
+  - title: UNICODE LOCALE DATA MARKUP LANGUAGE (LDML)
+    url: http://unicode.org/reports/tr35/
+  - title: LDML Specification
+    url: https://sites.google.com/site/ldmlspec/home
 source: Lang Tech Competencies.xlsx
 last_updated: 2026-07-01
 ---

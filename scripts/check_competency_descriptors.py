@@ -8,6 +8,7 @@ descriptors. This check fails (exit 1) if they drift:
   * a descriptor names a competency that isn't in the framework,
   * a descriptor's frontmatter is malformed or missing a required key,
   * a descriptor self-reports `in_framework: false`,
+  * a descriptor's `resources:` entries aren't `{title, url}` links,
   * or a descriptor's filename doesn't match its `slug`.
 
 Run:  python scripts/check_competency_descriptors.py
@@ -59,6 +60,23 @@ def main():
         for key in ("name", "category", "slug"):
             if not fm.get(key):
                 errors.append(f"{md.name}: missing required frontmatter key `{key}`")
+        # `resources:` is a list of {title, url} links that scripts/gen_site.py renders as
+        # each page's Further Information section. Hand-maintained, so guard the shape.
+        resources = fm.get("resources")
+        if resources is not None and not isinstance(resources, list):
+            errors.append(f"{md.name}: `resources` must be a list of title/url entries")
+        elif resources:
+            for i, r in enumerate(resources, start=1):
+                if not isinstance(r, dict):
+                    errors.append(f"{md.name}: resources[{i}] must be a mapping with "
+                                  "`title` and `url`")
+                    continue
+                if not str(r.get("title") or "").strip():
+                    errors.append(f"{md.name}: resources[{i}] is missing `title`")
+                url = str(r.get("url") or "").strip()
+                if not url.startswith(("http://", "https://")):
+                    errors.append(f"{md.name}: resources[{i}] `url` must be an http(s) URL "
+                                  f"(got {url!r})")
         name = fm["name"]
         if name in seen:
             errors.append(f"{md.name}: duplicate descriptor for '{name}' (also {seen[name]})")

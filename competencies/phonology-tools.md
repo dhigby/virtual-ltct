@@ -11,8 +11,20 @@ outcome_levels:
   - Trainer/Proficient
   - Expert
 resources:
-  - http://lingtransoft.info/competencies/phonology-tools
-  - http://lingtransoft.info/competencies/instrument-analysis
+  - title: Cambridge Journal of Phonology
+    url: https://www.cambridge.org/core/journals/phonology
+  - title: Phonology Assistant
+    url: https://software.sil.org/phonologyassistant/
+  - title: Phonology Assistant 3
+    url: http://lingtransoft.info/apps/phonology-assistant-3
+  - title: Dekereke Tutorials and Help Materials
+    url: http://casali.canil.ca/DekerekeTutorials/tutorials.html
+  - title: 'Speech Analyzer: a computer program for acoustic analysis'
+    url: https://software.sil.org/speech-analyzer/
+  - title: Audacity
+    url: https://www.audacityteam.org/
+  - title: Praat
+    url: https://www.fon.hum.uva.nl/praat/
 source: Lang Tech Competencies.xlsx
 last_updated: 2026-07-01
 ---

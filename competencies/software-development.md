@@ -11,7 +11,26 @@ outcome_levels:
   - Trainer/Proficient
   - Expert
 resources:
-  - http://lingtransoft.info/competencies/software-development
+  - title: Problem Solving Skills of Great Software Developers
+    url: https://dev.to/lpasqualis/the-5-problem-solving-skills-of-great-software-developers-4e6
+  - title: SIL Language Software Development on Github
+    url: https://github.com/sillsdev
+  - title: SIL's Keyman on GitHub (Multiplatform Keyboards)
+    url: https://github.com/keymanapp
+  - title: Learn C# online
+    url: https://codeasy.net/
+  - title: C# Tutorial
+    url: https://www.tutorialspoint.com/csharp/index.htm
+  - title: W3schools - C# tutorial
+    url: https://www.w3schools.com/cs/
+  - title: SIL Writing Systems Technology
+    url: https://github.com/silnrsi
+  - title: Github (An open-source programming community)
+    url: https://github.com
+  - title: Sourceforge (Another open-source programming community)
+    url: http://www.sourceforge.com
+  - title: Praat on Github
+    url: https://github.com/praat
 source: Lang Tech Competencies.xlsx
 last_updated: 2026-07-01
 ---

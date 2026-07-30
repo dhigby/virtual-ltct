@@ -10,7 +10,22 @@ outcome_levels:
   - Practitioner
   - Trainer
 resources:
-  - http://lingtransoft.info/competencies/os-basics
+  - title: How to use Windows 10
+    url: https://www.laptopmag.com/articles/how-to-use-windows-10
+  - title: Windows 10 tutorial from Microsoft
+    url: https://www.thewindowsclub.com/windows-10-guide-for-beginners-from-microsoft
+  - title: Basic Computer Skills
+    url: https://lingtran.net/Basic-Computer-Skills
+  - title: Basic Computer Skills by GCFGlobal
+    url: https://edu.gcfglobal.org/en/basic-computer-skills/
+  - title: Nepals basic computer course
+    url: https://docs.google.com/document/d/12ZmXEZWhTuhFCLqoLD2hYoVl4MvHpcNIISmuXLFZWmQ/edit
+  - title: Ubuntu commands for Beginners (Wasta is an Ubuntu based OS)
+    url: https://ubuntu.com/tutorials/command-line-for-beginners#1-overview
+  - title: NetLiteracy.org
+    url: https://drive.google.com/open?id=1sVyGCUqFEVLMSbajZw8hnRr4anSkcn7A
+  - title: Klient Slutech
+    url: http://www.klientsolutech.com/online-basic-computer-courses-
 source: Lang Tech Competencies.xlsx
 last_updated: 2026-07-01
 ---

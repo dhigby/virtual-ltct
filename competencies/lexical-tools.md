@@ -11,7 +11,36 @@ outcome_levels:
   - Trainer/Proficient
   - Expert
 resources:
-  - http://lingtransoft.info/competencies/lexical-tools
+  - title: SIL Dictionaries & Lexicography
+    url: https://www.sil.org/dictionaries-lexicography
+  - title: SIL Fieldworks
+    url: https://software.sil.org/fieldworks/
+  - title: RapidWords.net (Rapid Dictionary Development)
+    url: http://rapidwords.net/
+  - title: Introduction to Lexicography for FLEx
+    url: https://drive.google.com/file/d/122-fSjQnFOwjwsf4vRXdNi4OUsLBpjW8/view
+  - title: WeSay
+    url: https://software.sil.org/wesay/
+  - title: Language Forge
+    url: https://languageforge.org/
+  - title: Lexique Pro
+    url: http://lexiquepro.com/
+  - title: SIL Field Linguist's Toolbox
+    url: https://software.sil.org/toolbox/
+  - title: MLE 4000 wordlist in WeSay
+    url: https://lingtran.net/MLE4000-Wordlist-in-WeSay
+  - title: MLE 4000 wordlist in FLEx
+    url: https://lingtran.net/MLE4000-Wordlist-in-FLEx
+  - title: SILCAWL Starter database for FLEx
+    url: https://lingtran.net/CAWL+in+FLEx
+  - title: Multi-Dictionary Formatter (MDF)
+    url: https://software.sil.org/shoebox/mdf/
+  - title: Making Dictionaries. A Guide to Lexicography and the Multi-Dictionary Formatter
+    url: https://drive.google.com/file/d/1JgSILyOdyOdw24tkpRnbUESdrHj1PLw3/view
+  - title: LIFT standard
+    url: https://code.google.com/archive/p/lift-standard/
+  - title: Computational Lexicography
+    url: https://typecraft.org/tc2wiki/Computational_Lexicography
 source: Lang Tech Competencies.xlsx
 last_updated: 2026-07-01
 ---

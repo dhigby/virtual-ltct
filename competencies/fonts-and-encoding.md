@@ -10,7 +10,22 @@ outcome_levels:
   - Practitioner
   - Trainer
 resources:
-  - http://lingtransoft.info/competencies/fonts-encoding
+  - title: UNICODE
+    url: http://www.unicode.org/versions/latest/
+  - title: ScriptSource - Info on the World's writing systems
+    url: https://www.scriptsource.org/
+  - title: SIL Fonts
+    url: https://software.sil.org/fonts/
+  - title: Google Web Fonts
+    url: https://fonts.google.com/
+  - title: Character Name index
+    url: https://www.unicode.org/charts/charindex.html
+  - title: Unicode Code Charts
+    url: https://www.unicode.org/charts/index.html
+  - title: Unicode Surrogates and Supplementary Characters
+    url: https://docs.microsoft.com/en-us/windows/win32/intl/surrogates-and-supplementary-characters
+  - title: To the BMP and beyond
+    url: https://www.unicode.org/notes/tn23/Muller-Slides.pdf
 source: Lang Tech Competencies.xlsx
 last_updated: 2026-07-01
 ---

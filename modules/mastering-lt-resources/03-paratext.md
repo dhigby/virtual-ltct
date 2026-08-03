@@ -10,9 +10,11 @@
 
 ## Connect
 
-**Why should you use the Paratext.org website?**
+Think about the last time you used Paratext for a translation project. When you needed help — whether for downloading an update, troubleshooting a problem, or learning a new feature — where did you go? How effective was that?
 
-Being familiar with the site isn't just a "nice to have" — it's a prerequisite for professional translation work. Here is why:
+## Content
+
+Being familiar with [paratext.org](http://paratext.org/) isn't just a "nice to have" — it's a prerequisite for professional translation work. Here is why:
 
 ### 1. Software maintenance and updates
 
@@ -54,9 +56,7 @@ The core software is powerful, but many users need specialized tools (like **che
 
 **The bottom line:** If you aren't comfortable with [paratext.org](http://paratext.org/), you are essentially driving a high-performance vehicle without knowing where the gas station or the mechanic is. Familiarity with the site ensures your data stays **secure**, your software stays **functional**, and your skills stay **current**.
 
-## Content
-
-This is a comprehensive guide to navigating the [paratext.org](http://paratext.org/) website, specifically highlighting the extensive Training and Support section. Users can choose between video tutorials hosted on Vimeo and text-based resources, such as illustrated articles and a structured training manual organized by project workflow. The platform offers specialized content on biblical terms and provides materials in multiple languages, including French, Spanish, and Chinese, to assist global users. For those with limited internet access, the site includes video summaries that outline key tasks without requiring a full download. Additionally, the source explains how to access software downloads for various operating systems and manage user registration. Ultimately, the guide encourages interactive exploration to help users locate specific technical help and feature-specific instructions efficiently.
+Beyond that overview, the site's most extensive area is its Training and Support section. Users can choose between video tutorials hosted on Vimeo and text-based resources, such as illustrated articles and a structured training manual organized by project workflow. The platform offers specialized content on biblical terms and provides materials in multiple languages, including French, Spanish, and Chinese, to assist global users. For those with limited internet access, the site includes video summaries that outline key tasks without requiring a full download. It also explains how to access software downloads for various operating systems and manage user registration. The section rewards interactive exploration, helping users locate specific technical help and feature-specific instructions efficiently.
 
 **Watch the video:** [Mastering Paratext Website](https://vimeo.com/1197710909)
 
@@ -80,7 +80,7 @@ The two best resources for this translator are:
 
 ## Challenge
 
-Go to the [Paratext.org](https://paratext.org/) website.
+Go to the [Paratext.org](https://paratext.org/) website. *Record your responses to each of the following in your learning journal.*
 
 - Find Paratext training videos on a particular topic in Paratext 9. How many are there?
 - Find a Paratext article. Read the article and write a one-paragraph summary of the article.

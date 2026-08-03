@@ -11,15 +11,13 @@
 
 ## Connect
 
-**Why should you use the [lingtran.net](http://lingtran.net/) website?**
-
-A language technology (LT) worker — specifically those working in linguistics, translation, or literacy — should learn about [lingtran.net](http://lingtran.net/) (the LingTranSoft Wiki) because it is the primary knowledge hub for specialized tools used in minority language development and scripture translation.
-
-Managed by SIL Global, this site serves as the companion to [lingtransoft.info](http://lingtransoft.info/), and it is designed to bridge the gap between complex linguistic and translation work and practical technical application.
+Think about a time you needed training materials or documentation to learn a new software tool for your language technology work. Where did you look, and how easy was it to find what you needed?
 
 ## Content
 
-The website [lingtran.net](http://lingtran.net/) serves as a collaborative wiki platform designed to provide comprehensive educational resources for language technology software. Users can access a diverse library of instructional materials, ranging from archived monthly webinars on program updates to specific manuals for tools like Paratext and FLEx. While the site is open for public viewing, creating a registered account allows community members to contribute their own training videos and guides.
+[lingtran.net](http://lingtran.net/) (the LingTranSoft Wiki) is SIL Global's primary knowledge hub for specialized tools used in minority language development and scripture translation. It serves as the companion to [lingtransoft.info](http://lingtransoft.info/), bridging the gap between complex linguistic and translation work and practical technical application.
+
+The site works as a collaborative wiki platform providing comprehensive educational resources for language technology software. Users can access a diverse library of instructional materials, ranging from archived monthly webinars on program updates to specific manuals for tools like Paratext and FLEx. While the site is open for public viewing, creating a registered account allows community members to contribute their own training videos and guides.
 
 The platform also features specialized content for consultant development, offering practical advice on organizing workshops and technical tutorials for building literacy materials. To ensure mastery of the site, learners are encouraged to practice navigating the menus and downloading archived media. This centralized hub ultimately aims to support the global community in mastering linguistic software through shared knowledge and accessible documentation.
 

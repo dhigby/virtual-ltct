@@ -11,13 +11,13 @@
 
 ## Connect
 
-**Why should you use the [lingtransoft.info](http://lingtransoft.info/) website?**
-
-You should use lingtransoft.info because it serves as a specialized, searchable archive for anyone working in language and translation work. Lingtransoft.info is the go-to resource if you need to discover language and translation software, understand what skills are needed at your level, or get guidance on accomplishing specific language-related tasks.
+Think about the last time you needed to find a software tool for a specific language task — or to work out which skills you needed to develop for your work. How did you go about it, and how confident were you that you had found the right option?
 
 ## Content
 
-LingTranSoft is a specialized website designed to help users identify language and translation software and explore professional competencies. The platform features a task help section that breaks down specific goals, such as literacy development, and a software database that filters programs by language support and operating system.
+You should use [lingtransoft.info](http://lingtransoft.info/) because it serves as a specialized, searchable archive for anyone working in language and translation work. It is the go-to resource if you need to discover language and translation software, understand what skills are needed at your level, or get guidance on accomplishing specific language-related tasks.
+
+LingTranSoft is designed to help users identify language and translation software and explore professional competencies. The platform features a task help section that breaks down specific goals, such as literacy development, and a software database that filters programs by language support and operating system.
 
 Furthermore, the site hosts a competency list detailing the skills required for different proficiency levels, ranging from learners to experts. While the site is a valuable archive for software discovery, it differs from the [lingtran.net](http://lingtran.net/) website, which focuses more on instructional tutorials and consultant training. Users are encouraged to utilize the news tab for the most recent updates, as the website lacks an automated notification system for new entries.
 

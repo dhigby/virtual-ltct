@@ -11,9 +11,11 @@
 
 ## Connect
 
-**Why should you use the software.sil.org website?**
+Think about a time you needed to download a language software tool or find its documentation. How did you know you were getting it from a trustworthy source, and how easy was it to find what you needed to get started?
 
-Software.sil.org is the official software distribution website of **SIL Global** (formerly Summer Institute of Linguistics), a nonprofit organization focused on language development, literacy, and Bible translation for minority language communities worldwide.
+## Content
+
+[software.sil.org](https://software.sil.org/) is the official software distribution website of **SIL Global** (formerly Summer Institute of Linguistics), a nonprofit organization focused on language development, literacy, and Bible translation for minority language communities worldwide.
 
 Here are the key reasons to use it:
 
@@ -35,8 +37,6 @@ Other reasons to use the site:
 - **Active development and support** — SIL maintains documentation, forums, and ongoing updates for their tools.
 
 It's particularly valuable for **linguists, translators, missionaries, language activists, and educators** working with minority or indigenous languages.
-
-## Content
 
 The SIL software website serves as a centralized hub for accessing a wide array of language technology tools and typography resources. Users can navigate the platform to find active software products, experimental web applications, and older programs that are no longer officially supported. Individual product pages are structured to provide installation files, comprehensive educational tutorials, and the latest development news. Additionally, the site features a dedicated section for global and regional fonts, offering specialized character sets for diverse writing systems. By utilizing this resource, individuals can gain the technical documentation and files necessary to support linguistic projects and script development worldwide.
 

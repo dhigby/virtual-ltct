@@ -52,6 +52,12 @@ content-consistent and required no rewrite of the scenarios themselves.
 | 5 | Learner can recognize signs that a problem exceeds what they can resolve alone and identify the appropriate next step (escalate to a more experienced colleague, contact vendor support, restore from backup, or find a workaround) | Translation Tools 2.0, Learner (foundational recognition of escalation triggers, ahead of the Advanced Beginner rung's actual "troubleshoot issues that arise") | Quiz + Challenge Scenario 3 |
 | 6 | Learner can recognize common categories of translation-software problems (synchronization failures, missing/lost work, installation & compatibility issues, performance problems, UI/feature-location confusion) from a translator's description of symptoms | Translation Tools 2.0, Learner | Quiz |
 
+**Source-column note.** The "X.0" labels in the table above (e.g. "Translation Tools 2.0",
+"Translation Process 1.0") refer to numbered **components within** the single
+`Translation Tools` competency descriptor (`competencies/translation-tools.md`), not to
+separate framework competencies. The only framework competency this course maps to is
+**Translation Tools**.
+
 **Supplementary content — not competency-mapped.** The lesson also teaches two adjacent
 professional skills the SME chose to keep as bundled content, per her Q6 answer:
 
@@ -76,16 +82,16 @@ performed here.
 
 | File | Topic | Objectives covered | Estimated minutes |
 | --- | --- | --- | --- |
-| `01-software-support-and-troubleshooting.md` | Systematic troubleshooting framework (Clarify → Understand Context → Reproduce → Test Systematically → Escalate), common issue categories, supporting stressed translators, toolkit-building | 1–6 (+ supplementary content) | 45 (est., after scenarios/mentor notes are moved out) |
+| `01-software-support-and-troubleshooting.md` | Systematic troubleshooting framework (Clarify → Understand Context → Reproduce → Test Systematically → Escalate), common issue categories, supporting stressed translators, toolkit-building | 1–6 (+ supplementary content) | 55 (Connect 10 / Content 30 / Challenge 10 / Change 5) |
 | `02-scenario-bank.md` | The three existing Challenge scenarios (Panicked Translator, Unclear Error, Recurring Problem), reframed as explanation/self-assessment tasks consistent with Has Knowledge | 1, 2, 3, 4, 5 | 15 |
 | `03-mentor-guide.md` | The existing "For Mentors" watch-for notes, expanded as needed for a standalone facilitator file | — | — |
-| `04-quiz.md` *(does not exist yet — to be authored by `quiz-writer`)* | Assessment | 1–6 | 15 (est.) |
-| **Total learner seat time** | | | **≤ 75** |
+| `04-quiz.md` | Assessment (12 questions, 80% to pass) | 1–6 | 15 |
+| **Total learner seat time** | | | **~85** |
 
 ## Assessment plan
 
-A new multiple-choice quiz (`04-quiz.md`, not yet authored) of roughly 10–12 questions at
-80% (8–10 correct) to pass, covering objectives 1–6. The three Challenge scenarios in
+A 12-question multiple-choice quiz (`04-quiz.md`) at 80% (10/12) to pass, covering
+objectives 1–6. The three Challenge scenarios in
 `02-scenario-bank.md` (written explanation/self-assessment, mentor-reviewed per
 `03-mentor-guide.md`'s watch-for list — jumping to solutions, asking clarifying questions,
 considering the translator's stress, systematic vs. random troubleshooting) exercise

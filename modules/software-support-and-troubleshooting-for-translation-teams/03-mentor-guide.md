@@ -50,7 +50,7 @@ whether it matches a single expected answer.
 
 ## Answer notes by scenario
 
-### Scenario F1: The Panicked Translator (objectives 1, 5)
+### Scenario F1: The Panicked Translator (objective 1)
 
 **What a strong answer looks like.** The learner slows down and **clarifies before acting**.
 Their three questions map onto the clarifying prompts from the lesson — for example: *What

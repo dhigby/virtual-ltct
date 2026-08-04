@@ -45,7 +45,7 @@ morning and all my work from the past week has disappeared! What happened?!"*
 distressed. You do not yet know anything about how their project is set up or what changed
 between yesterday and today.
 
-**Objectives exercised:** 1, 5.
+**Objectives exercised:** 1.
 
 **Your task:**
 

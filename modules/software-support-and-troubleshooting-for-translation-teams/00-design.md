@@ -8,7 +8,7 @@
 | **Competencies addressed** | Translation Tools |
 | **Target outcome level** | Has Knowledge |
 | **SME(s) consulted** | Jenni Beadle — interviewed 2026-07-30, answers recorded below. Original lesson content (troubleshooting framework, common-issue categories, toolkit list, three Challenge scenarios) was first drafted via a Claude.ai chat session and is being retained where the SME confirmed it. |
-| **Design status** | Draft |
+| **Design status** | Approved by Steve White on 2026-08-04 (SME review; his notes on the lesson were folded in — see commit `e81e3b0`) |
 
 ## Why this course is entering the pipeline now
 

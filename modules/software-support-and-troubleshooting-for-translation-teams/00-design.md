@@ -7,8 +7,8 @@
 | **Title** | Software Support and Troubleshooting for Translation Teams |
 | **Competencies addressed** | Translation Tools |
 | **Target outcome level** | Has Knowledge |
-| **SME(s) consulted** | Jenni Beadle — interviewed 2026-07-30, answers recorded below. Original lesson content (troubleshooting framework, common-issue categories, toolkit list, three Challenge scenarios) was first drafted via a Claude.ai chat session and is being retained where the SME confirmed it. |
-| **Design status** | Approved by Steve White on 2026-08-04 (SME review; his notes on the lesson were folded in — see commit `e81e3b0`) |
+| **SME(s) consulted** | Jenni Beadle — interviewed 2026-07-30, answers recorded below. Original lesson content (troubleshooting framework, common-issue categories, toolkit list, three Challenge scenarios) was first drafted via a Claude.ai chat session and is being retained where the SME confirmed it. Steve White — SME review 2026-08-04; approved the design, and his lesson-content notes were folded in (see commit `e81e3b0`). |
+| **Design status** | Approved by Steve White on 2026-08-04 |
 
 ## Why this course is entering the pipeline now
 

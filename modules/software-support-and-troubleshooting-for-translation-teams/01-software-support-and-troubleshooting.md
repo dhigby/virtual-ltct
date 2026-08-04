@@ -55,7 +55,7 @@ Ask clarifying questions:
 - It starts but never finishes (network/server problem)
 - It shows an error message (specific error to diagnose)
 - It completes but their changes aren't appearing (synchronization logic issue)
-- *SW* It completes but another user's changes aren't appearing (synchronization logic, or other user is failing to send/receive)
+- It completes but another user's changes aren't appearing (synchronization logic, or the other user hasn't run a send/receive)
 - They can't find where to click (user interface familiarity)
 
 Each of these requires a different solution, so clarification is essential.
@@ -125,11 +125,10 @@ When you solve a problem, document it. This helps you remember for next time and
 ### Section 4: Common Translation Software Issues
 
 While every situation is unique, certain patterns appear frequently:
-Comment *SW*: Where in this list would you put a user doing s/r to the wrong location (USB instead of Internet)? 
 
 **Synchronization issues:**
-- Often caused by network interruptions, conflicting changes, or corrupted project data
-- Usually requires checking connection, reviewing conflict reports, or restoring from backup
+- Often caused by network interruptions, conflicting changes, corrupted project data, or a user sending/receiving to the wrong location (e.g., a USB drive instead of the internet server), so their changes never reach teammates
+- Usually requires checking the connection, reviewing conflict reports, verifying the send/receive location, or restoring from backup
 
 **Missing work or data:**
 - Could be user didn't save, file permissions changed, working in wrong location, or actual data loss

@@ -55,6 +55,7 @@ Ask clarifying questions:
 - It starts but never finishes (network/server problem)
 - It shows an error message (specific error to diagnose)
 - It completes but their changes aren't appearing (synchronization logic issue)
+- *SW* It completes but another user's changes aren't appearing (synchronization logic, or other user is failing to send/receive)
 - They can't find where to click (user interface familiarity)
 
 Each of these requires a different solution, so clarification is essential.
@@ -124,6 +125,7 @@ When you solve a problem, document it. This helps you remember for next time and
 ### Section 4: Common Translation Software Issues
 
 While every situation is unique, certain patterns appear frequently:
+Comment *SW*: Where in this list would you put a user doing s/r to the wrong location (USB instead of Internet)? 
 
 **Synchronization issues:**
 - Often caused by network interruptions, conflicting changes, or corrupted project data

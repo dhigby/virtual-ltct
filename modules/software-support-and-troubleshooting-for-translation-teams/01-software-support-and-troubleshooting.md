@@ -1,6 +1,6 @@
 # Software Support and Troubleshooting for Translation Teams
 
-**Estimated time:** 60 minutes
+**Estimated time:** 55 minutes
 
 **Level:** Has Knowledge
 
@@ -176,7 +176,7 @@ Effective support requires preparation:
 
 ## Challenge
 
-**Time:** 15 minutes
+**Time:** 10 minutes
 
 ### Scenario 1: The Panicked Translator
 
@@ -184,27 +184,7 @@ You receive this message: "Everything is gone! I opened my project this morning 
 
 **✏️ Your task:** Write out the first three questions you would ask to understand what's actually happening. Then identify what information you'd need before proposing any solutions.
 
-### Scenario 2: The Unclear Error
-
-A translator sends you a screenshot of an error message in a language you don't speak well, and says "I keep getting this error and I don't know what to do."
-
-**✏️ Your task:** Describe your troubleshooting approach. What would you do first, second, and third? How would you gather information when you can't easily read the error?
-
-### Scenario 3: The Recurring Problem
-
-A translator contacts you saying "This keeps happening. Every few days my work gets stuck and I have to restart the program. Can you fix it permanently?"
-
-**✏️ Your task:** How would you approach diagnosing an intermittent problem? What information would help you identify patterns? What would you tell the translator about your process?
-
-### For Mentors
-
-As learners work through these scenarios, watch for:
-- Are they jumping to solutions before understanding the problem?
-- Do they ask clarifying questions before acting?
-- Do they consider the translator's emotional state and stress level?
-- Are they thinking systematically or randomly trying things?
-
-Help them see that good troubleshooting is as much about asking the right questions as it is about technical knowledge.
+**TIP** This is one of three practice scenarios for this course. When you've worked through it, continue with the [scenario bank](02-scenario-bank.md) — it adds *The Unclear Error* and *The Recurring Problem* — and submit your written responses to your mentor for feedback.
 
 ## Change
 

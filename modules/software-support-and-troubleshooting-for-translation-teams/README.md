@@ -16,18 +16,23 @@ last_exported: 2026-06-18
 
 # Software Support and Troubleshooting for Translation Teams
 
-One lesson applying a systematic troubleshooting framework (Clarify the Problem → Understand
+A course applying a systematic troubleshooting framework (Clarify the Problem → Understand
 the Context → Reproduce the Problem → Test Systematically → Know When to Escalate) to
 translation software issues, alongside guidance for supporting translators effectively while
 doing so.
 
-Backfilled from Cypher for Business — see [BACKFILL.md](../../BACKFILL.md).
+Originally backfilled from Cypher for Business (see [BACKFILL.md](../../BACKFILL.md)), this
+course has since entered the 8-stage production pipeline — see [`00-design.md`](00-design.md).
 
 ## Companion video
 
 [Software Support and Troubleshooting for Translation Teams](https://vimeo.com/1160540654)
 
-## Sub-modules
+## Course package
 
-- [Software Support and Troubleshooting for Translation Teams](01-software-support-and-troubleshooting.md)
+- [Design document](00-design.md)
+- [Lesson: Software Support and Troubleshooting](01-software-support-and-troubleshooting.md)
+- [Scenario bank](02-scenario-bank.md)
+- [Mentor guide](03-mentor-guide.md)
+- [Quiz](04-quiz.md)
 

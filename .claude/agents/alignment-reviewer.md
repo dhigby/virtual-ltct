@@ -57,11 +57,29 @@ Format: a table with "Check", "Status", and "Finding" columns. Mark as ✓ (pass
 
 ### d. Lesson structure (Learning That Lasts)
 
-- **Check:** Every numbered lesson file (01-, 02-, …) contains the four *Learning That
-  Lasts* phase sections as H2 headings, in order: `## Connect`, `## Content`,
-  `## Challenge`, `## Change`. (The scenario bank, mentor guide, quiz, and video script
-  are exempt — they have their own formats.)
-- **Finding:** List any lesson missing a phase section or with the phases out of order.
+- **Check (structure):** Every numbered lesson file (01-, 02-, …) contains the four
+  *Learning That Lasts* phase sections as H2 headings, in order: `## Connect`,
+  `## Content`, `## Challenge`, `## Change`. (The scenario bank, mentor guide, quiz, and
+  video script are exempt — they have their own formats.)
+- **Check (substance — advisory):** the automated checker (`check_course_package.py`) only
+  verifies the four *headings* exist in order — it reads nothing inside them. So confirm each
+  phase actually does its job, not just carries the right heading:
+  - **Connect** must contain a genuine *reflection prompt tied to the learner's own prior
+    knowledge or field experience* ("Think about a time you…", a reflection question, a
+    `✏️` prompt) — its job is to activate what the learner already knows. Flag a Connect that
+    only introduces the topic, states objectives, or carries course-overview/administrative
+    content (that belongs in an Introduction *before* the first `## Connect`).
+  - **Change** must have the learner *consolidate and commit to applying the content* — a
+    self-assessment ("Can you explain… to a colleague?"), a concrete next step / action plan,
+    or reflection on a real person in their context. Flag a Change that only summarises the
+    lesson with no apply-it-going-forward element.
+  - **Challenge** must be an applied task that produces something a mentor can review, not a
+    bare recall question.
+  This is a judgment call, not a mechanical check — report it as an **advisory** and quote
+  the offending Connect/Change/Challenge text briefly so a human can confirm.
+- **Finding:** As *blocking*, list any lesson missing a phase section or with the phases out
+  of order. As *advisory*, list any lesson whose Connect/Change/Challenge is present but
+  hollow (heading only, missing its substance), with a short supporting quote.
 
 ### e. Quiz format compliance
 

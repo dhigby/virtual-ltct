@@ -7,7 +7,7 @@ what a complete recovery/response looks like for each, and common wrong turns.
 
 1. **Reasoning** — does the learner think through *why* something happened before
    recommending an action, or jump straight to a fix?
-2. **Procedural accuracy** — do they get the actual Paratext (and, for Scenario 5,
+2. **Procedural accuracy** — do they get the actual Paratext (and, for Scenario 4,
    TortoiseHG) steps right, in the right order?
 3. **Practical judgment** — is the recommendation appropriate given the scenario's stakes
    (e.g., recognizing when *not* to Send/Receive immediately)?
@@ -87,7 +87,30 @@ a chronology mismatch, not the whole explanation.)
 is the exact action the source material warns against — it risks propagating the
 crash-corrupted files to the rest of the team.
 
-### Scenario 4: The Archived Draft
+### Scenario 4: The Vanishing Notes
+
+**What a strong answer looks like:**
+
+- Correctly diagnoses this as the merge case (old notes lost, new notes still
+  accumulating) rather than a straight restore, based on the detail that some recent notes
+  are still visible.
+- Includes downloading TortoiseHG (64-bit for any Windows 11 machine, or matching the
+  user's actual Windows bitness), closing Paratext, opening the HG Workbench, and finding
+  the deletion point (using the `removes("*.*")` revision-set query if it isn't obvious
+  from recent history).
+- Gets the merge mechanics right: save the old file **keeping** its `@NN` suffix; strip the
+  first two lines (`<?xml version...?>` and `<CommentList>`) from the *new* file; strip the
+  last line (`</CommentList>`) from the *old* file; paste the old content above the new
+  file's remaining content; save.
+- Knows to check the three specific XML lines (first line, second line, last line) if
+  Paratext reports the merged file as corrupt afterward.
+- Notes this procedure applies to both Paratext 9 and Paratext 8.
+
+**Common wrong turn:** stripping the `@NN` suffix when saving the old file (as in the
+straight-restore case), which overwrites the current notes file and loses the very notes
+the learner is trying to preserve, rather than setting up the merge correctly.
+
+### Scenario 5: The Archived Draft
 
 **What a strong answer looks like:**
 
@@ -115,26 +138,3 @@ crash-corrupted files to the rest of the team.
 "just work" without first confirming automatic Send/Receive was off during the reverted
 period, or choosing the wrong delete option and affecting the whole team's copy — either
 mistake risks the exact "reintroduced as new work" failure described above.
-
-### Scenario 5: The Vanishing Notes
-
-**What a strong answer looks like:**
-
-- Correctly diagnoses this as the merge case (old notes lost, new notes still
-  accumulating) rather than a straight restore, based on the detail that some recent notes
-  are still visible.
-- Includes downloading TortoiseHG (64-bit for any Windows 11 machine, or matching the
-  user's actual Windows bitness), closing Paratext, opening the HG Workbench, and finding
-  the deletion point (using the `removes("*.*")` revision-set query if it isn't obvious
-  from recent history).
-- Gets the merge mechanics right: save the old file **keeping** its `@NN` suffix; strip the
-  first two lines (`<?xml version...?>` and `<CommentList>`) from the *new* file; strip the
-  last line (`</CommentList>`) from the *old* file; paste the old content above the new
-  file's remaining content; save.
-- Knows to check the three specific XML lines (first line, second line, last line) if
-  Paratext reports the merged file as corrupt afterward.
-- Notes this procedure applies to both Paratext 9 and Paratext 8.
-
-**Common wrong turn:** stripping the `@NN` suffix when saving the old file (as in the
-straight-restore case), which overwrites the current notes file and loses the very notes
-the learner is trying to preserve, rather than setting up the merge correctly.

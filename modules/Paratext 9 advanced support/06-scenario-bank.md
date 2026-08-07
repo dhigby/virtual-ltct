@@ -4,7 +4,7 @@
 
 **Purpose:** Applied practice covering all five recovery/support topics from this course.
 **Format:** Sequenced from most straightforward to most involved. Scenario 1 is a simple
-setup task; Scenario 4 (last) is the most complex, since it requires an external tool
+setup task; Scenario 5 (last) is the most complex, since it requires an external tool
 (TortoiseHG) and manual file editing rather than anything done inside Paratext alone.
 
 ## How to use these scenarios
@@ -95,9 +95,31 @@ a Send/Receive since restarting it.
 2. Recommend the correct next step for the team member whose laptop crashed — and
    specifically what they should *not* do first, and why.
 
----
+## Scenario 4: The Vanishing Notes
 
-## Scenario 4: The Archived Draft
+**Time budget:** 20 minutes | **Topic:** Recovering notes and settings (Lesson 4)
+
+**Situation:** A translator contacts you: most of their project notes seem to have
+disappeared. Looking more closely, a handful of very recent notes are still there — it's
+only the older ones that are gone.
+
+**Context:** The translator remembers that their computer crashed while Paratext was
+running about three weeks ago, but they didn't think much of it at the time since Paratext
+seemed to restart fine and they kept taking new notes afterward. They don't have TortoiseHG
+installed yet and have never used it.
+
+**Your task:**
+
+1. Diagnose which of the two recovery cases from Lesson 4 this is (a full restore, or a
+   merge of an old and new notes file) — and explain what in the situation tells you that.
+2. Write the full step-by-step recovery plan, including getting TortoiseHG installed, the
+   specific find-and-recover steps in the HG Workbench, and (since this is the merge case)
+   the exact XML edits required.
+3. Describe what you would check afterward to confirm the recovery succeeded, and what a
+   corrupt-file result would tell you about where the edit went wrong.
+
+
+## Scenario 5: The Archived Draft
 
 **Time budget:** 18 minutes | **Topic:** Snapshotting to a reference project (Lesson 5)
 
@@ -121,25 +143,3 @@ team's ongoing work, since several translators are actively editing other books 
 
 ---
 
-## Scenario 5: The Vanishing Notes
-
-**Time budget:** 20 minutes | **Topic:** Recovering notes and settings (Lesson 4)
-
-**Situation:** A translator contacts you: most of their project notes seem to have
-disappeared. Looking more closely, a handful of very recent notes are still there — it's
-only the older ones that are gone.
-
-**Context:** The translator remembers that their computer crashed while Paratext was
-running about three weeks ago, but they didn't think much of it at the time since Paratext
-seemed to restart fine and they kept taking new notes afterward. They don't have TortoiseHG
-installed yet and have never used it.
-
-**Your task:**
-
-1. Diagnose which of the two recovery cases from Lesson 4 this is (a full restore, or a
-   merge of an old and new notes file) — and explain what in the situation tells you that.
-2. Write the full step-by-step recovery plan, including getting TortoiseHG installed, the
-   specific find-and-recover steps in the HG Workbench, and (since this is the merge case)
-   the exact XML edits required.
-3. Describe what you would check afterward to confirm the recovery succeeded, and what a
-   corrupt-file result would tell you about where the edit went wrong.

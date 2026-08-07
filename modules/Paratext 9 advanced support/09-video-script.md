@@ -18,7 +18,8 @@ orientation to `06-scenario-bank.md` at the close.
 > Runtime target: ~60-75 seconds. Open on a talking-head or a simple title card — save the
 > screen recording for the first demo cue in Segment 1.
 
-**Voiceover:** "At some point, a team you support is going to call you in a state of
+**Voiceover:** "Let's look at some advanced topics for Paratext supporters. In the first one, a team may wonder how to do something that seems like it ought to be simple, but they don't know how. And the answer is not immediately obvious.
+In the other topics, a team you support may call you in a state of
 alarm. Maybe their project history looks like someone's edit just got undone. Maybe a
 team leader swears a change appeared under a name that shouldn't have had access to that
 book. Maybe a translator tells you their notes — weeks of them — have simply vanished.
@@ -166,3 +167,6 @@ and submit your answers to your mentor for feedback before you take the quiz."
   recording that isn't answered in the lesson content (e.g., a Paratext version not
   covered, or a step for a scenario this course doesn't include), take it to the course
   lead rather than answering it on camera.
+
+I tried to create the video by having Claude make a powerpoint, then converted that power point to Video with Google vids. I am not impressed with the results. Video link: 
+https://docs.google.com/videos/d/1etBXbfO0Pp7PZw_zgyNIpX5IHoUBD2aNM_o_MSRk6ak/play?usp=sharing

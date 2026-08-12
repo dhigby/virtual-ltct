@@ -8,10 +8,14 @@
 
 ## Overview
 
-This course teaches configuration of Paratext 9.5's Quotation check using four fictional
-projects (`tamba`, `runda`, `menda`, `waku`). Learners never touch a real project. The
-`tamba` project is used in two staged versions (Phase A blank, Phase B seeded); the other
-three are configured from scratch in the [scenario bank](05-scenario-bank.md).
+This course teaches configuration of Paratext 9.5's Quotation check using five fictional
+projects (`tamba`, `runda`, `velna`, `menda`, `waku`). Learners never touch a real project. The
+`tamba` project is used in two staged versions (Phase A blank, Phase B seeded) across Lessons
+1–4. `runda` is a second project configured hands-on in Lesson 2, alongside `tamba`, to practice
+a different character set and the apostrophe conflict. The remaining three (`velna`, `menda`,
+`waku`) are configured from scratch, independently, in the [scenario bank](05-scenario-bank.md)
+— `velna` deliberately reuses Runda's guillemet-and-apostrophe convention under a new name and
+project, so Scenario A tests the same skill on a project the learner has not already configured.
 
 ---
 
@@ -98,17 +102,41 @@ For self-paced learners working alone, USB or file share is simplest. For instru
 
 ---
 
-## Project Setup: `runda`, `menda`, and `waku` (Scenario bank)
+## Project Setup: `runda` (Lesson 2)
 
-Each scenario-bank project needs enough text to produce meaningful check results, but no deliberate errors need to be seeded — learners configure these projects from scratch.
+`runda` is a second fictional project, alongside `tamba`, used hands-on in Lesson 2
+(Exercises 2.2–2.3) to practice a different character set (guillemets) and the word-medial
+apostrophe conflict. It must be installed before learners start Lesson 2, not just before the
+scenario bank.
+
+| Field | Value |
+|-------|-------|
+| Quotation style | Guillemet outer (`«` / `»`), curly single inner (`‘` / `’`) |
+| Minimum books suggested | Matthew, Luke, John (dialogue-heavy) |
+
+Include words using `’` (U+2019) as an apostrophe somewhere in the text, so Exercise 2.3's
+word-medial punctuation conflict has real examples to resolve. Leave the Quote marks tab and
+Quotation Rules blank — learners configure both during Lesson 2. A prebuilt backup accompanies
+this course as `Runda.zip`.
+
+---
+
+## Project Setup: `velna`, `menda`, and `waku` (Scenario bank)
+
+Each scenario-bank project needs enough text to produce meaningful check results, but no deliberate errors need to be seeded — learners configure these projects from scratch, independently, having never seen them before.
 
 | Project | Quotation style | Minimum books suggested |
 |---------|----------------|-------------------------|
-| `runda` | Guillemet outer (`«` / `»`), curly single inner (`‘` / `’`) — Guillemet style (Scenario A). Include words with `’` (U+2019) as apostrophes so learners encounter the apostrophe conflict. | Matthew, Luke, John (dialogue-heavy) |
+| `velna` | Guillemet outer (`«` / `»`), curly single inner (`‘` / `’`) — Guillemet style (Scenario A). Include words with `’` (U+2019) as apostrophes so learners encounter the apostrophe conflict. | Matthew, Luke, John (dialogue-heavy) |
 | `menda` | Double guillemets outer, reversed single guillemets inner: `«...›...‹...»`; Third level returns to `«...»` — include at least one third-level quote (John 19:21) (Scenario B) | John (dialogue-heavy, contains the 19:21 third-level example) |
 | `waku` | Em dash as both opener and closer: `—...—`, with em dash continuation mark (Scenario C) | Matthew, Luke, Acts (stretch exercise; Acts is required — the scenario's check steps use its extended multi-paragraph speeches) |
 
 Apply the correct quotation characters for each language throughout the text. Leave all Quote marks tab and Rules settings blank — learners configure them as part of the scenario.
+
+**Asset gap:** unlike `tamba`, `runda`, and `menda`, no prebuilt backup exists yet for `velna` or
+`waku` — a facilitator must build both from the tables above before the scenario bank can be
+distributed. `velna` is new as of this revision (it replaces `runda`'s prior role in Scenario A,
+so the two must be distinct projects — do not reuse the `runda` backup for `velna`).
 
 ---
 

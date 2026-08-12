@@ -170,7 +170,7 @@ would you have done differently knowing the two-type distinction?
 
 **Next step.** You have taken one language, Tamba, from an unconfigured check to zero
 actionable errors. The [scenario bank](05-scenario-bank.md) puts the full workflow — inventory
-→ rules → check → triage — to work on three unfamiliar languages (Runda, Menda, Waku), each
+→ rules → check → triage — to work on three unfamiliar languages (Velna, Menda, Waku), each
 with its own conventions and edge cases.
 
 ---

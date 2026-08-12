@@ -36,7 +36,7 @@ This course follows the repo's [content package structure](../../process/PROCESS
 | [`02-setting-up-quote-marks.md`](02-setting-up-quote-marks.md) | Lesson 2 — the Quote marks tab, continuer, apostrophe conflict (75 min) |
 | [`03-configuring-quotation-types.md`](03-configuring-quotation-types.md) | Lesson 3 — the Quotation types tab (60 min) |
 | [`04-interpreting-and-clearing-the-check.md`](04-interpreting-and-clearing-the-check.md) | Lesson 4 — triage to zero errors (75 min) |
-| [`05-scenario-bank.md`](05-scenario-bank.md) | Applied practice: Runda, Menda, Waku (90 min) |
+| [`05-scenario-bank.md`](05-scenario-bank.md) | Applied practice: Velna, Menda, Waku (90 min) |
 | [`06-mentor-guide.md`](06-mentor-guide.md) | Facilitator notes: project setup, phasing, error seeding |
 | [`07-quiz.md`](07-quiz.md) | Assessment quiz |
 | [`08-video-script.md`](08-video-script.md) | Recording script for Cypher upload |
@@ -58,7 +58,8 @@ Before starting this course confirm you have the following:
 
 **Fictional projects** (see the [mentor guide](06-mentor-guide.md) for setup and distribution)
 - The `tamba` project must be installed before starting Lessons 1–4
-- The `runda`, `menda`, and `waku` projects must be installed before the scenario bank
+- The `runda` project must also be installed before starting Lesson 2 (Lessons 1, 3, and 4 only need `tamba`)
+- The `velna`, `menda`, and `waku` projects must be installed before the scenario bank
 
 ---
 

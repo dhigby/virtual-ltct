@@ -205,9 +205,17 @@ The correct final settings for Tamba:
 | Indirect | Never use quote marks | Reported speech is not marked |
 | Hypothetical | Never use quote marks | Hypothetical speech is not marked |
 
+**Before you re-run:** the Quotation types check itself only runs if a project administrator
+has ticked **Enable the Quotation types check in Run basic checks** (see Content section
+above). Exercise 1.1 deliberately left this unticked. If it is still unticked, ask your
+administrator to enable it now — none of the settings below will affect the check results
+until they do.
+
 **Check your work:**
-- Save and re-run the check. A verse with a self-quote that lacks marks should now be flagged
-  as an error.
+- Save and re-run the check. Phase A's self-quotes are already correctly marked, so this
+  change produces no *new* flags on `tamba` — you're confirming the setting takes effect
+  without breaking correct text. (If a self-quote were missing its marks, this is the setting
+  that would catch it — that's exactly the behavior Exercise 4.1 exercises in Lesson 4.)
 - Confirm that Luke 4:18 (narrator Isaiah citation) is not flagged — Quotation from another
   source = Optional means no marks are required.
 - Check a verse with indirect speech. With Indirect = Never use quote marks, it should not be

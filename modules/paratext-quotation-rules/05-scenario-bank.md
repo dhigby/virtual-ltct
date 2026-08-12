@@ -9,14 +9,25 @@
 
 **Learning objectives:** By the end of this scenario bank you will be able to apply the complete inventory + rules + check + triage workflow independently to an unfamiliar language scenario, including edge cases not covered in Lessons 1–4.
 
-These exercises use three new fictional projects. Each has a different quotation style. For each scenario follow the same standard workflow:
+These exercises use three new fictional projects. Each has a different quotation style. For each scenario follow the same four-step workflow — **inventory → rules → check → triage** — broken into eight concrete actions:
+
+**Inventory**
 
 1. Read the language conventions table.
 2. Answer the discovery prompts before configuring anything.
 3. Open the Quote marks tab; the fields will be empty.
 4. Enter the quote mark characters on the Quote marks tab.
+
+**Rules**
+
 5. Configure the Quotation types tab.
+
+**Check**
+
 6. Run the check (start with one book).
+
+**Triage**
+
 7. Triage the results to zero actionable errors.
 8. Compare your configuration against the expected answer key.
 
@@ -24,9 +35,9 @@ These exercises use three new fictional projects. Each has a different quotation
 
 ## Scenario A — Guillemet (French style)
 
-**Project:** Runda New Testament (`runda`)
+**Project:** Velna New Testament (`velna`)
 
-**Runda quotation conventions:**
+**Velna quotation conventions:**
 
 | Level | Opening | Unicode | Closing | Unicode |
 |-------|---------|---------|---------|----------|
@@ -36,7 +47,7 @@ These exercises use three new fictional projects. Each has a different quotation
 No Third level. First level opening mark `«` also appears at the start of continued paragraphs.
 
 **Discovery prompts:**
-- Runda uses `’` (U+2019) as both its Second level closing mark and as an apostrophe. How does the Word-medial punctuation setting resolve this conflict?
+- Velna uses `’` (U+2019) as both its Second level closing mark and as an apostrophe. How does the Word-medial punctuation setting resolve this conflict?
 - How would you verify that the text contains `«` (U+00AB) rather than `<<` (two less-than signs)?
 
 **Expected configuration:**

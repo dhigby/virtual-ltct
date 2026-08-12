@@ -46,7 +46,7 @@ One row per numbered lesson file. Each stays ≤ 90 minutes.
 | `02-setting-up-quote-marks.md` | The Quote marks tab; nesting levels; continuer; apostrophe conflict | 2, 3 | 75 |
 | `03-configuring-quotation-types.md` | The Quotation types tab; seven types; recommended vs. custom | 4 | 60 |
 | `04-interpreting-and-clearing-the-check.md` | Triage: real error vs. config problem; reaching zero | 5, 6 | 75 |
-| `05-scenario-bank.md` | Applied practice: three unfamiliar languages (Runda, Menda, Waku) | 7 | 90 |
+| `05-scenario-bank.md` | Applied practice: three unfamiliar languages (Velna, Menda, Waku) | 7 | 90 |
 | `06-mentor-guide.md` | Facilitator notes: project setup, phasing, error seeding | — | — |
 | `07-quiz.md` | Assessment | 1–7 | 20 |
 | `08-video-script.md` | Recording script for Cypher upload | — | — |

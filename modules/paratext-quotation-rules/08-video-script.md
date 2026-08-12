@@ -84,7 +84,7 @@ yourself."
 | On-screen | Voiceover / talking points |
 | --- | --- |
 | Cut to the Menda Quote marks tab, Second level showing `›` opening and `‹` closing, with the Example preview confirming the nested order. (`ss-L560-menda-quote-marks.png`.) | "Once you know the workflow, it's the same four steps for any language, however strange the marks. Here's Menda, where the second level opens with a right-pointing single guillemet and closes with a left-pointing one — reversed from what your eye expects. Get them backwards and the check fires on every embedded quote. The Example preview at the bottom is exactly how you catch it before you click OK." |
-| Slide listing the three scenario languages: **Runda (guillemets), Menda (reversed nesting), Waku (em-dash — stretch).** | "In the scenario bank you'll do three of these on your own: guillemets, that reversed nesting, and — if you want the stretch — a language that uses the em dash for both opening and closing. That last one won't fully clear by configuration alone; you'll document the leftovers in a Project Note so the consultant knows they were reviewed on purpose." |
+| Slide listing the three scenario languages: **Velna (guillemets), Menda (reversed nesting), Waku (em-dash — stretch).** | "In the scenario bank you'll do three of these on your own: guillemets, that reversed nesting, and — if you want the stretch — a language that uses the em dash for both opening and closing. That last one won't fully clear by configuration alone; you'll document the leftovers in a Project Note so the consultant knows they were reviewed on purpose." |
 
 ## Call to action / close
 
@@ -116,7 +116,7 @@ mentor for review. See you in Paratext."
 - **Live-demo caution:** always drive character entry with the dropdown (▼), never the
   keyboard, on camera — it models the habit the course insists on and avoids accidentally
   entering a straight quote.
-- **Pronunciation / naming:** the project languages (Tamba, Runda, Menda, Waku) are
+- **Pronunciation / naming:** the project languages (Tamba, Runda, Velna, Menda, Waku) are
   fictional; say them plainly. Do not imply they are real languages.
 - **Screen legibility:** the yellow information bar (Segment 1), the Example preview
   (Segment 2), and the reversed guillemets (Segment 5) are small UI details — zoom or

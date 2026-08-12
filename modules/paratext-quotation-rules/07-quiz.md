@@ -26,9 +26,10 @@ trustworthy results?
 - C) Yes, but only for the first-level quotes
 - D) No — zero results always means the check failed to run
 
-**Question 3:** True or False: When first working through check results during
-configuration, you should run the check on the whole New Testament at once so you can see
-the full scope of the problem before fixing anything.
+**Question 3:** True or False: Once you begin actively configuring quote marks and
+quotation types (Lessons 2–4), you should keep the check scoped to the whole New Testament
+after every change, rather than narrowing to Current Book, so you always see the complete
+result set.
 - A) True
 - B) False
 
@@ -163,8 +164,10 @@ means the Quotations check ends at zero results.
 1. B — Lesson 1: the check needs both the Quote marks tab and the Quotation types tab.
 2. B — Lesson 1: zero results on an unconfigured project is silence, not confirmed
    correctness; Paratext does not yet know which characters are marks.
-3. B (False) — Lesson 1 scope tip: use Current Book (Matthew) during configuration; expand
-   to the full NT only after Matthew is clean.
+3. B (False) — Lesson 1 uses the whole NT once, deliberately, to show the scale of
+   unconfigured noise. From Lesson 2 onward, scope to Current Book (Matthew) while actively
+   configuring and triaging; expand to the full NT only after Matthew is clean (Lesson 4
+   Exercise 4.2).
 4. B — Lesson 2: the Quote Continuer at new paragraph repeats the mark when one speech
    spans paragraphs; leave it blank if the language closes and reopens at each break.
 5. C — Lesson 2 Exercise 2.3: the apostrophe/closing-quote conflict is resolved in Language

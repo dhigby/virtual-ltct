@@ -36,8 +36,11 @@ Converting a stub to authored content is a *separate* decision that belongs to
   option was renamed to `Drafting`:
   - **Module Status**: `Not started` · `Design` · `Drafting` · `SME Check` · `Internal Review` · `Pilot` · `Publishing` · `Online`
   - **Priority**: `Low` · `Medium` · `High`
-  - **Consultant Tier**: `Practitioner` · `Trainer` · `Expert`
-  - **Target Outcome Level**: `Has knowledge` · `With Assistance`
+  - **Target Outcome Level**: `1 - Has Knowledge` · `2 - With Assistance` · `3 - Independent` ·
+    `4 - Expert` — the CBC scale, defined in `outcome-levels.yaml`. Never `0 - No Competency`:
+    the field records where a learner lands, and no course leaves someone at No Competency.
+    (The "Consultant Tier" field was retired — growth-plan level is earned by accumulating
+    points across whole competency categories, so it is never a property of one course.)
   A course legitimately mid-pipeline may sit in any of `Design`, `Drafting`, `SME Check`,
   `Pilot`, or `Publishing` — don't treat those as drift; only flag values that contradict the
   evidence (e.g. a delivered course still `Not started`).
@@ -57,8 +60,8 @@ b. **Authored but stalled.** `content_type: content` with real lesson files pres
 c. **Outcome-level drift.** Board Target Outcome Level ≠ frontmatter `target_outcome_level`, or
    one side is set and the other blank.
 
-d. **Unset fields.** Priority null, Consultant Tier unpopulated, or no assignee where the Notion
-   manifest recorded a person. Surface these as questions, not silent defaults.
+d. **Unset fields.** Priority null, or no assignee where the Notion manifest recorded a person.
+   Surface these as questions, not silent defaults.
 
 e. **Frontmatter staleness (report-only).** `external_links` that look dead/moved, or a missing
    `target_outcome_level`. You do not fix these — they go on the handoff list.

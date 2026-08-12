@@ -2,7 +2,7 @@
 
 **Estimated time:** 55 minutes
 
-**Level:** Has Knowledge
+**Level:** 1 - Has Knowledge
 
 **Purpose:** Apply a systematic approach to diagnosing and resolving translation software issues while supporting translators effectively.
 

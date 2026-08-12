@@ -5,11 +5,11 @@ slug: typesetting
 in_framework: true
 target_statement: Is able to assist users with typesetting final complex documents.
 outcome_levels:
-  - Learner
-  - Advanced Beginner
-  - Practitioner
-  - Trainer/Proficient
-  - Expert
+  - "0 - No Competency"
+  - "1 - Has Knowledge"
+  - "2 - With Assistance"
+  - "3 - Independent"
+  - "4 - Expert"
 resources:
   - title: PTXprint
     url: https://software.sil.org/ptxprint/
@@ -53,25 +53,26 @@ Publishing scripture is important to the Bible translation task. A language tech
 
 ## Progression by component
 
-_Suggested activities to reach each outcome level._
+_Each row is a level a learner is **at**; its activities are what they do to reach the level in the final column._
 
 ### 1.0 — Lexicons
 
-| Level | Suggested activities |
-| --- | --- |
-| **Learner** | Examine published dictionaries to identify elements of style, formatting, editing and spacing. |
-| **Advanced Beginner** | Learn to filter and format entries for publication in the current lexical software |
-| **Practitioner** | Assist a team or researcher to publish a print dictionary locally. |
-| **Trainer/Proficient** | Train others to typeset dictionaries. |
-| **Expert** | — |
+| Current level | Suggested activities | Reaches |
+| --- | --- | --- |
+| **0 - No Competency** | Examine published dictionaries to identify elements of style, formatting, editing and spacing. | 1 - Has Knowledge |
+| **1 - Has Knowledge** | Learn to filter and format entries for publication in the current lexical software | 2 - With Assistance |
+| **2 - With Assistance** | Assist a team or researcher to publish a print dictionary locally. | 3 - Independent |
+| **3 - Independent** | Train others to typeset dictionaries. | 4 - Expert |
+| **4 - Expert** | — | — |
 
 ### 2.0 — Scripture
 
-| Level | Suggested activities |
-| --- | --- |
-| **Learner** | Examine published scripture to identify elements of style, formatting, editing and spacing. |
-| **Advanced Beginner** | Take a typesetting course. |
-| **Practitioner** | Become a certified Scripture typesetter. |
-| **Trainer/Proficient** | Become a typesetter trainer. |
-| **Expert** | — |
+| Current level | Suggested activities | Reaches |
+| --- | --- | --- |
+| **0 - No Competency** | Examine published scripture to identify elements of style, formatting, editing and spacing. | 1 - Has Knowledge |
+| **1 - Has Knowledge** | Take a typesetting course. | 2 - With Assistance |
+| **2 - With Assistance** | Become a certified Scripture typesetter. | 3 - Independent |
+| **3 - Independent** | Become a typesetter trainer. | 4 - Expert |
+| **4 - Expert** | — | — |
 
+_Level 4 activities aim past the top of the CBC scale (the source spreadsheet's "level 5"), which CBC does not define._

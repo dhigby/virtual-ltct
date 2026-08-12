@@ -5,10 +5,10 @@ slug: computer-hardware
 in_framework: true
 target_statement: Is able to troubleshoot basic computer hardware problems.
 outcome_levels:
-  - Learner
-  - Advanced Beginner
-  - Practitioner
-  - Trainer
+  - "0 - No Competency"
+  - "1 - Has Knowledge"
+  - "2 - With Assistance"
+  - "3 - Independent"
 resources:
   - title: iFixit (Repair manuals for many devices)
     url: https://www.ifixit.com/
@@ -40,14 +40,14 @@ While hardware support is not a goal of a Language Technologist, in the absence 
 
 ## Progression by component
 
-_Suggested activities to reach each outcome level._
+_Each row is a level a learner is **at**; its activities are what they do to reach the level in the final column._
 
 ### 1.0 — Can effectively use and troubleshoot current and recent computer and mobile hardware
 
-| Level | Suggested activities |
-| --- | --- |
-| **Learner** | Identify the various hardware components of a computer and understand their function. |
-| **Advanced Beginner** | Spend time with an IT professional while they troubleshoot computer hardware issues. |
-| **Practitioner** | Troubleshoot hardware issues, and recommend appropriate hardware for language program use. |
-| **Trainer** | Research the latest hardware components |
+| Current level | Suggested activities | Reaches |
+| --- | --- | --- |
+| **0 - No Competency** | Identify the various hardware components of a computer and understand their function. | 1 - Has Knowledge |
+| **1 - Has Knowledge** | Spend time with an IT professional while they troubleshoot computer hardware issues. | 2 - With Assistance |
+| **2 - With Assistance** | Troubleshoot hardware issues, and recommend appropriate hardware for language program use. | 3 - Independent |
+| **3 - Independent** | Research the latest hardware components | 4 - Expert |
 

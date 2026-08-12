@@ -49,6 +49,16 @@ def sel(props, key):
     return v.get("name") if v else None
 
 
+# Notion predates the CBC scale and stored the old two-value outcome level. Translate on
+# the way out so a re-export can't reintroduce retired vocabulary — see outcome-levels.yaml.
+_CBC = {"has knowledge": "1 - Has Knowledge", "with assistance": "2 - With Assistance"}
+
+
+def outcome_level(props):
+    v = sel(props, "Target Outcome Level")
+    return _CBC.get((v or "").strip().lower(), v)
+
+
 _slugs = set()
 def slugify(title):
     s = re.sub(r"[^a-z0-9]+", "-", title.lower()).strip("-")
@@ -167,8 +177,7 @@ def main():
         fm = {
             "title": title, "slug": slug, "notion_id": row["id"],
             "notion_data_source": MOD_DS,
-            "consultant_tier": sel(p, "Consultant Tier"),
-            "target_outcome_level": sel(p, "Target Outcome Level"),
+            "target_outcome_level": outcome_level(p),
             "competencies": comps,
             "content_type": "content" if content else "stub",
             "external_links": links,
@@ -200,7 +209,6 @@ def main():
             "slug": slug, "title": title, "notion_id": row["id"],
             "status": (p.get("Status") or {}).get("status", {}).get("name"),
             "priority": sel(p, "Priority"),
-            "consultant_tier": fm["consultant_tier"],
             "target_outcome_level": fm["target_outcome_level"],
             "competencies": comps,
             "persons": [pe.get("name") for pe in (p.get("Person") or {}).get("people", [])],

@@ -3,7 +3,7 @@ title: "Language Technology Overview: Which tools for what tasks and when"
 slug: language-technology-overview-which-tools-for-what-tasks-and-when
 notion_id: 47a63d13-0c53-4ae8-82d3-2f0bcc74baf8
 notion_data_source: 7ebb2ef5-9f57-4723-8de0-9cc1ca47ff8e
-target_outcome_level: Has knowledge
+target_outcome_level: "1 - Has Knowledge"
 competencies:
   - Uncategorized
 content_type: content

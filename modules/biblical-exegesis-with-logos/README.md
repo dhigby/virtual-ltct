@@ -3,7 +3,7 @@ title: Biblical Exegesis with Logos
 slug: biblical-exegesis-with-logos
 notion_id: 20e524ad-49ad-453a-a5a3-260b9d3719b7
 notion_data_source: 7ebb2ef5-9f57-4723-8de0-9cc1ca47ff8e
-target_outcome_level: Has knowledge
+target_outcome_level: "1 - Has Knowledge"
 competencies:
   - Translation Tools
 content_type: stub

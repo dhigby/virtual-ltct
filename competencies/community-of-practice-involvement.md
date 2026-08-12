@@ -6,10 +6,10 @@ source_label: CoP Involvement
 in_framework: true
 target_statement: Can communicate with peers both to find and to share solutions to problems.
 outcome_levels:
-  - Learner
-  - Advanced Beginner
-  - Practitioner
-  - Trainer
+  - "0 - No Competency"
+  - "1 - Has Knowledge"
+  - "2 - With Assistance"
+  - "3 - Independent"
 resources:
   - title: Professional Networking Resources
     url: https://consultantcompetencies.org/relating-to-other-organisations/
@@ -39,14 +39,14 @@ Learning from and sharing with peers helps the language technologist to grow and
 
 ## Progression by component
 
-_Suggested activities to reach each outcome level._
+_Each row is a level a learner is **at**; its activities are what they do to reach the level in the final column._
 
 ### 1.0 — General
 
-| Level | Suggested activities |
-| --- | --- |
-| **Learner** | Join an LT Community of Practice (CoP) and learn from the discussions. |
-| **Advanced Beginner** | Contribute to a language technology community of practice. |
-| **Practitioner** | Contribute regularly to a CoP, offering solutions to problems and fielding questions |
-| **Trainer** | Manage an LT CoP |
+| Current level | Suggested activities | Reaches |
+| --- | --- | --- |
+| **0 - No Competency** | Join an LT Community of Practice (CoP) and learn from the discussions. | 1 - Has Knowledge |
+| **1 - Has Knowledge** | Contribute to a language technology community of practice. | 2 - With Assistance |
+| **2 - With Assistance** | Contribute regularly to a CoP, offering solutions to problems and fielding questions | 3 - Independent |
+| **3 - Independent** | Manage an LT CoP | 4 - Expert |
 

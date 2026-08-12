@@ -5,11 +5,11 @@ slug: language-documentation
 in_framework: true
 target_statement: Can teach tools to document both living and endangered languages. Can identify quality audio and video recordings, teach best practices, and edit or clean up these files.
 outcome_levels:
-  - Learner
-  - Advanced Beginner
-  - Practitioner
-  - Trainer/Proficient
-  - Expert
+  - "0 - No Competency"
+  - "1 - Has Knowledge"
+  - "2 - With Assistance"
+  - "3 - Independent"
+  - "4 - Expert"
 resources:
   - title: Language Documentation & Conservation
     url: http://nflrc.hawaii.edu/ldc/
@@ -37,15 +37,16 @@ Language Documentation is a wide field focused on collecting a corpus of linguis
 
 ## Progression by component
 
-_Suggested activities to reach each outcome level._
+_Each row is a level a learner is **at**; its activities are what they do to reach the level in the final column._
 
 ### 1.0 — General
 
-| Level | Suggested activities |
-| --- | --- |
-| **Learner** | Understand the concepts and practice of language documentation |
-| **Advanced Beginner** | Collect your own data and recordings using a language documentation tool |
-| **Practitioner** | Use a language documentation tool in a language documentation collection to analyze, tag, transcribe, and archive data. |
-| **Trainer/Proficient** | Teach others to use a language documentation tool |
-| **Expert** | Research the latest developments in language documentation |
+| Current level | Suggested activities | Reaches |
+| --- | --- | --- |
+| **0 - No Competency** | Understand the concepts and practice of language documentation | 1 - Has Knowledge |
+| **1 - Has Knowledge** | Collect your own data and recordings using a language documentation tool | 2 - With Assistance |
+| **2 - With Assistance** | Use a language documentation tool in a language documentation collection to analyze, tag, transcribe, and archive data. | 3 - Independent |
+| **3 - Independent** | Teach others to use a language documentation tool | 4 - Expert |
+| **4 - Expert** | Research the latest developments in language documentation | — |
 
+_Level 4 activities aim past the top of the CBC scale (the source spreadsheet's "level 5"), which CBC does not define._

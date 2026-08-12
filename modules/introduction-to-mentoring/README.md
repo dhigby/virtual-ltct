@@ -3,7 +3,7 @@ title: Introduction to Mentoring
 slug: introduction-to-mentoring
 notion_id: 5b2e5481-a00a-4ab1-9ca1-8fdd2ef58f87
 notion_data_source: 7ebb2ef5-9f57-4723-8de0-9cc1ca47ff8e
-target_outcome_level: Has knowledge
+target_outcome_level: "1 - Has Knowledge"
 competencies:
   - Mentoring
 content_type: stub

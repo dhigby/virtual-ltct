@@ -1,7 +1,7 @@
 ---
 title: Configuring Quotation Rules in Paratext
 slug: paratext-quotation-rules
-target_outcome_level: With Assistance
+target_outcome_level: "2 - With Assistance"
 competencies:
   - Translation Tools
 content_type: content

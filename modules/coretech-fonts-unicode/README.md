@@ -3,7 +3,7 @@ title: "CoreTech: Fonts & Unicode"
 slug: coretech-fonts-unicode
 notion_id: 312598a5-fd40-80dc-a003-e18cf6d3022d
 notion_data_source: 7ebb2ef5-9f57-4723-8de0-9cc1ca47ff8e
-target_outcome_level: With Assistance
+target_outcome_level: "2 - With Assistance"
 competencies:
   - Fonts & Encoding
 content_type: content
@@ -19,9 +19,10 @@ saved 2026-07-28). It teaches trainee Language Technology Consultants to recogni
 and systematically diagnose broken text (boxes, wrong marks, mojibake) caused by mismatched
 encoding, missing font glyphs, or rendering problems.
 
-> **Note:** the source content states `Level: Has Knowledge`, but this README's
-> `target_outcome_level` frontmatter says `With Assistance`. Left as-is per the training-content
-> skill (frontmatter changes are a human decision) — resolve before this course leaves backfill.
+> **Note:** the source content states `Level: Has Knowledge` (i.e. `1 - Has Knowledge`), but
+> this README's `target_outcome_level` frontmatter says `2 - With Assistance`. Left as-is per
+> the training-content skill (frontmatter changes are a human decision) — resolve before this
+> course leaves backfill.
 
 **Watch the video:** [The Case of the Broken Text](https://vimeo.com/1178428863)
 

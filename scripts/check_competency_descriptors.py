@@ -9,6 +9,7 @@ descriptors. This check fails (exit 1) if they drift:
   * a descriptor's frontmatter is malformed or missing a required key,
   * a descriptor self-reports `in_framework: false`,
   * a descriptor's `resources:` entries aren't `{title, url}` links,
+  * a descriptor's `outcome_levels:` drift from the CBC scale in outcome-levels.yaml,
   * or a descriptor's filename doesn't match its `slug`.
 
 Run:  python scripts/check_competency_descriptors.py
@@ -21,6 +22,9 @@ try:
     import yaml
 except ImportError:
     sys.exit("pyyaml required: pip install pyyaml")
+
+sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent))
+import _levels
 
 REPO = pathlib.Path(__file__).resolve().parent.parent
 YAML = REPO / "competencies.yaml"
@@ -43,6 +47,7 @@ def parse_frontmatter(path):
 def main():
     framework = {n for names in yaml.safe_load(YAML.read_text(encoding="utf-8")).values()
                  for n in names}
+    ladder, _, legacy = _levels.load()
     errors, seen = [], {}
 
     for md in sorted(OUT.glob("*.md")):
@@ -77,6 +82,24 @@ def main():
                 if not url.startswith(("http://", "https://")):
                     errors.append(f"{md.name}: resources[{i}] `url` must be an http(s) URL "
                                   f"(got {url!r})")
+        # `outcome_levels:` is the CBC ladder. It must be a contiguous run starting at
+        # level 0 — a rung names where a learner IS, and its activities carry them to the
+        # next rung, so a ladder that skips or reorders levels is meaningless.
+        levels = fm.get("outcome_levels")
+        if levels is not None:
+            if not isinstance(levels, list) or not levels:
+                errors.append(f"{md.name}: `outcome_levels` must be a non-empty list")
+            else:
+                unknown = [lv for lv in levels if lv not in ladder]
+                for lv in unknown:
+                    hint = f" (legacy rung — did you mean '{legacy[lv]}'?)" \
+                        if lv in legacy else ""
+                    errors.append(f"{md.name}: outcome_levels value {lv!r} is not a CBC "
+                                  f"level{hint}")
+                if not unknown and levels != ladder[:len(levels)]:
+                    errors.append(f"{md.name}: outcome_levels must be a contiguous run "
+                                  f"starting at '{ladder[0]}' — got {levels}")
+
         name = fm["name"]
         if name in seen:
             errors.append(f"{md.name}: duplicate descriptor for '{name}' (also {seen[name]})")

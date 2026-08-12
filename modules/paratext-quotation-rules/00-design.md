@@ -13,7 +13,7 @@
 | --- | --- |
 | **Title** | Configuring Quotation Rules in Paratext |
 | **Competencies addressed** | Translation Tools |
-| **Target outcome level** | With Assistance |
+| **Target outcome level** | 2 - With Assistance |
 | **SME(s) consulted** | _(pending — retro-fit; SME fact-check not yet run)_ |
 | **Design status** | Draft |
 <!-- On approval (stage 2), the Design Approver replaces the line above with:
@@ -22,7 +22,7 @@
 Source component: `competencies/translation-tools.md` §2.0 Translation Tools —
 *Advanced Beginner: "Can use translation tools and troubleshoot issues that arise."* The
 course takes a learner who can navigate Paratext to the point of independently configuring
-and troubleshooting one specific check (Quotations), which is squarely "With Assistance."
+and troubleshooting one specific check (Quotations), which is squarely `2 - With Assistance`.
 
 ## Learning objectives
 

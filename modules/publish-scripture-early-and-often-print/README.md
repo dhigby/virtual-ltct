@@ -3,7 +3,7 @@ title: Publish Scripture Early and Often  (Print)
 slug: publish-scripture-early-and-often-print
 notion_id: 5e91d8f9-6858-4011-b8aa-6e500404fc6d
 notion_data_source: 7ebb2ef5-9f57-4723-8de0-9cc1ca47ff8e
-target_outcome_level: Has knowledge
+target_outcome_level: "1 - Has Knowledge"
 competencies:
   - Digital and Print Publishing
 content_type: content

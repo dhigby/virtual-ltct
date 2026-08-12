@@ -5,11 +5,11 @@ slug: digital-and-print-publishing
 in_framework: true
 target_statement: Is able to use the tools that assist language workers to publish their work electronically and on paper and is able to consult others on their use.
 outcome_levels:
-  - Learner
-  - Advanced Beginner
-  - Practitioner
-  - Trainer/Proficient
-  - Expert
+  - "0 - No Competency"
+  - "1 - Has Knowledge"
+  - "2 - With Assistance"
+  - "3 - Independent"
+  - "4 - Expert"
 resources:
   - title: PTXprint
     url: https://software.sil.org/ptxprint/
@@ -53,35 +53,36 @@ This competency covers the usage and training of users that help them to publish
 
 ## Progression by component
 
-_Suggested activities to reach each outcome level._
+_Each row is a level a learner is **at**; its activities are what they do to reach the level in the final column._
 
 ### 1.0 — Print Publishing
 
-| Level | Suggested activities |
-| --- | --- |
-| **Learner** | Identify appropriate tools to produce draft print output of Scripture and dictionaries |
-| **Advanced Beginner** | Use appropriate tools to produce draft print output of Scripture and dictionaries |
-| **Practitioner** | Customize and use appropriate tools to produce publishable output for Scripture and dictionaries |
-| **Trainer/Proficient** | Teach and mentor others to customize and use appropriate tools to produce publishable output for Scripture and dictionaries |
-| **Expert** | Research the latest developments in current publishing tools |
+| Current level | Suggested activities | Reaches |
+| --- | --- | --- |
+| **0 - No Competency** | Identify appropriate tools to produce draft print output of Scripture and dictionaries | 1 - Has Knowledge |
+| **1 - Has Knowledge** | Use appropriate tools to produce draft print output of Scripture and dictionaries | 2 - With Assistance |
+| **2 - With Assistance** | Customize and use appropriate tools to produce publishable output for Scripture and dictionaries | 3 - Independent |
+| **3 - Independent** | Teach and mentor others to customize and use appropriate tools to produce publishable output for Scripture and dictionaries | 4 - Expert |
+| **4 - Expert** | Research the latest developments in current publishing tools | — |
 
 ### 2.0 — Digital Publishing
 
-| Level | Suggested activities |
-| --- | --- |
-| **Learner** | Identify appropriate tools to produce digital output of Scripture and dictionaries for web and mobile. |
-| **Advanced Beginner** | Use appropriate tools to produce digital output of Scripture and dictionaries for web and mobile. |
-| **Practitioner** | Customize and use appropriate tools to produce publishable output for Scripture and dictionaries |
-| **Trainer/Proficient** | Teach and mentor others to customize and use appropriate tools to produce publishable output for Scripture and dictionaries |
-| **Expert** | Research the latest developments in current publishing tools |
+| Current level | Suggested activities | Reaches |
+| --- | --- | --- |
+| **0 - No Competency** | Identify appropriate tools to produce digital output of Scripture and dictionaries for web and mobile. | 1 - Has Knowledge |
+| **1 - Has Knowledge** | Use appropriate tools to produce digital output of Scripture and dictionaries for web and mobile. | 2 - With Assistance |
+| **2 - With Assistance** | Customize and use appropriate tools to produce publishable output for Scripture and dictionaries | 3 - Independent |
+| **3 - Independent** | Teach and mentor others to customize and use appropriate tools to produce publishable output for Scripture and dictionaries | 4 - Expert |
+| **4 - Expert** | Research the latest developments in current publishing tools | — |
 
 ### 3.0 — Audio Sync
 
-| Level | Suggested activities |
-| --- | --- |
-| **Learner** | Learn how to configure software to synchronize audio and text |
-| **Advanced Beginner** | Use software to synchronize audio with text |
-| **Practitioner** | Advise others on text and audio synchronization and to do micro adjustments to synchronized audio and text |
-| **Trainer/Proficient** | Teach and mentor others to configure and use audio and text synchronization software |
-| **Expert** | — |
+| Current level | Suggested activities | Reaches |
+| --- | --- | --- |
+| **0 - No Competency** | Learn how to configure software to synchronize audio and text | 1 - Has Knowledge |
+| **1 - Has Knowledge** | Use software to synchronize audio with text | 2 - With Assistance |
+| **2 - With Assistance** | Advise others on text and audio synchronization and to do micro adjustments to synchronized audio and text | 3 - Independent |
+| **3 - Independent** | Teach and mentor others to configure and use audio and text synchronization software | 4 - Expert |
+| **4 - Expert** | — | — |
 
+_Level 4 activities aim past the top of the CBC scale (the source spreadsheet's "level 5"), which CBC does not define._

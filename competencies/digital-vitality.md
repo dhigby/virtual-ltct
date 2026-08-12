@@ -5,11 +5,11 @@ slug: digital-vitality
 in_framework: true
 target_statement: Demonstrates the ability to inform and assist communities in the digitization of their language
 outcome_levels:
-  - Learner
-  - Advanced Beginner
-  - Practitioner
-  - Trainer/Proficient
-  - Expert
+  - "0 - No Competency"
+  - "1 - Has Knowledge"
+  - "2 - With Assistance"
+  - "3 - Independent"
+  - "4 - Expert"
 resources:
   - title: CLDR - Common Repository for Locales
     url: http://cldr.unicode.org/
@@ -37,15 +37,16 @@ Promoting a language digitally is important to its use and survival.
 
 ## Progression by component
 
-_Suggested activities to reach each outcome level._
+_Each row is a level a learner is **at**; its activities are what they do to reach the level in the final column._
 
 ### 1.0 — General
 
-| Level | Suggested activities |
-| --- | --- |
-| **Learner** | Learn how to Identify and collect the data needed to add a language to the Common Locale Data Repository (CLDR). |
-| **Advanced Beginner** | Help language community users to codify the features of their language and locale for representation digitally |
-| **Practitioner** | Assist language teams to add their language to the Common Locale Data Repository. Promote sustainable Unicode orthographies. |
-| **Trainer/Proficient** | Assist teams to create localized tools for their languages. This could include vernacular websites, spelling and grammar checkers and Wikipedia. |
-| **Expert** | Assist teams with well-developed orthographies and a wide variety of text resources to create resources such as morphologically-aware spell checkers, text-to-speech, parsers, machine translation, and voice recognition. |
+| Current level | Suggested activities | Reaches |
+| --- | --- | --- |
+| **0 - No Competency** | Learn how to Identify and collect the data needed to add a language to the Common Locale Data Repository (CLDR). | 1 - Has Knowledge |
+| **1 - Has Knowledge** | Help language community users to codify the features of their language and locale for representation digitally | 2 - With Assistance |
+| **2 - With Assistance** | Assist language teams to add their language to the Common Locale Data Repository. Promote sustainable Unicode orthographies. | 3 - Independent |
+| **3 - Independent** | Assist teams to create localized tools for their languages. This could include vernacular websites, spelling and grammar checkers and Wikipedia. | 4 - Expert |
+| **4 - Expert** | Assist teams with well-developed orthographies and a wide variety of text resources to create resources such as morphologically-aware spell checkers, text-to-speech, parsers, machine translation, and voice recognition. | — |
 
+_Level 4 activities aim past the top of the CBC scale (the source spreadsheet's "level 5"), which CBC does not define._

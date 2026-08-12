@@ -3,7 +3,7 @@ title: Mastering LT Resources
 slug: mastering-lt-resources
 notion_id: 8af547c7-d51b-460f-880b-7954bfdb6771
 notion_data_source: 7ebb2ef5-9f57-4723-8de0-9cc1ca47ff8e
-target_outcome_level: Has knowledge
+target_outcome_level: "1 - Has Knowledge"
 competencies:
   - Responsive Feedback
   - Problem Solving

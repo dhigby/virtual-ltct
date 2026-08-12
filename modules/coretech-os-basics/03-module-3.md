@@ -1457,11 +1457,11 @@ You now have the complete skill set for OS fundamentals:
 
 ### Next Steps in Your Development
 
-**"Has Knowledge" → "With Assistance" → "Independent"**
+**1 - Has Knowledge → 2 - With Assistance → 3 - Independent**
 
-This course built your "Has Knowledge" level competency. Moving forward:
+This course built your **1 - Has Knowledge** competency. Moving forward:
 
-**For "With Assistance" development:**
+**For 2 - With Assistance development:**
 
 - Work with experienced consultants
 - Shadow IT professionals during installations
@@ -1469,7 +1469,7 @@ This course built your "Has Knowledge" level competency. Moving forward:
 - Build experience with diverse scenarios
 - Learn from mistakes in low-risk situations
 
-**For "Independent" development:**
+**For 3 - Independent development:**
 
 - Handle problems on your own
 - Mentor others

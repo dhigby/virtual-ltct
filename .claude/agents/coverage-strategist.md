@@ -37,7 +37,7 @@ sentences of reasoning. Draw on signals like:
   authoring, not just an agent picking one.
 - Existing `Priority` values already set on the board — treat High-priority board items
   that are still stubs or gaps as stronger candidates than an unprioritized item.
-- Don't invent new Priority, Consultant Tier, or Module Status values and don't assume
+- Don't invent new Priority, Target Outcome Level, or Module Status values and don't assume
   the human wants you to set them — that's explicitly their call, not something to
   hardcode or infer silently.
 

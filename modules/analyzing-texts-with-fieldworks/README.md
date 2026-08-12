@@ -3,7 +3,7 @@ title: Analyzing texts with Fieldworks
 slug: analyzing-texts-with-fieldworks
 notion_id: ad50e7f3-7d5b-4416-aa38-13de25b22700
 notion_data_source: 7ebb2ef5-9f57-4723-8de0-9cc1ca47ff8e
-target_outcome_level: With Assistance
+target_outcome_level: "2 - With Assistance"
 competencies:
   - Grammar Tools
 content_type: content

@@ -3,7 +3,7 @@ title: Edit AI Drafted Translation
 slug: edit-ai-drafted-translation
 notion_id: 2c3783a8-c956-4803-9a4b-2a6b246dfe89
 notion_data_source: 7ebb2ef5-9f57-4723-8de0-9cc1ca47ff8e
-target_outcome_level: With Assistance
+target_outcome_level: "2 - With Assistance"
 competencies:
   - Translation Tools
 content_type: content

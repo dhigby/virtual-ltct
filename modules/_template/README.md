@@ -36,7 +36,7 @@ the existing convention in `coretech-computer-hardware`.
 ---
 title: <Module title>
 slug: <module-slug>
-target_outcome_level: With Assistance      # or "Has knowledge" — outcome level, not workflow status
+target_outcome_level: "2 - With Assistance"      # 1-4; see outcome-levels.yaml
 competencies:
   - <Competency Name>                       # must match competencies.yaml exactly
 content_type: content                       # stub | content

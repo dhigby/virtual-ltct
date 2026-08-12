@@ -5,10 +5,10 @@ slug: problem-solving
 in_framework: true
 target_statement: Demonstrates use of creative, effective, and efficient solutions to complex problems
 outcome_levels:
-  - Learner
-  - Advanced Beginner
-  - Practitioner
-  - Trainer
+  - "0 - No Competency"
+  - "1 - Has Knowledge"
+  - "2 - With Assistance"
+  - "3 - Independent"
 resources:
   - title: What is problem solving?
     url: https://www.mindtools.com/pages/article/newTMC_00.htm
@@ -44,14 +44,14 @@ Problem solving is an important skill for dealing with language technology issue
 
 ## Progression by component
 
-_Suggested activities to reach each outcome level._
+_Each row is a level a learner is **at**; its activities are what they do to reach the level in the final column._
 
 ### 1.0 — General
 
-| Level | Suggested activities |
-| --- | --- |
-| **Learner** | Find and complete problem-solving puzzles. |
-| **Advanced Beginner** | Diagnose common problems by identifying the individual components of the problem and seek assistance. |
-| **Practitioner** | Find and share effective workarounds for commonly experienced problems. |
-| **Trainer** | Develop and document complete solutions and processes to solve complex problems. |
+| Current level | Suggested activities | Reaches |
+| --- | --- | --- |
+| **0 - No Competency** | Find and complete problem-solving puzzles. | 1 - Has Knowledge |
+| **1 - Has Knowledge** | Diagnose common problems by identifying the individual components of the problem and seek assistance. | 2 - With Assistance |
+| **2 - With Assistance** | Find and share effective workarounds for commonly experienced problems. | 3 - Independent |
+| **3 - Independent** | Develop and document complete solutions and processes to solve complex problems. | 4 - Expert |
 

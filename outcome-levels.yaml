@@ -1,0 +1,56 @@
+# Competency levels — the Competency-Based Certification (CBC) scale.
+#
+# THE canonical vocabulary for competency levels in this repo. Everything that names a
+# level reads from here: competency descriptor ladders (`competencies/*.md` frontmatter
+# `outcome_levels:`), module frontmatter `target_outcome_level:`, and the GitHub Project
+# board's "Target Outcome Level" field.
+#
+# Source: import-seeds/Lang Tech Competencies.xlsx, "Milestone Scoring" sheet (the point
+# key) and the "LT Domain" sheet's two-row header. Read that spreadsheet carefully before
+# changing anything here — see "the offset" below.
+#
+# ---------------------------------------------------------------------------------------
+# THE OFFSET — the single most misread thing in this framework
+# ---------------------------------------------------------------------------------------
+# A level names where a learner *is*. The activities listed against that level are what
+# they do to reach the *next* one. The source spreadsheet says so outright: the column
+# headed "Learner" is captioned "suggested activities in order to help you reach level 1",
+# and Milestone Scoring scores Learner at 0 points, Advanced Beginner at 1, and so on.
+#
+# The legacy import kept only the spreadsheet's second header row (Learner / Advanced
+# Beginner / …) and dropped the first (Knowledge / With Assistance / …), which named the
+# destination. That collapsed two different things into one label and shifted every rung
+# by one. `legacy:` below records the mapping so old documents can still be read.
+#
+# NOTE: a module's `target_outcome_level` is where the learner LANDS, so it is drawn from
+# `course_target_levels` (1-4), never 0 — no course leaves someone at No Competency.
+
+levels:
+  - id: 0
+    label: "0 - No Competency"
+    legacy: Learner
+    description: No demonstrated competency yet.
+  - id: 1
+    label: "1 - Has Knowledge"
+    legacy: Advanced Beginner
+    description: Can understand concepts.
+  - id: 2
+    label: "2 - With Assistance"
+    legacy: Practitioner
+    description: Can troubleshoot and begin to work on their own.
+  - id: 3
+    label: "3 - Independent"
+    legacy: Trainer/Proficient
+    description: Can work independently and advise others.
+  - id: 4
+    label: "4 - Expert"
+    legacy: Expert
+    description: Advanced skill and trains others.
+
+# Levels a course may target, i.e. where a learner stands after completing it.
+course_target_levels: [1, 2, 3, 4]
+
+# Only the 18 Technology Domain descriptors carry a level-4 rung; its activities aim at the
+# spreadsheet's "level 5", which CBC does not define. Core Technical, Education, and
+# Professional ladders stop at level 3 — not a lower ceiling, since level-3 activities still
+# carry a learner to 4 - Expert.

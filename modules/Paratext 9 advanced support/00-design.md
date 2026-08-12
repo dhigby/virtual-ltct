@@ -6,7 +6,7 @@
 | --- | --- |
 | **Title** | Advanced Paratext Support |
 | **Competencies addressed** | Translation Tools |
-| **Target outcome level** | With Assistance |
+| **Target outcome level** | 2 - With Assistance |
 | **SME(s) consulted** | TBD — scenario list below was supplied directly by the requesting consultant during initial scoping; a full SME interview for procedural specifics has not yet been conducted (see SME knowledge notes below) |
 | **Design status** | Approved by Steve White on 2026-07-16 |
 
@@ -14,19 +14,22 @@
 
 This course sits above the two existing Paratext modules — `paratext-9-basic-training-course`
 (basic navigation) and `paratext-quotation-rules` (intermediate configuration) — both at
-`target_outcome_level: With Assistance`. This repo's module frontmatter uses a two-value
-outcome scale (`Has knowledge` / `With Assistance`), which is coarser than the Translation
-Tools competency's five-rung activity ladder (Learner / Advanced Beginner / Practitioner /
-Trainer-Proficient / Expert). Matching this course's scope against that ladder, the closest
-rows are consistently at **Practitioner**: 5.0 Scripture Collaboration Practitioner
-("Advise users in best-practices for collaboration and data safety … such as the use of
-Send/Receive. Assist users to configure plans and tasks in a way that helps them.") and 3.0
-Scripture Markup and Import Practitioner ("Convert and import data from other formats …
-into translation software."). Practitioner-level activity is still "perform/configure with
-some independent judgment," not "train others" (Trainer/Proficient) or "train consultants"
-(Expert), so on the repo's binary scale it lands as **With Assistance**, one notch of
-difficulty above the two prerequisite courses within that same band — the learner performs
-real recovery procedures, but is not yet expected to train other consultants to do so.
+`target_outcome_level: "2 - With Assistance"`. Matching this course's scope against the
+Translation Tools ladder, the closest rows are consistently the ones labelled
+**`2 - With Assistance`**: 5.0 Scripture Collaboration ("Advise users in best-practices for
+collaboration and data safety … such as the use of Send/Receive. Assist users to configure
+plans and tasks in a way that helps them.") and 3.0 Scripture Markup and Import ("Convert and
+import data from other formats … into translation software."). That activity is
+"perform/configure with some independent judgment," not "train others."
+
+> **⚠️ Re-level pending approval.** This rationale was written against the old two-value
+> scale, where the closest thing to those rows was `With Assistance`. Under the CBC scale the
+> rows labelled `2 - With Assistance` are the rows whose activities *carry a learner to*
+> `3 - Independent` — so on the merits this course should be
+> `target_outcome_level: "3 - Independent"`. The frontmatter still reads `2 - With Assistance`
+> (a faithful translation of its previous value) pending sign-off from the design approver
+> (Steve White, per the Design status above). This is exactly the mis-level the old coarse
+> scale forced; see [`outcome-levels.yaml`](../../outcome-levels.yaml).
 
 ### Scope note
 
@@ -182,7 +185,7 @@ Step by step:
 ## Handoff
 
 - **Learning objectives:** 5, one per SME-specified scenario, drawn from the Translation
-  Tools competency descriptor's Practitioner-level rows under 3.0 Scripture Markup and
+  Tools competency descriptor's `2 - With Assistance` rows under 3.0 Scripture Markup and
   Import and 5.0 Scripture Collaboration. Objective 4 (recovering notes/renderings) is
   explicitly flagged as not cleanly matching any existing activity-ladder row — it is
   included anyway because the SME named it by name as a real, recurring support case. (An

@@ -5,10 +5,10 @@ slug: keyboards
 in_framework: true
 target_statement: Is able to teach others how to install and configure keyboard solutions for typing language characters.
 outcome_levels:
-  - Learner
-  - Advanced Beginner
-  - Practitioner
-  - Trainer
+  - "0 - No Competency"
+  - "1 - Has Knowledge"
+  - "2 - With Assistance"
+  - "3 - Independent"
 resources:
   - title: Keyman
     url: https://keyman.com/
@@ -38,14 +38,14 @@ A large part of interaction with our devices happens through a keyboard. A Langu
 
 ## Progression by component
 
-_Suggested activities to reach each outcome level._
+_Each row is a level a learner is **at**; its activities are what they do to reach the level in the final column._
 
 ### 1.0 — Configure Virtual Keyboard Solutions
 
-| Level | Suggested activities |
-| --- | --- |
-| **Learner** | Install appropriate virtual keyboarding solutions on user computers. |
-| **Advanced Beginner** | Configure applications to work with the appropriate keyboards, through system language association and switching |
-| **Practitioner** | Work with individuals to install and configure custom keyboarding solutions. |
-| **Trainer** | Teach a group how to configure custom keyboard solutions. |
+| Current level | Suggested activities | Reaches |
+| --- | --- | --- |
+| **0 - No Competency** | Install appropriate virtual keyboarding solutions on user computers. | 1 - Has Knowledge |
+| **1 - Has Knowledge** | Configure applications to work with the appropriate keyboards, through system language association and switching | 2 - With Assistance |
+| **2 - With Assistance** | Work with individuals to install and configure custom keyboarding solutions. | 3 - Independent |
+| **3 - Independent** | Teach a group how to configure custom keyboard solutions. | 4 - Expert |
 

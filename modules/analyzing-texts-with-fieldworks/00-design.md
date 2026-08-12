@@ -8,7 +8,7 @@
 | --- | --- |
 | **Title** | Analyzing Texts with FieldWorks |
 | **Competencies addressed** | Grammar Tools |
-| **Target outcome level** | With Assistance |
+| **Target outcome level** | 2 - With Assistance |
 | **SME(s) consulted** | Jenni Beadle (SIL) — authors learner-facing tutorials; adapting Kent's facilitator-style teaching-plan source material (`lingtran.net/FLEx-8`) into this repo's self-paced tutorial convention |
 | **Design status** | Approved by Jenni Beadle on 2026-07-16 |
 
@@ -76,7 +76,7 @@ Only the writing-systems setup path needs rewriting for 9.3.9; everything else t
   - Keep genuinely separate words unlinked (clitics, individual words in a phrase) when charting — link only true idioms.
   - You can still finish morpheme-level interlinearization later in the Analyze tab without breaking an existing chart, as long as you don't change spellings or phrase links afterward.
   - Undo works in the chart, but only until you leave the tab or refresh.
-  - This is a rich feature with many advanced marking options (dependent/speech/song clause marking, preposed/postposed marking, grammatical-information marking) — **out of scope for this With Assistance-level module**; the lesson should cover the basic insert-into-column workflow only, not the full discourse-marking toolkit.
+  - This is a rich feature with many advanced marking options (dependent/speech/song clause marking, preposed/postposed marking, grammatical-information marking) — **out of scope for this `2 - With Assistance` module**; the lesson should cover the basic insert-into-column workflow only, not the full discourse-marking toolkit.
 
   **Still unconfirmed:** the exact interaction for approving/reassigning a candidate analysis in the **Word Analyses** view (the source's "right-click Analysis Candidate → User Opinion → approve" instruction is unverified, and the sense-disambiguation right-click instruction elsewhere in this same source turned out to be outdated — don't assume this one is still accurate). The SME has only glossed their sample project so far, not reached the analysis/parsing stage, so this couldn't be checked yet. **Lesson content should describe Word Analyses' purpose and value in general terms (viewing/selecting candidate analyses) without asserting a specific unverified click-path**, and the Challenge exercise should treat it as exploratory ("open it and see what's there") rather than a precise numbered procedure.
 - **Project Management (foundational only):** a writing system = a specific language + script; the vernacular writing system is the language being researched, the analysis writing system is the language of the glosses/notes; each writing system pairs a language with a font and keyboard configuration.
@@ -93,5 +93,5 @@ Do not invent details beyond what's above — anything not confirmed here should
 2. **Interview the SME** before drafting objectives or module breakdown. Ask: real field cases they've seen, what learners most commonly get wrong, what "good" looks like at your target outcome level, any tool-version specifics. Record answers in the SME knowledge notes section.
 3. **Enforce the 90-minute rule.** Each numbered module file (01-, 02-, …) has a documented estimated duration, stated at the top as `**Estimated time:** X minutes`, and must not exceed 90 minutes. If your content can't fit, split it into another file rather than overflowing — update this table and the `module-author` will implement it.
 4. **Align objectives with assessment.** Every objective in the table above must map to at least one quiz question or scenario. Every quiz question and scenario must trace back to an objective — no orphan assessments.
-5. **Outcome-level verb choice.** "Has knowledge" objectives use recognize/explain language; "With Assistance" objectives use perform/configure language.
+5. **Outcome-level verb choice.** Verbs follow the CBC level (see `outcome-levels.yaml`): `1 - Has Knowledge` uses recognize/explain language; `2 - With Assistance` uses perform/configure language; `3 - Independent` uses unaided-judgment language ("resolve," "recover from"); `4 - Expert` uses teaching language ("train others to," "critique"). Remember the ladder offset: objectives for level N come from the descriptor row labelled level N-1, the row that *reaches* N.
 6. **Hand off.** Once approved, this document becomes a contract: the `module-author` and `quiz-writer` agents will draft content and assessment to fulfill it, not freelance or add unstated competencies.

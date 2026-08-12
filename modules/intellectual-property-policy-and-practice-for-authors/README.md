@@ -3,7 +3,7 @@ title: Intellectual Property Policy and Practice for Authors
 slug: intellectual-property-policy-and-practice-for-authors
 notion_id: 3993f2e4-9abe-462f-9d27-599a982061c0
 notion_data_source: 7ebb2ef5-9f57-4723-8de0-9cc1ca47ff8e
-target_outcome_level: Has knowledge
+target_outcome_level: "1 - Has Knowledge"
 competencies:
   - Archiving and Copyright Tools
 content_type: stub

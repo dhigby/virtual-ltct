@@ -40,9 +40,10 @@ drip) about:
 - **Common learner mistakes.** What do people most often get wrong or struggle with in
   this area?
 - **What "good" looks like.** Describe what competent performance at the target outcome
-  level looks like in the field. If it's "Has knowledge," this might be explanation and
-  recognition; if it's "With Assistance," this might be performing the task with guidance
-  or decision-making support.
+  level looks like in the field. At `1 - Has Knowledge` this might be explanation and
+  recognition; at `2 - With Assistance`, performing the task with guidance or
+  decision-making support; at `3 - Independent`, handling it unaided including the
+  failure cases; at `4 - Expert`, teaching someone else to do it.
 - **Tool-version specifics.** If the course covers specific software, what versions or
   configurations? Are there known gotchas?
 
@@ -67,9 +68,18 @@ Extract one objective per row from the competency descriptor(s):
   `competencies/<slug>.md` that it comes from.
 - Note in the "Assessed by" column which quiz section or scenario proves the learner
   achieved it.
-- **Outcome-level language matters:** "Has knowledge" objectives use recognize/explain
-  verbs ("learner can identify," "explain why," "distinguish between"); "With Assistance"
-  objectives use perform/configure verbs ("learner can set up," "diagnose," "execute").
+- **Outcome-level language matters.** Levels come from
+  [`outcome-levels.yaml`](../../outcome-levels.yaml); the verbs follow the level:
+  `1 - Has Knowledge` uses recognize/explain ("learner can identify," "explain why,"
+  "distinguish between"); `2 - With Assistance` uses perform/configure with support
+  ("learner can set up," "diagnose," "execute"); `3 - Independent` uses unaided
+  judgment verbs ("resolve," "decide between," "recover from"); `4 - Expert` uses
+  teaching verbs ("train others to," "critique," "lead a workshop on").
+- **Mind the ladder offset.** In `competencies/<slug>.md` each row names the level a
+  learner is **at**, and its activities carry them to the level in the `Reaches` column.
+  To design for `2 - With Assistance`, lift objectives from the row labelled
+  `1 - Has Knowledge` — the row that *reaches* level 2 — not the one sharing your
+  target's name.
 
 ### Module breakdown
 

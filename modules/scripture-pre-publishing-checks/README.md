@@ -3,7 +3,7 @@ title: Scripture Pre-publishing Checks
 slug: scripture-pre-publishing-checks
 notion_id: 49910cb4-85e6-44b7-b5af-3d5047dd8945
 notion_data_source: 7ebb2ef5-9f57-4723-8de0-9cc1ca47ff8e
-target_outcome_level: Has knowledge
+target_outcome_level: "1 - Has Knowledge"
 competencies:
   - Translation Tools
 content_type: content

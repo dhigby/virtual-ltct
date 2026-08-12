@@ -5,11 +5,11 @@ slug: phonology-tools
 in_framework: true
 target_statement: Is able to use the tools for doing phonological analysis and is able to consult others in their use
 outcome_levels:
-  - Learner
-  - Advanced Beginner
-  - Practitioner
-  - Trainer/Proficient
-  - Expert
+  - "0 - No Competency"
+  - "1 - Has Knowledge"
+  - "2 - With Assistance"
+  - "3 - Independent"
+  - "4 - Expert"
 resources:
   - title: Cambridge Journal of Phonology
     url: https://www.cambridge.org/core/journals/phonology
@@ -43,25 +43,26 @@ This competency covers the usage and training of users to use the current phonol
 
 ## Progression by component
 
-_Suggested activities to reach each outcome level._
+_Each row is a level a learner is **at**; its activities are what they do to reach the level in the final column._
 
 ### 1.0 — Can teach others to use text-based Phonology Tools
 
-| Level | Suggested activities |
-| --- | --- |
-| **Learner** | Demonstates basic knowledge of phonological tools |
-| **Advanced Beginner** | Can use phonology tools and troubleshoot issues that arise |
-| **Practitioner** | Can input lexical data into a text-centric Phonology tool (i.e. Phonology Assistant or Dekereke) |
-| **Trainer/Proficient** | Prepare and teach phonology tools module as part of a training event |
-| **Expert** | Train someone to teach a phonology tool module |
+| Current level | Suggested activities | Reaches |
+| --- | --- | --- |
+| **0 - No Competency** | Demonstates basic knowledge of phonological tools | 1 - Has Knowledge |
+| **1 - Has Knowledge** | Can use phonology tools and troubleshoot issues that arise | 2 - With Assistance |
+| **2 - With Assistance** | Can input lexical data into a text-centric Phonology tool (i.e. Phonology Assistant or Dekereke) | 3 - Independent |
+| **3 - Independent** | Prepare and teach phonology tools module as part of a training event | 4 - Expert |
+| **4 - Expert** | Train someone to teach a phonology tool module | — |
 
 ### 2.0 — Statistical Instrumental Analysis
 
-| Level | Suggested activities |
-| --- | --- |
-| **Learner** | Participate in phonology training event as a teaching assistant |
-| **Advanced Beginner** | Learn to use a speech analysis tool (such as Speech Analyzer) to identify pitch melodies (tone), frequencies, and length of utterances. |
-| **Practitioner** | Work with a linguist to learn about the types of frames that are useful for studying certain features. Investigate the methods and statistics used to justify and disprove linguistic theories or develop orthographies. |
-| **Trainer/Proficient** | Learn to use and teach instrumental audio analysis tools (such as Praat or Speech Analyzer) to identify and quantify the qualities and parameters of spoken utterances. |
-| **Expert** | Assist users with scripting (ex. R) to process and aggregate instrumental analysis data. |
+| Current level | Suggested activities | Reaches |
+| --- | --- | --- |
+| **0 - No Competency** | Participate in phonology training event as a teaching assistant | 1 - Has Knowledge |
+| **1 - Has Knowledge** | Learn to use a speech analysis tool (such as Speech Analyzer) to identify pitch melodies (tone), frequencies, and length of utterances. | 2 - With Assistance |
+| **2 - With Assistance** | Work with a linguist to learn about the types of frames that are useful for studying certain features. Investigate the methods and statistics used to justify and disprove linguistic theories or develop orthographies. | 3 - Independent |
+| **3 - Independent** | Learn to use and teach instrumental audio analysis tools (such as Praat or Speech Analyzer) to identify and quantify the qualities and parameters of spoken utterances. | 4 - Expert |
+| **4 - Expert** | Assist users with scripting (ex. R) to process and aggregate instrumental analysis data. | — |
 
+_Level 4 activities aim past the top of the CBC scale (the source spreadsheet's "level 5"), which CBC does not define._

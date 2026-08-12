@@ -3,7 +3,7 @@ title: Software Support and Troubleshooting for Translation Teams
 slug: software-support-and-troubleshooting-for-translation-teams
 notion_id: 1428c929-44e5-4945-923b-9744d1b8761f
 notion_data_source: 7ebb2ef5-9f57-4723-8de0-9cc1ca47ff8e
-target_outcome_level: Has Knowledge
+target_outcome_level: "1 - Has Knowledge"
 competencies:
   - Translation Tools
 content_type: content

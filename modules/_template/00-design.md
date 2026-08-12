@@ -8,7 +8,7 @@
 | --- | --- |
 | **Title** | [Your course title] |
 | **Competencies addressed** | [List verbatim competency names from `competencies.yaml`, one per line] |
-| **Target outcome level** | [Has knowledge \| With Assistance] |
+| **Target outcome level** | [1 - Has Knowledge \| 2 - With Assistance \| 3 - Independent \| 4 - Expert] |
 | **SME(s) consulted** | [Name(s) and affiliation] |
 | **Design status** | Draft |
 <!-- On approval (stage 2), the Design Approver replaces the line above with:
@@ -53,5 +53,5 @@ One row per planned numbered lesson file. Each row stays ≤ 90 minutes. The tot
 2. **Interview the SME** before drafting objectives or module breakdown. Ask: real field cases they've seen, what learners most commonly get wrong, what "good" looks like at your target outcome level, any tool-version specifics. Record answers in the SME knowledge notes section.
 3. **Enforce the 90-minute rule.** Each numbered module file (01-, 02-, …) has a documented estimated duration, stated at the top as `**Estimated time:** X minutes`, and must not exceed 90 minutes. If your content can't fit, split it into another file rather than overflowing — update this table and the `module-author` will implement it.
 4. **Align objectives with assessment.** Every objective in the table above must map to at least one quiz question or scenario. Every quiz question and scenario must trace back to an objective — no orphan assessments.
-5. **Outcome-level verb choice.** "Has knowledge" objectives use recognize/explain language; "With Assistance" objectives use perform/configure language.
+5. **Outcome-level verb choice.** Verbs follow the CBC level (see `outcome-levels.yaml`): `1 - Has Knowledge` uses recognize/explain language; `2 - With Assistance` uses perform/configure language; `3 - Independent` uses unaided-judgment language ("resolve," "recover from"); `4 - Expert` uses teaching language ("train others to," "critique"). Remember the ladder offset: objectives for level N come from the descriptor row labelled level N-1, the row that *reaches* N.
 6. **Hand off.** Once approved, this document becomes a contract: the `module-author` and `quiz-writer` agents will draft content and assessment to fulfill it, not freelance or add unstated competencies.

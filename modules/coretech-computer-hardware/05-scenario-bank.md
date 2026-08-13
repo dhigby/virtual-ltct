@@ -1,3 +1,5 @@
+ n
+
 # SCENARIOS BANK FOR ASSESSMENT
 
 **Estimated time:** 15 minutes to read through and orient (the scenarios themselves are worked inside Modules 2, 3 and 4)
@@ -12,7 +14,7 @@
 
 - Read each scenario carefully
 - Apply the four-step diagnostic framework (Observe, Isolate, Test, Decide)
-- Fill out a [Consultant's Triage Card](consultant-triage-card.md) for each scenario
+- Fill out a [Consultant&#39;s Triage Card](consultant-triage-card.md) for each scenario
 - Write detailed responses
 - Submit to your mentor for feedback
 
@@ -316,19 +318,19 @@ Marcus works in a hot, dry environment. The computer is 2 years old and has been
 
 **Where each scenario is used:**
 
-| Scenario | Used in |
-|---|---|
-| F1 The Slow Startup | Module 1 §1.5 mini-scenario; Module 2 Activity 2.2 |
-| F2 The Black Screen | Module 2 §2.5 Scenario 1 (guided) |
-| F3 The Charging Problem | Module 2 §2.5 Practice Scenario 3 (submitted to mentor) |
-| I1 The Intermittent Shutdown | Module 2 §2.5 Scenario 2 (guided) |
-| I2 The Mysterious Beeping | Module 2 — optional extra practice |
-| I3 The Performance Puzzle | Module 2 — optional extra practice |
-| C1–C3 | Module 3 §3.4 (assessed by mentor) |
-| C4 The Site Survey | Module 4 §4.4 (assessed by mentor) |
-| C5 The Reassuring User | Module 4 §4.4 (assessed by mentor) |
-| P3 The Data Dilemma | Module 4 §4.3 (assessed by mentor) |
-| P1, P2, P4 | Reserve pool for additional practice |
+| Scenario                     | Used in                                                  |
+| ---------------------------- | -------------------------------------------------------- |
+| F1 The Slow Startup          | Module 1 §1.5 mini-scenario; Module 2 Activity 2.2      |
+| F2 The Black Screen          | Module 2 §2.5 Scenario 1 (guided)                       |
+| F3 The Charging Problem      | Module 2 §2.5 Practice Scenario 3 (submitted to mentor) |
+| I1 The Intermittent Shutdown | Module 2 §2.5 Scenario 2 (guided)                       |
+| I2 The Mysterious Beeping    | Module 2 — optional extra practice                      |
+| I3 The Performance Puzzle    | Module 2 — optional extra practice                      |
+| C1–C3                       | Module 3 §3.4 (assessed by mentor)                      |
+| C4 The Site Survey           | Module 4 §4.4 (assessed by mentor)                      |
+| C5 The Reassuring User       | Module 4 §4.4 (assessed by mentor)                      |
+| P3 The Data Dilemma          | Module 4 §4.3 (assessed by mentor)                      |
+| P1, P2, P4                   | Reserve pool for additional practice                     |
 
 **For Foundational Scenarios (F1-F3):**
 

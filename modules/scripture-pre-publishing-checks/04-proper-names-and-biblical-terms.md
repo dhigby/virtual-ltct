@@ -1,27 +1,19 @@
-# Proper names and Biblical Terms
-
-# Proper names and Biblical Terms
-
----
-## title: "Proper Names and Biblical Terms Final Check"<br>course: "Finalizing Your Translation for Publication"<br>module_number: 4<br>duration: 60<br>level: Experienced Translator<br>goal: Ensure all proper names and major biblical terms have approved renderings before publication<br>prerequisites: "Familiar with Biblical Terms tool; translation substantially complete"
 # Proper Names and Biblical Terms Final Check
-**Duration:** 60 minutes
 **Level:** Experienced Translator
 **Goal:** Ensure all proper names and major biblical terms have approved renderings before publication
 ---
 ## Introduction
-**Time:** 5 minutes
-<span discussion-urls="discussion://2f7598a5-fd40-805d-8b01-fc366a965214/2f7598a5-fd40-80cc-907e-f9b7dcdab8b9/37a598a5-fd40-80e1-ab96-001c71e654da">Imagine a reader encountering "Jerusalem" spelled three different ways in your translation. Or finding that "Peter" is called by one name in Matthew and a different name in Acts. Or discovering that a key theological term like "covenant" has no consistent rendering.</span>
+Imagine a reader encountering "Jerusalem" spelled three different ways in your translation. Or finding that "Peter" is called by one name in Matthew and a different name in Acts. Or discovering that a key theological term like "covenant" has no consistent rendering.
 Proper names and biblical terms are the backbone of Scripture translation. Inconsistency in these foundational elements undermines reader confidence and creates confusion. Even one missing or inconsistent rendering can be noticed by readers and create questions about the translation's reliability.
-This module guides you through the final systematic review of all proper names and major biblical terms to ensure nothing has been missed and everything is consistent.
-### What This Module Covers
+This chapter guides you through the final systematic review of all proper names and major biblical terms to ensure nothing has been missed and everything is consistent.
+### What This Chapter Covers
 - Understanding the Major Biblical Terms list
 - Filtering for names with missing renderings
 - Reviewing and adding renderings where needed
 - Verifying consistency across your translation
 - Making final decisions on difficult terms
 ### Prerequisites
-Before starting this module, ensure:
+Before starting this chapter, ensure:
 - You're familiar with the Biblical Terms tool in Paratext
 - Your project has access to the Major Biblical Terms list
 - You have editing permissions for your project
@@ -29,7 +21,6 @@ Before starting this module, ensure:
 - You understand your project's approach to transliterating vs. translating names
 ---
 ## Procedure Walkthrough
-**Time:** 40 minutes
 ### Understanding Biblical Terms and Proper Names
 The Biblical Terms tool in Paratext tracks important words and concepts throughout Scripture, ensuring they're translated consistently. This includes:
 **Proper names:**
@@ -52,7 +43,7 @@ You've been working with biblical terms throughout the translation process, but 
 3. **Consistency is verified** - Even approved renderings should be checked across contexts
 4. **Team agreement is confirmed** - Final sign-off before publication
 **Key principle:** Missing renderings discovered after publication require expensive reprinting or leave readers with untranslated words.
-> <span discussion-urls="discussion://2f7598a5-fd40-805d-8b01-fc366a965214/2f7598a5-fd40-8079-b736-c85c29b1498e/37a598a5-fd40-8094-b2ed-001c9b1d8b8e">⚠️ Important: One missing name can confuse readers for the entire New Testament. A reader encounters "Παῦλος" untranslated because you forgot to add a rendering? They'll wonder if it's the same person as "Paul" or someone different. Don't let this happen!</span>
+> ⚠️ Important: One missing name can confuse readers for the entire New Testament. A reader encounters "Παῦλος" untranslated because you forgot to add a rendering? They'll wonder if it's the same person as "Paul" or someone different. Don't let this happen!
 ---
 ### Step 1: Open the Biblical Terms Tool
 1. Click in your project window to make it active
@@ -170,8 +161,7 @@ Before considering this check complete:
 	- Make revisions as needed
 ---
 ## Verification Checklist
-**Time:** 5 minutes
-After completing this module, verify that you have:
+After completing this chapter, verify that you have:
 **Major Biblical Terms Review:**
 - [ ] Opened the Biblical Terms tool
 - [ ] Selected the Major Biblical Terms list
@@ -203,7 +193,6 @@ After completing this module, verify that you have:
 - Share with Translation Consultant for final sign-off
 ---
 ## Troubleshooting
-**Time:** 5 minutes
 ### Common Issues and Solutions
 **Problem:** "The filter for missing renderings shows nothing, but I know there are gaps"
 - **Solution:** The filter may be set incorrectly. Try: (1) Clear all filters and manually look through the list, (2) Check if you're viewing the correct biblical terms list (Major vs. All), (3) Verify the filter is set to "missing" not "present" renderings.
@@ -234,7 +223,6 @@ After completing this module, verify that you have:
 - You need final approval before publication (quality verification)
 ---
 ## Summary and Next Steps
-**Time:** 3 minutes
 ### Key Takeaways
 - The Major Biblical Terms list contains the most important terms for your publication
 - Every term on this list should have an approved rendering before publication
@@ -243,7 +231,7 @@ After completing this module, verify that you have:
 - Team agreement and Translation Consultant approval are essential
 - Proper names and theological terms are highly visible to readers—errors are costly
 ### What Comes Next
-After completing biblical terms review, the next module covers **Numbers, Weights, and Measures**. You'll learn to:
+After completing biblical terms review, the next chapter covers **Numbers, Weights, and Measures**. You'll learn to:
 - Use the specialized biblical terms lists for measurements
 - Ensure consistency in how quantities are expressed
 - Add appropriate renderings for ancient measurements

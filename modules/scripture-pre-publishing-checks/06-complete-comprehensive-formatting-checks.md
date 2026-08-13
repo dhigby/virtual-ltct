@@ -1,20 +1,18 @@
 # Complete Comprehensive formatting checks
 
-# Complete Comprehensive formatting checks
-
 ---
 ## Formatting Checks
-**Duration:** 60 minutes
 **Level:** Experienced Translator
 **Goal:** Complete comprehensive formatting verification using Paratext checklists to ensure publication-ready text
 ---
 ## Introduction
-**Time:** 5 minutes
 Formatting errors are invisible during translation work—until they're printed in thousands of copies and it's too late to fix them.
-> ⚠️ Important: Formatting errors can't be easily fixed after printing. A missing section heading, broken cross-reference, or incomplete footnote will be in every copy of your published Bible. This module is unglamorous but essential.
+> ⚠️ Important: Formatting errors can't be easily fixed after printing. A missing section heading, broken cross-reference, or incomplete footnote will be in every copy of your published Bible. This chapter is unglamorous but essential.
 A missing section heading here, an inconsistent book title there, a footnote with broken reference formatting—these seem like minor issues during translation. But in a published Bible, they undermine professionalism and distract readers from the message.
-Formatting checks are the unglamorous but essential final quality control before publication. This module guides you through Paratext's checklist tools to systematically verify that every formatting element is correct and consistent.
-### What This Module Covers
+Formatting checks are the unglamorous but essential final quality control before publication. This chapter guides you through Paratext's checklist tools to systematically verify that every formatting element is correct and consistent.
+
+**Why the order matters.** Paratext's formatting checks are *hierarchical*: if your chapter/verse sequence is broken, your Long/Short Verse results will be wrong; if marker pairs aren't closed, your footnote checks will be messy. So work **structural integrity → manual audits → fine-tuning** — get the basic/structural checks completely clean *first*, because everything downstream depends on them. The aim is a **"zero-error"** result: a clean bill of health on every checklist before you publish.
+### What This Chapter Covers
 - Reviewing formatting check module (FC) completion
 - Checking verse lengths and divisions
 - Verifying section headings
@@ -22,14 +20,13 @@ Formatting checks are the unglamorous but essential final quality control before
 - Checking cross-references
 - Reviewing footnote formatting
 ### Prerequisites
-Before starting this module, ensure:
+Before starting this chapter, ensure:
 - You've previously completed the FC (Formatting Checks) module
 - You're familiar with USFM formatting markers
 - You have editing permissions for all books
 - You understand your project's style guidelines for headings and references
 ---
 ## Procedure Walkthrough
-**Time:** 45 minutes
 <callout icon="💡" color="green_bg">
 	The procedure walkthrough should only take 45 minutes. Repeat each checklist until all flagged items are either corrected or documented as intentional. This can take several hours for a New Testament. 
 </callout>
@@ -51,7 +48,7 @@ Formatting checks verify the structure and presentation elements of your text:
 **The challenge:** You've been focused on translation quality. Formatting may have been neglected or become inconsistent through multiple revisions. 
 Repeat each step until all errors are corrected. 
 ---
-### <span discussion-urls="discussion://2f7598a5-fd40-80ba-9ed3-e9a65496231a/351598a5-fd40-80a9-938b-f409f12b84a2/37a598a5-fd40-80df-81cb-001cb545c123">Step 1: Review Previous Formatting Checks Module</span>
+### Step 1: Review Previous Formatting Checks Module
 Before running final formatting checks, review what you've already done:
 1. Locate your FC (Formatting Checks) module completion record
 	- This module should have been completed earlier in the translation process
@@ -67,6 +64,14 @@ Before running final formatting checks, review what you've already done:
 - Stop here and complete that module first, see [13. Formatting checks \| Paratext Manual](https://manual.paratext.org/13.FC)
 - The FC module provides foundational training on formatting
 - These final checks assume you understand the basics
+### Marker-Pair Census (structural integrity — do this first)
+
+Before the detailed checklists, confirm the structure is sound. In the **Markers Inventory** (**≡ Tab > Tools > Checking Inventories > Markers**), check that opening counts equal closing counts — `\f` must equal `\f*`, `\x` must equal `\x*`, `\nd` must equal `\nd*`.
+
+> 💡 *Example: if the inventory shows 412 `\f` but only 410 `\f*`, you have two unclosed footnotes that will break the layout.*
+
+Also watch for **"ghost" markers** — a marker with a count but no text content; these cause odd spacing in print, so delete or populate them. Don't move on to the checklists below until the counts match.
+
 ### Step 2: Check Long and Short Verses
 Verses that are unusually long or short may indicate formatting problems.
 1. **≡ Tab** \> **Tools** \> **Checklists** \> **Long/short verses**
@@ -200,8 +205,7 @@ Footnotes provide explanations, alternative translations, and textual notes. The
 - Formatting is uniform throughout
 ---
 ## Verification Checklist
-**Time:** 5 minutes
-After completing this module, verify that you have:
+After completing this chapter, verify that you have:
 **Formatting Checks Module Review:**
 - [ ] Reviewed previous FC module completion
 - [ ] Verified earlier formatting issues were resolved
@@ -231,11 +235,10 @@ After completing this module, verify that you have:
 - [ ] Archive checklist results for documentation
 ---
 ## Troubleshooting
-**Time:** 3 minutes
 ### Common Issues and Solutions
 **Problem:** "Long/short verses checklist flags many verses, but they're correct"
 - **Solution:** Biblical verses vary in length naturally. Review flagged verses, but if they're accurate to the original, note them as correct. The checklist just identifies unusual cases for review.
-**Problem:** "I can't find a specific checklist mentioned in this module"
+**Problem:** "I can't find a specific checklist mentioned in this chapter"
 - **Solution:** Checklist availability varies by Paratext version. If a specific checklist isn't available, ask your Language Technology Consultant for alternatives or updates.
 **Problem:** "Section headings checklist shows I'm missing headings, but I intentionally didn't add them"
 - **Solution:** Some projects use fewer headings than others. If your project style uses minimal headings, document this decision. Ensure the choice is intentional and approved by your Translation Consultant.
@@ -260,7 +263,6 @@ After completing this module, verify that you have:
 - Book title formatting questions (publication conventions)
 ---
 ## Summary and Next Steps
-**Time:** 2 minutes
 ### Key Takeaways
 - Formatting checks use systematic checklists to verify publication readiness
 - Previous FC module work should be reviewed and issues resolved
@@ -269,7 +271,7 @@ After completing this module, verify that you have:
 - Consistency in formatting creates professional, reader-friendly publications
 - Documentation of decisions helps with future work and team continuity
 ### What Comes Next
-After completing formatting checks, the final module covers **Glossary Linking**. You'll learn to:
+After completing formatting checks, the final chapter covers **Glossary Linking**. You'll learn to:
 - Mark glossary words in the text with links
 - Use the Biblical Terms tool to automate linking
 - Choose appropriate linking frequency

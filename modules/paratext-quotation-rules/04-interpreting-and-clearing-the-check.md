@@ -72,27 +72,39 @@ and reasoning are what a mentor reviews.
 
 ### Exercise 4.1 — Triage a dirty result set
 
-The `tamba` project has been seeded with the following issues. **Before reading further, fill
-in the Your prediction column for all five rows — write 1 (Real error) or 2 (Configuration
-problem).** Only after you have written a prediction for every row should you read the
-discovery prompts and open the verses.
+The `tamba` project has been seeded with five issues — but the check reports **seven** results,
+because one issue (#3) is a single broken mark whose damage is reported back as three separate,
+differently-worded results at three different verses. This is common: a break in the middle of a
+nested quotation chain confuses the tracking on both sides of the break, so the checker reports
+the symptom in multiple places even though there is exactly one thing to fix. **Before reading
+further, fill in the Your prediction column for all five rows — write 1 (Real error) or 2
+(Configuration problem). For row 3, make one prediction that covers all three linked results.**
+Only after you have written a prediction for every row should you read the discovery prompts and
+open the verses.
 
 | # | Location | Check message | Your prediction | Actual type |
 |---|----------|--------------|----------------|------------|
-| 1 | Matthew 5:3 | Missing closing quotation mark | ? | ? |
-| 2 | Luke 4:18 | Unexpected opening quotation mark | ? | ? |
-| 3 | John 3:16 | Invalid Second level quotation mark | ? | ? |
-| 4 | Acts 2:25 | Unclosed quotation mark at paragraph break | ? | ? |
-| 5 | Romans 1:1 | Unexpected closing quotation mark | ? | ? |
+| 1 | Matthew 5:3 | "Closing quote mark is possibly missing before verse 7:28" | ? | ? |
+| 2 | Luke 4:18 | "Closing quote mark is possibly missing before verse 20" | ? | ? |
+| 3 | John 3:10, 3:16, 3:21 — **one seed, three linked results** | 3:10: "Quote opened; see following message for error" · 3:16: "Expected continuers [“] are missing OR quote not closed; see preceding message" · 3:21: "Closing quote mark [”] found without matching opening" | ? | ? |
+| 4 | Acts 2:25 | "Opening quote mark found without matching closing quote mark" | ? | ? |
+| 5 | Romans 1:1 | "Closing quote mark [’ U+2019] found as a word medial character. Sometimes caused when a closing quote is incorrectly used as an apostrophe" | ? | ? |
 
 **✏️ Discovery prompts for each item:**
-- Matthew 5:3 opens a speech that runs through verse 5:12. What closing mark should appear at
-  5:12, and what does the check report when it is absent?
+- Matthew 5:3 opens a speech that runs through verse 7:28 — the whole Sermon on the Mount, not
+  just the Beatitudes. What closing mark should appear at 7:28, and what does the check report
+  when it is absent?
 - Luke 4:18 contains an Isaiah citation. Does Tamba use dialogue marks for narrator scripture
-  citations? If not, what should you do with a stray opening `“` before the citation?
-- John 3:16 is inside Jesus's speech to Nicodemus. The inner quotation at this verse is Second
-  level. What character should the Second level opening mark be in Tamba? If you see a straight
-  `"` (U+0022) instead, is that a valid Tamba Second level mark?
+  citations? If not, what should you do with a stray opening `“` before the citation? Notice the
+  check doesn't call this mark "unexpected" — it just treats it as a legitimate new opening and
+  complains that *its* close is missing, wherever the next real closing mark happens to fall.
+  What does that tell you about how much the checker actually "knows" about your language's
+  conventions?
+- John 3:10, 3:16, and 3:21 are three separate results, but open the whole span in one sitting.
+  The inner quotation at 3:16 is Second level. What character should the Second level opening
+  mark be in Tamba? If you see a straight `"` (U+0022) instead, is that a valid Tamba Second
+  level mark? Once you spot the one broken mark, ask yourself: does fixing only that one
+  character, then re-running the check, clear all three results, or just one?
 - Acts 2:25–28: Peter cites Psalm 16 in Second level marks as one continuous span across
   several paragraph breaks. Recall the Tamba conventions in The Fictional Project table: what
   does Tamba do with quotation marks at each new paragraph of continued speech? Does this text
@@ -104,9 +116,9 @@ discovery prompts and open the verses.
 
 | # | Actual type | Action |
 |---|-------------|--------|
-| 1 | Real error | Add the missing `”` (U+201D) at the end of Matthew 5:12. The First level speech opened with `“` (U+201C) at verse 5:3; the closing mark was deleted. |
+| 1 | Real error | Add the missing `”` (U+201D) at the end of Matthew 7:28. The First level speech opened with `“` (U+201C) at verse 5:3 and runs continuously through the whole Sermon on the Mount; the closing mark at 7:28 was deleted. |
 | 2 | Real error | Delete the stray `“` (U+201C) before the Isaiah citation in Luke 4:18. Tamba does not mark narrator scripture citations; the mark was added by mistake. |
-| 3 | Real error | The Second level opening mark in John 3:16 is a straight `"` (U+0022) rather than `‘` (U+2018). Replace it with `‘` (U+2018) and confirm the closing `’` (U+2019) is also present. |
+| 3 | Real error (one fix, three results) | The Second level opening mark in John 3:16 is a straight `"` (U+0022) rather than `‘` (U+2018). That single wrong character is what produces all three results: the checker reports the true Second level quote as "opened" at 3:10 (where it actually starts), then loses track at 3:16 because the mark there isn't recognized as the expected continuation, then reports an orphaned First-level-looking closing mark at 3:21 that no longer has anything to match against. Replace the one character at 3:16 with `‘` (U+2018), confirm the closing `’` (U+2019) is present at the end of the quotation, re-run the check, and all three results — 3:10, 3:16, and 3:21 — should clear together. Do not chase 3:10 or 3:21 individually; there is nothing wrong at those verses themselves. |
 | 4 | Real error | Tamba restarts quotation marks at every paragraph break, but the Psalm 16 citation runs from 2:25 to 2:28 as one unbroken Second level span. Edit the text: close with `’` (U+2019) at the end of each paragraph and reopen with `‘` (U+2018) at the start of the next, so every paragraph carries a complete pair. |
 | 5 | Configuration problem | The `’` (U+2019) in Romans 1:1 is an apostrophe inside a word, which Paratext reads as the Second level closing mark with no matching opener. Navigate to ☰ > Project settings > Language Settings > Other Characters tab and add `’` (U+2019) to the Word-medial punctuation field. |
 
@@ -127,6 +139,12 @@ cleared by fixing the text or adjusting the configuration.
 6. When unsure whether a result is a real error or a configuration problem, look at how often
    the same message appears: the same message repeated across many verses usually points to a
    configuration gap; a one-off result usually points to a real error in that verse.
+7. Watch for **linked results**: a cluster of *different* messages at nearby verses — typically
+   an "opened"/"quote opened" message, followed by an "expected continuer" or "not closed"
+   message, followed by an orphaned "closing mark found without matching opening" further on —
+   usually traces back to one broken mark in the middle of the chain, not three separate errors.
+   Fix the one mark, re-run, and confirm the whole cluster clears together before treating any of
+   the other verses in the cluster as needing their own fix.
 
 **Completion criteria:**
 - The Quotations check shows 0 results for the current scope.

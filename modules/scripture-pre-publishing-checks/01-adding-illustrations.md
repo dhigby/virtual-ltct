@@ -32,7 +32,7 @@ Before starting this chapter, ensure:
 - The translation is finalized and approved
 - The translator has internet access
 - The translator has sufficient storage space in their Pictures folder
-- The translator has editing permissions for the Paratext project
+- The translator has editing permissions for all the books in the Paratext project
 
 # **Procedure Walkthrough**
 
@@ -89,7 +89,7 @@ The first part of this process takes place in Windows, before opening Paratext. 
 6. Open/extract the zip file
 7. Find the single folder inside: Illustrations – English
 8. Move this entire folder to the Pictures folder
-    1. On Windows: Usually C:\Users\[YourName]\Pictures
+    1. On Windows: Usually `C:\Users\[YourName]\Pictures`
     2. Windows will automatically start indexing the image contents for searching
 
 Tip

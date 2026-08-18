@@ -83,7 +83,7 @@ Distribute Phase A before learners begin Lesson 1. Learners configure the invent
 
 **Phase B — Lesson 4 (configured + seeded errors)**
 - Quote marks tab: fully configured per the Tamba settings above (Exercise 2.1 values)
-- Quotation types tab: recommended defaults with one customization — Self quote = **Use quote marks** (the Exercise 3.2 result)
+- Quotation types tab: recommended defaults with three customizations, confirmed against a real Paratext 9.5 build — Quotation from another source = **Quote marks are optional**, Continued quotation = **Use quote marks**, Indirect = **Never use quote marks** (the Exercise 3.2 result). Self quote already defaults to Use quote marks, which matches Tamba's requirement, so it is left unchanged.
 - Text: same as Phase A, plus the five deliberate errors from the Lesson 4 Seeding table below
 
 Distribute Phase B (or push an update) before Exercise 4.1. For a group session, the simplest approach is to distribute Phase A, let learners work through Lessons 1–3 themselves, then have the facilitator push the five seed edits to the shared project before Lesson 4 begins.

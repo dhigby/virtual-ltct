@@ -58,13 +58,13 @@ yourself."
 
 ### Segment 3 — The Quotation types tab (companion to Lesson 3)
 
-> ~2 minutes. Concept + the one custom change. Don't recite all seven types on camera.
+> ~2.5 minutes. Concept + the three custom changes. Don't recite all seven types on camera.
 
 | On-screen | Voiceover / talking points |
 | --- | --- |
 | Click the **Quotation types** tab. Show the seven type rows and the Recommended/Custom controls at the top. (`ss-L289-quotation-types-tab.png`.) | "Input two lives on the second tab. This one isn't about characters at all — it's about meaning. For each of seven kinds of speech, you tell Paratext: expect marks, never expect marks, or don't care." |
 | Point to the **Use recommended settings** control, then to the enable checkbox at the top. | "Start with Use recommended settings — for most projects that's most of the work done. Note the enable checkbox at the top: only a project administrator can tick it. You can configure everything else; if you're not an admin, set it up and then ask them to flip that switch." |
-| Switch to **Custom settings** and change one row — **Self quote** — from *optional* to **Use quote marks**. | "You only go to Custom settings when your language diverges. In our Tamba project, self-quotes have to be marked like any other speech, so we change that one row. That's the pattern: recommended as your baseline, custom for the exceptions your team has confirmed." |
+| Switch to **Custom settings** and change three rows — **Quotation from another source** to *optional*, **Continued quotation** to **Use quote marks**, and **Indirect** to **Never use quote marks**. Point out that **Self quote** is left alone because it already defaults to Use quote marks, which is what Tamba needs. | "You only go to Custom settings when your language diverges — and check each row, because the defaults don't always match what you'd guess. In our Tamba project, three types need to change; Self quote turns out to already be right, so we leave it. That's the pattern: recommended as your baseline, custom for the exceptions your team has confirmed — verified against the actual project, not assumed." |
 
 ### Segment 4 — Reading and clearing results (companion to Lesson 4)
 

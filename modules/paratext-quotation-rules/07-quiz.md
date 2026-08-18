@@ -76,21 +76,22 @@ the Quote marks tab?
 - C) It is an older version of the Quote marks tab and does the same thing
 - D) It controls only Third level quotes; the Quote marks tab controls the first two levels
 
-**Question 8:** In the recommended settings, **Indirect** speech ("He said that the road
-was long") is set to which option, and why?
-- A) Use quote marks — reported speech should always be marked
-- B) Quote marks are optional — reported speech may or may not be marked
-- C) Never use quote marks — reported speech carries no direct marks, so the check should
-  flag any that appear
+**Question 8:** Tamba's convention is that indirect/reported speech ("He said that the road
+was long") never carries quote marks at all — a stray mark there would be a translator error.
+Paratext's recommended default for **Indirect** is "Quote marks are optional." What do you do?
+- A) Leave it — optional already permits no marks, so nothing needs to change
+- B) Click **Custom settings** and change Indirect to **Never use quote marks**, so the check
+  flags any stray mark a translator introduces in reported speech
+- C) Change Indirect to **Use quote marks**, since reported speech still needs marking
 - D) It is not one of the seven quotation types
 
 **Question 9:** After reviewing Tamba's text, the team confirms that a self-quote (a
 character quoting their own earlier words) **must** be marked exactly like normal direct
-speech, but the recommended default for Self quote is "Quote marks are optional." What do
-you do?
-- A) Leave it — optional already allows marks
-- B) Click **Custom settings** and change Self quote to **Use quote marks** so missing
-  marks are flagged
+speech. You open the Quotation types tab and find **Self quote** is already set to "Use
+quote marks." What do you do?
+- A) Nothing — it already matches Tamba's requirement; move on to the types that do need to
+  change (Quotation from another source, Continued quotation, Indirect)
+- B) Click **Custom settings** and change Self quote to **Use quote marks** anyway, to be safe
 - C) Delete the Self quote row from the tab
 - D) Change every type to Use quote marks
 
@@ -176,10 +177,13 @@ means the Quotations check ends at zero results.
    dialog.
 7. B — Lesson 3: the Quotation types tab controls whether marks are expected; the Quote
    marks tab controls which characters are used.
-8. C — Lesson 3 recommended settings: Indirect = Never use quote marks; reported speech
-   carries no direct marks.
-9. B — Lesson 3 Exercise 3.2: switch to Custom settings and set Self quote to Use quote
-   marks so missing marks are flagged.
+8. B — Lesson 3 Exercise 3.2: the recommended default for Indirect is Quote marks are
+   optional; Tamba's convention that reported speech is never marked requires switching it
+   to Never use quote marks so a stray mark gets caught.
+9. A — Lesson 3 Exercise 3.2: Self quote already defaults to Use quote marks, which matches
+   Tamba's requirement — no change needed there. Not every recommended default is wrong;
+   verify each type against your language's conventions rather than assuming all seven need
+   customizing.
 10. B — Lesson 4 Exercise 4.1 item 5: a word-medial apostrophe is a configuration problem
     fixed in Language Settings, not by editing text.
 11. B — Lesson 4 Exercise 4.1 item 3: a straight `"` (U+0022) at Second level is a real

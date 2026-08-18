@@ -105,9 +105,10 @@ For self-paced learners working alone, USB or file share is simplest. For instru
 ## Project Setup: `runda` (Lesson 2)
 
 `runda` is a second fictional project, alongside `tamba`, used hands-on in Lesson 2
-(Exercises 2.2–2.3) to practice a different character set (guillemets) and the word-medial
-apostrophe conflict. It must be installed before learners start Lesson 2, not just before the
-scenario bank.
+(Exercises 2.2–2.3) to practice a different character set (guillemets) and to work through the
+word-medial apostrophe conflict — including discovering, on a real Paratext 9.5 check, that
+Word-medial punctuation does not actually clear the resulting flag. It must be installed before
+learners start Lesson 2, not just before the scenario bank.
 
 | Field | Value |
 |-------|-------|
@@ -115,7 +116,9 @@ scenario bank.
 | Minimum books suggested | Matthew, Luke, John (dialogue-heavy) |
 
 Include words using `’` (U+2019) as an apostrophe somewhere in the text, so Exercise 2.3's
-word-medial punctuation conflict has real examples to resolve. Leave the Quote marks tab and
+word-medial punctuation conflict has real examples to work through — the exercise now expects
+learners to confirm the check keeps flagging these even after configuring Word-medial
+punctuation, not to reach zero results. Leave the Quote marks tab and
 Quotation Rules blank — learners configure both during Lesson 2. A prebuilt backup accompanies
 this course as `Runda.zip`.
 
@@ -150,7 +153,7 @@ The five underlying issues in Exercise 4.1 must be manually introduced into the 
 | 2 | Luke 4:18 | Insert a stray `“` (U+201C) immediately before the first word of the Isaiah citation. Tamba does not mark narrator scripture citations; the stray mark mimics a translator adding a dialogue opener by mistake. |
 | 3 | John 3:16 | Replace the Second level opening mark `‘` (U+2018) with a straight `"` (U+0022) at the start of Jesus's embedded statement within his speech to Nicodemus. This one corrupted character breaks quotation tracking on both sides of it: confirmed in a Paratext 9.5 run to produce three linked results — "Quote opened; see following message for error" at 3:10 (the quotation's true start), "Expected continuers [“] are missing OR quote not closed; see preceding message" at 3:16 (the corrupted mark itself), and "Closing quote mark [”] found without matching opening" at 3:21 (the orphaned close). Fixing the single character at 3:16 and re-running clears all three. |
 | 4 | Acts 2:25–28 | Mark Peter's Psalm 16 citation as a single continuous Second level block: add `‘` (U+2018) at the start of verse 2:25 and `’` (U+2019) at the end of verse 2:28. Do **not** close and reopen at the intermediate paragraph breaks (make sure the text has at least one \p break inside 2:25–28 — the seed depends on it). Tamba restarts marks at every paragraph, so the check reports the span as unclosed; learners identify it as a real error and add the close/reopen pairs. |
-| 5 | Romans 1:1 | In a possessive or contraction in the verse text (e.g., *God’s word*), use `’` (U+2019) as the apostrophe. Phase A text has no apostrophes; this one creates the conflict between the Second level closing mark (U+2019) and a word-medial apostrophe, generating a spurious quotation result. |
+| 5 | Romans 1:1 | In a possessive or contraction in the verse text (e.g., *God’s word*), use `’` (U+2019) as the apostrophe. Phase A text has no apostrophes; this one creates the conflict between the Second level closing mark (U+2019) and a word-medial apostrophe, generating a spurious quotation result. Confirmed on a real Paratext 9.5 build: this result is permanent — adding `’` to Word-medial punctuation does not clear it. Do not seed this expecting learners to reach zero results in Romans; Exercise 4.2's completion criteria account for this one exception. |
 
 After seeding, run the Quotation check and confirm all seven results (five seeds, with #3 producing three) appear before distributing the project to learners. The Exercise 4.1 table already reflects verified Paratext 9.5 message wording for this build; if you rebuild the project from scratch and the wording or locations differ, update that table to match before distributing the course.
 

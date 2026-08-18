@@ -30,7 +30,7 @@ and troubleshooting one specific check (Quotations), which is squarely "With Ass
 | --- | --- | --- | --- |
 | 1 | Learner can explain why the Quotation check produces no trustworthy results before it is configured, and name the two inputs it needs (inventory + rules). | Translation Tools §2.0 (use/troubleshoot) | Quiz §1; Lesson 1 exercise 1.1 |
 | 2 | Learner can enter the correct opening/closing quote-mark characters for each nesting level on the Quote marks tab and verify them via the Example preview. | Translation Tools §2.0 | Quiz §2; Lesson 2 exercises 2.1–2.2 |
-| 3 | Learner can configure the Quote Continuer at new paragraph and resolve the word-medial apostrophe conflict in Language Settings. | Translation Tools §2.0 (troubleshoot) | Quiz §2; Lesson 2 exercises 2.1–2.2 (continuer), 2.3 (apostrophe) |
+| 3 | Learner can configure the Quote Continuer at new paragraph and recognize the word-medial apostrophe conflict as a confirmed limitation Language Settings cannot resolve when the character is also a quote mark. | Translation Tools §2.0 (troubleshoot) | Quiz §2; Lesson 2 exercises 2.1–2.2 (continuer), 2.3 (apostrophe) |
 | 4 | Learner can configure each of the seven Quotation types for a given language's conventions and distinguish recommended vs. custom settings. | Translation Tools §2.0 | Quiz §3; Lesson 3 exercises 3.1–3.2 |
 | 5 | Learner can classify a check result as a real error or a configuration problem and take the correct corrective action for each. | Translation Tools §2.0 (troubleshoot) | Quiz §4; Lesson 4 exercise 4.1 |
 | 6 | Learner can work a result set to zero actionable errors, book by book, without silencing correct text. | Translation Tools §2.0 | Quiz §4; Lesson 4 exercise 4.2 |
@@ -66,9 +66,13 @@ assessment is the consolidated quiz.
 _Retro-fit — no formal SME interview was conducted for this design. The content encodes the
 following field knowledge (to be confirmed at SME fact-check, stage 5):_
 
-- The apostrophe/closing-quote conflict (U+2019 serving as both) is resolved in **Language
-  Settings → Other Characters → Word-medial punctuation**, *not* in the Quotation Rules
-  dialog. This is the single most common real-world stumbling block.
+- The apostrophe/closing-quote conflict (U+2019 serving as both) is **not** actually resolvable
+  through **Language Settings → Other Characters → Word-medial punctuation** — confirmed
+  against real Paratext 9.5 behavior, that setting has no effect once the character is also a
+  configured quote mark. The check keeps flagging every genuine apostrophe regardless. This is
+  the single most common real-world stumbling block, precisely because the UI suggests a fix
+  that doesn't work; the correct handling is to verify and document the result, not chase a
+  configuration change.
 - The **Quotation types** check is a separate, administrator-enabled check that only checks
   first-level quotes in non-Deuterocanonical books.
 - Same-character open/close (em-dash languages like the fictional Waku) cannot always be

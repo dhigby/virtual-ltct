@@ -18,6 +18,8 @@ By the end of this lesson you will be able to:
 
 - Classify a check result as a real error or a configuration problem.
 - Take the correct corrective action for each type.
+- Recognize the rare case where a result is neither — a genuine collision Paratext cannot
+  resolve through configuration — and know what to do with it instead.
 - Work through a result set systematically to reach zero actionable errors.
 
 ## Connect
@@ -49,6 +51,17 @@ After configuration you will typically have two kinds of results:
 2. **Configuration problems** — the check flags something that reveals a gap in your inventory
    or rules. Fix these by refining the configuration, not by editing the text.
 
+**A rare third case:** occasionally a result is neither. When the same character is used as
+both a Second (or Third) level closing mark and a word-medial apostrophe, Paratext's
+Word-medial punctuation setting (Language Settings > Other Characters) — which looks built for
+exactly this — does not actually suppress the resulting "closing quote found as a word medial
+character" flag, confirmed against real Paratext 9.5 behavior. There is no text fix (the
+apostrophe is correct) and no configuration fix (the setting doesn't take effect once the
+character is already a quote mark). The correct action is to verify the flagged instance really
+is a genuine apostrophe, then leave it and move on — document it for whoever inherits the
+project rather than losing time hunting for a setting that doesn't exist. You'll meet this
+exact case in Exercise 4.1, item 5.
+
 ![The Quotations check results panel after full configuration, showing a manageable list of results. One result is highlighted with the verse open alongside it, demonstrating how to read a result entry (location, message, and the text in context).](ss-L429-results-with-highlight.png)
 
 Read each result as three parts: the **location** (book, chapter, verse), the **message** (what
@@ -58,9 +71,11 @@ gap**; a one-off result usually points to a **real error** in that verse.
 
 **Key takeaways**
 
-- Every result is one of two types: real error (fix the text) or configuration problem (fix the
-  Quote marks tab or Quotation types tab).
+- Almost every result is one of two types: real error (fix the text) or configuration problem
+  (fix the Quote marks tab or Quotation types tab).
 - Never edit correct text to make a result disappear — fix the configuration instead.
+- The one confirmed exception: a quote-mark/apostrophe character collision. Neither fix
+  applies — verify it's genuine, document it, and move on.
 - Work book by book — Matthew first, then expand. A full-NT result list is overwhelming; a
   single-book list is actionable.
 
@@ -77,10 +92,10 @@ because one issue (#3) is a single broken mark whose damage is reported back as 
 differently-worded results at three different verses. This is common: a break in the middle of a
 nested quotation chain confuses the tracking on both sides of the break, so the checker reports
 the symptom in multiple places even though there is exactly one thing to fix. **Before reading
-further, fill in the Your prediction column for all five rows — write 1 (Real error) or 2
-(Configuration problem). For row 3, make one prediction that covers all three linked results.**
-Only after you have written a prediction for every row should you read the discovery prompts and
-open the verses.
+further, fill in the Your prediction column for all five rows — write 1 (Real error), 2
+(Configuration problem), or 3 (Neither — cannot be resolved through configuration). For row 3,
+make one prediction that covers all three linked results.** Only after you have written a
+prediction for every row should you read the discovery prompts and open the verses.
 
 | # | Location | Check message | Your prediction | Actual type |
 |---|----------|--------------|----------------|------------|
@@ -110,7 +125,9 @@ open the verses.
   does Tamba do with quotation marks at each new paragraph of continued speech? Does this text
   follow that convention?
 - Romans 1:1 has no dialogue. How could `’` (U+2019) inside a word cause the check to report a
-  quotation problem? What is the correct fix?
+  quotation problem? Try the fix Lesson 2 taught for this exact situation (Word-medial
+  punctuation in Language Settings) and re-run the check with a genuinely fresh run, not just
+  "Rerun" on the open panel. Does the result actually clear?
 
 **Expected resolution (answer key):**
 
@@ -120,22 +137,31 @@ open the verses.
 | 2 | Real error | Delete the stray `“` (U+201C) before the Isaiah citation in Luke 4:18. Tamba does not mark narrator scripture citations; the mark was added by mistake. |
 | 3 | Real error (one fix, three results) | The Second level opening mark in John 3:16 is a straight `"` (U+0022) rather than `‘` (U+2018). That single wrong character is what produces all three results: the checker reports the true Second level quote as "opened" at 3:10 (where it actually starts), then loses track at 3:16 because the mark there isn't recognized as the expected continuation, then reports an orphaned First-level-looking closing mark at 3:21 that no longer has anything to match against. Replace the one character at 3:16 with `‘` (U+2018), confirm the closing `’` (U+2019) is present at the end of the quotation, re-run the check, and all three results — 3:10, 3:16, and 3:21 — should clear together. Do not chase 3:10 or 3:21 individually; there is nothing wrong at those verses themselves. |
 | 4 | Real error | Tamba restarts quotation marks at every paragraph break, but the Psalm 16 citation runs from 2:25 to 2:28 as one unbroken Second level span. Edit the text: close with `’` (U+2019) at the end of each paragraph and reopen with `‘` (U+2018) at the start of the next, so every paragraph carries a complete pair. |
-| 5 | Configuration problem | The `’` (U+2019) in Romans 1:1 is an apostrophe inside a word, which Paratext reads as the Second level closing mark with no matching opener. Navigate to ☰ > Project settings > Language Settings > Other Characters tab and add `’` (U+2019) to the Word-medial punctuation field. |
+| 5 | Neither — confirmed unresolvable | The `’` (U+2019) in Romans 1:1 is a genuine apostrophe inside a word, which Paratext reads as the Second level closing mark with no matching opener. Adding `’` to ☰ > Project settings > Language Settings > Other Characters > Word-medial punctuation looks like the fix (and is what Lesson 2 teaches), but confirmed against real Paratext 9.5 behavior, it does **not** suppress this result — the check keeps flagging it even after the setting is saved and a fully fresh check is run. There is no text change to make either (the apostrophe is correct as written). Verify the character really is a word-medial apostrophe, then leave the result and move on; note it for anyone else who picks up this project so they don't re-attempt the same fix. |
 
-### Exercise 4.2 — Reach zero actionable errors
+### Exercise 4.2 — Reach zero *actionable* errors
 
-**Goal:** Work through the full result list for the `tamba` project until every result has been
-cleared by fixing the text or adjusting the configuration.
+**Goal:** Work through the full result list for the `tamba` project until every result has
+either been cleared (by fixing the text or adjusting the configuration) or, for the one
+confirmed unresolvable case, verified and documented as an expected false positive. "Zero
+actionable errors" does not mean a literal zero-length results list once Romans is in scope —
+it means nothing left in the list still needs your action.
 
 **Steps:**
-1. Limit the scope to Matthew first. Work that book to zero results before expanding.
+1. Limit the scope to Matthew first. Work that book to zero results before expanding — Matthew
+   has no unresolvable cases, so a true zero is the right target there.
 2. Work through the results top-to-bottom.
 3. For each result: open the verse, classify it, take the appropriate action.
    - **Real error:** edit the verse text to fix the mark, then re-run.
    - **Configuration problem:** adjust the Quote marks tab or Quotation types tab, then re-run.
      Do not edit the text to make marks disappear — fix the configuration instead.
+   - **Neither (confirmed unresolvable):** a quote-mark/apostrophe collision, like Romans 1:1.
+     Verify the flagged character is genuinely a word-medial apostrophe, then leave it — do not
+     keep trying configuration changes to clear it, and do not edit the text.
 4. After fixing a batch of real errors, re-run the check to confirm the count drops.
-5. Once Matthew is clean, expand the scope one book at a time through the NT.
+5. Once Matthew is clean, expand the scope one book at a time through the NT. When you reach
+   Romans, expect the count to stop at 1 (the 1:1 apostrophe) rather than reaching 0 — that
+   remaining result is correct, not a sign something is still wrong.
 6. When unsure whether a result is a real error or a configuration problem, look at how often
    the same message appears: the same message repeated across many verses usually points to a
    configuration gap; a one-off result usually points to a real error in that verse.
@@ -147,7 +173,9 @@ cleared by fixing the text or adjusting the configuration.
    the other verses in the cluster as needing their own fix.
 
 **Completion criteria:**
-- The Quotations check shows 0 results for the current scope.
+- The Quotations check shows 0 results for every book except Romans.
+- Romans shows exactly 1 result (the 1:1 apostrophe), verified as a genuine word-medial
+  apostrophe and documented rather than chased with further configuration changes.
 
 ![The Quotations check results panel showing zero results, confirming the check is clean.](ss-L477-zero-results.png)
 

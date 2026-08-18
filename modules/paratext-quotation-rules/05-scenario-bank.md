@@ -47,7 +47,7 @@ These exercises use three new fictional projects. Each has a different quotation
 No Third level. First level opening mark `«` also appears at the start of continued paragraphs.
 
 **Discovery prompts:**
-- Velna uses `’` (U+2019) as both its Second level closing mark and as an apostrophe. How does the Word-medial punctuation setting resolve this conflict?
+- Velna uses `’` (U+2019) as both its Second level closing mark and as an apostrophe. Try adding `’` to Word-medial punctuation as Lesson 2 taught — does it actually clear the resulting check result here too?
 - How would you verify that the text contains `«` (U+00AB) rather than `<<` (two less-than signs)?
 
 **Expected configuration:**
@@ -57,12 +57,20 @@ No Third level. First level opening mark `«` also appears at the start of conti
 | First level | `«` | `«` | `»` |
 | Second level | `‘` | *(blank)* | `’` |
 
-Word-medial punctuation: add `’` (U+2019) in ☰ > Project settings > Language Settings > Other Characters tab > Word-medial punctuation.
+Word-medial punctuation: add `’` (U+2019) in ☰ > Project settings > Language Settings > Other Characters tab > Word-medial punctuation — do this anyway, since it's the correct habit to build, but confirmed on a real Paratext 9.5 build, it will **not** stop the check from flagging Velna's word-medial apostrophes. That's expected: once `’` is already a configured quote mark, this setting has no effect on it. Treat any remaining apostrophe results as verified false positives, not something left to configure away.
+
+**Quotation types tab:** confirmed on a real Paratext 9.5 build: Velna needs exactly **one**
+change from recommended defaults — **Continued quotation = Use quote marks** (the First level
+continuer means a mark is expected at every continued paragraph, same reasoning as Tamba in
+Lesson 3). Unlike Tamba, Velna has no narrator-citation, self-quote, or indirect-speech
+exceptions, so every other type — Normal, Quotation from another source, Self quote, Potential,
+Indirect, Hypothetical — stays at its recommended default.
 
 **Check your work:**
 - After configuration, run the check on Luke. Verify that `«...»` speech boundaries are recognized correctly and narrative passages generate no results.
-- Verify that apostrophes inside words (contractions, possessives) do not appear in the results. If they do, the Word-medial punctuation setting for U+2019 is missing.
+- Confirm that apostrophes inside words (contractions, possessives) are still flagged even after configuring Word-medial punctuation — that's the expected, confirmed outcome for this collision, not a sign of a missing setting. Verify each is a genuine apostrophe and move on.
 - Confirm the First level Quote Continuer (`«`) at the start of continued paragraphs is not flagged as an unexpected mark.
+- Enable the Quotation types check and run it on Matthew, Luke, and John. It should return clean once Continued quotation is set to Use quote marks — this check is separate from the apostrophe results above, which live in the Quotations check and remain regardless.
 
 ---
 

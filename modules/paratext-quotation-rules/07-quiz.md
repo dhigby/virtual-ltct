@@ -48,12 +48,14 @@ column configure, and when should it be left blank?
 
 **Question 5:** A language uses `’` (U+2019) as both its Second level closing mark **and**
 as an apostrophe inside words, and the check is flagging those in-word apostrophes as
-unclosed quotations. Where in Paratext 9.5 do you fix this, and what do you enter?
-- A) In the Quotation Rules dialog, Quote marks tab — remove `’` from the Closing cell
-- B) In the Quotation types tab — set Normal to "Quote marks are optional"
-- C) In ☰ > Project settings > Language Settings > Other Characters tab — add `’`
-  (U+2019) to the Word-medial punctuation field
-- D) In the Run basic checks dialog — untick the Quotations check for that book
+unclosed quotations. You add `’` (U+2019) to ☰ > Project settings > Language Settings > Other
+Characters > Word-medial punctuation — the field that looks built for exactly this — save, and
+run a genuinely fresh check. What happens?
+- A) The apostrophe results clear immediately
+- B) The apostrophe results are still flagged — this setting does not suppress the result once
+  the character is also a configured quote mark, confirmed against real Paratext 9.5 behavior
+- C) Paratext refuses to save the setting at all
+- D) The setting clears the apostrophe results but introduces new ones elsewhere
 
 **Question 6:** After entering the opening and closing characters for each nesting level on
 the Quote marks tab, what is the recommended way to confirm you selected the correct
@@ -100,11 +102,12 @@ quote marks." What do you do?
 ### Section 4: Interpreting and Clearing the Check (Questions 10-12)
 
 **Question 10:** The check flags **Romans 1:1** — a verse with no dialogue — for an
-unexpected Second level closing mark, caused by a `’` (U+2019) apostrophe inside a word. Is
-this a real error or a configuration problem, and what is the correct action?
+unexpected Second level closing mark, caused by a `’` (U+2019) apostrophe inside a word. You've
+already confirmed, on a real project, that adding `’` to Word-medial punctuation does not clear
+this. Is this a real error or a configuration problem, and what is the correct action?
 - A) Real error — delete the apostrophe from the word
-- B) Configuration problem — add `’` (U+2019) to the Word-medial punctuation field in
-  Language Settings; do not edit the text
+- B) Neither — verify the apostrophe is genuine, then leave the result and document it; there
+  is no text or configuration fix for this collision
 - C) Real error — replace the apostrophe with a straight quote
 - D) Configuration problem — set Normal to "Never use quote marks"
 
@@ -171,8 +174,9 @@ means the Quotations check ends at zero results.
    Exercise 4.2).
 4. B — Lesson 2: the Quote Continuer at new paragraph repeats the mark when one speech
    spans paragraphs; leave it blank if the language closes and reopens at each break.
-5. C — Lesson 2 Exercise 2.3: the apostrophe/closing-quote conflict is resolved in Language
-   Settings > Other Characters > Word-medial punctuation, not in the Quotation Rules dialog.
+5. B — Lesson 2 Exercise 2.3: Word-medial punctuation does not suppress this result once the
+   character is also a configured quote mark, confirmed against real Paratext 9.5 behavior —
+   the field exists and looks like the fix, but doesn't resolve this specific collision.
 6. C — Lesson 2: verify entered characters using the Example preview at the bottom of the
    dialog.
 7. B — Lesson 3: the Quotation types tab controls whether marks are expected; the Quote
@@ -184,8 +188,8 @@ means the Quotations check ends at zero results.
    Tamba's requirement — no change needed there. Not every recommended default is wrong;
    verify each type against your language's conventions rather than assuming all seven need
    customizing.
-10. B — Lesson 4 Exercise 4.1 item 5: a word-medial apostrophe is a configuration problem
-    fixed in Language Settings, not by editing text.
+10. B — Lesson 4 Exercise 4.1 item 5: a word-medial apostrophe colliding with a quote mark is
+    the one confirmed case with no text or configuration fix — verify and document instead.
 11. B — Lesson 4 Exercise 4.1 item 3: a straight `"` (U+0022) at Second level is a real
     error; replace it with `‘` (U+2018).
 12. B — Lesson 4 Exercise 4.2 / check-your-understanding 2: remaining results on correct

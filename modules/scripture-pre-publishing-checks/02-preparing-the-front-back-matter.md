@@ -1,4 +1,4 @@
-ï»¿title: "Preparing Back Matter: Maps, Introductions, and Appendices"
+title: "Preparing Back Matter: Maps, Introductions, and Appendices"
 
 course: "Finalizing Your Translation for Publication"
 
@@ -18,7 +18,7 @@ prerequisites: "Translation content finalized; coordination with typesetter esta
 
 ## Introduction
 
-Your translation of the biblical text is complete. But a published Scripture isn't just the translated textâit needs supporting materials that help readers engage with the content effectively.
+Your translation of the biblical text is complete. But a published Scripture isn't just the translated text—it needs supporting materials that help readers engage with the content effectively.
 
 Maps help readers visualize the geography of biblical events. An introduction orients readers to what they're about to read and why it matters. Appendices provide additional resources like glossaries, chronologies, or explanatory notes.
 
@@ -54,7 +54,7 @@ Each serves a different purpose, but all help readers engage more fully with the
 
 ### Part 1: Preparing Map Names
 
-Maps in published Scripture help readers understand the geographical context of biblical events. Place names â Jerusalem, Galilee, Jericho, Rome â need to appear on those maps in your language, spelled consistently with how they appear in the translated text. The Paratext Diagram Labeler plugin is designed to make this possible.
+Maps in published Scripture help readers understand the geographical context of biblical events. Place names — Jerusalem, Galilee, Jericho, Rome — need to appear on those maps in your language, spelled consistently with how they appear in the translated text. The Paratext Diagram Labeler plugin is designed to make this possible.
 
 **How it works**
 
@@ -65,19 +65,19 @@ When you save your work, the labels are exported automatically into files that y
 **Before you begin**
 
 - Paratext 9 should already be installed
-- It is strongly recommended that you use the Biblical Terms tool to guess renderings for all Names before opening the Labeler â this gives the plugin the best starting point for proposals
+- It is strongly recommended that you use the Biblical Terms tool to guess renderings for all Names before opening the Labeler — this gives the plugin the best starting point for proposals
 - Check with your typesetter which file format they need (.mapx for Map Creator, or .idml for Adobe InDesign)
 
 **Getting started**
 
-1. Install the Paratext Diagram Labeler plugin if not already installed â download from software.sil.org/labeler
+1. Install the Paratext Diagram Labeler plugin if not already installed — download from software.sil.org/labeler
 2. Work through your maps using the plugin, reviewing and confirming place name labels
-3. Save your work â labels are exported automatically to your project's shared folder and included in Send/Receive
+3. Save your work — labels are exported automatically to your project's shared folder and included in Send/Receive
 4. Notify your typesetter that labels are ready
 
 **For detailed guidance**, refer to the full user guide at software.sil.org/labeler/learn, which covers installation, the interface, working with labels, and exporting finished maps.
 
-â ï¸ *Note: This plugin is currently in beta. If you encounter problems or need help installing it, contact your Language Technology Consultant.*
+⚠️ *Note: This plugin is currently in beta. If you encounter problems or need help installing it, contact your Language Technology Consultant.*
 
 ### Part 2: Drafting an Introduction to the NT/Bible
 
@@ -103,7 +103,7 @@ An introduction helps readers understand what they're about to read. It's especi
 
 Use these USFM markers to format your introduction properly:
 
-í ½í²¡ **Tip:** If you're new to USFM markers, think of them like formatting codes. \mt1 = Main Title (level 1), \is = Introduction Section heading, \ip = Introduction Paragraph. Each marker tells the typesetter how to format that content.
+í ½í²¡ **Tip:** If you're new to USFM markers, think of them like formatting codes. \mt1 = Main Title (level 1), \is = Introduction Section heading, \ip = Introduction Paragraph. Each marker tells the typesetter how to format that content.
 
 **\mt1** - Main Title
 
@@ -158,7 +158,7 @@ Consider including sections on:
 - Have it reviewed by community advisors and your Translation Consultant
 - Consider your readers' familiarity with Scripture
 
-â **Best Practice:** Read introductions from published Bibles in related languages for inspiration, but write in your own voice for your specific audience. What works for one culture may not work for another.
+✅ **Best Practice:** Read introductions from published Bibles in related languages for inspiration, but write in your own voice for your specific audience. What works for one culture may not work for another.
 
 ### Step 4: Example Structure
 
@@ -174,7 +174,7 @@ Here's a sample structure using proper markers:
 
 \is The Four Gospels
 
-\ip The first four booksâMatthew, Mark, Luke, and Johnâtell the story of Jesus' life, teaching, death, and resurrection...
+\ip The first four books—Matthew, Mark, Luke, and John—tell the story of Jesus' life, teaching, death, and resurrection...
 
 \is How to Read This Book
 
@@ -225,7 +225,7 @@ Paratext provides several book codes for appendices:
 
 **Important:** Check with your typesetter about which book codes to use. Different publishing systems may have different preferences.
 
-â ï¸ **Important:** Always coordinate with your typesetter BEFORE creating extensive appendix content. Nothing is more frustrating than spending hours formatting an appendix only to learn the typesetter needs it in a completely different format or book code.
+⚠️ **Important:** Always coordinate with your typesetter BEFORE creating extensive appendix content. Nothing is more frustrating than spending hours formatting an appendix only to learn the typesetter needs it in a completely different format or book code.
 
 ### Creating Appendix Content
 

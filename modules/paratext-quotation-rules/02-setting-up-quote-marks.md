@@ -237,6 +237,25 @@ unclosed quotation), and move on — there is no setting that will make the resu
 Document this for whoever inherits the project, so a future checker doesn't waste time hunting
 for a fix that doesn't exist.
 
+**If the orthography is still being decided:** this is the one situation where the team has a
+real fix available — Paratext's own warning when you enter `’` into Word-medial punctuation
+("unique characters are recommended") is pointing at it. Recommend the language team adopt a
+different, unique character for the apostrophe (or, less commonly, for the closing mark) so the
+two roles never collide. That's a project-level decision for the translation team to make, not
+something you configure your way around — but it's worth raising if the orthography isn't
+locked in yet, since it's the only path that actually eliminates the false positives rather than
+just documenting them.
+
+A good concrete recommendation: **`ʼ` (U+02BC MODIFIER LETTER APOSTROPHE)**. It's the character
+the Unicode Standard itself recommends for an apostrophe functioning as a letter — marking a
+glottal stop or similar — as distinct from `’` (U+2019), which is meant for punctuation
+(closing a quotation, or a generic typographic apostrophe in running prose). Visually it's a
+small raised mark close in shape to `’`, so the orthography doesn't change much for readers, but
+it's a completely different code point, so Paratext never confuses it with a configured quote
+mark. For example, a word written `Kalaʼu` (U+02BC) would never generate a quotation result no
+matter what the Second level closing mark is configured to — compare that to `Kala’u` (U+2019),
+which collides the moment `’` is also a quote mark, exactly like Runda and Tamba above.
+
 **Tamba scenario:** Tamba's Second level closing mark is `’` (U+2019). Tamba's Phase A text has
 no contractions or apostrophes, so this conflict never comes up there — but if Tamba's real
 orthography later needed apostrophes written with `’`, this is the same unresolvable collision

@@ -62,6 +62,15 @@ is a genuine apostrophe, then leave it and move on — document it for whoever i
 project rather than losing time hunting for a setting that doesn't exist. You'll meet this
 exact case in Exercise 4.1, item 5.
 
+The one real fix, when it's available, is upstream of the check entirely: if the language's
+orthography is still being finalized, this is worth raising with the translation team as a
+reason to pick a different, unique character for the apostrophe — Lesson 2 recommends `ʼ`
+(U+02BC MODIFIER LETTER APOSTROPHE), the character Unicode itself designates for an apostrophe
+functioning as a letter rather than as punctuation. That eliminates the collision outright
+rather than living with documented false positives — but it's a project-level decision for the
+team, not a Paratext setting, and it isn't available at all for a fixed text like Tamba's, where
+the orthography (real or fictional) is already settled.
+
 ![The Quotations check results panel after full configuration, showing a manageable list of results. One result is highlighted with the verse open alongside it, demonstrating how to read a result entry (location, message, and the text in context).](ss-L429-results-with-highlight.png)
 
 Read each result as three parts: the **location** (book, chapter, verse), the **message** (what

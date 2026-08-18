@@ -100,11 +100,21 @@ At Third level Menda returns to **double guillemets** — `«` opens and `»` cl
 
 Continuation: none. Apostrophe handling: not needed — Menda's Quote marks tab does not use U+2019, so no Word-medial punctuation setting is required.
 
+**Quotation types tab:** unlike Tamba (Lesson 3), Menda needs **no customization at all** — leave
+it on **Use recommended settings**. Confirmed on a real Paratext 9.5 build: with the Quotation
+types check enabled, Menda's text passes clean at the recommended defaults (Normal/Quotation
+from another source/Self quote = Use quote marks; Continued quotation = Never use quote marks;
+Potential/Indirect = Quote marks are optional; Hypothetical = Never use quote marks). Step 5 of
+the scenario workflow still applies — open the tab, tick the enable checkbox (administrator
+required), and verify with a check run — but for Menda that verification is the whole task; there
+is nothing to change.
+
 **Check your work:**
 - Run the check on John (contains clear nested dialogue). Verify that `«...›...‹...»` structures pass without errors.
 - If the check fires on every Second level opening mark, the Opening and Closing fields for Second level are likely reversed. Confirm which character is right-pointing (`›`) and which is left-pointing (`‹`).
 - After entering Second level, check the Example section at the bottom. If › opens and ‹ closes in the example, you have the correct order. The visual difference between `›` and `‹` is easy to miss — use the Example to confirm before clicking OK.
 - John 19:21 contains Menda's rare Third level quotation. Verify it passes once Third level is configured — if 19:21 is flagged, the Third level cells are probably still empty.
+- Enable the Quotation types check and run it on John. It should return clean at recommended settings with no customization — if it doesn't, re-check your Quote marks tab entries first, since a character-level mistake there is more likely than a genuine need to customize types.
 
 ---
 

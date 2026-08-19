@@ -300,14 +300,19 @@ After completing this chapter, verify that the translator can:
 
 **Inserting in Paratext (both options):**
 
-- Open the Figure dialog from the Insert menu
-- Enter a caption in the translation language
-- Enter a description in the LWC (typesetter)
-- Choose appropriate image sizing (column vs. page width)
-- Browse and select an image file (from either source)
-- Insert the correct copyright/attribution text
-- Insert the complete figure into the project
-- See the image displayed at the correct verse
+*Fill in the Figure dialog:*
+
+1. Open the Figure dialog from the Insert menu
+2. Enter a caption in the translation language
+3. Enter a description in the LWC (typesetter)
+4. Choose appropriate image sizing (column vs. page width)
+
+*Insert and confirm:*
+
+1. Browse and select an image file (from either source)
+2. Insert the correct copyright/attribution text
+3. Insert the complete figure into the project
+4. See the image displayed at the correct verse
 
 **To verify the work:**
 

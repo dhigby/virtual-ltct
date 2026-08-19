@@ -77,20 +77,22 @@ The first part of this process takes place in Windows, before opening Paratext. 
 
 ## **Step 1: Download and Set Up the Image Library**
 
-**First time only:**
+**First time only — download the library:**
 
-1. Open this link in the web browser:
-2. [https://tiny.cc/sampleimages](https://tiny.cc/sampleimages)
-3. Right-click on the folder Illustrations – English
-4. Select Download
-    1. The download is approximately 121 MB
-    2. This may take several minutes, depending on the internet connection speed
-5. Once downloaded, locate the zip file in the Downloads folder
-6. Open/extract the zip file
-7. Find the single folder inside: Illustrations – English
-8. Move this entire folder to the Pictures folder
-    1. On Windows: Usually `C:\Users\[YourName]\Pictures`
-    2. Windows will automatically start indexing the image contents for searching
+1. Open this link in the web browser: [https://tiny.cc/sampleimages](https://tiny.cc/sampleimages)
+2. Right-click on the folder **Illustrations – English**
+3. Select **Download**
+    - The download is approximately 121 MB
+    - This may take several minutes, depending on the internet connection speed
+4. Once downloaded, locate the zip file in the **Downloads** folder
+
+**Extract and install it:**
+
+1. Open/extract the zip file
+2. Find the single folder inside: **Illustrations – English**
+3. Move this entire folder to the **Pictures** folder
+    - On Windows: usually `C:\Users\[YourName]\Pictures`
+    - Windows will automatically start indexing the image contents for searching
 
 Tip
 
@@ -114,8 +116,8 @@ The image library is organized so you can search by keywords, Bible references, 
 
 **Open the image folder:**
 
-1. Navigate to the **Pictures** folder using File Explorer
-2. Open the **Illustrations – English** folder
+1. Navigate to the **Pictures** folder using File Explorer
+2. Open the **Illustrations – English** folder
 3. All the images will be displayed
 
 **Search strategies:**
@@ -134,9 +136,9 @@ The image library is organized so you can search by keywords, Bible references, 
 
 **By visual style:**
 
-- Add **black** to your search to see only black-and-white images
-- Add **color** to see only color images
-- Example: **cross black** shows black-and-white images of crosses
+- Add **black** to your search to see only black-and-white images
+- Add **color** to see only color images
+- Example: **cross black** shows black-and-white images of crosses
 
 ⏱ Time Saver
 
@@ -171,9 +173,9 @@ Because Open Bible Images uses CC licensing, teams can download high-resolution 
 1. Open a web browser and navigate to:
 2. [https://openbibleimages.org](https://openbibleimages.org/)
 3. Use the search bar to find images by:
-    1. Scripture passage (e.g., “John”, “Mark 1”)
-    2. Topic or keyword (e.g., “pastor”, “prayer”, “cross”)
-    3. Biblical event (e.g., “baptism of Jesus”, “The Last Supper”)
+    - Scripture passage (e.g., “John”, “Mark 1”)
+    - Topic or keyword (e.g., “pastor”, “prayer”, “cross”)
+    - Biblical event (e.g., “baptism of Jesus”, “The Last Supper”)
 4. Browse the results and click on any image to see the full-size preview and its license details
 
 ## **Step 1B-2: Check the License**
@@ -189,7 +191,7 @@ Before using an image, note the specific Creative Commons license displayed on t
 
 ⚠️ Note on CC BY-NC
 
-Most Bible translation projects are non-commercial ministry work and will qualify for CC BY-NC use. However, if *any* money changes hands for the physical book, the CC BY-NC license might be risky. It’s safer to stick to CC BY, CC BY-SA, or CC0. If you are unsure, check with your Translation Consultant before using images under this license. Remind the team that 'Non-Commercial' is often interpreted strictly by secular copyright holders. If the local church plans to sell these Bibles to cover costs, we strongly recommend sticking to CC0 or CC BY images to avoid future legal friction.
+Most Bible translation projects are non-commercial ministry work and will qualify for CC BY-NC use. However, if *any* money changes hands for the physical book, the CC BY-NC license might be risky. It’s safer to stick to CC BY, CC BY-SA, or CC0. If you are unsure, check with your Translation Consultant before using images under this license. Remind the team that 'Non-Commercial' is often interpreted strictly by secular copyright holders. If the local church plans to sell these Bibles to cover costs, we strongly recommend sticking to CC0 or CC BY images to avoid future legal friction.
 
 ---
 
@@ -199,8 +201,8 @@ Most Bible translation projects are non-commercial ministry work and will qualif
 
 1. On the image page, look for the download option (button or right-click to save)
 2. Save the image to a dedicated folder on your computer
-    1. Suggested location: Pictures > Illustrations – Open Bible Images
-    2. Use a consistent naming convention, e.g., JHN03_Nicodemus.jpg
+    - Suggested location: Pictures > Illustrations – Open Bible Images
+    - Use a consistent naming convention, e.g., JHN03_Nicodemus.jpg
 3. Note the full attribution text shown on the image page — you will need this for the Copyright field in Paratext
 
 Tip:
@@ -261,7 +263,7 @@ Tip: Where to place your cursor
 - Black-and-white images: Printed on the page with the text (inline)
 - Color images: Printed as full-page images inserted together in a signature (separate section)
 
-**Note:** The choice between color and black-and-white affects both cost and layout. Color images are grouped separately, while black-and-white images appear inline with text. Discuss with the typesetter early to understand the implications for budget and design.
+**Note:** The choice between color and black-and-white affects both cost and layout. Color images are grouped separately, while black-and-white images appear inline with text. Discuss with the typesetter early to understand the implications for budget and design.
 
 For New LTCs:
 
@@ -279,31 +281,31 @@ Once the team has identified which images to use and where to place them, you mo
 
 1. Open the Paratext project
 2. Navigate to the verse where the image should appear, place your cursor at the end of the verse
-3. From the **Insert** menu, choose **Figure**
-    1. The Figure Properties dialog box will open with several fields
+3. From the **Insert** menu, choose **Figure**
+    - The Figure Properties dialog box will open with several fields
 
 **Understanding the Figure Properties dialog:**
 
 The dialog has numbered fields and sections. Here’s what to enter:
 
-**[1] Caption:** Enter the text that should appear printed below the image in the **translation language**.
+**[1] Caption:** Enter the text that should appear printed below the image in the **translation language**.
 
-**[2] Description:** Enter a description in the **typesetter’s language** (e.g., English, French, Spanish). This helps the typesetter verify the correct image is being used.
+**[2] Description:** Enter a description in the **typesetter’s language** (e.g., English, French, Spanish). This helps the typesetter verify the correct image is being used.
 
-**[3] Width:** Choose how the image fits on the page. Usually, **Single column** is preferred. Use **Full page width** only for very important or detailed images.
+**[3] Width:** Choose how the image fits on the page. Usually, **Single column** is preferred. Use **Full page width** only for very important or detailed images.
 
-**[4] Location:** Specify where the image should appear (e.g., **P** for Print, **E** for Electronic, **W** for Web).
+**[4] Location:** Specify where the image should appear (e.g., **P** for Print, **E** for Electronic, **W** for Web).
 
-- **Tip:** If you want the image to show up everywhere, leave this field **blank**.
+- **Tip:** If you want the image to show up everywhere, leave this field **blank**.
 
-**[5] Copyright:** Enter the required copyright or attribution text.
+**[5] Copyright:** Enter the required copyright or attribution text.
 
-- **Paratext Library:** Copy the info from the filename.
-- **Open Bible Images:** Paste the attribution text you saved earlier.
+- **Paratext Library:** Copy the info from the filename.
+- **Open Bible Images:** Paste the attribution text you saved earlier.
 
-**[6] Reference:** This is filled automatically by Paratext based on where your cursor was. (e.g., MAT 27:1). DO NOT EDIT.
+**[6] Reference:** This is filled automatically by Paratext based on where your cursor was. (e.g., MAT 27:1). DO NOT EDIT.
 
-**[7] Browse:** Click this to find and select your image file from your computer.
+**[7] Browse:** Click this to find and select your image file from your computer.
 
 For New LTCs:
 
@@ -323,25 +325,30 @@ Before the team inserts many images, have them insert 2–3 samples and get feed
 
 ## **Step 5: Browse for the Image File**
 
-1. Click the **Browse…** button [7]
-    1. A file selection dialog appears
-2. In the left sidebar, navigate to **Pictures**
+**Find and select the image file:**
+
+1. Click the **Browse…** button [7]
+    - A file selection dialog appears
+2. In the left sidebar, navigate to **Pictures**
 3. Open the appropriate folder:
-    1. Option A: Open **Illustrations – English**
-    2. Option B: Open **Illustrations – Open Bible Images** (or wherever you saved the downloaded files)
+    - Option A: Open **Illustrations – English**
+    - Option B: Open **Illustrations – Open Bible Images** (or wherever you saved the downloaded files)
 4. Click in the Search field (top right) and type keywords to filter the images
 5. When the desired image is found:
-    1. Click on it to select
-    2. Click **Open**
-6. You’ll return to the Figure dialog with the filename now filled in
-7. Review all entries
-8. Click **OK** to insert the image
-9. *The image (or a string of UFSM codes starting with \fig) will now appear in the text at the specified location.*
-10. If you can’t see the image, change the view to **Formatted or Preview**
+    - Click on it to select
+    - Click **Open**
+
+**Insert and check the image:**
+
+1. You’ll return to the Figure dialog with the filename now filled in
+2. Review all entries
+3. Click **OK** to insert the image
+4. *The image (or a string of USFM codes starting with \fig) will now appear in the text at the specified location.*
+5. If you can’t see the image, change the view to **Formatted or Preview**
 
 For LTCs:
 
-Ensure the translator doesn’t rename the images after inserting them in Paratext or the link will break. If they *must* move their project to a different computer, they need to ensure the `Illustrations` folder is in the exact same file path (e.g., `C:\Users\[Name]\Pictures...`) or the links will break there too.
+Ensure the translator doesn’t rename the images after inserting them in Paratext or the link will break. If they *must* move their project to a different computer, they need to ensure the `Illustrations` folder is in the exact same file path (e.g., `C:\Users\[Name]\Pictures...`) or the links will break there too.
 
 ---
 
@@ -441,11 +448,11 @@ After completing this chapter, verify that the translator can:
 
 **Problem: “I typed 'Print' in the Location field, but the typesetter says the image is missing.”**
 
-- Solution: The field only recognizes single-letter codes. Change "Print" to **P**. To include multiple locations, string the letters together without spaces (e.g., **PE**).
+- Solution: The field only recognizes single-letter codes. Change "Print" to **P**. To include multiple locations, string the letters together without spaces (e.g., **PE**).
 
 **Problem: “What happens if I leave the Location field blank?”**
 
-- Solution**:** That is perfectly fine! Paratext will assume the image is approved for all formats (Print, Electronic, and Web). You only need to type letters if you want to *restrict* the image to a specific format.
+- Solution**:** That is perfectly fine! Paratext will assume the image is approved for all formats (Print, Electronic, and Web). You only need to type letters if you want to *restrict* the image to a specific format.
 
 **Problem: “The project file size increased after adding images”**
 
@@ -537,9 +544,9 @@ Plan for a few days to gather team input on image selection before finalizing.
 
 **Related Documentation:**
 
-- Full Paratext manual: [https://manual.paratext.org/](https://manual.paratext.org/)
+- Full Paratext manual: [https://manual.paratext.org/](https://manual.paratext.org/)
 - Image library documentation: Section 24.1–24.2
-- Open Bible Images: [https://openbibleimages.org](https://openbibleimages.org/)
+- Open Bible Images: [https://openbibleimages.org](https://openbibleimages.org/)
 - Video demonstrations: [Links will be added when available]
 
 ## **Additional Resources**

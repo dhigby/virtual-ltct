@@ -93,11 +93,11 @@ An introduction helps readers understand what they're about to read. It's especi
 ### Step 1: Access the Introduction Book
 
 1. In Paratext, navigate to the book **INT** (Introduction)
-    1. This is a special book code specifically for introductory material
-    2. If you don't see INT in your book list, you may need to enable it in project settings
+    - This is a special book code specifically for introductory material
+    - If you don't see INT in your book list, you may need to enable it in project settings
 2. Ensure the book has a **\h** (header) line
-    1. This line identifies the book
-    2. Example: \h Introduction to the New Testament
+    - This line identifies the book
+    - Example: \h Introduction to the New Testament
 
 ### Step 2: Structure Your Introduction
 
@@ -193,7 +193,12 @@ Here's a sample structure using proper markers:
 
 Appendices provide additional helpful resources for readers. Common appendices include:
 
-**Glossary:** Definitions of difficult or important terms **Weights and Measures:** Explanations of biblical measurements **Chronology:** Timeline of biblical events **Maps:** (In addition to maps in the text) **Names Index:** Alphabetical list of important names **Topical Index:** Key topics and where to find them
+- **Glossary:** Definitions of difficult or important terms
+- **Weights and Measures:** Explanations of biblical measurements
+- **Chronology:** Timeline of biblical events
+- **Maps:** (in addition to maps in the text)
+- **Names Index:** Alphabetical list of important names
+- **Topical Index:** Key topics and where to find them
 
 ### Choosing Appendix Content
 
@@ -231,11 +236,11 @@ Paratext provides several book codes for appendices:
 
 1. Navigate to the appropriate appendix book (e.g., XXA)
 2. Use standard USFM markers:
-    1. **\h** - Header line (book identification)
-    2. **\mt1** - Main title
-    3. **\s** - Section headings
-    4. **\p** - Paragraphs
-    5. **\li** - List items (for indexes)
+    - **\h** - Header line (book identification)
+    - **\mt1** - Main title
+    - **\s** - Section headings
+    - **\p** - Paragraphs
+    - **\li** - List items (for indexes)
 3. Create your content following your typesetter's specifications
 
 **Example Glossary Structure:**

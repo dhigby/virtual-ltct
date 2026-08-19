@@ -49,7 +49,7 @@ When the project goes to the typesetter for final composition, these small files
 There are two approaches for finding images to insert into your Paratext project. You can use either one, or a combination of both:
 
 | **Feature** | **Option A: Paratext Image Library** | **Option B: Open Bible Images (openbibleimages.org)** |
-| --- | --- | --- |
+|  |  |  |
 | **Connectivity** | Offline (after initial download) | Online only |
 | **Style** | Traditional Line Art / BW | Varied (Photos, Paintings, Art) |
 | **Licensing** | Pre-cleared for Paratext | CC (requires specific attribution) |
@@ -59,17 +59,7 @@ Which option should I choose?
 
 For most projects following the standard Paratext workflow, Option A remains the default — it is well-integrated with the typesetting pipeline. Option B is a good choice when you want images with no licensing restrictions, when your community prefers a different visual style, or when the Paratext library does not have a suitable image for a specific passage. Many teams use both: Option A for the majority of images and Option B to fill gaps.
 
----
-
----
-
-For New LTCs:
-
-Before the session, ask the translation team whether they have reliable internet access. If connectivity is poor or intermittent, plan to use Option A as the primary method and demonstrate Option B as a secondary tool for when the Internet is available.
-
----
-
----
+> **For new LTCs:** Before the session, ask the translation team whether they have reliable internet access. If connectivity is poor or intermittent, plan to use Option A as the primary method and demonstrate Option B as a secondary tool for when the Internet is available.
 
 # **Part 1A: Setting Up and Searching — Paratext Image Library (Windows)**
 
@@ -94,21 +84,9 @@ The first part of this process takes place in Windows, before opening Paratext. 
     - On Windows: usually `C:\Users\[YourName]\Pictures`
     - Windows will automatically start indexing the image contents for searching
 
-Tip
+> **TIP:** This setup only needs to be done once. After the images are indexed, they can be searched quickly at any time. If training multiple team members, one person can set this up and share the folder via network or USB drive.
 
-This setup only needs to be done once. After the images are indexed, they can be searched quickly at any time. If training multiple team members, one person can set this up and share the folder via network or USB drive.
-
----
-
----
-
-For New LTCs:
-
-The indexing process takes a few minutes after moving the folder. If the translator tries to search immediately and gets no results, ask them to wait 10–15 minutes and try again. This is a common source of confusion — it’s not a mistake they made, just a timing issue. If necessary, you can manually trigger a search in the folder once to “force” Windows to examine the metadata if automatic indexing is lagging.
-
----
-
----
+> **For new LTCs:** The indexing process takes a few minutes after moving the folder. If the translator tries to search immediately and gets no results, ask them to wait 10–15 minutes and try again. This is a common source of confusion — it’s not a mistake they made, just a timing issue. If necessary, you can manually trigger a search in the folder once to “force” Windows to examine the metadata if automatic indexing is lagging.
 
 ## **Step 2: Learn to Search for Images**
 
@@ -140,33 +118,15 @@ The image library is organized so you can search by keywords, Bible references, 
 - Add **color** to see only color images
 - Example: **cross black** shows black-and-white images of crosses
 
-⏱ Time Saver
+> **TIP — Time saver:** Use multiple search terms together! Try “MAT27 cross” to find cross images specifically for Matthew 27, or “temple color” to find color images of the temple.
 
-Use multiple search terms together! Try “MAT27 cross” to find cross images specifically for Matthew 27, or “temple color” to find color images of the temple.
-
----
-
----
-
-For New LTCs:
-
-Image selection is primarily a cultural decision — let the translator and team lead this conversation. Your role is to help them search effectively and ensure they understand the practical constraints (32-page limit, color vs black-and-white implications). Don’t express preferences about which images look better — that judgment belongs to the translation team.
-
----
-
----
+> **For new LTCs:** Image selection is primarily a cultural decision — let the translator and team lead this conversation. Your role is to help them search effectively and ensure they understand the practical constraints (32-page limit, color vs black-and-white implications). Don’t express preferences about which images look better — that judgment belongs to the translation team.
 
 # **Part 1B: Finding Images Online — Open Bible Images**
 
 Open Bible Images (openbibleimages.org) is a website offering Scripture illustrations under Creative Commons (CC) licensing. This means images can be used freely in published Bibles and other Scripture materials without the need to request separate permission — you simply follow the attribution terms of the specific CC license shown for each image.
 
-Why this matters for Bible translation
-
-Because Open Bible Images uses CC licensing, teams can download high-resolution images and send them directly to the typesetter without waiting for copyright clearance. This can simplify and speed up the publication process, particularly for smaller or under-resourced projects.
-
----
-
----
+> **Why this matters for Bible translation:** Because Open Bible Images uses CC licensing, teams can download high-resolution images and send them directly to the typesetter without waiting for copyright clearance. This can simplify and speed up the publication process, particularly for smaller or under-resourced projects.
 
 ## **Step 1B-1: Browse and Search the Website**
 
@@ -183,19 +143,13 @@ Because Open Bible Images uses CC licensing, teams can download high-resolution 
 Before using an image, note the specific Creative Commons license displayed on the image page. All CC licenses allow free use, but the terms vary slightly:
 
 | **License** | **What it means for your project** |
-| --- | --- |
+|  |  |
 | CC BY | Free to use in any format. Credit the creator in your copyright notice. |
 | CC BY-SA | Free to use. Credit the creator, and distribute the final publication under a similar open license. |
 | CC BY-NC | Free for non-commercial use. Suitable for most Bible translation publications; confirm with your Translation Consultant if unsure. |
 | CC0 | Public domain dedication. No attribution required, though it’s courteous to credit the creator. |
 
-⚠️ Note on CC BY-NC
-
-Most Bible translation projects are non-commercial ministry work and will qualify for CC BY-NC use. However, if *any* money changes hands for the physical book, the CC BY-NC license might be risky. It’s safer to stick to CC BY, CC BY-SA, or CC0. If you are unsure, check with your Translation Consultant before using images under this license. Remind the team that 'Non-Commercial' is often interpreted strictly by secular copyright holders. If the local church plans to sell these Bibles to cover costs, we strongly recommend sticking to CC0 or CC BY images to avoid future legal friction.
-
----
-
----
+> **Warning — CC BY-NC:** Most Bible translation projects are non-commercial ministry work and will qualify for CC BY-NC use. However, if *any* money changes hands for the physical book, the CC BY-NC license might be risky. It’s safer to stick to CC BY, CC BY-SA, or CC0. If you are unsure, check with your Translation Consultant before using images under this license. Remind the team that 'Non-Commercial' is often interpreted strictly by secular copyright holders. If the local church plans to sell these Bibles to cover costs, we strongly recommend sticking to CC0 or CC BY images to avoid future legal friction.
 
 ## **Step 1B-3: Download the Image**
 
@@ -205,21 +159,9 @@ Most Bible translation projects are non-commercial ministry work and will qualif
     - Use a consistent naming convention, e.g., JHN03_Nicodemus.jpg
 3. Note the full attribution text shown on the image page — you will need this for the Copyright field in Paratext
 
-Tip:
+> **TIP:** Attribution text Copy the attribution from the Open Bible Images website and paste it into a notepad document alongside the filename before you begin inserting images in Paratext. This saves time later when filling in the Copyright field.
 
-Attribution text Copy the attribution from the Open Bible Images website and paste it into a notepad document alongside the filename before you begin inserting images in Paratext. This saves time later when filling in the Copyright field.
-
----
-
----
-
-For New LTCs:
-
-Open Bible Images is an online-only resource. If the translator’s internet connection is slow or unreliable, it is better to download images in advance, when connectivity is good, rather than browsing the website during the training session.
-
----
-
----
+> **For new LTCs:** Open Bible Images is an online-only resource. If the translator’s internet connection is slow or unreliable, it is better to download images in advance, when connectivity is good, rather than browsing the website during the training session.
 
 # **Part 1C: Decide on Image Placement**
 
@@ -227,13 +169,7 @@ This step applies regardless of which image source you use. Before inserting ima
 
 ## **How many illustrations?**
 
-⚠️ Important: 32-Page Limit
-
-You can only have 32 pages of images in a New Testament. This is a physical printing constraint and is also set by the funders. Help the team plan their illustrations carefully — prioritize the most important passages and culturally significant images.
-
----
-
----
+> **Important — 32-page limit:** You can only have 32 pages of images in a New Testament. This is a physical printing constraint and is also set by the funders. Help the team plan their illustrations carefully — prioritize the most important passages and culturally significant images.
 
 - Too many images can distract from the text
 - Too few may miss opportunities to aid comprehension
@@ -243,13 +179,7 @@ You can only have 32 pages of images in a New Testament. This is a physical prin
 
 ## **Where to place images?**
 
-Tip: Where to place your cursor
-
-*Always place your cursor at the end of the verse where the image should appear. This 'anchors' the image to that specific verse even if the text flows to a new page.*
-
----
-
----
+> **TIP — Where to place your cursor:** *Always place your cursor at the end of the verse where the image should appear. This 'anchors' the image to that specific verse even if the text flows to a new page.*
 
 - Key events (crucifixion, resurrection, parables)
 - Culturally unfamiliar objects (temple layout, ancient tools, clothing)
@@ -265,13 +195,7 @@ Tip: Where to place your cursor
 
 **Note:** The choice between color and black-and-white affects both cost and layout. Color images are grouped separately, while black-and-white images appear inline with text. Discuss with the typesetter early to understand the implications for budget and design.
 
-For New LTCs:
-
-The 32-page limit and the color vs black-and-white decision are the two things the team most often don’t know about in advance. Raise both of these early — before the team gets attached to a long list of images — to avoid disappointment later. If the team is unsure how many images to use, suggest they draft a provisional list and review it with the Translation Consultant before inserting anything.
-
----
-
----
+> **For new LTCs:** The 32-page limit and the color vs black-and-white decision are the two things the team most often don’t know about in advance. Raise both of these early — before the team gets attached to a long list of images — to avoid disappointment later. If the team is unsure how many images to use, suggest they draft a provisional list and review it with the Translation Consultant before inserting anything.
 
 # **Part 2: Inserting Images in Paratext**
 
@@ -307,21 +231,9 @@ The dialog has numbered fields and sections. Here’s what to enter:
 
 **[7] Browse:** Click this to find and select your image file from your computer.
 
-For New LTCs:
+> **For new LTCs:** The Figure dialog can look overwhelming at first. Guide the translator through it one field at a time. The caption field is where the translator needs to think carefully — give them time to craft this in their language rather than rushing to the next step. The description should be in the typesetter’s language. The copyright field is easy to miss — make sure it gets filled in correctly every time.
 
-The Figure dialog can look overwhelming at first. Guide the translator through it one field at a time. The caption field is where the translator needs to think carefully — give them time to craft this in their language rather than rushing to the next step. The description should be in the typesetter’s language. The copyright field is easy to miss — make sure it gets filled in correctly every time.
-
----
-
----
-
-For New LTCs:
-
-Before the team inserts many images, have them insert 2–3 samples and get feedback from the Translation Consultant on caption style. It’s much easier to adjust the approach early than to revise dozens of captions later.
-
----
-
----
+> **For new LTCs:** Before the team inserts many images, have them insert 2–3 samples and get feedback from the Translation Consultant on caption style. It’s much easier to adjust the approach early than to revise dozens of captions later.
 
 ## **Step 5: Browse for the Image File**
 
@@ -346,13 +258,7 @@ Before the team inserts many images, have them insert 2–3 samples and get feed
 4. *The image (or a string of USFM codes starting with \fig) will now appear in the text at the specified location.*
 5. If you can’t see the image, change the view to **Formatted or Preview**
 
-For LTCs:
-
-Ensure the translator doesn’t rename the images after inserting them in Paratext or the link will break. If they *must* move their project to a different computer, they need to ensure the `Illustrations` folder is in the exact same file path (e.g., `C:\Users\[Name]\Pictures...`) or the links will break there too.
-
----
-
----
+> **For LTCs:** Ensure the translator doesn’t rename the images after inserting them in Paratext or the link will break. If they *must* move their project to a different computer, they need to ensure the `Illustrations` folder is in the exact same file path (e.g., `C:\Users\[Name]\Pictures...`) or the links will break there too.
 
 ## **Tips for Efficient Image Insertion**
 
@@ -484,13 +390,7 @@ After completing this chapter, verify that the translator can:
 - The team disagrees on illustration choices and needs external input (translation issue)
 - You are unsure whether a specific CC license is appropriate for your publication context
 
-For New LTCs:
-
-Knowing which problems to escalate and to whom is an important skill. Technical tool problems go to your mentor or supervisor; content, cultural, and licensing decisions go to the Translation Consultant. When in doubt, start with your mentor or supervisor.
-
----
-
----
+> **For new LTCs:** Knowing which problems to escalate and to whom is an important skill. Technical tool problems go to your mentor or supervisor; content, cultural, and licensing decisions go to the Translation Consultant. When in doubt, start with your mentor or supervisor.
 
 # **Summary and Next Steps**
 
@@ -557,8 +457,4 @@ Plan for a few days to gather team input on image selection before finalizing.
 - Contact the typesetter early to discuss image specifications and requirements
 - When using Open Bible Images, keep a record of image attributions in a shared spreadsheet for use during typesetting
 
-**For New LTCs:**
-
-**Your role throughout this chapter is to guide the translator verbally through each step — never touch their keyboard, even when it would be faster. This is their project and they need to develop confidence with the tools. If they’re struggling, slow down and explain more carefully rather than doing it for them. This principle applies throughout the entire course.**
-
----
+> **For new LTCs:** Your role throughout this chapter is to guide the translator verbally through each step — never touch their keyboard, even when it would be faster. This is their project and they need to develop confidence with the tools. If they’re struggling, slow down and explain more carefully rather than doing it for them. This principle applies throughout the entire course.

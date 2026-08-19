@@ -1,4 +1,4 @@
-## **Adding Visual Elements: Illustrations and Captions**
+## **1. Adding Visual Elements: Illustrations and Captions**
 
 *Course: Finalizing Your Translation for Publication | Chapter 1*
 

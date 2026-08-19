@@ -1,4 +1,4 @@
-# Proper Names and Biblical Terms Final Check
+# 4. Proper Names and Biblical Terms Final Check
 **Level:** Experienced Translator
 **Goal:** Ensure all proper names and major biblical terms have approved renderings before publication
 ---

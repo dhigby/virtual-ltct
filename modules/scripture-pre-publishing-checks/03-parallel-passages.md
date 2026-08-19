@@ -10,7 +10,7 @@ goal: Verify that parallel passages are consistent and mark them as checked befo
 
 prerequisites: "Both passages translated and consultant-checked; Parallel Passages familiarity from earlier training"
 
-# Compare Parallel Passages
+# 3. Compare Parallel Passages
 
 **Level:** Experienced Translator
 **Goal:** Verify that parallel passages are consistent and mark them as checked before publication, using Paratext's Parallel Passages tool

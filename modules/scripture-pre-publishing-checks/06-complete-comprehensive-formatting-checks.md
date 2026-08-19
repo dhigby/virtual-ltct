@@ -1,4 +1,4 @@
-# Complete Comprehensive formatting checks
+# 6. Complete Comprehensive Formatting Checks
 
 ---
 ## Formatting Checks

@@ -10,7 +10,7 @@ goal: Verify that numbers, money, weights, and measures already carry a consiste
 
 prerequisites: "Renderings for measurement terms already decided and applied during translation; familiar with the Biblical Terms tool"
 
-# Numbers, Weights, and Measures
+# 5. Numbers, Weights, and Measures
 
 **Level:** Experienced Translator
 **Goal:** Verify that numbers, money, weights, and measures already carry a consistent, agreed rendering throughout the project, using the specialized biblical terms lists

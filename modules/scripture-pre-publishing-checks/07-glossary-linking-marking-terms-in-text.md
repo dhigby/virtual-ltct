@@ -1,4 +1,4 @@
-# Glossary Linking: Marking Terms in the Text
+# 7. Glossary Linking: Marking Terms in the Text
 **Level:** Experienced Translator
 **Goal:** Mark glossary terms in the text using the Biblical Terms tool to help readers access definitions and explanations
 ---

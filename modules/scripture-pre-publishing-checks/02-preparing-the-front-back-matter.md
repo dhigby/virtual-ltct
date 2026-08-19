@@ -10,7 +10,7 @@ goal: Prepare essential supplementary materials including map names, introductio
 
 prerequisites: "Translation content finalized; coordination with typesetter established"
 
-# Preparing Front/Back Matter: Maps, Introductions, and Appendices
+# 2. Preparing Front/Back Matter: Maps, Introductions, and Appendices
 
 **Level:** Experienced Translator
 

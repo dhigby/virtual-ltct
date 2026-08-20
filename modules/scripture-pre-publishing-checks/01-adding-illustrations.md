@@ -1,4 +1,4 @@
-## **1. Adding Visual Elements: Illustrations and Captions**
+# 1. Adding Visual Elements: Illustrations and Captions
 
 *Course: Finalizing Your Translation for Publication | Chapter 1*
 
@@ -8,7 +8,7 @@ Level: Experienced Translator, LTCT Specialist Level 2
 
 Prerequisites: Translation content finalized and approved by consultants
 
-# **Introduction**
+## Introduction
 
 You've completed the translation work. The consultants have approved your text. Now the typesetter is asking, “What about illustrations?”
 
@@ -34,9 +34,9 @@ Before starting this chapter, ensure:
 - The translator has sufficient storage space in their Pictures folder
 - The translator has editing permissions for all the books in the Paratext project
 
-# **Procedure Walkthrough**
+## Procedure Walkthrough
 
-## **Understanding the Image Library**
+### Understanding the Image Library
 
 Paratext provides access to over 2,800 illustrations covering biblical events, cultural contexts, geography, and objects. These images are available in both color and black-and-white versions, and they’re indexed for easy searching.
 
@@ -44,7 +44,7 @@ Paratext provides access to over 2,800 illustrations covering biblical events, c
 
 When the project goes to the typesetter for final composition, these small files will be replaced with high-resolution versions. This keeps the project file size manageable during the translation process.
 
-## **Choosing Your Image Source**
+### Choosing Your Image Source
 
 There are two approaches for finding images to insert into your Paratext project. You can use either one, or a combination of both:
 
@@ -61,11 +61,11 @@ For most projects following the standard Paratext workflow, Option A remains the
 
 > **For new LTCs:** Before the session, ask the translation team whether they have reliable internet access. If connectivity is poor or intermittent, plan to use Option A as the primary method and demonstrate Option B as a secondary tool for when the Internet is available.
 
-# **Part 1A: Setting Up and Searching — Paratext Image Library (Windows)**
+## Part 1A: Setting Up and Searching — Paratext Image Library (Windows)
 
 The first part of this process takes place in Windows, before opening Paratext. The translator needs to download the image library and learn to search it in File Explorer.
 
-## **Step 1: Download and Set Up the Image Library**
+### Step 1: Download and Set Up the Image Library
 
 **First time only — download the library:**
 
@@ -88,7 +88,7 @@ The first part of this process takes place in Windows, before opening Paratext. 
 
 > **For new LTCs:** The indexing process takes a few minutes after moving the folder. If the translator tries to search immediately and gets no results, ask them to wait 10–15 minutes and try again. This is a common source of confusion — it’s not a mistake they made, just a timing issue. If necessary, you can manually trigger a search in the folder once to “force” Windows to examine the metadata if automatic indexing is lagging.
 
-## **Step 2: Learn to Search for Images**
+### Step 2: Learn to Search for Images
 
 The image library is organized so you can search by keywords, Bible references, or visual characteristics.
 
@@ -122,13 +122,13 @@ The image library is organized so you can search by keywords, Bible references, 
 
 > **For new LTCs:** Image selection is primarily a cultural decision — let the translator and team lead this conversation. Your role is to help them search effectively and ensure they understand the practical constraints (32-page limit, color vs black-and-white implications). Don’t express preferences about which images look better — that judgment belongs to the translation team.
 
-# **Part 1B: Finding Images Online — Open Bible Images**
+## Part 1B: Finding Images Online — Open Bible Images
 
 Open Bible Images (openbibleimages.org) is a website offering Scripture illustrations under Creative Commons (CC) licensing. This means images can be used freely in published Bibles and other Scripture materials without the need to request separate permission — you simply follow the attribution terms of the specific CC license shown for each image.
 
 > **Why this matters for Bible translation:** Because Open Bible Images uses CC licensing, teams can download high-resolution images and send them directly to the typesetter without waiting for copyright clearance. This can simplify and speed up the publication process, particularly for smaller or under-resourced projects.
 
-## **Step 1B-1: Browse and Search the Website**
+### Step 1B-1: Browse and Search the Website
 
 1. Open a web browser and navigate to:
 2. [https://openbibleimages.org](https://openbibleimages.org/)
@@ -138,7 +138,7 @@ Open Bible Images (openbibleimages.org) is a website offering Scripture illustra
     - Biblical event (e.g., “baptism of Jesus”, “The Last Supper”)
 4. Browse the results and click on any image to see the full-size preview and its license details
 
-## **Step 1B-2: Check the License**
+### Step 1B-2: Check the License
 
 Before using an image, note the specific Creative Commons license displayed on the image page. All CC licenses allow free use, but the terms vary slightly:
 
@@ -151,7 +151,7 @@ Before using an image, note the specific Creative Commons license displayed on t
 
 > **Warning — CC BY-NC:** Most Bible translation projects are non-commercial ministry work and will qualify for CC BY-NC use. However, if *any* money changes hands for the physical book, the CC BY-NC license might be risky. It’s safer to stick to CC BY, CC BY-SA, or CC0. If you are unsure, check with your Translation Consultant before using images under this license. Remind the team that 'Non-Commercial' is often interpreted strictly by secular copyright holders. If the local church plans to sell these Bibles to cover costs, we strongly recommend sticking to CC0 or CC BY images to avoid future legal friction.
 
-## **Step 1B-3: Download the Image**
+### Step 1B-3: Download the Image
 
 1. On the image page, look for the download option (button or right-click to save)
 2. Save the image to a dedicated folder on your computer
@@ -163,11 +163,11 @@ Before using an image, note the specific Creative Commons license displayed on t
 
 > **For new LTCs:** Open Bible Images is an online-only resource. If the translator’s internet connection is slow or unreliable, it is better to download images in advance, when connectivity is good, rather than browsing the website during the training session.
 
-# **Part 1C: Decide on Image Placement**
+## Part 1C: Decide on Image Placement
 
 This step applies regardless of which image source you use. Before inserting images, the team needs to consider:
 
-## **How many illustrations?**
+### How many illustrations?
 
 > **Important — 32-page limit:** You can only have 32 pages of images in a New Testament. This is a physical printing constraint and is also set by the funders. Help the team plan their illustrations carefully — prioritize the most important passages and culturally significant images.
 
@@ -177,7 +177,7 @@ This step applies regardless of which image source you use. Before inserting ima
 - Discuss with the translation team and community advisors
 - Consult with the Translation Consultant if guidance is needed on the appropriate quantity
 
-## **Where to place images?**
+### Where to place images?
 
 > **TIP — Where to place your cursor:** *Always place your cursor at the end of the verse where the image should appear. This 'anchors' the image to that specific verse even if the text flows to a new page.*
 
@@ -186,7 +186,7 @@ This step applies regardless of which image source you use. Before inserting ima
 - Geographic contexts (maps, landscape features)
 - Teaching moments (visual aids for difficult concepts)
 
-## **What size and color?**
+### What size and color?
 
 - Column width: Image fits within one column of text (most common)
 - Page width: Image spans across columns or full page (use sparingly for major events)
@@ -197,11 +197,11 @@ This step applies regardless of which image source you use. Before inserting ima
 
 > **For new LTCs:** The 32-page limit and the color vs black-and-white decision are the two things the team most often don’t know about in advance. Raise both of these early — before the team gets attached to a long list of images — to avoid disappointment later. If the team is unsure how many images to use, suggest they draft a provisional list and review it with the Translation Consultant before inserting anything.
 
-# **Part 2: Inserting Images in Paratext**
+## Part 2: Inserting Images in Paratext
 
 Once the team has identified which images to use and where to place them, you move into Paratext to insert them. This process is the same whether you are using images from the Paratext library (Option A) or from Open Bible Images (Option B).
 
-## **Step 4: Insert an Illustration in Paratext**
+### Step 4: Insert an Illustration in Paratext
 
 1. Open the Paratext project
 2. Navigate to the verse where the image should appear, place your cursor at the end of the verse
@@ -235,7 +235,7 @@ The dialog has numbered fields and sections. Here’s what to enter:
 
 > **For new LTCs:** Before the team inserts many images, have them insert 2–3 samples and get feedback from the Translation Consultant on caption style. It’s much easier to adjust the approach early than to revise dozens of captions later.
 
-## **Step 5: Browse for the Image File**
+### Step 5: Browse for the Image File
 
 **Find and select the image file:**
 
@@ -260,7 +260,7 @@ The dialog has numbered fields and sections. Here’s what to enter:
 
 > **For LTCs:** Ensure the translator doesn’t rename the images after inserting them in Paratext or the link will break. If they *must* move their project to a different computer, they need to ensure the `Illustrations` folder is in the exact same file path (e.g., `C:\Users\[Name]\Pictures...`) or the links will break there too.
 
-## **Tips for Efficient Image Insertion**
+### Tips for Efficient Image Insertion
 
 **Make searching easier:**
 
@@ -281,7 +281,7 @@ The dialog has numbered fields and sections. Here’s what to enter:
 - Insert multiple images in one work session
 - Review all images together to ensure consistency
 
-# **Verification Checklist**
+## Verification Checklist
 
 After completing this chapter, verify that the translator can:
 
@@ -329,9 +329,9 @@ After completing this chapter, verify that the translator can:
 - Are images placed at appropriate, logical locations?
 - Are images from different sources visually consistent with each other?
 
-# **Troubleshooting**
+## Troubleshooting
 
-## **Common Issues and Solutions**
+### Common Issues and Solutions
 
 **Problem: “Can’t find the Illustrations – English folder”**
 
@@ -381,7 +381,7 @@ After completing this chapter, verify that the translator can:
 
 - Solution: Keep captions brief but clear. Describe what’s happening in the image using vocabulary from the translation text when possible. Examples: “Jesus teaching in the synagogue” or “The temple in Jerusalem.” This reinforces the words readers encounter in the Scripture text.
 
-## **When to Ask for Help**
+### When to Ask for Help
 
 **Contact your mentor or supervisor if:**
 
@@ -397,9 +397,9 @@ After completing this chapter, verify that the translator can:
 
 > **For new LTCs:** Knowing which problems to escalate and to whom is an important skill. Technical tool problems go to your mentor or supervisor; content, cultural, and licensing decisions go to the Translation Consultant. When in doubt, start with your mentor or supervisor.
 
-# **Summary and Next Steps**
+## Summary and Next Steps
 
-## **Key Takeaways**
+### Key Takeaways
 
 - Two image sources are available: the Paratext image library (downloaded once) and Open Bible Images (online, CC-licensed)
 - The Paratext image library contains over 2,800 indexed illustrations searchable by keyword, Bible reference, or visual style
@@ -412,7 +412,7 @@ After completing this chapter, verify that the translator can:
 - Color and black-and-white images are handled differently in print — discuss with the typesetter early
 - Image selection is a cultural decision — let the translator and team lead
 
-## **What Comes Next**
+### What Comes Next
 
 After adding illustrations, the next chapter covers Preparing Back Matter: Maps, Introductions, and Appendices. You’ll learn to:
 
@@ -420,7 +420,7 @@ After adding illustrations, the next chapter covers Preparing Back Matter: Maps,
 - Draft introductions to the New Testament or Bible
 - Prepare appendices and supplementary materials
 
-## **Timeline Guidance**
+### Timeline Guidance
 
 Adding illustrations typically takes:
 
@@ -431,9 +431,9 @@ Adding illustrations typically takes:
 
 Plan for a few days to gather team input on image selection before finalizing.
 
-# **Support Resources**
+## Support Resources
 
-## **Getting Help**
+### Getting Help
 
 **WhatsApp/Email Support:**
 
@@ -454,7 +454,7 @@ Plan for a few days to gather team input on image selection before finalizing.
 - Open Bible Images: [https://openbibleimages.org](https://openbibleimages.org/)
 - Video demonstrations: [Links will be added when available]
 
-## **Additional Resources**
+### Additional Resources
 
 - Discuss illustration choices with the translation team
 - Consult with community advisors about culturally appropriate images

@@ -19,7 +19,7 @@ _Last generated: 2026-08-20._
 
 | Competency | Modules | Status |
 | --- | --- | --- |
-| Translation Tools | 7 | ✅ |
+| Translation Tools | 8 | ✅ |
 | Lexical Tools | 1 | ✅ |
 | Grammar Tools | 1 | ✅ |
 | Phonetic Tools | 0 | ⛔ gap |
@@ -27,7 +27,7 @@ _Last generated: 2026-08-20._
 | Literacy Tools | 1 | ✅ |
 | Recording Tools | 0 | ⛔ gap |
 | Language Documentation | 0 | ⛔ gap |
-| Digital and Print Publishing | 3 | ✅ |
+| Digital and Print Publishing | 4 | ✅ |
 | Archiving and Copyright Tools | 2 | ✅ |
 | Lexical Import | 0 | ⛔ gap |
 | Data Conversion | 1 | ✅ |

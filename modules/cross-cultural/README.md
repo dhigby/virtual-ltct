@@ -3,7 +3,7 @@ title: Cross Cultural
 slug: cross-cultural
 notion_id: b85ef585-b91c-4481-bb0d-1b69d96d10c0
 notion_data_source: 7ebb2ef5-9f57-4723-8de0-9cc1ca47ff8e
-target_outcome_level: Has knowledge
+target_outcome_level: "1 - Has Knowledge"
 competencies:
   - Working in a Multicultural Environment
 content_type: content

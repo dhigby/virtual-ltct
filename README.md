@@ -26,7 +26,7 @@ progress is tracked on the GitHub Project board.
 | --- | --- |
 | Modules table | GitHub Project, one **issue** per module |
 | Status | Project **Module Status** field |
-| Priority / Consultant Tier / Target Outcome Level | Project fields |
+| Priority / Target Outcome Level | Project fields |
 | Person | Issue **assignee** |
 | Competencies relation | Issue **labels** (`competency: …`) + each module's frontmatter |
 | Coverage/gap rollup | [`COVERAGE.md`](COVERAGE.md) (regenerated automatically on every change) |

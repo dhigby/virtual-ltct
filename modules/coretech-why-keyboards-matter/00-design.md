@@ -6,7 +6,7 @@
 | --- | --- |
 | **Title** | CoreTech: Why Keyboards Matter |
 | **Competencies addressed** | Keyboards |
-| **Target outcome level** | Has knowledge |
+| **Target outcome level** | 1 - Has Knowledge |
 | **SME(s) consulted** | Jenni Beadle (SIL) — verifying Claude.ai-chat-drafted content against live Windows 11 + Keyman behavior |
 | **Design status** | Approved by Jenni Beadle on 2026-07-22 |
 

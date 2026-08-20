@@ -52,7 +52,7 @@ This shows the detected encoding. Like Notepad++, it's an educated guess — not
 
 For advanced diagnosis, a hex editor shows the actual bytes stored in a file. This lets you see exactly what numbers are stored, which can confirm encoding issues definitively.
 
-This is beyond the Has Knowledge level, but it's good to know it exists for when you need to go deeper.
+This is beyond the `1 - Has Knowledge` level, but it's good to know it exists for when you need to go deeper.
 
 #### Activity: Encoding detective work (8 minutes)
 
@@ -247,7 +247,7 @@ You now have a complete diagnostic toolkit across all three modules:
 - **Understanding (Module 1b):** encoding, fonts, rendering and combining
 - **Investigation (Module 1c):** check encoding, check font coverage, identify characters, consult resources
 
-At the Has Knowledge level, you can identify what's wrong, understand why it's happening, investigate systematically, explain problems to others, and know where to find help.
+At the `1 - Has Knowledge` level, you can identify what's wrong, understand why it's happening, investigate systematically, explain problems to others, and know where to find help.
 
 ### What comes next: Course 2
 

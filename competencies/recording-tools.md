@@ -5,11 +5,11 @@ slug: recording-tools
 in_framework: true
 target_statement: is able to use the tools that assist language workers to record their work, either audio and/or video and is able to consult others on their use
 outcome_levels:
-  - Learner
-  - Advanced Beginner
-  - Practitioner
-  - Trainer/Proficient
-  - Expert
+  - "0 - No Competency"
+  - "1 - Has Knowledge"
+  - "2 - With Assistance"
+  - "3 - Independent"
+  - "4 - Expert"
 resources:
   []
 source: Lang Tech Competencies.xlsx
@@ -30,25 +30,26 @@ In recent years, audio and video have become an integral part of each domain tha
 
 ## Progression by component
 
-_Suggested activities to reach each outcome level._
+_Each row is a level a learner is **at**; its activities are what they do to reach the level in the final column._
 
 ### 1.0 — Audio
 
-| Level | Suggested activities |
-| --- | --- |
-| **Learner** | Listen to various audio recordings to identify various audio problems (low volume, clipping, noise, low quality, etc). Try to figure out how they could have been improved. |
-| **Advanced Beginner** | Can use audio software to produce optimal audio recording with minimal noise. |
-| **Practitioner** | Learn the tools and techniques to make clean audio recordings and improve quality of existing recordings. |
-| **Trainer/Proficient** | Train someone to use audio software to produce quality audio recordings |
-| **Expert** | — |
+| Current level | Suggested activities | Reaches |
+| --- | --- | --- |
+| **0 - No Competency** | Listen to various audio recordings to identify various audio problems (low volume, clipping, noise, low quality, etc). Try to figure out how they could have been improved. | 1 - Has Knowledge |
+| **1 - Has Knowledge** | Can use audio software to produce optimal audio recording with minimal noise. | 2 - With Assistance |
+| **2 - With Assistance** | Learn the tools and techniques to make clean audio recordings and improve quality of existing recordings. | 3 - Independent |
+| **3 - Independent** | Train someone to use audio software to produce quality audio recordings | 4 - Expert |
+| **4 - Expert** | — | — |
 
 ### 2.0 — Video
 
-| Level | Suggested activities |
-| --- | --- |
-| **Learner** | Watch various video recordings to identify various video problems (framing, lighting, zoom, reflections, etc.). Try to figure out how they could have been improved. |
-| **Advanced Beginner** | Can use video software to produce an high quality video recording |
-| **Practitioner** | Learn the tools and techniques to make and edit quality video recordings. |
-| **Trainer/Proficient** | Train someone to use video software to make and edit quality video recordings. |
-| **Expert** | — |
+| Current level | Suggested activities | Reaches |
+| --- | --- | --- |
+| **0 - No Competency** | Watch various video recordings to identify various video problems (framing, lighting, zoom, reflections, etc.). Try to figure out how they could have been improved. | 1 - Has Knowledge |
+| **1 - Has Knowledge** | Can use video software to produce an high quality video recording | 2 - With Assistance |
+| **2 - With Assistance** | Learn the tools and techniques to make and edit quality video recordings. | 3 - Independent |
+| **3 - Independent** | Train someone to use video software to make and edit quality video recordings. | 4 - Expert |
+| **4 - Expert** | — | — |
 
+_Level 4 activities aim past the top of the CBC scale (the source spreadsheet's "level 5"), which CBC does not define._

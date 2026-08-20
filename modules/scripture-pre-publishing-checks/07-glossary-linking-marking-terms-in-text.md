@@ -1,21 +1,13 @@
-# Glossary linking: marking terms in text
-
-# Glossary linking: marking terms in text
-
----
-## title: "Glossary Linking: Marking Terms in the Text"<br>course: "Finalizing Your Translation for Publication"<br>module_number: 7<br>duration: 60<br>level: Experienced Translator<br>goal: Mark glossary terms in the text using the Biblical Terms tool to help readers access definitions and explanations<br>prerequisites: "Glossary created; familiar with Biblical Terms tool; editing permissions for all books"
-# Glossary Linking: Marking Terms in the Text
-**Duration:** 60 minutes
+# 7. Glossary Linking: Marking Terms in the Text
 **Level:** Experienced Translator
 **Goal:** Mark glossary terms in the text using the Biblical Terms tool to help readers access definitions and explanations
 ---
 ## Introduction
-**Time:** 5 minutes
 You've created a helpful glossary defining difficult terms—"atonement," "covenant," "Pharisee," "righteousness." But how do readers know which words have glossary entries? How do they find the definition when they encounter an unfamiliar term?
-In printed Bibles, glossary words are often marked with an asterisk (\*) before the term. In digital versions, they become clickable links. This module teaches you to systematically mark these glossary terms in your text.
+In printed Bibles, glossary words are often marked with an asterisk (\*) before the term. In digital versions, they become clickable links. This chapter teaches you to systematically mark these glossary terms in your text.
 **Example:** "Jesus taught in the \*synagogue" (asterisk before the term points to the glossary)
 **Why wait until the end?** Throughout translation, you've made spelling corrections and terminology adjustments. If you marked glossary words early, spelling changes would have broken the links. Now that the text is finalized, you can confidently link glossary terms without fear of missing occurrences due to spelling variations.
-### What This Module Covers
+### What This Chapter Covers
 - Using the Biblical Terms tool to automate glossary linking
 - Choosing appropriate linking frequency (first occurrence, all occurrences, etc.)
 - Handling glossary entries not in the Biblical Terms list
@@ -23,7 +15,7 @@ In printed Bibles, glossary words are often marked with an asterisk (\*) before 
 - Verifying and correcting linking results
 - Unlinking when needed
 ### Prerequisites
-Before starting this module, ensure:
+Before starting this chapter, ensure:
 - Your glossary content is complete and finalized
 - You have editing permissions for all books being published
 - You're familiar with the Biblical Terms tool
@@ -31,11 +23,10 @@ Before starting this module, ensure:
 - You understand \\w ... \\w\* markers (word list markers in USFM)
 ---
 ## Procedure Walkthrough
-**Time:** 45 minutes
 ### Understanding Glossary Linking
 **What happens when you link glossary words:**
 In the text, Paratext wraps glossary words with markers:
-- <span discussion-urls="discussion://2f7598a5-fd40-805e-aeb9-f689d0390ac5/32c598a5-fd40-807c-9825-e5d86dde7068/37a598a5-fd40-806e-8a53-001c4456fb29">`\w word\w*`</span><span discussion-urls="discussion://2f7598a5-fd40-805e-aeb9-f689d0390ac5/32c598a5-fd40-807c-9825-e5d86dde7068/37a598a5-fd40-806e-8a53-001c4456fb29"> for single words</span>
+- `\w word\w*` for single words
 - `\w phrase with multiple words\w*` for phrases
 **In printed publications:**
 - The typesetter uses these markers to add an asterisk before the term
@@ -244,8 +235,7 @@ Before finalizing, inform your typesetter that glossary linking is complete. Not
 > **Note:** The typesetter already has access to all glossary terms through the GLO book and understands standard conventions. You do not need to provide a separate list of linked terms unless there are special cases.
 ---
 ## Verification Checklist
-**Time:** 5 minutes
-After completing this module, verify that you have:
+After completing this chapter, verify that you have:
 **Preparation:**
 - [ ] Verified editing permissions for all books (Menu \> Project settings \> User permissions)
 - [ ] Glossary content is finalized
@@ -278,7 +268,6 @@ After completing this module, verify that you have:
 - [ ] Typesetter has been informed of any special cases
 ---
 ## Troubleshooting
-**Time:** 3 minutes
 ### Common Issues and Solutions
 **Problem:** "Link selected renderings to glossary... is greyed out/unavailable"
 - **Solution:** Ensure: (1) You have terms selected in the Biblical Terms tool, (2) You have editing permissions, (3) Your project is not locked for editing. If still unavailable, contact your mentor or supervisor.
@@ -310,7 +299,6 @@ After completing this module, verify that you have:
 > **For New LTCs:** Knowing who to contact for which type of problem is an important skill. Technical tool problems go to your mentor or supervisor; permission issues go to the project administrator; content and translation decisions go to the Translation Consultant. When in doubt, start with your mentor or supervisor.
 ---
 ## Summary and Next Steps
-**Time:** 2 minutes
 ### Key Takeaways
 - Glossary linking should be done near the end when text is finalized
 - The Biblical Terms tool automates linking using "**Link Selected Renderings to Glossary**"
@@ -322,9 +310,9 @@ After completing this module, verify that you have:
 - The Biblical Terms tool already handles many homographs with separate numbered entries
 - Unlink selected (not all) is available if you need to redo linking for specific terms
 ### What Comes Next
-**Congratulations!** You've completed all the finalizing for publication modules. Your next steps:
+**Congratulations!** You've completed all the finalizing for publication chapters. Your next steps:
 1. **Final comprehensive review:**
-	- Review all modules' verification checklists
+	- Review all chapters' verification checklists
 	- Confirm all tasks are complete
 	- Address any remaining items
 2. **Consultant approval:**
@@ -371,7 +359,7 @@ Glossary linking typically takes:
 - Document any special cases or manual interventions
 - Keep notes about what worked well for future publications
 ### Final Encouragement
-Finalizing a translation for publication is detailed, careful work. Each module in this course has guided you through essential quality checks that protect your years of translation effort and serve your readers well.
+Finalizing a translation for publication is detailed, careful work. Each chapter in this course has guided you through essential quality checks that protect your years of translation effort and serve your readers well.
 Take pride in the thoroughness of your preparation. Readers may never know about the hours spent checking parallel passages, verifying biblical terms, or linking glossary entries—but they'll benefit from a clear, accurate, professional publication that helps them engage with God's Word.
 Well done!
 <empty-block/>

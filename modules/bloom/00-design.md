@@ -6,7 +6,7 @@
 | --- | --- |
 | **Title** | Bloom |
 | **Competencies addressed** | Literacy Tools |
-| **Target outcome level** | With Assistance |
+| **Target outcome level** | 2 - With Assistance |
 | **SME(s) consulted** | TBD — SME interview not yet conducted (see SME knowledge notes below) |
 | **Design status** | Draft |
 
@@ -47,7 +47,7 @@ A 12-question quiz, grouped into four sections matching the lesson files (Bloom 
 
 - **Real field cases (1–3 concrete stories):** Actual language projects where Bloom was used to produce primers, simple books, decodable/leveled readers, or talking books — including any resource constraints (offline field locations, low-power devices, limited literacy of end users) or tool problems the SME personally encountered.
 - **Common learner mistakes:** What new Bloom users most often get wrong — e.g., template misuse, image/formatting pitfalls, mishandling multilingual book settings, decodable-reader grapheme-sequencing errors, or audio-sync problems.
-- **What "good" looks like at the "With Assistance" level:** What competent-with-support performance looks like in the field — e.g., what a consultant should be able to do for/with a literacy worker when creating a simple book, decodable reader, or talking book, and where a learner would still need guidance vs. work independently.
+- **What "good" looks like at `2 - With Assistance`:** What competent-with-support performance looks like in the field — e.g., what a consultant should be able to do for/with a literacy worker when creating a simple book, decodable reader, or talking book, and where a learner would still need guidance vs. work independently.
 - **Tool-version specifics:** Which Bloom version(s) and any relevant configuration/platform notes (Windows-only vs. other platforms, offline vs. online publishing, BloomPUB/BloomLibrary specifics) the SME flags as current gotchas.
 
 Do not draft `01-*.md` scenario content or lesson framing that depends on field specifics until this section is filled in from an actual SME interview.

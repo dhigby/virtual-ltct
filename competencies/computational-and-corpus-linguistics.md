@@ -5,11 +5,11 @@ slug: computational-and-corpus-linguistics
 in_framework: true
 target_statement: Is able to use and teach computational tools for corpus and data analysis
 outcome_levels:
-  - Learner
-  - Advanced Beginner
-  - Practitioner
-  - Trainer/Proficient
-  - Expert
+  - "0 - No Competency"
+  - "1 - Has Knowledge"
+  - "2 - With Assistance"
+  - "3 - Independent"
+  - "4 - Expert"
 resources:
   - title: Problem Solving Skills of Great Software Developers
     url: https://dev.to/lpasqualis/the-5-problem-solving-skills-of-great-software-developers-4e6
@@ -49,25 +49,26 @@ This competency promotes the use of natural language processing tools for the ad
 
 ## Progression by component
 
-_Suggested activities to reach each outcome level._
+_Each row is a level a learner is **at**; its activities are what they do to reach the level in the final column._
 
 ### 1.0 — Corpus Linguistics
 
-| Level | Suggested activities |
-| --- | --- |
-| **Learner** | Explore existing tools for computational and corpus linguistics. |
-| **Advanced Beginner** | Learn to collect, prepare and tag corpus data for Natural Language Processing. |
-| **Practitioner** | Learn to use an NLP tool for forced alignment, semantic parsing, or corpus linguistics. |
-| **Trainer/Proficient** | Train users to use an NLP tool for forced alignment, semantic parsing, or corpus linguistics. |
-| **Expert** | Participate or contribute to augment, improve, or develop new NLP methods. |
+| Current level | Suggested activities | Reaches |
+| --- | --- | --- |
+| **0 - No Competency** | Explore existing tools for computational and corpus linguistics. | 1 - Has Knowledge |
+| **1 - Has Knowledge** | Learn to collect, prepare and tag corpus data for Natural Language Processing. | 2 - With Assistance |
+| **2 - With Assistance** | Learn to use an NLP tool for forced alignment, semantic parsing, or corpus linguistics. | 3 - Independent |
+| **3 - Independent** | Train users to use an NLP tool for forced alignment, semantic parsing, or corpus linguistics. | 4 - Expert |
+| **4 - Expert** | Participate or contribute to augment, improve, or develop new NLP methods. | — |
 
 ### 2.0 — Machine Learning
 
-| Level | Suggested activities |
-| --- | --- |
-| **Learner** | Explore existing tools for machine learning. |
-| **Advanced Beginner** | Try out some machine learning tools. |
-| **Practitioner** | Contribute to a project using existing machine learning to explore solutions. |
-| **Trainer/Proficient** | Train users to use existing machine learning solutions. |
-| **Expert** | Participate or contribute to augment, improve, or develop new Machine Learning projects. |
+| Current level | Suggested activities | Reaches |
+| --- | --- | --- |
+| **0 - No Competency** | Explore existing tools for machine learning. | 1 - Has Knowledge |
+| **1 - Has Knowledge** | Try out some machine learning tools. | 2 - With Assistance |
+| **2 - With Assistance** | Contribute to a project using existing machine learning to explore solutions. | 3 - Independent |
+| **3 - Independent** | Train users to use existing machine learning solutions. | 4 - Expert |
+| **4 - Expert** | Participate or contribute to augment, improve, or develop new Machine Learning projects. | — |
 
+_Level 4 activities aim past the top of the CBC scale (the source spreadsheet's "level 5"), which CBC does not define._

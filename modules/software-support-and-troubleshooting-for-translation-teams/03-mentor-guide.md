@@ -2,7 +2,7 @@
 
 **Purpose:** Guide for mentors assessing learner responses to the [scenario bank](02-scenario-bank.md).
 
-This is a **Has Knowledge** course. The scenarios ask learners to *explain and self-assess*
+This is a **1 - Has Knowledge** course. The scenarios ask learners to *explain and self-assess*
 a troubleshooting approach, not to perform a repair. Assess the **quality of their
 reasoning** — whether they think systematically and reach for the right questions — rather
 than whether they name a specific fix. All three scenarios are built on the lesson's 5-step

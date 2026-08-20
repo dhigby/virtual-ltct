@@ -5,10 +5,10 @@ slug: responsive-feedback
 in_framework: true
 target_statement: Has the ability to describe a software issue in a meaningful way for developers to act on.
 outcome_levels:
-  - Learner
-  - Advanced Beginner
-  - Practitioner
-  - Trainer
+  - "0 - No Competency"
+  - "1 - Has Knowledge"
+  - "2 - With Assistance"
+  - "3 - Independent"
 resources:
   - title: How to write a quality bug report?
     url: https://rubygarage.org/blog/how-to-write-a-quality-bug-report
@@ -38,14 +38,14 @@ Giving feedback to the developers of language technology tools is an important s
 
 ## Progression by component
 
-_Suggested activities to reach each outcome level._
+_Each row is a level a learner is **at**; its activities are what they do to reach the level in the final column._
 
 ### 1.0 — General
 
-| Level | Suggested activities |
-| --- | --- |
-| **Learner** | Learn what should be included in a bug report. |
-| **Advanced Beginner** | Submit a well defined bug report or a new feature request for developers to act upon. Follow the report or request through the process. |
-| **Practitioner** | Actively participate as a beta tester for a language technology tool. |
-| **Trainer** | Represents the user community on software development prioritization committees, UX design, or in championing new products. |
+| Current level | Suggested activities | Reaches |
+| --- | --- | --- |
+| **0 - No Competency** | Learn what should be included in a bug report. | 1 - Has Knowledge |
+| **1 - Has Knowledge** | Submit a well defined bug report or a new feature request for developers to act upon. Follow the report or request through the process. | 2 - With Assistance |
+| **2 - With Assistance** | Actively participate as a beta tester for a language technology tool. | 3 - Independent |
+| **3 - Independent** | Represents the user community on software development prioritization committees, UX design, or in championing new products. | 4 - Expert |
 

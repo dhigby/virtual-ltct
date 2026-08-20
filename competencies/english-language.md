@@ -5,10 +5,10 @@ slug: english-language
 in_framework: true
 target_statement: Can understand English training and technical publications and convey to others what they learned.
 outcome_levels:
-  - Learner
-  - Advanced Beginner
-  - Practitioner
-  - Trainer
+  - "0 - No Competency"
+  - "1 - Has Knowledge"
+  - "2 - With Assistance"
+  - "3 - Independent"
 resources:
   - title: Common European Framework of Reference (CEFR)
     url: https://www.coe.int/en/web/common-european-framework-reference-languages
@@ -42,14 +42,14 @@ Many of the LT tools, training materials and documentation are in English only.
 
 ## Progression by component
 
-_Suggested activities to reach each outcome level._
+_Each row is a level a learner is **at**; its activities are what they do to reach the level in the final column._
 
 ### 1.0 — General
 
-| Level | Suggested activities |
-| --- | --- |
-| **Learner** | Level A2 in reading on Common European Framework of Reference for Languages |
-| **Advanced Beginner** | Level B1 in reading on Common European Framework of Reference for Languages |
-| **Practitioner** | Level B2 in reading on Common European Framework of Reference for Languages |
-| **Trainer** | Level C1 in reading on Common European Framework of Reference for Languages |
+| Current level | Suggested activities | Reaches |
+| --- | --- | --- |
+| **0 - No Competency** | Level A2 in reading on Common European Framework of Reference for Languages | 1 - Has Knowledge |
+| **1 - Has Knowledge** | Level B1 in reading on Common European Framework of Reference for Languages | 2 - With Assistance |
+| **2 - With Assistance** | Level B2 in reading on Common European Framework of Reference for Languages | 3 - Independent |
+| **3 - Independent** | Level C1 in reading on Common European Framework of Reference for Languages | 4 - Expert |
 

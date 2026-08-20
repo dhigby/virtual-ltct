@@ -2,7 +2,39 @@
 
 The GitHub Project board ("LTC Training Modules", project #1, owner `dhigby`) is
 user-owned, so only the Maintainer (or someone granted project admin) can change its
-fields. This page covers the **one-time status expansion** the new process needs.
+fields. This page covers the **one-time field migrations** the process has needed.
+
+## One-time: adopt the CBC level scale — ⬜ TODO
+
+The repo moved to the CBC scale (see [`outcome-levels.yaml`](../outcome-levels.yaml)); the
+board still carries the old vocabulary. Do this **in the Projects web UI**, and **rename**
+rather than replace — see the warning below.
+
+**Target Outcome Level** — 30 items, of which 13 read `With Assistance`, 11 read
+`Has knowledge`, and 6 are unset:
+
+1. Open the board → **⋯ → Settings → Target Outcome Level**.
+2. **Rename** `Has knowledge` → `1 - Has Knowledge`. Renaming preserves the option's ID, so
+   all 11 items keep their value.
+3. **Rename** `With Assistance` → `2 - With Assistance` (13 items preserved).
+4. **Add** two new options: `3 - Independent` and `4 - Expert`.
+5. Leave the order as `1 · 2 · 3 · 4`. There is deliberately no `0 - No Competency` option:
+   the field records where a learner *lands*, and no course leaves someone at No Competency.
+
+**Consultant Tier** — **delete the field.** It was set on 0 of 30 items, and the concept
+doesn't survive contact with CBC: the growth-plan levels (LT Specialist L1/L2, LT Consultant
+L1/L2, Senior LT Consultant L3) are earned by accumulating points across whole competency
+categories — see the "Milestone Scoring" sheet in `import-seeds/Lang Tech Competencies.xlsx`
+— and competencies are electives, so one course legitimately serves an LT Specialist 1 and an
+LT Consultant 2 alike. Nothing in the repo references it any more.
+
+Verify afterwards:
+
+```bash
+gh project item-list 1 --owner dhigby --format json   # 24 items still carry a level; no Consultant Tier
+```
+
+Then flip this heading to `✅ DONE (<date>)`.
 
 ## One-time: expand the Module Status field — ✅ DONE (2026-07-06)
 

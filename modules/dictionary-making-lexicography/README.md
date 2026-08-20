@@ -3,7 +3,7 @@ title: Dictionary-Making & Lexicography
 slug: dictionary-making-lexicography
 notion_id: b30d3aed-be86-48d8-a966-2b7326e32f6e
 notion_data_source: 7ebb2ef5-9f57-4723-8de0-9cc1ca47ff8e
-target_outcome_level: With Assistance
+target_outcome_level: "2 - With Assistance"
 competencies:
   - Lexical Tools
 content_type: stub

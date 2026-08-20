@@ -66,7 +66,10 @@ different instructional style.
   connectivity, non-technical end users) — this curriculum trains people who support
   Bible translators and language workers in the field, not office IT staff.
 - State the observable outcome a lesson prepares the learner for before teaching the
-  content, matching the module's `target_outcome_level` ("Has knowledge" is conceptual;
-  "With Assistance" means the learner should be able to attempt the task with support).
+  content, matching the module's `target_outcome_level` — a CBC level defined in
+  [`outcome-levels.yaml`](../../outcome-levels.yaml) naming where the learner stands
+  after the course (`1 - Has Knowledge` is conceptual; `2 - With Assistance` means
+  attempting the task with support; `3 - Independent` means unaided; `4 - Expert` means
+  teaching others).
 - Prefer editing existing lesson files over restructuring a module's numbering scheme
   unless asked.

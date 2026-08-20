@@ -6,7 +6,7 @@
 | --- | --- |
 | **Title** | Software Support and Troubleshooting for Translation Teams |
 | **Competencies addressed** | Translation Tools |
-| **Target outcome level** | Has Knowledge |
+| **Target outcome level** | 1 - Has Knowledge |
 | **SME(s) consulted** | Jenni Beadle — interviewed 2026-07-30, answers recorded below. Original lesson content (troubleshooting framework, common-issue categories, toolkit list, three Challenge scenarios) was first drafted via a Claude.ai chat session and is being retained where the SME confirmed it. Steve White — SME review 2026-08-04; approved the design, and his lesson-content notes were folded in (see commit `e81e3b0`). |
 | **Design status** | Approved by Steve White on 2026-08-04 |
 
@@ -29,15 +29,17 @@ the previous draft of this document.
 The original draft of this document flagged a conflict: the `README.md` frontmatter said
 `With Assistance` while the lesson body itself said `**Level:** Has Knowledge`, and the
 content is tool-agnostic throughout (never names a specific translation tool). **Jenni's
-decision: re-level to Has Knowledge.** `README.md` frontmatter has been updated to match.
+decision: re-level to `1 - Has Knowledge`.** `README.md` frontmatter has been updated to match.
 
 This also changes which rung of the `competencies/translation-tools.md` component 2.0
-ladder anchors the objectives. Advanced Beginner ("Can use translation tools and
-troubleshoot issues that arise") maps to *With Assistance*; the better anchor for *Has
-Knowledge* is **Learner** ("Demonstrates basic knowledge of translation tools"). Objective
-verbs below have been rewritten to recognize/explain phrasing accordingly. The existing
+ladder anchors the objectives. Reading the ladder correctly — each row's activities carry a
+learner to the level in its `Reaches` column — the row that reaches `2 - With Assistance` is
+`1 - Has Knowledge` ("Can use translation tools and troubleshoot issues that arise"), which is
+one level too high here. The anchor for a course landing at `1 - Has Knowledge` is the row
+labelled **`0 - No Competency`** ("Demonstrates basic knowledge of translation tools").
+Objective verbs below have been rewritten to recognize/explain phrasing accordingly. The existing
 Challenge scenarios ("write out the questions you would ask," "describe your
-troubleshooting approach") already fit Has Knowledge well — they're explanation/
+troubleshooting approach") already fit `1 - Has Knowledge` well — they're explanation/
 self-assessment tasks, not live-practice-with-mentor tasks — so this re-level is
 content-consistent and required no rewrite of the scenarios themselves.
 
@@ -45,12 +47,12 @@ content-consistent and required no rewrite of the scenarios themselves.
 
 | # | Objective | Source | Assessed by |
 | --- | --- | --- | --- |
-| 1 | Learner can explain what clarifying questions to ask (goal, actual behavior, timeline, recent changes, reproducible evidence) to turn a vague translator problem report ("nothing is working") into a specific, diagnosable issue | Translation Tools 2.0, Learner — "Demonstrates basic knowledge of translation tools" | Quiz + Challenge Scenario 1 (The Panicked Translator) |
-| 2 | Learner can identify project- and workflow-context factors (project structure, collaboration setup, work environment, recent changes) that affect what's normal vs. abnormal for a translation team, and explain why context matters for diagnosis | Translation Process 1.0, Learner — "Get to know a translation team and their daily activities" | Quiz + Challenge Scenario 3 (The Recurring Problem) |
-| 3 | Learner can explain why reproducing or directly observing a reported problem (screen-share or side-by-side) is more reliable than relying solely on a translator's verbal description | Translation Tools 2.0, Learner | Quiz + Challenge Scenario 2 (The Unclear Error) |
-| 4 | Learner can describe a systematic, one-variable-at-a-time testing method for isolating the cause of a translation-software fault | Translation Tools 2.0, Learner | Quiz + Challenge Scenario 3 |
-| 5 | Learner can recognize signs that a problem exceeds what they can resolve alone and identify the appropriate next step (escalate to a more experienced colleague, contact vendor support, restore from backup, or find a workaround) | Translation Tools 2.0, Learner (foundational recognition of escalation triggers, ahead of the Advanced Beginner rung's actual "troubleshoot issues that arise") | Quiz + Challenge Scenario 3 |
-| 6 | Learner can recognize common categories of translation-software problems (synchronization failures, missing/lost work, installation & compatibility issues, performance problems, UI/feature-location confusion) from a translator's description of symptoms | Translation Tools 2.0, Learner | Quiz |
+| 1 | Learner can explain what clarifying questions to ask (goal, actual behavior, timeline, recent changes, reproducible evidence) to turn a vague translator problem report ("nothing is working") into a specific, diagnosable issue | Translation Tools 2.0, `0 - No Competency` — "Demonstrates basic knowledge of translation tools" | Quiz + Challenge Scenario 1 (The Panicked Translator) |
+| 2 | Learner can identify project- and workflow-context factors (project structure, collaboration setup, work environment, recent changes) that affect what's normal vs. abnormal for a translation team, and explain why context matters for diagnosis | Translation Process 1.0, `0 - No Competency` — "Get to know a translation team and their daily activities" | Quiz + Challenge Scenario 3 (The Recurring Problem) |
+| 3 | Learner can explain why reproducing or directly observing a reported problem (screen-share or side-by-side) is more reliable than relying solely on a translator's verbal description | Translation Tools 2.0, `0 - No Competency` | Quiz + Challenge Scenario 2 (The Unclear Error) |
+| 4 | Learner can describe a systematic, one-variable-at-a-time testing method for isolating the cause of a translation-software fault | Translation Tools 2.0, `0 - No Competency` | Quiz + Challenge Scenario 3 |
+| 5 | Learner can recognize signs that a problem exceeds what they can resolve alone and identify the appropriate next step (escalate to a more experienced colleague, contact vendor support, restore from backup, or find a workaround) | Translation Tools 2.0, `0 - No Competency` (foundational recognition of escalation triggers, ahead of the `1 - Has Knowledge` rung's actual "troubleshoot issues that arise") | Quiz + Challenge Scenario 3 |
+| 6 | Learner can recognize common categories of translation-software problems (synchronization failures, missing/lost work, installation & compatibility issues, performance problems, UI/feature-location confusion) from a translator's description of symptoms | Translation Tools 2.0, `0 - No Competency` | Quiz |
 
 **Source-column note.** The "X.0" labels in the table above (e.g. "Translation Tools 2.0",
 "Translation Process 1.0") refer to numbered **components within** the single
@@ -83,7 +85,7 @@ performed here.
 | File | Topic | Objectives covered | Estimated minutes |
 | --- | --- | --- | --- |
 | `01-software-support-and-troubleshooting.md` | Systematic troubleshooting framework (Clarify → Understand Context → Reproduce → Test Systematically → Escalate), common issue categories, supporting stressed translators, toolkit-building | 1–6 (+ supplementary content) | 55 (Connect 10 / Content 30 / Challenge 10 / Change 5) |
-| `02-scenario-bank.md` | The three existing Challenge scenarios (Panicked Translator, Unclear Error, Recurring Problem), reframed as explanation/self-assessment tasks consistent with Has Knowledge | 1, 2, 3, 4, 5 | 15 |
+| `02-scenario-bank.md` | The three existing Challenge scenarios (Panicked Translator, Unclear Error, Recurring Problem), reframed as explanation/self-assessment tasks consistent with `1 - Has Knowledge` | 1, 2, 3, 4, 5 | 15 |
 | `03-mentor-guide.md` | The existing "For Mentors" watch-for notes, expanded as needed for a standalone facilitator file | — | — |
 | `04-quiz.md` | Assessment (12 questions, 80% to pass) | 1–6 | 15 |
 | **Total learner seat time** | | | **~85** |
@@ -122,20 +124,20 @@ folded into Translation Tools — it's a distinct, confirmed failure mode in its
 
 **Framework validity (Q4):** the SME confirmed the current 5-step framework (Clarify →
 Understand Context → Reproduce → Test Systematically → Escalate) is "certainly the goal"
-and is good for learners to see even at Has Knowledge level — they need to recognize and
+and is good for learners to see even at `1 - Has Knowledge` level — they need to recognize and
 explain the target framework now, and will apply it with assistance later in their
 development (a likely future With-Assistance-level course, not in scope here). No changes
 to the framework's steps are needed.
 
 **Tool-version specifics (Q5):** moot at this outcome level — the course stays
-tool-agnostic; no tool-specific module is needed at Has Knowledge.
+tool-agnostic; no tool-specific module is needed at `1 - Has Knowledge`.
 
 ## Resolved open questions (for reference)
 
 All seven open questions from the prior draft of this document have been answered by the
 SME interview above:
 
-1. Outcome level → re-leveled to Has Knowledge (see "Outcome-level re-level" section).
+1. Outcome level → re-leveled to `1 - Has Knowledge` (see "Outcome-level re-level" section).
 2. Real field cases → Scenarios 1 and 2 confirmed real; Scenario 3 flagged as illustrative
    only.
 3. Common learner mistakes → recorded verbatim above.

@@ -1,7 +1,7 @@
 ---
 title: Advanced Paratext Support
 slug: paratext-9-advanced-support
-target_outcome_level: With Assistance
+target_outcome_level: "2 - With Assistance"
 competencies:
   - Translation Tools
 content_type: content

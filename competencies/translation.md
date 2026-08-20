@@ -6,10 +6,10 @@ source_label: Domain-specific education
 in_framework: true
 target_statement: "Has pursue domain specific knowledge via formal education or equivalent in one of the following: translation, linguistics, literacy / education or scripture engagment."
 outcome_levels:
-  - Learner
-  - Advanced Beginner
-  - Practitioner
-  - Trainer
+  - "0 - No Competency"
+  - "1 - Has Knowledge"
+  - "2 - With Assistance"
+  - "3 - Independent"
 resources:
   []
 source: Lang Tech Competencies.xlsx
@@ -32,14 +32,14 @@ Have a good understanding of one of the language domains used for Bible translat
 
 ## Progression by component
 
-_Suggested activities to reach each outcome level._
+_Each row is a level a learner is **at**; its activities are what they do to reach the level in the final column._
 
 ### 1.0 — -
 
-| Level | Suggested activities |
-| --- | --- |
-| **Learner** | Complete a semester of university level courses in one of these domains. Alternately, gain significant practical experience in one of these domains from working in a language program. |
-| **Advanced Beginner** | Complete a bachelor's program or a semester of post graduate level courses in one of these domains. Alternately, gain significant practical experience in one of these domains from working in a language program. |
-| **Practitioner** | Complete a Master's program in one of these domains or demonstrate a thorough understanding and respected contribution to the field. |
-| **Trainer** | Complete a Doctoral program (PhD, EdD) in one of these domains. |
+| Current level | Suggested activities | Reaches |
+| --- | --- | --- |
+| **0 - No Competency** | Complete a semester of university level courses in one of these domains. Alternately, gain significant practical experience in one of these domains from working in a language program. | 1 - Has Knowledge |
+| **1 - Has Knowledge** | Complete a bachelor's program or a semester of post graduate level courses in one of these domains. Alternately, gain significant practical experience in one of these domains from working in a language program. | 2 - With Assistance |
+| **2 - With Assistance** | Complete a Master's program in one of these domains or demonstrate a thorough understanding and respected contribution to the field. | 3 - Independent |
+| **3 - Independent** | Complete a Doctoral program (PhD, EdD) in one of these domains. | 4 - Expert |
 

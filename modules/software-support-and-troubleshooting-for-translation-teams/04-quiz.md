@@ -4,7 +4,7 @@
 
 This quiz covers the systematic troubleshooting framework and common issue categories
 taught in `01-software-support-and-troubleshooting.md`. It tests whether you can
-**recognize and explain** good support practice (this is a *Has Knowledge* course), not
+**recognize and explain** good support practice (this is a *1 - Has Knowledge* course), not
 whether you can perform live troubleshooting. You need **80% (10/12)** to pass.
 
 ### Section 1: Clarifying the Problem (Questions 1-3)

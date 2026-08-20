@@ -7,6 +7,10 @@ split: workflow state lives in the GitHub Project, not here).
 
 A frontmatter competency that isn't in competencies.yaml is a loud warning — it means a
 typo is hiding a module from coverage. In CI this is treated as a failure (exit 1).
+
+Also guards `target_outcome_level` against outcome-levels.yaml. This is the only check that
+sees every module (check_course_package.py only inspects courses that opted into the
+pipeline), so it is what catches a stale or mis-capitalised level anywhere in the repo.
 """
 import sys, pathlib, datetime
 
@@ -14,6 +18,9 @@ try:
     import yaml
 except ImportError:
     sys.exit("pyyaml required: pip install pyyaml")
+
+sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent))
+import _levels
 
 REPO = pathlib.Path(__file__).resolve().parent.parent
 
@@ -34,6 +41,8 @@ def main():
     coverage = {n: [] for n in all_names}
     warnings = []
 
+    _, target_levels, legacy = _levels.load()
+
     for md in sorted((REPO / "modules").glob("*/README.md")):
         fm = parse_frontmatter(md)
         title = fm.get("title", md.parent.name)
@@ -42,6 +51,21 @@ def main():
                 coverage[c].append(title)
             else:
                 warnings.append(f"{md.parent.name}: competency '{c}' not in competencies.yaml")
+
+        # `target_outcome_level` is a CBC level naming where the learner LANDS, so 1-4 only.
+        level = fm.get("target_outcome_level")
+        if level is not None and level not in target_levels:
+            hint = ""
+            if str(level) in legacy:
+                hint = f" (legacy rung — did you mean '{legacy[str(level)]}'?)"
+            elif str(level).strip().lower() in {t.split(" - ", 1)[1].lower()
+                                                for t in target_levels}:
+                match = next(t for t in target_levels
+                             if t.split(" - ", 1)[1].lower() == str(level).strip().lower())
+                hint = f" (did you mean '{match}'?)"
+            warnings.append(
+                f"{md.parent.name}: target_outcome_level '{level}' is not one of "
+                f"{target_levels}{hint}")
 
     covered = sorted(c for c in all_names if coverage[c])
     gaps = sorted(c for c in all_names if not coverage[c])

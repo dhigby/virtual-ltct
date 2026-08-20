@@ -5,10 +5,10 @@ slug: fonts-and-encoding
 in_framework: true
 target_statement: Is able troubleshoot font and character display issues, and convert between encodings.
 outcome_levels:
-  - Learner
-  - Advanced Beginner
-  - Practitioner
-  - Trainer
+  - "0 - No Competency"
+  - "1 - Has Knowledge"
+  - "2 - With Assistance"
+  - "3 - Independent"
 resources:
   - title: UNICODE
     url: http://www.unicode.org/versions/latest/
@@ -44,32 +44,32 @@ Some scripts and fonts reinforce cultural or community identity. A Language Tech
 
 ## Progression by component
 
-_Suggested activities to reach each outcome level._
+_Each row is a level a learner is **at**; its activities are what they do to reach the level in the final column._
 
 ### 1.0 — Can troubleshoot font issues.
 
-| Level | Suggested activities |
-| --- | --- |
-| **Learner** | Identify local scripts and fonts. |
-| **Advanced Beginner** | Can identify issues related to fonts, and suggest appropriate solutions. |
-| **Practitioner** | Train others to use appropriate fonts. |
-| **Trainer** | Research alternate scripts. Learn to create and tweak fonts. |
+| Current level | Suggested activities | Reaches |
+| --- | --- | --- |
+| **0 - No Competency** | Identify local scripts and fonts. | 1 - Has Knowledge |
+| **1 - Has Knowledge** | Can identify issues related to fonts, and suggest appropriate solutions. | 2 - With Assistance |
+| **2 - With Assistance** | Train others to use appropriate fonts. | 3 - Independent |
+| **3 - Independent** | Research alternate scripts. Learn to create and tweak fonts. | 4 - Expert |
 
 ### 2.0 — Can identify and convert between common document formats.
 
-| Level | Suggested activities |
-| --- | --- |
-| **Learner** | Pay attention what file formats are in use in your context (Word, LibreOffice, Publisher, Web Pages, etc.). |
-| **Advanced Beginner** | Learn which programs can open and edit various document formats and identify which formats and content can be easily converted to others. |
-| **Practitioner** | — |
-| **Trainer** | — |
+| Current level | Suggested activities | Reaches |
+| --- | --- | --- |
+| **0 - No Competency** | Pay attention what file formats are in use in your context (Word, LibreOffice, Publisher, Web Pages, etc.). | 1 - Has Knowledge |
+| **1 - Has Knowledge** | Learn which programs can open and edit various document formats and identify which formats and content can be easily converted to others. | 2 - With Assistance |
+| **2 - With Assistance** | — | 3 - Independent |
+| **3 - Independent** | — | 4 - Expert |
 
 ### 3.0 — Can troubleshoot encoding issues
 
-| Level | Suggested activities |
-| --- | --- |
-| **Learner** | Identify common encodings (Legacy/Unicode/NFC/NFD) |
-| **Advanced Beginner** | Convert data between common scripts and encodings. Learn about SIL's Open Font License. |
-| **Practitioner** | Create and and use a custom encoding conversion, set up a transliteration project in Paratext, etc. |
-| **Trainer** | Research encoding in alternate scripts |
+| Current level | Suggested activities | Reaches |
+| --- | --- | --- |
+| **0 - No Competency** | Identify common encodings (Legacy/Unicode/NFC/NFD) | 1 - Has Knowledge |
+| **1 - Has Knowledge** | Convert data between common scripts and encodings. Learn about SIL's Open Font License. | 2 - With Assistance |
+| **2 - With Assistance** | Create and and use a custom encoding conversion, set up a transliteration project in Paratext, etc. | 3 - Independent |
+| **3 - Independent** | Research encoding in alternate scripts | 4 - Expert |
 

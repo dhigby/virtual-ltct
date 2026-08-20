@@ -3,7 +3,7 @@ title: Teaching a Language Technology Workshop
 slug: teaching-a-language-technology-workshop
 notion_id: 6386e22e-a8f2-49e4-a0d9-18c48bf1a2aa
 notion_data_source: 7ebb2ef5-9f57-4723-8de0-9cc1ca47ff8e
-target_outcome_level: Has knowledge
+target_outcome_level: "1 - Has Knowledge"
 competencies:
   - Adult Education
 content_type: content

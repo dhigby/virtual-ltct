@@ -14,7 +14,7 @@
 | --- | --- |
 | **Title** | Data manipulation skills |
 | **Competencies addressed** | Data Conversion |
-| **Target outcome level** | With Assistance |
+| **Target outcome level** | 2 - With Assistance |
 | **SME(s) consulted** | Jenni Beadle (SIL) — author of the original lesson; content verified against real RegEx Pal screenshots during this retro-fit pass |
 | **Design status** | Draft (retro-fit — see note above) |
 
@@ -22,10 +22,10 @@
 
 | # | Objective | Source | Assessed by |
 | --- | --- | --- | --- |
-| 1 | Use Find operations in the User Menu to safely locate formatting problems without changing any text | Data Conversion, Learner rung ("advanced search and replace in text") | Challenge Step 1 + mentor check-in |
+| 1 | Use Find operations in the User Menu to safely locate formatting problems without changing any text | Data Conversion, `0 - No Competency` rung ("advanced search and replace in text") | Challenge Step 1 + mentor check-in |
 | 2 | Use Count operations to measure how often a pattern appears in a project | Data Conversion, Learner/Advanced Beginner boundary | Challenge Step 2 + mentor check-in |
-| 3 | Use Extract operations to pull matching content out for review | Data Conversion, Learner rung | Challenge Step 3 + mentor check-in |
-| 4 | Run a Replace operation safely, reviewing each change as it's presented, with mentor support if unsure | Data Conversion, Advanced Beginner rung ("replace strings according to context") | Challenge Step 4 + mentor check-in |
+| 3 | Use Extract operations to pull matching content out for review | Data Conversion, `0 - No Competency` rung | Challenge Step 3 + mentor check-in |
+| 4 | Run a Replace operation safely, reviewing each change as it's presented, with mentor support if unsure | Data Conversion, `1 - Has Knowledge` rung ("replace strings according to context") | Challenge Step 4 + mentor check-in |
 
 ## Module breakdown
 
@@ -126,7 +126,7 @@ available than others, not that a learner might have none. The lesson's "Check i
 mentor" checkpoints keep the mentor as the expected point of contact throughout, but where an
 immediate check-in might not be possible, each checkpoint now also says what to do in the
 meantime (make a note, compare against another book, etc.) so a learner isn't blocked waiting
-on their mentor's availability. Target outcome level remains **With Assistance**.
+on their mentor's availability. Target outcome level remains **`2 - With Assistance`**.
 
 **Known pending items (tracked in `README.md`):**
 - Three of five original screenshots (Find, Extract, and the Replace confirmation dialog) are

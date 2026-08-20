@@ -33,8 +33,13 @@ FIELDS = {
     "Module Status": ("status", ["Not started", "Design", "Drafting", "SME Check",
                                  "Internal Review", "Pilot", "Publishing", "Online"]),
     "Priority": ("priority", ["Low", "Medium", "High"]),
-    "Consultant Tier": ("consultant_tier", ["Practitioner", "Trainer", "Expert"]),
-    "Target Outcome Level": ("target_outcome_level", ["Has knowledge", "With Assistance"]),
+    # CBC scale — keep in step with outcome-levels.yaml. Only levels a course can leave a
+    # learner AT, so no "0 - No Competency". The old "Consultant Tier" field was retired:
+    # growth-plan level (LT Specialist 1/2, LT Consultant 1/2/3) is earned by accumulating
+    # points across whole competency categories, so it is never a property of one course.
+    "Target Outcome Level": ("target_outcome_level", ["1 - Has Knowledge",
+                                                      "2 - With Assistance",
+                                                      "3 - Independent", "4 - Expert"]),
 }
 
 

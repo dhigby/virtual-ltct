@@ -19,8 +19,11 @@ Read `modules/<slug>/00-design.md` and check:
 1. **Objective traceability.** Every learning objective names a real source criterion from
    a `competencies/<slug>.md` descriptor — spot-check two against the descriptor. Reject
    objectives invented from thin air.
-2. **Outcome-level fit.** "Has knowledge" objectives use recognize/explain verbs; "With
-   Assistance" objectives use perform/configure/diagnose verbs. Flag mismatches.
+2. **Outcome-level fit.** Verbs follow the CBC level: `1 - Has Knowledge` uses
+   recognize/explain; `2 - With Assistance` uses perform/configure/diagnose;
+   `3 - Independent` uses unaided-judgment verbs (resolve, recover from); `4 - Expert` uses
+   teaching verbs. Flag mismatches. Check the objectives were lifted from the descriptor row
+   **one level below** the target — the row whose activities *reach* it.
 3. **Time budget.** Each lesson row is ≤ 90 minutes and the totals are believable.
 4. **Assessment coverage.** Every objective maps to at least one quiz question or scenario,
    and vice versa — no orphan assessments.

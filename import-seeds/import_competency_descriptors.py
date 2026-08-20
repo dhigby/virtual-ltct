@@ -6,7 +6,16 @@ alongside it in `import-seeds/`):
 
   1. `Lang Tech Competencies.xlsx` — the technical/education/professional competencies,
      each with a rationale, a target statement, and a ladder of suggested activities at
-     each outcome level (Learner … Expert).
+     each outcome level.
+
+     MIND THE OFFSET. That sheet's level columns carry TWO header rows: one naming where
+     the activities take you (Knowledge / With Assistance / …) and one naming who performs
+     them (Learner / Advanced Beginner / …). Row 4 spells it out — the "Learner" column is
+     captioned "activities in order to help you reach level 1" — and the Milestone Scoring
+     sheet scores Learner at 0 points, Advanced Beginner at 1, and so on. The original
+     import kept only the performer row and emitted it as if it named the achieved level,
+     which shifted every rung by one. This importer now maps the performer names onto the
+     CBC scale in `outcome-levels.yaml` and emits both endpoints per row.
   2. `CBC Guide for Non-technical Competencies in Language Technology.md` — the Core
      (non-technical) competencies, each a group of sub-competencies with a description,
      observable criteria, and a rationale. These have no level ladder.
@@ -96,6 +105,18 @@ def slugify(name):
     s = re.sub(r"[()]", "", s)
     s = re.sub(r"[^a-z0-9]+", "-", s).strip("-")
     return s
+
+
+# Spreadsheet performer name -> (CBC level the learner is AT, level its activities reach).
+# Keep in step with outcome-levels.yaml.
+CBC_LEVELS = {
+    "Learner":            ("0 - No Competency",   "1 - Has Knowledge"),
+    "Advanced Beginner":  ("1 - Has Knowledge",   "2 - With Assistance"),
+    "Practitioner":       ("2 - With Assistance", "3 - Independent"),
+    "Trainer":            ("3 - Independent",     "4 - Expert"),
+    "Trainer/Proficient": ("3 - Independent",     "4 - Expert"),
+    "Expert":             ("4 - Expert",          "—"),
+}
 
 
 def find_layout(rows):
@@ -205,7 +226,7 @@ def frontmatter(d):
     if d["kind"] == "leveled":
         lines.append("target_statement: " + scalar(d["statement"]))
         lines.append("outcome_levels:")
-        lines += [f"  - {lv}" for lv in d["levels"]]
+        lines += [f'  - "{CBC_LEVELS[lv][0]}"' for lv in d["levels"]]
     lines.append("resources:")
     lines += [f"  - {u}" for u in d["resources"]] or ["  []"]
     lines += [f"source: {scalar(d['source'])}", f"last_updated: {d['today']}", "---"]
@@ -241,16 +262,21 @@ def _leveled_body(d):
     if d["statement"]:
         out += ["## Target competency", "", f"> {d['statement']}", ""]
     out += ["## Progression by component", "",
-            "_Suggested activities to reach each outcome level._", ""]
+            "_Each row is a level a learner is **at**; its activities are what they do "
+            "to reach the level in the final column._", ""]
     for comp in d["components"]:
         head = " — ".join(p for p in (comp["num"], comp["name"]) if p) or "General"
         out += [f"### {head}", ""]
         if comp["note"]:
             out += [f"_{comp['note']}_", ""]
-        out += ["| Level | Suggested activities |", "| --- | --- |"]
+        out += ["| Current level | Suggested activities | Reaches |", "| --- | --- | --- |"]
         for lv, act in zip(d["levels"], comp["acts"]):
-            out.append(f"| **{lv}** | {act.replace(chr(124), '/') or '—'} |")
+            label, reaches = CBC_LEVELS[lv]
+            out.append(f"| **{label}** | {act.replace(chr(124), '/') or '—'} | {reaches} |")
         out.append("")
+    if any(CBC_LEVELS[lv][0] == "4 - Expert" for lv in d["levels"]):
+        out += ['_Level 4 activities aim past the top of the CBC scale (the source '
+                'spreadsheet\'s "level 5"), which CBC does not define._', ""]
     return out
 
 

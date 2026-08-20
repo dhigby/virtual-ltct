@@ -10,7 +10,8 @@ contract for everything downstream. Nothing gets drafted until it's approved (st
 - A Course production tracker issue exists for this course and is on the board.
 - You know which competency(ies) the course addresses (copy names **verbatim** from
   [`competencies.yaml`](../../competencies.yaml)) and the target outcome level
-  (`Has knowledge` or `With Assistance`).
+  (`1 - Has Knowledge`, `2 - With Assistance`, `3 - Independent`, or `4 - Expert` — see
+  [`outcome-levels.yaml`](../../outcome-levels.yaml)).
 
 ## How
 
@@ -19,6 +20,10 @@ In Claude Code, from the repo root:
 > Use the **course-designer** agent to produce `modules/<slug>/00-design.md` for a course
 > on _<topic>_, addressing the competencies _<names, verbatim>_ at the _<outcome level>_
 > outcome level.
+
+The outcome level is one of `1 - Has Knowledge`, `2 - With Assistance`, `3 - Independent`,
+or `4 - Expert` — the CBC level a learner stands at **after** finishing the course. See
+[`outcome-levels.yaml`](../../outcome-levels.yaml).
 
 The agent will:
 

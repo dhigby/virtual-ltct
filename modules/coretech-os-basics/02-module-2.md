@@ -62,7 +62,7 @@ Module 2 focuses on five essential areas:
 ### What This Module Doesn't Cover
 
 To keep this module focused and practical, we're not covering:
-- Detailed step-by-step installation processes (IT specialists handle that, or it happens during "With Assistance" phase)
+- Detailed step-by-step installation processes (IT specialists handle that, or it happens during the `2 - With Assistance` phase)
 - Custom keyboard layouts (covered in later courses)
 - Every possible system setting (only what matters for language work)
 - Advanced troubleshooting (that's Module 3)

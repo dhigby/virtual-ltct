@@ -36,7 +36,7 @@ In the past, OS knowledge was assumed as a prerequisite for language technology 
 - Administrator access to your computer (for some configuration activities)
 - Willingness to explore your own system settings
 
-This course is hands-on — you'll be exploring your actual computer system, not just reading about operating systems in theory. All activities are safe and reversible. Throughout Modules 2 and 3, you'll work through realistic scenarios and document your responses in your learning journal. Your mentor will review your diagnostic thinking and provide feedback. This course builds **Has Knowledge** level competency — you'll continue developing toward **With Assistance** and **Independent** levels through real experience and mentorship.
+This course is hands-on — you'll be exploring your actual computer system, not just reading about operating systems in theory. All activities are safe and reversible. Throughout Modules 2 and 3, you'll work through realistic scenarios and document your responses in your learning journal. Your mentor will review your diagnostic thinking and provide feedback. This course builds **1 - Has Knowledge** competency — you'll continue developing toward **2 - With Assistance** and **3 - Independent** through real experience and mentorship.
 
 ### Reflecting on Your OS Experience
 

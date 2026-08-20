@@ -16,6 +16,28 @@ not an application. There is no build/test/run loop; the "checks" are content + 
 numbered file inside it (`01-*.md`, …), capped at 90 minutes. (The board field "Module
 Status" predates this terminology — read "Module" there as *course*.)
 
+## Competency levels (CBC) — and the offset that trips everyone up
+
+This curriculum exists to advance people through the **Competency-Based Certification (CBC)**
+program, so it uses the CBC scale and nothing else. It is defined once, in
+[`outcome-levels.yaml`](outcome-levels.yaml):
+
+`0 - No Competency · 1 - Has Knowledge · 2 - With Assistance · 3 - Independent · 4 - Expert`
+
+**A level names where a learner *is*. The activities listed against that level are what they
+do to reach the *next* one.** In a descriptor's ladder, the row labelled `1 - Has Knowledge`
+holds the activities that carry a learner to `2 - With Assistance` — which is why every ladder
+table now carries a `Reaches` column. Design objectives for level N from the row labelled
+N-1.
+
+A course's `target_outcome_level` is **where the learner lands**, so it is `1`–`4`; never `0`,
+since no course leaves someone at No Competency.
+
+The legacy vocabulary (`Learner · Advanced Beginner · Practitioner · Trainer/Proficient ·
+Expert`, and the two-value `Has knowledge`/`With Assistance`) is retired — do not reintroduce
+it. It came from a spreadsheet whose header had *two* rows, one naming the destination and one
+naming the performer; the import kept only the second, which is what shifted every rung by one.
+
 ## The production process
 
 New content courses are built through an 8-stage pipeline — Design → approve → draft →
@@ -66,7 +88,7 @@ separate faithful-import workstream — see [`process/backfill.md`](process/back
 ---
 title: Bloom
 slug: bloom
-target_outcome_level: With Assistance      # outcome level, not workflow status
+target_outcome_level: "2 - With Assistance" # CBC level, not workflow status
 competencies:
   - Literacy Tools                          # must match competencies.yaml exactly
 content_type: stub                          # stub | content

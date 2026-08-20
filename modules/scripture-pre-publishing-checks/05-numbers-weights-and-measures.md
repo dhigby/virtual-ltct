@@ -1,279 +1,248 @@
-# Numbers, Weights, and Measures
+title: "Numbers, Weights, and Measures"
 
-# Numbers, Weights, and Measures
+course: "Finalizing Your Translation for Publication"
 
-Numbers, Weights, and Measures
----
-## title: "Numbers, Weights, and Measures"<br>course: "Finalizing Your Translation for Publication"<br>module_number: 5<br>duration: 50<br>level: Experienced Translator<br>goal: Ensure consistent translation of numbers, money, weights, and measures using specialized biblical terms lists<br>prerequisites: "Familiar with Biblical Terms tool; understand your project's approach to measurements"
-# Numbers, Weights, and Measures
-**Duration:** 50 minutes
+chapter_number: 5
+
+level: Experienced Translator
+
+goal: Verify that numbers, money, weights, and measures already carry a consistent, agreed rendering throughout the project, using the specialized biblical terms lists
+
+prerequisites: "Renderings for measurement terms already decided and applied during translation; familiar with the Biblical Terms tool"
+
+# 5. Numbers, Weights, and Measures
+
 **Level:** Experienced Translator
-**Goal:** Ensure consistent translation of numbers, money, weights, and measures using specialized biblical terms lists
+**Goal:** Verify that numbers, money, weights, and measures already carry a consistent, agreed rendering throughout the project, using the specialized biblical terms lists
+
 ---
+
 ## Introduction
-**Time:** 5 minutes
+
 "How much is a denarius worth?" "What does 'three measures of flour' mean?" "How far is a sabbath day's journey?"
-Ancient measurements, monetary units, and numerical expressions can confuse modern readers. Unlike theological terms or proper names that you've worked with throughout translation, these specialized terms often get inconsistent treatment because they appear sporadically throughout the text.
-A reader might see "two denarii" rendered one way in the Gospels and a different way in a parable—creating confusion about whether they're the same coin. Or "a cubit" might be translated as a measurement in one book and transliterated in another.
-This module guides you through the systematic review of all numbers, monetary terms, weights, and measures to ensure consistency and reader comprehension.
-### What This Module Covers
-- Understanding specialized biblical terms lists for measurements
-- Choosing appropriate renderings for ancient units
-- Deciding between literal translation and cultural equivalents
-- Ensuring consistency across all occurrences
-- Working with numbers and numerical expressions
+
+Ancient measurements, monetary units, and numerical expressions can confuse modern readers. Unlike theological terms or proper names that you've worked with throughout translation, these specialized terms often receive inconsistent treatment because they appear sporadically throughout the text.
+
+A reader might see "two denarii" rendered one way in the Gospels and a different way in a parable — creating confusion about whether they're the same coin. Or "a cubit" might be translated as a measurement in one book and transliterated in another.
+
+This is a final pre-publishing **check**. The decisions — whether your project preserves ancient units, converts to modern equivalents, or uses a mix — were made *during translation*. Here you confirm that every number, monetary term, weight, and measure already carries its agreed rendering and that it is applied **consistently** across every occurrence before publication.
+
+> **NOTE** If your team has **not** yet settled on an overall approach to measurements, that is a translation-stage gap, not a pre-publishing task. Don't start making new rendering decisions in the checking workshop — flag it to your Translation Consultant and resolve it before you publish.
+
+### What This Chapter Covers
+
+- Opening the specialized biblical terms lists for measurements
+- Confirming every measurement term already has a rendering
+- Verifying renderings follow the project's agreed approach
+- Checking that the same term is rendered consistently everywhere
+- Checking that related terms (talent, mina, shekel …) keep compatible treatment and preserved ratios
+
 ### Prerequisites
-Before starting this module, ensure:
-- You're familiar with the Biblical Terms tool
-- You understand your project's translation philosophy regarding measurements
-- Your team has discussed whether to use ancient units or modern equivalents
-- You have access to the appropriate specialized biblical terms lists
+
+- Your team has already agreed an approach to measurements (preserve / convert / mixed) **during translation**.
+- Renderings have already been added; you are here to verify them, not create them.
+- You're familiar with the Biblical Terms tool.
+
 ---
+
 ## Procedure Walkthrough
-**Time:** 35 minutes
-### Understanding the Challenge
-Ancient biblical measurements don't map neatly onto modern systems. Consider:
+
+### The terms you're checking
+
+Ancient biblical measurements don't map neatly onto modern systems. You are checking that each of these types has a consistent, agreed rendering wherever it appears:
+
 **Distances:**
 - A "sabbath day's journey" (about 1 km)
 - A "cubit" (about 45 cm or 18 inches)
 - A "stade/stadion" (about 185 meters)
+
 **Volumes:**
 - A "bath" (about 22 liters)
 - An "ephah" (about 22 liters, dry measure)
 - A "cor/kor" (about 220 liters)
+
 **Weights:**
 - A "talent" (about 34 kg)
 - A "mina" (about 0.6 kg)
 - A "shekel" (about 11 grams)
+
 **Money:**
 - A "denarius" (day's wage for a laborer)
 - A "drachma" (similar to denarius)
 - A "mite/lepton" (small copper coin, 1/128 of a denarius)
-**Translation choices:**
-- Keep ancient terms? ("He owed ten talents")
-- Convert to modern equivalents? ("He owed about 340 kg of silver" or "millions of dollars")
-- Use generic terms? ("He owed a huge amount")
-- Provide both? ("He owed ten talents \[about 340 kg\]" in footnote)
-**There's no universally right answer**, but consistency is essential.
-> 📝 Note: Different translation philosophies lead to different choices. A more literal translation might preserve ancient terms with footnotes. A more meaning-based translation might use modern equivalents. Neither is "wrong"—but whichever you choose, be consistent throughout your project.
-### Your Project's Approach
-Before proceeding, ensure your team has decided:
-1. **What's your general approach?**
-	- Preserve ancient terms (with glossary/footnotes to explain)
-	- Convert to modern equivalents
-	- Use a mixed approach (depends on context)
-2. **How will you help readers?**
-	- Glossary of measurements
-	- Footnotes explaining values
-	- Introduction explaining approach
-	- Cultural equivalent in text
-3. **What has your Translation Consultant recommended?**
-	- Follow their guidance for consistency with other projects
-	- Ensure your approach aligns with overall translation philosophy
-**If you haven't made these decisions, pause here and have that discussion before proceeding.**
-> ⚠️ Important: Don't start adding renderings for measurements until your team has agreed on the overall approach. If one translator uses modern equivalents and another uses ancient terms, your published Bible will be inconsistent and confusing.
+
+**The rendering approach was chosen during translation** — for example, keep ancient terms ("He owed ten talents"), convert to modern equivalents ("about 340 kg of silver"), use a generic amount ("a huge amount"), or provide both ("ten talents [about 340 kg]" in a footnote). Your job now is not to re-open that choice, but to confirm it was applied — and applied the same way — everywhere.
+
+> **NOTE** Different translation philosophies lead to different choices, and neither preserving ancient terms nor using modern equivalents is "wrong." What you are checking for is **consistency** with whatever approach your project already adopted.
+
 ---
+
 ### Step 1: Access the Biblical Terms Tool
-1. Click in your project window
-2. **≡ Tab** \> **Tools** \> **Biblical Terms**
+
+1. Click in your project window.
+2. **≡ Tab > Tools > Biblical Terms**.
+
 ### Step 2: Select the Appropriate Specialized List
-Unlike the Major Biblical Terms list, measurements have specialized lists:
-1. In the Biblical Terms window: **≡ Tab** \> **Biblical Terms** \> **Select Biblical Terms List**
-2. Choose the appropriate list for what you're checking:
-	- **<span discussion-urls="discussion://2f7598a5-fd40-80e7-81e0-d15baec5dbaf/2f7598a5-fd40-805e-94a6-da3a0d828b94/33b598a5-fd40-806a-8efc-001c4aca0d9b">"Weights and Measures"</span>**<span discussion-urls="discussion://2f7598a5-fd40-80e7-81e0-d15baec5dbaf/2f7598a5-fd40-805e-94a6-da3a0d828b94/33b598a5-fd40-806a-8efc-001c4aca0d9b"> (if available as a single list)</span>
-	- **<span discussion-urls="discussion://2f7598a5-fd40-80e7-81e0-d15baec5dbaf/2f7598a5-fd40-80fd-9da2-d09a8a461015/33b598a5-fd40-806a-8efc-001c4aca0d9b">"Weights"</span>**<span discussion-urls="discussion://2f7598a5-fd40-80e7-81e0-d15baec5dbaf/2f7598a5-fd40-80fd-9da2-d09a8a461015/33b598a5-fd40-806a-8efc-001c4aca0d9b"> (for talents, minas, shekels)</span>
-	- **<span discussion-urls="discussion://2f7598a5-fd40-80e7-81e0-d15baec5dbaf/2f7598a5-fd40-8033-87ff-f44538b8ebbb/33b598a5-fd40-806a-8efc-001c4aca0d9b">"Measures"</span>**<span discussion-urls="discussion://2f7598a5-fd40-80e7-81e0-d15baec5dbaf/2f7598a5-fd40-8033-87ff-f44538b8ebbb/33b598a5-fd40-806a-8efc-001c4aca0d9b"> (for volumes and distances)</span>
-	- **<span discussion-urls="discussion://2f7598a5-fd40-80e7-81e0-d15baec5dbaf/2f7598a5-fd40-80fd-bd63-e7776b48a953/33b598a5-fd40-806a-8efc-001c4aca0d9b">"Money"</span>**<span discussion-urls="discussion://2f7598a5-fd40-80e7-81e0-d15baec5dbaf/2f7598a5-fd40-80fd-bd63-e7776b48a953/33b598a5-fd40-806a-8efc-001c4aca0d9b"> or </span>**<span discussion-urls="discussion://2f7598a5-fd40-80e7-81e0-d15baec5dbaf/2f7598a5-fd40-80fd-bd63-e7776b48a953/33b598a5-fd40-806a-8efc-001c4aca0d9b">"Currency"</span>**<span discussion-urls="discussion://2f7598a5-fd40-80e7-81e0-d15baec5dbaf/2f7598a5-fd40-80fd-bd63-e7776b48a953/33b598a5-fd40-806a-8efc-001c4aca0d9b"> (for monetary units)</span>
-	- **"Numbers"** (for number-related terms)
-**Note:** Available lists vary by Paratext version and project configuration. If you're unsure which lists are available, check with your Language Technology Consultant.
-1. Click **OK**
+
+Unlike the Major Biblical Terms list, measurements have specialized lists. In the current version of Paratext these are:
+
+1. In the Biblical Terms window: **≡ Tab > Biblical Terms > Select Biblical Terms List**.
+2. Choose the list for what you're checking:
+	- **"Measures and Money"** — weights, volumes, distances, and monetary units (combined in the current Paratext list).
+	- **"Numbers"** — number-related terms (a separate list).
+
+**Note:** List names vary by Paratext version and project configuration — older projects may still show separate "Weights," "Measures," "Money," or "Currency" lists. If you're unsure which lists are available, check with your Language Technology Consultant.
+
+3. Click **OK**.
+
 ### Step 3: Review the List
-You'll see all terms in that category—money, weights, measures, or numbers.
-**For each term, you'll see:**
+
+You'll see all terms in that category. **For each term, you'll see:**
+
 - The term in the original language
-- Where it appears in Scripture
+- An equivalent in English
 - Your current rendering (if any)
-### Step 4: Add Renderings Systematically
-Work through the list, adding renderings for any missing items:
-### For Monetary Units:
-**Option 1: Preserve ancient term**
-- Transliterate the ancient name: "denarius" → "denario" or similar
-- Readers learn these terms (like they learn character names)
-- Requires glossary or footnote explanation
-- Maintains connection to original cultural context
-**Example:** "The worker was paid one denarius for the day's work."
-**Option 2: Modern equivalent value**
-- Research the approximate modern value
-- Use your language's currency
-- May need updating as currency values change
-- Can lose connection to original context
-**Example:** "The worker was paid about \$100 for the day's work."
-**Option 3: Functional equivalent**
-- Describe what it could buy
-- Express relative value ("day's wage")
-- Helps readers understand significance
-- May be imprecise for exact amounts
-**Example:** "The worker was paid a day's wage."
-**Option 4: Combination approach**
-- Ancient term in text + modern value in footnote
-- Best of both worlds
-- More work to maintain
-> ✅ Best Practice: The combination approach (ancient term + footnote) is often ideal. It preserves the biblical text while helping modern readers understand. Example: "ten talents\^a\^" with footnote "\^a\^ About 340 kg of silver, equivalent to 20 years' wages for a laborer."
-**Example:** "The worker was paid one denarius\^a\^ for the day's work."<br>*\^a\^ About one day's wage for a laborer*
-### For Weights:
-Similar options as money:
-- Keep ancient term: "He weighed ten talents"
-- Modern equivalent: "He weighed about 340 kilograms"
-- Functional: "He weighed an extremely heavy amount"
-- Combined: "He weighed ten talents \[about 340 kg\]"
-### For Measures (Volume and Distance):
-**For volume:**
-- Ancient: "three measures of flour"
-- Modern metric: "three baths \[about 66 liters\] of flour"
-- Modern imperial: "three baths \[about 17.5 gallons\] of flour"
-- Functional: "a large amount of flour"
-**For distance:**
-- Ancient: "a sabbath day's journey"
-- Modern: "about one kilometer" or "about half a mile"
-- Functional: "a short walk"
-### For Numbers and Numerical Expressions:
-Some special numerical expressions appear in Scripture:
-- "Seventy times seven" (Matthew 18:22)
-- "The third hour" (time of day)
-- Ordinal numbers (first, second, third...)
-- Large numbers (thousands, ten thousands)
-**Ensure consistency in:**
-- How you express large numbers
-- Time-of-day expressions
-- Ordinal vs. cardinal numbers
-- Symbolic numbers (7, 12, 40)
-### Step 5: Apply Your Renderings Consistently
-After adding renderings to the biblical terms list:
-1. **Review each occurrence**
-	- Click on a term to see all its occurrences
-	- Read the contexts
-	- Verify your rendering works in each context
-2. **Check for consistency**
+- A list of all verses where it appears in scripture in the lower pane
+
+### Step 4: Confirm Every Term Has a Rendering
+
+Work through the list looking for **gaps** — any term with no rendering, or a rendering that doesn't match the approach your team agreed.
+
+- A term with **no** rendering is a gap: the measurement was never given an agreed form. Flag it for the team to resolve.
+- A rendering that **contradicts** the agreed approach (e.g. a modern equivalent where the project preserves ancient terms) is an inconsistency to correct.
+
+For reference, the agreed approach for a monetary or measurement term will usually be one of:
+
+- **Preserve the ancient term** — transliterate the name ("denarius" → "denario"), explained in a glossary or footnote.
+- **Modern equivalent value** — the approximate value in your language's currency or units.
+- **Functional equivalent** — describe the value ("a day's wage," "a large amount").
+- **Combination** — ancient term in the text with the modern value in a footnote, e.g. "ten talents^a^" / "^a^ About 340 kg of silver."
+
+Whichever your project chose, the check is the same: **is it present, and is it the agreed one?**
+
+### Step 5: Verify Renderings Are Applied Consistently
+
+This is the heart of the check.
+
+1. **Review each occurrence.**
+	- Click on a term to see all its occurrences.
+	- Read the contexts.
+	- Verify the agreed rendering is used in each one.
+2. **Check for consistency.**
 	- Is the same term always rendered the same way?
-	- Are related terms consistent? (e.g., talent, mina, shekel should use the same approach)
-3. **Look for special cases**
-	- Symbolic uses (parables using exaggerated amounts)
-	- Precise vs. approximate amounts
-	- Contexts where functional equivalent works better
+	- Are related terms consistent? (e.g., talent, mina, shekel should all use the same approach.)
+3. **Look for special cases.**
+	- Symbolic uses (parables using exaggerated amounts).
+	- Precise vs. approximate amounts.
+	- Contexts where a functional equivalent was deliberately used instead.
+
 ### Step 6: Cross-Check Related Terms
+
 Measurements often appear in relationship to each other:
-**Example:** "Three talents, fifty minas, and two hundred shekels"
-Ensure your renderings maintain the relationship:
-- If using modern equivalents, do the conversions match the ratios?
-- If using ancient terms, are they all from the same approach?
-- If mixed, is there a clear reason for the variation?
-### Step 7: Document Your Decisions
-In the Biblical Terms tool:
-1. Add notes explaining your rendering choices
-2. Reference any consultant input or team discussions
-3. Note any special cases or exceptions
-4. Document resources consulted (conversion charts, etc.)
-This helps with:
-- Future consistency
-- Training new team members
-- Responding to reader questions
-- Making revisions if needed
+
+**Example:** "Three talents, fifty minas, and two hundred shekels."
+
+Confirm the renderings maintain the relationship:
+
+- If modern equivalents are used, do the conversions match the ratios?
+- If ancient terms are used, are they all from the same approach?
+- If mixed, is there a clear, documented reason for the variation?
+
+### Step 7: Confirm Decisions Are Documented
+
+In the Biblical Terms tool, check that the rendering choices are recorded:
+
+1. Notes explain the rendering choices.
+2. Consultant input or team discussions are referenced.
+3. Special cases or exceptions are noted.
+
+Well-documented decisions support future consistency, training new team members, answering reader questions, and any later revision.
+
 ---
+
 ## Verification Checklist
-**Time:** 5 minutes
-After completing this module, verify that you have:
+
+After completing this chapter, verify that you have:
+
 **Systematic Review:**
-- [ ] Accessed all appropriate specialized biblical terms lists (weights, measures, money, numbers)
+- [ ] Opened all appropriate specialized biblical terms lists (Measures and Money, Numbers)
 - [ ] Reviewed every term on each list
-- [ ] Added renderings for all terms without renderings
+- [ ] Confirmed a rendering exists for every term (gaps flagged to the team)
 - [ ] Verified renderings work in all contexts
+
 **Consistency:**
 - [ ] Same terms rendered consistently throughout
 - [ ] Related terms use compatible approaches
 - [ ] Ratios between measurements are preserved (if using equivalents)
-- [ ] Approach aligns with overall translation philosophy
+- [ ] Renderings match the project's agreed translation philosophy
+
 **Team and Consultant Review:**
-- [ ] Team has agreed on general approach to measurements
-- [ ] Difficult cases have been discussed
-- [ ] Translation Consultant has reviewed approach
-- [ ] Decisions are documented in biblical terms notes
-**Reader Helps:**
-- [ ] Plan for glossary or footnotes is established
-- [ ] Introduction or appendix will explain approach (if needed)
-- [ ] Cultural context is provided where necessary
+- [ ] Any missing or contradictory renderings referred back to the team / Translation Consultant
+- [ ] Difficult cases confirmed as resolved
+- [ ] Decisions are documented in the biblical terms notes
+
 **Quality Check:**
 - [ ] No missing renderings for numbers, money, weights, or measures
-- [ ] Renderings are accurate and appropriate
 - [ ] Readers will be able to understand the significance of amounts
 - [ ] Translation maintains connection to biblical context
+
 ---
+
 ## Troubleshooting
-**Time:** 3 minutes
+
 ### Common Issues and Solutions
-**Problem:** "I can't find the specialized list for weights and measures"
-- **Solution:** Lists may be named differently in your Paratext version. Look for "Weights," "Measures," "Money," "Currency," or similar. If unavailable, ask your Language Technology Consultant to install the appropriate biblical terms lists.
-**Problem:** "I'm not sure whether to use ancient terms or modern equivalents"
-- **Solution:** This is a translation philosophy decision. Consult with your Translation Consultant. Consider: (1) What do other translations in your language family do? (2) What will help your readers most? (3) How will you provide explanation? There's no universally right answer, but consistency matters.
-**Problem:** "The same monetary unit has different values in different contexts"
-- **Solution:** This can happen with coins whose value changed over time or differed by region. Note this in your biblical terms notes. You may need different renderings or explanatory footnotes for different historical periods.
-**Problem:** "Modern equivalent amounts seem imprecise or confusing"
-- **Solution:** Ancient measurements weren't as precise as modern ones. It's okay to use approximate equivalents ("about 22 liters" not "21.96 liters"). Consider using functional equivalents for parables and teaching contexts where the symbolic meaning matters more than precision.
-**Problem:** "Conversion charts give different values for ancient measurements"
-- **Solution:** Ancient measurements varied by time and place, so sources differ. Choose reliable biblical reference works, be consistent in which source you use, and use approximate language ("about," "approximately") in footnotes.
-**Problem:** "Large numbers in biblical genealogies or census counts—how do we express these?"
-- **Solution:** Follow your language's normal conventions for large numbers. Ensure consistency across all uses. If your language has special forms for large numbers, use them appropriately.
+
+**Problem:** "I can't find the specialized list for weights and measures."
+- **Solution:** Lists may be named differently in your Paratext version. In current versions look for "Measures and Money" and "Numbers"; older projects may show separate "Weights," "Measures," "Money," or "Currency." If none are available, ask your Language Technology Consultant to install the appropriate biblical terms lists.
+
+**Problem:** "A term has no rendering, or the renderings disagree with each other."
+- **Solution:** This is exactly what the check is for. Don't decide a new rendering here — record the gap or inconsistency and refer it back to the team and Translation Consultant, since the approach should have been set during translation.
+
+**Problem:** "The same monetary unit has different values in different contexts."
+- **Solution:** This can happen with coins whose value changed over time or differed by region. Confirm it is noted in the biblical terms notes; different historical periods may legitimately need different renderings or explanatory footnotes.
+
+**Problem:** "Modern equivalent amounts seem imprecise."
+- **Solution:** Ancient measurements weren't as precise as modern ones. Approximate equivalents ("about 22 liters," not "21.96 liters") are fine, and functional equivalents are appropriate where symbolic meaning matters more than precision.
+
+**Problem:** "Large numbers in genealogies or census counts — are they consistent?"
+- **Solution:** Confirm they follow your language's normal conventions for large numbers, applied consistently across all uses.
+
 ### When to Ask for Help
+
 **Contact your Language Technology Consultant if:**
-- You can't access specialized biblical terms lists (technical issue)
-- The lists don't include terms you need (configuration problem)
+- You can't access the specialized biblical terms lists (technical issue).
+- The lists don't include terms you need (configuration problem).
+
 **Contact your Translation Consultant if:**
-- You need guidance on translation philosophy for measurements (content decision)
-- You're unsure about accuracy of conversions (biblical scholarship question)
-- Your team disagrees on approach (translation issue)
-- You need help deciding between preservation and equivalence (philosophical question)
+- A rendering is missing or the team's approach was never settled (content decision).
+- You're unsure about the accuracy of conversions (biblical scholarship question).
+- Occurrences disagree and it's not clear which is correct (translation issue).
+
 ---
+
 ## Summary and Next Steps
-**Time:** 2 minutes
+
 ### Key Takeaways
-- Numbers, money, weights, and measures require systematic review using specialized biblical terms lists
-- Your project should have a consistent approach: preserve ancient terms, use modern equivalents, or a combination
-- Consistency across related terms is essential (don't mix approaches randomly)
-- Reader helps (glossary, footnotes, introduction) should explain your approach
-- Translation Consultant approval ensures alignment with translation philosophy
+
+- Numbers, money, weights, and measures are **checked** systematically using the specialized biblical terms lists — the rendering approach itself was decided during translation.
+- The check confirms every term has a rendering, and that it is applied **consistently** across all occurrences.
+- Consistency across related terms is essential (don't mix approaches without a documented reason).
+- Missing or contradictory renderings are referred back to the team and Translation Consultant, not decided in the workshop.
+
 ### What Comes Next
-After completing measurements review, the next module covers **Formatting Checks**. You'll learn to:
-- Run comprehensive formatting checklists
-- Check verse lengths and divisions
-- Verify section headings and book titles
-- Review references and footnotes
-- Ensure consistent formatting throughout
-### Timeline Guidance
-Numbers, weights, and measures review typically takes:
-- **Initial review and rendering:** 2-3 hours
-- **Team discussion on approach:** 1-2 hours
-- **Applying renderings consistently:** 2-4 hours
-- **Consultant review:** 1 week
-- **Creating reader helps (glossary/footnotes):** 2-4 hours
-**Budget extra time if:**
-- Your team hasn't yet agreed on general approach
-- You're creating extensive footnotes or glossary entries
-- You're working with unfamiliar measurement systems
+
+After confirming measurements are consistent, the next chapter covers **Complete Comprehensive Formatting Checks** — running the full formatting checklists, verse lengths and divisions, section headings, references, and footnotes.
+
 ---
+
 ## Support Resources
+
 ### Getting Help
-**WhatsApp/Email Support:**
-- Post questions in your project team WhatsApp group
-- For biblical terms tool questions, contact Language Technology Consultant
-- For translation philosophy questions, contact Translation Consultant
+
+- For biblical terms tool questions, contact your Language Technology Consultant.
+- For translation-philosophy questions (which shouldn't arise at this stage), contact your Translation Consultant.
+
 **Related Documentation:**
 - Full Paratext manual: [https://manual.paratext.org/](https://manual.paratext.org/)
 - Numbers, money, weights and measures: Section 24.8
 - Biblical Terms tool: Section 10
-- Bible dictionaries and encyclopedias for measurement information
-### Additional Resources
-- Create a team reference document listing all measurement renderings
-- Maintain conversion charts for future reference
-- Document the rationale for your approach for future team members
-- Review how related languages have handled measurements
-- Consult published reference Bibles for footnote examples
-

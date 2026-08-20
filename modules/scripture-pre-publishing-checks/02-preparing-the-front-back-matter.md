@@ -397,7 +397,7 @@ Preparing back matter typically takes:
 - Full Paratext manual: https://manual.paratext.org/
 - Map names and back matter: Section 24.3-24.4
 - USFM marker reference: [Available in Paratext Help menu]
-- Paratext Diagram Labeler plugin documentation: [Link to be added]
+- Paratext Diagram Labeler plugin: https://software.sil.org/labeler (user guide: https://software.sil.org/labeler/learn)
 
 ### Additional Resources
 

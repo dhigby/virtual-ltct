@@ -26,9 +26,10 @@ trustworthy results?
 - C) Yes, but only for the first-level quotes
 - D) No — zero results always means the check failed to run
 
-**Question 3:** True or False: When first working through check results during
-configuration, you should run the check on the whole New Testament at once so you can see
-the full scope of the problem before fixing anything.
+**Question 3:** True or False: Once you begin actively configuring quote marks and
+quotation types (Lessons 2–4), you should keep the check scoped to the whole New Testament
+after every change, rather than narrowing to Current Book, so you always see the complete
+result set.
 - A) True
 - B) False
 
@@ -47,12 +48,14 @@ column configure, and when should it be left blank?
 
 **Question 5:** A language uses `’` (U+2019) as both its Second level closing mark **and**
 as an apostrophe inside words, and the check is flagging those in-word apostrophes as
-unclosed quotations. Where in Paratext 9.5 do you fix this, and what do you enter?
-- A) In the Quotation Rules dialog, Quote marks tab — remove `’` from the Closing cell
-- B) In the Quotation types tab — set Normal to "Quote marks are optional"
-- C) In ☰ > Project settings > Language Settings > Other Characters tab — add `’`
-  (U+2019) to the Word-medial punctuation field
-- D) In the Run basic checks dialog — untick the Quotations check for that book
+unclosed quotations. You add `’` (U+2019) to ☰ > Project settings > Language Settings > Other
+Characters > Word-medial punctuation — the field that looks built for exactly this — save, and
+run a genuinely fresh check. What happens?
+- A) The apostrophe results clear immediately
+- B) The apostrophe results are still flagged — this setting does not suppress the result once
+  the character is also a configured quote mark, confirmed against real Paratext 9.5 behavior
+- C) Paratext refuses to save the setting at all
+- D) The setting clears the apostrophe results but introduces new ones elsewhere
 
 **Question 6:** After entering the opening and closing characters for each nesting level on
 the Quote marks tab, what is the recommended way to confirm you selected the correct
@@ -75,21 +78,22 @@ the Quote marks tab?
 - C) It is an older version of the Quote marks tab and does the same thing
 - D) It controls only Third level quotes; the Quote marks tab controls the first two levels
 
-**Question 8:** In the recommended settings, **Indirect** speech ("He said that the road
-was long") is set to which option, and why?
-- A) Use quote marks — reported speech should always be marked
-- B) Quote marks are optional — reported speech may or may not be marked
-- C) Never use quote marks — reported speech carries no direct marks, so the check should
-  flag any that appear
+**Question 8:** Tamba's convention is that indirect/reported speech ("He said that the road
+was long") never carries quote marks at all — a stray mark there would be a translator error.
+Paratext's recommended default for **Indirect** is "Quote marks are optional." What do you do?
+- A) Leave it — optional already permits no marks, so nothing needs to change
+- B) Click **Custom settings** and change Indirect to **Never use quote marks**, so the check
+  flags any stray mark a translator introduces in reported speech
+- C) Change Indirect to **Use quote marks**, since reported speech still needs marking
 - D) It is not one of the seven quotation types
 
 **Question 9:** After reviewing Tamba's text, the team confirms that a self-quote (a
 character quoting their own earlier words) **must** be marked exactly like normal direct
-speech, but the recommended default for Self quote is "Quote marks are optional." What do
-you do?
-- A) Leave it — optional already allows marks
-- B) Click **Custom settings** and change Self quote to **Use quote marks** so missing
-  marks are flagged
+speech. You open the Quotation types tab and find **Self quote** is already set to "Use
+quote marks." What do you do?
+- A) Nothing — it already matches Tamba's requirement; move on to the types that do need to
+  change (Quotation from another source, Continued quotation, Indirect)
+- B) Click **Custom settings** and change Self quote to **Use quote marks** anyway, to be safe
 - C) Delete the Self quote row from the tab
 - D) Change every type to Use quote marks
 
@@ -98,11 +102,12 @@ you do?
 ### Section 4: Interpreting and Clearing the Check (Questions 10-12)
 
 **Question 10:** The check flags **Romans 1:1** — a verse with no dialogue — for an
-unexpected Second level closing mark, caused by a `’` (U+2019) apostrophe inside a word. Is
-this a real error or a configuration problem, and what is the correct action?
+unexpected Second level closing mark, caused by a `’` (U+2019) apostrophe inside a word. You've
+already confirmed, on a real project, that adding `’` to Word-medial punctuation does not clear
+this. Is this a real error or a configuration problem, and what is the correct action?
 - A) Real error — delete the apostrophe from the word
-- B) Configuration problem — add `’` (U+2019) to the Word-medial punctuation field in
-  Language Settings; do not edit the text
+- B) Neither — verify the apostrophe is genuine, then leave the result and document it; there
+  is no text or configuration fix for this collision
 - C) Real error — replace the apostrophe with a straight quote
 - D) Configuration problem — set Normal to "Never use quote marks"
 
@@ -163,22 +168,28 @@ means the Quotations check ends at zero results.
 1. B — Lesson 1: the check needs both the Quote marks tab and the Quotation types tab.
 2. B — Lesson 1: zero results on an unconfigured project is silence, not confirmed
    correctness; Paratext does not yet know which characters are marks.
-3. B (False) — Lesson 1 scope tip: use Current Book (Matthew) during configuration; expand
-   to the full NT only after Matthew is clean.
+3. B (False) — Lesson 1 uses the whole NT once, deliberately, to show the scale of
+   unconfigured noise. From Lesson 2 onward, scope to Current Book (Matthew) while actively
+   configuring and triaging; expand to the full NT only after Matthew is clean (Lesson 4
+   Exercise 4.2).
 4. B — Lesson 2: the Quote Continuer at new paragraph repeats the mark when one speech
    spans paragraphs; leave it blank if the language closes and reopens at each break.
-5. C — Lesson 2 Exercise 2.3: the apostrophe/closing-quote conflict is resolved in Language
-   Settings > Other Characters > Word-medial punctuation, not in the Quotation Rules dialog.
+5. B — Lesson 2 Exercise 2.3: Word-medial punctuation does not suppress this result once the
+   character is also a configured quote mark, confirmed against real Paratext 9.5 behavior —
+   the field exists and looks like the fix, but doesn't resolve this specific collision.
 6. C — Lesson 2: verify entered characters using the Example preview at the bottom of the
    dialog.
 7. B — Lesson 3: the Quotation types tab controls whether marks are expected; the Quote
    marks tab controls which characters are used.
-8. C — Lesson 3 recommended settings: Indirect = Never use quote marks; reported speech
-   carries no direct marks.
-9. B — Lesson 3 Exercise 3.2: switch to Custom settings and set Self quote to Use quote
-   marks so missing marks are flagged.
-10. B — Lesson 4 Exercise 4.1 item 5: a word-medial apostrophe is a configuration problem
-    fixed in Language Settings, not by editing text.
+8. B — Lesson 3 Exercise 3.2: the recommended default for Indirect is Quote marks are
+   optional; Tamba's convention that reported speech is never marked requires switching it
+   to Never use quote marks so a stray mark gets caught.
+9. A — Lesson 3 Exercise 3.2: Self quote already defaults to Use quote marks, which matches
+   Tamba's requirement — no change needed there. Not every recommended default is wrong;
+   verify each type against your language's conventions rather than assuming all seven need
+   customizing.
+10. B — Lesson 4 Exercise 4.1 item 5: a word-medial apostrophe colliding with a quote mark is
+    the one confirmed case with no text or configuration fix — verify and document instead.
 11. B — Lesson 4 Exercise 4.1 item 3: a straight `"` (U+0022) at Second level is a real
     error; replace it with `‘` (U+2018).
 12. B — Lesson 4 Exercise 4.2 / check-your-understanding 2: remaining results on correct

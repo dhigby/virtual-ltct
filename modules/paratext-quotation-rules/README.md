@@ -36,7 +36,7 @@ This course follows the repo's [content package structure](../../process/PROCESS
 | [`02-setting-up-quote-marks.md`](02-setting-up-quote-marks.md) | Lesson 2 — the Quote marks tab, continuer, apostrophe conflict (75 min) |
 | [`03-configuring-quotation-types.md`](03-configuring-quotation-types.md) | Lesson 3 — the Quotation types tab (60 min) |
 | [`04-interpreting-and-clearing-the-check.md`](04-interpreting-and-clearing-the-check.md) | Lesson 4 — triage to zero errors (75 min) |
-| [`05-scenario-bank.md`](05-scenario-bank.md) | Applied practice: Runda, Menda, Waku (90 min) |
+| [`05-scenario-bank.md`](05-scenario-bank.md) | Applied practice: Velna, Menda, Waku (90 min) |
 | [`06-mentor-guide.md`](06-mentor-guide.md) | Facilitator notes: project setup, phasing, error seeding |
 | [`07-quiz.md`](07-quiz.md) | Assessment quiz |
 | [`08-video-script.md`](08-video-script.md) | Recording script for Cypher upload |
@@ -58,7 +58,8 @@ Before starting this course confirm you have the following:
 
 **Fictional projects** (see the [mentor guide](06-mentor-guide.md) for setup and distribution)
 - The `tamba` project must be installed before starting Lessons 1–4
-- The `runda`, `menda`, and `waku` projects must be installed before the scenario bank
+- The `runda` project must also be installed before starting Lesson 2 (Lessons 1, 3, and 4 only need `tamba`)
+- The `velna`, `menda`, and `waku` projects must be installed before the scenario bank
 
 ---
 
@@ -145,4 +146,4 @@ A unique number assigned to every character in the Unicode standard, written as 
 A tagged code in Paratext’s text format (Unified Standard Format Markers) that identifies the role of a paragraph or span — for example \p (body paragraph), \q (poetry line), \v (verse).
 
 **Word-medial punctuation**
-A setting in ☰ > Project settings > Language Settings > Other Characters tab. Any character listed here is treated as part of a word when it appears between two alphabetic characters. Use this when a character serves as both a closing quotation mark and an apostrophe (e.g., U+2019 ’), to prevent the quotation checker from misreading apostrophes inside words as unclosed quotation marks.
+A setting in ☰ > Project settings > Language Settings > Other Characters tab. Any character listed here is treated as part of a word when it appears between two alphabetic characters — genuinely useful for punctuation that isn't otherwise a quote mark. It does **not**, however, resolve the case it looks built for: when a character serves as both a closing quotation mark and an apostrophe (e.g., U+2019 ’), confirmed against real Paratext 9.5 behavior, the quotation checker keeps flagging in-word instances as unclosed quotation marks even after the character is added here. That specific collision has no configuration fix — verify each flagged instance is a genuine apostrophe and document it rather than continuing to adjust settings.

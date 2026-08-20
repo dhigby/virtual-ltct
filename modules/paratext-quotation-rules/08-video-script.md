@@ -54,17 +54,17 @@ yourself."
 | Slow pan across the three-by-three grid. Highlight the three rows, then the three columns. (Layout in `ss-L172-quote-marks-tab-layout.png`.) | "Three rows are your nesting levels: first-level speech, a quote inside a quote, and a quote inside that. Three columns: the Opening mark, the Quote Continuer at a new paragraph, and the Closing mark. Most languages leave that middle column blank — they just close and reopen at each paragraph." |
 | Click the dropdown arrow (▼) on the First-level Opening cell so the character list appears. Select the curly double quote. Then show the **Example** preview at the bottom updating to `“…‘…’…”`. | "Enter characters with the dropdown on each cell, never by typing — that's how you're sure you picked U+201C and not a straight keyboard quote. And every time, glance down at the Example preview. If the sample sentence shows the marks you expect, you got it right. This is your single best safety check." |
 | Brief cut to the Runda Quote marks tab showing guillemets and a filled Continuer cell. (`ss-L227-runda-quote-marks.png`.) | "Different language, same grid. Here's a language that uses French guillemets and does repeat its opening mark at each new paragraph — so its Continuer column is filled. The tab doesn't change; only the characters do." |
-| Cut to Language Settings: **☰ > Project settings > Language Settings > Other Characters** tab, with `’` in the **Word-medial punctuation** field. (`ss-L241-language-settings-other-chars.png`.) | "One gotcha that traps almost everyone. If your closing single-quote is U+2019 and that same character is also an apostrophe inside words, the check reads every apostrophe as an unclosed quote. The fix is NOT in the Quotation Rules dialog — it's over here in Language Settings, Other Characters, Word-medial punctuation. Add the character here and the checker treats it as part of the word. Remember where this lives; you'll come back to it." |
+| Cut to Language Settings: **☰ > Project settings > Language Settings > Other Characters** tab, with `’` in the **Word-medial punctuation** field, warning icon visible. (`ss-L241-language-settings-other-chars.png`.) | "One gotcha that traps almost everyone — and it doesn't resolve the way you'd expect. If your closing single-quote is U+2019 and that same character is also an apostrophe inside words, the check reads every apostrophe as an unclosed quote. This field, Language Settings, Other Characters, Word-medial punctuation, looks built for exactly this. Add the character here, save, run a fresh check — and the apostrophes are still flagged. Confirmed on Paratext 9.5: once a character is claimed as a quote mark, this setting doesn't override that. There's no fix for this one. The real skill is recognizing it, verifying it's a genuine apostrophe, and documenting it instead of chasing a setting that doesn't exist." |
 
 ### Segment 3 — The Quotation types tab (companion to Lesson 3)
 
-> ~2 minutes. Concept + the one custom change. Don't recite all seven types on camera.
+> ~2.5 minutes. Concept + the three custom changes. Don't recite all seven types on camera.
 
 | On-screen | Voiceover / talking points |
 | --- | --- |
 | Click the **Quotation types** tab. Show the seven type rows and the Recommended/Custom controls at the top. (`ss-L289-quotation-types-tab.png`.) | "Input two lives on the second tab. This one isn't about characters at all — it's about meaning. For each of seven kinds of speech, you tell Paratext: expect marks, never expect marks, or don't care." |
 | Point to the **Use recommended settings** control, then to the enable checkbox at the top. | "Start with Use recommended settings — for most projects that's most of the work done. Note the enable checkbox at the top: only a project administrator can tick it. You can configure everything else; if you're not an admin, set it up and then ask them to flip that switch." |
-| Switch to **Custom settings** and change one row — **Self quote** — from *optional* to **Use quote marks**. | "You only go to Custom settings when your language diverges. In our Tamba project, self-quotes have to be marked like any other speech, so we change that one row. That's the pattern: recommended as your baseline, custom for the exceptions your team has confirmed." |
+| Switch to **Custom settings** and change three rows — **Quotation from another source** to *optional*, **Continued quotation** to **Use quote marks**, and **Indirect** to **Never use quote marks**. Point out that **Self quote** is left alone because it already defaults to Use quote marks, which is what Tamba needs. | "You only go to Custom settings when your language diverges — and check each row, because the defaults don't always match what you'd guess. In our Tamba project, three types need to change; Self quote turns out to already be right, so we leave it. That's the pattern: recommended as your baseline, custom for the exceptions your team has confirmed — verified against the actual project, not assumed." |
 
 ### Segment 4 — Reading and clearing results (companion to Lesson 4)
 
@@ -84,7 +84,7 @@ yourself."
 | On-screen | Voiceover / talking points |
 | --- | --- |
 | Cut to the Menda Quote marks tab, Second level showing `›` opening and `‹` closing, with the Example preview confirming the nested order. (`ss-L560-menda-quote-marks.png`.) | "Once you know the workflow, it's the same four steps for any language, however strange the marks. Here's Menda, where the second level opens with a right-pointing single guillemet and closes with a left-pointing one — reversed from what your eye expects. Get them backwards and the check fires on every embedded quote. The Example preview at the bottom is exactly how you catch it before you click OK." |
-| Slide listing the three scenario languages: **Runda (guillemets), Menda (reversed nesting), Waku (em-dash — stretch).** | "In the scenario bank you'll do three of these on your own: guillemets, that reversed nesting, and — if you want the stretch — a language that uses the em dash for both opening and closing. That last one won't fully clear by configuration alone; you'll document the leftovers in a Project Note so the consultant knows they were reviewed on purpose." |
+| Slide listing the three scenario languages: **Velna (guillemets), Menda (reversed nesting), Waku (em-dash — stretch).** | "In the scenario bank you'll do three of these on your own: guillemets, that reversed nesting, and — if you want the stretch — a language that uses the em dash for both opening and closing. That last one won't fully clear by configuration alone; you'll document the leftovers in a Project Note so the consultant knows they were reviewed on purpose." |
 
 ## Call to action / close
 
@@ -116,7 +116,7 @@ mentor for review. See you in Paratext."
 - **Live-demo caution:** always drive character entry with the dropdown (▼), never the
   keyboard, on camera — it models the habit the course insists on and avoids accidentally
   entering a straight quote.
-- **Pronunciation / naming:** the project languages (Tamba, Runda, Menda, Waku) are
+- **Pronunciation / naming:** the project languages (Tamba, Runda, Velna, Menda, Waku) are
   fictional; say them plainly. Do not imply they are real languages.
 - **Screen legibility:** the yellow information bar (Segment 1), the Example preview
   (Segment 2), and the reversed guillemets (Segment 5) are small UI details — zoom or

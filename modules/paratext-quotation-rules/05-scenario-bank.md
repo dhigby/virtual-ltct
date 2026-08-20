@@ -9,14 +9,25 @@
 
 **Learning objectives:** By the end of this scenario bank you will be able to apply the complete inventory + rules + check + triage workflow independently to an unfamiliar language scenario, including edge cases not covered in Lessons 1–4.
 
-These exercises use three new fictional projects. Each has a different quotation style. For each scenario follow the same standard workflow:
+These exercises use three new fictional projects. Each has a different quotation style. For each scenario follow the same four-step workflow — **inventory → rules → check → triage** — broken into eight concrete actions:
+
+**Inventory**
 
 1. Read the language conventions table.
 2. Answer the discovery prompts before configuring anything.
 3. Open the Quote marks tab; the fields will be empty.
 4. Enter the quote mark characters on the Quote marks tab.
+
+**Rules**
+
 5. Configure the Quotation types tab.
+
+**Check**
+
 6. Run the check (start with one book).
+
+**Triage**
+
 7. Triage the results to zero actionable errors.
 8. Compare your configuration against the expected answer key.
 
@@ -24,9 +35,9 @@ These exercises use three new fictional projects. Each has a different quotation
 
 ## Scenario A — Guillemet (French style)
 
-**Project:** Runda New Testament (`runda`)
+**Project:** Velna New Testament (`velna`)
 
-**Runda quotation conventions:**
+**Velna quotation conventions:**
 
 | Level | Opening | Unicode | Closing | Unicode |
 |-------|---------|---------|---------|----------|
@@ -36,7 +47,7 @@ These exercises use three new fictional projects. Each has a different quotation
 No Third level. First level opening mark `«` also appears at the start of continued paragraphs.
 
 **Discovery prompts:**
-- Runda uses `’` (U+2019) as both its Second level closing mark and as an apostrophe. How does the Word-medial punctuation setting resolve this conflict?
+- Velna uses `’` (U+2019) as both its Second level closing mark and as an apostrophe. Try adding `’` to Word-medial punctuation as Lesson 2 taught — does it actually clear the resulting check result here too?
 - How would you verify that the text contains `«` (U+00AB) rather than `<<` (two less-than signs)?
 
 **Expected configuration:**
@@ -46,12 +57,20 @@ No Third level. First level opening mark `«` also appears at the start of conti
 | First level | `«` | `«` | `»` |
 | Second level | `‘` | *(blank)* | `’` |
 
-Word-medial punctuation: add `’` (U+2019) in ☰ > Project settings > Language Settings > Other Characters tab > Word-medial punctuation.
+Word-medial punctuation: add `’` (U+2019) in ☰ > Project settings > Language Settings > Other Characters tab > Word-medial punctuation — do this anyway, since it's the correct habit to build, but confirmed on a real Paratext 9.5 build, it will **not** stop the check from flagging Velna's word-medial apostrophes. That's expected: once `’` is already a configured quote mark, this setting has no effect on it. Treat any remaining apostrophe results as verified false positives, not something left to configure away. Since Velna's orthography is fictional and effectively still "in development" for this exercise, this is also the right moment to raise the real fix with learners: if this were a live translation team's project, this is exactly when you'd recommend adopting a different, unique apostrophe character — Lesson 2 names `ʼ` (U+02BC MODIFIER LETTER APOSTROPHE) as a concrete option — rather than living with the collision indefinitely. Velna itself keeps `’` for its apostrophes so the scenario still demonstrates the unresolvable case firsthand; the `ʼ` alternative is illustrated in Lesson 2's text, not built into this project.
+
+**Quotation types tab:** confirmed on a real Paratext 9.5 build: Velna needs exactly **one**
+change from recommended defaults — **Continued quotation = Use quote marks** (the First level
+continuer means a mark is expected at every continued paragraph, same reasoning as Tamba in
+Lesson 3). Unlike Tamba, Velna has no narrator-citation, self-quote, or indirect-speech
+exceptions, so every other type — Normal, Quotation from another source, Self quote, Potential,
+Indirect, Hypothetical — stays at its recommended default.
 
 **Check your work:**
 - After configuration, run the check on Luke. Verify that `«...»` speech boundaries are recognized correctly and narrative passages generate no results.
-- Verify that apostrophes inside words (contractions, possessives) do not appear in the results. If they do, the Word-medial punctuation setting for U+2019 is missing.
+- Confirm that apostrophes inside words (contractions, possessives) are still flagged even after configuring Word-medial punctuation — that's the expected, confirmed outcome for this collision, not a sign of a missing setting. Verify each is a genuine apostrophe and move on.
 - Confirm the First level Quote Continuer (`«`) at the start of continued paragraphs is not flagged as an unexpected mark.
+- Enable the Quotation types check and run it on Matthew, Luke, and John. It should return clean once Continued quotation is set to Use quote marks — this check is separate from the apostrophe results above, which live in the Quotations check and remain regardless.
 
 ---
 
@@ -89,11 +108,21 @@ At Third level Menda returns to **double guillemets** — `«` opens and `»` cl
 
 Continuation: none. Apostrophe handling: not needed — Menda's Quote marks tab does not use U+2019, so no Word-medial punctuation setting is required.
 
+**Quotation types tab:** unlike Tamba (Lesson 3), Menda needs **no customization at all** — leave
+it on **Use recommended settings**. Confirmed on a real Paratext 9.5 build: with the Quotation
+types check enabled, Menda's text passes clean at the recommended defaults (Normal/Quotation
+from another source/Self quote = Use quote marks; Continued quotation = Never use quote marks;
+Potential/Indirect = Quote marks are optional; Hypothetical = Never use quote marks). Step 5 of
+the scenario workflow still applies — open the tab, tick the enable checkbox (administrator
+required), and verify with a check run — but for Menda that verification is the whole task; there
+is nothing to change.
+
 **Check your work:**
 - Run the check on John (contains clear nested dialogue). Verify that `«...›...‹...»` structures pass without errors.
 - If the check fires on every Second level opening mark, the Opening and Closing fields for Second level are likely reversed. Confirm which character is right-pointing (`›`) and which is left-pointing (`‹`).
 - After entering Second level, check the Example section at the bottom. If › opens and ‹ closes in the example, you have the correct order. The visual difference between `›` and `‹` is easy to miss — use the Example to confirm before clicking OK.
 - John 19:21 contains Menda's rare Third level quotation. Verify it passes once Third level is configured — if 19:21 is flagged, the Third level cells are probably still empty.
+- Enable the Quotation types check and run it on John. It should return clean at recommended settings with no customization — if it doesn't, re-check your Quote marks tab entries first, since a character-level mistake there is more likely than a genuine need to customize types.
 
 ---
 

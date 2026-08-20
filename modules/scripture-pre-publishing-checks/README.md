@@ -27,6 +27,10 @@ translators**.
 > so it deliberately does **not** follow the 4Cs lesson structure or the pipeline package, and it
 > is not run through `check_course_package.py`.
 
+> **For consultants:** this workbook is written for the translation team doing the work. The
+> consultant-facing course that prepares you to *support* a team through these checks is
+> [Supporting Scripture Pre-publishing Checks](../supporting-pre-publishing-checks/README.md).
+
 ## Chapters
 
 1. [Adding Illustrations](01-adding-illustrations.md)

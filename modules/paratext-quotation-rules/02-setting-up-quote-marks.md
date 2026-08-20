@@ -16,8 +16,9 @@ By the end of this lesson you will be able to:
 
 - Navigate to the Quote marks tab and enter the correct characters for each nesting level.
 - Configure the Quote Continuer at new paragraph for languages that use continuation marks.
-- Resolve the word-medial punctuation conflict when the same character serves as both a
-  closing mark and an apostrophe.
+- Recognize the word-medial punctuation conflict when the same character serves as both a
+  closing mark and an apostrophe, and explain why it cannot be fully resolved through Paratext
+  settings when that character is also configured as a quote mark.
 
 ## Connect
 
@@ -75,14 +76,30 @@ At the bottom of the dialog:
 
 ![The Quote marks tab with the three-row, three-column grid visible, showing the additional settings below the grid.](ss-L172-quote-marks-tab-layout.png)
 
-**One more setting lives elsewhere.** Some languages use the same character for two purposes:
-as the **closing quotation mark** at the single-quote level *and* as an **apostrophe** within
-words. When Paratext sees that character inside a word it cannot tell whether it is ending a
-quotation or marking a contraction or possessive. In Paratext 9.5 you resolve this **not** in
-the Quotation Rules dialog, but in **☰ > Project settings > Language Settings > Other
-Characters** tab, using the **Word-medial punctuation** field. Any character listed there is
-treated as part of a word when it appears between two alphabetic characters, so the checker
-won't misread it as a closing mark. You'll apply this in the third exercise below.
+**One more setting lives elsewhere, but it has a real limit.** Some languages use the same
+character for two purposes: as the **closing quotation mark** at the single-quote level *and*
+as an **apostrophe** within words. Paratext's Language Settings has a field for exactly this
+kind of ambiguous character — **☰ > Project settings > Language Settings > Other Characters**
+tab, **Word-medial punctuation** — and its own help text describes it as telling the checker to
+treat a listed character as part of a word rather than punctuation when it sits between two
+letters.
+
+**Verified on Paratext 9.5, this does *not* work for a character that is also a configured
+quote mark.** Adding `’` to Word-medial punctuation has no effect on the "Closing quote found as
+a word medial character" result when `’` is also set as a Second (or Third) level closing mark
+— the check keeps flagging every genuine apostrophe, with or without the setting. Once a
+character is claimed as a quote mark in the Quotation Rules dialog, that classification appears
+to take priority over the Word-medial punctuation exception list. The setting genuinely works
+for punctuation that *isn't* also a quote character; it just doesn't rescue this specific
+collision.
+
+**What this means in practice:** if a language's real orthography reuses a quote-mark character
+as an apostrophe, there is no configuration that makes the check stop flagging it. The
+practical options are (a) recognize each such result during triage as a known, expected
+false positive — a real apostrophe, not a translation error — and move past it rather than
+hunting for a setting to clear it, or (b) if the orthography is still being finalized, choose a
+different, unique character for the apostrophe so the two roles don't collide in the first
+place. You'll see this firsthand in the third exercise below.
 
 **Key takeaways**
 
@@ -92,8 +109,10 @@ won't misread it as a closing mark. You'll apply this in the third exercise belo
   dialog — confirm the code point, not just the shape.
 - The Quote Continuer at new paragraph is optional; leave it blank if your language closes and
   reopens the marks at each paragraph break.
-- When a closing-quote character doubles as an apostrophe, resolve it in Language Settings >
-  Other Characters > Word-medial punctuation — not in Quotation Rules.
+- When a closing-quote character doubles as an apostrophe, Word-medial punctuation in Language
+  Settings does **not** suppress the resulting check result (confirmed against real Paratext
+  9.5 behavior) — treat every such flag as an expected false positive to verify and set aside
+  during triage, not a configuration problem to fix.
 
 ## Challenge
 
@@ -177,45 +196,76 @@ continuing across a paragraph break. The convention table drives the configurati
 other way around, so don't assume one language's pattern applies to another, or that every
 nesting level within the same language behaves the same way.
 
-### Exercise 2.3 — Handle word-medial punctuation (the apostrophe conflict)
+### Exercise 2.3 — The word-medial punctuation conflict (and its limit)
 
 Recall from the Content section: some languages use the same character as a **closing mark**
-at the single-quote level *and* as an **apostrophe** within words, and Paratext resolves the
-ambiguity in Language Settings, not in Quotation Rules.
+at the single-quote level *and* as an **apostrophe** within words. Paratext has a field that
+looks designed for exactly this — but verified against real Paratext 9.5 behavior, it does not
+actually resolve the conflict when that character is also a quote mark. This exercise walks you
+through the setting so you can see that limitation firsthand, rather than assuming it works
+because the field exists.
 
 **☰ > Project settings > Language Settings**, then click the **Other Characters** tab. This tab
-has a **Word-medial punctuation** field. Any character listed there is treated as part of a
-word when it appears between two alphabetic characters, so the quotation checker will not
-misread it as a closing mark.
+has a **Word-medial punctuation** field. Its own help text says any character listed there is
+treated as part of a word when it appears between two alphabetic characters, so the checker
+should not misread it as a closing mark.
 
 ![The Language Settings dialog open on the Other Characters tab, showing the Word-medial punctuation field with a right single quotation mark entered.](ss-L241-language-settings-other-chars.png)
 
-**When to use this:**
-- Your Second or Third level closing mark is `’` (U+2019), AND
-- The same character also appears as an apostrophe inside words (contractions, possessives,
-  glottal stops written with that character)
+**Where this genuinely helps:** punctuation characters that are *not* also configured as a
+quote mark — a hyphen used word-medially, for instance. Paratext will warn you if you enter a
+character here that's also registered as a quote mark in Quotation Rules ("unique characters
+are recommended"); that warning is a real signal, not just caution — it means the setting won't
+do what you're about to try to use it for.
 
-If both conditions apply, add `’` to the Word-medial punctuation field in Language Settings.
-The quotation checker will then treat `’` as part of a word when it is flanked by letters, and
-will only read it as a closing mark when it appears at the end of a quotation.
-
-**Tamba scenario:** Tamba's Second level closing mark is `’` (U+2019). Tamba does not use
-contractions with apostrophes, so no word-medial punctuation setting is needed. But if Tamba
-began using `’` as an apostrophe, you would add it to the Word-medial punctuation field.
-
-**Do it (Runda):** Runda also uses `’` (U+2019) as its Second level closing mark. Suppose
-Runda does use `’` as an apostrophe.
+**Do it (Runda):** Runda uses `’` (U+2019) as its Second level closing mark. Suppose Runda also
+uses `’` as an apostrophe — a genuine collision.
 
 1. Navigate to ☰ > Project settings > Language Settings > Other Characters tab.
-2. In the **Word-medial punctuation** field, enter `’` (U+2019).
-3. Click **OK**.
-4. Re-run the quotation check on a chapter that has both apostrophes and single-quote speech.
-   Verify that apostrophes inside words no longer generate false quotation errors.
+2. In the **Word-medial punctuation** field, enter `’` (U+2019). Paratext will warn that this
+   character is already a quote mark. Confirm through the warning and click **OK** anyway.
+3. Re-run the quotation check (a full re-run, not just "Rerun" on an already-open results
+   panel) on a chapter that has both apostrophes and single-quote speech.
+4. **Observe that the apostrophes are still flagged.** The check keeps reporting "Closing quote
+   found as a word medial character" for every genuine apostrophe, exactly as before you added
+   the setting. This is the expected, confirmed outcome — not a sign you configured something
+   wrong.
+
+**What to do instead, in real triage:** treat each of these results as a known false positive.
+Open the verse, confirm the flagged character really is a word-medial apostrophe (not an actual
+unclosed quotation), and move on — there is no setting that will make the result disappear.
+Document this for whoever inherits the project, so a future checker doesn't waste time hunting
+for a fix that doesn't exist.
+
+**If the orthography is still being decided:** this is the one situation where the team has a
+real fix available — Paratext's own warning when you enter `’` into Word-medial punctuation
+("unique characters are recommended") is pointing at it. Recommend the language team adopt a
+different, unique character for the apostrophe (or, less commonly, for the closing mark) so the
+two roles never collide. That's a project-level decision for the translation team to make, not
+something you configure your way around — but it's worth raising if the orthography isn't
+locked in yet, since it's the only path that actually eliminates the false positives rather than
+just documenting them.
+
+A good concrete recommendation: **`ʼ` (U+02BC MODIFIER LETTER APOSTROPHE)**. It's the character
+the Unicode Standard itself recommends for an apostrophe functioning as a letter — marking a
+glottal stop or similar — as distinct from `’` (U+2019), which is meant for punctuation
+(closing a quotation, or a generic typographic apostrophe in running prose). Visually it's a
+small raised mark close in shape to `’`, so the orthography doesn't change much for readers, but
+it's a completely different code point, so Paratext never confuses it with a configured quote
+mark. For example, a word written `Kalaʼu` (U+02BC) would never generate a quotation result no
+matter what the Second level closing mark is configured to — compare that to `Kala’u` (U+2019),
+which collides the moment `’` is also a quote mark, exactly like Runda and Tamba above.
+
+**Tamba scenario:** Tamba's Second level closing mark is `’` (U+2019). Tamba's Phase A text has
+no contractions or apostrophes, so this conflict never comes up there — but if Tamba's real
+orthography later needed apostrophes written with `’`, this is the same unresolvable collision
+you just saw in Runda, not something a setting change would fix.
 
 **✏️ Produce this (a mentor will review it).** After all three exercises, jot 2–3 sentences: which
-project(s) and level(s) needed a Quote Continuer and why, and how you confirmed the apostrophe
-fix worked. A mentor will check your configured Quote marks tabs against the README convention
-tables.
+project(s) and level(s) needed a Quote Continuer and why, and what you observed when you tried
+the Word-medial punctuation fix for the apostrophe conflict — including that it did not
+suppress the check result. A mentor will check your configured Quote marks tabs against the
+README convention tables.
 
 ## Change
 
@@ -226,17 +276,20 @@ tables.
 2. What is the Quote Continuer at new paragraph column for? Give an example of when you would
    leave it blank.
 3. Your Second level closing mark is `’` (U+2019). The quotation check is flagging apostrophes
-   inside words as unclosed quotations. Where in PT 9.5 do you resolve this, and what do you
-   enter?
+   inside words as unclosed quotations. Can you make this result disappear through
+   configuration, and if not, what should you actually do about it?
 
 *You should be able to say:* (1) In the **Quote marks tab** of the Quotation Rules dialog (☰ >
 Project settings > Quotation Rules) — `««` in the First level Opening cell, `»»` in the First
 level Closing cell, `«` in the Second level Opening cell, and `»` in the Second level Closing
 cell. (2) It is the character repeated at the start of each new paragraph when one speech spans
 multiple paragraphs; leave it blank when the language closes and reopens the marks at each
-paragraph break (as most Western European languages do). (3) In ☰ > Project settings >
-Language Settings > Other Characters tab — enter `’` (U+2019) in the **Word-medial
-punctuation** field, so the checker treats it as part of a word between two letters.
+paragraph break (as most Western European languages do). (3) No — adding `’` to ☰ > Project
+settings > Language Settings > Other Characters tab > Word-medial punctuation does not suppress
+this result when `’` is also a configured quote mark (confirmed against real Paratext 9.5
+behavior). Treat each flagged instance as an expected false positive: open the verse, confirm
+it's a genuine apostrophe, and move past it during triage rather than searching for a setting
+that will clear it.
 
 **✏️ Take it to your context.** For one real language you support, write the three-row Quote
 marks table (First/Second/Third level, Opening / Continuer / Closing) as you believe it should

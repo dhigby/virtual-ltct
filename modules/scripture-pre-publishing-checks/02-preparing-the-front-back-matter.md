@@ -26,7 +26,7 @@ These "back matter" elements are often overlooked until the typesetter asks for 
 
 ### What This Chapter Covers
 
-- Preparing map names using the Map Labeler Plugin
+- Preparing map names using the Paratext Diagram Labeler plugin
 - Drafting an introduction to the New Testament or Bible
 - Creating appendices and supplementary materials
 - Working with typesetters to determine format requirements
@@ -276,7 +276,7 @@ After completing this chapter, verify that you can:
 **Map Names:**
 
 - Understand the purpose of providing map names
-- [Access and use the Map Labeler Plugin - details to be added]
+- [Access and use the Paratext Diagram Labeler plugin - details to be added]
 - Export map names for the typesetter
 
 **Introduction:**
@@ -347,7 +347,7 @@ After completing this chapter, verify that you can:
 
 ### Key Takeaways
 
-- Maps require identifying place names in your language using the Map Labeler Plugin
+- Maps require identifying place names in your language using the Paratext Diagram Labeler plugin
 - Introductions are created in the special INT book using \mt1, \is, and \ip markers
 - Appendices can be created in XXA, XXB, XXC or specialized books like BAK, TDX, NDX
 - Always coordinate with your typesetter before creating extensive back matter content
@@ -395,7 +395,7 @@ Preparing back matter typically takes:
 - Full Paratext manual: https://manual.paratext.org/
 - Map names and back matter: Section 24.3-24.4
 - USFM marker reference: [Available in Paratext Help menu]
-- Map Labeler Plugin documentation: [Link to be added]
+- Paratext Diagram Labeler plugin documentation: [Link to be added]
 
 ### Additional Resources
 

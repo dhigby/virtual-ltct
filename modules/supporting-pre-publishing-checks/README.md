@@ -12,9 +12,10 @@ content_type: content
 ### A Course for Language Technology Consultants
 
 **In production** — this course is being built through the repo's
-[8-stage production pipeline](../../process/PROCESS.md). The design document
-([`00-design.md`](00-design.md)) is the contract; lesson content follows once the design is
-approved. Run `/next-step supporting-pre-publishing-checks` to see where it stands.
+[8-stage production pipeline](../../process/PROCESS.md), tracked on
+[issue #40](https://github.com/dhigby/virtual-ltct/issues/40). Stage 1 is under way: the design
+document (`00-design.md`) is the contract, and lesson content follows only once it is approved.
+Run `/next-step supporting-pre-publishing-checks` to see where it stands.
 
 ---
 

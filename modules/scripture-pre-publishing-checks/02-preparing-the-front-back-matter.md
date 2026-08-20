@@ -276,8 +276,10 @@ After completing this chapter, verify that you can:
 **Map Names:**
 
 - Understand the purpose of providing map names
-- [Access and use the Paratext Diagram Labeler plugin - details to be added]
-- Export map names for the typesetter
+- Install the Paratext Diagram Labeler plugin
+- Seed place-name renderings with the Biblical Terms tool before opening the plugin
+- Review and confirm the plugin's proposed labels so map names match the text
+- Save your work so the labels export automatically for the typesetter
 
 **Introduction:**
 

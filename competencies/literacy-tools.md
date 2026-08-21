@@ -13,20 +13,16 @@ outcome_levels:
 resources:
   - title: SIL Literacy and Education
     url: https://www.sil.org/literacy-education
-  - title: SIL Literacy and education (ILS)
+  - title: SIL Literacy and Education (ILS)
     url: https://sites.google.com/d/1WRbBXpgVYdTHgcS0jLOdXOSggI17FruM/p/1Kx_uPz4kEIYT2iMXVr7q8gNsonSGXzfJ/edit
   - title: Bloom Library
     url: http://bloomlibrary.org
   - title: Bloom 4 Training Plan
     url: https://lingtran.net/Bloom-4
-  - title: Bloom Resources from SIL LEAD
-    url: https://www.sil-lead.org/bloom-accessible-books
   - title: PrimerPro
     url: https://software.sil.org/primerpro/
   - title: PrimerPro training videos
     url: https://vimeo.com/showcase/3521179
-  - title: SIL Principles of Literacy course
-    url: https://elearning.sil.org/enrol/index.php?id=370
   - title: PrimerPrep
     url: https://software.sil.org/primerprep/
   - title: Reading App Builder

@@ -16,8 +16,6 @@ resources:
     url: https://www.thewindowsclub.com/windows-10-guide-for-beginners-from-microsoft
   - title: Basic Computer Skills
     url: https://lingtran.net/Basic-Computer-Skills
-  - title: Basic Computer Skills by GCFGlobal
-    url: https://edu.gcfglobal.org/en/basic-computer-skills/
   - title: Nepals basic computer course
     url: https://docs.google.com/document/d/12ZmXEZWhTuhFCLqoLD2hYoVl4MvHpcNIISmuXLFZWmQ/edit
   - title: Ubuntu commands for Beginners (Wasta is an Ubuntu based OS)

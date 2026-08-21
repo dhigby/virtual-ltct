@@ -18,13 +18,13 @@ resources:
   - title: RapidWords.net (Rapid Dictionary Development)
     url: http://rapidwords.net/
   - title: Introduction to Lexicography for FLEx
-    url: https://drive.google.com/file/d/122-fSjQnFOwjwsf4vRXdNi4OUsLBpjW8/view
+    url: https://downloads.languagetechnology.org/fieldworks/Documentation/Intro%20to%20Lexicography/Introduction%20to%20Lexicography.htm
   - title: WeSay
     url: https://software.sil.org/wesay/
   - title: Language Forge
     url: https://languageforge.org/
   - title: Lexique Pro
-    url: http://lexiquepro.com/
+    url: https://software.sil.org/lexiquepro/  
   - title: SIL Field Linguist's Toolbox
     url: https://software.sil.org/toolbox/
   - title: MLE 4000 wordlist in WeSay
@@ -36,7 +36,7 @@ resources:
   - title: Multi-Dictionary Formatter (MDF)
     url: https://software.sil.org/shoebox/mdf/
   - title: Making Dictionaries. A Guide to Lexicography and the Multi-Dictionary Formatter
-    url: https://drive.google.com/file/d/1JgSILyOdyOdw24tkpRnbUESdrHj1PLw3/view
+    url: https://archive.org/details/mdf-2000_202306
   - title: LIFT standard
     url: https://code.google.com/archive/p/lift-standard/
   - title: Computational Lexicography

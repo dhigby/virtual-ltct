@@ -17,8 +17,6 @@ resources:
     url: https://github.com/silnrsi/sldr
   - title: UNICODE LOCALE DATA MARKUP LANGUAGE (LDML)
     url: http://unicode.org/reports/tr35/
-  - title: LDML Specification
-    url: https://sites.google.com/site/ldmlspec/home
 source: Lang Tech Competencies.xlsx
 last_updated: 2026-07-01
 ---

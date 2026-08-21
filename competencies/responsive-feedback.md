@@ -10,10 +10,8 @@ outcome_levels:
   - "2 - With Assistance"
   - "3 - Independent"
 resources:
-  - title: How to write a quality bug report?
-    url: https://rubygarage.org/blog/how-to-write-a-quality-bug-report
   - title: How to write good bug report?
-    url: https://musescore.org/en/handbook/developers-handbook/getting-started/how-write-good-bug-report-step-step-instructions
+    url: https://musescore.org/en/node/309537
   - title: What makes a good bug report?
     url: https://www.boxuk.com/insight/what-makes-a-good-bug-report/
   - title: A Humorous but true article on Bug Reporting (Simon Tatham)

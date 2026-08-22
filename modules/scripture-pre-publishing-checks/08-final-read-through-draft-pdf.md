@@ -159,8 +159,9 @@ You have produced a draft PDF, viewed it the way the reader will, and read the w
 3. **Typesetter coordination:**
    - Provide all necessary files and documentation (including the draft PDF)
    - Communicate any special requirements
+   - Typically the team travels with the files, so any changes needed during typesetting can be made with — or by — the team on-site
    - Review typeset samples
 4. **Publication process:**
    - Follow your organization's publication workflow
    - Maintain archival copies
-   - Celebrate the completion of this major milestone!
+   - **Celebrate!** Completing the pre-publishing checks is a real milestone — many teams mark it at the branch before the files go to the typesetter, with more celebration once typesetting is done.

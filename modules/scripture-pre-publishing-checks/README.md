@@ -40,6 +40,7 @@ translators**.
 5. [Numbers, Weights, and Measures](05-numbers-weights-and-measures.md)
 6. [Formatting Checks](06-complete-comprehensive-formatting-checks.md)
 7. [Glossary Linking: Marking Terms in the Text](07-glossary-linking-marking-terms-in-text.md)
+8. [Final Read-Through: Producing the Draft PDF](08-final-read-through-draft-pdf.md)
 
 The **FC (Formatting Checks)** referenced in Chapter 6 is an *earlier* check in the manual
 ([13. Formatting checks](https://manual.paratext.org/13.FC)) that the team **reruns** here to catch

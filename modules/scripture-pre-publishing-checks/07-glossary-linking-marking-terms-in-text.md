@@ -310,23 +310,9 @@ After completing this chapter, verify that you have:
 - The Biblical Terms tool already handles many homographs with separate numbered entries
 - Unlink selected (not all) is available if you need to redo linking for specific terms
 ### What Comes Next
-**Congratulations!** You've completed all the finalizing for publication chapters. Your next steps:
-1. **Final comprehensive review:**
-	- Review all chapters' verification checklists
-	- Confirm all tasks are complete
-	- Address any remaining items
-2. **Consultant approval:**
-	- Submit complete project to Translation Consultant
-	- Address any final feedback
-	- Obtain sign-off for publication
-3. **Typesetter coordination:**
-	- Provide all necessary files and documentation
-	- Communicate any special requirements
-	- Review typeset samples
-4. **Publication process:**
-	- Follow your organization's publication workflow
-	- Maintain archival copies
-	- Celebrate the completion of this major milestone!
+
+With the glossary terms marked, one step remains before the files go to the typesetter: **Chapter 8 — Final Read-Through**, where you produce a draft PDF in PTXprint and read the whole publication through, spread by spread, to catch layout and flow problems.
+
 ### Timeline Guidance
 Glossary linking typically takes:
 - **Planning and preparation:** 1 hour

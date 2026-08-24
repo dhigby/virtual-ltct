@@ -53,12 +53,17 @@ You've been working with biblical terms throughout the translation process, but 
 ### Step 2: Select the Major Biblical Terms List
 Not all biblical terms are equally important. The Major Biblical Terms list focuses on the most crucial ones for publication.
 1. In the Biblical Terms window: **≡ Tab** \> **Biblical Terms** \> **Select Biblical Terms List**
-2. Choose **Major Biblical Terms** from the list
+2. Choose the list your project uses (commonly **Major Biblical Terms**)
 3. Click **OK**
 **What you'll see:**
 - The window now shows only major biblical terms
 - This is a more manageable list than "All Biblical Terms"
 - These are the terms that absolutely must have renderings before publication
+
+> **TIP — Which Biblical Terms list?** Projects use different lists, and the choice is your **Translation Consultant's** to make — work from whichever list they've set. For reference:
+> - **Major Biblical Terms** — the recommended default; shows every term in each conjugated form (comprehensive, but a lot to work through).
+> - **NT Key Biblical Terms (SIL)** — groups a term's forms under one theme with an English/French gloss, which some find quicker. Two trade-offs: it splits terms into fine senses (e.g. *peace* has 12), which can be tedious in some languages; and it does **not** contain every term — some appear only in Major Biblical Terms.
+> - **All Biblical Terms** — the most comprehensive, but very large and **can noticeably slow the computer**.
 ### Step 3: Filter for Names with Missing Renderings
 You want to focus on terms that still need work.
 1. Look for the filter options in the Biblical Terms window

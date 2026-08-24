@@ -84,12 +84,13 @@ Ancient biblical measurements don't map neatly onto modern systems. You are chec
 
 ### Step 2: Select the Appropriate Specialized List
 
-Unlike the Major Biblical Terms list, measurements have specialized lists. In the current version of Paratext these are:
+These terms are **not** in the key theological-terms lists (such as NT Key Biblical Terms), so check them in a **specialized list** — or in **Major** or **All Biblical Terms**, which include them. In the current version of Paratext the specialized lists are:
 
 1. In the Biblical Terms window: **≡ Tab > Biblical Terms > Select Biblical Terms List**.
 2. Choose the list for what you're checking:
 	- **"Measures and Money"** — weights, volumes, distances, and monetary units (combined in the current Paratext list).
 	- **"Numbers"** — number-related terms (a separate list).
+	- Or your project's **Major** / **All Biblical Terms** list, which also contains these terms.
 
 **Note:** List names vary by Paratext version and project configuration — older projects may still show separate "Weights," "Measures," "Money," or "Currency" lists. If you're unsure which lists are available, check with your Language Technology Consultant.
 

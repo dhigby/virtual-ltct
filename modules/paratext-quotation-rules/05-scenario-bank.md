@@ -136,8 +136,9 @@ is nothing to change.
 |-------|---------|---------|---------|---------|
 | First level | `—` | U+2014 | `—` | U+2014 |
 | Second level | `“` | U+201C | `”` | U+201D |
+| Third level | `‘` | U+2018 | `’` | U+2019 |
 
-Waku uses an **em dash** (U+2014) for both the opening and closing mark at First level. Multi-paragraph speech does *not* restart the em dash — it uses a **continuation mark** of `—` (another em dash) at the start of each continued paragraph.
+Waku uses an **em dash** (U+2014) for both the opening and closing mark at First level. Multi-paragraph speech does *not* restart the em dash — it uses a **continuation mark** of `—` (another em dash) at the start of each continued paragraph. Waku's word-medial apostrophe is `ʼ` (U+02BC MODIFIER LETTER APOSTROPHE), so the Third level closer `’` (U+2019) creates no apostrophe collision.
 
 **Discovery prompts:**
 - When the same character is used for both opening and closing, how does Paratext know which is which? What rule does it rely on?
@@ -150,15 +151,18 @@ Waku uses an **em dash** (U+2014) for both the opening and closing mark at First
 |-------|---------|----------------------------------|--------|
 | First level | `—` | `—` | `—` |
 | Second level | `“` | *(blank)* | `”` |
+| Third level | `‘` | *(blank)* | `’` |
 
-Third level: leave blank (Waku uses only two levels). Continuation: `—` (em dash, same character).
+Continuation: `—` (em dash, same character) at First level only.
 
 **Note on same-character open/close:** When the same character serves as both opener and closer, Paratext relies on structural context (paragraph markers, verse boundaries, and surrounding text flow) to determine which role the em dash plays. Because this context-based interpretation may not resolve every case unambiguously, human review of flagged em-dash results is always required for Waku.
 
 **Check your work:**
 - Run the check on Acts (extended speeches, heavy use of em-dash dialogue). Verify that multi-paragraph speeches with continuation marks do not generate "unclosed quote" errors.
 - Check a verse where em dash is used for a parenthetical aside (not speech). Does the check flag it? What is the correct response — fix the text (replace the em dash with different punctuation for the parenthetical), reconfigure if possible, or document in a Project Note for the consultant?
-- This scenario will likely leave some results that cannot be eliminated by configuration alone — because Paratext cannot distinguish an em dash used as speech from one used as a parenthetical dash. For these, consider whether the verses can be reworded to use different punctuation for the parenthetical. Where rewording is not feasible, add a Project Note (☰ > Insert > Project note...) to explain the em dash is a parenthetical, not dialogue, so the consultant can verify during review.
+- This scenario leaves results that cannot be eliminated by configuration alone — because Paratext cannot distinguish an em dash used as speech from one used as a parenthetical dash. Confirmed on a real Paratext 9.5 build, a correct configuration run against all books ends at **seven results**: six "found as a word medial character" results on genuine parenthetical em dashes (Mark 13:14 twice, 13:19, 13:22; Luke 9:3; Acts 3:1), plus one "Closing quote mark is possibly missing before verse 18:1" at John 17:26.
+- The John 17:26 result is a different residual class from the parentheticals: the text there is *correct* — Jesus's prayer (17:1–26) opens with `—`, carries the `—` continuer at every paragraph, and closes with `—` at the end of verse 26 — but with the same character serving as opener, closer, and continuer across a long multi-paragraph speech, Paratext's context-based tracking loses the open/close state and reports the speech as possibly unclosed. No text change fixes it without breaking Waku's convention. Verify the marks are all present, then document.
+- For all seven: consider whether the parenthetical verses can be reworded to use different punctuation. Where rewording is not feasible (and always for John 17:26, where the text is already correct), add a Project Note (☰ > Insert > Project note...) explaining the result so the consultant can verify during review.
 
 ## Scenario bank summary
 - The same four-step workflow (inventory → rules → check → triage) applies to every language, however unusual its quotation conventions.
@@ -169,13 +173,13 @@ Third level: leave blank (Waku uses only two levels). Continuation: `—` (em da
 
 1. You enter Second level Opening as `‹` and Second level Closing as `›` for the Menda project, then run the check and find that every Second level opening mark generates a result. The Example section in the Quote marks tab shows the marks in reversed order from what you expect. What went wrong, and what is the fix?
 2. In Scenario B you enter Second level as Opening: U+2039, Closing: U+203A (reversed from the correct order). What will the check report?
-3. After completing Scenario C (Waku), 8 results remain in the Basic Checks panel — all em dashes used as parenthetical remarks, not speech. Configuration cannot eliminate them. What are your options?
+3. After completing Scenario C (Waku), 7 results remain in the Basic Checks panel — six em dashes used as parenthetical remarks (not speech), plus one "possibly missing" result on a multi-paragraph speech whose marks are all correctly in place. Configuration cannot eliminate them. What are your options?
 
 **Answers**
 
 1. The characters were entered in the wrong fields — the left-pointing guillemet (`‹`, U+2039) is in the Opening field when it should be in the Closing field, and vice versa. Swap them: Opening should be `›` (right-pointing, U+203A), Closing should be `‹` (left-pointing, U+2039). Confirm by checking the Example section — the correct order shows `›` as the inner opening and `‹` as the inner closing.
 2. The check will fire on every Second level opening mark (treating the right-pointing guillemet as an unexpected closing mark) and on every Second level closing mark (treating the left-pointing guillemet as an unexpected opening mark). The entire Second level configuration will appear as errors.
-3. Two options: (1) Rewrite the affected verses to use different punctuation for parenthetical remarks (e.g. brackets or a non-speech dash character), which removes the ambiguity and clears the results. (2) Where rewording is not feasible, add a Project Note (☰ > Insert > Project note...) to each verse explaining the em dash is a parenthetical, not dialogue — so the consultant can verify during review. The Basic Checks panel results will remain; documenting them prevents them from being mistaken for unreviewed errors.
+3. Two options: (1) For the parentheticals, rewrite the affected verses to use different punctuation for parenthetical remarks (e.g. brackets or a non-speech dash character), which removes the ambiguity and clears the results. (2) Where rewording is not feasible — and always for the multi-paragraph result, where the text is already correct and there is nothing to rewrite — add a Project Note (☰ > Insert > Project note...) to each verse explaining what the flagged em dash actually is, so the consultant can verify during review. The Basic Checks panel results will remain; documenting them prevents them from being mistaken for unreviewed errors.
 
 ---
 

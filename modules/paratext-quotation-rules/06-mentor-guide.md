@@ -90,7 +90,7 @@ Distribute Phase B (or push an update) before Exercise 4.1. For a group session,
 
 ### Step 5 — Distribute the project
 
-Choose whichever distribution method suits your setup. (Prebuilt project backups accompany this course as `Tamba-A.zip`, `Tamba-B.zip`, `Runda.zip`, and `Menda.zip`.)
+Choose whichever distribution method suits your setup. (Prebuilt project backups accompany this course as `Tamba-A.zip`, `Tamba-B.zip`, `Runda.zip`, `Menda.zip`, `Velna.zip`, and `Waku.zip`.)
 
 | Method | How |
 |--------|-----|
@@ -132,14 +132,16 @@ Each scenario-bank project needs enough text to produce meaningful check results
 |---------|----------------|-------------------------|
 | `velna` | Guillemet outer (`«` / `»`), curly single inner (`‘` / `’`) — Guillemet style (Scenario A). Include words with `’` (U+2019) as apostrophes so learners encounter the apostrophe conflict. | Matthew, Luke, John (dialogue-heavy) |
 | `menda` | Double guillemets outer, reversed single guillemets inner: `«...›...‹...»`; Third level returns to `«...»` — include at least one third-level quote (John 19:21) (Scenario B) | John (dialogue-heavy, contains the 19:21 third-level example) |
-| `waku` | Em dash as both opener and closer: `—...—`, with em dash continuation mark (Scenario C) | Matthew, Luke, Acts (stretch exercise; Acts is required — the scenario's check steps use its extended multi-paragraph speeches) |
+| `waku` | Em dash as both opener and closer: `—...—`, with em dash continuation mark; Second level `“...”`; Third level `‘...’` (Scenario C) | Matthew, Mark, Luke, John, Acts (stretch exercise; Acts is required — the scenario's check steps use its extended multi-paragraph speeches; Mark 13 carries most of the parenthetical em dashes and John 17 the same-character ambiguity that the scenario's seven residual results depend on) |
 
 Apply the correct quotation characters for each language throughout the text. Leave all Quote marks tab and Rules settings blank — learners configure them as part of the scenario.
 
-**Asset gap:** unlike `tamba`, `runda`, and `menda`, no prebuilt backup exists yet for `velna` or
-`waku` — a facilitator must build both from the tables above before the scenario bank can be
-distributed. `velna` is new as of this revision (it replaces `runda`'s prior role in Scenario A,
-so the two must be distinct projects — do not reuse the `runda` backup for `velna`).
+Prebuilt backups now exist for all three scenario-bank projects (`Velna.zip`, `Menda.zip`,
+`Waku.zip`) — the tables above are reference for anyone rebuilding a project from scratch, not
+a required setup step. If you do rebuild one: blank the Quote marks tab and Quotation Rules
+settings used during verification before backing up — learners must start from empty fields.
+`velna` is new as of this revision (it replaces `runda`'s prior role in Scenario A, so the two
+must be distinct projects — do not reuse the `runda` backup for `velna`).
 
 ---
 

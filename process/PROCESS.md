@@ -20,12 +20,16 @@ read one section, read [The 30-second answer](#the-30-second-answer).
 Open the repo in Claude Code and run:
 
 ```
-/next-step <course-slug>
+/work-on <course-slug>
 ```
 
-It reads the course folder and its tracker issue, tells you exactly which stage the
-course is at, and gives you the one command to run next. Run `/next-step` with no
-argument to see every in-flight course at once.
+It pins the session to that one course, puts you on its branch, reads the course folder
+and its tracker issue, tells you exactly which stage the course is at, and gives you the
+one command to run next.
+
+`/next-step <course-slug>` is the read-only version — same answer, changes nothing. Run
+`/next-step` bare to list the courses in the pipeline so you can pick one. That list is a
+**chooser, not a to-do list**: this repo builds one course at a time.
 
 ## The pipeline
 
@@ -44,7 +48,8 @@ Every content course moves through eight stages. Each has a one-page how-to unde
 | 8 | [Record & publish](stages/08-publish.md) | Publisher | Record video, upload to Cypher | Publishing → Online |
 
 The stages are gates, not suggestions: don't start drafting before the design is
-approved, and don't publish before the pilot. `/next-step` enforces the order for you.
+approved, and don't publish before the pilot. `/work-on` and `/next-step` tell you which
+gate you're at, so you don't have to track it yourself.
 
 ## Board status vocabulary
 
@@ -107,19 +112,44 @@ checkbox that disagrees with reality.
   [`tracker-checklist.md`](tracker-checklist.md) to its existing issue (edit the issue
   body in the GitHub UI and paste it in below the existing content).
 
+## One branch per course
+
+Each course's work happens on exactly **one** branch, named `course/<slug>` — for example
+`course/bloom`. (Backfill imports use `backfill/<slug>`.)
+
+**You never type a branch name.** [`/work-on <slug>`](../.claude/commands/work-on.md)
+derives it from the slug, checks `origin` for an existing one, and either checks that out or
+creates it. Because the name is always derived and never invented, a second branch for the
+same course can't happen — no `bloom-fix`, no `doug-bloom`, no `bloom-v2`.
+
+That also means the branch acts as a soft lock: **one course, one branch, one person at a
+time.** If `/work-on` finds the branch already exists, it tells you who last pushed to it
+and whether a PR is open, so you coordinate instead of colliding. The next stage's owner
+picks the course up after the PR merges.
+
+Why branches at all, when contributors aren't git people:
+
+- Half-finished drafting stays out of everyone else's copy until it's reviewed.
+- The content checks in CI (`check_course_package.py`, coverage, descriptor sync) run on
+  **pull requests** — so a missing duration header or a misspelled competency name is
+  caught *before* it lands on `main`, not after everyone has pulled it.
+- Editing `modules/` while on `main` is refused by a session hook, which points you at
+  `/work-on`. That refusal is the only hard block in the repo.
+
 ## Planning ritual — filling the gaps
 
 The end goal is a course for every competency in [`competencies.yaml`](../competencies.yaml).
 [`COVERAGE.md`](../COVERAGE.md) shows the gaps; [`ROADMAP.md`](../ROADMAP.md) is where we
 commit to closing them. Once a month (or each quarter):
 
-1. The Maintainer runs the `coverage-strategist` agent for a ranked shortlist of what to
-   tackle next.
-2. The team picks **1–3** items to commit to.
-3. For each: open a Course production tracker issue, add it to the board (`Not started`,
-   set Priority), and fill in its row in `ROADMAP.md`.
+1. The Maintainer runs the `coverage-strategist` agent for a recommended next course, with
+   its reasoning and a couple of runners-up.
+2. The team commits to **the one** they'll build next.
+3. Open its Course production tracker issue, add it to the board (`Not started`, set
+   Priority), and fill in its row in `ROADMAP.md`.
 
-Keep it small — commit to what you'll actually finish. Don't pre-create 22 tracker
+One at a time. `ROADMAP.md` is an ordered queue, not a set of parallel commitments — the
+gap list is long, so the discipline is finishing, not claiming. Don't pre-create 22 tracker
 issues; empty "Not started" rows are just board noise.
 
 ## Backfilling legacy content

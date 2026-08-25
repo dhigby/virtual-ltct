@@ -8,13 +8,15 @@ The goal is a course for every competency in [`competencies.yaml`](competencies.
 
 Once a month (or quarterly), per [`process/PROCESS.md`](process/PROCESS.md):
 
-1. A maintainer runs the `coverage-strategist` agent for a ranked shortlist.
-2. The team commits to **1–3** items — no more than we'll actually finish.
-3. For each: open a [Course production tracker](.github/ISSUE_TEMPLATE/course-production.yml)
+1. A maintainer runs the `coverage-strategist` agent for a recommended next course.
+2. The team commits to **the one** we'll build next — this repo builds one course at a time.
+3. Open its [Course production tracker](.github/ISSUE_TEMPLATE/course-production.yml)
    issue, add it to the board (`Not started`, set Priority), and fill in its row below
    (planned course slug, issue #, target quarter).
 
-Don't pre-open 22 tracker issues — empty rows are just board noise. Commit as you go.
+This is an **ordered queue**, not a set of parallel commitments: at most one row should be
+in production at any time, and Priority is what orders the rest. Don't pre-open 22 tracker
+issues — empty rows are just board noise. Commit as you go.
 
 ## Gap competencies (22)
 

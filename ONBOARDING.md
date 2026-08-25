@@ -32,9 +32,12 @@ set of files a finished course has.
 
 - **[`process/PROCESS.md`](process/PROCESS.md)** — the whole method: the 8 stages, the
   roles, the board statuses. Read this once, top to bottom.
-- **The `/next-step` command** — your everyday tool. In Claude Code, run
-  `/next-step <course-slug>` to see exactly where a course is and what to do next, or
-  `/next-step` alone to see everything in flight.
+- **The `/work-on` command** — how every working session starts. In Claude Code, run
+  `/work-on <course-slug>`. It puts you on that course's own branch and tells you the one
+  next thing to do. You never have to create a branch or think about git yourself.
+- **The `/next-step` command** — the read-only version: `/next-step <course-slug>` says
+  where a course stands without changing anything. Run it bare to list the courses in the
+  pipeline and pick one.
 - **The board** — the "LTC Training Modules" GitHub Project. Each course has one tracker
   issue with a stage checklist.
 - **The seven agents** (in Claude Code, via the Agent tool):
@@ -52,19 +55,27 @@ set of files a finished course has.
 
 The daily loop is the same every time — learn it once on a small step:
 
-1. **Open the board** and pick a course that's already in progress (or ask what needs help).
-2. **Open its tracker issue** to see the checklist.
-3. **In Claude Code, run** `/next-step <slug>`. It'll tell you the one next thing — say,
-   "run the `quiz-writer` agent" or "the design doc needs approval."
-4. **Do that one thing.** Follow the linked stage page under
+1. **Pick one course.** Ask what needs help, or run `/next-step` bare to see the courses in
+   the pipeline and what each needs next. You work on **one course at a time** here.
+2. **In Claude Code, run** `/work-on <slug>`. It puts you on that course's branch, warns you
+   if a teammate is already working it, and tells you the one next thing — say, "run the
+   `quiz-writer` agent" or "the design doc needs approval."
+3. **Do that one thing.** Follow the linked stage page under
    [`process/stages/`](process/stages/) if you're unsure how.
-5. **Tick the checkbox** on the tracker issue and **move the board status** if the stage
+4. **Tick the checkbox** on the tracker issue and **move the board status** if the stage
    changed.
-6. **Open a PR** for any files you changed.
+5. **Let Claude commit, push, and open the PR** for the files you changed. You review the
+   PR in the browser; you never have to create one.
 
-That's it. Every course is just this loop repeated eight times. When nothing's in flight and
-you want to start something new, run the `coverage-strategist` agent or look at
+That's it. Every course is just this loop repeated eight times. When you finish a course and
+want to start something new, run the `coverage-strategist` agent or look at
 [`ROADMAP.md`](ROADMAP.md).
+
+> **Why branches?** Each course gets exactly one branch, named `course/<slug>`. It keeps your
+> half-finished drafting out of everyone else's copy until it's reviewed, and it's what makes
+> the automated content checks run *before* your work lands rather than after. `/work-on`
+> handles all of it — if you ever wonder "where did my files go?", run `/work-on <slug>`
+> again and it will tell you exactly where you are.
 
 ## 4. Two side-tracks
 

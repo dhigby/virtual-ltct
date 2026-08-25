@@ -10,11 +10,13 @@ pipeline, the per-stage agents, and the roles — lives in
 Open the repo in Claude Code and run:
 
 ```
-/next-step <course-slug>
+/work-on <course-slug>
 ```
 
-It tells you exactly where a course is in the pipeline and the single next thing to do.
-Run `/next-step` with no argument to see every in-flight course.
+That's how every session starts. It pins the session to **one** course, puts you on that
+course's branch, and tells you the single next thing to do — no git knowledge needed. Run
+`/next-step` (read-only) to check where a course stands without starting on it, or bare to
+list the courses in the pipeline and pick one.
 
 ## How a course gets built (the short version)
 
@@ -35,7 +37,8 @@ per-course to-do list. Don't start drafting before the design is approved.
    the `README.md` frontmatter (title, slug, competencies, outcome level).
 2. Open a **Course production tracker** issue (Issues → New issue → *Course production
    tracker*). A maintainer adds it to the board at status `Design`.
-3. Run `/next-step <slug>` and follow it from stage 1.
+3. Run `/work-on <slug>` and follow it from stage 1. It creates the course's branch
+   (`course/<slug>`) for you.
 
 To propose an idea without starting production yet, use the **Propose a course** issue
 template instead.

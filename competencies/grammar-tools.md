@@ -1,4 +1,4 @@
-﻿---
+---
 name: Grammar Tools
 category: Technology Domain
 slug: grammar-tools

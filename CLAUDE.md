@@ -4,6 +4,31 @@ Guidance for AI assistants working in this repo. This is a **content repository*
 the Language Technology Consultant (LTC) training curriculum — markdown training modules,
 not an application. There is no build/test/run loop; the "checks" are content + coverage.
 
+## How a session in this repo runs (read this first)
+
+**One course per session.** Contributors here work on a single course at a time, and most
+are not comfortable with git. So before doing any course work:
+
+1. **Establish which one course** this session is for. Don't guess, and don't offer to work
+   on several at once. `python scripts/course_stage.py --all` lists what's in the pipeline.
+2. **Run [`/work-on <slug>`](.claude/commands/work-on.md).** It puts the session on that
+   course's branch (`course/<slug>`, always derived from the slug — never invented, which is
+   what stops duplicate branches for one course), then reports the stage and next action.
+3. **Never edit `modules/` while on `main`.** A hook refuses it; `/work-on` is the fix.
+4. **Do the current stage only.** The eight stages are *gates* — no drafting before the
+   design is approved, no publishing before the pilot.
+5. **Route authoring through the stage's agent** (`course-designer`, `module-author`,
+   `quiz-writer`, `video-script-writer`, `alignment-reviewer`) and the matching
+   `process/stages/<NN>-*.md` how-to, rather than free-typing content.
+
+**You do the git; you explain the git.** After any branch operation, say in one plain
+sentence what changed and where their files are now — "where did my files go?" after a
+branch switch is the single most common confusion here.
+
+[`scripts/course_stage.py`](scripts/course_stage.py) is the **only** implementation of stage
+detection. `/next-step`, `/work-on`, the session hooks and the status line all read it. Don't
+re-derive a course's stage by hand.
+
 ## What this repo is
 
 - One folder per module under `modules/<slug>/`, each with a `README.md` (some modules

@@ -60,21 +60,26 @@ a web page — because that's all it is. Most of you will never need to touch gi
 ## 3. The author path — optional, for those who draft (5 min) — *only if the group wants it*
 
 - **Say:** "If you're going to *create* content, here's the fuller loop. Reviewers can tune out."
-- **Do, briefly:** In Claude Code run `/next-step <slug>` → it names the next step. Show: make
-  changes → they land on a **branch** → **open a PR** → the team reviews it (the page we just saw)
-  → it gets merged into `main`.
+- **Do, briefly:** In Claude Code run `/work-on <slug>` → it puts you on that course's branch
+  and names the next step. Show: make changes → they're on the course's **branch**
+  (`course/<slug>`) → **open a PR** → the team reviews it (the page we just saw) → it gets
+  merged into `main`.
+- **Say the reassuring part out loud:** *"You never create a branch or type a branch name.
+  `/work-on` does it. There's exactly one branch per course, so you can't accidentally make a
+  second one — and if someone else is already working that course, it tells you."*
 - **Point out — the two things that confuse people:**
   - **"Getting the latest" isn't automatic.** Clicking the Source Control icon shows *your* changes;
     it doesn't check the server. You have to **Fetch, then Pull** ("Sync Changes"). *(Demo the Sync
-    button in the status bar.)*
+    button in the status bar.)* `/work-on` also pulls for you when it starts.
   - **"Where did my files go?"** = you're on `main` but the work is on a branch (or vice-versa).
-    The branch name is bottom-left; click it to switch. *"When in doubt, review in the browser
-    instead."*
+    **The fix is to run `/work-on <slug>` again** — it tells you which branch you're on and puts
+    you back on the right one. (The branch name is also bottom-left in VS Code.) If you try to
+    edit course content while on `main`, Claude Code will stop you and say the same thing.
 
 ## 4. Close (2 min)
 
 - **The one-sentence takeaway:** *"Reviewers: bookmark the PR link, click Files changed, comment.
-  Authors: `/next-step` tells you what to do, and a PR is how it gets checked."*
+  Authors: `/work-on <slug>` tells you what to do, and a PR is how it gets checked."*
 - **Where to get help:** the team channel, or ask Claude Code / Doug. "Confusion is a doc bug —
   tell us and we'll fix the guide."
 

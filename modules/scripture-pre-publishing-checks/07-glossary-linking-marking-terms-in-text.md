@@ -163,6 +163,8 @@ The recommended approach is to search for the term in your reference text first,
 - Add 3-5 glossary terms
 - Link them and review results
 - Continue with more batches
+
+> **CAUTION** Add only the terms you need to the **Project** Biblical Terms. Adding large numbers — for example the whole **All Biblical Terms** list — bloats the project and noticeably slows Paratext and Send/Receive.
 ### Step 4: Link Custom Terms
 Once custom Biblical Terms entries have been created:
 1. Select the newly created terms in the Biblical Terms tool

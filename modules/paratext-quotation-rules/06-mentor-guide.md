@@ -90,7 +90,7 @@ Distribute Phase B (or push an update) before Exercise 4.1. For a group session,
 
 ### Step 5 — Distribute the project
 
-Choose whichever distribution method suits your setup. (Prebuilt project backups accompany this course as `Tamba-A.zip`, `Tamba-B.zip`, `Runda.zip`, `Menda.zip`, `Velna.zip`, and `Waku.zip`.)
+Choose whichever distribution method suits your setup. (Prebuilt project backups accompany this course as `Projects/Tamba-A.zip`, `Projects/Tamba-B.zip`, `Projects/Runda.zip`, `Projects/Menda.zip`, `Projects/Velna.zip`, and `Projects/Waku.zip`.)
 
 | Method | How |
 |--------|-----|
@@ -120,7 +120,7 @@ word-medial punctuation conflict has real examples to work through — the exerc
 learners to confirm the check keeps flagging these even after configuring Word-medial
 punctuation, not to reach zero results. Leave the Quote marks tab and
 Quotation Rules blank — learners configure both during Lesson 2. A prebuilt backup accompanies
-this course as `Runda.zip`.
+this course as `Projects/Runda.zip`.
 
 ---
 
@@ -136,8 +136,8 @@ Each scenario-bank project needs enough text to produce meaningful check results
 
 Apply the correct quotation characters for each language throughout the text. Leave all Quote marks tab and Rules settings blank — learners configure them as part of the scenario.
 
-Prebuilt backups now exist for all three scenario-bank projects (`Velna.zip`, `Menda.zip`,
-`Waku.zip`) — the tables above are reference for anyone rebuilding a project from scratch, not
+Prebuilt backups now exist for all three scenario-bank projects (`Projects/Velna.zip`, `Projects/Menda.zip`,
+`Projects/Waku.zip`) — the tables above are reference for anyone rebuilding a project from scratch, not
 a required setup step. If you do rebuild one: blank the Quote marks tab and Quotation Rules
 settings used during verification before backing up — learners must start from empty fields.
 `velna` is new as of this revision (it replaces `runda`'s prior role in Scenario A, so the two

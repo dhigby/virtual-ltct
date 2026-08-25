@@ -48,7 +48,7 @@ paragraph break. Navigate to:
 
 project menu **☰ > Project settings > Quotation Rules**, then click the **Quote marks** tab.
 
-![The project menu open showing Project settings highlighted, and Quotation Rules selected in the submenu.](ss-L152-project-menu-quotation-rules.png)
+![The project menu open showing Project settings highlighted, and Quotation Rules selected in the submenu.](Images/ss-L152-project-menu-quotation-rules.png)
 
 The tab has a grid with three rows and three columns.
 
@@ -74,7 +74,7 @@ At the bottom of the dialog:
 - **Copy quote mark settings...** button — imports character settings from another project
   (useful when a related project uses the same conventions).
 
-![The Quote marks tab with the three-row, three-column grid visible, showing the additional settings below the grid.](ss-L172-quote-marks-tab-layout.png)
+![The Quote marks tab with the three-row, three-column grid visible, showing the additional settings below the grid.](Images/ss-L172-quote-marks-tab-layout.png)
 
 **One more setting lives elsewhere, but it has a real limit.** Some languages use the same
 character for two purposes: as the **closing quotation mark** at the single-quote level *and*
@@ -186,7 +186,7 @@ level.
    level speech and ‘...’ for embedded speech.
 8. Click **OK**.
 
-![The Quote marks tab for Runda after entry, showing « and » in First level cells and the Second level Opening/Closing filled.](ss-L227-runda-quote-marks.png)
+![The Quote marks tab for Runda after entry, showing « and » in First level cells and the Second level Opening/Closing filled.](Images/ss-L227-runda-quote-marks.png)
 
 **✏️ Compare.** Runda and Tamba both fill the Quote Continuer cell at First level — Runda with
 `«`, Tamba with `“` — because both languages repeat the opening mark at the start of each
@@ -210,7 +210,7 @@ has a **Word-medial punctuation** field. Its own help text says any character li
 treated as part of a word when it appears between two alphabetic characters, so the checker
 should not misread it as a closing mark.
 
-![The Language Settings dialog open on the Other Characters tab, showing the Word-medial punctuation field with a right single quotation mark entered.](ss-L241-language-settings-other-chars.png)
+![The Language Settings dialog open on the Other Characters tab, showing the Word-medial punctuation field with a right single quotation mark entered.](Images/ss-L241-language-settings-other-chars.png)
 
 **Where this genuinely helps:** punctuation characters that are *not* also configured as a
 quote mark — a hyphen used word-medially, for instance. Paratext will warn you if you enter a

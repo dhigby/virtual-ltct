@@ -72,7 +72,7 @@ rather than living with documented false positives — but it's a project-level 
 team, not a Paratext setting, and it isn't available at all for a fixed text like Tamba's, where
 the orthography (real or fictional) is already settled.
 
-![The Quotations check results panel after full configuration, showing a manageable list of results. One result is highlighted with the verse open alongside it, demonstrating how to read a result entry (location, message, and the text in context).](ss-L429-results-with-highlight.png)
+![The Quotations check results panel after full configuration, showing a manageable list of results. One result is highlighted with the verse open alongside it, demonstrating how to read a result entry (location, message, and the text in context).](Images/ss-L429-results-with-highlight.png)
 
 Read each result as three parts: the **location** (book, chapter, verse), the **message** (what
 the check thinks is wrong), and the **text in context** (open the verse and look). A useful
@@ -187,7 +187,7 @@ it means nothing left in the list still needs your action.
 - Romans shows exactly 1 result (the 1:1 apostrophe), verified as a genuine word-medial
   apostrophe and documented rather than chased with further configuration changes.
 
-![The Quotations check results panel showing zero results, confirming the check is clean.](ss-L477-zero-results.png)
+![The Quotations check results panel showing zero results, confirming the check is clean.](Images/ss-L477-zero-results.png)
 
 **✏️ Produce this (a mentor will review it).** Submit your completed triage table (predictions
 + actual types) and a one-line note for each result on the action you took and why. The point a

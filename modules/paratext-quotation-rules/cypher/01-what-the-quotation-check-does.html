@@ -1,0 +1,148 @@
+<p><strong>Target Audience:</strong> Trainee Language Technology Consultants<br><strong>Duration:</strong> 30 minutes<br><strong>Level:</strong> With Assistance<br><strong>Framework:</strong> Learning That Lasts (Connect, Content, Challenge, Change)</p>
+<div style="border: 1px solid #d0d0d0; border-radius: 6px; padding: 16px 20px; margin: 16px 0; background-color: #fafafa;">
+<h3 style="margin-top: 0;">Learning Objectives</h3>
+<p>By the end of this lesson you will be able to:</p>
+<ul>
+<li>Explain why the Quotation check cannot produce trustworthy results before it is configured.</li>
+<li>Name the two inputs Paratext needs — the Quote marks inventory and the quotation rules — before the check is meaningful.</li>
+<li>Run the check on an unconfigured project and judge why its results are noise, not a starting baseline.</li>
+</ul>
+</div>
+<p>On a real project you will often be handed a Quotation check that is either screaming with errors or silent — and a translation team asking what it means. Before you can help, you have to recognize when the check's results are meaningless because it has not been configured yet, and be able to explain that to the team. This lesson prepares you for that first conversation.</p>
+<div style="background-color: #e3f2fd; border-left: 4px solid #2196f3; padding: 12px 16px; margin: 16px 0;">
+<p style="margin: 0;"><strong>INFO</strong> This lesson uses the fictional <a href="/files/7783595/Tamba-A(6).zip"><strong>Tamba New Testament</strong> </a>(<code>tamba</code>) project. See the course introduction for the Tamba quotation conventions, and make sure the Tamba practice project is restored in your Paratext before starting the Challenge exercise.</p>
+<p style="margin: 0;"><a href="/files/7783595/Tamba-A(6).zip" target="_blank" rel="noopener">/files/7783595/Tamba-A(6).zip</a></p>
+</div>
+<hr style="border: 2px solid black;">
+<p><img src="/files/7780768/connect.png" alt="connect" style="width: 144px; height: 194px;"></p>
+<p>Think about the language project you work with — or one you have seen a colleague support.</p>
+<p><strong>✏️ Reflection.</strong> Bring to mind a time you ran an automated check (spelling, punctuation, basic checks) and it either flooded the screen with results or returned nothing at all.</p>
+<ul>
+<li>What did you do first — start fixing the results, or step back and ask whether the check was even set up correctly?</li>
+<li>How did you decide whether the results could be trusted?</li>
+<li>If a translator asked you "does zero errors mean my quotation marks are perfect?", what would you say?</li>
+</ul>
+<p>Hold those answers. This lesson is about telling the difference between a check that has <em>found nothing wrong</em> and a check that <em>doesn't yet know what to look for</em>.</p>
+<hr style="border: 2px solid black;">
+<p><img src="/files/7780768/content.png" alt="content" style="width: 167px; height: 194px;"></p>
+<p><em>Configuring and troubleshooting a project's checks is core to the <strong>Translation Tools</strong> competency — being able to "use translation tools and troubleshoot issues that arise." The Quotation check is a good first case because its results are worthless until you have given it two specific pieces of information, and recognizing that is half the skill.</em></p>
+<p>Paratext's <strong>Quotation check</strong> (☰ &gt; Tools &gt; Run basic checks... &gt; Quotations) scans your translation for unmatched, unopened, or incorrectly nested quotation marks. Before it can do this it needs two things:</p>
+<ol>
+<li><strong>Quote marks tab</strong> — which characters in your text are quotation marks, and at what level (Opening, Quote Continuer at new paragraph, Closing for each level).</li>
+<li><strong>Quotation types tab</strong> — for each semantic category of speech, whether marks are required, forbidden, or optional.</li>
+</ol>
+<p>If neither is configured, the check either fires on every verse or fires on nothing — both are useless. An unconfigured check is <strong>not a starting baseline; it is noise.</strong></p>
+<div style="background-color: #f5f5f5; border-left: 4px solid #9e9e9e; padding: 12px 16px; margin: 16px 0;">
+<p style="margin: 0;"><strong>NOTE</strong> Zero results on an unconfigured project does <em>not</em> mean the translation has no quotation errors. It means Paratext does not know which characters to look for, so it is not finding marks — not confirming their absence. The check is reporting silence, not correctness.</p>
+</div>
+<div style="border: 1px solid #d0d0d0; border-radius: 6px; padding: 16px 20px; margin: 16px 0; background-color: #fafafa;">
+<h3 style="margin-top: 0;">Key Takeaways</h3>
+<ul>
+<li>The Quotation check needs both the Quote marks tab (which characters are quote marks) and the Quotation types tab (when marks are expected) before it gives trustworthy results.</li>
+<li>Don't interpret or fix results until configuration is complete — you would be chasing noise.</li>
+</ul>
+</div>
+<hr style="border: 2px solid black;">
+<p><img src="/files/7780768/challenge.png" alt="challenge" style="width: 142px; height: 194px;"></p>
+<h3>Exercise 1.1 — Observe an unconfigured check</h3>
+<p><strong>The situation.</strong> You are supporting the <strong>Tamba New Testament</strong> team. The team lead has run the Quotations check for the first time, seen the results, and messaged you: <em>"The quotation check is giving me hundreds of errors — is our punctuation really this bad?"</em> Your job is to see for yourself what the check reports on an unconfigured project, and then write the team lead a short, honest explanation.</p>
+<p><strong>Do it in Paratext:</strong></p>
+<ol>
+<li>Open the <code>tamba</code> project.</li>
+<li>Click <strong>☰ &gt; Tools &gt; Run basic checks...</strong></li>
+<li>In the dialog, tick <strong>Quotations</strong> only (leave "Quotation types" unticked — it is a separate check).</li>
+<li>Click <strong>Choose Books</strong> and select all NT books available in the <code>tamba</code> project, then click <strong>OK</strong>. This runs the check across the whole project so you can see the full scope of the problem.</li>
+</ol>
+<div style="background-color: #f5f5f5; border-left: 4px solid #9e9e9e; padding: 12px 16px; margin: 16px 0;">
+<p style="margin: 0;"><strong>NOTE</strong> A yellow information bar at the bottom of the dialog reads <em>"The accuracy of the results of these checks is dependent upon the information you have provided in the inventories and quotation rules for your project."</em> This is expected — the point of this challenge is that the check cannot give accurate results until it is configured.</p>
+</div>
+<p><img src="/files/7783595/ss-L108-run-basic-checks(2).png" alt="The Run basic checks dialog with Quotations ticked, Choose Books selected, and all NT books included." style="max-width: 100%;" width="585" height="452"></p>
+<ol start="5">
+<li>Look at the results list.</li>
+</ol>
+<p><img src="/files/7783595/ss-L113-unconfigured-results(2).png" alt="The Quotations check results panel with no results at all, showing only the notice 'Quotation punctuation is not used in project TAMBA' and pointing to Project settings &gt; Quotation rules." width="333" height="508" style="max-width: 100%;"></p>
+<div style="background-color: #e8f5e9; border-left: 4px solid #4caf50; padding: 12px 16px; margin: 16px 0;">
+<p style="margin: 0;"><strong>TIP</strong> For all configuration work in Lessons 2–4, use <strong>Current Book</strong> in the Run basic checks dialog and keep Matthew open — it has heavy, representative dialogue and keeps results manageable. Switch to Choose Books and expand to the full NT only after Matthew is clean.</p>
+</div>
+<div class="ui-tabs ui-component" data-widget-type="tabs">
+<div class="tab-headers">
+<div class="tab-header active" data-widget-part="tab-header" data-widget-action="tab-switch" data-tab-index="0"><strong>✏️ Discovery prompts</strong></div>
+<div class="tab-header" data-widget-part="tab-header" data-widget-action="tab-switch" data-tab-index="1"><strong>What you should observe:</strong></div>
+<div class="tab-header" data-widget-part="tab-header" data-widget-action="tab-switch" data-tab-index="2"><strong>✏️ Produce this</strong></div>
+</div>
+<div class="tab-content active" data-widget-part="tab-content" data-tab-index="0" style="display: block !important;">
+<h3>Answer these before you write anything</h3>
+<ul>
+<li>What does the panel actually report? Is that the same thing as "no quotation errors were found"?</li>
+<li>The notice points you to <strong>Project settings &gt; Quotation rules</strong>. What is Paratext missing before it can examine the text at all?</li>
+<li>The team lead in the scenario above saw <em>hundreds</em> of errors on their project; this project shows none. How can the same check produce both — and is either result trustworthy?</li>
+</ul>
+</div>
+<div class="tab-content" data-widget-part="tab-content" data-tab-index="1" style="display: none !important;">
+<h3>Confirmed on a real Paratext 9.5 build</h3>
+<p>The check declines to run on a truly unconfigured project — the panel shows no results, only the notice <em>"Quotation punctuation is not used in project TAMBA."</em> That is silence, not a clean bill of health. A project whose settings are <em>wrong</em> rather than missing (like the team lead's) fails the opposite way: a flood of false positives. Either way the results are not trustworthy until the Quote marks tab describes the language.</p>
+</div>
+<div class="tab-content" data-widget-part="tab-content" data-tab-index="2" style="display: none !important;">
+<h3>Hands-on Practice</h3>
+<p>Write the team lead a 2–3 sentence reply that (a) answers whether the errors mean their punctuation is bad, and (b) says what has to happen before the check can be trusted. Keep it plain enough for a non-technical translator to understand.</p>
+</div>
+</div>
+<hr style="border: 2px solid black;">
+<p><img src="/files/7780768/change.png" alt="change" style="width: 145px; height: 194px;"></p>
+<p><strong>Self-assessment — can you explain it to a colleague?</strong></p>
+<div class="ui-flipbox ui-component" data-widget-type="flipbox" data-shape="square">
+<div class="flipbox-container" data-widget-part="flipbox-container" data-valign="center" style="height: 152px;">
+<div class="flipbox-inner">
+<div class="flipbox-front">
+<div class="flipbox-content" data-max-chars="250">
+<p><strong>Question 1</strong></p>
+<p>The <strong>Quotations check </strong>runs on an unconfigured project and returns zero results. Does this mean the translation has no quotation errors?</p>
+</div>
+</div>
+<div class="flipbox-back">
+<div class="flipbox-content" data-max-chars="250">
+<p><strong>Answer </strong></p>
+<p><strong></strong>No — zero results on an unconfigured project means Paratext does not know which characters to look for; it is reporting silence, not correctness.</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="ui-flipbox ui-component" data-widget-type="flipbox" data-shape="square">
+<div class="flipbox-container" data-widget-part="flipbox-container" data-valign="center" style="height: 172px;">
+<div class="flipbox-inner">
+<div class="flipbox-front">
+<div class="flipbox-content" data-max-chars="250">
+<p><strong>Question 2</strong></p>
+<p>What are the two things Paratext needs before the Quotations check gives meaningful results?</p>
+</div>
+</div>
+<div class="flipbox-back">
+<div class="flipbox-content" data-max-chars="250">
+<p><strong>Answer</strong></p>
+<p>The Quote marks tab (which characters are quote marks and at what level) and the Quotation types tab (whether each category of speech requires, forbids, or optionally allows marks).</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="ui-flipbox ui-component" data-widget-type="flipbox" data-shape="square">
+<div class="flipbox-container" data-widget-part="flipbox-container" data-valign="center" style="height: 172px;">
+<div class="flipbox-inner">
+<div class="flipbox-front">
+<div class="flipbox-content" data-max-chars="250">
+<p><strong>Question 3</strong></p>
+<p>Why start with Matthew when working through check results during configuration, rather than running the check on the whole NT at once?</p>
+</div>
+</div>
+<div class="flipbox-back">
+<div class="flipbox-content" data-max-chars="250">
+<p><strong>Answer</strong></p>
+<p>Matthew has heavy, representative dialogue with clear nesting; one book keeps results manageable and lets you confirm each fix before expanding scope.</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<p><strong>✏️ Take it to your context.</strong> Name one real project you support (or expect to). Does the team know whether its quotation checking is configured? Write down one sentence you would use to set their expectations before running the check for the first time.</p>
+<p><strong>Next step.</strong> In Lesson 2 you will give Paratext the first of the two inputs it needs — you will open the Quote marks tab and enter Tamba's actual quotation characters, so the check finally has something meaningful to look for.</p>

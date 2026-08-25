@@ -8,7 +8,7 @@ work happens in the numbered lesson files, where learners can pause and work at 
 pace. The recording happens outside this repo; upload to Cypher for Business is a separate
 human step.
 
-**Estimated runtime:** 12-14 minutes (overview companion to a multi-hour hands-on course).
+**Estimated runtime:** 13-15 minutes (overview companion to a multi-hour hands-on course).
 **Companion lesson file(s):** `01-what-the-quotation-check-does.md` through
 `05-scenario-bank.md` — one orientation segment per lesson.
 
@@ -41,9 +41,9 @@ you'll go build that configuration yourself."
 
 | On-screen | Voiceover / talking points |
 | --- | --- |
-| Stay in the results panel from the cold open. Hover over the yellow information bar at the bottom of the Run basic checks dialog so its text is legible on screen. | "See this yellow bar? It says the accuracy of the check depends on the information you've given it. That's the whole story. The check needs two inputs before it can say anything trustworthy." |
+| Reopen the **Run basic checks** dialog (it closed when OK was clicked in the cold open). Hover over the yellow information bar at the bottom of the dialog so its text is legible on screen. | "See this yellow bar? It says the accuracy of the check depends on the information you've given it. That's the whole story. The check needs two inputs before it can say anything trustworthy." |
 | Cut to a simple two-box slide: **1. Quote marks tab — which characters are quote marks, and at what level.** **2. Quotation types tab — when marks are expected.** | "Input one: which characters in your text actually are quotation marks, and at which nesting level. Input two: for each kind of speech, whether marks should be there, should never be there, or don't matter. Give it both, and the check goes from guessing to checking." |
-| Back to the results panel. Point out results scattered across Matthew, Luke, John, Acts. | "One more habit before we start: don't ever try to interpret a full-New-Testament result list. Zero results on an unconfigured project doesn't mean the text is clean — it means Paratext isn't looking for anything. We fix that one book at a time, starting with Matthew, because Matthew has heavy, representative dialogue." |
+| Back to the empty results panel from the cold open, with the notice *"Quotation punctuation is not used in project TAMBA"* visible on screen. | "One more habit before we start: even once the check is configured, don't try to work a full-New-Testament result list. We go one book at a time, starting with Matthew — it has heavy, representative dialogue. And remember what you just saw: zero results here doesn't mean the text is clean; it means Paratext isn't looking for anything yet." |
 
 ### Segment 2 — The Quote marks tab (companion to Lesson 2)
 
@@ -73,7 +73,7 @@ you'll go build that configuration yourself."
 
 | On-screen | Voiceover / talking points |
 | --- | --- |
-| Re-run the check on **Current Book** (Matthew). Show the now-short results panel with one result highlighted and the verse open alongside it. (`ss-L429-results-with-highlight.png`.) | "Now re-run the check — Current Book, Matthew — and look at the difference. The check finally has something to say, and it's a handful of results, every one of them meaningful. This is a list you can actually work." |
+| Re-run the check across the whole New Testament. Show the now-short results panel with one result highlighted and the verse open alongside it. (`ss-L429-results-with-highlight.png`.) | "Now re-run the check across the whole New Testament — and look at the difference. The check finally has something to say, and it's seven results across five books, every one of them meaningful. This is a list you can actually work." |
 | Slide: **Real error → fix the text.** / **Configuration problem → fix the settings.** | "Every result is one of two things. A real error means the text genuinely has a missing, extra, or wrong mark — you fix the verse. A configuration problem means the check is revealing a gap in your settings — you fix the Quote marks tab or the types tab, and you do NOT edit correct text to make the warning go away." |
 | Screen: point to a message that repeats across many verses, versus a one-off message. | "Quick tell: the same message on lots of verses usually means a configuration gap. A one-off usually means a real error in that one verse. Work top to bottom, re-run after each batch, and watch the count fall." |
 | Show the results panel at zero. (`ss-L477-zero-results.png`.) | "The goal for each book is zero — Matthew clean first, then expand one book at a time. Zero doesn't mean the text is perfect; it means every result has been looked at and resolved deliberately. That's what a consultant is trusting when they pick up the book." |
@@ -85,7 +85,7 @@ you'll go build that configuration yourself."
 | On-screen | Voiceover / talking points |
 | --- | --- |
 | Cut to the Menda Quote marks tab, Second level showing `›` opening and `‹` closing, with the Example preview confirming the nested order. (`ss-L560-menda-quote-marks.png`.) | "Once you know the workflow, it's the same four steps for any language, however strange the marks. Here's Menda, where the second level opens with a right-pointing single guillemet and closes with a left-pointing one — reversed from what your eye expects. Get them backwards and the check fires on every embedded quote. The Example preview at the bottom is exactly how you catch it before you click OK." |
-| Slide listing the three scenario languages: **Velna (guillemets), Menda (reversed nesting), Waku (em-dash — stretch).** | "In the scenario bank you'll do three of these on your own: guillemets, that reversed nesting, and — if you want the stretch — a language that uses the em dash for both opening and closing. That last one won't fully clear by configuration alone; you'll document the leftovers in a Project Note so the consultant knows they were reviewed on purpose." |
+| Slide listing the three scenario languages: **Velna (guillemets), Menda (reversed nesting), Waku (em-dash — stretch).** At "That last one won't fully clear by configuration alone," briefly cut to the Waku results panel showing seven remaining results on a correctly configured project (`ss-L163-waku-residual-results.png`), then return to the slide. | "In the scenario bank you'll do three of these on your own: guillemets, that reversed nesting, and — if you want the stretch — a language that uses the em dash for both opening and closing. That last one won't fully clear by configuration alone; you'll document the leftovers in a Project Note so the consultant knows they were reviewed on purpose." |
 
 ## Call to action / close
 
@@ -95,8 +95,9 @@ you'll go build that configuration yourself."
 closing slide: **Lessons 1-4 → Scenario Bank → submit to your mentor.**
 
 **Voiceover:** "That's the whole arc: inventory the marks, set the rules, run the check,
-and triage to zero. You've seen it — now build it. Open Lesson 1 and work through the
-four hands-on lessons on the Tamba project at your own pace; each one has discovery
+and triage every result — to zero where the language allows, to a documented Project Note
+where it doesn't. You've seen it — now build it. Open Lesson 1 and work through the
+four hands-on lessons on the practice projects at your own pace; each one has discovery
 prompts and an answer key to check yourself against. Then take on the scenario bank. When
 you've configured all three languages, submit your configurations and your answers to your
 mentor for review. See you in Paratext."
@@ -109,7 +110,7 @@ mentor for review. See you in Paratext."
   runs long, cut demo depth, not the concept framing.
 - **Per-lesson clips.** If a full click-by-click walkthrough of a lesson is wanted later,
   record it as a separate short clip per lesson rather than bloating this overview past
-  ~14 minutes.
+  ~15 minutes.
 - **Terms to show on screen (not just say):** define *real error* vs. *configuration
   problem* with the Segment 4 slide, and put the Unicode code points (U+201C, U+2019,
   U+00AB, U+203A, U+2039, U+2014) on screen wherever you name a character — the visual

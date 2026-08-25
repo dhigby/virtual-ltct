@@ -18,19 +18,20 @@ human step.
 
 **On-screen:** Screen recording of the `tamba` project with the **Run basic checks**
 dialog open, **Quotations** ticked, and **Choose Books** set to the whole New Testament.
-The presenter clicks **OK** and the results panel fills with a long, scrolling list of
-results across many books. (This is the state captured in `ss-L108-run-basic-checks.png`
-and `ss-L113-unconfigured-results.png` — record it live so the scroll and the sheer
-count land.)
+The presenter clicks **OK** — and the results panel comes back with no results at all,
+just the notice *"Quotation punctuation is not used in project TAMBA."* (This is the
+state captured in `ss-L108-run-basic-checks.png` and `ss-L113-unconfigured-results.png`
+— record it live so the anticlimax lands.)
 
-**Voiceover:** "This is what the Quotation check looks like on a project nobody has
-configured yet. Hundreds of results. Scroll down — they never stop. And here's the trap:
-almost none of them are real. If you start opening verses and 'fixing' them one at a time,
-you'll spend a week editing correct text and end up with a translation that's worse, not
-better. The check isn't broken. It just doesn't know what a quotation mark looks like in
-your language yet. In the next few minutes I'll show you the two settings that turn this
-wall of noise into a short, trustworthy list — and then you'll go build that configuration
-yourself."
+**Voiceover:** "This is what the Quotation check says on a project nobody has configured
+yet: nothing. Not 'no errors found' — nothing. It won't even look at the text, because it
+doesn't know what a quotation mark looks like in this language. And on a project where the
+settings are merely *wrong* instead of missing, you get the opposite: hundreds of results,
+and almost none of them real. Start 'fixing' those one at a time and you'll spend a week
+editing correct text and end up with a translation that's worse, not better. Silence on one
+project, noise on another — the check isn't broken either time. In the next few minutes
+I'll show you the two settings that turn it into a short, trustworthy list — and then
+you'll go build that configuration yourself."
 
 ## Script
 
@@ -72,7 +73,7 @@ yourself."
 
 | On-screen | Voiceover / talking points |
 | --- | --- |
-| Re-run the check on **Current Book** (Matthew). Show the now-short results panel with one result highlighted and the verse open alongside it. (`ss-L429-results-with-highlight.png`.) | "Now re-run the check — Current Book, Matthew — and look at the difference. A handful of results instead of hundreds. This is a list you can actually work." |
+| Re-run the check on **Current Book** (Matthew). Show the now-short results panel with one result highlighted and the verse open alongside it. (`ss-L429-results-with-highlight.png`.) | "Now re-run the check — Current Book, Matthew — and look at the difference. The check finally has something to say, and it's a handful of results, every one of them meaningful. This is a list you can actually work." |
 | Slide: **Real error → fix the text.** / **Configuration problem → fix the settings.** | "Every result is one of two things. A real error means the text genuinely has a missing, extra, or wrong mark — you fix the verse. A configuration problem means the check is revealing a gap in your settings — you fix the Quote marks tab or the types tab, and you do NOT edit correct text to make the warning go away." |
 | Screen: point to a message that repeats across many verses, versus a one-off message. | "Quick tell: the same message on lots of verses usually means a configuration gap. A one-off usually means a real error in that one verse. Work top to bottom, re-run after each batch, and watch the count fall." |
 | Show the results panel at zero. (`ss-L477-zero-results.png`.) | "The goal for each book is zero — Matthew clean first, then expand one book at a time. Zero doesn't mean the text is perfect; it means every result has been looked at and resolved deliberately. That's what a consultant is trusting when they pick up the book." |

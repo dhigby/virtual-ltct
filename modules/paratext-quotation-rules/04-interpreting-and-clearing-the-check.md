@@ -28,7 +28,8 @@ By now the Tamba project is configured (Lessons 2 and 3). Run the check and you 
 results — but now they *mean* something. The skill this lesson builds is the judgment call you
 will make dozens of times on a real project: **fix the text, or fix the settings?**
 
-**✏️ Reflection.** Think back to the flood of results you saw in Lesson 1, and to a project you
+**✏️ Reflection.** Think back to Lesson 1 — the unconfigured check that refused to examine the
+text at all, and the team lead's project drowning in false positives — and to a project you
 support:
 
 - When a check lights up, what is your first instinct — start editing verses, or step back and

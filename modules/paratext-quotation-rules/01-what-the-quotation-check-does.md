@@ -94,9 +94,9 @@ the check cannot give accurate results until it is configured.
 
 ![The Run basic checks dialog with Quotations ticked, Choose Books selected, and all NT books included.](ss-L108-run-basic-checks.png)
 
-5. Scroll through the results list.
+5. Look at the results list.
 
-![The Quotations check results panel showing a large number of results spread across many books, with no configuration applied.](ss-L113-unconfigured-results.png)
+![The Quotations check results panel with no results at all, showing only the notice "Quotation punctuation is not used in project TAMBA" and pointing to Project settings > Quotation rules.](ss-L113-unconfigured-results.png)
 
 **TIP** For all configuration work in Lessons 2–4, use **Current Book** in the Run basic
 checks dialog and keep Matthew open — it has heavy, representative dialogue and keeps results
@@ -104,15 +104,19 @@ manageable. Switch to Choose Books and expand to the full NT only after Matthew 
 
 **✏️ Discovery prompts** (answer these before you write anything):
 
-- How many results are listed? Are they spread across many books, or concentrated in one?
-- Pick three results at random. Open the verse. Do you see what you would call a "real"
-  quotation problem, or does it look like the text is fine?
-- What do you think is causing all these results?
+- What does the panel actually report? Is that the same thing as "no quotation errors were
+  found"?
+- The notice points you to **Project settings > Quotation rules**. What is Paratext missing
+  before it can examine the text at all?
+- The team lead in the scenario above saw *hundreds* of errors on their project; this project
+  shows none. How can the same check produce both — and is either result trustworthy?
 
-**What you should observe:** the check either reports hundreds of false positives (if it
-defaults to expecting straight double-quote characters that Tamba does not use) or reports
-nothing at all. Either way the results are not trustworthy until you configure the Quote marks
-tab.
+**What you should observe:** confirmed on a real Paratext 9.5 build, the check declines to run
+on a truly unconfigured project — the panel shows no results, only the notice *"Quotation
+punctuation is not used in project TAMBA."* That is silence, not a clean bill of health. A
+project whose settings are *wrong* rather than missing (like the team lead's) fails the
+opposite way: a flood of false positives. Either way the results are not trustworthy until the
+Quote marks tab describes the language.
 
 **✏️ Produce this (a mentor will review it).** Write the team lead a 2–3 sentence reply that
 (a) answers whether the errors mean their punctuation is bad, and (b) says what has to happen

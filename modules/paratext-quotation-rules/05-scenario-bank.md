@@ -153,7 +153,12 @@ Waku uses an **em dash** (U+2014) for both the opening and closing mark at First
 | Second level | `“` | *(blank)* | `”` |
 | Third level | `‘` | *(blank)* | `’` |
 
-Continuation: `—` (em dash, same character) at First level only.
+Continuation: `—` (em dash, same character) at First level only. The verified configuration
+also fills **Continuer required at** with `p p/q1 b/q1 m/q1` — the paragraph-marker contexts
+where the check must insist on the continuer. Copy it exactly; without it the check does not
+enforce the continuer at those paragraph breaks.
+
+![The Quote marks tab for the Waku project, with the em dash in all three First level cells (Opening, Continuer, and Closing), “ and ” at Second level, and ‘ and ’ at Third level. The Example section at the bottom shows the same em dash serving as opener, continuer, and closer in the preview text.](ss-L156-waku-quote-marks.png)
 
 **Note on same-character open/close:** When the same character serves as both opener and closer, Paratext relies on structural context (paragraph markers, verse boundaries, and surrounding text flow) to determine which role the em dash plays. Because this context-based interpretation may not resolve every case unambiguously, human review of flagged em-dash results is always required for Waku.
 
@@ -163,6 +168,8 @@ Continuation: `—` (em dash, same character) at First level only.
 - This scenario leaves results that cannot be eliminated by configuration alone — because Paratext cannot distinguish an em dash used as speech from one used as a parenthetical dash. Confirmed on a real Paratext 9.5 build, a correct configuration run against all books ends at **seven results**: six "found as a word medial character" results on genuine parenthetical em dashes (Mark 13:14 twice, 13:19, 13:22; Luke 9:3; Acts 3:1), plus one "Closing quote mark is possibly missing before verse 18:1" at John 17:26.
 - The John 17:26 result is a different residual class from the parentheticals: the text there is *correct* — Jesus's prayer (17:1–26) opens with `—`, carries the `—` continuer at every paragraph, and closes with `—` at the end of verse 26 — but with the same character serving as opener, closer, and continuer across a long multi-paragraph speech, Paratext's context-based tracking loses the open/close state and reports the speech as possibly unclosed. No text change fixes it without breaking Waku's convention. Verify the marks are all present, then document.
 - For all seven: consider whether the parenthetical verses can be reworded to use different punctuation. Where rewording is not feasible (and always for John 17:26, where the text is already correct), add a Project Note (☰ > Insert > Project note...) explaining the result so the consultant can verify during review.
+
+![The Quotations check results panel for Waku across all books, showing the seven residual results: word-medial em dash results in Mark 13, Luke 9:3, and Acts 3:1, plus the possibly-missing closing mark at John 17:26. Mark 13:14 is open alongside, showing its parenthetical em dashes in context.](ss-L163-waku-residual-results.png)
 
 ## Scenario bank summary
 - The same four-step workflow (inventory → rules → check → triage) applies to every language, however unusual its quotation conventions.

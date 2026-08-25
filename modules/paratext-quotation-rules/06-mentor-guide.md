@@ -50,7 +50,7 @@ The project must contain text in at least the following passages. All other book
 | Acts | 2:22–28 (Peter's Pentecost speech) | Exercise 4.1 seed #4 — Psalm 16 citation |
 | Romans | 1:1–7 | Exercise 4.1 seed #5 — apostrophe-conflict scenario |
 
-For all other books, inserting one or two placeholder verses is sufficient. The unconfigured check in Exercise 1.1 needs enough text to produce a realistic flood of results; five or more books with at least a few verses each will achieve this.
+For all other books, inserting one or two placeholder verses is sufficient. Note that the unconfigured check in Exercise 1.1 produces no results regardless of text volume — confirmed on a real Paratext 9.5 build, it reports only *"Quotation punctuation is not used in project TAMBA"* until the Quote marks tab is configured; the lesson teaches that notice as the finding. The text volume matters from Lesson 2 onward, when the configured check runs against real dialogue — five or more books with at least a few verses each is sufficient.
 
 ### Step 3 — Apply correct Tamba quotation marks throughout
 

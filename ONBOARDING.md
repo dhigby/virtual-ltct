@@ -11,7 +11,10 @@ set of files a finished course has.
 
 ## 1. Set up (once)
 
-1. **Install [Claude Code](https://claude.com/claude-code)** and sign in.
+1. **Install [Claude Code](https://claude.com/claude-code)** and sign in. Use the
+   **VS Code extension** — that's the supported environment here. This repo is markdown,
+   so you want the files and Claude side by side: the file tree on the left, your lesson
+   open in the middle, Claude in the sidebar.
 2. **Install the GitHub CLI** (`gh`) and authenticate:
    ```bash
    gh auth login
@@ -27,6 +30,15 @@ set of files a finished course has.
    ```
 5. **Ask a maintainer** (currently Doug) to grant you write access to the **LTC Training
    Modules** Project board — otherwise you can see courses but can't move their status.
+6. **Pin the `.claude/NOW.md` tab.** Open it (Ctrl+P, type `NOW`), then right-click the
+   tab → **Pin**. It always shows which course you're on, what stage it's at, and the one
+   next thing to do. It rewrites itself as you work — you never edit it, and it's ignored
+   by git so it's yours alone.
+
+> **Where the guidance shows up.** When a session starts, Claude posts a short message in
+> the sidebar naming your course and next step (or listing the courses, if you haven't
+> picked one). If you try to edit course content while on `main`, it will stop you and tell
+> you to run `/work-on <slug>`. That's expected, not an error.
 
 ## 2. The tour
 

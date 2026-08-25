@@ -107,6 +107,17 @@ Then print exactly this shape:
 Keep the "Next" line copy-pasteable, e.g. *"Use the module-author agent to draft the
 numbered lessons for modules/bloom/ per its approved 00-design.md."*
 
+## 6. Refresh the pinned tab
+
+```bash
+python scripts/session_hooks.py refresh-now
+```
+
+That rewrites `.claude/NOW.md` — the tab contributors keep pinned in VS Code — so it shows
+the course, stage, and next action you just reported. Tell them in one plain sentence what
+changed and where their files are now, e.g. *"You're now on the bloom branch; your files
+are the ones under modules/bloom/, and .claude/NOW.md has the details."*
+
 ## Rules
 
 - **One course.** If they ask for a second course in the same session, say the session is

@@ -10,7 +10,7 @@
 | **Competencies addressed** | Translation Tools; Digital and Print Publishing |
 | **Target outcome level** | 3 - Independent — **see the "Outcome-level open question" section below; not yet locked** |
 | **SME(s) consulted** | Jenni Beadle — design interview conducted 2026-08-24/25 (recorded verbatim in "SME knowledge notes" below). Doug Higby — course author, ruled (2026-08-25 meeting) that the course must map to an honest CBC rung rather than blend levels. |
-| **Design status** | Draft |
+| **Design status** | Draft — pending Design Approver confirmation of the two open items below (outcome-level, objective 1/spine tension) |
 
 ## Outcome-level open question (resolve before approval)
 

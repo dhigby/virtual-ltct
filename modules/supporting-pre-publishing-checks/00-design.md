@@ -8,9 +8,9 @@
 | --- | --- |
 | **Title** | Supporting Scripture Pre-publishing Checks |
 | **Competencies addressed** | Translation Tools; Digital and Print Publishing |
-| **Target outcome level** | 3 - Independent — **see the "Outcome-level open question" section below; not yet locked** |
+| **Target outcome level** | 3 - Independent — confirmed at approval; the mentor-reviewed scenario bank is mandatory (see "Outcome-level open question" below) |
 | **SME(s) consulted** | Jenni Beadle — design interview conducted 2026-08-24/25 (recorded verbatim in "SME knowledge notes" below). Doug Higby — course author, ruled (2026-08-25 meeting) that the course must map to an honest CBC rung rather than blend levels. |
-| **Design status** | Draft — pending Design Approver confirmation of the two open items below (outcome-level, objective 1/spine tension) |
+| **Design status** | Approved by Kevin Nicholas on 2026-08-27 |
 
 ## Outcome-level open question (resolve before approval)
 
@@ -35,6 +35,10 @@ therefore treats the scenario bank as **mentor-reviewed**, not self-checked, and
 is a required structural file, not optional. **The Design Approver must confirm this resolution
 (or direct a re-level to `1 - Has Knowledge`) before this document is approved** — it is the one
 open decision left from the SME interview.
+
+> **Resolved at approval (2026-08-27):** the Design Approver (Kevin Nicholas) confirmed option
+> (b) — the course keeps `3 - Independent`, and the mentor-reviewed scenario bank plus required
+> mentor guide are what earn that claim. They are not optional components.
 
 ## Scope
 
@@ -96,6 +100,10 @@ objective 1 recurring in small touches across the core lessons (a short "watch f
 result here too" callout in each core check-area lesson) rather than either (a) a standalone heavy
 module or (b) dropping the spine framing. **The Design Approver should confirm this treatment is
 what Jenni intends**, or direct a different balance between "spine" and "secondary."
+
+> **Resolved at approval (2026-08-27):** the Design Approver (Kevin Nicholas) confirmed the
+> recurring-callout treatment — a short false-clean watch-for in each core check-area lesson,
+> plus the theme woven through two scenario-bank cases, with no heavy standalone module.
 
 ## Module breakdown
 
@@ -268,3 +276,7 @@ mentor-reviewed scenarios, as designed here, or direct a re-level to `1 - Has Kn
 (2) the objective-1/spine tension flagged in "Learning objectives" (confirm the recurring-callout
 treatment, or direct heavier standalone treatment for false-clean recognition). Requesting review
 from the Design Approver per stage 2 of the pipeline.
+
+> **Both rulings made at approval (2026-08-27):** `3 - Independent` confirmed with the
+> mentor-reviewed scenario bank mandatory, and the recurring-callout spine treatment confirmed.
+> See the resolution notes in each section above. Drafting may begin.

@@ -197,8 +197,8 @@ cases were added in this review round; the stories below are unchanged.
    diagnosing a configuration-caused performance problem and advising the team to right-size the
    project's Biblical Terms list.
 
-7. **(Added 2026-08-28, Kevin Nicholas, post-approval comment on issue #40 — pending
-   confirmation as a design addition, not yet drafted.)** Kevin spent significant time,
+7. **(Added 2026-08-28, Kevin Nicholas, post-approval comment on issue #40 — confirmed
+   by Kevin Nicholas on 2026-08-28, PR #43.)** Kevin spent significant time,
    while working with a typesetter, going through **Paratext's Punctuation Inventory**
    (Checks > Inventories) settings ahead of typesetting — this is Paratext's own inventory,
    not PTXprint or the typesetter's own tooling. He flagged it as a real time-sink worth
@@ -280,9 +280,9 @@ checking and team-routing, since an LTC does not normally know the project langu
 files** (5 numbered content lessons + scenario bank + mentor guide + quiz), totaling **335 minutes**
 (~5.6 hours) of learner-facing seat time (content lessons + mentor-reviewed scenario bank; mentor
 guide and quiz excluded from the total per convention), now weighted toward the core objectives.
-The 335-minute total includes the **pending, not-yet-confirmed** Punctuation Inventory subsection
-added to `04-formatting-and-references.md` on 2026-08-28 (see the amendment note at the top of
-this document); the previously approved total was 320 minutes.
+The 335-minute total includes the Punctuation Inventory subsection added to
+`04-formatting-and-references.md` on 2026-08-28 and **confirmed by Kevin Nicholas on 2026-08-28**
+(see the amendment note at the top of this document); the previously approved total was 320 minutes.
 Every objective traces to a descriptor component and to both the quiz and the scenario bank. One
 open tension is flagged and left for the Design Approver: whether the lighter, recurring-callout
 treatment of objective 1 (false-clean results) adequately preserves the "spine" framing from the

@@ -1,0 +1,223 @@
+# Scenario bank
+
+**Estimated time:** 60 minutes
+
+**Purpose:** Six mentor-reviewed scenarios that put the whole course to work — diagnosing
+a check-area problem, deciding what to say to the team, and deciding what (if anything)
+to escalate. This is the component that earns this course's `3 - Independent` claim (see
+`00-design.md`, "Outcome-level open question"): a mentor scores your reasoning and
+coaching, not a single correct fix.
+
+Weighting matches the design doc's assessment plan: one full scenario each for the six
+**core** objectives (2, 5, 6, 7, 9, 10), one combined scenario folding in the three
+**secondary** objectives (3, 4, 8), and the cross-cutting **false-clean** thread (objective
+1) woven inside two of the core scenarios rather than given its own case. Every scenario
+is built from a confirmed SME field case, a stated mistake pattern, or established course
+content from Lessons 1–5 — nothing here is invented beyond what those lessons already
+establish.
+
+## How to use these scenarios
+
+### For learners
+- Read each scenario carefully, including the context.
+- For each scenario, write out three things: **how you'd diagnose** the situation, **what
+  you'd say to the team**, and **what (if anything) you'd escalate** — and to whom.
+- Submit your written responses to your mentor.
+
+### For mentors
+- Use `07-mentor-guide.md` for what to watch for in each response and the "what good looks
+  like" markers from the SME interview.
+- Score reasoning and coaching quality, not whether the learner names one "correct" fix —
+  several of these scenarios have more than one defensible path.
+
+---
+
+## Scenario 1: The Harmonized Synoptics (Objective 2 — parallel passages)
+
+**Situation:** You're supporting a team nearing Stage 6. Their parallel-passage
+comparison check shows several flagged differences between two accounts of the same
+event. The team lead tells you, "Those are just supposed to be different — we're not
+touching them, this was already checked months ago."
+
+**Context:** You notice the parallel-passage check hasn't actually been re-run since a
+major revision pass three weeks ago — the flags on screen are old. You don't speak the
+team's language, so you can't judge the passages' meaning yourself.
+
+**Your task:**
+1. **Diagnose:** What would you confirm before accepting the team lead's explanation?
+   What does the gap between "checked months ago" and "revised three weeks ago" tell
+   you, and how does that connect to the "we already did that" trap from Lesson 1?
+2. **Say to the team:** How would you ask the team to re-run the check and walk through
+   the results, without implying you doubt their judgment about legitimate variation?
+3. **Escalate:** If the team's re-run check surfaces a genuine disagreement inside the
+   team about whether a difference is legitimate variation or an error, who handles that
+   — you, the team, or someone else? Say why.
+
+---
+
+## Scenario 2: The Undocumented Measure (Objective 5 — numbers, weights & measures)
+
+**Situation:** A team's numbers/weights/measures consistency check flags an
+inconsistency between two occurrences of what should be the same measurement — one
+passage renders it one way, another passage renders it differently. You ask the team
+what their documented approach to measures is, and they aren't sure such a document
+exists; someone recalls "a decision early on" but nobody can point to where it's written.
+
+**Context:** This check area has no single well-known field "gotcha" the way the
+wordlist or Biblical Terms tool does — your job here is process and routing, not
+recognizing a specific known bug.
+
+**Your task:**
+1. **Diagnose:** What would you check first — the check itself, or whether an agreed
+   approach exists at all? What's the difference between "the check found an
+   inconsistency" and "the team has no documented standard to check against"?
+2. **Say to the team:** How would you help the team either locate their existing
+   decision or agree on one now, without proposing a rendering yourself?
+3. **Escalate:** Once an approach is documented, whose job is it to decide which of the
+   two flagged renderings is correct — and is there any version of this situation that
+   would need a Translation Consultant rather than staying inside the team?
+
+---
+
+## Scenario 3: The Inventory Nobody Opened (Objective 6 — formatting checks)
+
+**Situation:** A team's Basic Checks show a short list of formatting errors, all in the
+second half of Mark — a few "wrong marker" flags on section headings, one heading that
+seems to be missing, and a reference that looks garbled. Separately, the team tells you
+the Punctuation Inventory "was already checked back when we started the project." The
+project has since been through two more revision passes and is headed to a typesetter in
+three weeks.
+
+**Context:** You're time-limited — the team wants to hand off soon and is treating both
+of these as already handled.
+
+**Your task:**
+1. **Diagnose:** Before working the Basic Checks list top to bottom, what would you check
+   first, and why? If you find an unclosed footnote marker partway through Mark, what
+   would you expect that to explain about the other flags — and how would you confirm it
+   before telling the team? Separately, what's wrong with treating "checked at the start
+   of the project" as current for the Punctuation Inventory?
+2. **Say to the team:** What would you say to get them to re-run Basic Checks
+   structural-first, and what would you specifically ask them to open and show you for
+   the Punctuation Inventory?
+3. **Escalate:** If the Punctuation Inventory's settings turn out to be genuinely
+   confusing or you can't tell whether an unrecognized character is a real problem or a
+   font-display quirk, who do you bring in?
+
+---
+
+## Scenario 4: The Every-Occurrence Glossary (Objective 7 — glossary linking)
+
+**Situation:** You're reviewing a project's glossary links before the final read-through
+and notice one high-frequency term is linked at nearly every occurrence across several
+chapters, not just its first appearance per section. The team's glossary-linking pass
+shows as "complete."
+
+**Context:** The glossary itself already exists and its content is out of scope for you
+— you're only reviewing the linking operation.
+
+**Your task:**
+1. **Diagnose:** What would you check to confirm this is over-linking (every occurrence)
+   rather than a deliberate, correctly-scoped choice? What does a "complete" status
+   actually tell you, and what doesn't it tell you?
+2. **Say to the team:** Walk through exactly what you'd do to unlink and relink at the
+   correct scope, and what you'd explain to the team about why "first occurrence per
+   section" matters for readers.
+3. **Escalate:** Is there any part of this situation that isn't yours to fix directly?
+   Explain your reasoning.
+
+---
+
+## Scenario 5: The Last Read-Through (Objective 9 — PTXprint draft-PDF read-through)
+
+**Situation:** You're leading a team through the final PTXprint draft-PDF read-through
+before their files go to the typesetter. In one sitting you spot: an orphan word sitting
+alone at the top of a column, a footnote that has shifted two pages from its reference,
+and a heading that lands awkwardly at a column break on a spread.
+
+**Context:** The team is verified on PTXprint 3.0.38. They're eager to sign off and move
+on, and are inclined to treat all three as "typesetting's problem now."
+
+**Your task:**
+1. **Diagnose:** For each of the three issues, what's your first read on what's causing
+   it, and what would you check to confirm?
+2. **Say to the team:** Sort the three into "mine to resolve," "the team's call," and
+   "the typesetter's craft" — and explain, in terms the team can follow, why you're not
+   trying to solve all three yourself.
+3. **Escalate:** Which of the three, if any, would you send on to the typesetter rather
+   than resolving now, and what would you tell the typesetter so they don't have to
+   rediscover the issue themselves?
+
+---
+
+## Scenario 6: The Three Buckets (Objective 10 — triage: yours / team's / escalate)
+
+**Situation:** In a single support session with one team, three things surface: (1) a
+check status that turns out to have been mis-set rather than genuinely reviewed, (2) a
+team disagreement about how a specific passage should read, and (3) a formatting problem
+in the underlying markup that's beyond what you're able to diagnose yourself.
+
+**Context:** The team is looking to you to resolve all three before they can move
+forward, and doesn't distinguish between them — from their side, "you're the LTC, you
+sort it out."
+
+**Your task:**
+1. **Diagnose:** Using the three-bucket framework from Lesson 1 (yours / the team's /
+   escalate), sort each of the three items and explain your reasoning for each — what
+   makes (1) yours, (2) the team's, and (3) an escalation rather than yours?
+2. **Say to the team:** How would you explain, in one short conversation, why you're
+   handling one of these yourself, sending the team back to decide another, and bringing
+   in outside help for the third — without sounding like you're passing the buck?
+3. **Escalate:** For item (3), who specifically do you bring in — an LT mentor or a
+   Translation Consultant — and why? What would you tell them to get them up to speed
+   quickly?
+
+---
+
+## Scenario 7 (combined): The Overloaded Setup (Objectives 3, 4, 8 — secondary)
+
+**Situation:** A team going into their final formatting and layout push has three
+separate things going on:
+
+- A Biblical Terms rendering that looks implausible for the term it's attached to.
+- Send/Receive has become noticeably slower over the last month; the team mentions,
+  almost in passing, that they added the full "All Biblical Terms" reference list to the
+  project to make consulting terms easier.
+- The project's expat admin wants to move to single-column layout because the language
+  has long words and the team has never set up hyphenation — even though the language
+  community's own printed Bibles are conventionally two-column.
+
+**Context:** All three surfaced in the same conversation; the team sees them as three
+unrelated, minor asks.
+
+**Your task:**
+1. **Diagnose:** For the Biblical Terms rendering, what would you check to determine
+   whether this is the first-word-of-verse bug, and how would you confirm it? For the
+   Send/Receive slowdown, what's the actual cause, and why is it not simply "having a big
+   list open"? For the layout question, what should determine the choice instead of word
+   length alone?
+2. **Say to the team:** For each of the three, write what you'd say to the team —
+   including how you'd explain the Send/Receive cause to a team that's skeptical the two
+   things (adding terms, slower Send/Receive) are connected, and how you'd establish the
+   reader-expectation requirement for layout before agreeing to any fix.
+3. **Escalate:** Which of these three, if any, would need to go beyond you and the team,
+   and which are entirely within your own coaching and technical-setup role (remember:
+   this course's Digital and Print Publishing claim rests on you both advising *and*
+   doing hands-on setup, such as building a hyphenation file)?
+
+---
+
+## Coverage check
+
+| Scenario | Objective(s) | False-clean thread (Obj. 1) |
+| --- | --- | --- |
+| 1. The Harmonized Synoptics | 2 | Yes |
+| 2. The Undocumented Measure | 5 | — |
+| 3. The Inventory Nobody Opened | 6 | Yes |
+| 4. The Every-Occurrence Glossary | 7 | — |
+| 5. The Last Read-Through | 9 | — |
+| 6. The Three Buckets | 10 | — |
+| 7. The Overloaded Setup (combined) | 3, 4, 8 | — |
+
+All ten objectives (1–10) are covered across these seven cases, matching the weighting in
+`00-design.md`'s "Assessment plan" and "Module breakdown" sections.

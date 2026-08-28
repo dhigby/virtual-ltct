@@ -12,14 +12,13 @@
 | **SME(s) consulted** | Jenni Beadle — design interview conducted 2026-08-24/25 (recorded verbatim in "SME knowledge notes" below). Doug Higby — course author, ruled (2026-08-25 meeting) that the course must map to an honest CBC rung rather than blend levels. |
 | **Design status** | Approved by Kevin Nicholas on 2026-08-27 |
 
-> **Amendment, pending confirmation (added 2026-08-28):** Kevin raised a new field case
+> **Amendment, confirmed by Kevin Nicholas on 2026-08-28:** Kevin raised a new field case
 > post-approval, on issue #40 — significant time spent with a typesetter working through
 > Paratext's **Punctuation Inventory** (Checks > Inventories) settings ahead of typesetting.
-> Jenni has placed this as a new subsection of `04-formatting-and-references.md` (see that
-> row in "Module breakdown" and field case 7 in "SME knowledge notes" below). **This specific
-> addition is not yet approved** — the rest of this document remains approved as of
-> 2026-08-27; only the punctuation-inventory subsection needs Kevin's quick re-confirmation
-> before `module-author` drafts `04-formatting-and-references.md`.
+> Jenni placed this as a new subsection of `04-formatting-and-references.md` (see that
+> row in "Module breakdown" and field case 7 in "SME knowledge notes" below). Kevin confirmed
+> (PR #43) the placement and time budget are correctly scoped. `module-author` may proceed
+> with drafting `04-formatting-and-references.md`.
 
 ## Outcome-level open question (resolve before approval)
 
@@ -127,12 +126,12 @@ each core check-area lesson instead of either a heavy standalone module or being
 | `01-supporting-the-final-turn.md` | The translation process as a 6-stage spiral; Stage 6 as the final turn re-running earlier checks; the cross-cutting spine (false-clean results) introduced as a recurring watch-for, not a standalone topic; the consultant's role (diagnose, coach, never touch the keyboard); when to escalate | 1 (light touch), 10 | 35 |
 | `02-wordlist-and-biblical-terms.md` | Biblical Terms rendering errors including the first-word-of-verse bug (secondary, condensed); Project Biblical Terms bloat and performance (secondary, condensed); recurring false-clean callout for this check area | 1 (callout), 3, 4 | 40 |
 | `03-parallel-passages-and-measures.md` | Parallel passages: confirming the comparison check was run and routing tool-flagged inconsistencies to the team (core, expanded); numbers/weights/measures: confirming the check runs against the team's already-agreed, documented approach and routing gaps back to the team (core, expanded); recurring false-clean callout | 1 (callout), 2, 5 | 60 |
-| `04-formatting-and-references.md` | Formatting checks in structural-first order: marker-pair census, ghost markers, long/short verses, section headings, book titles, references, footnotes (core); **new subsection (pending Kevin's confirmation, added 2026-08-28): Punctuation Inventory (Checks > Inventories) ahead of typesetting** — reviewing/using the inventory itself (not PTXprint or the typesetter's own tooling), confirming the inventory was actually reviewed rather than assumed already handled earlier in the process (echoes the objective-1 false-clean theme), and common settings issues that turn this into a time-sink for a typesetter; recurring false-clean callout | 1 (callout), 6 | 75 — if drafting runs long, trim the reference/book-title portion first rather than exceed the 90-minute cap |
+| `04-formatting-and-references.md` | Formatting checks in structural-first order: marker-pair census, ghost markers, long/short verses, section headings, book titles, references, footnotes (core); **new subsection (confirmed by Kevin Nicholas on 2026-08-28): Punctuation Inventory (Checks > Inventories) ahead of typesetting** — reviewing/using the inventory itself (not PTXprint or the typesetter's own tooling), confirming the inventory was actually reviewed rather than assumed already handled earlier in the process (echoes the objective-1 false-clean theme), and common settings issues that turn this into a time-sink for a typesetter; recurring false-clean callout | 1 (callout), 6 | 75 — if drafting runs long, trim the reference/book-title portion first rather than exceed the 90-minute cap |
 | `05-glossary-linking-and-layout.md` | Glossary-linking scope (over-linking, core); single- vs. two-column layout and hyphenation decisions (secondary, condensed); the PTXprint draft-PDF read-through (core); recurring false-clean callout | 1 (callout), 7, 8, 9 | 65 |
 | `06-scenario-bank.md` | Mentor-reviewed applied scenarios weighted toward core objectives (2, 5, 6, 7, 9, 10 each get a full scenario), secondary objectives (3, 4, 8) folded into one combined scenario, and objective 1 (false-clean) run as a thread inside two of the core scenarios rather than its own case | 1–10 | 60 |
 | `07-mentor-guide.md` | Facilitator notes: what to watch for in each scenario response, the "good" markers from the SME interview | — | — |
 | `08-quiz.md` | Assessment | 1–10 | — |
-| **Total learner seat time** | | | **335** (pending Kevin's confirmation of the added punctuation-inventory subsection; was 320 as approved 2026-08-27) |
+| **Total learner seat time** | | | **335** (confirmed by Kevin Nicholas on 2026-08-28; was 320 as approved 2026-08-27) |
 
 ## Assessment plan
 
@@ -304,8 +303,7 @@ from the Design Approver per stage 2 of the pipeline.
 > mentor-reviewed scenario bank mandatory, and the recurring-callout spine treatment confirmed.
 > See the resolution notes in each section above. Drafting may begin.
 
-**Amendment pending confirmation (added 2026-08-28):** the Punctuation Inventory subsection
-added to `04-formatting-and-references.md` (field case 7, module-breakdown row, and revised
-335-minute total) still needs Kevin Nicholas's sign-off. `module-author` should hold off
-drafting `04-formatting-and-references.md` until that confirmation is recorded here; the rest
-of the course package may proceed under the existing 2026-08-27 approval.
+**Amendment confirmed by Kevin Nicholas on 2026-08-28 (PR #43):** the Punctuation Inventory
+subsection added to `04-formatting-and-references.md` (field case 7, module-breakdown row, and
+revised 335-minute total) is confirmed correctly scoped and placed. `module-author` may draft
+`04-formatting-and-references.md`.

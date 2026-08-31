@@ -79,6 +79,10 @@ role, which follows the same reframed pattern as parallel passages:
   while older project configurations may still show them split into separate "Weights,"
   "Measures," "Money," or "Currency" lists. Don't assume a project's terminology matches
   what you've seen elsewhere.
+- Note that Biblical Terms includes several lists (e.g. All Biblical Terms, Major
+  Biblical Terms — which includes Names as a category within it) — "Measures and Money"
+  and "Numbers" are separate lists specific to this check area, not the whole of the
+  Biblical Terms system.
 
 **Key takeaways**
 - In both check areas, your job is process and routing — confirm the check ran, confirm

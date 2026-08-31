@@ -267,6 +267,9 @@ Observable markers of a competent supporting consultant:
 - Biblical Terms list names vary by Paratext version/project configuration — current versions use
   "Measures and Money" and "Numbers"; older projects may still show separate "Weights,"
   "Measures," "Money," or "Currency" lists.
+- Biblical Terms includes several lists (e.g. All Biblical Terms, Major Biblical Terms —
+  which includes Names as a category within it) — "Measures and Money" and "Numbers" are
+  separate lists specific to this check area.
 
 ---
 

@@ -1,0 +1,217 @@
+<p>
+  <strong>Audience:</strong> Translators and translation helpers who are comfortable navigating Paratext but have not yet configured quotation checking for a project.<br>
+  <strong>Goal:</strong> By the end of this course you will be able to open an unconfigured project, identify the quotation characters a language uses, enter them correctly into the Quote marks tab, configure the checking rules, run the check, and interpret the results.<br>
+  <strong>Format:</strong> Each lesson presents a goal, a starting state, a set of discovery prompts (questions to answer before you act), and then the expected configuration you can compare against.<br>
+  <strong>Estimated time:</strong> Lessons 1&ndash;4 run 3&ndash;4 hours total; the scenario practice adds 1&ndash;2 hours. No single lesson exceeds 90 minutes.
+</p>
+
+<hr style="border: 2px solid black;">
+
+<h2>Orientation Video (13&ndash;15 minutes)</h2>
+
+<p>Before you start Lesson 1, watch this orientation video. It walks through the whole workflow once &mdash; the unconfigured check, the two settings tabs, and clearing a real results list &mdash; so the hands-on lessons will feel familiar when you get there. The video is an overview only: the click-by-click work happens in the lessons, where you can pause and work at your own pace.</p>
+
+<p>[[ INSERT VIDEO HERE &mdash; upload Configuring_Quotation_Rules.mp4 with the editor's insert-media button, then delete this placeholder line ]]</p>
+
+<hr style="border: 2px solid black;">
+
+<h2>How This Course Is Organized</h2>
+
+<p>Work through the five modules in order. Each of Lessons 1&ndash;4 builds one piece of the configure-check-triage workflow; Module 5 hands you three unfamiliar languages to apply it on your own.</p>
+
+<table border="1" cellpadding="6" style="border-collapse: collapse;">
+  <thead>
+    <tr>
+      <th>Module</th>
+      <th>What it covers</th>
+      <th>Time</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>1. What the Quotation Check Does</strong></td>
+      <td>Why the check produces useless results until it is configured, and the two inputs Paratext needs before any result can be trusted</td>
+      <td>30 min</td>
+    </tr>
+    <tr>
+      <td><strong>2. Setting Up Quote Marks</strong></td>
+      <td>The Quote marks tab: opening, continuer, and closing characters at each nesting level, and the closing-quote/apostrophe conflict</td>
+      <td>75 min</td>
+    </tr>
+    <tr>
+      <td><strong>3. Configuring Quotation Types</strong></td>
+      <td>The Quotation types tab: required, forbidden, or optional marks for each of the seven kinds of speech</td>
+      <td>60 min</td>
+    </tr>
+    <tr>
+      <td><strong>4. Interpreting and Clearing the Check</strong></td>
+      <td>Classifying every result as a real text error or a configuration gap, and working a seeded project down to zero results</td>
+      <td>75 min</td>
+    </tr>
+    <tr>
+      <td><strong>5. Language Scenario Practice</strong></td>
+      <td>The complete workflow on three unfamiliar language scenarios: French-style guillemets, reversed single guillemets, and em-dash dialogue</td>
+      <td>90 min</td>
+    </tr>
+  </tbody>
+</table>
+
+<hr style="border: 2px solid black;">
+
+<h2>Prerequisites</h2>
+
+<p><strong>Software</strong></p>
+<ul>
+  <li>Paratext 9.5 installed and licensed on your machine</li>
+  <li>A user account with write access to at least one project</li>
+</ul>
+
+<p><strong>Skills</strong></p>
+<ul>
+  <li>Able to open a project and navigate the Paratext menu bar</li>
+  <li>Able to run a basic check (&#9776; &gt; Tools &gt; Run basic checks...)</li>
+  <li>Familiar with the idea that <code>\p</code>, <code>\q</code>, <code>\v</code> etc. are USFM markers (you do not need to know them in depth &mdash; the course explains the relevant ones as they appear)</li>
+</ul>
+
+<p><strong>Practice projects</strong></p>
+<p>This course uses fictional practice projects, restored into Paratext from zip files. Each lesson also links the project(s) it needs, so you can download them as you go &mdash; or grab them all now:</p>
+
+<div style="background-color: #e3f2fd; border-left: 4px solid #2196f3; padding: 12px 16px; margin: 16px 0;">
+  <p style="margin: 0 0 8px 0;"><strong>INFO</strong> Practice project downloads (restore in Paratext via &#9776; &gt; Paratext &gt; Restore project):</p>
+  <ul style="margin: 0;">
+    <li><a href="/files/7783595/Tamba_A.zip" target="_blank" rel="noopener">Tamba_A.zip</a> &mdash; Lessons 1&ndash;4 (install before Lesson 1)</li>
+    <li><a href="/files/7783595/Runda_.zip" target="_blank" rel="noopener">Runda_.zip</a> &mdash; Lesson 2 only</li>
+    <li><a href="/files/7783595/Tamba_B.zip" target="_blank" rel="noopener">Tamba_B.zip</a> &mdash; Lesson 4 (the seeded triage project)</li>
+    <li><a href="/files/7783595/Velna_.zip" target="_blank" rel="noopener">Velna_.zip</a>, <a href="/files/7783595/Menda_.zip" target="_blank" rel="noopener">Menda_.zip</a>, <a href="/files/7783595/Waku_.zip" target="_blank" rel="noopener">Waku_.zip</a> &mdash; Module 5 scenario practice</li>
+  </ul>
+</div>
+
+<hr style="border: 2px solid black;">
+
+<h2>The Fictional Project: Tamba</h2>
+
+<p>Lessons 1&ndash;4 use a single fictional project called <strong>Tamba New Testament</strong> (<code>tamba</code>). The Tamba language is fictional and uses the following quotation conventions. <strong>Keep this table open as you work through Lessons 1&ndash;4</strong> &mdash; the lessons refer back to it. Module 5 introduces three further fictional languages, each with its own conventions table.</p>
+
+<table border="1" cellpadding="6" style="border-collapse: collapse;">
+  <thead>
+    <tr>
+      <th>Level</th>
+      <th>Name</th>
+      <th>Opening mark</th>
+      <th>Unicode</th>
+      <th>Closing mark</th>
+      <th>Unicode</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>First level</td>
+      <td>Primary speech</td>
+      <td style="font-size: 1.4em;">&ldquo;</td>
+      <td>U+201C</td>
+      <td style="font-size: 1.4em;">&rdquo;</td>
+      <td>U+201D</td>
+    </tr>
+    <tr>
+      <td>Second level</td>
+      <td>Embedded speech</td>
+      <td style="font-size: 1.4em;">&lsquo;</td>
+      <td>U+2018</td>
+      <td style="font-size: 1.4em;">&rsquo;</td>
+      <td>U+2019</td>
+    </tr>
+    <tr>
+      <td>Third level</td>
+      <td>Tertiary (rare)</td>
+      <td style="font-size: 1.4em;">&ldquo;</td>
+      <td>U+201C</td>
+      <td style="font-size: 1.4em;">&rdquo;</td>
+      <td>U+201D</td>
+    </tr>
+  </tbody>
+</table>
+
+<p><strong>Additional facts about Tamba quotation style:</strong></p>
+<ul>
+  <li>First level (primary speech) uses a Quote Continuer at new paragraph: continued speech repeats the opening mark &ldquo; (U+201C) at the start of each new paragraph, with the closing mark &rdquo; (U+201D) appearing only once, at the very end of the whole speech.</li>
+  <li>Second and Third level have no continuer &mdash; a Second or Third level quotation that spans a paragraph break closes fully and reopens fully at each new paragraph instead.</li>
+  <li>Third level is used only in Matthew, John, and Revelation where a character quotes scripture inside dialogue.</li>
+  <li>Poetry lines (<code>\q</code>, <code>\q2</code>, <code>\q3</code>) are never marked with quotation characters; only prose speech uses marks.</li>
+</ul>
+
+<hr style="border: 2px solid black;">
+
+<h2>Quick Reference &mdash; Unicode Characters Used in This Course</h2>
+
+<table border="1" cellpadding="6" style="border-collapse: collapse;">
+  <thead>
+    <tr>
+      <th>Character</th>
+      <th>Unicode</th>
+      <th>Name</th>
+      <th>How to enter in Paratext</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr><td style="font-size: 1.4em;">&laquo;</td><td>U+00AB</td><td>Left-pointing double angle quotation mark</td><td>Dropdown (&#9660;) in Quote marks tab, or paste from this table</td></tr>
+    <tr><td style="font-size: 1.4em;">&raquo;</td><td>U+00BB</td><td>Right-pointing double angle quotation mark</td><td>Dropdown (&#9660;) in Quote marks tab, or paste from this table</td></tr>
+    <tr><td style="font-size: 1.4em;">&ldquo;</td><td>U+201C</td><td>Left double quotation mark</td><td>Dropdown (&#9660;) in Quote marks tab, or paste from this table</td></tr>
+    <tr><td style="font-size: 1.4em;">&rdquo;</td><td>U+201D</td><td>Right double quotation mark</td><td>Dropdown (&#9660;) in Quote marks tab, or paste from this table</td></tr>
+    <tr><td style="font-size: 1.4em;">&lsquo;</td><td>U+2018</td><td>Left single quotation mark</td><td>Dropdown (&#9660;) in Quote marks tab, or paste from this table</td></tr>
+    <tr><td style="font-size: 1.4em;">&rsquo;</td><td>U+2019</td><td>Right single quotation mark</td><td>Dropdown (&#9660;) in Quote marks tab, or paste from this table</td></tr>
+    <tr><td style="font-size: 1.4em;">&lsaquo;</td><td>U+2039</td><td>Single left-pointing angle quotation mark</td><td>Dropdown (&#9660;) in Quote marks tab, or paste from this table</td></tr>
+    <tr><td style="font-size: 1.4em;">&rsaquo;</td><td>U+203A</td><td>Single right-pointing angle quotation mark</td><td>Dropdown (&#9660;) in Quote marks tab, or paste from this table</td></tr>
+    <tr><td style="font-size: 1.4em;">&mdash;</td><td>U+2014</td><td>Em dash</td><td>Dropdown (&#9660;) in Quote marks tab, or Alt+0151 on Windows</td></tr>
+    <tr><td style="font-size: 1.4em;">"</td><td>U+0022</td><td>Quotation mark (straight)</td><td>Standard keyboard &mdash; avoid using as a quote mark</td></tr>
+    <tr><td style="font-size: 1.4em;">'</td><td>U+0027</td><td>Apostrophe (straight)</td><td>Standard keyboard &mdash; avoid using as a quote mark</td></tr>
+  </tbody>
+</table>
+
+<hr style="border: 2px solid black;">
+
+<h2>Glossary</h2>
+
+<p><strong>Check scope</strong><br>
+The portion of the project the Quotation check examines &mdash; a single book, a chapter range, or the entire project. Limiting scope to one book during configuration makes results manageable.</p>
+
+<p><strong>Configuration problem</strong><br>
+A check result caused by a gap or error in the Quote marks tab or Quotation types tab rather than by a mistake in the translation text. Fix by adjusting the configuration; do not edit the text.</p>
+
+<p><strong>First level / Second level / Third level</strong><br>
+The nesting depth of a quotation. First level is primary speech; Second level is speech embedded within a First level quotation; Third level is speech embedded within a Second level quotation. Each level has its own Opening, Quote Continuer at new paragraph, and Closing characters on the Quote marks tab.</p>
+
+<p><strong>Label tooltip / status bar</strong><br>
+In the Quote marks tab, the status bar at the bottom of the dialog shows a description when you hover over any row or column label (such as &ldquo;Opening&rdquo; or &ldquo;Quotes within Quotes (Second level)&rdquo;). Use this to understand what a field does. To verify the actual character in a cell, use the dropdown arrow (&#9660;) on that cell to see the character list, or check the Example preview at the bottom of the dialog.</p>
+
+<p><strong>Opening mark / Closing mark</strong><br>
+The characters that begin and end a quotation at a given level. These are entered per-level in the Quote marks tab.</p>
+
+<p><strong>Project note</strong><br>
+A note attached to a verse (&#9776; &gt; Insert &gt; Project note..., or via the notes list at &#9776; &gt; Tools &gt; Notes List...). Use Project Notes to document residual check results that configuration cannot eliminate, so a consultant reviewer can see they were examined deliberately.</p>
+
+<p><strong>Quote Continuer at new paragraph</strong><br>
+A character placed at the start of a new paragraph to signal that a speaker&rsquo;s speech from the previous paragraph continues. Entered in the middle column of the Quote marks tab grid. Many languages leave this blank and instead close and reopen quotes fully at each paragraph break.</p>
+
+<p><strong>Quote marks tab</strong><br>
+The first tab of the Quotation Rules dialog (&#9776; &gt; Project settings &gt; Quotation Rules). Contains a three-row, three-column grid for entering the Opening, Quote Continuer at new paragraph, and Closing characters at each nesting level, plus additional checkboxes below the grid (hover labels for descriptions), an Example preview section showing the configured marks in context, and the <strong>Copy quote mark settings...</strong> button.</p>
+
+<p><strong>Quotation Rules</strong><br>
+The Paratext dialog (under the project menu <strong>&#9776; &gt; Project settings &gt; Quotation Rules</strong>) where both the Quote marks tab and the Quotation types tab are configured.</p>
+
+<p><strong>Quotation types check</strong><br>
+A Paratext check (separate from the basic Quotation check) that verifies whether quotation marks appear or are absent according to the semantic type of speech in each verse. Configured on the Quotation types tab. Must be enabled by a project administrator.</p>
+
+<p><strong>Quotation types tab</strong><br>
+The second tab of the Quotation Rules dialog. Lists seven semantic speech categories (Normal, Quotation from another source, Self quote, Continued quotation, Potential, Indirect, Hypothetical). For each type you choose Use quote marks, Never use quote marks, or Quote marks are optional.</p>
+
+<p><strong>Real error</strong><br>
+A check result where the translation text genuinely has a missing, extra, or wrong-level quotation mark. Fix by editing the verse directly.</p>
+
+<p><strong>Unicode code point</strong><br>
+A unique number assigned to every character in the Unicode standard, written as U+ followed by four to six hex digits (e.g., U+00AB for &laquo;). Use the code point &mdash; not the visual appearance &mdash; to confirm that the correct character is entered in the Quote marks tab.</p>
+
+<p><strong>USFM marker</strong><br>
+A tagged code in Paratext&rsquo;s text format (Unified Standard Format Markers) that identifies the role of a paragraph or span &mdash; for example <code>\p</code> (body paragraph), <code>\q</code> (poetry line), <code>\v</code> (verse).</p>
+
+<p><strong>Word-medial punctuation</strong><br>
+A setting in &#9776; &gt; Project settings &gt; Language Settings &gt; Other Characters tab. Any character listed here is treated as part of a word when it appears between two alphabetic characters &mdash; genuinely useful for punctuation that isn&rsquo;t otherwise a quote mark. It does <strong>not</strong>, however, resolve the case it looks built for: when a character serves as both a closing quotation mark and an apostrophe (e.g., U+2019 &rsquo;), confirmed against real Paratext 9.5 behavior, the quotation checker keeps flagging in-word instances as unclosed quotation marks even after the character is added here. That specific collision has no configuration fix &mdash; verify each flagged instance is a genuine apostrophe and document it rather than continuing to adjust settings.</p>

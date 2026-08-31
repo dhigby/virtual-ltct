@@ -98,16 +98,16 @@ secondary objectives or their competency coverage.
 | 9 | Core | Learner can lead a team through the final PTXprint draft-PDF read-through (spreads, orphan words, footnote shifts, heading placement, underfilled pages) and resolve or triage what it surfaces, deferring true typesetting composition to the typesetter | Digital and Print Publishing 1.0, `2 - With Assistance` | Quiz + Scenario Bank |
 | 10 | Core | Learner can decide, for any surfaced issue, whether it is theirs to resolve, the team's translation decision, or needs escalation (an LT mentor for tooling, a Translation Consultant for content) | Translation Tools 2.0, `2 - With Assistance` | Quiz + Scenario Bank |
 
-\*\* **Objective 5 / Numbers-vs-Measures — flagged, not resolved.** Objective 5 now covers the
+\*\* **Objective 5 / Numbers-vs-Measures — resolved.** Objective 5 now covers the
 LTC's process/routing role across **two separate checks** (Numbers, released but limited in
 scope; Measures, still under development and not yet reliably available) rather than one combined
 check, per Jenni's 2026-09-01 correction (see "Tool-version specifics" below). It is kept as a
 single objective here because the LTC's job — confirm which check(s) are actually available and
 mature, then route gaps back to the team — is the same underlying skill regardless of which
-check(s) exist at a given time. **The Design Approver should confirm a single objective is still
-appropriate**, or direct that Numbers and Measures be split into two separate objectives (e.g. if
-Measures ships and matures enough during the life of this course to warrant its own assessed
-item).
+check(s) exist at a given time. **Ruled by Kevin Nicholas (Design Approver), 2026-08-31, PR #44:
+objective 5 stays a single objective.** Assessing Measures separately would mean assessing a
+check that is not yet reliably available; revisit a split only if Measures ships and matures
+enough during the life of this course to warrant its own assessed item.
 
 \* **Objective 1 / spine tension — flagged, not resolved.** Objective 1 (recognizing false-clean
 results) was the SME's original **spine scenario**, framed in the interview as a cross-cutting

@@ -37,9 +37,9 @@ means the team has genuinely reviewed and resolved everything.
 
 ### Section 2: Wordlist and Biblical Terms (Questions 4-8)
 
-**Question 4:** A team's wordlist status shows zero errors, but most entries were
-approved within the same few minutes, and several "possible misspelling" flags are
-marked denied. What does this pattern most likely indicate?
+**Question 4:** A team's wordlist status shows zero errors, but thousands of entries
+were marked correct with none flagged as suspect, and several "possible misspelling"
+flags are marked denied. What does this pattern most likely indicate?
 - A) The wordlist genuinely has no problems
 - B) The wordlist was blanket-approved rather than genuinely reviewed
 - C) The check tool malfunctioned

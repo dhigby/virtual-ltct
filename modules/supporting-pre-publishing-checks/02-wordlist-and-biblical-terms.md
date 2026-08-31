@@ -90,8 +90,8 @@ look identical.
 ## Challenge
 
 **✏️ Try this:** A team tells you their wordlist check is finished — the status shows
-no outstanding errors. When you look closer, you notice the majority of entries were
-approved within the same few minutes, and several flagged "possible misspelling"
+no outstanding errors. When you look closer, you notice thousands of entries were
+marked correct with none flagged as suspect, and several flagged "possible misspelling"
 entries are marked denied.
 
 1. What does this pattern suggest happened, and how would you confirm it?

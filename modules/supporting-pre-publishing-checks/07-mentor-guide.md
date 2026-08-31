@@ -55,12 +55,15 @@ before reattempting.
 
 ## Scenario 1: The Harmonized Synoptics (Objective 2)
 
-**Watch for in the diagnosis:** the learner should notice the mismatch between "checked
-months ago" and "revised three weeks ago" and name that as the tell — the flags on screen
-predate the most recent revision, so the check has not genuinely been re-run since. This is
-marker **(a)**: don't trust a clean/settled-sounding result just because the team is
-confident about it. A weak answer accepts the team lead's explanation at face value and
-moves on to judging the passages itself.
+**Watch for in the diagnosis:** the learner should know that Paratext's checks don't show
+a "last run" date on screen, so the way to verify or refute the team lead's claim is to
+open Project History and read its dated, categorized entries — comparing when the
+relevant check category was last actually touched/re-run against the dated revision-pass
+entries in the same log. A strong answer names Project History specifically rather than
+implying the check screen itself would show the gap. This is marker **(a)**: don't trust a
+clean/settled-sounding result just because the team is confident about it. A weak answer
+accepts the team lead's explanation at face value and moves on to judging the passages
+itself.
 
 **Watch for in what they'd say to the team:** the learner does not attempt to judge whether
 the flagged differences are legitimate variation or error — they don't speak the language.

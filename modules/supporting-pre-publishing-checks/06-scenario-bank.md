@@ -39,14 +39,17 @@ comparison check shows several flagged differences between two accounts of the s
 event. The team lead tells you, "Those are just supposed to be different — we're not
 touching them, this was already checked months ago."
 
-**Context:** You notice the parallel-passage check hasn't actually been re-run since a
-major revision pass three weeks ago — the flags on screen are old. You don't speak the
-team's language, so you can't judge the passages' meaning yourself.
+**Context:** Paratext's checks don't show a "last run" date on screen, so you open
+Project History to check for yourself. The dated, categorized entries show a revision
+pass logged three weeks ago, but no entry showing the parallel-passage check category
+touched or re-run since then — the flags on screen predate the revision. You don't speak
+the team's language, so you can't judge the passages' meaning yourself.
 
 **Your task:**
 1. **Diagnose:** What would you confirm before accepting the team lead's explanation?
-   What does the gap between "checked months ago" and "revised three weeks ago" tell
-   you, and how does that connect to the "we already did that" trap from Lesson 1?
+   How would you use Project History to check whether the parallel-passage check has
+   actually been re-run since the last revision pass, and how does what you find there
+   connect to the "we already did that" trap from Lesson 1?
 2. **Say to the team:** How would you ask the team to re-run the check and walk through
    the results, without implying you doubt their judgment about legitimate variation?
 3. **Escalate:** If the team's re-run check surfaces a genuine disagreement inside the

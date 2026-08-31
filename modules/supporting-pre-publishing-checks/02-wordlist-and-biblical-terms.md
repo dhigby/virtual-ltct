@@ -58,8 +58,9 @@ still records *something* as the rendering.
 
 To diagnose it: look for renderings that don't plausibly match the term's meaning, and
 check whether they happen to be a verse's opening word. To coach the fix: have the
-team **delete the bad rendering**, then **select the correct text in the verse before**
-adding it — the team does this themselves, at their own keyboard.
+team **select the correct text in the verse**, **add the correct rendering**, then
+**delete the bad (no-selection) rendering** — the team does this themselves, at their
+own keyboard.
 
 **Biblical Terms: Project list bloat and performance.** A separate problem with the
 same tool: a consultant **added the entire "All Biblical Terms" list into the

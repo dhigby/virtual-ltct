@@ -55,7 +55,7 @@ flags are marked denied. What does this pattern most likely indicate?
 renderings that don't plausibly match a term's meaning, and each happens to be the
 opening word of its verse. What should the team do to fix this?
 - A) Manually retype the rendering as free text
-- B) Delete the bad rendering, select the correct text in the verse, then re-add it
+- B) Select the correct text in the verse, add the correct rendering, then delete the bad rendering
 - C) Delete the term from the Biblical Terms list entirely
 - D) Ignore it, since renderings default correctly most of the time
 

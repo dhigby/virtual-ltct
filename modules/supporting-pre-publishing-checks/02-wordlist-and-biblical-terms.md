@@ -11,7 +11,7 @@ fix without touching their keyboard.
 
 - You will be able to recognize a wordlist that has been blanket-approved rather than
   genuinely reviewed, and coach a team to reset it and re-run the check honestly.
-- You will be able to diagnose the first-word-of-verse Biblical Terms rendering bug and
+- You will be able to diagnose the no-selection rendering error in Biblical Terms and
   coach the team to correct it.
 - You will be able to diagnose a Project Biblical Terms list that has been over-added-to
   and is causing Send/Receive or performance slowdowns, and advise the team on
@@ -49,7 +49,7 @@ the translator does the actual review and correction.
 > bulk, and whether any errors were denied rather than resolved. A clean-looking status
 > bar tells you nothing about which of those happened.
 
-**Biblical Terms: the first-word-of-verse rendering bug.** A narrower, more mechanical
+**Biblical Terms: the no-selection rendering error.** A narrower, more mechanical
 problem, but a real one: a team can add a term's rendering in the Biblical Terms tool
 without first **selecting** the correct word or phrase in the text. When nothing is
 selected, Paratext defaults to grabbing the **first word of the verse** as the
@@ -58,8 +58,9 @@ still records *something* as the rendering.
 
 To diagnose it: look for renderings that don't plausibly match the term's meaning, and
 check whether they happen to be a verse's opening word. To coach the fix: have the
-team **delete the bad rendering**, then **select the correct text in the verse before**
-adding it — the team does this themselves, at their own keyboard.
+team **select the correct text in the verse**, **add the correct rendering**, then
+**delete the bad (no-selection) rendering** — the team does this themselves, at their
+own keyboard.
 
 **Biblical Terms: Project list bloat and performance.** A separate problem with the
 same tool: a consultant **added the entire "All Biblical Terms" list into the
@@ -82,7 +83,7 @@ look identical.
 **Key takeaways**
 - A clean wordlist status can hide mass-approval or denied errors — re-run the check to
   find out, and reset entries the team hasn't genuinely reviewed.
-- The first-word-of-verse bug comes from adding a rendering without selecting the
+- The no-selection rendering error comes from adding a rendering without selecting the
   correct text first; the fix is delete, select correctly, re-add.
 - Project Biblical Terms bloat causes real Send/Receive slowdowns, and the cause is
   often hard for a team to accept without a clear explanation.
@@ -90,8 +91,8 @@ look identical.
 ## Challenge
 
 **✏️ Try this:** A team tells you their wordlist check is finished — the status shows
-no outstanding errors. When you look closer, you notice the majority of entries were
-approved within the same few minutes, and several flagged "possible misspelling"
+no outstanding errors. When you look closer, you notice thousands of entries were
+marked correct with none flagged as suspect, and several flagged "possible misspelling"
 entries are marked denied.
 
 1. What does this pattern suggest happened, and how would you confirm it?

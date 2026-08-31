@@ -74,11 +74,15 @@ now slow" is not obvious to a non-technical team.
 Diagnosing this means checking whether the Project Biblical Terms list has been
 expanded well beyond the terms the project actually uses, and advising the team to
 **right-size it** — keep the project list to the terms relevant to their translation,
-rather than the full reference list. Note also that Biblical Terms list names vary by
-Paratext version and project configuration: current versions typically show "Measures
-and Money" and "Numbers," while older projects may still show separate "Weights,"
-"Measures," "Money," or "Currency" lists — don't assume every project's terms lists
-look identical.
+rather than the full reference list. Note also that the Biblical Terms list panel holds
+several separate lists side by side (Major Biblical Terms, All Biblical Terms, NT Key
+Biblical Terms, Inclusive/Exclusive Pronouns, Younger/Older Siblings, and others),
+and — as covered in Lesson 3 — **Numbers** and **Measures** are two more separate
+entries there, not a single combined "Measures and Money and Numbers" list: Numbers is
+a released check with limited scope, while Measures is still under development and not
+yet reliably available. Don't assume every project's terms lists look identical, or
+that a list you've seen behave one way in one project will exist or behave the same
+way in another.
 
 **Key takeaways**
 - A clean wordlist status can hide mass-approval or denied errors — re-run the check to

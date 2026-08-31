@@ -6,8 +6,9 @@ This quiz covers Lessons 1–5 of Supporting Scripture Pre-publishing Checks. Yo
 **80% (16/20)** to pass.
 
 Questions are weighted toward the course's core objectives (confirming the parallel-
-passage and numbers/measures checks, formatting diagnosis, glossary/layout, and the
-final read-through and escalation judgment), with the secondary objectives (false-clean
+passage check and the separate Numbers and Measures checks, formatting diagnosis,
+glossary/layout, and the final read-through and escalation judgment), with the secondary
+objectives (false-clean
 recognition, the no-selection rendering error in Biblical Terms, Project Biblical Terms bloat, and the
 layout/hyphenation decision) still represented. This quiz can assess recognition and
 diagnostic reasoning — it can't assess live coaching. The mentor-reviewed scenario bank
@@ -49,7 +50,7 @@ flags are marked denied. What does this pattern most likely indicate?
 - A) A software glitch in Paratext
 - B) Adding a rendering without first selecting the correct word or phrase in the text
 - C) Importing terms from an outdated list
-- D) Mixing the "Measures and Money" and "Numbers" lists
+- D) Confusing the Numbers check with the Measures check
 
 **Question 6:** While reviewing Biblical Terms renderings, you notice several
 renderings that don't plausibly match a term's meaning, and each happens to be the
@@ -80,7 +81,7 @@ Biblical Terms list and the Send/Receive slowdown "hard to convince the team of"
 - A) Failing to run the comparison check at all
 - B) Forcing all parallel passages to match exactly, erasing legitimate variation
 - C) Adding too many cross-references
-- D) Confusing the "Measures and Money" and "Numbers" lists
+- D) Confusing the Numbers check with the Measures check
 
 **Question 10:** A parallel-passage check flags several differences between two
 accounts of the same event. The team lead says, "those are just supposed to be
@@ -91,16 +92,18 @@ since a major revision three weeks ago. What should you do?
 - C) Decide yourself whether the passages should match
 - D) Escalate to a Translation Consultant without further discussion
 
-**Question 11:** What should you confirm about a numbers/weights/measures consistency
-check before accepting its results?
+**Question 11:** Numbers and Measures are two separate checks in Paratext at different
+levels of maturity. Before accepting either check's results, what should you confirm?
 - A) That it matches your own sense of the correct rendering
-- B) That it was run against the team's already-agreed, documented approach to numbers and measures
-- C) That the Biblical Terms list is named "Measures and Money"
+- B) Which check(s) are actually available and mature enough to rely on for the team's Paratext version, then that whichever is usable was run against the team's already-agreed, documented approach to numbers and measures
+- C) That both Numbers and Measures appear as one combined Biblical Terms list
 - D) That the typesetter has reviewed it
 
-**Question 12:** A numbers/measures check flags an inconsistency between two
-occurrences of what should be the same measurement. You're not sure whether the
-team's documented approach covers this case. What should you do?
+**Question 12:** You confirm that Numbers is available for a team's Paratext version
+but Measures is still under development and not reliably available. The Numbers check
+flags an inconsistency between two occurrences of what should be the same measurement.
+You're not sure whether the team's documented approach covers this case. What should
+you do?
 - A) Decide which rendering is correct based on your own judgment
 - B) Ignore the flag, since this check area has no established field pattern
 - C) Refer the gap back to the team to resolve against their own documented approach

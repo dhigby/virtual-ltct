@@ -58,23 +58,34 @@ the team's language, so you can't judge the passages' meaning yourself.
 
 ---
 
-## Scenario 2: The Undocumented Measure (Objective 5 — numbers, weights & measures)
+## Scenario 2: The Undocumented Measure (Objective 5 — Numbers and Measures)
 
-**Situation:** A team's numbers/weights/measures consistency check flags an
-inconsistency between two occurrences of what should be the same measurement — one
-passage renders it one way, another passage renders it differently. You ask the team
-what their documented approach to measures is, and they aren't sure such a document
-exists; someone recalls "a decision early on" but nobody can point to where it's written.
+**Situation:** A team asks you to check their Bible for consistent renderings of
+weights and measures. When you go looking, you find that this Paratext version's
+**Measures** check is still under development and isn't reliably available — but the
+separate **Numbers** check is released and running. Once you confirm this and run the
+Numbers check where it applies, along with what informal comparison you can do for the
+measures themselves, you find an inconsistency between two occurrences of what should
+be the same measurement — one passage renders it one way, another passage renders it
+differently. You ask the team what their documented approach to measures is, and they
+aren't sure such a document exists; someone recalls "a decision early on" but nobody can
+point to where it's written.
 
 **Context:** This check area has no single well-known field "gotcha" the way the
-wordlist or Biblical Terms tool does — your job here is process and routing, not
-recognizing a specific known error.
+wordlist or Biblical Terms tool does, and it's newer territory — part of your job here
+is confirming what's actually available and mature enough to rely on before you lean on
+it, and the rest is process and routing, not recognizing a specific known error.
 
 **Your task:**
-1. **Diagnose:** What would you check first — the check itself, or whether an agreed
-   approach exists at all? What's the difference between "the check found an
-   inconsistency" and "the team has no documented standard to check against"?
-2. **Say to the team:** How would you help the team either locate their existing
+1. **Diagnose:** How would you confirm, for this team's Paratext version, which of
+   Numbers and Measures is actually available and mature enough to rely on — and what
+   would you do about the measurement inconsistency if the Measures check itself can't
+   be trusted to catch it yet? Separately, what would you check first about the
+   inconsistency you did find — the check result itself, or whether an agreed approach
+   exists at all? What's the difference between "the check found an inconsistency" and
+   "the team has no documented standard to check against"?
+2. **Say to the team:** How would you explain the difference between the two checks'
+   maturity to the team, and how would you help them either locate their existing
    decision or agree on one now, without proposing a rendering yourself?
 3. **Escalate:** Once an approach is documented, whose job is it to decide which of the
    two flagged renderings is correct — and is there any version of this situation that
@@ -215,7 +226,7 @@ unrelated, minor asks.
 | Scenario | Objective(s) | False-clean thread (Obj. 1) |
 | --- | --- | --- |
 | 1. The Harmonized Synoptics | 2 | Yes |
-| 2. The Undocumented Measure | 5 | — |
+| 2. The Undocumented Measure (Numbers & Measures) | 5 | — |
 | 3. The Inventory Nobody Opened | 6 | Yes |
 | 4. The Every-Occurrence Glossary | 7 | — |
 | 5. The Last Read-Through | 9 | — |

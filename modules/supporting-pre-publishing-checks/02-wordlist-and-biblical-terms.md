@@ -11,7 +11,7 @@ fix without touching their keyboard.
 
 - You will be able to recognize a wordlist that has been blanket-approved rather than
   genuinely reviewed, and coach a team to reset it and re-run the check honestly.
-- You will be able to diagnose the first-word-of-verse Biblical Terms rendering bug and
+- You will be able to diagnose the no-selection rendering error in Biblical Terms and
   coach the team to correct it.
 - You will be able to diagnose a Project Biblical Terms list that has been over-added-to
   and is causing Send/Receive or performance slowdowns, and advise the team on
@@ -49,7 +49,7 @@ the translator does the actual review and correction.
 > bulk, and whether any errors were denied rather than resolved. A clean-looking status
 > bar tells you nothing about which of those happened.
 
-**Biblical Terms: the first-word-of-verse rendering bug.** A narrower, more mechanical
+**Biblical Terms: the no-selection rendering error.** A narrower, more mechanical
 problem, but a real one: a team can add a term's rendering in the Biblical Terms tool
 without first **selecting** the correct word or phrase in the text. When nothing is
 selected, Paratext defaults to grabbing the **first word of the verse** as the
@@ -82,7 +82,7 @@ look identical.
 **Key takeaways**
 - A clean wordlist status can hide mass-approval or denied errors — re-run the check to
   find out, and reset entries the team hasn't genuinely reviewed.
-- The first-word-of-verse bug comes from adding a rendering without selecting the
+- The no-selection rendering error comes from adding a rendering without selecting the
   correct text first; the fix is delete, select correctly, re-add.
 - Project Biblical Terms bloat causes real Send/Receive slowdowns, and the cause is
   often hard for a team to accept without a clear explanation.

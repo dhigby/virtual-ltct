@@ -8,7 +8,7 @@ This quiz covers Lessons 1–5 of Supporting Scripture Pre-publishing Checks. Yo
 Questions are weighted toward the course's core objectives (confirming the parallel-
 passage and numbers/measures checks, formatting diagnosis, glossary/layout, and the
 final read-through and escalation judgment), with the secondary objectives (false-clean
-recognition, the Biblical Terms rendering bug, Project Biblical Terms bloat, and the
+recognition, the no-selection rendering error in Biblical Terms, Project Biblical Terms bloat, and the
 layout/hyphenation decision) still represented. This quiz can assess recognition and
 diagnostic reasoning — it can't assess live coaching. The mentor-reviewed scenario bank
 (`06-scenario-bank.md`) is what earns this course's `3 - Independent` claim.
@@ -45,7 +45,7 @@ marked denied. What does this pattern most likely indicate?
 - C) The check tool malfunctioned
 - D) The team used an outdated wordlist
 
-**Question 5:** What causes the "first-word-of-verse" Biblical Terms rendering bug?
+**Question 5:** What causes the no-selection rendering error in Biblical Terms?
 - A) A software glitch in Paratext
 - B) Adding a rendering without first selecting the correct word or phrase in the text
 - C) Importing terms from an outdated list

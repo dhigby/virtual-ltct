@@ -228,7 +228,7 @@ Score this one in three parts — each sub-item maps to its own secondary object
 learner can be strong on one and weak on another.
 
 **Biblical Terms rendering (Objective 3):** watch for the learner naming the
-first-word-of-verse bug specifically — the team added a term's rendering without first
+no-selection rendering error specifically — the team added a term's rendering without first
 *selecting* the correct text, so Paratext auto-grabbed the verse's first word — and
 describing how to confirm it (checking what text was actually selected/highlighted when
 the rendering was added, or simply looking at whether the "rendering" is just the verse's

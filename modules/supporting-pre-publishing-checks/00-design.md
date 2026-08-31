@@ -124,7 +124,7 @@ each core check-area lesson instead of either a heavy standalone module or being
 | File | Topic | Objectives covered | Estimated minutes |
 | --- | --- | --- | --- |
 | `01-supporting-the-final-turn.md` | The translation process as a 6-stage spiral; Stage 6 as the final turn re-running earlier checks; the cross-cutting spine (false-clean results) introduced as a recurring watch-for, not a standalone topic; the consultant's role (diagnose, coach, never touch the keyboard); when to escalate | 1 (light touch), 10 | 35 |
-| `02-wordlist-and-biblical-terms.md` | Biblical Terms rendering errors including the first-word-of-verse bug (secondary, condensed); Project Biblical Terms bloat and performance (secondary, condensed); recurring false-clean callout for this check area | 1 (callout), 3, 4 | 40 |
+| `02-wordlist-and-biblical-terms.md` | Biblical Terms rendering errors including the no-selection rendering error (secondary, condensed); Project Biblical Terms bloat and performance (secondary, condensed); recurring false-clean callout for this check area | 1 (callout), 3, 4 | 40 |
 | `03-parallel-passages-and-measures.md` | Parallel passages: confirming the comparison check was run and routing tool-flagged inconsistencies to the team (core, expanded); numbers/weights/measures: confirming the check runs against the team's already-agreed, documented approach and routing gaps back to the team (core, expanded); recurring false-clean callout | 1 (callout), 2, 5 | 60 |
 | `04-formatting-and-references.md` | Formatting checks in structural-first order: marker-pair census, ghost markers, long/short verses, section headings, book titles, references, footnotes (core); **new subsection (confirmed by Kevin Nicholas on 2026-08-28): Punctuation Inventory (Checks > Inventories) ahead of typesetting** — reviewing/using the inventory itself (not PTXprint or the typesetter's own tooling), confirming the inventory was actually reviewed rather than assumed already handled earlier in the process (echoes the objective-1 false-clean theme), and common settings issues that turn this into a time-sink for a typesetter; recurring false-clean callout | 1 (callout), 6 | 75 — if drafting runs long, trim the reference/book-title portion first rather than exceed the 90-minute cap |
 | `05-glossary-linking-and-layout.md` | Glossary-linking scope (over-linking, core); single- vs. two-column layout and hyphenation decisions (secondary, condensed); the PTXprint draft-PDF read-through (core); recurring false-clean callout | 1 (callout), 7, 8, 9 | 65 |
@@ -162,7 +162,7 @@ invented for scenario content.
 LTC's role in the field cases below was never to judge linguistic meaning herself — the
 process/routing framing of objectives 2 and 5 (confirm the check ran, refer the tool's own
 flagged inconsistencies to the team for a decision) matches how these situations actually play
-out. She also assessed the Biblical Terms rendering-bug case (4) and the layout/hyphenation case
+out. She also assessed the Biblical Terms no-selection rendering error case (4) and the layout/hyphenation case
 (5) as lower-frequency in her own field experience than the wordlist false-clean cases (1, 2) and
 the Biblical Terms bloat case (6) — hence objectives 3 and 8 (drawn from cases 4 and 5) being
 marked Secondary above, along with objective 4 (case 6) and objective 1 (cases 1–2, under the
@@ -217,8 +217,8 @@ matching the same rule taught in the team workbook).
 
 - **Wordlist / spelling** (its own area — a spiral, high-volume check across tens of thousands of
   words): blanket-approving the whole wordlist instead of genuinely reviewing it.
-- **Biblical Terms & renderings**: the first-word-of-verse rendering bug (didn't select the
-  correct text before adding).
+- **Biblical Terms & renderings**: the no-selection rendering error (didn't select the
+  correct text before adding, so Paratext auto-grabbed the first word of the verse).
 - **Parallel passages**: over-harmonising — forcing all parallel passages to match exactly and
   erasing legitimate variation. They must be consistent in *meaning*, not necessarily identical in
   *form*.

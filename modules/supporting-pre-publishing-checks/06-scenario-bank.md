@@ -68,7 +68,7 @@ exists; someone recalls "a decision early on" but nobody can point to where it's
 
 **Context:** This check area has no single well-known field "gotcha" the way the
 wordlist or Biblical Terms tool does — your job here is process and routing, not
-recognizing a specific known bug.
+recognizing a specific known error.
 
 **Your task:**
 1. **Diagnose:** What would you check first — the check itself, or whether an agreed
@@ -195,7 +195,7 @@ unrelated, minor asks.
 
 **Your task:**
 1. **Diagnose:** For the Biblical Terms rendering, what would you check to determine
-   whether this is the first-word-of-verse bug, and how would you confirm it? For the
+   whether this is the no-selection rendering error, and how would you confirm it? For the
    Send/Receive slowdown, what's the actual cause, and why is it not simply "having a big
    list open"? For the layout question, what should determine the choice instead of word
    length alone?

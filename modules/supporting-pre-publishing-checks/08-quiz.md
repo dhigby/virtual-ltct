@@ -146,12 +146,13 @@ across several chapters. What should you do?
 language has long words and the team has never used hyphenation. What should you
 check before agreeing?
 - A) Whether single-column is technically easier
-- B) What layout format Bibles and printed materials in that language community conventionally use
+- B) Ask the team what layout format the LWC (Language of Wider Communication) Bibles they currently use follow
 - C) Whether the typesetter prefers single-column
 - D) Nothing — word length settles the decision
 
-**Question 18:** The team's community conventionally uses two-column Bibles, and the
-language has long words. What concrete technical step should you take?
+**Question 18:** The community currently reads two-column Bibles in the LWC (Language
+of Wider Communication), and the target language has long words. What concrete
+technical step should you take?
 - A) Recommend switching the community to single-column instead
 - B) Build a hyphenation file so long words can break correctly across the column width
 - C) Reduce the font size until words fit

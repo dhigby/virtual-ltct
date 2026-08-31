@@ -59,16 +59,21 @@ markup, not translated content.
 
 A real field case: an expat project admin assumed a **single-column** layout was
 appropriate because the language has long words and the team had never used
-hyphenation. But the language community's own Bibles are conventionally published in
-**two columns** — and layout has to match what readers actually expect, not just what's
-technically easiest given word length.
+hyphenation. But this is a Bible translation project — the community doesn't yet have
+a Bible of its own. What they do have is Bibles in a **Language of Wider Communication
+(LWC)**, a regional trade language they currently read and use, and those LWC Bibles
+are conventionally published in **two columns**. That existing reader expectation is
+the baseline, even though the LWC likely doesn't have the long-word problem the target
+language does — which is exactly why layout convention, not word length, should drive
+the decision.
 
 Your role here has two parts, and both matter for this course to honestly claim
 Digital and Print Publishing competency:
 
 1. **Advise** — establish the reader-expectation requirement with the team. Ask what
-   format Bibles and other printed materials in that community conventionally use,
-   rather than defaulting to whichever layout avoids a technical problem.
+   layout format the LWC Bibles and other printed materials the community currently
+   reads and uses follow, rather than defaulting to whichever layout avoids a technical
+   problem for the target language.
 2. **Do the technical setup** — once two-column layout is the right call, **build a
    hyphenation file** so long words can break correctly across the column width. This
    is genuine hands-on tooling work, not just advice-giving.

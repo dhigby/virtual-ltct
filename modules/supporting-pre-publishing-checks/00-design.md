@@ -197,12 +197,15 @@ cases were added in this review round; the stories below are unchanged.
    verse's first word by default. The consultant deleted the bad rendering, selected the correct
    text, and added it properly.
 5. An expat project admin assumed **single-column** layout (the language has long words and the
-   team had never used hyphenation), but the language community's Bibles are conventionally
-   **two-column** — the layout has to match reader expectation, not just word length. The
-   consultant established the reader-expectation requirement with the team, then **built a
-   hyphenation file** so long words could break correctly in the two-column layout. This is a
-   concrete case where the consultant both advises a publishing-layout decision *and* does the
-   technical setup — confirming Digital and Print Publishing is honestly earned by this course.
+   team had never used hyphenation), but the community currently reads/uses Bibles in a
+   **Language of Wider Communication (LWC)** — this is a Bible translation project, so the
+   community doesn't yet have a Bible of its own in their language — and those **LWC Bibles are
+   conventionally published in two columns**, which sets the readers' layout expectation. The
+   layout has to match that reader expectation, not just word length. The consultant established
+   the reader-expectation requirement with the team, then **built a hyphenation file** so long
+   words could break correctly in the two-column layout. This is a concrete case where the
+   consultant both advises a publishing-layout decision *and* does the technical setup —
+   confirming Digital and Print Publishing is honestly earned by this course.
 6. A consultant **added the entire "All Biblical Terms" list into the Project's Biblical Terms**
    (not just selected it for viewing). The slowdown came specifically from adding the terms to
    the *project* — bloating the project and slowing Send/Receive — not from merely viewing a

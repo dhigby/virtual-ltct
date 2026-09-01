@@ -2,7 +2,7 @@ site_name: LT Consultant Competencies
 site_description: >-
   The Language Technology Consultant competency framework — rationale, target
   outcomes, and progression for each competency.
-site_url: https://dhigby.github.io/virtual-ltct/
+site_url: https://competencies.languagetechnology.org/
 repo_url: https://github.com/dhigby/virtual-ltct
 repo_name: dhigby/virtual-ltct
 edit_uri: edit/main/

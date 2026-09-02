@@ -8,28 +8,58 @@ repo_name: dhigby/virtual-ltct
 edit_uri: edit/main/
 docs_dir: docs
 
+# Fail the build on a broken internal link or an orphaned page, rather than
+# shipping it. Every page here is generated, so a bad link is a code bug.
+strict: true
+
+# These two live in docs/ because that is where they were filed, but they are
+# repo reference material, not site pages — don't publish them.
+exclude_docs: |
+  AudioScriptures.pt.srt
+  support.bible
+
 theme:
   name: material
+  logo: assets/logo.svg
+  favicon: assets/favicon.svg
   features:
-    - navigation.sections
+    - navigation.tabs          # the 6 categories become top-level tabs
+    - navigation.tabs.sticky
+    - navigation.indexes       # a category's tab lands on its overview page
     - navigation.top
+    - navigation.footer        # prev/next at the foot of every page
+    - navigation.instant
+    - navigation.instant.progress
     - toc.follow
     - search.suggest
     - search.highlight
+    - search.share
     - content.action.edit
+  font:
+    text: Inter
+    code: JetBrains Mono
   palette:
+    # Colours are defined in docs/stylesheets/extra.css (primary: custom).
     - media: "(prefers-color-scheme: light)"
       scheme: default
-      primary: teal
+      primary: custom
+      accent: custom
       toggle:
         icon: material/weather-night
         name: Switch to dark mode
     - media: "(prefers-color-scheme: dark)"
       scheme: slate
-      primary: teal
+      primary: custom
+      accent: custom
       toggle:
         icon: material/weather-sunny
         name: Switch to light mode
+
+extra_css:
+  - stylesheets/extra.css
+
+extra_javascript:
+  - javascripts/competency-filter.js
 
 plugins:
   - search
@@ -38,10 +68,19 @@ plugins:
         - scripts/gen_site.py
   - literate-nav:
       nav_file: SUMMARY.md
+  # Link-preview cards for Slack/email. Needs the native imaging libraries, so it
+  # runs in CI only — `mkdocs serve` locally stays dependency-free.
+  - social:
+      enabled: !ENV [CI, false]
 
 markdown_extensions:
   - admonition
   - attr_list
+  - md_in_html
   - tables
+  - pymdownx.details
+  - pymdownx.emoji:
+      emoji_index: !!python/name:material.extensions.emoji.twemoji
+      emoji_generator: !!python/name:material.extensions.emoji.to_svg
   - toc:
       permalink: true

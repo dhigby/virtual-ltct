@@ -529,7 +529,8 @@ for category, names in CATS.items():
         cov = COVERAGE.get(n, 0)
         cov_cell = ('<span class="cx-pill cx-pill--gap">gap</span>' if cov == 0
                     else f'<span class="cx-pill">{cov}</span>')
-        rows.append(f'<tr data-category="{category}" data-name="{n.lower()}">'
+        rows.append(f'<tr data-category="{category}" data-name="{n.lower()}" '
+                    f'data-coverage="{"yes" if cov else "no"}">'
                     f'<td><a href="{slugify(category)}/{d["slug"]}/">{n}</a></td>'
                     f'<td class="cx-td-cat">{category}</td>'
                     f'<td class="cx-td-target">{teaser(n, d, limit=220)}</td>'
@@ -540,12 +541,17 @@ allpage = [
     "---", "hide:", "  - toc", "---", "",
     "# All competencies", "",
     f'<p class="cx-lede">The whole framework — {total} competencies — in one place. '
-    f'Filter by name or category to find the one you need.</p>', "",
+    f'Filter by name, category, or whether training material exists yet.</p>', "",
     '<div class="cx-filter" data-cx-filter>',
     '<input type="search" class="cx-filter__q" placeholder="Filter by name…" '
     'aria-label="Filter competencies by name">',
     '<select class="cx-filter__cat" aria-label="Filter competencies by category">',
     '<option value="">All categories</option>', options, "</select>",
+    '<select class="cx-filter__cov" aria-label="Filter competencies by training '
+    'coverage">',
+    '<option value="">Any coverage</option>',
+    '<option value="yes">Has training material</option>',
+    '<option value="no">Gaps only</option>', "</select>",
     '<span class="cx-filter__count" aria-live="polite"></span>',
     "</div>", "",
     '<div class="cx-table-wrap">',

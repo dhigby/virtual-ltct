@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" role="img" aria-label="LT Competencies">
+  <!-- Five rungs of increasing reach: the 0-4 CBC progression. -->
+  <g fill="#ffffff">
+    <rect x="3" y="18.5" width="7"  height="2.5" rx="1.25" opacity="0.45"/>
+    <rect x="3" y="14.6" width="10" height="2.5" rx="1.25" opacity="0.6"/>
+    <rect x="3" y="10.7" width="13" height="2.5" rx="1.25" opacity="0.75"/>
+    <rect x="3" y="6.8"  width="16" height="2.5" rx="1.25" opacity="0.88"/>
+    <rect x="3" y="2.9"  width="19" height="2.5" rx="1.25"/>
+  </g>
+</svg>

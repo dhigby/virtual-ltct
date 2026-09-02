@@ -53,7 +53,9 @@ symptoms of a single cause higher up. Work in this order instead:
 5. **Book titles.** Inconsistent or incorrect book-name and book-title markup, especially
    after a book has been renamed or reorganized mid-project.
 6. **References** (`\r` cross-references) and the **table of contents.** Missed
-   book-name checks, foreign-language `\r` abbreviations left unadjusted, and a table of
+   book-name checks, foreign-language `\r` abbreviations left unadjusted (a common source:
+   bulk-copying `\r` lines from another NT project as a starting point, which carries over
+   that project's abbreviations instead of the current project's own), and a table of
    contents that doesn't match the book titles actually in the text.
 7. **Footnotes.** Beyond the marker-pair check in step 1, confirm footnote content and
    placement are sound — a footnote that survives the marker check can still be attached

@@ -164,8 +164,19 @@ the competency scripts.
 The competency content is published as a MkDocs Material site. On push to `main`,
 [`.github/workflows/pages.yml`](.github/workflows/pages.yml) builds it (nav + pages are
 generated at build time by [`scripts/gen_site.py`](scripts/gen_site.py) straight from
-`competencies/` — nothing is duplicated in git) and deploys to the `gh-pages` branch.
-Preview locally with `pip install -r docs-requirements.txt && mkdocs serve`.
+`competencies.yaml`, `outcome-levels.yaml`, `competencies/` and `COVERAGE.md` — nothing is
+duplicated in git) and deploys to the `gh-pages` branch. Preview locally with
+`pip install -r docs-requirements.txt && mkdocs serve`.
+
+The build is `strict: true`, so a broken internal link fails it rather than shipping.
+Beyond one page per competency, `gen_site.py` generates the landing page, a per-category
+overview page, `all-competencies` (one filterable table), `how-to-read-levels`, and the
+coverage page. A competency page is *not* a copy of its descriptor: the descriptor's level
+tables are re-rendered as a stepped ladder component. **To change how the site looks,
+edit `gen_site.py` (structure) and [`docs/stylesheets/extra.css`](docs/stylesheets/extra.css)
+(presentation, `cx-`-prefixed classes, brand colours in one block at the top) — not the
+descriptors.** Anything in `docs/` is published, so keep repo reference material out of it
+or add it to `exclude_docs` in `mkdocs.yml`.
 
 ## Maintainer scripts (`scripts/`)
 

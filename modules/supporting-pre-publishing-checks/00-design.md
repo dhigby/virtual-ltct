@@ -20,6 +20,19 @@
 > (PR #43) the placement and time budget are correctly scoped. `module-author` may proceed
 > with drafting `04-formatting-and-references.md`.
 
+> **Amendment, PENDING Kevin Nicholas's confirmation — raised during Stage 5 SME
+> fact-check, 2026-09-03:** Kevin raised a further field case, confirmed by Jenni Beadle's
+> team on the same date — the Punctuation Inventory's **Inventory menu > "Show sequences"**
+> option is what makes the **"Punctuation (sequences)"** checkbox under Run Basic Checks
+> actually check punctuation sequences/combinations meaningfully. Jenni has placed this as a
+> **new, separate section** in `04-formatting-and-references.md` (see that row in "Module
+> breakdown" and field case 8 in "SME knowledge notes" below), scoped to punctuation
+> sequences only (quotation-mark specifics are explicitly out of scope, deferred to a future
+> addition). **This pushes the lesson's time estimate to 85 minutes, close to the 90-minute
+> cap — flagged below.** Unlike the 2026-08-28 amendment, **Kevin has not yet confirmed this
+> placement and scoping are correct** — `module-author` should not draft this new section of
+> `04-formatting-and-references.md` until that confirmation lands.
+
 ## Outcome-level open question (resolve before approval)
 
 The `README.md` frontmatter and issue #40 both target `3 - Independent`, delivered self-paced
@@ -139,12 +152,12 @@ each core check-area lesson instead of either a heavy standalone module or being
 | `01-supporting-the-final-turn.md` | The translation process as a 6-stage spiral; Stage 6 as the final turn re-running earlier checks; the cross-cutting spine (false-clean results) introduced as a recurring watch-for, not a standalone topic; the consultant's role (diagnose, coach, never touch the keyboard); when to escalate | 1 (light touch), 10 | 35 |
 | `02-wordlist-and-biblical-terms.md` | Biblical Terms rendering errors including the no-selection rendering error (secondary, condensed); Project Biblical Terms bloat and performance (secondary, condensed); recurring false-clean callout for this check area | 1 (callout), 3, 4 | 40 |
 | `03-parallel-passages-and-measures.md` | Parallel passages: confirming the comparison check was run and routing tool-flagged inconsistencies to the team (core, expanded); Numbers and Measures — **two separate checks, not one**: confirming which of the two is actually available and mature for the team's Paratext version (Numbers exists now, limited scope; Measures still under development, not yet reliably available), running whichever is usable against the team's already-agreed, documented approach, and routing gaps back to the team (core, expanded); recurring false-clean callout | 1 (callout), 2, 5 | 60 |
-| `04-formatting-and-references.md` | Formatting checks in structural-first order: marker-pair census, ghost markers, long/short verses, section headings, book titles, references, footnotes (core); **new subsection (confirmed by Kevin Nicholas on 2026-08-28): Punctuation Inventory (Checks > Inventories) ahead of typesetting** — reviewing/using the inventory itself (not PTXprint or the typesetter's own tooling), confirming the inventory was actually reviewed rather than assumed already handled earlier in the process (echoes the objective-1 false-clean theme), and common settings issues that turn this into a time-sink for a typesetter; recurring false-clean callout | 1 (callout), 6 | 75 — if drafting runs long, trim the reference/book-title portion first rather than exceed the 90-minute cap |
+| `04-formatting-and-references.md` | Formatting checks in structural-first order: marker-pair census, ghost markers, long/short verses, section headings, book titles, references, footnotes (core); subsection (confirmed by Kevin Nicholas on 2026-08-28): Punctuation Inventory (Checks > Inventories) ahead of typesetting — reviewing/using the inventory itself (not PTXprint or the typesetter's own tooling), confirming the inventory was actually reviewed rather than assumed already handled earlier in the process (echoes the objective-1 false-clean theme), and common settings issues that turn this into a time-sink for a typesetter; **NEW separate section, PENDING Kevin Nicholas's confirmation (raised 2026-09-03): "Show sequences" in the Punctuation Inventory's Inventory menu, and its relationship to the "Punctuation (sequences)" Basic Checks option** — reviewing the inventory without "Show sequences" selected can silently miss unmatched punctuation-pair sequences (echoes the false-clean theme again); scoped to punctuation sequences only — quotation-mark-specific complexity is explicitly out of scope here and deferred to a future addition; recurring false-clean callout | 1 (callout), 6 | 85 — **at risk of exceeding the 90-minute cap.** If drafting runs long, trim the reference/book-title portion first (as already flagged for the prior amendment); if that alone isn't enough, this lesson should be split rather than pushed over 90 minutes |
 | `05-glossary-linking-and-layout.md` | Glossary-linking scope (over-linking, core); single- vs. two-column layout and hyphenation decisions (secondary, condensed); the PTXprint draft-PDF read-through (core); recurring false-clean callout | 1 (callout), 7, 8, 9 | 65 |
 | `06-scenario-bank.md` | Mentor-reviewed applied scenarios weighted toward core objectives (2, 5, 6, 7, 9, 10 each get a full scenario), secondary objectives (3, 4, 8) folded into one combined scenario, and objective 1 (false-clean) run as a thread inside two of the core scenarios rather than its own case | 1–10 | 60 |
 | `07-mentor-guide.md` | Facilitator notes: what to watch for in each scenario response, the "good" markers from the SME interview | — | — |
 | `08-quiz.md` | Assessment | 1–10 | — |
-| **Total learner seat time** | | | **335** (confirmed by Kevin Nicholas on 2026-08-28; was 320 as approved 2026-08-27) |
+| **Total learner seat time** | | | **345** (PENDING Kevin Nicholas's confirmation of the 2026-09-03 "Show sequences" addition — was 335 as confirmed 2026-08-28) |
 
 ## Assessment plan
 
@@ -224,6 +237,17 @@ cases were added in this review round; the stories below are unchanged.
    assume it's already handled" — echoing the false-clean theme from field cases 1–2 and
    objective 1.
 
+8. **(Added 2026-09-03, Kevin Nicholas, raised during Stage 5 SME fact-check — confirmed
+   by Jenni Beadle's team on 2026-09-03; placement PENDING Kevin's confirmation.)** Kevin
+   thought his **Punctuation Inventory** review was thorough, but the typesetter later found
+   a long list of **unmatched punctuation pairs** (mostly involving quotation marks) that
+   hadn't surfaced. Traced back to not having selected **"Show sequences"** in the
+   Punctuation Inventory's **Inventory menu** — without it, the **"Punctuation (sequences)"**
+   checkbox under Run Basic Checks doesn't meaningfully check punctuation
+   sequences/combinations, so the review looked complete but wasn't. This is scoped to
+   **punctuation only** for now; quotation marks specifically are more complicated and are
+   deferred to a **separate, future addition**, not this course.
+
 **Cross-cutting theme across these cases:** *false-clean results* — a team clears a checklist
 without genuinely checking. The consultant's job is to spot the fake all-clear, reset statuses,
 and re-review — while the **translator does the actual fix** ("never touch their keyboard,"
@@ -284,12 +308,12 @@ Observable markers of a competent supporting consultant:
   **PTXprint 3.0.38**; PTXprint is updated often, so menu labels may move between versions.
   Underfilled-page auto-fill is available from **PTXprint v3.0.19+**.
 - **Correction, SME review 2026-09-01 (Jenni Beadle, confirmed via a screenshot of the actual
-  Biblical Terms list panel):** Numbers and Measures are **two separate checks in Paratext, not
+  Open Biblical Terms List dialog):** Numbers and Measures are **two separate checks in Paratext, not
   a combined "Measures and Money and Numbers" list.** The **Numbers** check/list already exists
   and has been released, but its scope is fairly limited. A **Measures** check (money/weights) is
   still **under development and not yet released** — Jenni is confident it's coming, but it is not
   a mature, available check at the time of this design. Both appear as separate entries in
-  Paratext's Biblical Terms list panel alongside other unrelated lists (Major Biblical Terms, All
+  Paratext's Open Biblical Terms List dialog alongside other unrelated lists (Major Biblical Terms, All
   Biblical Terms, NT Key Biblical Terms, Inclusive/Exclusive Pronouns, Younger/Older Siblings,
   etc.) — there is no single combined list to point learners at. The earlier note in this section
   claiming current Paratext versions show "Measures and Money" and "Numbers" as combined lists was
@@ -304,12 +328,15 @@ marker added after Jenni's 2026-08-27 review), spanning both Translation Tools a
 Print Publishing, anchored to the `2 - With Assistance` ladder rows that reach `3 - Independent`.
 Objectives 2 and 5 were reframed in this review from meaning-judgment to process/consistency-
 checking and team-routing, since an LTC does not normally know the project language. **8 planned
-files** (5 numbered content lessons + scenario bank + mentor guide + quiz), totaling **335 minutes**
-(~5.6 hours) of learner-facing seat time (content lessons + mentor-reviewed scenario bank; mentor
+files** (5 numbered content lessons + scenario bank + mentor guide + quiz), totaling **345 minutes**
+(~5.75 hours) of learner-facing seat time (content lessons + mentor-reviewed scenario bank; mentor
 guide and quiz excluded from the total per convention), now weighted toward the core objectives.
-The 335-minute total includes the Punctuation Inventory subsection added to
+The 345-minute total includes the Punctuation Inventory subsection added to
 `04-formatting-and-references.md` on 2026-08-28 and **confirmed by Kevin Nicholas on 2026-08-28**
-(see the amendment note at the top of this document); the previously approved total was 320 minutes.
+(see the amendment note at the top of this document; previously 320 minutes as approved
+2026-08-27), plus the "Show sequences" section added 2026-09-03, which is **PENDING Kevin
+Nicholas's confirmation** and has pushed `04-formatting-and-references.md` to 85 minutes — close
+enough to the 90-minute cap that it is flagged as at-risk in "Module breakdown" above.
 Every objective traces to a descriptor component and to both the quiz and the scenario bank. One
 open tension is flagged and left for the Design Approver: whether the lighter, recurring-callout
 treatment of objective 1 (false-clean results) adequately preserves the "spine" framing from the
@@ -334,3 +361,13 @@ from the Design Approver per stage 2 of the pipeline.
 subsection added to `04-formatting-and-references.md` (field case 7, module-breakdown row, and
 revised 335-minute total) is confirmed correctly scoped and placed. `module-author` may draft
 `04-formatting-and-references.md`.
+
+**Amendment PENDING Kevin Nicholas's confirmation (raised during Stage 5 SME fact-check,
+2026-09-03):** a new, separate section on "Show sequences" (Punctuation Inventory's Inventory
+menu) and its relationship to the "Punctuation (sequences)" Basic Checks option has been added to
+`04-formatting-and-references.md` (field case 8, module-breakdown row, and revised 345-minute
+total), scoped to punctuation sequences only (quotation marks deferred to a future addition).
+**This pushes the lesson to 85 minutes, at risk of the 90-minute cap** — see the trim/split
+guidance in "Module breakdown." Even though the underlying fact came from Kevin's own report,
+he has not yet confirmed the placement and scoping are correct, so `module-author` should hold
+off drafting this new section of `04-formatting-and-references.md` until that confirmation lands.

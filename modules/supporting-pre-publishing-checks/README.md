@@ -13,8 +13,10 @@ content_type: content
 
 **In production** — this course is being built through the repo's
 [8-stage production pipeline](../../process/PROCESS.md), tracked on
-[issue #40](https://github.com/dhigby/virtual-ltct/issues/40). Stage 1 is under way: the design
-document (`00-design.md`) is the contract, and lesson content follows only once it is approved.
+[issue #40](https://github.com/dhigby/virtual-ltct/issues/40). The design document
+(`00-design.md`) was approved, and all content — lessons 01–05, the scenario bank, the mentor
+guide, and the quiz — is fully drafted. The course now moves through Stage 4 (alignment
+review) and Stage 5 (SME fact-check) before internal review, pilot, and publish.
 Run `/next-step supporting-pre-publishing-checks` to see where it stands.
 
 ---
@@ -30,12 +32,16 @@ consultant-checked draft to publication-ready output the typesetter can accept, 
 team on the decisions the checks surface.
 
 **Scope:** The text checks — comparing parallel passages, proper names and biblical terms,
-numbers/weights/measures, and the final formatting-check pass with its draft-print
-verification. The publication *furniture* (illustrations, front and back matter, glossary
-linking) is a separate course, not yet built.
+numbers/weights/measures, the final formatting-check pass with its draft-print verification,
+and the glossary-linking *operation* and its checks (over-linking vs. first-per-section). The
+publication *furniture* — illustrations, front and back matter, and glossary *content* itself
+(as opposed to the linking operation) — is a separate course, not yet built.
 
-**Outcome level:** `3 - Independent` — you run the pass unaided and advise the team, with a
-self-check rubric rather than a mentor in the loop.
+**Outcome level:** `3 - Independent` — you run the pass unaided and advise the team. That claim
+is earned through a **mandatory, mentor-reviewed scenario bank**, not a self-check rubric: a
+mentor scores your reasoning on each scenario against the mentor guide's watch-for list, since
+independence at this level is demonstrated through coaching quality, not a single correct
+answer.
 
 ---
 

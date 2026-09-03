@@ -100,10 +100,11 @@ levels of maturity. Before accepting either check's results, what should you con
 - D) That the typesetter has reviewed it
 
 **Question 12:** You confirm that Numbers is available for a team's Paratext version
-but Measures is still under development and not reliably available. The Numbers check
-flags an inconsistency between two occurrences of what should be the same measurement.
-You're not sure whether the team's documented approach covers this case. What should
-you do?
+but Measures is still under development and not reliably available. You run the Numbers
+check where it applies, along with what informal comparison you can do for the measures
+themselves, and that informal comparison turns up an inconsistency between two
+occurrences of what should be the same measurement. You're not sure whether the team's
+documented approach covers this case. What should you do?
 - A) Decide which rendering is correct based on your own judgment
 - B) Ignore the flag, since this check area has no established field pattern
 - C) Refer the gap back to the team to resolve against their own documented approach

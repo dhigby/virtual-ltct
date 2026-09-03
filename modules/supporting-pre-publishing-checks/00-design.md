@@ -284,12 +284,12 @@ Observable markers of a competent supporting consultant:
   **PTXprint 3.0.38**; PTXprint is updated often, so menu labels may move between versions.
   Underfilled-page auto-fill is available from **PTXprint v3.0.19+**.
 - **Correction, SME review 2026-09-01 (Jenni Beadle, confirmed via a screenshot of the actual
-  Biblical Terms list panel):** Numbers and Measures are **two separate checks in Paratext, not
+  Open Biblical Terms List dialog):** Numbers and Measures are **two separate checks in Paratext, not
   a combined "Measures and Money and Numbers" list.** The **Numbers** check/list already exists
   and has been released, but its scope is fairly limited. A **Measures** check (money/weights) is
   still **under development and not yet released** — Jenni is confident it's coming, but it is not
   a mature, available check at the time of this design. Both appear as separate entries in
-  Paratext's Biblical Terms list panel alongside other unrelated lists (Major Biblical Terms, All
+  Paratext's Open Biblical Terms List dialog alongside other unrelated lists (Major Biblical Terms, All
   Biblical Terms, NT Key Biblical Terms, Inclusive/Exclusive Pronouns, Younger/Older Siblings,
   etc.) — there is no single combined list to point learners at. The earlier note in this section
   claiming current Paratext versions show "Measures and Money" and "Numbers" as combined lists was

@@ -74,7 +74,7 @@ now slow" is not obvious to a non-technical team.
 Diagnosing this means checking whether the Project Biblical Terms list has been
 expanded well beyond the terms the project actually uses, and advising the team to
 **right-size it** — keep the project list to the terms relevant to their translation,
-rather than the full reference list. Note also that the Biblical Terms list panel holds
+rather than the full reference list. Note also that the Open Biblical Terms List dialog holds
 several separate lists side by side (Major Biblical Terms, All Biblical Terms, NT Key
 Biblical Terms, Inclusive/Exclusive Pronouns, Younger/Older Siblings, and others),
 and — as covered in Lesson 3 — **Numbers** and **Measures** are two more separate

@@ -1,7 +1,6 @@
 ---
 name: Translation
 category: Education
-slug: translation
 source_label: Domain-specific education
 in_framework: true
 target_statement: "Has pursue domain specific knowledge via formal education or equivalent in one of the following: translation, linguistics, literacy / education or scripture engagment."
@@ -11,9 +10,12 @@ outcome_levels:
   - "2 - With Assistance"
   - "3 - Independent"
 resources:
-  []
+  - title: SIL Translation
+    url:  https://www.sil.org/translation
+  - title: SIL Training in Translation
+    url:  https://www.sil.org/training/translation
 source: Lang Tech Competencies.xlsx
-last_updated: 2026-07-01
+last_updated: 2026-09-03
 ---
 
 # Translation
@@ -24,11 +26,11 @@ last_updated: 2026-07-01
 
 ## Why it matters
 
-Have a good understanding of one of the language domains used for Bible translation and language development work.
+Have a good understanding of translation  used for Bible translation and language development work.
 
 ## Target competency
 
-> Has pursue domain specific knowledge via formal education or equivalent in one of the following: translation, linguistics, literacy / education or scripture engagment.
+> Has pursue knowledge in translation via formal education or equivalent.
 
 ## Progression by component
 
@@ -38,8 +40,8 @@ _Each row is a level a learner is **at**; its activities are what they do to rea
 
 | Current level | Suggested activities | Reaches |
 | --- | --- | --- |
-| **0 - No Competency** | Complete a semester of university level courses in one of these domains. Alternately, gain significant practical experience in one of these domains from working in a language program. | 1 - Has Knowledge |
-| **1 - Has Knowledge** | Complete a bachelor's program or a semester of post graduate level courses in one of these domains. Alternately, gain significant practical experience in one of these domains from working in a language program. | 2 - With Assistance |
-| **2 - With Assistance** | Complete a Master's program in one of these domains or demonstrate a thorough understanding and respected contribution to the field. | 3 - Independent |
-| **3 - Independent** | Complete a Doctoral program (PhD, EdD) in one of these domains. | 4 - Expert |
+| **0 - No Competency** | Complete a semester of university level courses in translation. Alternately, gain significant practical experience in translation from working in a language program. | 1 - Has Knowledge |
+| **1 - Has Knowledge** | Complete a bachelor's program or a semester of post graduate level courses in translation. Alternately, gain significant practical experience in translation from working in a language program. | 2 - With Assistance |
+| **2 - With Assistance** | Complete a Master's program in translation or demonstrate a thorough understanding and respected contribution to the field. | 3 - Independent |
+| **3 - Independent** | Complete a Doctoral program (PhD, EdD) in translation. | 4 - Expert |
 

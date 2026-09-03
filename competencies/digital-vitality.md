@@ -1,7 +1,7 @@
 ---
 name: Digital Vitality
 category: Technology Domain
-slug: digital-vitality
+label_solver: Digital Vitality
 in_framework: true
 target_statement: Demonstrates the ability to inform and assist communities in the digitization of their language
 outcome_levels:
@@ -18,7 +18,7 @@ resources:
   - title: UNICODE LOCALE DATA MARKUP LANGUAGE (LDML)
     url: http://unicode.org/reports/tr35/
 source: Lang Tech Competencies.xlsx
-last_updated: 2026-07-01
+last_updated: 2026-08-31
 ---
 
 # Digital Vitality

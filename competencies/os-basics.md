@@ -1,7 +1,7 @@
 ---
 name: OS Basics
 category: Core Technical
-slug: os-basics
+source_label: OS-Basics
 in_framework: true
 target_statement: Is able to troubleshoot operating system installation issues, configure for optimal use, and teach best practices.
 outcome_levels:
@@ -10,10 +10,10 @@ outcome_levels:
   - "2 - With Assistance"
   - "3 - Independent"
 resources:
-  - title: How to use Windows 10
-    url: https://www.laptopmag.com/articles/how-to-use-windows-10
-  - title: Windows 10 tutorial from Microsoft
-    url: https://www.thewindowsclub.com/windows-10-guide-for-beginners-from-microsoft
+  - title: Windows 11 tutorial
+    url: https://www.geeksforgeeks.org/techtips/windows-11-tutorial/
+  - title: Windows help and learning
+    url: https://support.microsoft.com/en-us/windows/
   - title: Basic Computer Skills
     url: https://lingtran.net/Basic-Computer-Skills
   - title: Nepals basic computer course
@@ -25,7 +25,7 @@ resources:
   - title: Klient Slutech
     url: http://www.klientsolutech.com/online-basic-computer-courses-
 source: Lang Tech Competencies.xlsx
-last_updated: 2026-07-01
+last_updated: 2026-09-03
 ---
 
 # OS Basics

@@ -1,7 +1,7 @@
 ---
 name: Digital and Print Publishing
 category: Technology Domain
-slug: digital-and-print-publishing
+source_label: Digital and Print Publishing
 in_framework: true
 target_statement: Is able to use the tools that assist language workers to publish their work electronically and on paper and is able to consult others on their use.
 outcome_levels:
@@ -36,7 +36,7 @@ resources:
   - title: SILAS (Smart Interactive Layout Assistant for Scripture)
     url: http://lingtransoft.info/apps/silas-smart-interactive-layout-assistant-scripture
 source: Lang Tech Competencies.xlsx
-last_updated: 2026-07-01
+last_updated: 2026-08-31
 ---
 
 # Digital and Print Publishing

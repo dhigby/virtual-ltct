@@ -1,7 +1,7 @@
 ---
 name: Problem Solving
 category: Professional
-slug: problem-solving
+source_label: Problem Solving
 in_framework: true
 target_statement: Demonstrates use of creative, effective, and efficient solutions to complex problems
 outcome_levels:
@@ -27,7 +27,7 @@ resources:
   - title: Building Students' Problem-Solving Skills Through Complex Challenges
     url: http://www.ascd.org/Publications/Books/Overview/What-If-Building-Students-Problem-Solving-Skills-Through-Complex-Challenges.aspx
 source: Lang Tech Competencies.xlsx
-last_updated: 2026-07-01
+last_updated: 2026-09-03
 ---
 
 # Problem Solving

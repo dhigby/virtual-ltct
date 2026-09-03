@@ -1,7 +1,7 @@
 ---
 name: Translation Tools
 category: Technology Domain
-slug: translation-tools
+source_label:Translation Tools
 in_framework: true
 target_statement: Is able to train others in the effective use of current Translation tools.
 outcome_levels:
@@ -38,7 +38,7 @@ resources:
   - title: Unified Standard Format Markers
     url: https://paratext.org/usfm/
 source: Lang Tech Competencies.xlsx
-last_updated: 2026-07-01
+last_updated: 2026-09-03
 ---
 
 # Translation Tools

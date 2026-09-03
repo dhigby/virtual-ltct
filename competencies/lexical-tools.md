@@ -1,7 +1,7 @@
 ---
 name: Lexical Tools
 category: Technology Domain
-slug: lexical-tools
+source_label: Lexical-tools
 in_framework: true
 target_statement: Is able to consult others in building and using lexicons.
 outcome_levels:
@@ -42,12 +42,12 @@ resources:
   - title: Computational Lexicography
     url: https://typecraft.org/tc2wiki/Computational_Lexicography
 source: Lang Tech Competencies.xlsx
-last_updated: 2026-07-01
+last_updated: 2026-08-28
 ---
 
 # Lexical Tools
 
-**Category:** Technology Domain
+**Category:** LT Domain
 
 ## Why it matters
 

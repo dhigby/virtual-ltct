@@ -1,7 +1,7 @@
 ---
 name: Lexical Import
 category: Technology Domain
-slug: lexical-import
+source_label: Lexical Import
 in_framework: true
 target_statement: Can disambiguate and import language data into current lexical software
 outcome_levels:
@@ -11,9 +11,16 @@ outcome_levels:
   - "3 - Independent"
   - "4 - Expert"
 resources:
-  []
+  - title: Technical Notes on SFM Database Import
+    url: https://software.sil.org/fieldworks/wp-content/uploads/sites/38/2016/10/Technical-Notes-on-SFM-Database-Import.pdf
+  - title: Request Help with Dictionary Conversion into FLEx
+    url: https://www.webonary.org/request-help-with-dictionary-conversion-into-flex/
+  - title: Solid
+    url: https://software.sil.org/solid/
+  - title: Sheetsweeper
+    url: https://software.sil.org/sheetswiper/
 source: Lang Tech Competencies.xlsx
-last_updated: 2026-07-01
+last_updated: 2026-09-02
 ---
 
 # Lexical Import

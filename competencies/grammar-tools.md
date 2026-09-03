@@ -1,7 +1,7 @@
----
+﻿---
 name: Grammar Tools
 category: Technology Domain
-slug: grammar-tools
+source_label: Grammar Tools
 in_framework: true
 target_statement: Is able to consult others in the effective use of grammar tools. This include interlinear and parsing tools.
 outcome_levels:
@@ -20,7 +20,7 @@ resources:
   - title: Linguistic Society of America
     url: https://www.lsadc.org/
 source: Lang Tech Competencies.xlsx
-last_updated: 2026-07-01
+last_updated: 2026-09-02
 ---
 
 # Grammar Tools

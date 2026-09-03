@@ -1,7 +1,7 @@
 ---
 name: Software Development
 category: Technology Domain
-slug: software-development
+source_label: Software Development
 in_framework: true
 target_statement: Can develop or improve a software solution to a complex problem.
 outcome_levels:
@@ -32,7 +32,7 @@ resources:
   - title: Praat on Github
     url: https://github.com/praat
 source: Lang Tech Competencies.xlsx
-last_updated: 2026-07-01
+last_updated: 2026-09-03
 ---
 
 # Software Development

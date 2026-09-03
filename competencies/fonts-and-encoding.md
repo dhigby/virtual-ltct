@@ -1,7 +1,7 @@
 ---
-name: "Fonts & Encoding"
+name: Fonts & Encoding
 category: Core Technical
-slug: fonts-and-encoding
+source_label: Fonts & Encoding
 in_framework: true
 target_statement: Is able troubleshoot font and character display issues, and convert between encodings.
 outcome_levels:
@@ -27,7 +27,7 @@ resources:
   - title: To the BMP and beyond
     url: https://www.unicode.org/notes/tn23/Muller-Slides.pdf
 source: Lang Tech Competencies.xlsx
-last_updated: 2026-07-01
+last_updated: 2026-09-02
 ---
 
 # Fonts & Encoding

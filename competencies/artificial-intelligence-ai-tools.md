@@ -1,7 +1,7 @@
 ---
 name: Artificial Intelligence (AI) Tools
 category: Technology Domain
-slug: artificial-intelligence-ai-tools
+source_label: Artificial Intelligence AI tools
 in_framework: true
 target_statement: Is able to apply general and specialized AI tools effectively, critically, and responsibly in language technology work, and can guide others in their use.
 outcome_levels:

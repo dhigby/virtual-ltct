@@ -1,7 +1,7 @@
 ---
 name: Language Documentation
 category: Technology Domain
-slug: language-documentation
+source label: Language Documentation
 in_framework: true
 target_statement: Can teach tools to document both living and endangered languages. Can identify quality audio and video recordings, teach best practices, and edit or clean up these files.
 outcome_levels:
@@ -20,7 +20,7 @@ resources:
   - title: SayMore
     url: https://software.sil.org/saymore/
 source: Lang Tech Competencies.xlsx
-last_updated: 2026-07-01
+last_updated: 2026-09-02
 ---
 
 # Language Documentation

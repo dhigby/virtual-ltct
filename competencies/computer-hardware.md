@@ -1,7 +1,7 @@
 ---
 name: Computer Hardware
 category: Core Technical
-slug: computer-hardware
+source_label: Computer Hardware
 in_framework: true
 target_statement: Is able to troubleshoot basic computer hardware problems.
 outcome_levels:

@@ -1,7 +1,7 @@
 ---
 name: Keyboard Development
 category: Technology Domain
-slug: keyboard-development
+source_label: Keyboard Development
 in_framework: true
 target_statement: Can develop and trains others to develop custom keyboard and data-entry tools.
 outcome_levels:
@@ -22,7 +22,7 @@ resources:
   - title: How to change keyboard layouts in Windows 11
     url: https://windowsreport.com/keyboard-layout-windows-11/
 source: Lang Tech Competencies.xlsx
-last_updated: 2026-07-01
+last_updated: 2026-09-02
 ---
 
 # Keyboard Development

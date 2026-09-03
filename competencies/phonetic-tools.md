@@ -1,7 +1,6 @@
 ---
 name: Phonetic Tools
 category: Technology Domain
-slug: phonetic-tools
 source_label: Phonetics Tools
 in_framework: true
 target_statement: Is able to use the tools for doing phonetic analysis and is able to consult others in their use
@@ -21,12 +20,12 @@ resources:
   - title: Dekereke Tutorials and Help Materials
     url: http://casali.canil.ca/DekerekeTutorials/tutorials.html
 source: Lang Tech Competencies.xlsx
-last_updated: 2026-07-01
+last_updated: 2026-09-03
 ---
 
 # Phonetic Tools
 
-**Category:** Technology Domain · **Workbook label:** Phonetics Tools
+**Category:** Technology Domain
 
 ## Why it matters
 

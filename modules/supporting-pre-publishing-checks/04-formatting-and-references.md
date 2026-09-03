@@ -31,10 +31,15 @@ cause before chasing individual flags.
 
 ### Why structural-first order matters
 
-Formatting errors cascade. A single unclosed marker pair — a `\f` footnote opened
-without its matching `\f*`, for example — can make everything after it in the chapter
-look malformed to Paratext's checking tools: headings misread, references miscounted,
-even unrelated markers flagged as "wrong" because the parser lost track of where it was.
+Formatting errors cascade — but only through a real mechanism, not a vague "everything
+after it breaks" effect. A missing `\p` (paragraph marker) after a `\s1` section heading
+is a common, real example: without it, everything from right after the heading text up
+until the next `\p` marker gets swallowed into and rendered *as part of* the section
+heading — in the heading's bold/heading style — including verse numbers and verse text
+that should be ordinary body text. That single missing marker can plausibly produce a
+whole cluster of downstream-looking symptoms: an oversized or wrong-looking heading,
+verse numbers that appear to have vanished from the normal flow, and references that
+miscount because the checker is reading swallowed verse content as part of the heading.
 If you start by fixing the errors at the bottom of a long list, you may be fixing
 symptoms of a single cause higher up. Work in this order instead:
 
@@ -60,7 +65,12 @@ symptoms of a single cause higher up. Work in this order instead:
    contents that doesn't match the book titles actually in the text.
 7. **Footnotes.** Beyond the marker-pair check in step 1, confirm footnote content and
    placement are sound — a footnote that survives the marker check can still be attached
-   to the wrong verse or duplicated.
+   to the wrong verse or duplicated. Note that an unclosed `\f` footnote marker (opened
+   without its matching `\f*`) has a much narrower effect than the missing-`\p` example
+   above: if it's unclosed at the end of a verse, it has no effect at all; if it's
+   unclosed partway through a verse, the only consequence is that the following verse
+   text gets swallowed into the footnote's own content — it does not cascade into
+   headings, references, or other markers elsewhere in the chapter.
 
 Diagnosing structural-first doesn't mean the team fixes things in that exact order line
 by line — it means *you* look for the highest-leverage cause first, so you're not
@@ -151,9 +161,10 @@ one heading that seems to be missing, and a reference that looks garbled. They a
 to help them go through the list and fix each one.
 
 1. Before working the list top to bottom, what would you check first, and why?
-2. If you find an unclosed footnote marker partway through Mark, what do you expect that
-   to explain about the other flags on the list — and how would you confirm your
-   suspicion before telling the team?
+2. If you find a missing `\p` marker after a section heading partway through Mark, what
+   do you expect that to explain about the other flags on the list — verse text swallowed
+   into the heading style — and how would you confirm your suspicion before telling the
+   team?
 3. Separately: the same team says the Punctuation Inventory "was already checked back
    when we started the project." The project has since been through two more revision
    passes and is headed to a typesetter in three weeks. What would you say to the team,

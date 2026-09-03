@@ -107,10 +107,11 @@ of these as already handled.
 
 **Your task:**
 1. **Diagnose:** Before working the Basic Checks list top to bottom, what would you check
-   first, and why? If you find an unclosed footnote marker partway through Mark, what
-   would you expect that to explain about the other flags — and how would you confirm it
-   before telling the team? Separately, what's wrong with treating "checked at the start
-   of the project" as current for the Punctuation Inventory?
+   first, and why? If you find a missing `\p` marker after a section heading partway
+   through Mark, what would you expect that to explain about the other flags — verse text
+   swallowed into the heading style — and how would you confirm it before telling the
+   team? Separately, what's wrong with treating "checked at the start of the project" as
+   current for the Punctuation Inventory?
 2. **Say to the team:** What would you say to get them to re-run Basic Checks
    structural-first, and what would you specifically ask them to open and show you for
    the Punctuation Inventory?

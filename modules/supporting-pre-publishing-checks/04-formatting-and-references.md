@@ -1,6 +1,6 @@
 # Lesson 4: Formatting and References
 
-**Estimated time:** 75 minutes
+**Estimated time:** 80 minutes
 
 **Purpose:** Support a team through the structural formatting checks — marker pairs,
 headings, book titles, references, footnotes, and the Punctuation Inventory — working
@@ -14,9 +14,10 @@ team to a genuinely zero-error result rather than a fast one.
   by working structural-first, and coach a team to a zero-error result without touching
   their keyboard.
 - You will be able to review and use Paratext's Punctuation Inventory (Checks >
-  Inventories) ahead of typesetting, confirm it was genuinely reviewed rather than
-  assumed already handled, and recognize the common settings issues that turn it into a
-  time-sink for a typesetter.
+  Inventories) ahead of typesetting — including selecting "Show sequences" in its
+  Inventory menu so that the "Punctuation (sequences)" Basic Check is meaningful —
+  confirm it was genuinely reviewed rather than assumed already handled, and recognize
+  the common settings issues that turn it into a time-sink for a typesetter.
 
 ## Connect
 
@@ -93,7 +94,7 @@ after the fact, going through the Punctuation Inventory's settings to sort out i
 that should have been caught earlier — a real time-sink that fell on the typesetter
 instead of getting resolved during the project's own formatting review.
 
-Two things to do with this inventory:
+Three things to do with this inventory:
 
 - **Actually review it, don't assume it's already handled.** Just like the marker-pair
   and Basic Checks work above, it's easy for a team (or a previous consultant) to assume
@@ -106,6 +107,23 @@ Two things to do with this inventory:
   typesetter — unrecognized or unconfigured punctuation characters left unresolved in the
   inventory's settings can surface late, as a pile of issues the typesetter has to chase
   down one by one instead of the team resolving them upfront.
+- **Select "Show sequences" in the inventory's Inventory menu**, so that punctuation
+  *sequences* — combinations of punctuation characters, such as unmatched punctuation
+  pairs — are actually inventoried, not just the individual characters. Without it, the
+  **"Punctuation (sequences)"** checkbox under Run Basic Checks doesn't meaningfully check
+  punctuation sequences or combinations, so the review can look complete while a whole
+  class of problems goes unseen. This lesson covers punctuation sequences only;
+  quotation marks specifically are more complicated and are intentionally out of scope
+  here, deferred to a separate, future addition.
+
+That third point comes from a real case. One consultant believed their Punctuation
+Inventory review had been thorough — yet the typesetter later came back with a long list
+of unmatched punctuation pairs (mostly involving quotation marks) that had never
+surfaced. The cause was traced to "Show sequences" not having been selected in the
+Inventory menu — and without that setting, the "Punctuation (sequences)" checkbox under
+Run Basic Checks doesn't meaningfully check punctuation sequences or combinations. The
+review *looked* complete and wasn't — the false-clean pattern again, this time produced
+by a single unselected menu option rather than by anyone skipping a step.
 
 > **WARNING — watch for a false-clean result here too:** don't let "we're close to done"
 > stand in for "someone reviewed the Punctuation Inventory." Confirming it was actually
@@ -120,6 +138,10 @@ Two things to do with this inventory:
   in the project.
 - Loose or unconfigured settings in the inventory are what create a late time-sink for
   the typesetter — catching them here is cheaper for everyone.
+- "Show sequences" must be selected in the inventory's Inventory menu for the
+  "Punctuation (sequences)" Basic Check to actually check sequences — without it, the
+  review can look complete and still miss unmatched punctuation pairs. (Quotation marks
+  specifically are out of scope for this lesson.)
 
 ## Challenge
 
@@ -135,7 +157,8 @@ to help them go through the list and fix each one.
 3. Separately: the same team says the Punctuation Inventory "was already checked back
    when we started the project." The project has since been through two more revision
    passes and is headed to a typesetter in three weeks. What would you say to the team,
-   and what would you specifically ask them to open and show you?
+   and what would you specifically ask them to open and show you? Which inventory
+   setting would you confirm was selected before accepting that the review was complete?
 
 Write your answers as if reporting back to the team lead afterward — include exactly
 what you'd say and what you'd ask them to do next.

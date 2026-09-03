@@ -20,18 +20,19 @@
 > (PR #43) the placement and time budget are correctly scoped. `module-author` may proceed
 > with drafting `04-formatting-and-references.md`.
 
-> **Amendment, PENDING Kevin Nicholas's confirmation — raised during Stage 5 SME
-> fact-check, 2026-09-03:** Kevin raised a further field case, confirmed by Jenni Beadle's
-> team on the same date — the Punctuation Inventory's **Inventory menu > "Show sequences"**
-> option is what makes the **"Punctuation (sequences)"** checkbox under Run Basic Checks
-> actually check punctuation sequences/combinations meaningfully. Jenni has placed this as a
-> **new, separate section** in `04-formatting-and-references.md` (see that row in "Module
-> breakdown" and field case 8 in "SME knowledge notes" below), scoped to punctuation
-> sequences only (quotation-mark specifics are explicitly out of scope, deferred to a future
-> addition). **This pushes the lesson's time estimate to 85 minutes, close to the 90-minute
-> cap — flagged below.** Unlike the 2026-08-28 amendment, **Kevin has not yet confirmed this
-> placement and scoping are correct** — `module-author` should not draft this new section of
-> `04-formatting-and-references.md` until that confirmation lands.
+> **Amendment confirmed by Kevin Nicholas on 2026-09-03 (comment on PR #46) — raised during
+> Stage 5 SME fact-check, 2026-09-03:** Kevin raised a further field case, confirmed by Jenni
+> Beadle's team on the same date — the Punctuation Inventory's **Inventory menu > "Show
+> sequences"** option is what makes the **"Punctuation (sequences)"** checkbox under Run Basic
+> Checks actually check punctuation sequences/combinations meaningfully. Jenni had proposed
+> this as a new, separate section in `04-formatting-and-references.md`; **Kevin's ruling is to
+> fold it into the existing Punctuation Inventory subsection as a "Punctuation Sequences"
+> addition instead** (see that row in "Module breakdown" and field case 8 in "SME knowledge
+> notes" below), scoped to punctuation sequences only (quotation-mark specifics are explicitly
+> out of scope, deferred to a future addition). The lighter treatment revises the lesson's
+> time estimate to **80 minutes** (Jenni's separate-section proposal had estimated 85), keeping
+> 10 minutes of headroom under the 90-minute cap. `module-author` may revise
+> `04-formatting-and-references.md` accordingly.
 
 ## Outcome-level open question (resolve before approval)
 
@@ -152,12 +153,12 @@ each core check-area lesson instead of either a heavy standalone module or being
 | `01-supporting-the-final-turn.md` | The translation process as a 6-stage spiral; Stage 6 as the final turn re-running earlier checks; the cross-cutting spine (false-clean results) introduced as a recurring watch-for, not a standalone topic; the consultant's role (diagnose, coach, never touch the keyboard); when to escalate | 1 (light touch), 10 | 35 |
 | `02-wordlist-and-biblical-terms.md` | Biblical Terms rendering errors including the no-selection rendering error (secondary, condensed); Project Biblical Terms bloat and performance (secondary, condensed); recurring false-clean callout for this check area | 1 (callout), 3, 4 | 40 |
 | `03-parallel-passages-and-measures.md` | Parallel passages: confirming the comparison check was run and routing tool-flagged inconsistencies to the team (core, expanded); Numbers and Measures — **two separate checks, not one**: confirming which of the two is actually available and mature for the team's Paratext version (Numbers exists now, limited scope; Measures still under development, not yet reliably available), running whichever is usable against the team's already-agreed, documented approach, and routing gaps back to the team (core, expanded); recurring false-clean callout | 1 (callout), 2, 5 | 60 |
-| `04-formatting-and-references.md` | Formatting checks in structural-first order: marker-pair census, ghost markers, long/short verses, section headings, book titles, references, footnotes (core); subsection (confirmed by Kevin Nicholas on 2026-08-28): Punctuation Inventory (Checks > Inventories) ahead of typesetting — reviewing/using the inventory itself (not PTXprint or the typesetter's own tooling), confirming the inventory was actually reviewed rather than assumed already handled earlier in the process (echoes the objective-1 false-clean theme), and common settings issues that turn this into a time-sink for a typesetter; **NEW separate section, PENDING Kevin Nicholas's confirmation (raised 2026-09-03): "Show sequences" in the Punctuation Inventory's Inventory menu, and its relationship to the "Punctuation (sequences)" Basic Checks option** — reviewing the inventory without "Show sequences" selected can silently miss unmatched punctuation-pair sequences (echoes the false-clean theme again); scoped to punctuation sequences only — quotation-mark-specific complexity is explicitly out of scope here and deferred to a future addition; recurring false-clean callout | 1 (callout), 6 | 85 — **at risk of exceeding the 90-minute cap.** If drafting runs long, trim the reference/book-title portion first (as already flagged for the prior amendment); if that alone isn't enough, this lesson should be split rather than pushed over 90 minutes |
+| `04-formatting-and-references.md` | Formatting checks in structural-first order: marker-pair census, ghost markers, long/short verses, section headings, book titles, references, footnotes (core); subsection (confirmed by Kevin Nicholas on 2026-08-28): Punctuation Inventory (Checks > Inventories) ahead of typesetting — reviewing/using the inventory itself (not PTXprint or the typesetter's own tooling), confirming the inventory was actually reviewed rather than assumed already handled earlier in the process (echoes the objective-1 false-clean theme), and common settings issues that turn this into a time-sink for a typesetter; **"Punctuation Sequences" addition folded into that Punctuation Inventory subsection (raised 2026-09-03; confirmed by Kevin Nicholas on 2026-09-03 via PR #46 comment — folded in, not a separate section): "Show sequences" in the Punctuation Inventory's Inventory menu, and its relationship to the "Punctuation (sequences)" Basic Checks option** — reviewing the inventory without "Show sequences" selected can silently miss unmatched punctuation-pair sequences (echoes the false-clean theme again); scoped to punctuation sequences only — quotation-mark-specific complexity is explicitly out of scope here and deferred to a future addition; recurring false-clean callout | 1 (callout), 6 | 80 — the folded-in treatment keeps 10 minutes under the 90-minute cap. If drafting runs long, trim the reference/book-title portion first (as already flagged for the prior amendment); if that alone isn't enough, this lesson should be split rather than pushed over 90 minutes |
 | `05-glossary-linking-and-layout.md` | Glossary-linking scope (over-linking, core); single- vs. two-column layout and hyphenation decisions (secondary, condensed); the PTXprint draft-PDF read-through (core); recurring false-clean callout | 1 (callout), 7, 8, 9 | 65 |
 | `06-scenario-bank.md` | Mentor-reviewed applied scenarios weighted toward core objectives (2, 5, 6, 7, 9, 10 each get a full scenario), secondary objectives (3, 4, 8) folded into one combined scenario, and objective 1 (false-clean) run as a thread inside two of the core scenarios rather than its own case | 1–10 | 60 |
 | `07-mentor-guide.md` | Facilitator notes: what to watch for in each scenario response, the "good" markers from the SME interview | — | — |
 | `08-quiz.md` | Assessment | 1–10 | — |
-| **Total learner seat time** | | | **345** (PENDING Kevin Nicholas's confirmation of the 2026-09-03 "Show sequences" addition — was 335 as confirmed 2026-08-28) |
+| **Total learner seat time** | | | **340** (includes the 2026-09-03 "Punctuation Sequences" addition, confirmed by Kevin Nicholas on 2026-09-03 as a fold-in — was 335 as confirmed 2026-08-28) |
 
 ## Assessment plan
 
@@ -238,7 +239,8 @@ cases were added in this review round; the stories below are unchanged.
    objective 1.
 
 8. **(Added 2026-09-03, Kevin Nicholas, raised during Stage 5 SME fact-check — confirmed
-   by Jenni Beadle's team on 2026-09-03; placement PENDING Kevin's confirmation.)** Kevin
+   by Jenni Beadle's team on 2026-09-03; placement confirmed by Kevin on 2026-09-03 — folded
+   into the existing Punctuation Inventory subsection of lesson 04, not a separate section.)** Kevin
    thought his **Punctuation Inventory** review was thorough, but the typesetter later found
    a long list of **unmatched punctuation pairs** (mostly involving quotation marks) that
    hadn't surfaced. Traced back to not having selected **"Show sequences"** in the
@@ -328,15 +330,15 @@ marker added after Jenni's 2026-08-27 review), spanning both Translation Tools a
 Print Publishing, anchored to the `2 - With Assistance` ladder rows that reach `3 - Independent`.
 Objectives 2 and 5 were reframed in this review from meaning-judgment to process/consistency-
 checking and team-routing, since an LTC does not normally know the project language. **8 planned
-files** (5 numbered content lessons + scenario bank + mentor guide + quiz), totaling **345 minutes**
-(~5.75 hours) of learner-facing seat time (content lessons + mentor-reviewed scenario bank; mentor
+files** (5 numbered content lessons + scenario bank + mentor guide + quiz), totaling **340 minutes**
+(~5.67 hours) of learner-facing seat time (content lessons + mentor-reviewed scenario bank; mentor
 guide and quiz excluded from the total per convention), now weighted toward the core objectives.
-The 345-minute total includes the Punctuation Inventory subsection added to
+The 340-minute total includes the Punctuation Inventory subsection added to
 `04-formatting-and-references.md` on 2026-08-28 and **confirmed by Kevin Nicholas on 2026-08-28**
 (see the amendment note at the top of this document; previously 320 minutes as approved
-2026-08-27), plus the "Show sequences" section added 2026-09-03, which is **PENDING Kevin
-Nicholas's confirmation** and has pushed `04-formatting-and-references.md` to 85 minutes — close
-enough to the 90-minute cap that it is flagged as at-risk in "Module breakdown" above.
+2026-08-27), plus the "Punctuation Sequences" addition of 2026-09-03, **confirmed by Kevin Nicholas on
+2026-09-03** as a fold-in to the existing Punctuation Inventory subsection, which brings
+`04-formatting-and-references.md` to 80 minutes — 10 minutes under the 90-minute cap.
 Every objective traces to a descriptor component and to both the quiz and the scenario bank. One
 open tension is flagged and left for the Design Approver: whether the lighter, recurring-callout
 treatment of objective 1 (false-clean results) adequately preserves the "spine" framing from the
@@ -362,12 +364,12 @@ subsection added to `04-formatting-and-references.md` (field case 7, module-brea
 revised 335-minute total) is confirmed correctly scoped and placed. `module-author` may draft
 `04-formatting-and-references.md`.
 
-**Amendment PENDING Kevin Nicholas's confirmation (raised during Stage 5 SME fact-check,
-2026-09-03):** a new, separate section on "Show sequences" (Punctuation Inventory's Inventory
-menu) and its relationship to the "Punctuation (sequences)" Basic Checks option has been added to
-`04-formatting-and-references.md` (field case 8, module-breakdown row, and revised 345-minute
-total), scoped to punctuation sequences only (quotation marks deferred to a future addition).
-**This pushes the lesson to 85 minutes, at risk of the 90-minute cap** — see the trim/split
-guidance in "Module breakdown." Even though the underlying fact came from Kevin's own report,
-he has not yet confirmed the placement and scoping are correct, so `module-author` should hold
-off drafting this new section of `04-formatting-and-references.md` until that confirmation lands.
+**Amendment confirmed by Kevin Nicholas on 2026-09-03 (comment on PR #46; raised during Stage 5
+SME fact-check, 2026-09-03):** the "Show sequences" material (Punctuation Inventory's Inventory
+menu) and its relationship to the "Punctuation (sequences)" Basic Checks option is confirmed
+correctly scoped (punctuation sequences only; quotation marks deferred to a future addition).
+Kevin's ruling on placement: **fold it into the existing Punctuation Inventory subsection of
+`04-formatting-and-references.md` as a "Punctuation Sequences" addition, not a separate section**
+(field case 8, module-breakdown row, and revised 340-minute total). The lighter treatment puts
+the lesson at 80 minutes, 10 under the cap. `module-author` may revise
+`04-formatting-and-references.md`.

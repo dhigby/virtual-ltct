@@ -20,9 +20,13 @@ last_updated: 2026-09-03
 
 # Translation
 
-**Category:** Education · **Workbook label:** Domain-specific education
+**Category:** Education · 
 
 > This applies the workbook's single **Domain-specific education** ladder to the **Translation** domain; the framework calls out each domain separately, so the rationale and activities below are shared across them.
+
+## Description
+
+Domain-specific knowledge in translation
 
 ## Why it matters
 

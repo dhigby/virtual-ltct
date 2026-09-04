@@ -39,6 +39,10 @@ last_updated: 2026-08-31
 
 **Category:** Technology Domain
 
+## Description
+
+Knowledge of a scripting language to do data conversion.
+
 ## Why it matters
 
 Many time language Technologists need to assist a language workers to cleanup their data to make it consistent or to convert their data from one format to another.

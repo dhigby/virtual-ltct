@@ -31,6 +31,10 @@ last_updated: 2026-09-03
 
 **Category:** Technology Domain
 
+## Description
+
+Knowledge of the tools that assist language workers to record their work, either audio and/or video, and can consult others on their use.
+
 ## Why it matters
 
 In recent years, audio and video have become an integral part of each domain that we teach. As a result, it is increasingly important that a Language Technologists be able to identify quality recordings and proper recording techniques.

@@ -29,6 +29,10 @@ last_updated: 2026-09-02
 
 **Category:** Technology Domain
 
+## Description
+
+Knowledge of the tools to develop custom keyboards and data-entry tools.
+
 ## Why it matters
 
 If keyboarding solutions are non-existent or poorly adapted to input of local languages, a Language Technologist may be needed to develop a new solution,

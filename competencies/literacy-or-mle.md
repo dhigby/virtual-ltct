@@ -24,6 +24,10 @@ last_updated: 2026-09-03
 
 > This applies the workbook's single **Domain-specific education** ladder to the **Literacy or MLE** domain; the framework calls out each domain separately, so the rationale and activities below are shared across them.
 
+## Description
+
+Domain-specific knowledge in literacy and MLE
+
 ## Why it matters
 
 Have a good understanding of literacy or MLE used for Bible translation and language development work.

@@ -27,6 +27,10 @@ last_updated: 2026-09-02
 
 **Category:** Technology Domain
 
+##Description
+
+Can consult others in the effective use of grammar tools.  This includes interlinear and parsing tools.
+
 ## Why it matters
 
 This competency covers the usage and training of users to use the current grammar tools to interlinearize and parse texts

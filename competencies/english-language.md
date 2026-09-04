@@ -33,6 +33,10 @@ last_updated: 2026-08-31
 
 **Category:** Professional
 
+## Description
+
+Knowledge of the English language for training and technical publications.
+
 ## Why it matters
 
 Many of the LT tools, training materials and documentation are in English only.

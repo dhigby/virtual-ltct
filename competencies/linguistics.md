@@ -24,6 +24,10 @@ last_updated: 2026-09-03
 
 > This applies the workbook's single **Domain-specific education** ladder to the **Linguistics** domain; the framework calls out each domain separately, so the rationale and activities below are shared across them.
 
+## Description
+
+Domain-specific knowledge in linguistics
+
 ## Why it matters
 
 Have a good understanding of linguistics used for Bible translation and language development work.

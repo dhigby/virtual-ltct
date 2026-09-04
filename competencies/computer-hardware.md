@@ -30,6 +30,10 @@ last_updated: 2026-07-01
 
 **Category:** Core Technical
 
+## Description
+
+Familiarity with basic components of a computer
+
 ## Why it matters
 
 While hardware support is not a goal of a Language Technologist, in the absence of a dedicated technician, it is often necessary to resolve basic hardware problems before continuing with LT work. This competency invites the candidate to stay up-to-date with the use and troubleshooting of current and coming hardware and its basic usage. Those hoping to specialize in Language Technology will need to strike a healthy balance between LT and IT to progress in LT.

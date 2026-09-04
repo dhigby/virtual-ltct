@@ -28,6 +28,10 @@ last_updated: 2026-07-01
 
 **Category:** Core Technical
 
+## Description
+
+Ability to create and implement customized solutions for typing non-standard characters.
+
 ## Why it matters
 
 A large part of interaction with our devices happens through a keyboard. A Language Technologist is expected to help users choose keyboards that are appropriate for language, encoding, and physical layout.

@@ -39,6 +39,10 @@ last_updated: 2026-07-01
 
 **Category:** Technology Domain
 
+## Description
+
+Knowledge of the computational tools for corpus and data analysis.
+
 ## Why it matters
 
 This competency promotes the use of natural language processing tools for the advancement of the development of language ands its community.

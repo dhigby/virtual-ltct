@@ -27,6 +27,10 @@ last_updated: 2026-09-02
 
 **Category:** Technology Domain
 
+## Description
+
+Knowledge of the tools to document both living and endangered languages. 
+
 ## Why it matters
 
 Language Documentation is a wide field focused on collecting a corpus of linguistic material in many media. A Language Technologist choosing this competency will need to facilitate appropriate quality of recording, as well as guiding users through the tools used in the transcription process.

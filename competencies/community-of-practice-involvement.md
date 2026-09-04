@@ -28,6 +28,10 @@ last_updated: 2026-07-01
 
 **Category:** Professional
 
+## Description
+
+Knows how to communicate with peers both to find and share solutions to problems
+
 ## Why it matters
 
 Learning from and sharing with peers helps the language technologist to grow and to serve the user

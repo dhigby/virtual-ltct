@@ -40,9 +40,13 @@ last_updated: 2026-09-02
 
 # General
 
-**Category:** Education · 
+**Category:** Education
 
 > This applies the workbook's single **Domain-specific education** ladder to the **General** domain; the framework calls out each domain separately, so the rationale and activities below are shared across them.
+
+## Description
+
+Domain-specific knowledge in one of the following: translation, linguistics, literacy/education or scripture engagement
 
 ## Why it matters
 

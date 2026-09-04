@@ -32,6 +32,9 @@ last_updated: 2026-09-03
 
 **Category:** Core Technical
 
+## Description
+Familiarity with current operating systems in use in your location.
+
 ## Why it matters
 
 It is often necessary to resolve basic operating system configuration problems before continuing with LT work, as well as to keep your machine in working order.

@@ -39,6 +39,10 @@ last_updated: 2026-09-03
 
 **Category:** Technology Domain
 
+## Description
+
+Knowledge of the tools and languages for developing software
+
 ## Why it matters
 
 While not every Language Technologist will chose this path, the best way to learn how a programmer thinks is to become one. This will permit you to quickly draft a software solution to a problem or to help find and test the relevant code in a bug report.

@@ -26,6 +26,10 @@ last_updated: 2026-09-03
 
 **Category:** Professional
 
+## Description
+
+Knowledge to describe a software issue in a meaningful way for developers to act on.
+
 ## Why it matters
 
 Giving feedback to the developers of language technology tools is an important skill for improving these tools.

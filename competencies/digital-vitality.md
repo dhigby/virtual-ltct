@@ -25,6 +25,10 @@ last_updated: 2026-08-31
 
 **Category:** Technology Domain
 
+## Description
+
+Knowledge to inform and assist communities in the digitization of their language.
+
 ## Why it matters
 
 Promoting a language digitally is important to its use and survival.

@@ -43,6 +43,10 @@ last_updated: 2026-08-31
 
 **Category:** Technology Domain
 
+## Description
+
+Knowledge of the tools that assist language workers to publish their work electronically and on paper and consult others on their use.
+
 ## Why it matters
 
 This competency covers the usage and training of users that help them to publish work in print form and digitially.

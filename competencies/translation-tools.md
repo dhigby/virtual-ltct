@@ -45,6 +45,10 @@ last_updated: 2026-09-03
 
 **Category:** Technology Domain
 
+## Description
+
+Knowledge of current recommended translation.
+
 ## Why it matters
 
 For many Language Technologists, the input, verification, management and publishing of translated data will be a core activity of the parent organisations. As LT responds to the needs of other domains, this means that this competency is among the first competencies that should be studied.

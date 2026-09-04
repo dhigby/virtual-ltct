@@ -34,6 +34,10 @@ last_updated: 2026-09-02
 
 **Category:** Core Technical
 
+##Description
+
+Understanding usage and development of fonts, encoding, and glyphs used to display scripts.
+
 ## Why it matters
 
 Some scripts and fonts reinforce cultural or community identity. A Language Technologist is expected to be aware of or investigate the fonts and encodings that can be used for various languages.

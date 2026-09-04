@@ -34,6 +34,10 @@ last_updated: 2026-09-03
 
 **Category:** Professional
 
+## Description
+
+Knowledge of the techniques to create effective,and efficient solutions to complex problems
+
 ## Why it matters
 
 Problem solving is an important skill for dealing with language technology issues and problems

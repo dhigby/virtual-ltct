@@ -27,6 +27,10 @@ last_updated: 2026-09-02
 
 **Category:** Technology Domain
 
+## Description
+
+Knowledge to import language data into current lexical software.
+
 ## Why it matters
 
 Lexicons are, by nature, structured documents. various standards have been proposed, used, and abandoned over the years. This specialist competency involves disambiguation (removing any doubt about the classification and relationship) of data and importation into a modern lexicography program. This is often a non-trivial task when importing poorly structured or unstructured data. Once the data is clean, structured, and in an appropriate encoding, it can then be imported into a modern lexicography tool.

@@ -43,6 +43,10 @@ last_updated: 2026-09-03
 
 **Category:** Technology Domain
 
+## Description
+
+Knowledge of the tools for typesetting final complex documents.
+
 ## Why it matters
 
 Publishing scripture is important to the Bible translation task. A language technologist can use this skill to assist in the task.

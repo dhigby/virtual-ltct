@@ -1,0 +1,257 @@
+<p>
+  <strong>Target Audience:</strong> Trainee Language Technology Consultants<br>
+  <strong>Duration:</strong> 75 minutes<br>
+  <strong>Level:</strong> With Assistance<br>
+  <strong>Framework:</strong> Learning That Lasts (Connect, Content, Challenge, Change)
+</p>
+
+<div style="border: 1px solid #d0d0d0; border-radius: 6px; padding: 16px 20px; margin: 16px 0; background-color: #fafafa;">
+  <h3 style="margin-top: 0;">Learning Objectives</h3>
+  <p>By the end of this lesson you will be able to:</p>
+  <ul>
+    <li>Navigate to the Quote marks tab and enter the correct characters for each nesting level.</li>
+    <li>Configure the Quote Continuer at new paragraph for languages that use continuation marks.</li>
+    <li>Recognize the word-medial punctuation conflict when the same character serves as both a closing mark and an apostrophe, and explain why it cannot be fully resolved through Paratext settings when that character is also configured as a quote mark.</li>
+  </ul>
+</div>
+
+<p>Every language marks speech differently &mdash; curly quotes, guillemets, a character that doubles as an apostrophe. On a real project your job is to translate those conventions into Paratext's Quote marks grid correctly, so the Quotation check finally has something meaningful to look for. This lesson gives the check the first of its two inputs.</p>
+
+<div style="background-color: #e3f2fd; border-left: 4px solid #2196f3; padding: 12px 16px; margin: 16px 0;">
+  <p style="margin: 0;"><strong>INFO</strong> This lesson uses the <code>tamba</code> and <code>runda</code> fictional projects. See the course introduction for their quotation conventions, and make sure both practice projects are restored in your Paratext before starting the Challenge exercises.</p>
+</div>
+
+<hr style="border: 2px solid black;">
+
+<p><img src="/files/7780768/connect.png" alt="connect" style="width: 144px; height: 194px;"></p>
+
+<p>In Lesson 1 you saw that an unconfigured check is just noise. Now you give it the first thing it needs: the actual characters your language uses.</p>
+
+<p><strong>&#9999;&#65039; Reflection.</strong> Picture the language project you work with (or one you expect to support):</p>
+
+<ul>
+  <li>What characters does it use to open and close direct speech? Are they curly quotes (&ldquo; &rdquo;), guillemets (&laquo; &raquo;), straight quotes, or something else?</li>
+  <li>When speech is quoted <em>inside</em> other speech, does the language use a different mark for that inner level?</li>
+  <li>Have you ever seen a checker flag an apostrophe <em>inside</em> a word &mdash; a contraction or a glottal stop &mdash; as a broken quotation? What did you do about it?</li>
+</ul>
+
+<p>Hold those in mind. Two of the three exercises in this lesson are exactly these situations.</p>
+
+<hr style="border: 2px solid black;">
+
+<p><img src="/files/7780768/content.png" alt="content" style="width: 167px; height: 194px;"></p>
+
+<p><em>Configuring the Quote marks tab is the first half of the <strong>Translation Tools</strong> competency's "use and troubleshoot" skill for this check. Get the inventory of characters right here and most of the false positives from Lesson 1 disappear.</em></p>
+
+<p>The <strong>Quote marks</strong> tab tells Paratext which characters your language uses to open and close quotations at each nesting level, and which character (if any) continues a speech across a paragraph break. Navigate to:</p>
+
+<p>project menu <strong>&#9776; &gt; Project settings &gt; Quotation Rules</strong>, then click the <strong>Quote marks</strong> tab.</p>
+
+<p><img src="Images/ss-L152-project-menu-quotation-rules.png" alt="The project menu open showing Project settings highlighted, and Quotation Rules selected in the submenu." style="max-width: 100%;"></p>
+
+<p>The tab has a grid with three rows and three columns.</p>
+
+<p><strong>Rows &mdash; nesting levels:</strong></p>
+<ul>
+  <li><strong>Quotes (First level)</strong> &mdash; primary speech</li>
+  <li><strong>Quotes within Quotes (Second level)</strong> &mdash; speech embedded within a First level quotation</li>
+  <li><strong>Quotes within Quotes within Quotes (Third level)</strong> &mdash; speech embedded within a Second level quotation</li>
+</ul>
+
+<p><strong>Columns:</strong></p>
+<ul>
+  <li><strong>Opening</strong> &mdash; the character that starts a quotation at that level</li>
+  <li><strong>Quote Continuer at new paragraph</strong> &mdash; the character repeated at the beginning of a new paragraph when a quotation continues (many languages leave this blank)</li>
+  <li><strong>Closing</strong> &mdash; the character that ends a quotation at that level</li>
+</ul>
+
+<p>Below the grid the tab has several additional checkboxes (such as <strong>Closing quotes close</strong>, <strong>List all quote marks...</strong>, and <strong>Continuer required at...</strong>). Hover over any label to see its description in the status bar at the bottom of the dialog.</p>
+
+<p>At the bottom of the dialog:</p>
+<ul>
+  <li><strong>Example</strong> &mdash; a live text preview showing how your configured marks look in a sample passage. Use this to visually confirm that you have selected the correct characters.</li>
+  <li><strong>Copy quote mark settings...</strong> button &mdash; imports character settings from another project (useful when a related project uses the same conventions).</li>
+</ul>
+
+<p><img src="Images/ss-L172-quote-marks-tab-layout.png" alt="The Quote marks tab with the three-row, three-column grid visible, showing the additional settings below the grid." style="max-width: 100%;"></p>
+
+<p><strong>One more setting lives elsewhere, but it has a real limit.</strong> Some languages use the same character for two purposes: as the <strong>closing quotation mark</strong> at the single-quote level <em>and</em> as an <strong>apostrophe</strong> within words. Paratext's Language Settings has a field for exactly this kind of ambiguous character &mdash; <strong>&#9776; &gt; Project settings &gt; Language Settings &gt; Other Characters</strong> tab, <strong>Word-medial punctuation</strong> &mdash; and its own help text describes it as telling the checker to treat a listed character as part of a word rather than punctuation when it sits between two letters.</p>
+
+<div style="background-color: #fff8e1; border-left: 4px solid #ffc107; padding: 12px 16px; margin: 16px 0;">
+  <p style="margin: 0;"><strong>WARNING</strong> Verified on Paratext 9.5, this does <em>not</em> work for a character that is also a configured quote mark. Adding &rsquo; to Word-medial punctuation has no effect on the "Closing quote found as a word medial character" result when &rsquo; is also set as a Second (or Third) level closing mark &mdash; the check keeps flagging every genuine apostrophe, with or without the setting. Once a character is claimed as a quote mark in the Quotation Rules dialog, that classification appears to take priority over the Word-medial punctuation exception list. The setting genuinely works for punctuation that <em>isn't</em> also a quote character; it just doesn't rescue this specific collision.</p>
+</div>
+
+<p><strong>What this means in practice:</strong> if a language's real orthography reuses a quote-mark character as an apostrophe, there is no configuration that makes the check stop flagging it. The practical options are (a) recognize each such result during triage as a known, expected false positive &mdash; a real apostrophe, not a translation error &mdash; and move past it rather than hunting for a setting to clear it, or (b) if the orthography is still being finalized, choose a different, unique character for the apostrophe so the two roles don't collide in the first place. You'll see this firsthand in the third exercise below.</p>
+
+<div style="border: 1px solid #d0d0d0; border-radius: 6px; padding: 16px 20px; margin: 16px 0; background-color: #fafafa;">
+  <h3 style="margin-top: 0;">Key Takeaways</h3>
+  <ul>
+    <li>The Quote marks tab grid has three rows (First, Second, Third level) and three columns (Opening, Quote Continuer at new paragraph, Closing).</li>
+    <li>Always verify every character you enter using the <strong>Example</strong> section at the bottom of the dialog &mdash; confirm the code point, not just the shape.</li>
+    <li>The Quote Continuer at new paragraph is optional; leave it blank if your language closes and reopens the marks at each paragraph break.</li>
+    <li>When a closing-quote character doubles as an apostrophe, Word-medial punctuation in Language Settings does <strong>not</strong> suppress the resulting check result (confirmed against real Paratext 9.5 behavior) &mdash; treat every such flag as an expected false positive to verify and set aside during triage, not a configuration problem to fix.</li>
+  </ul>
+</div>
+
+<hr style="border: 2px solid black;">
+
+<p><img src="/files/7780768/challenge.png" alt="challenge" style="width: 142px; height: 194px;"></p>
+
+<p>You will configure two real (fictional) projects and then untangle the apostrophe conflict. Each exercise produces a configured tab a mentor can inspect against the language's convention table in the course introduction.</p>
+
+<h3>Exercise 2.1 &mdash; Enter quote marks for Tamba</h3>
+
+<p>Open the Tamba project's Quotation Rules dialog (&#9776; &gt; Project settings &gt; Quotation Rules) and click the <strong>Quote marks</strong> tab.</p>
+
+<p>The Tamba project is in Phase A: the Quote marks tab is blank. Enter the following settings using the dropdown arrow (&#9660;) on each cell:</p>
+
+<table border="1" style="border-collapse: collapse;">
+  <tr><th style="padding: 6px 12px;">Level</th><th style="padding: 6px 12px;">Opening</th><th style="padding: 6px 12px;">Quote Continuer at new paragraph</th><th style="padding: 6px 12px;">Closing</th></tr>
+  <tr><td style="padding: 6px 12px;">First level</td><td style="padding: 6px 12px;"><span style="font-size: 1.6em; font-family: Georgia, serif; line-height: 1;">&ldquo;</span> (U+201C)</td><td style="padding: 6px 12px;"><span style="font-size: 1.6em; font-family: Georgia, serif; line-height: 1;">&ldquo;</span> (U+201C)</td><td style="padding: 6px 12px;"><span style="font-size: 1.6em; font-family: Georgia, serif; line-height: 1;">&rdquo;</span> (U+201D)</td></tr>
+  <tr><td style="padding: 6px 12px;">Second level</td><td style="padding: 6px 12px;"><span style="font-size: 1.6em; font-family: Georgia, serif; line-height: 1;">&lsquo;</span> (U+2018)</td><td style="padding: 6px 12px;"><em>(leave blank)</em></td><td style="padding: 6px 12px;"><span style="font-size: 1.6em; font-family: Georgia, serif; line-height: 1;">&rsquo;</span> (U+2019)</td></tr>
+  <tr><td style="padding: 6px 12px;">Third level</td><td style="padding: 6px 12px;"><span style="font-size: 1.6em; font-family: Georgia, serif; line-height: 1;">&ldquo;</span> (U+201C)</td><td style="padding: 6px 12px;"><em>(leave blank)</em></td><td style="padding: 6px 12px;"><span style="font-size: 1.6em; font-family: Georgia, serif; line-height: 1;">&rdquo;</span> (U+201D)</td></tr>
+</table>
+
+<p><strong>Steps:</strong></p>
+<ol>
+  <li>Click the dropdown (&#9660;) on the <strong>Opening</strong> cell for First level. Select &ldquo; (Left double quotation mark, U+201C).</li>
+  <li>Click the dropdown on the <strong>Quote Continuer at new paragraph</strong> cell for First level. Select &ldquo; (U+201C) &mdash; the same character as the Opening mark.</li>
+  <li>Click the dropdown on the <strong>Closing</strong> cell for First level. Select &rdquo; (Right double quotation mark, U+201D).</li>
+  <li>Repeat for Second level: Opening = &lsquo; (U+2018), Continuer = blank, Closing = &rsquo; (U+2019).</li>
+  <li>Repeat for Third level: Opening = &ldquo; (U+201C), Continuer = blank, Closing = &rdquo; (U+201D).</li>
+  <li>Check the <strong>Example</strong> section at the bottom of the dialog. The sample text should show &ldquo;&hellip;&lsquo;&hellip;&rsquo;&hellip;&rdquo; &mdash; curly double quotes at the outer level and curly single quotes for embedded speech.</li>
+  <li>Click <strong>OK</strong>.</li>
+</ol>
+
+<p>Tamba uses English-style curly quotes at all three levels. First level speech that spans a paragraph break repeats the opening mark &ldquo; (U+201C) as a Quote Continuer at the head of each new paragraph; the closing mark &rdquo; (U+201D) appears only once, at the very end of the whole speech. Second and Third level have no continuer &mdash; a quotation at either of those levels that spans a paragraph break closes fully and reopens fully at each new paragraph instead.</p>
+
+<p><strong>TIP:</strong> Hover over any column or row label ("Opening", "Closing", "Quotes (First level)", etc.) to see a description of that field in the status bar at the bottom of the dialog.</p>
+
+<h3>Exercise 2.2 &mdash; Enter quote marks for Runda</h3>
+
+<p>Open the Runda project and navigate to &#9776; &gt; Project settings &gt; Quotation Rules &gt; Quote marks tab.</p>
+
+<p>Runda is a new project with no quote marks configured. Enter the following settings:</p>
+
+<table border="1" style="border-collapse: collapse;">
+  <tr><th style="padding: 6px 12px;">Level</th><th style="padding: 6px 12px;">Opening</th><th style="padding: 6px 12px;">Quote Continuer at new paragraph</th><th style="padding: 6px 12px;">Closing</th></tr>
+  <tr><td style="padding: 6px 12px;">First level</td><td style="padding: 6px 12px;"><span style="font-size: 1.6em; font-family: Georgia, serif; line-height: 1;">&laquo;</span> (U+00AB)</td><td style="padding: 6px 12px;"><span style="font-size: 1.6em; font-family: Georgia, serif; line-height: 1;">&laquo;</span> (U+00AB)</td><td style="padding: 6px 12px;"><span style="font-size: 1.6em; font-family: Georgia, serif; line-height: 1;">&raquo;</span> (U+00BB)</td></tr>
+  <tr><td style="padding: 6px 12px;">Second level</td><td style="padding: 6px 12px;"><span style="font-size: 1.6em; font-family: Georgia, serif; line-height: 1;">&lsquo;</span> (U+2018)</td><td style="padding: 6px 12px;"><em>(leave blank)</em></td><td style="padding: 6px 12px;"><span style="font-size: 1.6em; font-family: Georgia, serif; line-height: 1;">&rsquo;</span> (U+2019)</td></tr>
+  <tr><td style="padding: 6px 12px;">Third level</td><td style="padding: 6px 12px;"><em>(leave blank)</em></td><td style="padding: 6px 12px;"><em>(leave blank)</em></td><td style="padding: 6px 12px;"><em>(leave blank)</em></td></tr>
+</table>
+
+<p>Runda uses French-style guillemets at the first level with no continuation mark at the second level.</p>
+
+<p><strong>Steps:</strong></p>
+<ol>
+  <li>Click the dropdown arrow (&#9660;) on the <strong>Opening</strong> cell for First level. Select &laquo; from the list.</li>
+  <li>Click the dropdown arrow on the <strong>Quote Continuer at new paragraph</strong> cell for First level. Select &laquo;.</li>
+  <li>Click the dropdown arrow on the <strong>Closing</strong> cell for First level. Select &raquo;.</li>
+  <li>Click the dropdown arrow on the <strong>Opening</strong> cell for Second level. Select &lsquo; (U+2018).</li>
+  <li>Click the dropdown arrow on the <strong>Closing</strong> cell for Second level. Select &rsquo; (U+2019).</li>
+  <li>Leave all Third level cells at <strong>*none*</strong>.</li>
+  <li>Check the <strong>Example</strong> section at the bottom of the dialog. You should see &laquo;...&raquo; for First level speech and &lsquo;...&rsquo; for embedded speech.</li>
+  <li>Click <strong>OK</strong>.</li>
+</ol>
+
+<p><img src="Images/ss-L227-runda-quote-marks.png" alt="The Quote marks tab for Runda after entry, showing left and right guillemets in First level cells and the Second level Opening/Closing filled." style="max-width: 100%;"></p>
+
+<p><strong>&#9999;&#65039; Compare.</strong> Runda and Tamba both fill the Quote Continuer cell at First level &mdash; Runda with &laquo;, Tamba with &ldquo; &mdash; because both languages repeat the opening mark at the start of each continued paragraph rather than closing and reopening. Now compare Second level: both leave it blank there, since embedded quotations in both languages close and reopen fully rather than continuing across a paragraph break. The convention table drives the configuration &mdash; never the other way around, so don't assume one language's pattern applies to another, or that every nesting level within the same language behaves the same way.</p>
+
+<h3>Exercise 2.3 &mdash; The word-medial punctuation conflict (and its limit)</h3>
+
+<p>Recall from the Content section: some languages use the same character as a <strong>closing mark</strong> at the single-quote level <em>and</em> as an <strong>apostrophe</strong> within words. Paratext has a field that looks designed for exactly this &mdash; but verified against real Paratext 9.5 behavior, it does not actually resolve the conflict when that character is also a quote mark. This exercise walks you through the setting so you can see that limitation firsthand, rather than assuming it works because the field exists.</p>
+
+<p><strong>&#9776; &gt; Project settings &gt; Language Settings</strong>, then click the <strong>Other Characters</strong> tab. This tab has a <strong>Word-medial punctuation</strong> field. Its own help text says any character listed there is treated as part of a word when it appears between two alphabetic characters, so the checker should not misread it as a closing mark.</p>
+
+<p><img src="Images/ss-L241-language-settings-other-chars.png" alt="The Language Settings dialog open on the Other Characters tab, showing the Word-medial punctuation field with a right single quotation mark entered." style="max-width: 100%;"></p>
+
+<p><strong>Where this genuinely helps:</strong> punctuation characters that are <em>not</em> also configured as a quote mark &mdash; a hyphen used word-medially, for instance. Paratext will warn you if you enter a character here that's also registered as a quote mark in Quotation Rules ("unique characters are recommended"); that warning is a real signal, not just caution &mdash; it means the setting won't do what you're about to try to use it for.</p>
+
+<p><strong>Do it (Runda):</strong> Runda uses &rsquo; (U+2019) as its Second level closing mark. Suppose Runda also uses &rsquo; as an apostrophe &mdash; a genuine collision.</p>
+
+<ol>
+  <li>Navigate to &#9776; &gt; Project settings &gt; Language Settings &gt; Other Characters tab.</li>
+  <li>In the <strong>Word-medial punctuation</strong> field, enter &rsquo; (U+2019). Paratext will warn that this character is already a quote mark. Confirm through the warning and click <strong>OK</strong> anyway.</li>
+  <li>Re-run the quotation check (a full re-run, not just "Rerun" on an already-open results panel) on a chapter that has both apostrophes and single-quote speech.</li>
+  <li><strong>Observe that the apostrophes are still flagged.</strong> The check keeps reporting "Closing quote found as a word medial character" for every genuine apostrophe, exactly as before you added the setting. This is the expected, confirmed outcome &mdash; not a sign you configured something wrong.</li>
+</ol>
+
+<p><strong>What to do instead, in real triage:</strong> treat each of these results as a known false positive. Open the verse, confirm the flagged character really is a word-medial apostrophe (not an actual unclosed quotation), and move on &mdash; there is no setting that will make the result disappear. Document this for whoever inherits the project, so a future checker doesn't waste time hunting for a fix that doesn't exist.</p>
+
+<p><strong>If the orthography is still being decided:</strong> this is the one situation where the team has a real fix available &mdash; Paratext's own warning when you enter &rsquo; into Word-medial punctuation ("unique characters are recommended") is pointing at it. Recommend the language team adopt a different, unique character for the apostrophe (or, less commonly, for the closing mark) so the two roles never collide. That's a project-level decision for the translation team to make, not something you configure your way around &mdash; but it's worth raising if the orthography isn't locked in yet, since it's the only path that actually eliminates the false positives rather than just documenting them.</p>
+
+<div style="background-color: #e8f5e9; border-left: 4px solid #4caf50; padding: 12px 16px; margin: 16px 0;">
+  <p style="margin: 0;"><strong>TIP</strong> A good concrete recommendation: <strong>&#700; (U+02BC MODIFIER LETTER APOSTROPHE)</strong>. It's the character the Unicode Standard itself recommends for an apostrophe functioning as a letter &mdash; marking a glottal stop or similar &mdash; as distinct from &rsquo; (U+2019), which is meant for punctuation (closing a quotation, or a generic typographic apostrophe in running prose). Visually it's a small raised mark close in shape to &rsquo;, so the orthography doesn't change much for readers, but it's a completely different code point, so Paratext never confuses it with a configured quote mark. For example, a word written Kala&#700;u (U+02BC) would never generate a quotation result no matter what the Second level closing mark is configured to &mdash; compare that to Kala&rsquo;u (U+2019), which collides the moment &rsquo; is also a quote mark, exactly like Runda and Tamba above.</p>
+</div>
+
+<p><strong>Tamba scenario:</strong> Tamba's Second level closing mark is &rsquo; (U+2019). Tamba's Phase A text has no contractions or apostrophes, so this conflict never comes up there &mdash; but if Tamba's real orthography later needed apostrophes written with &rsquo;, this is the same unresolvable collision you just saw in Runda, not something a setting change would fix.</p>
+
+<p><strong>&#9999;&#65039; Produce this (a mentor will review it).</strong> After all three exercises, jot 2&ndash;3 sentences: which project(s) and level(s) needed a Quote Continuer and why, and what you observed when you tried the Word-medial punctuation fix for the apostrophe conflict &mdash; including that it did not suppress the check result. A mentor will check your configured Quote marks tabs against the convention tables in the course introduction.</p>
+
+<hr style="border: 2px solid black;">
+
+<p><img src="/files/7780768/change.png" alt="change" style="width: 145px; height: 194px;"></p>
+
+<p><strong>Self-assessment &mdash; can you explain it to a colleague?</strong></p>
+
+<div class="ui-flipbox ui-component" data-widget-type="flipbox" data-shape="square">
+<div class="flipbox-container" data-widget-part="flipbox-container" data-valign="center" style="height: 172px;">
+<div class="flipbox-inner">
+<div class="flipbox-front">
+<div class="flipbox-content" data-max-chars="250">
+<p><strong>Question 1</strong></p>
+<p>A language uses &laquo;&laquo; and &raquo;&raquo; for First level speech and &laquo; / &raquo; for Second level. Where do you enter these characters in PT 9.5?</p>
+</div>
+</div>
+<div class="flipbox-back">
+<div class="flipbox-content" data-max-chars="250">
+<p><strong>Answer</strong></p>
+<p>In the Quote marks tab (&#9776; &gt; Project settings &gt; Quotation Rules): &laquo;&laquo; in First level Opening, &raquo;&raquo; in First level Closing, &laquo; in Second level Opening, and &raquo; in Second level Closing.</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<div class="ui-flipbox ui-component" data-widget-type="flipbox" data-shape="square">
+<div class="flipbox-container" data-widget-part="flipbox-container" data-valign="center" style="height: 172px;">
+<div class="flipbox-inner">
+<div class="flipbox-front">
+<div class="flipbox-content" data-max-chars="250">
+<p><strong>Question 2</strong></p>
+<p>What is the Quote Continuer at new paragraph column for? Give an example of when you would leave it blank.</p>
+</div>
+</div>
+<div class="flipbox-back">
+<div class="flipbox-content" data-max-chars="250">
+<p><strong>Answer</strong></p>
+<p>The character repeated at the start of each new paragraph when one speech spans several paragraphs. Leave it blank when the language closes and reopens the marks at each paragraph break &mdash; as most Western European languages do.</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<div class="ui-flipbox ui-component" data-widget-type="flipbox" data-shape="square">
+<div class="flipbox-container" data-widget-part="flipbox-container" data-valign="center" style="height: 172px;">
+<div class="flipbox-inner">
+<div class="flipbox-front">
+<div class="flipbox-content" data-max-chars="250">
+<p><strong>Question 3</strong></p>
+<p>Your Second level closing mark is &rsquo; (U+2019). The check flags apostrophes inside words as unclosed quotations. Can configuration make this disappear &mdash; and if not, what do you do?</p>
+</div>
+</div>
+<div class="flipbox-back">
+<div class="flipbox-content" data-max-chars="250">
+<p><strong>Answer</strong></p>
+<p>No &mdash; Word-medial punctuation does not suppress it once &rsquo; is also a configured quote mark (confirmed on Paratext 9.5). Verify each flagged character is a genuine apostrophe and move past it as an expected false positive.</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<p><strong>&#9999;&#65039; Take it to your context.</strong> For one real language you support, write the three-row Quote marks table (First/Second/Third level, Opening / Continuer / Closing) as you believe it should be configured. Note any character that doubles as an apostrophe &mdash; that's your word-medial punctuation candidate.</p>
+
+<p><strong>Next step.</strong> The Quote marks tab tells Paratext <em>which characters</em> are quote marks. In Lesson 3 you give it the second input &mdash; the <strong>Quotation types</strong> tab, which tells the check <em>when</em> marks are expected for each kind of speech.</p>

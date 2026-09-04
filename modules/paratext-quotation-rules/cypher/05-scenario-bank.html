@@ -1,0 +1,333 @@
+<p>
+  <strong>Target Audience:</strong> Trainee Language Technology Consultants<br>
+  <strong>Duration:</strong> 90 minutes<br>
+  <strong>Level:</strong> With Assistance<br>
+  <strong>Framework:</strong> Learning That Lasts &mdash; applied practice (this module is the extended Challenge for the whole course)
+</p>
+
+<div style="border: 1px solid #d0d0d0; border-radius: 6px; padding: 16px 20px; margin: 16px 0; background-color: #fafafa;">
+  <h3 style="margin-top: 0;">Learning Objectives</h3>
+  <p>By the end of this scenario bank you will be able to apply the complete inventory + rules + check + triage workflow independently to an unfamiliar language scenario, including edge cases not covered in Lessons 1&ndash;4.</p>
+</div>
+
+<div style="background-color: #e3f2fd; border-left: 4px solid #2196f3; padding: 12px 16px; margin: 16px 0;">
+  <p style="margin: 0;"><strong>INFO</strong> Three independent scenarios, roughly 30 minutes each. Scenarios A and B are core practice; <strong>Scenario C (Waku em-dash) is an optional stretch</strong> for learners who complete A and B confidently. Do them in any order. Each uses its own fictional project &mdash; your facilitator distributes the practice projects.</p>
+</div>
+
+<p>These exercises use three new fictional projects. Each has a different quotation style. For each scenario follow the same four-step workflow &mdash; <strong>inventory &rarr; rules &rarr; check &rarr; triage</strong> &mdash; broken into eight concrete actions:</p>
+
+<p><strong>Inventory</strong></p>
+<ol>
+  <li>Read the language conventions table.</li>
+  <li>Answer the discovery prompts before configuring anything.</li>
+  <li>Open the Quote marks tab; the fields will be empty.</li>
+  <li>Enter the quote mark characters on the Quote marks tab.</li>
+</ol>
+
+<p><strong>Rules</strong></p>
+<ol start="5">
+  <li>Configure the Quotation types tab.</li>
+</ol>
+
+<p><strong>Check</strong></p>
+<ol start="6">
+  <li>Run the check (start with one book).</li>
+</ol>
+
+<p><strong>Triage</strong></p>
+<ol start="7">
+  <li>Triage the results to zero actionable errors.</li>
+  <li>Compare your configuration against the expected answer key.</li>
+</ol>
+
+<hr style="border: 2px solid black;">
+
+<h2>Scenario A &mdash; Guillemet (French style)</h2>
+
+<p><strong>Project:</strong> Velna New Testament (<code>velna</code>)</p>
+
+<p><strong>Velna quotation conventions:</strong></p>
+
+<table border="1" style="border-collapse: collapse;">
+  <tr><th style="padding: 6px 12px;">Level</th><th style="padding: 6px 12px;">Opening</th><th style="padding: 6px 12px;">Unicode</th><th style="padding: 6px 12px;">Closing</th><th style="padding: 6px 12px;">Unicode</th></tr>
+  <tr><td style="padding: 6px 12px;">First level</td><td style="padding: 6px 12px;"><span style="font-size: 1.6em; font-family: Georgia, serif; line-height: 1;">&laquo;</span></td><td style="padding: 6px 12px;">U+00AB</td><td style="padding: 6px 12px;"><span style="font-size: 1.6em; font-family: Georgia, serif; line-height: 1;">&raquo;</span></td><td style="padding: 6px 12px;">U+00BB</td></tr>
+  <tr><td style="padding: 6px 12px;">Second level</td><td style="padding: 6px 12px;"><span style="font-size: 1.6em; font-family: Georgia, serif; line-height: 1;">&lsquo;</span></td><td style="padding: 6px 12px;">U+2018</td><td style="padding: 6px 12px;"><span style="font-size: 1.6em; font-family: Georgia, serif; line-height: 1;">&rsquo;</span></td><td style="padding: 6px 12px;">U+2019</td></tr>
+</table>
+
+<p>No Third level. First level opening mark &laquo; also appears at the start of continued paragraphs.</p>
+
+<div class="ui-tabs ui-component" data-widget-type="tabs">
+<div class="tab-headers">
+<div class="tab-header active" data-widget-part="tab-header" data-widget-action="tab-switch" data-tab-index="0"><strong>&#9999;&#65039; Discovery prompts</strong></div>
+<div class="tab-header" data-widget-part="tab-header" data-widget-action="tab-switch" data-tab-index="1"><strong>Expected configuration</strong></div>
+<div class="tab-header" data-widget-part="tab-header" data-widget-action="tab-switch" data-tab-index="2"><strong>Check your work</strong></div>
+</div>
+<div class="tab-content active" data-widget-part="tab-content" data-tab-index="0" style="display: block !important;">
+<h3>Answer these before configuring anything</h3>
+<ul>
+  <li>Velna uses &rsquo; (U+2019) as both its Second level closing mark and as an apostrophe. Try adding &rsquo; to Word-medial punctuation as Lesson 2 taught &mdash; does it actually clear the resulting check result here too?</li>
+  <li>How would you verify that the text contains &laquo; (U+00AB) rather than &lt;&lt; (two less-than signs)?</li>
+</ul>
+</div>
+<div class="tab-content" data-widget-part="tab-content" data-tab-index="1" style="display: none !important;">
+<h3>Expected configuration</h3>
+<table border="1" style="border-collapse: collapse;">
+  <tr><th style="padding: 6px 12px;">Level</th><th style="padding: 6px 12px;">Opening</th><th style="padding: 6px 12px;">Quote Continuer at new paragraph</th><th style="padding: 6px 12px;">Closing</th></tr>
+  <tr><td style="padding: 6px 12px;">First level</td><td style="padding: 6px 12px;"><span style="font-size: 1.6em; font-family: Georgia, serif; line-height: 1;">&laquo;</span></td><td style="padding: 6px 12px;"><span style="font-size: 1.6em; font-family: Georgia, serif; line-height: 1;">&laquo;</span></td><td style="padding: 6px 12px;"><span style="font-size: 1.6em; font-family: Georgia, serif; line-height: 1;">&raquo;</span></td></tr>
+  <tr><td style="padding: 6px 12px;">Second level</td><td style="padding: 6px 12px;"><span style="font-size: 1.6em; font-family: Georgia, serif; line-height: 1;">&lsquo;</span></td><td style="padding: 6px 12px;"><em>(blank)</em></td><td style="padding: 6px 12px;"><span style="font-size: 1.6em; font-family: Georgia, serif; line-height: 1;">&rsquo;</span></td></tr>
+</table>
+
+<p><strong>Word-medial punctuation:</strong> add &rsquo; (U+2019) in &#9776; &gt; Project settings &gt; Language Settings &gt; Other Characters tab &gt; Word-medial punctuation &mdash; do this anyway, since it's the correct habit to build, but confirmed on a real Paratext 9.5 build, it will <strong>not</strong> stop the check from flagging Velna's word-medial apostrophes. That's expected: once &rsquo; is already a configured quote mark, this setting has no effect on it. Treat any remaining apostrophe results as verified false positives, not something left to configure away. Since Velna's orthography is fictional and effectively still "in development" for this exercise, this is also the right moment to raise the real fix with learners: if this were a live translation team's project, this is exactly when you'd recommend adopting a different, unique apostrophe character &mdash; Lesson 2 names &#700; (U+02BC MODIFIER LETTER APOSTROPHE) as a concrete option &mdash; rather than living with the collision indefinitely. Velna itself keeps &rsquo; for its apostrophes so the scenario still demonstrates the unresolvable case firsthand; the &#700; alternative is illustrated in Lesson 2's text, not built into this project.</p>
+
+<p><strong>Quotation types tab:</strong> confirmed on a real Paratext 9.5 build: Velna needs exactly <strong>one</strong> change from recommended defaults &mdash; <strong>Continued quotation = Use quote marks</strong> (the First level continuer means a mark is expected at every continued paragraph, same reasoning as Tamba in Lesson 3). Unlike Tamba, Velna has no narrator-citation, self-quote, or indirect-speech exceptions, so every other type &mdash; Normal, Quotation from another source, Self quote, Potential, Indirect, Hypothetical &mdash; stays at its recommended default.</p>
+</div>
+<div class="tab-content" data-widget-part="tab-content" data-tab-index="2" style="display: none !important;">
+<h3>Check your work</h3>
+<ul>
+  <li>After configuration, run the check on Luke. Verify that &laquo;...&raquo; speech boundaries are recognized correctly and narrative passages generate no results.</li>
+  <li>Confirm that apostrophes inside words (contractions, possessives) are still flagged even after configuring Word-medial punctuation &mdash; that's the expected, confirmed outcome for this collision, not a sign of a missing setting. Verify each is a genuine apostrophe and move on.</li>
+  <li>Confirm the First level Quote Continuer (&laquo;) at the start of continued paragraphs is not flagged as an unexpected mark.</li>
+  <li>Enable the Quotation types check and run it on Matthew, Luke, and John. It should return clean once Continued quotation is set to Use quote marks &mdash; this check is separate from the apostrophe results above, which live in the Quotations check and remain regardless.</li>
+</ul>
+</div>
+</div>
+
+<hr style="border: 2px solid black;">
+
+<h2>Scenario B &mdash; Angle-bracket guillemets (French/German style with nesting reversal)</h2>
+
+<p><strong>Project:</strong> Menda New Testament (<code>menda</code>)</p>
+
+<p><strong>Menda quotation conventions:</strong></p>
+
+<table border="1" style="border-collapse: collapse;">
+  <tr><th style="padding: 6px 12px;">Level</th><th style="padding: 6px 12px;">Opening</th><th style="padding: 6px 12px;">Unicode</th><th style="padding: 6px 12px;">Closing</th><th style="padding: 6px 12px;">Unicode</th></tr>
+  <tr><td style="padding: 6px 12px;">First level</td><td style="padding: 6px 12px;"><span style="font-size: 1.6em; font-family: Georgia, serif; line-height: 1;">&laquo;</span></td><td style="padding: 6px 12px;">U+00AB</td><td style="padding: 6px 12px;"><span style="font-size: 1.6em; font-family: Georgia, serif; line-height: 1;">&raquo;</span></td><td style="padding: 6px 12px;">U+00BB</td></tr>
+  <tr><td style="padding: 6px 12px;">Second level</td><td style="padding: 6px 12px;"><span style="font-size: 1.6em; font-family: Georgia, serif; line-height: 1;">&rsaquo;</span></td><td style="padding: 6px 12px;">U+203A</td><td style="padding: 6px 12px;"><span style="font-size: 1.6em; font-family: Georgia, serif; line-height: 1;">&lsaquo;</span></td><td style="padding: 6px 12px;">U+2039</td></tr>
+  <tr><td style="padding: 6px 12px;">Third level</td><td style="padding: 6px 12px;"><span style="font-size: 1.6em; font-family: Georgia, serif; line-height: 1;">&laquo;</span></td><td style="padding: 6px 12px;">U+00AB</td><td style="padding: 6px 12px;"><span style="font-size: 1.6em; font-family: Georgia, serif; line-height: 1;">&raquo;</span></td><td style="padding: 6px 12px;">U+00BB</td></tr>
+</table>
+
+<div style="background-color: #f5f5f5; border-left: 4px solid #9e9e9e; padding: 12px 16px; margin: 16px 0;">
+  <p style="margin: 0;"><strong>NOTE</strong> At Second level Menda uses <strong>single guillemets in reversed order</strong> &mdash; the &rsaquo; (U+203A, right-pointing) opens the embedded speech and &lsaquo; (U+2039, left-pointing) closes it. This is unusual and easy to get wrong. At Third level Menda returns to <strong>double guillemets</strong> &mdash; &laquo; opens and &raquo; closes, the same characters as First level. Third level is rare; John 19:21 is the key example.</p>
+</div>
+
+<p><img src="Images/ss-L560-menda-quote-marks.png" alt="The Quote marks tab for the Menda project, with Second level Opening set to a right-pointing single guillemet and Second level Closing set to a left-pointing one. The Example section at the bottom shows the marks in correct nested order." style="max-width: 100%;"></p>
+
+<div class="ui-tabs ui-component" data-widget-type="tabs">
+<div class="tab-headers">
+<div class="tab-header active" data-widget-part="tab-header" data-widget-action="tab-switch" data-tab-index="0"><strong>&#9999;&#65039; Discovery prompts</strong></div>
+<div class="tab-header" data-widget-part="tab-header" data-widget-action="tab-switch" data-tab-index="1"><strong>Expected configuration</strong></div>
+<div class="tab-header" data-widget-part="tab-header" data-widget-action="tab-switch" data-tab-index="2"><strong>Check your work</strong></div>
+</div>
+<div class="tab-content active" data-widget-part="tab-content" data-tab-index="0" style="display: block !important;">
+<h3>Answer these before configuring anything</h3>
+<ul>
+  <li>Why might it be confusing that the opening mark for Second level is the right-pointing single guillemet? What would happen if you entered it in the Closing field by mistake?</li>
+  <li>How would you verify which direction the single guillemet in the text actually points? (Hint: use the dropdown list on each field &mdash; hover each character option to read its name in the list.)</li>
+  <li>If a verse shows &laquo;Il a dit &rsaquo;oui&lsaquo;&raquo; and the check flags Second level as having incorrect marks, what is the most likely cause?</li>
+  <li>John 19:21 nests speech three levels deep. What characters does Menda use at the Third level, and what will the check report at 19:21 if the Third level cells are left blank?</li>
+</ul>
+</div>
+<div class="tab-content" data-widget-part="tab-content" data-tab-index="1" style="display: none !important;">
+<h3>Expected configuration</h3>
+<table border="1" style="border-collapse: collapse;">
+  <tr><th style="padding: 6px 12px;">Level</th><th style="padding: 6px 12px;">Opening</th><th style="padding: 6px 12px;">Quote Continuer at new paragraph</th><th style="padding: 6px 12px;">Closing</th></tr>
+  <tr><td style="padding: 6px 12px;">First level</td><td style="padding: 6px 12px;"><span style="font-size: 1.6em; font-family: Georgia, serif; line-height: 1;">&laquo;</span></td><td style="padding: 6px 12px;"><em>(blank)</em></td><td style="padding: 6px 12px;"><span style="font-size: 1.6em; font-family: Georgia, serif; line-height: 1;">&raquo;</span></td></tr>
+  <tr><td style="padding: 6px 12px;">Second level</td><td style="padding: 6px 12px;"><span style="font-size: 1.6em; font-family: Georgia, serif; line-height: 1;">&rsaquo;</span></td><td style="padding: 6px 12px;"><em>(blank)</em></td><td style="padding: 6px 12px;"><span style="font-size: 1.6em; font-family: Georgia, serif; line-height: 1;">&lsaquo;</span></td></tr>
+  <tr><td style="padding: 6px 12px;">Third level</td><td style="padding: 6px 12px;"><span style="font-size: 1.6em; font-family: Georgia, serif; line-height: 1;">&laquo;</span></td><td style="padding: 6px 12px;"><em>(blank)</em></td><td style="padding: 6px 12px;"><span style="font-size: 1.6em; font-family: Georgia, serif; line-height: 1;">&raquo;</span></td></tr>
+</table>
+
+<p>Continuation: none. Apostrophe handling: not needed &mdash; Menda's Quote marks tab does not use U+2019, so no Word-medial punctuation setting is required.</p>
+
+<p><strong>Quotation types tab:</strong> unlike Tamba (Lesson 3), Menda needs <strong>no customization at all</strong> &mdash; leave it on <strong>Use recommended settings</strong>. Confirmed on a real Paratext 9.5 build: with the Quotation types check enabled, Menda's text passes clean at the recommended defaults (Normal/Quotation from another source/Self quote = Use quote marks; Continued quotation = Never use quote marks; Potential/Indirect = Quote marks are optional; Hypothetical = Never use quote marks). Step 5 of the scenario workflow still applies &mdash; open the tab, tick the enable checkbox (administrator required), and verify with a check run &mdash; but for Menda that verification is the whole task; there is nothing to change.</p>
+</div>
+<div class="tab-content" data-widget-part="tab-content" data-tab-index="2" style="display: none !important;">
+<h3>Check your work</h3>
+<ul>
+  <li>Run the check on John (contains clear nested dialogue). Verify that &laquo;...&rsaquo;...&lsaquo;...&raquo; structures pass without errors.</li>
+  <li>If the check fires on every Second level opening mark, the Opening and Closing fields for Second level are likely reversed. Confirm which character is right-pointing (&rsaquo;) and which is left-pointing (&lsaquo;).</li>
+  <li>After entering Second level, check the Example section at the bottom. If &rsaquo; opens and &lsaquo; closes in the example, you have the correct order. The visual difference between &rsaquo; and &lsaquo; is easy to miss &mdash; use the Example to confirm before clicking OK.</li>
+  <li>John 19:21 contains Menda's rare Third level quotation. Verify it passes once Third level is configured &mdash; if 19:21 is flagged, the Third level cells are probably still empty.</li>
+  <li>Enable the Quotation types check and run it on John. It should return clean at recommended settings with no customization &mdash; if it doesn't, re-check your Quote marks tab entries first, since a character-level mistake there is more likely than a genuine need to customize types.</li>
+</ul>
+</div>
+</div>
+
+<hr style="border: 2px solid black;">
+
+<h2>Scenario C &mdash; Non-standard marks with continuation</h2>
+
+<p><strong>Project:</strong> Waku New Testament (<code>waku</code>)</p>
+
+<p><strong>Waku quotation conventions:</strong></p>
+
+<table border="1" style="border-collapse: collapse;">
+  <tr><th style="padding: 6px 12px;">Level</th><th style="padding: 6px 12px;">Opening</th><th style="padding: 6px 12px;">Unicode</th><th style="padding: 6px 12px;">Closing</th><th style="padding: 6px 12px;">Unicode</th></tr>
+  <tr><td style="padding: 6px 12px;">First level</td><td style="padding: 6px 12px;"><span style="font-size: 1.6em; font-family: Georgia, serif; line-height: 1;">&mdash;</span></td><td style="padding: 6px 12px;">U+2014</td><td style="padding: 6px 12px;"><span style="font-size: 1.6em; font-family: Georgia, serif; line-height: 1;">&mdash;</span></td><td style="padding: 6px 12px;">U+2014</td></tr>
+  <tr><td style="padding: 6px 12px;">Second level</td><td style="padding: 6px 12px;"><span style="font-size: 1.6em; font-family: Georgia, serif; line-height: 1;">&ldquo;</span></td><td style="padding: 6px 12px;">U+201C</td><td style="padding: 6px 12px;"><span style="font-size: 1.6em; font-family: Georgia, serif; line-height: 1;">&rdquo;</span></td><td style="padding: 6px 12px;">U+201D</td></tr>
+  <tr><td style="padding: 6px 12px;">Third level</td><td style="padding: 6px 12px;"><span style="font-size: 1.6em; font-family: Georgia, serif; line-height: 1;">&lsquo;</span></td><td style="padding: 6px 12px;">U+2018</td><td style="padding: 6px 12px;"><span style="font-size: 1.6em; font-family: Georgia, serif; line-height: 1;">&rsquo;</span></td><td style="padding: 6px 12px;">U+2019</td></tr>
+</table>
+
+<p>Waku uses an <strong>em dash</strong> (U+2014) for both the opening and closing mark at First level. Multi-paragraph speech does <em>not</em> restart the em dash &mdash; it uses a <strong>continuation mark</strong> of &mdash; (another em dash) at the start of each continued paragraph. Waku's word-medial apostrophe is &#700; (U+02BC MODIFIER LETTER APOSTROPHE), so the Third level closer &rsquo; (U+2019) creates no apostrophe collision.</p>
+
+<div class="ui-tabs ui-component" data-widget-type="tabs">
+<div class="tab-headers">
+<div class="tab-header active" data-widget-part="tab-header" data-widget-action="tab-switch" data-tab-index="0"><strong>&#9999;&#65039; Discovery prompts</strong></div>
+<div class="tab-header" data-widget-part="tab-header" data-widget-action="tab-switch" data-tab-index="1"><strong>Expected configuration</strong></div>
+<div class="tab-header" data-widget-part="tab-header" data-widget-action="tab-switch" data-tab-index="2"><strong>Check your work</strong></div>
+</div>
+<div class="tab-content active" data-widget-part="tab-content" data-tab-index="0" style="display: block !important;">
+<h3>Answer these before configuring anything</h3>
+<ul>
+  <li>When the same character is used for both opening and closing, how does Paratext know which is which? What rule does it rely on?</li>
+  <li>Waku uses the em dash as a continuation mark. Should the continuation mark be a different character from the opening mark, or can it be the same character? What happens if they are the same?</li>
+  <li>In a language where em dash is also used for parenthetical remarks (not speech), how would you expect the check to behave? Is there a way to address this?</li>
+</ul>
+</div>
+<div class="tab-content" data-widget-part="tab-content" data-tab-index="1" style="display: none !important;">
+<h3>Expected configuration</h3>
+<table border="1" style="border-collapse: collapse;">
+  <tr><th style="padding: 6px 12px;">Level</th><th style="padding: 6px 12px;">Opening</th><th style="padding: 6px 12px;">Quote Continuer at new paragraph</th><th style="padding: 6px 12px;">Closing</th></tr>
+  <tr><td style="padding: 6px 12px;">First level</td><td style="padding: 6px 12px;"><span style="font-size: 1.6em; font-family: Georgia, serif; line-height: 1;">&mdash;</span></td><td style="padding: 6px 12px;"><span style="font-size: 1.6em; font-family: Georgia, serif; line-height: 1;">&mdash;</span></td><td style="padding: 6px 12px;"><span style="font-size: 1.6em; font-family: Georgia, serif; line-height: 1;">&mdash;</span></td></tr>
+  <tr><td style="padding: 6px 12px;">Second level</td><td style="padding: 6px 12px;"><span style="font-size: 1.6em; font-family: Georgia, serif; line-height: 1;">&ldquo;</span></td><td style="padding: 6px 12px;"><em>(blank)</em></td><td style="padding: 6px 12px;"><span style="font-size: 1.6em; font-family: Georgia, serif; line-height: 1;">&rdquo;</span></td></tr>
+  <tr><td style="padding: 6px 12px;">Third level</td><td style="padding: 6px 12px;"><span style="font-size: 1.6em; font-family: Georgia, serif; line-height: 1;">&lsquo;</span></td><td style="padding: 6px 12px;"><em>(blank)</em></td><td style="padding: 6px 12px;"><span style="font-size: 1.6em; font-family: Georgia, serif; line-height: 1;">&rsquo;</span></td></tr>
+</table>
+
+<p>Continuation: &mdash; (em dash, same character) at First level only. The verified configuration also fills <strong>Continuer required at</strong> with <code>p p/q1 b/q1 m/q1</code> &mdash; the paragraph-marker contexts where the check must insist on the continuer. Copy it exactly; without it the check does not enforce the continuer at those paragraph breaks.</p>
+
+<p><img src="Images/ss-L156-waku-quote-marks.png" alt="The Quote marks tab for the Waku project, with the em dash in all three First level cells (Opening, Continuer, and Closing), curly double quotes at Second level, and curly single quotes at Third level. The Example section at the bottom shows the same em dash serving as opener, continuer, and closer in the preview text." style="max-width: 100%;"></p>
+
+<div style="background-color: #f5f5f5; border-left: 4px solid #9e9e9e; padding: 12px 16px; margin: 16px 0;">
+  <p style="margin: 0;"><strong>NOTE</strong> When the same character serves as both opener and closer, Paratext relies on structural context (paragraph markers, verse boundaries, and surrounding text flow) to determine which role the em dash plays. Because this context-based interpretation may not resolve every case unambiguously, human review of flagged em-dash results is always required for Waku.</p>
+</div>
+</div>
+<div class="tab-content" data-widget-part="tab-content" data-tab-index="2" style="display: none !important;">
+<h3>Check your work</h3>
+<ul>
+  <li>Run the check on Acts (extended speeches, heavy use of em-dash dialogue). Verify that multi-paragraph speeches with continuation marks do not generate "unclosed quote" errors.</li>
+  <li>Check a verse where em dash is used for a parenthetical aside (not speech). Does the check flag it? What is the correct response &mdash; fix the text (replace the em dash with different punctuation for the parenthetical), reconfigure if possible, or document in a Project Note for the consultant?</li>
+  <li>This scenario leaves results that cannot be eliminated by configuration alone &mdash; because Paratext cannot distinguish an em dash used as speech from one used as a parenthetical dash. Confirmed on a real Paratext 9.5 build, a correct configuration run against all books ends at <strong>seven results</strong>: six "found as a word medial character" results on genuine parenthetical em dashes (Mark 13:14 twice, 13:19, 13:22; Luke 9:3; Acts 3:1), plus one "Closing quote mark is possibly missing before verse 18:1" at John 17:26.</li>
+  <li>The John 17:26 result is a different residual class from the parentheticals: the text there is <em>correct</em> &mdash; Jesus's prayer (17:1&ndash;26) opens with &mdash;, carries the &mdash; continuer at every paragraph, and closes with &mdash; at the end of verse 26 &mdash; but with the same character serving as opener, closer, and continuer across a long multi-paragraph speech, Paratext's context-based tracking loses the open/close state and reports the speech as possibly unclosed. No text change fixes it without breaking Waku's convention. Verify the marks are all present, then document.</li>
+  <li>For all seven: consider whether the parenthetical verses can be reworded to use different punctuation. Where rewording is not feasible (and always for John 17:26, where the text is already correct), add a Project Note (&#9776; &gt; Insert &gt; Project note...) explaining the result so the consultant can verify during review.</li>
+</ul>
+
+<p><img src="Images/ss-L163-waku-residual-results.png" alt="The Quotations check results panel for Waku across all books, showing the seven residual results: word-medial em dash results in Mark 13, Luke 9:3, and Acts 3:1, plus the possibly-missing closing mark at John 17:26. Mark 13:14 is open alongside, showing its parenthetical em dashes in context." style="max-width: 100%;"></p>
+</div>
+</div>
+
+<hr style="border: 2px solid black;">
+
+<div style="border: 1px solid #d0d0d0; border-radius: 6px; padding: 16px 20px; margin: 16px 0; background-color: #fafafa;">
+  <h3 style="margin-top: 0;">Scenario Bank Summary</h3>
+  <ul>
+    <li>The same four-step workflow (inventory &rarr; rules &rarr; check &rarr; triage) applies to every language, however unusual its quotation conventions.</li>
+    <li>Always verify entered characters using the Example section at the bottom of the Quote marks tab &mdash; on unfamiliar languages it is easy to confuse visually similar characters.</li>
+    <li>Some languages (like Waku) will always require human review of residual results; zero configuration errors does not always mean zero results.</li>
+  </ul>
+</div>
+
+<h3>Scenario check-your-understanding</h3>
+
+<div class="ui-flipbox ui-component" data-widget-type="flipbox" data-shape="square">
+<div class="flipbox-container" data-widget-part="flipbox-container" data-valign="center" style="height: 172px;">
+<div class="flipbox-inner">
+<div class="flipbox-front">
+<div class="flipbox-content" data-max-chars="250">
+<p><strong>Question 1</strong></p>
+<p>For Menda you enter Second level Opening &lsaquo; and Closing &rsaquo;. The check fires on every Second level opening mark, and the Example shows the marks reversed. What went wrong, and what is the fix?</p>
+</div>
+</div>
+<div class="flipbox-back">
+<div class="flipbox-content" data-max-chars="250">
+<p><strong>Answer</strong></p>
+<p>The fields are swapped &mdash; Menda opens with &rsaquo; (U+203A) and closes with &lsaquo; (U+2039). Swap them and confirm in the Example section: &rsaquo; should open and &lsaquo; should close.</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<div class="ui-flipbox ui-component" data-widget-type="flipbox" data-shape="square">
+<div class="flipbox-container" data-widget-part="flipbox-container" data-valign="center" style="height: 172px;">
+<div class="flipbox-inner">
+<div class="flipbox-front">
+<div class="flipbox-content" data-max-chars="250">
+<p><strong>Question 2</strong></p>
+<p>In Scenario B you enter Second level as Opening: U+2039, Closing: U+203A &mdash; reversed from the correct order. What will the check report?</p>
+</div>
+</div>
+<div class="flipbox-back">
+<div class="flipbox-content" data-max-chars="250">
+<p><strong>Answer</strong></p>
+<p>It fires on every Second level mark: each opening &rsaquo; is read as an unexpected closer and each closing &lsaquo; as an unexpected opener. The entire Second level configuration shows up as errors.</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<div class="ui-flipbox ui-component" data-widget-type="flipbox" data-shape="square">
+<div class="flipbox-container" data-widget-part="flipbox-container" data-valign="center" style="height: 172px;">
+<div class="flipbox-inner">
+<div class="flipbox-front">
+<div class="flipbox-content" data-max-chars="250">
+<p><strong>Question 3</strong></p>
+<p>After Scenario C (Waku), 7 results remain &mdash; six parenthetical em dashes plus one "possibly missing" on a correct multi-paragraph speech. Configuration cannot clear them. What are your options?</p>
+</div>
+</div>
+<div class="flipbox-back">
+<div class="flipbox-content" data-max-chars="250">
+<p><strong>Answer</strong></p>
+<p>Reword parentheticals to different punctuation where feasible; otherwise (and always for John 17:26) add a Project Note to each verse so the consultant can verify. The results remain, but documented ones aren't mistaken for unreviewed errors.</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<hr style="border: 2px solid black;">
+
+<h2>Where to Go from Here</h2>
+
+<h3>How the Quotation check fits in the Paratext checking workflow</h3>
+
+<p>The Quotation check is one of the <strong>Basic Checks</strong> in Paratext 9.5 (run via <strong>&#9776; &gt; Tools &gt; Run basic checks...</strong>). Basic Checks are typically run and cleared before a book moves to Consultant Check (CC). A consultant reviewer will re-run the checks during review, so the goal is a configuration that genuinely models the language &mdash; not a result list silenced by editing correct text.</p>
+
+<p>The recommended sequence for a book heading toward CC:</p>
+
+<ol>
+  <li>Run all Basic Checks (Quotations, Characters, Markers, Footnotes, and others).</li>
+  <li>Clear each check to zero results by fixing text errors and refining the configuration.</li>
+  <li>Where a residual result cannot be cleared by configuration (see Scenario C), document it with a Project Note so the consultant can verify it quickly.</li>
+</ol>
+
+<p>The Quotation check does not need to be perfect before work continues, but it must be clean before CC begins.</p>
+
+<h3>Maintaining the configuration over time</h3>
+
+<p>Quotation Rules are set once per project and persist across sessions, but they need attention when:</p>
+
+<ul>
+  <li><strong>New text is added.</strong> Re-run the check after each significant drafting session; new text may introduce new errors.</li>
+  <li><strong>A new translator joins.</strong> Check whether they are typing the correct Unicode characters. Open the Quote marks tab and use the dropdown on each field to confirm the selected character, or check the Example section &mdash; if the marks look wrong in the example, a find-and-replace on the new chapters may be needed.</li>
+  <li><strong>A new book is started.</strong> Some books (like Psalms, Proverbs, or Revelation) have different poetry/prose ratios. Re-run the check after completing the first draft to confirm that poetry lines (\q, \q2) are not generating false quotation results.</li>
+</ul>
+
+<h3>Copying Quotation Rules to another project</h3>
+
+<p>If your language has more than one translation project (for example, a study Bible alongside the main translation), you do not need to reconfigure the Quote marks tab from scratch. Paratext 9.5 can copy settings from a base project:</p>
+
+<p>Open <strong>&#9776; &gt; Project settings &gt; Quotation Rules</strong> on the destination project. At the bottom of the dialog, click <strong>Copy quote mark settings...</strong> and select the already-configured project as the source. Review every field after copying &mdash; differences in verse structure or text conventions between the two projects may require adjustments.</p>
+
+<h3>What a well-configured project looks like</h3>
+
+<p>A project with correctly configured Quotation Rules will:</p>
+
+<ul>
+  <li>Return zero results in purely narrative passages with no speech.</li>
+  <li>Return zero results on apostrophes and possessives.</li>
+  <li>Flag only genuine mismatches &mdash; missing marks, extra marks, wrong-level marks &mdash; in speech sections.</li>
+  <li>Have any residual results (where the same character serves two linguistic purposes and configuration cannot distinguish them) documented in Project Notes (&#9776; &gt; Insert &gt; Project note...) so a consultant reviewer can verify them without asking for clarification.</li>
+</ul>
+
+<p>Reaching that state is what this course has prepared you to do.</p>

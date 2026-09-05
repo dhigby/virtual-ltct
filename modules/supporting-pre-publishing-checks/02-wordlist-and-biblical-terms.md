@@ -11,8 +11,9 @@ fix without touching their keyboard.
 
 - You will be able to recognize a wordlist that has been blanket-approved rather than
   genuinely reviewed, and coach a team to reset it and re-run the check honestly.
-- You will be able to diagnose the no-selection rendering error in Biblical Terms and
-  coach the team to correct it.
+- You will be able to recognize incomplete or stale Biblical Terms coverage — blank
+  renderings presented as done, and stale/duplicate renderings left uncleaned — and coach
+  the team to genuinely complete and clean up the list.
 - You will be able to diagnose a Project Biblical Terms list that has been over-added-to
   and is causing Send/Receive or performance slowdowns, and advise the team on
   right-sizing it.
@@ -49,18 +50,45 @@ the translator does the actual review and correction.
 > bulk, and whether any errors were denied rather than resolved. A clean-looking status
 > bar tells you nothing about which of those happened.
 
-**Biblical Terms: the no-selection rendering error.** A narrower, more mechanical
-problem, but a real one: a team can add a term's rendering in the Biblical Terms tool
-without first **selecting** the correct word or phrase in the text. When nothing is
-selected, Paratext defaults to grabbing the **first word of the verse** as the
-rendering — which is very often wrong, and easy for a team to miss because the tool
-still records *something* as the rendering.
+**Biblical Terms: blank renderings are the default starting state.** Every term in
+Paratext's Biblical Terms tool starts out with a gloss (in English, or the source
+language for a localized instance) and a **blank rendering** — shown highlighted (e.g.
+orange in the UI) with placeholder text like "Double click to enter rendering(s) from
+project text." This isn't a bug or a trap the tool is setting for the team; it's simply
+the tool's normal starting state, and the task is straightforward: work through the
+list and add the appropriate rendering for each term from the project's own text.
 
-To diagnose it: look for renderings that don't plausibly match the term's meaning, and
-check whether they happen to be a verse's opening word. To coach the fix: have the
-team **select the correct text in the verse**, **add the correct rendering**, then
-**delete the bad (no-selection) rendering** — the team does this themselves, at their
-own keyboard.
+Where this becomes a false-clean risk is the same pattern as the wordlist above: a team
+can present a partially-completed Biblical Terms list as "done" without having actually
+gone through and filled in every term. The check that catches this isn't eyeballing the
+list — it's the **Found** column/count on each row (e.g. "2/2" found vs. a row that's
+still blank or unfilled). To diagnose it: open the list and check the Found count row by
+row rather than trusting a general "we did the Biblical Terms" claim. To coach the fix:
+have the team work through the remaining blank rows themselves, entering renderings from
+their own project text.
+
+**Biblical Terms: stale or duplicate renderings piling up.** A separate, related
+problem: a term can accumulate a long list of multiple candidate renderings, most of
+which are no longer actually found in the current text — for example, an old (and
+possibly wrong) rendering left in place after a correct one was added later, without
+ever deleting the original. This clutters the list and can make it hard to tell which
+rendering is the team's current, intended one.
+
+To diagnose it: look for terms carrying several renderings and check which ones the
+Found count shows as still present in the text versus which are stale leftovers. To
+coach the fix: have the team review the full rendering list for a term, confirm which
+rendering(s) are current and correct, and remove the stale ones themselves — you're
+coaching this, not doing it at their keyboard.
+
+> **NOTE:** A related pattern was reported once in the SME interview behind this
+> course — a rendering that looked like it might have been auto-filled with a verse's
+> first word when nothing was selected in the text. It's only been seen the one time, in
+> one project, has never been reproduced since, and hasn't been confirmed as an actual
+> Paratext behavior (a query is open with support.bible). Worth being aware of if you
+> ever see something that looks like it, but it's not yet an established field pattern —
+> don't teach it as "the" cause of an implausible rendering. The confirmed, reproducible
+> patterns above (blank rows, stale duplicates) are what you should actually expect to
+> encounter and check for.
 
 **Biblical Terms: Project list bloat and performance.** A separate problem with the
 same tool: a consultant **added the entire "All Biblical Terms" list into the
@@ -87,8 +115,10 @@ way in another.
 **Key takeaways**
 - A clean wordlist status can hide mass-approval or denied errors — re-run the check to
   find out, and reset entries the team hasn't genuinely reviewed.
-- The no-selection rendering error comes from adding a rendering without selecting the
-  correct text first; the fix is delete, select correctly, re-add.
+- Blank renderings are Biblical Terms' normal starting state, not a bug — check the
+  Found column/count to confirm a list is genuinely complete, not just look clean.
+- Stale or duplicate renderings can pile up on a term over time; coach the team to
+  review and remove the ones no longer found in the text.
 - Project Biblical Terms bloat causes real Send/Receive slowdowns, and the cause is
   often hard for a team to accept without a clear explanation.
 

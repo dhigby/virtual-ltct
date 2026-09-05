@@ -241,15 +241,23 @@ the team is asking the LTC to "just sort it out."
 Score this one in three parts — each sub-item maps to its own secondary objective, and a
 learner can be strong on one and weak on another.
 
-**Biblical Terms rendering (Objective 3):** watch for the learner naming the
-no-selection rendering error specifically — the team added a term's rendering without first
-*selecting* the correct text, so Paratext auto-grabbed the verse's first word — and
-describing how to confirm it (checking what text was actually selected/highlighted when
-the rendering was added, or simply looking at whether the "rendering" is just the verse's
-opening word regardless of the term). Marker **(b)**: diagnose the actual cause. The fix —
-deleting the bad rendering, then selecting the correct text and adding it properly — should
-be described as something the learner **coaches the team through**, not performs on the
-team's keyboard (marker **(c)**).
+**Biblical Terms list (Objective 3):** watch for the learner recognizing two distinct,
+confirmed patterns rather than reaching for a single "gotcha" mechanism. First,
+incomplete coverage: rows still showing the blank/highlighted placeholder state
+("Double click to enter rendering(s)…") mean those terms simply haven't been given a
+rendering yet — this is the tool's normal starting state, not a bug — and the way to
+confirm genuine completion is checking the **Found** column/count row by row, not
+trusting a "we're done" claim at face value. Second, stale/duplicate renderings: a term
+carrying several candidate renderings, most no longer found in the current text,
+signals an old rendering left in place after a correct one was added later without
+deleting the original. Marker **(b)**: diagnose the actual cause for each, rather than
+treating the list as simply wrong. The fix in both cases — filling in the remaining
+blank rows, and reviewing/removing stale renderings — should be described as something
+the learner **coaches the team through**, not performs on the team's keyboard (marker
+**(c)**). A learner who confidently names "the no-selection rendering error" as the
+mechanism here has overreached: that pattern was reported once by the SME, has never
+been reproduced since, and isn't confirmed with Paratext support — it shouldn't be
+taught or scored as the established cause.
 
 **Send/Receive slowdown (Objective 4):** watch for the learner correctly identifying that
 the cause is **adding** the full "All Biblical Terms" list into the *project's* Biblical

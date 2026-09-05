@@ -194,7 +194,9 @@ sort it out."
 **Situation:** A team going into their final formatting and layout push has three
 separate things going on:
 
-- A Biblical Terms rendering that looks implausible for the term it's attached to.
+- A Biblical Terms list the team calls "done," but several rows are still showing the
+  blank/highlighted placeholder state, and one term carries multiple candidate
+  renderings, most no longer found in the current text.
 - Send/Receive has become noticeably slower over the last month; the team mentions,
   almost in passing, that they added the full "All Biblical Terms" reference list to the
   project to make consulting terms easier.
@@ -206,11 +208,12 @@ separate things going on:
 unrelated, minor asks.
 
 **Your task:**
-1. **Diagnose:** For the Biblical Terms rendering, what would you check to determine
-   whether this is the no-selection rendering error, and how would you confirm it? For the
-   Send/Receive slowdown, what's the actual cause, and why is it not simply "having a big
-   list open"? For the layout question, what should determine the choice instead of word
-   length alone?
+1. **Diagnose:** For the Biblical Terms list, what would you check to determine whether
+   the "done" claim is genuine — and separately, what would you check to confirm which of
+   a term's several candidate renderings is actually current versus a stale leftover? For
+   the Send/Receive slowdown, what's the actual cause, and why is it not simply "having a
+   big list open"? For the layout question, what should determine the choice instead of
+   word length alone?
 2. **Say to the team:** For each of the three, write what you'd say to the team —
    including how you'd explain the Send/Receive cause to a team that's skeptical the two
    things (adding terms, slower Send/Receive) are connected, and how you'd establish the

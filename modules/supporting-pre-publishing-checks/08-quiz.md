@@ -9,7 +9,7 @@ Questions are weighted toward the course's core objectives (confirming the paral
 passage check and the separate Numbers and Measures checks, formatting diagnosis,
 glossary/layout, and the final read-through and escalation judgment), with the secondary
 objectives (false-clean
-recognition, the no-selection rendering error in Biblical Terms, Project Biblical Terms bloat, and the
+recognition, incomplete/stale Biblical Terms coverage, Project Biblical Terms bloat, and the
 layout/hyphenation decision) still represented. This quiz can assess recognition and
 diagnostic reasoning — it can't assess live coaching. The mentor-reviewed scenario bank
 (`06-scenario-bank.md`) is what earns this course's `3 - Independent` claim.
@@ -46,19 +46,24 @@ flags are marked denied. What does this pattern most likely indicate?
 - C) The check tool malfunctioned
 - D) The team used an outdated wordlist
 
-**Question 5:** What causes the no-selection rendering error in Biblical Terms?
-- A) A software glitch in Paratext
-- B) Adding a rendering without first selecting the correct word or phrase in the text
-- C) Importing terms from an outdated list
-- D) Confusing the Numbers check with the Measures check
+**Question 5:** A team tells you their Biblical Terms list is done. You open it and see
+several rows still highlighted with placeholder text ("Double click to enter
+rendering(s) from project text") and a Found count of "0" or blank. What does this
+indicate?
+- A) A software glitch that needs a support ticket
+- B) Those terms are still at Biblical Terms' normal blank starting state and haven't
+  actually been given a rendering yet
+- C) The terms have been correctly resolved and the blank display is just a display quirk
+- D) The team accidentally deleted those renderings
 
-**Question 6:** While reviewing Biblical Terms renderings, you notice several
-renderings that don't plausibly match a term's meaning, and each happens to be the
-opening word of its verse. What should the team do to fix this?
-- A) Manually retype the rendering as free text
-- B) Select the correct text in the verse, add the correct rendering, then delete the bad rendering
+**Question 6:** While reviewing a Biblical Terms list, you notice one term has several
+candidate renderings listed, but the Found count shows only one of them as actually
+present in the current text. What should the team do?
+- A) Leave all the renderings in place, since more options can only help
+- B) Review the full rendering list for that term, confirm which rendering is current
+  and correct, and remove the stale ones no longer found in the text
 - C) Delete the term from the Biblical Terms list entirely
-- D) Ignore it, since renderings default correctly most of the time
+- D) Manually retype the rendering as free text
 
 **Question 7:** A team reports Send/Receive has become noticeably slower, and mentions
 they added the entire "All Biblical Terms" reference list to the Project's Biblical

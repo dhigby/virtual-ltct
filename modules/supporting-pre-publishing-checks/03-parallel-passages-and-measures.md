@@ -91,9 +91,9 @@ which follows the same reframed pattern as parallel passages:
   team's documented approach, or inconsistency between two occurrences of the same
   measure — **refer it back to the team to resolve**, rather than deciding what the
   correct rendering should be yourself.
-- Numbers and Measures appear as **separate entries** in Paratext's Biblical Terms list
-  panel, alongside other unrelated lists (Major Biblical Terms, All Biblical Terms, NT
-  Key Biblical Terms, Inclusive/Exclusive Pronouns, Younger/Older Siblings, and others)
+- Numbers and Measures appear as **separate entries** in Paratext's Open Biblical Terms
+  List dialog, alongside other unrelated lists (Major Biblical Terms, All Biblical Terms,
+  NT Key Biblical Terms, Inclusive/Exclusive Pronouns, Younger/Older Siblings, and others)
   — there is no single combined list to point a team at. Don't assume a project's
   terminology or available lists match what you've seen elsewhere; confirm what's
   actually present in that project's version.

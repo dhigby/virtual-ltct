@@ -247,11 +247,15 @@ cases were added in this review round; the stories below are unchanged.
    consultant both advises a publishing-layout decision *and* does the technical setup —
    confirming Digital and Print Publishing is honestly earned by this course.
 6. A consultant **added the entire "All Biblical Terms" list into the Project's Biblical Terms**
-   (not just selected it for viewing). The slowdown came specifically from adding the terms to
-   the *project* — bloating the project and slowing Send/Receive — not from merely viewing a
-   large list. It was **hard to convince the team of the actual cause**. The support skill here is
-   diagnosing a configuration-caused performance problem and advising the team to right-size the
-   project's Biblical Terms list.
+   (not just selected it for viewing). Per Paratext's own help documentation, "All Biblical
+   Terms" lists every Greek, Hebrew, and Aramaic term occurring 500 times or less — potentially
+   tens of thousands of entries depending on project scope (the SME observed one whole-Bible
+   project with around 20,000 entries in this list) — versus "Major Biblical Terms," a curated
+   subset of over 8,500 terms organized into semantic domains. The slowdown came specifically
+   from adding the terms to the *project* — bloating the project and slowing Send/Receive — not
+   from merely viewing a large list. It was **hard to convince the team of the actual cause**.
+   The support skill here is diagnosing a configuration-caused performance problem and advising
+   the team to right-size the project's Biblical Terms list.
 
 7. **(Added 2026-08-28, Kevin Nicholas, post-approval comment on issue #40 — confirmed
    by Kevin Nicholas on 2026-08-28, PR #43.)** Kevin spent significant time,

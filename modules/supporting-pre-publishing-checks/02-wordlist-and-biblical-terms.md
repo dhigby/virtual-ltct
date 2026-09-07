@@ -93,11 +93,21 @@ coaching this, not doing it at their keyboard.
 **Biblical Terms: Project list bloat and performance.** A separate problem with the
 same tool: a consultant **added the entire "All Biblical Terms" list into the
 Project's Biblical Terms list** — not merely selecting it for viewing, but adding every
-term into the project itself. The slowdown that followed (in Send/Receive and general
-performance) came specifically from that addition to the *project* list, not from
-viewing a large list. The SME interview noted this cause was **hard to convince the
+term into the project itself. To see why that's a much bigger addition than it sounds,
+it helps to know what's actually in each list, per Paratext's own help documentation:
+"All Biblical Terms" lists every Greek, Hebrew, and Aramaic term occurring 500 times or
+less in the original text — potentially tens of thousands of entries depending on the
+project's scope (the SME has observed a whole-Bible project where this list ran to
+around 20,000 entries). "Major Biblical Terms," by contrast, is a curated subset of
+just over 8,500 terms, organized into semantic domains. Adding the *entire* "All
+Biblical Terms" list into a project, rather than working from the curated "Major"
+list, means loading tens of thousands of entries instead of a few thousand — and that
+scale difference is exactly what turns into a Send/Receive and performance problem. The
+slowdown that followed came specifically from that addition to the *project* list, not
+from viewing a large list. The SME interview noted this cause was **hard to convince the
 team of** — the connection between "we added a big list of terms" and "Send/Receive is
-now slow" is not obvious to a non-technical team.
+now slow" is not obvious to a non-technical team, especially when the sheer scale (tens
+of thousands of entries) isn't visible or intuitive from inside the tool.
 
 Diagnosing this means checking whether the Project Biblical Terms list has been
 expanded well beyond the terms the project actually uses, and advising the team to

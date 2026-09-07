@@ -49,6 +49,22 @@
 > These two new findings are already confirmed and do not need to wait on support.bible; only the
 > no-selection/auto-grab mechanism itself remains pending.
 
+> **Amendment, Stage 5 SME fact-check pass, 2026-09-08 (Jenni Beadle) — terminology/attribution
+> correction, no re-approval needed:** Field case 1 ("denied errors") is a **Basic Checks**
+> case — Basic Checks results have their own real accept/deny mechanism. It had been conflated
+> into the wordlist/Biblical Terms module (`02-wordlist-and-biblical-terms.md`) alongside field
+> case 2 (wordlist blanket-approval), which is wrong: Paratext's spelling/wordlist status has
+> only three states — **Correct, Incorrect, Undecided** — there is no "deny" action for a word.
+> Corrected: field case 1 is now explicitly flagged as Basic Checks-specific in "SME knowledge
+> notes"; the `02-wordlist-and-biblical-terms.md` module-breakdown row no longer implies field
+> case 1 lives there and now describes its false-clean content using Correct/Incorrect/Undecided
+> terminology; the `04-formatting-and-references.md` row now incorporates field case 1 as its
+> concrete Basic Checks false-clean example; and the "Common mistakes" section's Wordlist/spelling
+> and Formatting & markup/Basic Checks bullets are corrected accordingly. Objective 1's wording is
+> generalized so it no longer implies "denied errors" is a wordlist-specific example. This is a
+> terminology/attribution fix only — objective 1 still covers the false-clean thread generally,
+> module scope and time estimates are unchanged, and no new approval is required.
+
 ## Outcome-level open question (resolve before approval)
 
 The `README.md` frontmatter and issue #40 both target `3 - Independent`, delivered self-paced
@@ -116,7 +132,7 @@ secondary objectives or their competency coverage.
 
 | # | Priority | Objective | Source | Assessed by |
 | --- | --- | --- | --- | --- |
-| 1 | Secondary* | Learner can recognize a "false-clean" check result — denied errors, a mass-approved wordlist, blanket-approved statuses — in any check area, and lead the team to reveal what was hidden, reset statuses, and re-run the check honestly | Translation Tools 2.0, `2 - With Assistance` — "Assist in training others on the use of translation tools" | Quiz + Scenario Bank (spine scenario) |
+| 1 | Secondary* | Learner can recognize a "false-clean" check result — denied Basic Checks errors, a mass-approved (blanket "Correct") wordlist status, or other blanket-approved statuses — in any check area, and lead the team to reveal what was hidden, reset statuses, and re-run the check honestly. (Denying an error is a Basic Checks–specific mechanism, distinct from wordlist/spelling status, which has only Correct/Incorrect/Undecided — see "SME knowledge notes.") | Translation Tools 2.0, `2 - With Assistance` — "Assist in training others on the use of translation tools" | Quiz + Scenario Bank (spine scenario) |
 | 2 | Core | Learner can confirm that a parallel-passage comparison check was actually run and its results reviewed by the team, flag passages the tool surfaces as inconsistent (by the tool's own comparison, not the learner's own linguistic judgment) back to the team for adjudication, and check that the team's own decisions about legitimate variation vs. over-harmonising — not the LTC's — are driving the resolution | Translation Tools 2.0, `2 - With Assistance` | Quiz + Scenario Bank |
 | 3 | Secondary | Learner can recognize incomplete Biblical Terms coverage — blank renderings (the tool's default starting state) presented as a finished list — by checking the Found column/count rather than eyeballing the list, recognize stale/duplicate renderings left in place after a correct rendering was added without deleting the original, and coach the team to complete and clean up the list — without taking over their keyboard. (A no-selection/auto-grab mechanism, where Paratext might fill an unselected rendering with the verse's first word, was reported once but is unconfirmed and pending a reply from support.bible as of 2026-09-06 — see "SME knowledge notes"; it is noted only as a secondary, currently-unconfirmed possibility, not the primary teaching point.) | Translation Tools 2.0, `2 - With Assistance` | Quiz + Scenario Bank |
 | 4 | Secondary | Learner can diagnose configuration-caused Send/Receive and performance slowdowns from over-adding terms to the *Project* Biblical Terms list, and advise the team on right-sizing it | Translation Tools 5.0 (Scripture Collaboration), `2 - With Assistance` — "Advise users in best-practices for collaboration and data safety... assist users to configure plans and tasks in a way that helps them" | Quiz + Scenario Bank |
@@ -166,9 +182,9 @@ each core check-area lesson instead of either a heavy standalone module or being
 | File | Topic | Objectives covered | Estimated minutes |
 | --- | --- | --- | --- |
 | `01-supporting-the-final-turn.md` | The translation process as a 6-stage spiral; Stage 6 as the final turn re-running earlier checks; the cross-cutting spine (false-clean results) introduced as a recurring watch-for, not a standalone topic; the consultant's role (diagnose, coach, never touch the keyboard); when to escalate | 1 (light touch), 10 | 35 |
-| `02-wordlist-and-biblical-terms.md` | Biblical Terms list completion and cleanup (secondary, condensed): recognizing blank renderings as the tool's normal default starting state and confirming genuine completion via the Found column/count rather than eyeballing the list; recognizing stale/duplicate renderings left in place after a correct rendering was added without deleting the original; the no-selection/auto-grab mechanism noted only briefly as an unconfirmed, pending possibility (see field case 4, revised 2026-09-06); Project Biblical Terms bloat and performance (secondary, condensed); recurring false-clean callout for this check area | 1 (callout), 3, 4 | 40 |
+| `02-wordlist-and-biblical-terms.md` | Biblical Terms list completion and cleanup (secondary, condensed): recognizing blank renderings as the tool's normal default starting state and confirming genuine completion via the Found column/count rather than eyeballing the list; recognizing stale/duplicate renderings left in place after a correct rendering was added without deleting the original; the no-selection/auto-grab mechanism noted only briefly as an unconfirmed, pending possibility (see field case 4, revised 2026-09-06); Project Biblical Terms bloat and performance (secondary, condensed); recurring false-clean callout for this check area, resting solely on the confirmed **blanket-approval pattern** — a wordlist mass-marked **Correct** — described using correct spelling-status terminology (**Correct / Incorrect / Undecided**), not "denied" (**reattributed 2026-09-08**: the "denied errors" field case belongs to Basic Checks in `04-formatting-and-references.md`, not here — see "SME knowledge notes," field case 1) | 1 (callout), 3, 4 | 40 |
 | `03-parallel-passages-and-measures.md` | Parallel passages: confirming the comparison check was run and routing tool-flagged inconsistencies to the team (core, expanded); Numbers and Measures — **two separate checks, not one**: confirming which of the two is actually available and mature for the team's Paratext version (Numbers exists now, limited scope; Measures still under development, not yet reliably available), running whichever is usable against the team's already-agreed, documented approach, and routing gaps back to the team (core, expanded); recurring false-clean callout | 1 (callout), 2, 5 | 60 |
-| `04-formatting-and-references.md` | Formatting checks in structural-first order: marker-pair census, ghost markers, long/short verses, section headings, book titles, references, footnotes (core); subsection (confirmed by Kevin Nicholas on 2026-08-28): Punctuation Inventory (Checks > Inventories) ahead of typesetting — reviewing/using the inventory itself (not PTXprint or the typesetter's own tooling), confirming the inventory was actually reviewed rather than assumed already handled earlier in the process (echoes the objective-1 false-clean theme), and common settings issues that turn this into a time-sink for a typesetter; **"Punctuation Sequences" addition folded into that Punctuation Inventory subsection (raised 2026-09-03; confirmed by Kevin Nicholas on 2026-09-03 via PR #46 comment — folded in, not a separate section): "Show sequences" in the Punctuation Inventory's Inventory menu, and its relationship to the "Punctuation (sequences)" Basic Checks option** — reviewing the inventory without "Show sequences" selected can silently miss unmatched punctuation-pair sequences (echoes the false-clean theme again); scoped to punctuation sequences only — quotation-mark-specific complexity is explicitly out of scope here and deferred to a future addition; recurring false-clean callout | 1 (callout), 6 | 80 — the folded-in treatment keeps 10 minutes under the 90-minute cap. If drafting runs long, trim the reference/book-title portion first (as already flagged for the prior amendment); if that alone isn't enough, this lesson should be split rather than pushed over 90 minutes |
+| `04-formatting-and-references.md` | Formatting checks in structural-first order: marker-pair census, ghost markers, long/short verses, section headings, book titles, references, footnotes (core); subsection (confirmed by Kevin Nicholas on 2026-08-28): Punctuation Inventory (Checks > Inventories) ahead of typesetting — reviewing/using the inventory itself (not PTXprint or the typesetter's own tooling), confirming the inventory was actually reviewed rather than assumed already handled earlier in the process (echoes the objective-1 false-clean theme), and common settings issues that turn this into a time-sink for a typesetter; **"Punctuation Sequences" addition folded into that Punctuation Inventory subsection (raised 2026-09-03; confirmed by Kevin Nicholas on 2026-09-03 via PR #46 comment — folded in, not a separate section): "Show sequences" in the Punctuation Inventory's Inventory menu, and its relationship to the "Punctuation (sequences)" Basic Checks option** — reviewing the inventory without "Show sequences" selected can silently miss unmatched punctuation-pair sequences (echoes the false-clean theme again); scoped to punctuation sequences only — quotation-mark-specific complexity is explicitly out of scope here and deferred to a future addition; recurring false-clean callout — **incorporating field case 1** (**reattributed 2026-09-08**: a team denying Basic Checks errors they didn't understand, rather than resolving them) as the concrete example of the false-clean pattern in the Basic Checks context specifically, since Basic Checks is where "deny" is an actual, correct Paratext action (unlike wordlist/spelling status, which has no deny — see `02-wordlist-and-biblical-terms.md` and "SME knowledge notes") | 1 (callout), 6 | 80 — the folded-in treatment keeps 10 minutes under the 90-minute cap. If drafting runs long, trim the reference/book-title portion first (as already flagged for the prior amendment); if that alone isn't enough, this lesson should be split rather than pushed over 90 minutes |
 | `05-glossary-linking-and-layout.md` | Glossary-linking scope (over-linking, core); single- vs. two-column layout and hyphenation decisions (secondary, condensed); the PTXprint draft-PDF read-through (core); recurring false-clean callout | 1 (callout), 7, 8, 9 | 65 |
 | `06-scenario-bank.md` | Mentor-reviewed applied scenarios weighted toward core objectives (2, 5, 6, 7, 9, 10 each get a full scenario), secondary objectives (3, 4, 8) folded into one combined scenario, and objective 1 (false-clean) run as a thread inside two of the core scenarios rather than its own case | 1–10 | 60 |
 | `07-mentor-guide.md` | Facilitator notes: what to watch for in each scenario response, the "good" markers from the SME interview | — | — |
@@ -213,10 +229,16 @@ cases were added in this review round; the stories below are unchanged.
 
 ### Real field cases
 
-1. A team **denied errors they didn't understand**, rather than resolving them. The consultant
-   re-ran the check to surface the denied errors and explained the cause of each one.
-2. A wordlist of thousands of words was **all marked correct** (blanket-approved). The consultant
-   reset every entry to *unknown* and re-ran the wordlist checks, especially for incorrectly
+1. **(Reattributed 2026-09-08 — Stage 5 SME fact-check, Jenni Beadle.)** A team **denied Basic
+   Checks errors they didn't understand**, rather than resolving them. The consultant re-ran the
+   check to surface the denied errors and explained the cause of each one. **This is a Basic
+   Checks case specifically** — Basic Checks results have their own, genuine accept/deny
+   mechanism. It is distinct from, and must not be conflated with, the wordlist/spelling status
+   mechanism (field case 2 below), which has no "deny" action: Paratext's spelling status is one
+   of only three states — **Correct, Incorrect, Undecided**. "Denied" belongs to Basic Checks
+   (see `04-formatting-and-references.md`), not to the wordlist/Biblical Terms module.
+2. A wordlist of thousands of words was **all marked Correct** (blanket-approved). The consultant
+   reset every entry to *Undecided* and re-ran the wordlist checks, especially for incorrectly
    split or joined words.
 3. Glossary links were applied to **every occurrence** of a term rather than the first occurrence
    per section. The consultant unlinked and relinked at "first occurrence in every section," not
@@ -306,7 +328,10 @@ matching the same rule taught in the team workbook).
 ### Common mistakes, organized by check area (Jenni's chosen axis — finalized 2026-08-24)
 
 - **Wordlist / spelling** (its own area — a spiral, high-volume check across tens of thousands of
-  words): blanket-approving the whole wordlist instead of genuinely reviewing it.
+  words): blanket-approving the whole wordlist (mass-marking entries **Correct**) instead of
+  genuinely reviewing it. (Spelling status has only three states — Correct, Incorrect,
+  Undecided — there is no "deny" action here; see the reattribution note under Formatting &
+  markup / Basic Checks below.)
 - **Biblical Terms & renderings**: leaving blank renderings in place while presenting the list as
   done (confirm via the Found column/count, not eyeballing); letting stale/duplicate renderings
   pile up when a correct rendering is added but an old, possibly-wrong one isn't deleted. (A
@@ -321,15 +346,20 @@ matching the same rule taught in the team workbook).
   still under development and not yet reliably available. **Open** — this area is still new to the
   SME; no field case yet for either check. Do not invent one for scenario content; fill from
   experience if one surfaces before drafting.
-- **Formatting & markup**: wrong markers, unclosed footnote pairs (`\f…\f*`), wrong-case
-  characters.
+- **Formatting & markup / Basic Checks**: wrong markers, unclosed footnote pairs (`\f…\f*`),
+  wrong-case characters; **denying Basic Checks errors they didn't understand, rather than
+  resolving them** (field case 1 — **reattributed 2026-09-08**, Jenni Beadle's Stage 5
+  fact-check: this is a Basic Checks–specific mistake, not a wordlist/spelling one, since
+  Basic Checks has a genuine deny mechanism that spelling status does not).
 - **References & book names**: missed book-name checks, foreign `\r` abbreviations, inconsistent
   table of contents.
 - **Glossary linking**: over-linked (every occurrence, instead of first-per-section).
 - **Layout & publishing (read-through)**: single- vs. two-column choice, hyphenation.
-- **Cross-cutting spine**: don't trust an old or fake "all clear" — denied errors, skipped checks,
-  or mass-approved statuses can occur in *any* of the areas above, and it's the pattern the
-  consultant must watch for everywhere, not just once.
+- **Cross-cutting spine**: don't trust an old or fake "all clear" — denied errors (Basic Checks'
+  own accept/deny mechanism), skipped checks, or mass-approved/blanket statuses (e.g. a wordlist
+  mass-marked Correct) can occur in *any* of the areas above, using whichever accept/reject
+  mechanism that area actually has, and it's the pattern the consultant must watch for
+  everywhere, not just once.
 
 **Spiral framing (key design premise, Jenni's language):** the translation process is a
 **6-stage spiral**; Stage 6 (pre-publishing) is the **final turn** — re-running checks begun back

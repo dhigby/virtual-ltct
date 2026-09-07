@@ -76,11 +76,21 @@ Diagnosing structural-first doesn't mean the team fixes things in that exact ord
 by line — it means *you* look for the highest-leverage cause first, so you're not
 sending a team to manually correct fifty symptoms of one unclosed marker.
 
+There's a second way a Basic Checks result can look clean without being clean: unlike
+the wordlist's spelling status (Correct/Incorrect/Undecided only), Basic Checks results
+do carry a real accept/deny mechanism for flagged errors. A documented field case from
+the SME interview behind this course found a team that had **denied errors they didn't
+understand**, rather than resolving them — simply clearing the check's flags instead of
+dealing with what was underneath. A denied error disappears from the outstanding list
+just as thoroughly as a genuinely fixed one, so it's worth checking which happened
+before trusting a zero-error result.
+
 > **WARNING — watch for a false-clean result here too:** A Basic Checks run showing zero
 > formatting errors can mean the project is genuinely clean — or it can mean the checks
 > were run once early in the project and never re-run after later revisions introduced
-> new markup. Confirm the checks were re-run at this stage, the same "we already did
-> that" trap from earlier lessons, now applied to formatting.
+> new markup, or it can mean errors were denied rather than resolved. Confirm the checks
+> were re-run at this stage and ask whether any flagged errors were denied — the same
+> "we already did that" trap from earlier lessons, now applied to formatting.
 
 **Key takeaways**
 - Work structural-first: marker pairs and ghost markers before headings, titles, and
@@ -88,7 +98,8 @@ sending a team to manually correct fifty symptoms of one unclosed marker.
 - Your job is to diagnose the cause and coach the team to fix it — you never touch their
   keyboard.
 - A zero-error result only counts if the checks were actually re-run at this stage, not
-  carried forward from an earlier, since-outdated pass.
+  carried forward from an earlier, since-outdated pass — and not the result of errors
+  being denied rather than resolved.
 
 ### The Punctuation Inventory, ahead of typesetting
 

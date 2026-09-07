@@ -34,21 +34,23 @@ SME interview behind this course:
 
 - A wordlist of **thousands of words was blanket-approved** — every entry marked
   correct without genuine review.
-- A team **denied errors they didn't understand**, rather than resolving them, simply
-  clearing the check's flags instead of dealing with what was underneath.
+- Entries can just as easily sit **marked "Undecided" and never followed up on**, which
+  leaves the same false impression of a resolved list.
 
 In both cases, the check tool *looked* clean. Nothing in the display told you the team
 had actually engaged with it. Your job is to **re-run the check to surface what was
-hidden** — the denied errors, the wholesale approvals — and walk the team through *why*
-each flagged item was raised, especially incorrectly split or joined words, which are
-common in a mass-approved list. Once the cause is explained, **reset the relevant
-entries to unknown** and have the team re-review them properly. You explain and coach;
-the translator does the actual review and correction.
+hidden** — the wholesale approvals, the forgotten Undecided entries — and walk the team
+through *why* each flagged item was raised, especially incorrectly split or joined
+words, which are common in a mass-approved list. Once the cause is explained, **reset
+the relevant entries to unknown** and have the team re-review them properly. You explain
+and coach; the translator does the actual review and correction.
 
 > **WARNING — watch for a false-clean result here too:** Before you accept that "the
 > wordlist is done," check whether entries were reviewed one at a time or approved in
-> bulk, and whether any errors were denied rather than resolved. A clean-looking status
-> bar tells you nothing about which of those happened.
+> bulk, and whether any entries are actually sitting at Undecided rather than genuinely
+> resolved. A clean-looking status bar tells you nothing about which of those happened.
+> (Note: a word's spelling status is only ever Correct, Incorrect, or Undecided — there's
+> no "deny" action here. That's a Basic Checks concept, covered in Lesson 4.)
 
 **Biblical Terms: blank renderings are the default starting state.** Every term in
 Paratext's Biblical Terms tool starts out with a gloss (in English, or the source
@@ -123,8 +125,8 @@ that a list you've seen behave one way in one project will exist or behave the s
 way in another.
 
 **Key takeaways**
-- A clean wordlist status can hide mass-approval or denied errors — re-run the check to
-  find out, and reset entries the team hasn't genuinely reviewed.
+- A clean wordlist status can hide mass-approval or forgotten Undecided entries —
+  re-run the check to find out, and reset entries the team hasn't genuinely reviewed.
 - Blank renderings are Biblical Terms' normal starting state, not a bug — check the
   Found column/count to confirm a list is genuinely complete, not just look clean.
 - Stale or duplicate renderings can pile up on a term over time; coach the team to
@@ -136,8 +138,8 @@ way in another.
 
 **✏️ Try this:** A team tells you their wordlist check is finished — the status shows
 no outstanding errors. When you look closer, you notice thousands of entries were
-marked correct with none flagged as suspect, and several flagged "possible misspelling"
-entries are marked denied.
+marked correct with none flagged as suspect, and several entries that are actually
+misspellings were also marked correct rather than left for genuine review.
 
 1. What does this pattern suggest happened, and how would you confirm it?
 2. What would you say to the team to explain why this needs to be redone, in terms that

@@ -93,6 +93,18 @@ open decision left from the SME interview.
 > (b) — the course keeps `3 - Independent`, and the mentor-reviewed scenario bank plus required
 > mentor guide are what earn that claim. They are not optional components.
 
+> **Clarification, agreed by Doug Higby (course author) and Jenni Beadle (SME), 2026-09-08 — not
+> a new open question, and no re-approval required.** This reinforces the resolution above rather
+> than revisiting it. Doug and Jenni agreed on a clean split between the two components so they
+> don't blur together: the five lessons' self-study material — including their Challenge
+> sections — is deliberately **self-check/recall** work (write an answer from memory, then verify
+> it against the lesson's own Content section), which builds and confirms `1 - Has Knowledge`
+> only. The mentor-reviewed, evaluated Scenario Bank (`06-scenario-bank.md`) remains the **sole**
+> component that earns the course's `3 - Independent` claim, per Kevin Nicholas's approval ruling
+> above. Doug has already reworked the Challenge sections in all five lessons (01–05) to this
+> self-check style (e.g. "write X from memory, then check it against the Content section above,"
+> rather than "a team tells you X, what would you do") — this is implemented, not proposed.
+
 ## Scope
 
 **In scope** — the pre-publishing **text checks**, matching workbook chapters 3–6 and 8 of
@@ -178,6 +190,13 @@ objectives (2, 5, 6, 7, 9, 10). The secondary objectives (1, 3, 4, 8) are still 
 assessed, but consolidated into lighter sections rather than each getting standalone billing —
 except objective 1, which per the flagged tension above is kept as a short recurring callout inside
 each core check-area lesson instead of either a heavy standalone module or being dropped.
+
+> **Clarification, Doug Higby and Jenni Beadle, 2026-09-08:** each of the five lessons below
+> (01–05) ends in a Challenge section that is a **self-check/recall exercise** — write an answer
+> from memory, then verify it against that lesson's own Content section — not an applied,
+> scenario-style task. This keeps the lessons honestly at `1 - Has Knowledge` and leaves the
+> applied, evaluated scenario work solely to the mentor-reviewed `06-scenario-bank.md` row below,
+> so the two components don't blur together. Already implemented in lessons 01–05.
 
 | File | Topic | Objectives covered | Estimated minutes |
 | --- | --- | --- | --- |

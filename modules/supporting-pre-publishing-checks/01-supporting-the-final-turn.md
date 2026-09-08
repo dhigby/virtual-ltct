@@ -105,20 +105,26 @@ everything is the team's translation call either. Three buckets:
 
 ## Challenge
 
-**✏️ Try this:** A team tells you, "We're ready for the typesetter — the Project Plan
-shows no issues on every check." Before you believe them:
+**✏️ Try this:** Four short exercises on this lesson's own material. Write each answer
+first, then mark it yourself against the Content section above — the point is to find
+your gaps here, not in front of a team.
 
-1. What two or three questions would you ask the team to find out whether that "clean"
-   result reflects genuine review, or a status that was cleared without being looked
-   at?
-2. Pick one check area you expect to be riskiest for a false-clean result on this team,
-   and say why.
-3. If you did find a denied error or a mass-approved list, what would you say to the
-   team to explain what happened and what needs to happen next — without taking over
-   their keyboard?
-
-Write out your answers as if you were about to walk into that meeting. You'll use this
-same "confirm, don't trust" instinct in every lesson that follows.
+1. **From memory, name the three buckets** you sort every surfaced issue into, with a
+   one-line definition of each. Then name the two escalation contacts and which kind
+   of problem each one takes. Check yourself against "Knowing when to escalate" — if
+   you had to guess on either contact, that's the line to re-read.
+2. **What does a "No issues" status on the Project Plan tell you, and what does it
+   not?** Write two sentences: one for what the check machinery has genuinely
+   confirmed, and one for the kind of thing an automatic recheck does *not* undo.
+   Name both of the user-level overrides this lesson lists.
+3. **Open the Project Plan** — the "Assignments and Progress" view — in one project
+   you already support. Pick a single task, read its current status straight off the
+   view, and note where on that same view you would rerun that one check from. One
+   narrow action: you're confirming you can find both things, not reviewing a project.
+4. **Draft one question — one sentence.** It should ask a team *how* a check status
+   came to be clear, rather than whether it is clear. Say it out loud once and adjust
+   until it sounds like something you'd actually open with. The gap between those two
+   questions is the instinct the rest of this course keeps returning to.
 
 ## Change
 

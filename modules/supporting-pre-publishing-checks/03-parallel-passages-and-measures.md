@@ -111,24 +111,32 @@ which follows the same reframed pattern as parallel passages:
 
 ## Challenge
 
-**✏️ Try this:** A team's parallel-passage check shows several flagged differences
-between two accounts of the same event. The team lead says, "Those are just supposed
-to be different — we're not touching them." Meanwhile, you notice the check itself
-hasn't been re-run since a major revision pass three weeks ago.
+**✏️ Try this:** Five short exercises — recall, two discriminations, and one narrow
+tool check. Write each answer, then verify it against the Content section above.
 
-1. What would you confirm before accepting the team lead's explanation?
-2. How would you distinguish, in this conversation, between a legitimate "these should
-   differ" call and an unreviewed dismissal?
-3. Separately: you're about to support a team on Numbers and Measures. Before you run
-   anything, how do you confirm which of the two checks is actually available and
-   mature enough to rely on for this team's Paratext version? Once you've run whichever
-   is usable, it flags an inconsistency between two occurrences of what should be the
-   same measurement. You don't know whether the team's documented approach covers this
-   case. What are your next two or three concrete steps — and what do you explicitly
-   *not* decide yourself?
-
-Write your answers as if reporting back to the team lead afterward — include exactly
-what you'd say and what you'd ask them to do next.
+1. **State what "consistent" means** for parallel passages in one sentence, and name
+   the specific failure mode that comes from getting it wrong. Then say which of the
+   two — consistency of meaning, or identity of form — you are actually able to judge
+   yourself, and why the other one isn't yours.
+2. **Write the general test** that tells a legitimate "these should differ" decision
+   apart from an unreviewed dismissal: what has to be true before a flagged difference
+   counts as *decided*? State it as a test you could apply to any flagged difference in
+   any project, not as a verdict on one passage. Two or three lines.
+3. **Two situations that look alike.** (a) A check flags an inconsistency between two
+   occurrences of the same measurement. (b) There is no documented, agreed approach for
+   that kind of measurement at all. Write one line per situation naming your next
+   action, then one line on which one you have to settle first when both are true at
+   once, and why.
+4. **Which check, at what maturity?** Without looking back, name which of Numbers and
+   Measures is released with limited scope, and which is still under development and
+   not yet reliably available. Then open the **Open Biblical Terms List** dialog in a
+   project you support and note which of the two entries are actually present in that
+   version. That dialog is where you confirm what a team's Paratext really has, rather
+   than carrying an assumption over from another project.
+5. **One question, one sentence:** draft the question you'd ask a team to find out
+   *where* their agreed approach to numbers, weights, money, and measures is written
+   down. Aim it at locating a document — if your sentence contains any hint of what
+   the rendering should be, rewrite it.
 
 ## Change
 

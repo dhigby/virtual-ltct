@@ -166,24 +166,35 @@ by a single unselected menu option rather than by anyone skipping a step.
 
 ## Challenge
 
-**✏️ Try this:** A team tells you their Basic Checks show a short list of formatting
-errors, all in the second half of Mark — a few "wrong marker" flags on section headings,
-one heading that seems to be missing, and a reference that looks garbled. They ask you
-to help them go through the list and fix each one.
+**✏️ Try this:** Five exercises on this lesson's own mechanisms. Write your answers
+from memory first, then check each one against the Content section above — the point is
+to find the gaps here, not halfway through a support session.
 
-1. Before working the list top to bottom, what would you check first, and why?
-2. If you find a missing `\p` marker after a section heading partway through Mark, what
-   do you expect that to explain about the other flags on the list — verse text swallowed
-   into the heading style — and how would you confirm your suspicion before telling the
-   team?
-3. Separately: the same team says the Punctuation Inventory "was already checked back
-   when we started the project." The project has since been through two more revision
-   passes and is headed to a typesetter in three weeks. What would you say to the team,
-   and what would you specifically ask them to open and show you? Which inventory
-   setting would you confirm was selected before accepting that the review was complete?
-
-Write your answers as if reporting back to the team lead afterward — include exactly
-what you'd say and what you'd ask them to do next.
+1. **Reproduce the structural-first order** — all seven steps, in order, from memory.
+   Then, for the first two steps only, write one line each on why that step earns its
+   place ahead of headings, titles, and references.
+2. **Two unclosed markers, two very different blast radii.** For a missing `\p` after
+   a `\s1` section heading, write what gets swallowed and up to what point. For an
+   `\f` opened without its matching `\f*`, write what happens when it's unclosed at
+   the end of a verse, and what happens when it's unclosed partway through one. Then
+   state which of the two cascades into other markers elsewhere in the chapter and
+   which does not — this is the distinction that keeps you from over-reading a small
+   error.
+3. **A denied error and a resolved error look identical** on the outstanding list.
+   Write the one question you'd ask to find out which of the two happened, and say in
+   one line why "deny" is a real, correct action in Basic Checks but has no equivalent
+   in the wordlist's spelling status.
+4. **Open Checks > Inventories > Punctuation Inventory** in a project you already
+   support, then open its **Inventory** menu and confirm whether **"Show sequences"**
+   is selected. Write down what you found. Then, in one sentence, say what the
+   **"Punctuation (sequences)"** checkbox under Run Basic Checks does and doesn't do
+   while that option is unselected. One setting, one look — not a full inventory
+   review.
+5. **A review can be genuine and still incomplete.** In two lines, say what the
+   consultant in this lesson's Punctuation Inventory case had got wrong, given that
+   they genuinely *did* review the inventory — and what would have made the same
+   review complete. Name the difference between a false-clean result produced by a
+   skipped step and one produced by an unselected setting.
 
 ## Change
 

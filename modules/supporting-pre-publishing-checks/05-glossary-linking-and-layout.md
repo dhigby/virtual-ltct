@@ -114,28 +114,31 @@ properly the typesetter's craft.
 
 ## Challenge
 
-**✏️ Try this:** You're reviewing a project's glossary links before the final
-read-through and notice one high-frequency term is linked at nearly every occurrence
-across several chapters.
+**✏️ Try this:** Five short exercises across this lesson's three areas. Write each
+answer, then check it against the Content section above.
 
-1. What would you check to confirm this is over-linking rather than intentional?
-2. Walk through exactly what you'd do to fix the scope, and what (if anything) you'd
-   explain to the team about why it matters.
-
-Separately, you're advising a team whose language has notably long words. The current
-project admin wants to switch to single-column layout to avoid dealing with
-hyphenation.
-
-3. What would you ask the team before agreeing to that layout choice?
-4. If two-column with hyphenation turns out to be the right call, what are the concrete
-   steps you'd take to set up the hyphenation file?
-
-Finally, during a draft-PDF read-through you spot an orphan word, a footnote that has
-shifted two pages from its reference, and a heading that lands awkwardly at a column
-break.
-
-5. Sort these three into "mine to fix," "the team's call," and "the typesetter's call,"
-   and explain your reasoning for each.
+1. **Write the spot-check** that tells over-linking apart from correctly-scoped
+   linking: what kind of term you'd pick, how many sections you'd look across, and
+   what result would point to each of the two. State it as a general procedure you
+   could run on any project, not a verdict on one. Then add one line on what a
+   "complete" status on a linking pass does tell you, and what it doesn't.
+2. **Name the relink scope in the tool's own words** — the exact phrasing this lesson
+   uses for the correct scope, and the wrong option it's easy to pick instead. Then
+   say in one line why that scope is the right one from the reader's side.
+3. **Two criteria, one decision.** Write one line on what word length can legitimately
+   tell you about a layout choice, and one line on what actually sets the baseline for
+   it. Then draft the single question — one sentence — you'd ask a team to establish
+   that baseline, aimed at what the community already reads and uses.
+4. **Say where the hands-on half of your role begins.** At what point in the layout
+   sequence does building a hyphenation file become the right next step, and what has
+   to be settled before it? One or two lines — and note whether that step is yours or
+   somebody else's.
+5. **List the five things to watch for** in the draft-PDF read-through, from memory.
+   Then write the general test you'd use to decide whether something the read-through
+   surfaces is yours to resolve or is typesetting craft belonging to the typesetter —
+   again a test you could apply to any issue, not a ruling on a particular one.
+   Finally, check which PTXprint version is installed on the machine you'd actually
+   use with a team, and note whether it's new enough for underfilled-page auto-fill.
 
 ## Change
 

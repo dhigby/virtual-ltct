@@ -136,18 +136,31 @@ way in another.
 
 ## Challenge
 
-**✏️ Try this:** A team tells you their wordlist check is finished — the status shows
-no outstanding errors. When you look closer, you notice thousands of entries were
-marked correct with none flagged as suspect, and several entries that are actually
-misspellings were also marked correct rather than left for genuine review.
+**✏️ Try this:** Four short exercises on the two tools in this lesson. Write each
+answer first, then verify it against the Content section above.
 
-1. What does this pattern suggest happened, and how would you confirm it?
-2. What would you say to the team to explain why this needs to be redone, in terms that
-   don't sound like an accusation?
-3. Separately: a team reports Send/Receive has become noticeably slower since last
-   month, and mentions in passing that they added the full Biblical Terms reference
-   list to make consulting terms easier. What's your diagnosis, and how would you
-   explain the cause to a team that's skeptical the two things are connected?
+1. **Name the only three statuses** a word's spelling can carry in Paratext's
+   wordlist. Then say in one sentence why "denied" is not one of them, and which
+   check area that word actually belongs to. If you wrote down four statuses, re-read
+   the warning box in the wordlist section.
+2. **Two rows, two different problems.** Row A shows a highlighted rendering carrying
+   the placeholder text "Double click to enter rendering(s) from project text." Row B
+   shows five renderings on one term, most of them no longer found in the current
+   text. For each row write one line: what the row is telling you, and what you look
+   at to confirm it. Then say which of the two is the tool's normal starting state
+   rather than something that has gone wrong.
+3. **Open the Biblical Terms list** in a project you already support and pick any one
+   row. Read its **Found** column/count and its rendering(s), and write down which of
+   three states that row is in: blank default, one current rendering, or several
+   renderings needing review. One row only — this is a find-the-column exercise, not a
+   list review.
+4. **Selecting versus adding.** In one sentence each, say what happens when a team
+   *selects* "All Biblical Terms" in order to view it, and what happens when they
+   *add* its contents into the Project Biblical Terms list — then name which of the
+   two can slow Send/Receive, and why. Include the rough scale this lesson gives for
+   "All Biblical Terms" against "Major Biblical Terms." That size difference is the
+   part a team finds hardest to believe, so you want the numbers at your fingertips
+   before you're in front of one.
 
 ## Change
 

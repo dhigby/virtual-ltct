@@ -65,6 +65,25 @@
 > terminology/attribution fix only — objective 1 still covers the false-clean thread generally,
 > module scope and time estimates are unchanged, and no new approval is required.
 
+> **Amendment, Stage 5 SME fact-check pass, 2026-09-10 (Jenni Beadle) — support.bible query
+> resolved, no re-approval needed:** A support.bible programmer replied to Jenni's pending query
+> (open since 2026-09-06) with a plausible explanation for the field case 4 rendering behavior:
+> the team had likely run Paratext's **Guess Renderings** feature before the project had enough
+> translated data for it to work reliably, which caused it to default to the verse's first word as
+> a guessed rendering. This is a real, named Paratext feature, not a hypothetical — and critically,
+> translators would **not** consciously notice this happening, since it's an automated/background
+> action rather than something like forgetting to select text. This is now promoted from
+> "unconfirmed, pending" to a credible, attributed third pattern to watch for in Biblical Terms
+> renderings — attributed as "likely cause per a support.bible programmer," not stated as certain
+> fact — alongside the two already-confirmed patterns (blank renderings, stale/duplicate
+> renderings), which remain the primary teaching content for objective 3 and lesson
+> `02-wordlist-and-biblical-terms.md`. Jenni also confirmed a coaching technique for spotting it:
+> scanning through a term's occurrences using the down arrow to quickly step through verses makes
+> it visually obvious when a rendering is just repeating the verse's first word, pattern-matching
+> the verse text. See field case 4 (revised again below), the revised objective 3, and the
+> "Tool-version specifics" section. `module-author` may revise `02-wordlist-and-biblical-terms.md`
+> on this basis.
+
 ## Outcome-level open question (resolve before approval)
 
 The `README.md` frontmatter and issue #40 both target `3 - Independent`, delivered self-paced
@@ -146,7 +165,7 @@ secondary objectives or their competency coverage.
 | --- | --- | --- | --- | --- |
 | 1 | Secondary* | Learner can recognize a "false-clean" check result — denied Basic Checks errors, a mass-approved (blanket "Correct") wordlist status, or other blanket-approved statuses — in any check area, and lead the team to reveal what was hidden, reset statuses, and re-run the check honestly. (Denying an error is a Basic Checks–specific mechanism, distinct from wordlist/spelling status, which has only Correct/Incorrect/Undecided — see "SME knowledge notes.") | Translation Tools 2.0, `2 - With Assistance` — "Assist in training others on the use of translation tools" | Quiz + Scenario Bank (spine scenario) |
 | 2 | Core | Learner can confirm that a parallel-passage comparison check was actually run and its results reviewed by the team, flag passages the tool surfaces as inconsistent (by the tool's own comparison, not the learner's own linguistic judgment) back to the team for adjudication, and check that the team's own decisions about legitimate variation vs. over-harmonising — not the LTC's — are driving the resolution | Translation Tools 2.0, `2 - With Assistance` | Quiz + Scenario Bank |
-| 3 | Secondary | Learner can recognize incomplete Biblical Terms coverage — blank renderings (the tool's default starting state) presented as a finished list — by checking the Found column/count rather than eyeballing the list, recognize stale/duplicate renderings left in place after a correct rendering was added without deleting the original, and coach the team to complete and clean up the list — without taking over their keyboard. (A no-selection/auto-grab mechanism, where Paratext might fill an unselected rendering with the verse's first word, was reported once but is unconfirmed and pending a reply from support.bible as of 2026-09-06 — see "SME knowledge notes"; it is noted only as a secondary, currently-unconfirmed possibility, not the primary teaching point.) | Translation Tools 2.0, `2 - With Assistance` | Quiz + Scenario Bank |
+| 3 | Secondary | Learner can recognize incomplete Biblical Terms coverage — blank renderings (the tool's default starting state) presented as a finished list — by checking the Found column/count rather than eyeballing the list, recognize stale/duplicate renderings left in place after a correct rendering was added without deleting the original, and coach the team to complete and clean up the list — without taking over their keyboard. Learner can also recognize a third pattern — a rendering that just repeats the verse's first word, likely caused by running **Guess Renderings** before the project had enough translated data for it to work reliably (per a support.bible programmer's reply, 2026-09-10; not something translators would consciously notice, since it's automated/background) — by scanning a term's occurrences with the down arrow to quickly step through verses, which makes the first-word pattern visually obvious. (This third pattern is now confirmed/attributed, not unconfirmed — see "SME knowledge notes," field case 4 revised 2026-09-10 — but remains secondary to the two primary patterns above.) | Translation Tools 2.0, `2 - With Assistance` | Quiz + Scenario Bank |
 | 4 | Secondary | Learner can diagnose configuration-caused Send/Receive and performance slowdowns from over-adding terms to the *Project* Biblical Terms list, and advise the team on right-sizing it | Translation Tools 5.0 (Scripture Collaboration), `2 - With Assistance` — "Advise users in best-practices for collaboration and data safety... assist users to configure plans and tasks in a way that helps them" | Quiz + Scenario Bank |
 | 5 | Core | Learner can confirm, for both the Numbers check and the Measures check, whether that check is actually available and mature enough to rely on for the team's Paratext version at the time of support (Numbers exists now but is limited in scope; Measures is still under development and may not yet be available), run whichever check(s) are usable against the team's *already-agreed and documented* approach (not the LTC's own judgment of what the rendering should be), and refer any gaps or contradictions the check(s) surface back to the team to resolve rather than deciding new renderings | Translation Tools 2.0, `2 - With Assistance` | Quiz + Scenario Bank |
 | 6 | Core | Learner can diagnose formatting-check failures — unclosed marker pairs, ghost markers, wrong markers, book-title/heading/reference errors — working structural-first, and coach a team to a zero-error result | Translation Tools 2.0, `2 - With Assistance` | Quiz + Scenario Bank |
@@ -201,7 +220,7 @@ each core check-area lesson instead of either a heavy standalone module or being
 | File | Topic | Objectives covered | Estimated minutes |
 | --- | --- | --- | --- |
 | `01-supporting-the-final-turn.md` | The translation process as a 6-stage spiral; Stage 6 as the final turn re-running earlier checks; the cross-cutting spine (false-clean results) introduced as a recurring watch-for, not a standalone topic; the consultant's role (diagnose, coach, never touch the keyboard); when to escalate | 1 (light touch), 10 | 35 |
-| `02-wordlist-and-biblical-terms.md` | Biblical Terms list completion and cleanup (secondary, condensed): recognizing blank renderings as the tool's normal default starting state and confirming genuine completion via the Found column/count rather than eyeballing the list; recognizing stale/duplicate renderings left in place after a correct rendering was added without deleting the original; the no-selection/auto-grab mechanism noted only briefly as an unconfirmed, pending possibility (see field case 4, revised 2026-09-06); Project Biblical Terms bloat and performance (secondary, condensed); recurring false-clean callout for this check area, resting solely on the confirmed **blanket-approval pattern** — a wordlist mass-marked **Correct** — described using correct spelling-status terminology (**Correct / Incorrect / Undecided**), not "denied" (**reattributed 2026-09-08**: the "denied errors" field case belongs to Basic Checks in `04-formatting-and-references.md`, not here — see "SME knowledge notes," field case 1) | 1 (callout), 3, 4 | 40 |
+| `02-wordlist-and-biblical-terms.md` | Biblical Terms list completion and cleanup (secondary, condensed): recognizing blank renderings as the tool's normal default starting state and confirming genuine completion via the Found column/count rather than eyeballing the list; recognizing stale/duplicate renderings left in place after a correct rendering was added without deleting the original; a third pattern — a rendering that just repeats the verse's first word, likely caused by running **Guess Renderings** before the project had enough translated data (per a support.bible programmer's reply, 2026-09-10 — see field case 4, revised) — noted as a real, attributed pattern to watch for (no longer unconfirmed/pending), spotted by scanning a term's occurrences with the **down arrow** to quickly step through verses so the first-word repetition becomes visually obvious; Project Biblical Terms bloat and performance (secondary, condensed); recurring false-clean callout for this check area, resting solely on the confirmed **blanket-approval pattern** — a wordlist mass-marked **Correct** — described using correct spelling-status terminology (**Correct / Incorrect / Undecided**), not "denied" (**reattributed 2026-09-08**: the "denied errors" field case belongs to Basic Checks in `04-formatting-and-references.md`, not here — see "SME knowledge notes," field case 1) | 1 (callout), 3, 4 | 40 |
 | `03-parallel-passages-and-measures.md` | Parallel passages: confirming the comparison check was run and routing tool-flagged inconsistencies to the team (core, expanded); Numbers and Measures — **two separate checks, not one**: confirming which of the two is actually available and mature for the team's Paratext version (Numbers exists now, limited scope; Measures still under development, not yet reliably available), running whichever is usable against the team's already-agreed, documented approach, and routing gaps back to the team (core, expanded); recurring false-clean callout | 1 (callout), 2, 5 | 60 |
 | `04-formatting-and-references.md` | Formatting checks in structural-first order: marker-pair census, ghost markers, long/short verses, section headings, book titles, references, footnotes (core); subsection (confirmed by Kevin Nicholas on 2026-08-28): Punctuation Inventory (Checks > Inventories) ahead of typesetting — reviewing/using the inventory itself (not PTXprint or the typesetter's own tooling), confirming the inventory was actually reviewed rather than assumed already handled earlier in the process (echoes the objective-1 false-clean theme), and common settings issues that turn this into a time-sink for a typesetter; **"Punctuation Sequences" addition folded into that Punctuation Inventory subsection (raised 2026-09-03; confirmed by Kevin Nicholas on 2026-09-03 via PR #46 comment — folded in, not a separate section): "Show sequences" in the Punctuation Inventory's Inventory menu, and its relationship to the "Punctuation (sequences)" Basic Checks option** — reviewing the inventory without "Show sequences" selected can silently miss unmatched punctuation-pair sequences (echoes the false-clean theme again); scoped to punctuation sequences only — quotation-mark-specific complexity is explicitly out of scope here and deferred to a future addition; recurring false-clean callout — **incorporating field case 1** (**reattributed 2026-09-08**: a team denying Basic Checks errors they didn't understand, rather than resolving them) as the concrete example of the false-clean pattern in the Basic Checks context specifically, since Basic Checks is where "deny" is an actual, correct Paratext action (unlike wordlist/spelling status, which has no deny — see `02-wordlist-and-biblical-terms.md` and "SME knowledge notes") | 1 (callout), 6 | 80 — the folded-in treatment keeps 10 minutes under the 90-minute cap. If drafting runs long, trim the reference/book-title portion first (as already flagged for the prior amendment); if that alone isn't enough, this lesson should be split rather than pushed over 90 minutes |
 | `05-glossary-linking-and-layout.md` | Glossary-linking scope (over-linking, core); single- vs. two-column layout and hyphenation decisions (secondary, condensed); the PTXprint draft-PDF read-through (core); recurring false-clean callout | 1 (callout), 7, 8, 9 | 65 |
@@ -262,21 +281,27 @@ cases were added in this review round; the stories below are unchanged.
 3. Glossary links were applied to **every occurrence** of a term rather than the first occurrence
    per section. The consultant unlinked and relinked at "first occurrence in every section," not
    "all."
-4. **(Revised 2026-09-06 — mechanism now marked UNCONFIRMED, pending support.bible.)** Jenni
-   originally reported a team's Biblical Terms rendering where the first word of the verse
-   appeared to have been auto-grabbed by Paratext as the term's rendering because they hadn't
-   *selected* the correct word/phrase before adding it. On this Stage 5 fact-check pass, Jenni
-   confirmed she has only ever seen this **once, in one project**, has **never been able to
-   reproduce it since** (including in that same project's current version), and it was **never a
-   reported Paratext error** — she has since submitted a question to support.bible and is waiting
-   on a reply (as of 2026-09-06). Re-examining the screenshot from that one project, what it
-   actually showed was closer to an **old, likely-wrong rendering (e.g. a verse's first word)
-   left in place alongside a later, correct rendering that was added without deleting the
-   original** — i.e. a stale/duplicate rendering left uncleaned (see field case 10 below), not
-   necessarily a clean single auto-fill event. The consultant, in the original telling, deleted
-   the bad rendering, selected the correct text, and added it properly. **Do not treat the
-   no-selection/auto-grab mechanism as an established fact for scenario content** until
-   support.bible responds; it may be woven in only as a secondary, explicitly-uncertain aside.
+4. **(Revised 2026-09-10 — support.bible replied; mechanism now a credible, attributed
+   explanation, promoted from UNCONFIRMED.)** Jenni originally reported a team's Biblical Terms
+   rendering where the first word of the verse appeared to have been auto-grabbed by Paratext as
+   the term's rendering, first framed as the team not having *selected* the correct word/phrase
+   before adding it. On the 2026-09-06 Stage 5 fact-check pass, Jenni noted she'd only ever seen
+   this once, in one project, could not reproduce it, and it was never a reported Paratext error,
+   so she submitted a question to support.bible. **A support.bible programmer replied on
+   2026-09-10** with a plausible explanation: the team had likely run Paratext's **Guess
+   Renderings** feature before the project had enough translated data for it to work reliably,
+   which caused it to default to the verse's first word as a guessed rendering. Guess Renderings
+   is a real, named Paratext feature — not a hypothetical — and importantly, this reframes the
+   mechanism as an **automated/background action the translators likely would not have
+   consciously noticed**, rather than a conscious slip like "forgot to select text." This
+   explanation is credible enough to teach, attributed as **"likely cause per a support.bible
+   programmer,"** not stated as certain fact. It is presented as a third pattern to watch for in
+   Biblical Terms renderings, alongside — but secondary to — the two already-confirmed patterns
+   (blank renderings, field case 9; stale/duplicate renderings, field case 10), since the original
+   screenshot itself was inconclusive between the two explanations. **Confirmed coaching
+   technique (Jenni, 2026-09-10):** to check for this, scan through a term's occurrences using the
+   **down arrow** to quickly step through verses — it becomes visually obvious when a rendering is
+   just the verse's first word, repeating a pattern that matches the verse text.
 5. An expat project admin assumed **single-column** layout (the language has long words and the
    team had never used hyphenation), but the community currently reads/uses Bibles in a
    **Language of Wider Communication (LWC)** — this is a Bible translation project, so the
@@ -353,10 +378,11 @@ matching the same rule taught in the team workbook).
   markup / Basic Checks below.)
 - **Biblical Terms & renderings**: leaving blank renderings in place while presenting the list as
   done (confirm via the Found column/count, not eyeballing); letting stale/duplicate renderings
-  pile up when a correct rendering is added but an old, possibly-wrong one isn't deleted. (A
-  no-selection rendering error — not selecting the correct text before adding, so Paratext
-  auto-grabs the verse's first word — was reported once but is **unconfirmed and pending
-  support.bible** as of 2026-09-06; see field case 4.)
+  pile up when a correct rendering is added but an old, possibly-wrong one isn't deleted; a
+  rendering that is just the verse's first word repeated, **likely caused by running Guess
+  Renderings before the project had enough translated data** (per a support.bible programmer's
+  reply, 2026-09-10 — see field case 4, revised) — spotted by scanning a term's occurrences with
+  the down arrow to quickly step through verses.
 - **Parallel passages**: over-harmonising — forcing all parallel passages to match exactly and
   erasing legitimate variation. They must be consistent in *meaning*, not necessarily identical in
   *form*.
@@ -421,13 +447,15 @@ Observable markers of a competent supporting consultant:
   etc.) — there is no single combined list to point learners at. The earlier note in this section
   claiming current Paratext versions show "Measures and Money" and "Numbers" as combined lists was
   incorrect and is removed.
-- **Open, 2026-09-06 (Jenni Beadle) — pending support.bible:** the reported "no-selection
-  rendering error" (Paratext allegedly auto-grabbing the verse's first word as a Biblical Terms
-  rendering when nothing is selected) is unconfirmed — seen once, unreproducible since, never a
-  reported Paratext error. Jenni has submitted a question to support.bible and is waiting on a
-  reply. Do not treat this mechanism as established for scenario or lesson content until it is
-  confirmed; see field case 4. The two related findings that ARE confirmed (blank-rendering
-  default state, stale/duplicate renderings — field cases 9–10) do not need to wait.
+- **Resolved, 2026-09-10 (Jenni Beadle) — support.bible replied:** the reported first-word
+  rendering behavior (open as a pending question since 2026-09-06) now has a credible, attributed
+  explanation from a support.bible programmer: the team likely ran Paratext's **Guess Renderings**
+  feature before the project had enough translated data for it to work reliably, defaulting the
+  rendering to the verse's first word. Guess Renderings is a real, named Paratext feature. Treat
+  this as **"likely cause per a support.bible programmer,"** not certain fact, and as a secondary
+  pattern alongside the two already-confirmed findings (blank-rendering default state,
+  stale/duplicate renderings — field cases 9–10); see field case 4 (revised 2026-09-10) for the
+  confirmed coaching technique (scanning occurrences with the down arrow).
 
 ---
 
@@ -493,4 +521,18 @@ is added (field cases 9–10). The `02-wordlist-and-biblical-terms.md` module-br
 revised accordingly; its estimated time (40 minutes) is unchanged. These two new findings do not
 need to wait on support.bible; only the auto-grab mechanism itself remains pending, and this
 document will be amended again once that reply arrives. `module-author` may draft or revise
+`02-wordlist-and-biblical-terms.md` on this basis.
+
+**Amendment, Stage 5 SME fact-check pass, 2026-09-10 (Jenni Beadle) — support.bible query
+resolved:** the reply arrived. A support.bible programmer's plausible explanation — the team
+likely ran **Guess Renderings** before the project had enough translated data, causing it to
+default to the verse's first word — promotes the field case 4 mechanism from unconfirmed/pending
+to a credible, attributed third pattern (attributed as "likely cause per a support.bible
+programmer," not certain fact), taught alongside but secondary to the two already-confirmed
+patterns (blank renderings, stale/duplicate renderings). Jenni also confirmed a coaching
+technique: scanning a term's occurrences with the down arrow to quickly step through verses,
+which makes the first-word repetition visually obvious. Field case 4, objective 3, the
+`02-wordlist-and-biblical-terms.md` module-breakdown row, the "Common mistakes" Biblical Terms
+bullet, and the "Tool-version specifics" section are all revised accordingly; estimated time for
+`02-wordlist-and-biblical-terms.md` (40 minutes) is unchanged. `module-author` may draft or revise
 `02-wordlist-and-biblical-terms.md` on this basis.

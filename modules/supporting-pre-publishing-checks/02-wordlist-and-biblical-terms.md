@@ -82,15 +82,23 @@ coach the fix: have the team review the full rendering list for a term, confirm 
 rendering(s) are current and correct, and remove the stale ones themselves — you're
 coaching this, not doing it at their keyboard.
 
-> **NOTE:** A related pattern was reported once in the SME interview behind this
-> course — a rendering that looked like it might have been auto-filled with a verse's
-> first word when nothing was selected in the text. It's only been seen the one time, in
-> one project, has never been reproduced since, and hasn't been confirmed as an actual
-> Paratext behavior (a query is open with support.bible). Worth being aware of if you
-> ever see something that looks like it, but it's not yet an established field pattern —
-> don't teach it as "the" cause of an implausible rendering. The confirmed, reproducible
-> patterns above (blank rows, stale duplicates) are what you should actually expect to
-> encounter and check for.
+> **NOTE:** A related, less common pattern: a rendering that's just the verse's first
+> word, repeated across a term's occurrences, rather than an actual translation. Per a
+> support.bible programmer's reply to the SME interview behind this course, the likely
+> cause is running Paratext's **Guess Renderings** feature before the project had enough
+> translated data for it to work correctly — with too little data to draw on, it can
+> default to guessing the verse's first word as the rendering. This is a background,
+> automated side effect of running that feature, not something a translator did
+> deliberately or would necessarily notice happened. It's a secondary pattern to the two
+> confirmed ones above (blank rows, stale duplicates) — don't lead your check with it,
+> but if you see a rendering that looks like a repeated first word, this is the likely
+> explanation, and it's worth checking for.
+
+> **TIP:** To spot this quickly, open a term's occurrences and step through them with
+> the **down arrow** rather than reading each one closely. A rendering that's just the
+> verse's first word stands out visually against real translations once you're moving
+> through the list at that pace — you don't need to read every entry carefully to catch
+> it.
 
 **Biblical Terms: Project list bloat and performance.** A separate problem with the
 same tool: a consultant **added the entire "All Biblical Terms" list into the

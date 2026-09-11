@@ -15,9 +15,10 @@ the team's own, made against their own agreed approach.
   - Flag any inconsistencies the check finds back to the team for their own decision.
   - Recognize the difference between legitimate variation and over-harmonising.
 - You will be able to:
-  - Confirm which of the two checks — Numbers or Measures — is actually available and
-    reliable for the team's Paratext version.
-  - Run whichever check is usable, checking it against the team's already-agreed
+  - Confirm which numbers/measures check(s) are actually available for the team's
+    Paratext version — the new consolidated check, or the older separate Numbers check
+    with no working Measures check.
+  - Run whichever check is available, checking it against the team's already-agreed
     approach.
   - Route any gaps or contradictions back to the team rather than deciding the correct
     rendering yourself.
@@ -64,54 +65,71 @@ was made, not silently dismissed or silently over-corrected.
 > in the project and never re-run since revisions were made. Confirm it was re-run at
 > this stage, not just trusted from memory.
 
-### Numbers and Measures — two separate checks
+### Numbers and Measures — confirm what your team's Paratext version has
 
-**Numbers** and **Measures** are **two separate checks in Paratext**, not one combined
-"numbers/weights/measures" check — and they are at different points of maturity. Before
-you rely on either, your first job is to confirm what's actually available for the
-team's Paratext version:
+Numbers and measures checking in Paratext is changing. A **new, consolidated check** —
+covering numbers, weights, and measures together in a single check — is expected to
+become available before too long, replacing the older, separate Numbers check (Measures
+was never released as its own check, so its functionality is being folded into this new
+consolidated one). Whether or not it has shipped by the time you're reading this, the
+same underlying skill applies either way: **confirm what a specific team's Paratext
+version actually has before you rely on it.** Don't assume every team is on the newer
+version at the same time — rollout doesn't happen everywhere at once, and some teams
+will stay on an older, unmigrated version for a while yet.
 
-- **Numbers** is a released check, but its scope is fairly limited. Where it exists,
-  treat it the same way as any other check area: confirm it was actually run, not
-  assumed clean from an earlier pass.
-- **Measures** (covering weights and money) is **still under development and not yet
-  reliably available** — don't assume a team's Paratext version has a mature Measures
-  check just because Numbers is there, and don't build a support plan around Measures
-  catching something it may not yet be capable of catching.
+In practice you'll meet one of two situations:
 
-This area is comparatively new territory for the field material behind this course —
-there is **no confirmed SME field case yet** for a specific Numbers or Measures error,
-so this lesson does not invent one. What *is* established is the shape of your role,
-which follows the same reframed pattern as parallel passages:
+- **The new consolidated check is available.** Confirm it, then run it as one check
+  against the team's documented approach to numbers, weights, and measures — you no
+  longer need to track two checks of different maturity separately.
+- **Only the older, separate Numbers check is available**, with no working Measures
+  check at all. This will still be the reality for some teams for a while after the
+  consolidated check ships. Numbers has fairly limited scope; treat it the same way as
+  any other check area — confirm it was actually run, not assumed clean from an earlier
+  pass — and be honest with the team that there's currently no working check that can
+  catch weights/measures inconsistencies on their version.
 
-- **Confirm which check(s) are actually available and mature enough to rely on** for
-  the team's Paratext version at the time of support — don't take for granted that both
-  Numbers and Measures exist or behave the same way across versions.
-- **Run whichever check(s) are usable** against the team's **already-agreed and
+Either way, your role follows the same reframed pattern as parallel passages:
+
+- **Confirm what's actually available and usable** for the team's Paratext version at
+  the time of support — don't assume the consolidated check is there just because you've
+  seen it elsewhere, and don't assume a team is stuck on the old split checks if their
+  version has already moved.
+- **Run whichever check is available** against the team's **already-agreed and
   documented approach** to numbers, weights, money, and measures — most teams will have
   made project-level decisions early on (e.g. whether to convert ancient measures to
   modern equivalents, how to render currency) rather than deciding case-by-case.
 - When a check surfaces a gap or a contradiction — a rendering that doesn't match the
   team's documented approach, or inconsistency between two occurrences of the same
   measure — **refer it back to the team to resolve**, rather than deciding what the
-  correct rendering should be yourself.
-- Numbers and Measures appear as **separate entries** in Paratext's Open Biblical Terms
-  List dialog, alongside other unrelated lists (Major Biblical Terms, All Biblical Terms,
-  NT Key Biblical Terms, Inclusive/Exclusive Pronouns, Younger/Older Siblings, and others)
-  — there is no single combined list to point a team at. Don't assume a project's
-  terminology or available lists match what you've seen elsewhere; confirm what's
-  actually present in that project's version.
+  correct rendering should be yourself. If a team is stuck on the old Numbers-only
+  check, flag any weights/measures inconsistency you spot informally the same way — as
+  something for the team to resolve against their documented approach, not something you
+  can confirm with a reliable tool yet.
+- Numbers (and, once available, the consolidated check) appear as **separate entries**
+  in Paratext's Open Biblical Terms List dialog, alongside other unrelated lists (Major
+  Biblical Terms, All Biblical Terms, NT Key Biblical Terms, Inclusive/Exclusive
+  Pronouns, Younger/Older Siblings, and others) — there is no single combined list to
+  point a team at beyond the check itself. Don't assume a project's terminology or
+  available lists match what you've seen elsewhere; confirm what's actually present in
+  that project's version.
+
+There is still **no confirmed SME field case yet** for a specific numbers/weights/
+measures error caught by either version of the check, so this lesson does not invent
+one. What *is* established is the shape of your role above — confirm what's available,
+run it against the documented approach, and route gaps back to the team.
 
 **Key takeaways**
 - In both check areas, your job is process and routing — confirm the check ran, confirm
   the team reviewed the results, and hand judgment calls about wording back to them.
 - Parallel passages need consistency of meaning, not identical form — watch for
   over-harmonising as the specific failure mode here.
-- Numbers and Measures are two separate checks at two different levels of maturity —
-  confirm which one(s) are actually available and mature enough to rely on before you
-  run anything, then check whichever is usable against the team's own documented
-  approach, not your own sense of what's correct; there's no established field "gotcha"
-  for this area yet, so stay alert rather than assuming a known pattern.
+- A new consolidated check (numbers, weights, and measures together) is expected to
+  replace the old, separate Numbers check — but not every team will be on a Paratext
+  version that has it right away. Confirm what a specific team's version actually offers
+  before relying on it, run whichever check is available against the team's own
+  documented approach, and route any gap back to the team; there's no established field
+  "gotcha" for this area yet, so stay alert rather than assuming a known pattern.
 
 ## Challenge
 
@@ -131,12 +149,13 @@ tool check. Write each answer, then verify it against the Content section above.
    that kind of measurement at all. Write one line per situation naming your next
    action, then one line on which one you have to settle first when both are true at
    once, and why.
-4. **Which check, at what maturity?** Without looking back, name which of Numbers and
-   Measures is released with limited scope, and which is still under development and
-   not yet reliably available. Then open the **Open Biblical Terms List** dialog in a
-   project you support and note which of the two entries are actually present in that
-   version. That dialog is where you confirm what a team's Paratext really has, rather
-   than carrying an assumption over from another project.
+4. **Which check does this team actually have?** Without looking back, describe the two
+   situations you might find in a team's Paratext version: the new consolidated check
+   covering numbers, weights, and measures together, or the older separate Numbers check
+   with no working Measures check. Then open the **Open Biblical Terms List** dialog in
+   a project you support and note what's actually present in that version. That dialog
+   is where you confirm what a team's Paratext really has, rather than carrying an
+   assumption over from another project.
 5. **One question, one sentence:** draft the question you'd ask a team to find out
    *where* their agreed approach to numbers, weights, money, and measures is written
    down. Aim it at locating a document — if your sentence contains any hint of what

@@ -85,30 +85,32 @@ checking whether the check that would confirm that has actually been re-run.
 
 ## Scenario 2: The Undocumented Measure (Objective 5)
 
-**Watch for in the diagnosis:** the learner should first recognize that Numbers and
-Measures are **two separate checks at two different levels of maturity** — Numbers is
-released (limited scope), Measures is still under development and not reliably
-available — and should confirm which one(s) are actually usable for this team's
-Paratext version before leaning on either. A strong answer explicitly notes that if
-Measures can't be trusted to catch the inconsistency yet, that changes what the check
-result can tell you, not just how you interpret it. From there, the learner should
-distinguish two different problems that look similar — "the check found an
-inconsistency" (a normal, expected check result) vs. "the team has no documented
-standard to check against" (a process gap that has to be fixed before the check result
-means anything). A strong answer checks for the existence of a documented approach
-*first*, before treating the flagged inconsistency as something to resolve. A weak
-answer treats "numbers/measures" as one check and never raises the maturity question at
-all.
+**Watch for in the diagnosis:** the learner should first recognize that Paratext's
+numbers/weights/measures checking is in transition: a **new consolidated check**
+(covering numbers, weights, and measures together) is expected to replace the older,
+separate Numbers check, but not every team's Paratext version has migrated to it yet.
+This team is still on the older setup — only the separate Numbers check, with no working
+Measures check at all — and the learner should confirm that specifically for this
+team's version rather than assuming either way. A strong answer explicitly notes that
+because no working check can catch the weights/measures inconsistency reliably on this
+version, that changes what the informal comparison can tell you, not just how you
+interpret it. From there, the learner should distinguish two different problems that
+look similar — "an inconsistency turned up" (a normal, expected finding) vs. "the team
+has no documented standard to check against" (a process gap that has to be fixed before
+the finding means anything). A strong answer checks for the existence of a documented
+approach *first*, before treating the flagged inconsistency as something to resolve. A
+weak answer never asks which check(s) this team's version actually has, or assumes the
+new consolidated check must already be available everywhere.
 
-**Watch for in what they'd say to the team:** the learner explains, in plain terms, that
-Numbers and Measures aren't the same check and aren't equally reliable yet in this
-team's Paratext version, and helps the team locate or establish their own documented
-approach — asking questions, prompting them to search prior notes or ask whoever made
-"the decision early on" — without proposing a rendering themselves. This is marker
-**(f)**: the numbers/measures rendering is the team's call, not the LTC's, and this
-scenario has no field "gotcha" to diagnose — it's pure process/routing (per the design
-doc, this check area has no confirmed field case yet, so don't expect or reward an
-invented technical cause).
+**Watch for in what they'd say to the team:** the learner explains, in plain terms, what
+this team's Paratext version does and doesn't have available yet — the older Numbers
+check only, no reliable Measures coverage — and helps the team locate or establish their
+own documented approach — asking questions, prompting them to search prior notes or ask
+whoever made "the decision early on" — without proposing a rendering themselves. This is
+marker **(f)**: the numbers/measures rendering is the team's call, not the LTC's, and
+this scenario has no field "gotcha" to diagnose — it's pure process/routing (per the
+design doc, this check area has no confirmed field case yet, so don't expect or reward
+an invented technical cause).
 
 **Watch for in escalation:** once an approach exists, deciding which of the two flagged
 renderings is correct stays with the team; a Translation Consultant only enters if the team
@@ -118,8 +120,8 @@ by default, without first establishing whether the team can resolve it internall
 skipped a step.
 
 **Common wrong turn:** proposing which rendering is "right" instead of routing the decision
-back to the team; treating Numbers and Measures as one combined check and never checking
-whether Measures is even mature enough to rely on for this team's Paratext version.
+back to the team; assuming the new consolidated check is available without confirming it for
+this team's specific Paratext version, or assuming no team could possibly have it yet.
 
 ---
 

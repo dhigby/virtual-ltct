@@ -61,32 +61,36 @@ the team's language, so you can't judge the passages' meaning yourself.
 ## Scenario 2: The Undocumented Measure (Objective 5 — Numbers and Measures)
 
 **Situation:** A team asks you to check their Bible for consistent renderings of
-weights and measures. When you go looking, you find that this Paratext version's
-**Measures** check is still under development and isn't reliably available — but the
-separate **Numbers** check is released and running. Once you confirm this and run the
-Numbers check where it applies, along with what informal comparison you can do for the
-measures themselves, you find an inconsistency between two occurrences of what should
-be the same measurement — one passage renders it one way, another passage renders it
-differently. You ask the team what their documented approach to measures is, and they
-aren't sure such a document exists; someone recalls "a decision early on" but nobody can
-point to where it's written.
+numbers, weights, and measures. When you go looking, you find that this team's Paratext
+version has not yet migrated to the new consolidated numbers/weights/measures check —
+they still only have the older, separate **Numbers** check, and there is no working
+Measures check available to them at all. You confirm this, then run the Numbers check
+where it applies, along with what informal comparison you can do for the measures
+themselves. That informal comparison turns up an inconsistency between two occurrences
+of what should be the same measurement — one passage renders it one way, another
+passage renders it differently. You ask the team what their documented approach to
+measures is, and they aren't sure such a document exists; someone recalls "a decision
+early on" but nobody can point to where it's written.
 
-**Context:** This check area has no single well-known field "gotcha" the way the
-wordlist or Biblical Terms tool does, and it's newer territory — part of your job here
-is confirming what's actually available and mature enough to rely on before you lean on
-it, and the rest is process and routing, not recognizing a specific known error.
+**Context:** A new consolidated check that covers numbers, weights, and measures
+together is expected to become available before too long, but rollout doesn't reach
+every team's Paratext version at once — this team is one of the ones still on the older
+setup. This check area has no single well-known field "gotcha" the way the wordlist or
+Biblical Terms tool does; part of your job here is confirming what's actually available
+for this team's specific version before you lean on it, and the rest is process and
+routing, not recognizing a specific known error.
 
 **Your task:**
-1. **Diagnose:** How would you confirm, for this team's Paratext version, which of
-   Numbers and Measures is actually available and mature enough to rely on — and what
-   would you do about the measurement inconsistency if the Measures check itself can't
-   be trusted to catch it yet? Separately, what would you check first about the
-   inconsistency you did find — the check result itself, or whether an agreed approach
-   exists at all? What's the difference between "the check found an inconsistency" and
-   "the team has no documented standard to check against"?
-2. **Say to the team:** How would you explain the difference between the two checks'
-   maturity to the team, and how would you help them either locate their existing
-   decision or agree on one now, without proposing a rendering yourself?
+1. **Diagnose:** How would you confirm, for this team's Paratext version, whether they
+   have the new consolidated check or only the older, separate Numbers check with no
+   working Measures check — and what would you do about the measurement inconsistency
+   given that no working check can catch it reliably on their version? Separately, what
+   would you check first about the inconsistency you did find — the check result itself,
+   or whether an agreed approach exists at all? What's the difference between "an
+   inconsistency turned up" and "the team has no documented standard to check against"?
+2. **Say to the team:** How would you explain to the team what their Paratext version
+   does and doesn't have available yet, and how would you help them either locate their
+   existing decision or agree on one now, without proposing a rendering yourself?
 3. **Escalate:** Once an approach is documented, whose job is it to decide which of the
    two flagged renderings is correct — and is there any version of this situation that
    would need a Translation Consultant rather than staying inside the team?

@@ -6,7 +6,8 @@ This quiz covers Lessons 1–5 of Supporting Scripture Pre-publishing Checks. Yo
 **80% (16/20)** to pass.
 
 Questions are weighted toward the course's core objectives (confirming the parallel-
-passage check and the separate Numbers and Measures checks, formatting diagnosis,
+passage check and the numbers/weights/measures check(s) available for a team's Paratext
+version, formatting diagnosis,
 glossary/layout, and the final read-through and escalation judgment), with the secondary
 objectives (false-clean
 recognition, incomplete/stale Biblical Terms coverage, Project Biblical Terms bloat, and the
@@ -98,19 +99,22 @@ since a major revision three weeks ago. What should you do?
 - C) Decide yourself whether the passages should match
 - D) Escalate to a Translation Consultant without further discussion
 
-**Question 11:** Numbers and Measures are two separate checks in Paratext at different
-levels of maturity. Before accepting either check's results, what should you confirm?
+**Question 11:** A new, consolidated Paratext check is expected to combine numbers,
+weights, and measures checking into one check, replacing the older, separate Numbers
+check — but not every team's Paratext version has migrated to it yet. Before accepting
+any numbers/measures check results, what should you confirm?
 - A) That it matches your own sense of the correct rendering
-- B) Which check(s) are actually available and mature enough to rely on for the team's Paratext version, then that whichever is usable was run against the team's already-agreed, documented approach to numbers and measures
-- C) That both Numbers and Measures appear as one combined Biblical Terms list
+- B) Which check(s) are actually available for the team's specific Paratext version — the new consolidated check, or only the older separate Numbers check — then that whichever is available was run against the team's already-agreed, documented approach to numbers and measures
+- C) That both the old and new checks appear as one combined Biblical Terms list
 - D) That the typesetter has reviewed it
 
-**Question 12:** You confirm that Numbers is available for a team's Paratext version
-but Measures is still under development and not reliably available. You run the Numbers
-check where it applies, along with what informal comparison you can do for the measures
-themselves, and that informal comparison turns up an inconsistency between two
-occurrences of what should be the same measurement. You're not sure whether the team's
-documented approach covers this case. What should you do?
+**Question 12:** You confirm that a team's Paratext version has not yet migrated to the
+new consolidated check — they only have the older, separate Numbers check, with no
+working Measures check at all. You run the Numbers check where it applies, along with
+what informal comparison you can do for the measures themselves, and that informal
+comparison turns up an inconsistency between two occurrences of what should be the same
+measurement. You're not sure whether the team's documented approach covers this case.
+What should you do?
 - A) Decide which rendering is correct based on your own judgment
 - B) Ignore the flag, since this check area has no established field pattern
 - C) Refer the gap back to the team to resolve against their own documented approach

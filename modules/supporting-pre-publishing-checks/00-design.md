@@ -84,6 +84,27 @@
 > "Tool-version specifics" section. `module-author` may revise `02-wordlist-and-biblical-terms.md`
 > on this basis.
 
+> **Amendment, 2026-09-11 (Jenni Beadle and Doug Higby) — factual update on Numbers/Measures tool
+> maturity, no re-approval needed:** Jenni and Doug have worked together to build a new,
+> **consolidated Numbers check that covers numbers, weights, and measures together in one check**,
+> replacing the old split Numbers/Measures approach (Measures itself was never released as its own
+> separate check, so it is being absorbed into this new consolidated check rather than "replaced"
+> in its own right). It is currently **in testing** — Jenni has manually imported it under a
+> working/test label for testing purposes only, which is not its eventual real name and is not
+> used anywhere in this document; it is described functionally throughout as **"the new
+> consolidated Numbers check (covering numbers, weights, and measures)."** Jenni and Doug expect
+> it to ship before this course publishes, but it is **not yet confirmed/released** as of this
+> writing. Because it is still in testing, and because not every team will be on a Paratext
+> version that has it once it does ship, the underlying skill objective 5 teaches — confirm what's
+> actually available in a team's specific Paratext version before relying on it — is unchanged and
+> remains essential: older or unmigrated projects may continue to show only the old, separate
+> Numbers check (with no Measures check at all) for some time after the new consolidated check
+> releases. This is a factual/content update reflecting real-world tool development, not a scope
+> or objective-count change. See the revised objective 5, the revised `03-parallel-passages-and-
+> measures.md` module-breakdown row, the revised Numbers/Measures field case, and the revised
+> "Tool-version specifics" section below. `module-author` may draft or revise
+> `03-parallel-passages-and-measures.md` on this basis.
+
 ## Outcome-level open question (resolve before approval)
 
 The `README.md` frontmatter and issue #40 both target `3 - Independent`, delivered self-paced
@@ -131,9 +152,11 @@ open decision left from the SME interview.
 Translation for Publication"):
 - Parallel passages (ch. 3)
 - Proper names and Biblical Terms, including the wordlist/spell-checking check area (ch. 4)
-- Numbers and Measures — **two separate checks in Paratext**, not one combined check (see
-  "Tool-version specifics" correction below): the Numbers check exists now (limited scope); the
-  Measures check is still under development and not yet reliably available (ch. 5)
+- Numbers and Measures — **anticipated to become one consolidated check** (covering numbers,
+  weights, and measures together), currently in testing and expected to ship before this course
+  publishes but not yet confirmed/released; until then, and for teams not yet on the newer
+  Paratext version once it ships, the old **separate Numbers check** (limited scope, with no
+  separate Measures check) remains the fallback case (see "Tool-version specifics" below) (ch. 5)
 - Formatting checks — structural integrity, section headings, book titles, references, footnotes
   (ch. 6)
 - The final draft-PDF read-through in PTXprint (ch. 8)
@@ -167,23 +190,27 @@ secondary objectives or their competency coverage.
 | 2 | Core | Learner can confirm that a parallel-passage comparison check was actually run and its results reviewed by the team, flag passages the tool surfaces as inconsistent (by the tool's own comparison, not the learner's own linguistic judgment) back to the team for adjudication, and check that the team's own decisions about legitimate variation vs. over-harmonising — not the LTC's — are driving the resolution | Translation Tools 2.0, `2 - With Assistance` | Quiz + Scenario Bank |
 | 3 | Secondary | Learner can recognize incomplete Biblical Terms coverage — blank renderings (the tool's default starting state) presented as a finished list — by checking the Found column/count rather than eyeballing the list, recognize stale/duplicate renderings left in place after a correct rendering was added without deleting the original, and coach the team to complete and clean up the list — without taking over their keyboard. Learner can also recognize a third pattern — a rendering that just repeats the verse's first word, likely caused by running **Guess Renderings** before the project had enough translated data for it to work reliably (per a support.bible programmer's reply, 2026-09-10; not something translators would consciously notice, since it's automated/background) — by scanning a term's occurrences with the down arrow to quickly step through verses, which makes the first-word pattern visually obvious. (This third pattern is now confirmed/attributed, not unconfirmed — see "SME knowledge notes," field case 4 revised 2026-09-10 — but remains secondary to the two primary patterns above.) | Translation Tools 2.0, `2 - With Assistance` | Quiz + Scenario Bank |
 | 4 | Secondary | Learner can diagnose configuration-caused Send/Receive and performance slowdowns from over-adding terms to the *Project* Biblical Terms list, and advise the team on right-sizing it | Translation Tools 5.0 (Scripture Collaboration), `2 - With Assistance` — "Advise users in best-practices for collaboration and data safety... assist users to configure plans and tasks in a way that helps them" | Quiz + Scenario Bank |
-| 5 | Core | Learner can confirm, for both the Numbers check and the Measures check, whether that check is actually available and mature enough to rely on for the team's Paratext version at the time of support (Numbers exists now but is limited in scope; Measures is still under development and may not yet be available), run whichever check(s) are usable against the team's *already-agreed and documented* approach (not the LTC's own judgment of what the rendering should be), and refer any gaps or contradictions the check(s) surface back to the team to resolve rather than deciding new renderings | Translation Tools 2.0, `2 - With Assistance` | Quiz + Scenario Bank |
+| 5 | Core | Learner can confirm whether the team's Paratext version has the new consolidated Numbers check (covering numbers, weights, and measures) or still only the old separate Numbers check, run whichever is available against the team's *already-agreed and documented* approach (not the LTC's own judgment of what the rendering should be), and refer any gaps or contradictions the check surfaces back to the team to resolve rather than deciding new renderings | Translation Tools 2.0, `2 - With Assistance` | Quiz + Scenario Bank |
 | 6 | Core | Learner can diagnose formatting-check failures — unclosed marker pairs, ghost markers, wrong markers, book-title/heading/reference errors — working structural-first, and coach a team to a zero-error result | Translation Tools 2.0, `2 - With Assistance` | Quiz + Scenario Bank |
 | 7 | Core | Learner can diagnose over-linked glossary marking (every occurrence vs. first-per-section) and coach the team to unlink and relink at the correct scope | Translation Tools 2.0, `2 - With Assistance` | Quiz + Scenario Bank |
 | 8 | Secondary | Learner can advise a team on a single- vs. two-column layout decision based on reader/community expectation (not just word length), and set up a hyphenation file so long words can break in a two-column layout | Digital and Print Publishing 1.0 (Print Publishing), `2 - With Assistance` — "Customize and use appropriate tools to produce publishable output for Scripture and dictionaries" | Quiz + Scenario Bank |
 | 9 | Core | Learner can lead a team through the final PTXprint draft-PDF read-through (spreads, orphan words, footnote shifts, heading placement, underfilled pages) and resolve or triage what it surfaces, deferring true typesetting composition to the typesetter | Digital and Print Publishing 1.0, `2 - With Assistance` | Quiz + Scenario Bank |
 | 10 | Core | Learner can decide, for any surfaced issue, whether it is theirs to resolve, the team's translation decision, or needs escalation (an LT mentor for tooling, a Translation Consultant for content) | Translation Tools 2.0, `2 - With Assistance` | Quiz + Scenario Bank |
 
-\*\* **Objective 5 / Numbers-vs-Measures — resolved.** Objective 5 now covers the
-LTC's process/routing role across **two separate checks** (Numbers, released but limited in
-scope; Measures, still under development and not yet reliably available) rather than one combined
-check, per Jenni's 2026-09-01 correction (see "Tool-version specifics" below). It is kept as a
-single objective here because the LTC's job — confirm which check(s) are actually available and
-mature, then route gaps back to the team — is the same underlying skill regardless of which
-check(s) exist at a given time. **Ruled by Kevin Nicholas (Design Approver), 2026-08-31, PR #44:
-objective 5 stays a single objective.** Assessing Measures separately would mean assessing a
-check that is not yet reliably available; revisit a split only if Measures ships and matures
-enough during the life of this course to warrant its own assessed item.
+\*\* **Objective 5 / Numbers-vs-Measures — resolved, updated 2026-09-11.** Objective 5 originally
+covered the LTC's process/routing role across **two separate checks** (Numbers, released but
+limited in scope; Measures, still under development and not yet reliably available), per Jenni's
+2026-09-01 correction (see "Tool-version specifics" below). As of 2026-09-11 (Jenni Beadle and
+Doug Higby), a new **consolidated Numbers check covering numbers, weights, and measures together**
+is in testing and expected to ship before this course publishes, intended to replace the old
+separate Numbers check (Measures was never released as its own check, so it is absorbed rather
+than separately "replaced"). Objective 5 is worded to cover **either state** — the new consolidated
+check if the team's Paratext version has it, or the old separate Numbers check if not — since the
+underlying skill (confirm what's actually available before relying on it, then route gaps back to
+the team) is unchanged. It is kept as a single objective here for the same reason it originally
+was. **Ruled by Kevin Nicholas (Design Approver), 2026-08-31, PR #44: objective 5 stays a single
+objective.** That ruling still holds under the 2026-09-11 update — this is a factual update to
+reflect real tool development, not a scope change, and does not require re-ruling.
 
 \* **Objective 1 / spine tension — flagged, not resolved.** Objective 1 (recognizing false-clean
 results) was the SME's original **spine scenario**, framed in the interview as a cross-cutting
@@ -221,7 +248,7 @@ each core check-area lesson instead of either a heavy standalone module or being
 | --- | --- | --- | --- |
 | `01-supporting-the-final-turn.md` | The translation process as a 6-stage spiral; Stage 6 as the final turn re-running earlier checks; the cross-cutting spine (false-clean results) introduced as a recurring watch-for, not a standalone topic; the consultant's role (diagnose, coach, never touch the keyboard); when to escalate | 1 (light touch), 10 | 35 |
 | `02-wordlist-and-biblical-terms.md` | Biblical Terms list completion and cleanup (secondary, condensed): recognizing blank renderings as the tool's normal default starting state and confirming genuine completion via the Found column/count rather than eyeballing the list; recognizing stale/duplicate renderings left in place after a correct rendering was added without deleting the original; a third pattern — a rendering that just repeats the verse's first word, likely caused by running **Guess Renderings** before the project had enough translated data (per a support.bible programmer's reply, 2026-09-10 — see field case 4, revised) — noted as a real, attributed pattern to watch for (no longer unconfirmed/pending), spotted by scanning a term's occurrences with the **down arrow** to quickly step through verses so the first-word repetition becomes visually obvious; Project Biblical Terms bloat and performance (secondary, condensed); recurring false-clean callout for this check area, resting solely on the confirmed **blanket-approval pattern** — a wordlist mass-marked **Correct** — described using correct spelling-status terminology (**Correct / Incorrect / Undecided**), not "denied" (**reattributed 2026-09-08**: the "denied errors" field case belongs to Basic Checks in `04-formatting-and-references.md`, not here — see "SME knowledge notes," field case 1) | 1 (callout), 3, 4 | 40 |
-| `03-parallel-passages-and-measures.md` | Parallel passages: confirming the comparison check was run and routing tool-flagged inconsistencies to the team (core, expanded); Numbers and Measures — **two separate checks, not one**: confirming which of the two is actually available and mature for the team's Paratext version (Numbers exists now, limited scope; Measures still under development, not yet reliably available), running whichever is usable against the team's already-agreed, documented approach, and routing gaps back to the team (core, expanded); recurring false-clean callout | 1 (callout), 2, 5 | 60 |
+| `03-parallel-passages-and-measures.md` | Parallel passages: confirming the comparison check was run and routing tool-flagged inconsistencies to the team (core, expanded); Numbers and Measures: confirming whether the team's Paratext version has the **new consolidated Numbers check (covering numbers, weights, and measures)** — in testing as of 2026-09-11, anticipated to be the primary case by the time this course publishes — or still only the **old separate Numbers check** (limited scope, no separate Measures check), which remains a real fallback scenario for teams not yet on the newer version; running whichever is available against the team's already-agreed, documented approach, and routing gaps back to the team (core, expanded); recurring false-clean callout | 1 (callout), 2, 5 | 60 |
 | `04-formatting-and-references.md` | Formatting checks in structural-first order: marker-pair census, ghost markers, long/short verses, section headings, book titles, references, footnotes (core); subsection (confirmed by Kevin Nicholas on 2026-08-28): Punctuation Inventory (Checks > Inventories) ahead of typesetting — reviewing/using the inventory itself (not PTXprint or the typesetter's own tooling), confirming the inventory was actually reviewed rather than assumed already handled earlier in the process (echoes the objective-1 false-clean theme), and common settings issues that turn this into a time-sink for a typesetter; **"Punctuation Sequences" addition folded into that Punctuation Inventory subsection (raised 2026-09-03; confirmed by Kevin Nicholas on 2026-09-03 via PR #46 comment — folded in, not a separate section): "Show sequences" in the Punctuation Inventory's Inventory menu, and its relationship to the "Punctuation (sequences)" Basic Checks option** — reviewing the inventory without "Show sequences" selected can silently miss unmatched punctuation-pair sequences (echoes the false-clean theme again); scoped to punctuation sequences only — quotation-mark-specific complexity is explicitly out of scope here and deferred to a future addition; recurring false-clean callout — **incorporating field case 1** (**reattributed 2026-09-08**: a team denying Basic Checks errors they didn't understand, rather than resolving them) as the concrete example of the false-clean pattern in the Basic Checks context specifically, since Basic Checks is where "deny" is an actual, correct Paratext action (unlike wordlist/spelling status, which has no deny — see `02-wordlist-and-biblical-terms.md` and "SME knowledge notes") | 1 (callout), 6 | 80 — the folded-in treatment keeps 10 minutes under the 90-minute cap. If drafting runs long, trim the reference/book-title portion first (as already flagged for the prior amendment); if that alone isn't enough, this lesson should be split rather than pushed over 90 minutes |
 | `05-glossary-linking-and-layout.md` | Glossary-linking scope (over-linking, core); single- vs. two-column layout and hyphenation decisions (secondary, condensed); the PTXprint draft-PDF read-through (core); recurring false-clean callout | 1 (callout), 7, 8, 9 | 65 |
 | `06-scenario-bank.md` | Mentor-reviewed applied scenarios weighted toward core objectives (2, 5, 6, 7, 9, 10 each get a full scenario), secondary objectives (3, 4, 8) folded into one combined scenario, and objective 1 (false-clean) run as a thread inside two of the core scenarios rather than its own case | 1–10 | 60 |
@@ -386,11 +413,14 @@ matching the same rule taught in the team workbook).
 - **Parallel passages**: over-harmonising — forcing all parallel passages to match exactly and
   erasing legitimate variation. They must be consistent in *meaning*, not necessarily identical in
   *form*.
-- **Numbers & Measures** (two separate checks, not one combined check — see the 2026-09-01
-  correction in "Tool-version specifics" below): Numbers exists now (limited scope); Measures is
-  still under development and not yet reliably available. **Open** — this area is still new to the
-  SME; no field case yet for either check. Do not invent one for scenario content; fill from
-  experience if one surfaces before drafting.
+- **Numbers & Measures** (see "Tool-version specifics" below): a new **consolidated Numbers check
+  covering numbers, weights, and measures together** is in testing (as of 2026-09-11) and expected
+  to ship before this course publishes, replacing the old separate Numbers check (Measures was
+  never released separately, so it is absorbed rather than replaced in its own right); until it
+  ships — and for teams not yet on the newer version afterward — the old separate Numbers check
+  (limited scope, no separate Measures check) remains the fallback. **Open** — this area is still
+  new to the SME; no field case yet for either the old or new check. Do not invent one for scenario
+  content; fill from experience if one surfaces before drafting.
 - **Formatting & markup / Basic Checks**: wrong markers, unclosed footnote pairs (`\f…\f*`),
   wrong-case characters; **denying Basic Checks errors they didn't understand, rather than
   resolving them** (field case 1 — **reattributed 2026-09-08**, Jenni Beadle's Stage 5
@@ -437,16 +467,30 @@ Observable markers of a competent supporting consultant:
   **PTXprint 3.0.38**; PTXprint is updated often, so menu labels may move between versions.
   Underfilled-page auto-fill is available from **PTXprint v3.0.19+**.
 - **Correction, SME review 2026-09-01 (Jenni Beadle, confirmed via a screenshot of the actual
-  Open Biblical Terms List dialog):** Numbers and Measures are **two separate checks in Paratext, not
-  a combined "Measures and Money and Numbers" list.** The **Numbers** check/list already exists
-  and has been released, but its scope is fairly limited. A **Measures** check (money/weights) is
-  still **under development and not yet released** — Jenni is confident it's coming, but it is not
-  a mature, available check at the time of this design. Both appear as separate entries in
-  Paratext's Open Biblical Terms List dialog alongside other unrelated lists (Major Biblical Terms, All
-  Biblical Terms, NT Key Biblical Terms, Inclusive/Exclusive Pronouns, Younger/Older Siblings,
-  etc.) — there is no single combined list to point learners at. The earlier note in this section
-  claiming current Paratext versions show "Measures and Money" and "Numbers" as combined lists was
-  incorrect and is removed.
+  Open Biblical Terms List dialog):** Numbers and Measures were, at that time, **two separate
+  checks in Paratext, not a combined "Measures and Money and Numbers" list.** The **Numbers**
+  check/list already existed and had been released, but its scope was fairly limited. A
+  **Measures** check (money/weights) was still **under development and not yet released**. Both
+  appeared as separate entries in Paratext's Open Biblical Terms List dialog alongside other
+  unrelated lists (Major Biblical Terms, All Biblical Terms, NT Key Biblical Terms,
+  Inclusive/Exclusive Pronouns, Younger/Older Siblings, etc.) — there was no single combined list
+  to point learners at.
+- **Update, 2026-09-11 (Jenni Beadle and Doug Higby):** since the above, Jenni and Doug have worked
+  together to build a **new, consolidated Numbers check that covers numbers, weights, and measures
+  together in one check**, intended to replace the old separate Numbers check (Measures itself was
+  never released separately, so it is absorbed into the new check rather than "replaced" in its
+  own right). It is **currently in testing** — Jenni has manually imported it under a working/test
+  label for testing purposes only; that label is **not** its eventual real name and is not used
+  anywhere in this design document. It is described here functionally, as **"the new consolidated
+  Numbers check (covering numbers, weights, and measures)."** Jenni and Doug expect it to be
+  released before this course publishes, but as of this writing it is **not yet confirmed/
+  released**. Because of this, and because not every team will immediately be on a Paratext
+  version that has it once it does ship, the underlying skill this course teaches — confirm what's
+  actually available in a team's specific Paratext version before relying on it, and route gaps
+  back to the team — remains essential. Teach the new consolidated check as the **anticipated
+  primary case** by the time this course is in use, with the older split-check behavior (separate,
+  limited-scope Numbers check; no separate Measures check) as a **real fallback scenario** for
+  teams on older or unmigrated Paratext versions.
 - **Resolved, 2026-09-10 (Jenni Beadle) — support.bible replied:** the reported first-word
   rendering behavior (open as a pending question since 2026-09-06) now has a credible, attributed
   explanation from a support.bible programmer: the team likely ran Paratext's **Guess Renderings**
@@ -536,3 +580,17 @@ which makes the first-word repetition visually obvious. Field case 4, objective 
 bullet, and the "Tool-version specifics" section are all revised accordingly; estimated time for
 `02-wordlist-and-biblical-terms.md` (40 minutes) is unchanged. `module-author` may draft or revise
 `02-wordlist-and-biblical-terms.md` on this basis.
+
+**Amendment, 2026-09-11 (Jenni Beadle and Doug Higby) — Numbers/Measures tool development, no
+re-approval needed:** a new, consolidated Numbers check that covers numbers, weights, and measures
+together in one check is in testing and expected to ship before this course publishes, replacing
+the old separate Numbers check (Measures was never released as its own check, so it is absorbed
+rather than separately replaced). It is described functionally throughout this document — not by
+the working/test label Jenni used for manual testing import, which is not its eventual real name.
+Objective 5's wording, the "Scope" section, the `03-parallel-passages-and-measures.md`
+module-breakdown row, the "Common mistakes" Numbers & Measures bullet, and the "Tool-version
+specifics" section are all revised to teach the new consolidated check as the anticipated primary
+case, with the old split-check behavior retained as a real fallback for teams not yet on the newer
+Paratext version. This is a factual update reflecting real-world tool development, not a scope or
+objective-count change; module and time estimates are unchanged. `module-author` may draft or
+revise `03-parallel-passages-and-measures.md` on this basis.

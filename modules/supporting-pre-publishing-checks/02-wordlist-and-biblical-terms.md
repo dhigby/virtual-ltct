@@ -9,14 +9,17 @@ fix without touching their keyboard.
 
 ## Learning objectives
 
-- You will be able to recognize a wordlist that has been blanket-approved rather than
-  genuinely reviewed, and coach a team to reset it and re-run the check honestly.
-- You will be able to recognize incomplete or stale Biblical Terms coverage — blank
-  renderings presented as done, and stale/duplicate renderings left uncleaned — and coach
-  the team to genuinely complete and clean up the list.
-- You will be able to diagnose a Project Biblical Terms list that has been over-added-to
-  and is causing Send/Receive or performance slowdowns, and advise the team on
-  right-sizing it.
+- You will be able to:
+  - Recognize a wordlist that has been blanket-approved rather than genuinely reviewed.
+  - Coach a team to reset it and re-run the check honestly.
+- You will be able to:
+  - Recognize incomplete Biblical Terms coverage — blank renderings presented as done.
+  - Recognize stale or duplicate renderings left uncleaned.
+  - Coach the team to genuinely complete and clean up the list.
+- You will be able to:
+  - Diagnose a Project Biblical Terms list that has been over-added-to and is causing
+    Send/Receive or performance slowdowns.
+  - Advise the team on right-sizing it.
 
 ## Connect
 

@@ -9,15 +9,19 @@ team to a genuinely zero-error result rather than a fast one.
 
 ## Learning objectives
 
-- You will be able to diagnose formatting-check failures — unclosed marker pairs, ghost
-  markers, wrong markers, and errors in book titles, section headings, and references —
-  by working structural-first, and coach a team to a zero-error result without touching
-  their keyboard.
-- You will be able to review and use Paratext's Punctuation Inventory (Checks >
-  Inventories) ahead of typesetting — including selecting "Show sequences" in its
-  Inventory menu so that the "Punctuation (sequences)" Basic Check is meaningful —
-  confirm it was genuinely reviewed rather than assumed already handled, and recognize
-  the common settings issues that turn it into a time-sink for a typesetter.
+- You will be able to:
+  - Diagnose formatting-check failures — unclosed marker pairs, ghost markers, wrong
+    markers, and errors in book titles, section headings, and references — by working
+    structural-first.
+  - Coach a team to a zero-error result without touching their keyboard.
+- You will be able to:
+  - Review and use Paratext's Punctuation Inventory (Checks > Inventories) ahead of
+    typesetting.
+  - Select "Show sequences" in its Inventory menu so that the "Punctuation (sequences)"
+    Basic Check is meaningful.
+  - Confirm the inventory was genuinely reviewed rather than assumed already handled.
+  - Recognize the common settings issues that turn it into a time-sink for a
+    typesetter.
 
 ## Connect
 

@@ -9,14 +9,18 @@ the team's own, made against their own agreed approach.
 
 ## Learning objectives
 
-- You will be able to confirm that a parallel-passage comparison check was actually run
-  and reviewed by the team, flag tool-surfaced inconsistencies back to the team for
-  their own adjudication, and recognize legitimate variation versus over-harmonising.
-- You will be able to confirm which of the two separate Numbers and Measures checks is
-  actually available and mature enough to rely on for a team's Paratext version, run
-  whichever is usable against the team's already-agreed, documented approach, and route
-  any gaps or contradictions the check surfaces back to the team rather than deciding a
-  rendering yourself.
+- You will be able to:
+  - Confirm the parallel-passage comparison check actually ran and was reviewed by the
+    team.
+  - Flag any inconsistencies the check finds back to the team for their own decision.
+  - Recognize the difference between legitimate variation and over-harmonising.
+- You will be able to:
+  - Confirm which of the two checks — Numbers or Measures — is actually available and
+    reliable for the team's Paratext version.
+  - Run whichever check is usable, checking it against the team's already-agreed
+    approach.
+  - Route any gaps or contradictions back to the team rather than deciding the correct
+    rendering yourself.
 
 ## Connect
 

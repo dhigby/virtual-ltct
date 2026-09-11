@@ -9,12 +9,15 @@ the room.
 
 ## Learning objectives
 
-- You will be able to describe the translation process as a 6-stage spiral, and explain
-  why Stage 6 (pre-publishing) is the "final turn" that re-runs earlier checks to
-  zero-error.
-- You will be able to state the consultant's role in a pre-publishing check session —
-  diagnose, coach, never touch the keyboard — and decide when an issue is yours to
-  resolve, the team's translation decision, or something to escalate.
+- You will be able to:
+  - Describe the translation process as a 6-stage spiral.
+  - Explain why Stage 6 (pre-publishing) is the "final turn" that re-runs earlier checks
+    to zero-error.
+- You will be able to:
+  - State the consultant's role in a pre-publishing check session — diagnose, coach,
+    never touch the keyboard.
+  - Decide when an issue is yours to resolve, the team's translation decision, or
+    something to escalate.
 
 ## Connect
 

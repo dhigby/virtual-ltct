@@ -76,9 +76,9 @@ symptoms of a single cause higher up. Work in this order instead:
    to the wrong verse or duplicated. Note that an unclosed `\f` footnote marker (opened
    without its matching `\f*`) has a much narrower effect than the missing-`\p` example
    above: if it's unclosed at the end of a verse, it has no effect at all; if it's
-   unclosed partway through a verse, the only consequence is that the following verse
-   text gets swallowed into the footnote's own content — it does not cascade into
-   headings, references, or other markers elsewhere in the chapter.
+   unclosed partway through a verse, the only consequence is that the footnote text
+   displays as part of the verse itself — it has no other flow-on effect, and does not
+   cascade into headings, references, or other markers elsewhere in the chapter.
 
 Diagnosing structural-first doesn't mean the team fixes things in that exact order line
 by line — it means *you* look for the highest-leverage cause first, so you're not

@@ -196,6 +196,7 @@ use to hand a content decision back to the team without sounding like you're avo
 the work — something like "that's a call for your team to make; my job is making sure
 the check ran and you've seen everything it found."
 
-**Coming up:** Lesson 5 turns to glossary linking and the final layout and draft-PDF
-read-through — where, unlike this lesson, you'll also be doing hands-on technical setup
+**Coming up:** Lesson 4 turns to formatting checks and references — working
+structural-first through marker pairs, headings, and the Punctuation Inventory ahead of
+typesetting.
 alongside your coaching role.

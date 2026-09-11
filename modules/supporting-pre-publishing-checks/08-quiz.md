@@ -90,12 +90,13 @@ Biblical Terms list and the Send/Receive slowdown "hard to convince the team of"
 - C) Adding too many cross-references
 - D) Confusing the Numbers check with the Measures check
 
-**Question 10:** A parallel-passage check flags several differences between two
-accounts of the same event. The team lead says, "those are just supposed to be
-different — we're not touching them." You also notice the check hasn't been re-run
-since a major revision three weeks ago. What should you do?
+**Question 10:** Two accounts of the same event have several differences in wording.
+The team lead says, "those are just supposed to be different — we're not touching
+them." You open the Parallel Passages tool and see the relevant verses still showing a
+red "?" in the Status column, meaning they were edited during a major revision three
+weeks ago and haven't been reviewed since. What should you do?
 - A) Accept the team lead's explanation immediately, since it sounds reasonable
-- B) Confirm the check has been re-run since the revision, and that the flagged differences were genuinely reviewed, not just dismissed from memory
+- B) Ask the team to review the verses still marked with a red "?" in the Parallel Passages tool, so the flagged differences are genuinely reviewed rather than dismissed from memory
 - C) Decide yourself whether the passages should match
 - D) Escalate to a Translation Consultant without further discussion
 

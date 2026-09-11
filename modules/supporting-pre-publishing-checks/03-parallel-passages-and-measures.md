@@ -3,16 +3,17 @@
 **Estimated time:** 60 minutes
 
 **Purpose:** Support a team through two check areas where your role is specifically
-*not* to judge the language yourself — confirming that the comparison check actually
-ran, that the team reviewed what it surfaced, and that any decisions about wording are
+*not* to judge the language yourself — confirming that every parallel passage has
+actually been reviewed since the last revision, and that any decisions about wording are
 the team's own, made against their own agreed approach.
 
 ## Learning objectives
 
 - You will be able to:
-  - Confirm the parallel-passage comparison check actually ran and was reviewed by the
-    team.
-  - Flag any inconsistencies the check finds back to the team for their own decision.
+  - Confirm every parallel passage has actually been reviewed since the last revision,
+    using the Parallel Passages tool's Status column.
+  - Flag any verse pairings still showing a red "?" back to the team for their own
+    decision.
   - Recognize the difference between legitimate variation and over-harmonising.
 - You will be able to:
   - Confirm which numbers/measures check(s) are actually available for the team's
@@ -42,28 +43,44 @@ decide the rendering yourself.
 
 ### Parallel passages
 
-Paratext's parallel-passage comparison flags places where passages that should say the
-same thing (e.g. synoptic Gospel accounts, repeated Old Testament passages) differ in
-the translation. Your first job is simply to **confirm the comparison check was
-actually run and that its results were reviewed by the team** — not assumed clean
-because it "was run once before." This is the same "we already did that" trap from
-Lesson 1, applied to this specific check.
+Paratext's Parallel Passages tool opens as its own window and displays passages that
+should say the same thing (e.g. synoptic Gospel accounts, repeated Old Testament
+passages) **side by side**, including the original-language text/gloss for reference.
+It does **not** algorithmically detect or flag "inconsistencies" the way a wordlist or
+Biblical Terms check does — there is nothing for it to compute. The team looks at each
+pair of parallel passages themselves and decides whether the translation is consistent
+and acceptable. That judgment call — meaning versus form — is the team's from the
+start, not something the tool hands you pre-flagged.
 
-When the tool flags an inconsistency, your job is to **surface it to the team**, not to
-decide whether it's a real problem. The common mistake here, per the SME field
-material, is **over-harmonising**: a team (or an overzealous checker) forces every
-parallel passage to match exactly, erasing legitimate variation. Passages need to be
-consistent in **meaning**, not necessarily identical in **form** — two Gospel accounts
-of the same event can use different wording and still be a faithful, consistent
-translation. That judgment belongs to the team (and, where content-level Scripture
-questions are involved, potentially a Translation Consultant) — your role is to make
-sure the tool's own flagged differences were actually looked at and a genuine decision
-was made, not silently dismissed or silently over-corrected.
+What the tool *does* track is **review status**, per verse, in a **Status column**:
 
-> **WARNING — watch for a false-clean result here too:** A parallel-passage check with
-> zero flags can mean genuine consistency — or it can mean the check was run once early
-> in the project and never re-run since revisions were made. Confirm it was re-run at
-> this stage, not just trusted from memory.
+- A **checkmark** means that verse pairing has been reviewed and approved.
+- A red **question mark (?)** means the verse has been edited since it was last
+  approved and needs to be looked at again.
+
+Your first job is simply to **open the Parallel Passages tool and check the Status
+column for outstanding red "?" marks** on the relevant verses — not to assume review
+happened because the team says "we already checked that." This is the same "we already
+did that" trap from Lesson 1, applied to this specific check: a revision pass can edit a
+verse after it was approved, which flips its status back to "needs review" whether or
+not the team notices.
+
+Once you can see which verses still show a red "?", your job is to **surface those to
+the team**, not to decide whether the passages are consistent yourself. The common
+mistake here, per the SME field material, is **over-harmonising**: a team (or an
+overzealous checker) forces every parallel passage to match exactly, erasing legitimate
+variation. Passages need to be consistent in **meaning**, not necessarily identical in
+**form** — two Gospel accounts of the same event can use different wording and still be
+a faithful, consistent translation. That judgment belongs to the team (and, where
+content-level Scripture questions are involved, potentially a Translation Consultant) —
+your role is to make sure every verse pairing that shows a red "?" was actually looked
+at and given a genuine decision, not left unreviewed or silently over-corrected.
+
+> **WARNING — watch for a false-clean result here too:** A team that says "we already
+> checked the parallel passages" may be remembering an earlier pass, before later
+> revisions touched those verses. Editing a verse after it was approved turns its
+> checkmark back into a red "?" — so open the Parallel Passages tool yourself and look
+> at the Status column rather than trusting a team's memory of when it was last done.
 
 ### Numbers and Measures — confirm what your team's Paratext version has
 
@@ -120,8 +137,12 @@ one. What *is* established is the shape of your role above — confirm what's av
 run it against the documented approach, and route gaps back to the team.
 
 **Key takeaways**
-- In both check areas, your job is process and routing — confirm the check ran, confirm
-  the team reviewed the results, and hand judgment calls about wording back to them.
+- In both check areas, your job is process and routing — confirm every relevant item has
+  actually been reviewed, and hand judgment calls about wording back to the team.
+- The Parallel Passages tool shows passages side by side (with original-language text)
+  for the team to judge themselves — it doesn't flag inconsistencies for you. Check the
+  Status column instead: a checkmark means reviewed and approved, a red "?" means edited
+  since approval and needing another look.
 - Parallel passages need consistency of meaning, not identical form — watch for
   over-harmonising as the specific failure mode here.
 - A new consolidated check (numbers, weights, and measures together) is expected to

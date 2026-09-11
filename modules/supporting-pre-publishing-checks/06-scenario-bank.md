@@ -34,25 +34,25 @@ establish.
 
 ## Scenario 1: The Harmonized Synoptics (Objective 2 — parallel passages)
 
-**Situation:** You're supporting a team nearing Stage 6. Their parallel-passage
-comparison check shows several flagged differences between two accounts of the same
-event. The team lead tells you, "Those are just supposed to be different — we're not
-touching them, this was already checked months ago."
+**Situation:** You're supporting a team nearing Stage 6. Two accounts of the same event
+have several differences in wording. The team lead tells you, "Those are just supposed
+to be different — we're not touching them, this was already checked months ago."
 
-**Context:** Paratext's checks don't show a "last run" date on screen, so you open
-Project History to check for yourself. The dated, categorized entries show a revision
-pass logged three weeks ago, but no entry showing the parallel-passage check category
-touched or re-run since then — the flags on screen predate the revision. You don't speak
-the team's language, so you can't judge the passages' meaning yourself.
+**Context:** You open the Parallel Passages tool and look at the relevant verses side by
+side. Several of them show a red question mark in the Status column rather than a
+checkmark — meaning those verses were edited during a revision pass three weeks ago and
+haven't been reviewed again since. You don't speak the team's language, so you can't
+judge the passages' meaning yourself.
 
 **Your task:**
 1. **Diagnose:** What would you confirm before accepting the team lead's explanation?
-   How would you use Project History to check whether the parallel-passage check has
-   actually been re-run since the last revision pass, and how does what you find there
-   connect to the "we already did that" trap from Lesson 1?
-2. **Say to the team:** How would you ask the team to re-run the check and walk through
-   the results, without implying you doubt their judgment about legitimate variation?
-3. **Escalate:** If the team's re-run check surfaces a genuine disagreement inside the
+   How would you use the Parallel Passages tool's Status column to check whether the
+   relevant verses have actually been reviewed since the last revision pass, and how
+   does what you find there connect to the "we already did that" trap from Lesson 1?
+2. **Say to the team:** How would you ask the team to open the Parallel Passages tool
+   and walk through the verses still marked with a red "?", without implying you doubt
+   their judgment about legitimate variation?
+3. **Escalate:** If the team's review surfaces a genuine disagreement inside the
    team about whether a difference is legitimate variation or an error, who handles that
    — you, the team, or someone else? Say why.
 

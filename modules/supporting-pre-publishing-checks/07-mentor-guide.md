@@ -55,31 +55,37 @@ before reattempting.
 
 ## Scenario 1: The Harmonized Synoptics (Objective 2)
 
-**Watch for in the diagnosis:** the learner should know that Paratext's checks don't show
-a "last run" date on screen, so the way to verify or refute the team lead's claim is to
-open Project History and read its dated, categorized entries — comparing when the
-relevant check category was last actually touched/re-run against the dated revision-pass
-entries in the same log. A strong answer names Project History specifically rather than
-implying the check screen itself would show the gap. This is marker **(a)**: don't trust a
+**Watch for in the diagnosis:** the learner should know that the Parallel Passages tool
+doesn't algorithmically flag inconsistencies — it displays passages side by side (with
+original-language text) for the team to judge, and tracks review status per verse in a
+Status column: a checkmark means reviewed and approved, a red "?" means the verse was
+edited since it was last approved and needs review again. The way to verify or refute
+the team lead's claim is to open the Parallel Passages tool and check the Status column
+for the relevant verses, not to dig through Project History (Project History is not the
+mechanism for this check). A strong answer names the Status column specifically — a red
+"?" on a verse edited during the recent revision pass is direct evidence the "already
+checked" claim doesn't hold for that verse. This is marker **(a)**: don't trust a
 clean/settled-sounding result just because the team is confident about it. A weak answer
 accepts the team lead's explanation at face value and moves on to judging the passages
 itself.
 
 **Watch for in what they'd say to the team:** the learner does not attempt to judge whether
-the flagged differences are legitimate variation or error — they don't speak the language.
-A strong answer asks the team to re-run the check and walk through each flagged difference
-themselves, framed as routine process ("let's make sure the re-run reflects the latest
-revision") rather than as doubting the team's judgment — marker **(e)**, correctly deferred
-to the people who can actually judge meaning.
+the differences are legitimate variation or error — they don't speak the language.
+A strong answer asks the team to open the Parallel Passages tool and walk through each
+verse still showing a red "?" themselves, framed as routine process ("let's make sure
+everything edited in the recent revision gets reviewed again") rather than as doubting
+the team's judgment — marker **(e)**, correctly deferred to the people who can actually
+judge meaning.
 
-**Watch for in escalation:** if the re-run surfaces a genuine internal disagreement about
+**Watch for in escalation:** if the review surfaces a genuine internal disagreement about
 legitimate variation vs. error, that stays with the team (or moves to a Translation
 Consultant if the team can't resolve it themselves) — not the LTC. The LTC's job stops at
-confirming the check ran and routing the result. A learner who offers to arbitrate the
-disagreement has missed marker **(f)**.
+confirming the review happened and routing the result. A learner who offers to arbitrate
+the disagreement has missed marker **(f)**.
 
 **Common wrong turn:** treating "these are supposed to be different" as sufficient without
-checking whether the check that would confirm that has actually been re-run.
+checking the Status column for verses that still need review; reaching for Project
+History instead of the Parallel Passages tool itself.
 
 ---
 

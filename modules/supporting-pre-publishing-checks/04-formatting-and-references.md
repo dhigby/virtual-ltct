@@ -10,9 +10,10 @@ team to a genuinely zero-error result rather than a fast one.
 ## Learning objectives
 
 - You will be able to:
-  - Diagnose formatting-check failures — unclosed marker pairs, ghost markers, wrong
-    markers, and errors in book titles, section headings, and references — by working
-    structural-first.
+  - Diagnose formatting-check failures — unclosed marker pairs, ghost markers (a marker
+    left with no content attached, usually debris from an incompletely deleted footnote
+    or cross-reference), wrong markers, and errors in book titles, section headings, and
+    references — by working structural-first.
   - Coach a team to a zero-error result without touching their keyboard.
 - You will be able to:
   - Review and use Paratext's Punctuation Inventory (Checks > Inventories) ahead of

@@ -65,8 +65,9 @@ symptoms of a single cause higher up. Work in this order instead:
    match the text they introduce.
 5. **Book titles.** Inconsistent or incorrect book-name and book-title markup, especially
    after a book has been renamed or reorganized mid-project.
-6. **References** (`\r` cross-references) and the **table of contents.** Missed
-   book-name checks, foreign-language `\r` abbreviations left unadjusted (a common source:
+6. **References** (`\r` shows parallel passages; `\xt` is the actual cross-reference
+   marker) and the **table of contents.** Missed book-name checks, foreign-language `\r`
+   abbreviations left unadjusted (a common source:
    bulk-copying `\r` lines from another NT project as a starting point, which carries over
    that project's abbreviations instead of the current project's own), and a table of
    contents that doesn't match the book titles actually in the text.

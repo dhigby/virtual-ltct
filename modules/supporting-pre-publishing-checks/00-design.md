@@ -14,7 +14,8 @@
 
 > **Amendment, confirmed by Kevin Nicholas on 2026-08-28:** Kevin raised a new field case
 > post-approval, on issue #40 — significant time spent with a typesetter working through
-> Paratext's **Punctuation Inventory** (Checks > Inventories) settings ahead of typesetting.
+> Paratext's **Punctuation Inventory** (Tools > Checking Inventories > Punctuation Inventory)
+> settings ahead of typesetting.
 > Jenni placed this as a new subsection of `04-formatting-and-references.md` (see that
 > row in "Module breakdown" and field case 7 in "SME knowledge notes" below). Kevin confirmed
 > (PR #43) the placement and time budget are correctly scoped. `module-author` may proceed
@@ -104,6 +105,30 @@
 > measures.md` module-breakdown row, the revised Numbers/Measures field case, and the revised
 > "Tool-version specifics" section below. `module-author` may draft or revise
 > `03-parallel-passages-and-measures.md` on this basis.
+
+> **Amendment, Stage 5 SME fact-check pass, 2026-09-11 (Jenni Beadle) — menu-path correction and a
+> second, complementary field-confirmed tool, no re-approval needed:** Two corrections, confirmed
+> via live Paratext screenshots. First, **the menu path for the Punctuation Inventory has been
+> wrong throughout this document** — it is at **Tools > Checking Inventories > Punctuation
+> Inventory**, not "Checks > Inventories"; every occurrence is corrected. Second, a **separate,
+> dedicated inventory called "Unmatched Pairs of Punctuation"** exists (also under Tools > Checking
+> Inventories), confirmed via a live screenshot: a standalone window listing single unmatched
+> punctuation pairs (e.g. an unmatched "}", "[", "(") with a count and a per-row Status column
+> (checkmark = approved, X = incorrect, ? = needs review) — the same status pattern used elsewhere
+> in this course. This is **distinct from and complementary to** the existing "Show sequences"
+> feature within Punctuation Inventory (field case 8): Unmatched Pairs of Punctuation catches
+> single-character unmatched bracket/parenthesis-type pairs directly, while "Show sequences"
+> catches multi-character punctuation sequences/combinations (e.g. multiple quotation marks
+> combined with spacing or other punctuation), confirmed via a second screenshot. Both are real,
+> useful checks the LTC should know about — this is an addition, not a replacement of either. The
+> separate, more complex dedicated quotation-marks check (handling continuing quote marks across
+> paragraph breaks) **remains genuinely out of scope**, confirmed still accurate — the existing
+> "quotation marks deferred to a future addition" language is unchanged. See field case 11 (new)
+> in "SME knowledge notes," the revised `04-formatting-and-references.md` module-breakdown row, and
+> the menu-path correction throughout. **Flag for the Design Approver / module-author: this
+> addition may push lesson 04 over its 80-minute estimate (10 minutes under the 90-minute cap) —
+> see the module-breakdown row for a trim recommendation if so.** `module-author` may revise
+> `04-formatting-and-references.md` accordingly.
 
 ## Outcome-level open question (resolve before approval)
 
@@ -249,12 +274,12 @@ each core check-area lesson instead of either a heavy standalone module or being
 | `01-supporting-the-final-turn.md` | The translation process as a 6-stage spiral; Stage 6 as the final turn re-running earlier checks; the cross-cutting spine (false-clean results) introduced as a recurring watch-for, not a standalone topic; the consultant's role (diagnose, coach, never touch the keyboard); when to escalate | 1 (light touch), 10 | 35 |
 | `02-wordlist-and-biblical-terms.md` | Biblical Terms list completion and cleanup (secondary, condensed): recognizing blank renderings as the tool's normal default starting state and confirming genuine completion via the Found column/count rather than eyeballing the list; recognizing stale/duplicate renderings left in place after a correct rendering was added without deleting the original; a third pattern — a rendering that just repeats the verse's first word, likely caused by running **Guess Renderings** before the project had enough translated data (per a support.bible programmer's reply, 2026-09-10 — see field case 4, revised) — noted as a real, attributed pattern to watch for (no longer unconfirmed/pending), spotted by scanning a term's occurrences with the **down arrow** to quickly step through verses so the first-word repetition becomes visually obvious; Project Biblical Terms bloat and performance (secondary, condensed); recurring false-clean callout for this check area, resting solely on the confirmed **blanket-approval pattern** — a wordlist mass-marked **Correct** — described using correct spelling-status terminology (**Correct / Incorrect / Undecided**), not "denied" (**reattributed 2026-09-08**: the "denied errors" field case belongs to Basic Checks in `04-formatting-and-references.md`, not here — see "SME knowledge notes," field case 1) | 1 (callout), 3, 4 | 40 |
 | `03-parallel-passages-and-measures.md` | Parallel passages: confirming the comparison check was run and routing tool-flagged inconsistencies to the team (core, expanded); Numbers and Measures: confirming whether the team's Paratext version has the **new consolidated Numbers check (covering numbers, weights, and measures)** — in testing as of 2026-09-11, anticipated to be the primary case by the time this course publishes — or still only the **old separate Numbers check** (limited scope, no separate Measures check), which remains a real fallback scenario for teams not yet on the newer version; running whichever is available against the team's already-agreed, documented approach, and routing gaps back to the team (core, expanded); recurring false-clean callout | 1 (callout), 2, 5 | 60 |
-| `04-formatting-and-references.md` | Formatting checks in structural-first order: marker-pair census, ghost markers, long/short verses, section headings, book titles, references, footnotes (core); subsection (confirmed by Kevin Nicholas on 2026-08-28): Punctuation Inventory (Checks > Inventories) ahead of typesetting — reviewing/using the inventory itself (not PTXprint or the typesetter's own tooling), confirming the inventory was actually reviewed rather than assumed already handled earlier in the process (echoes the objective-1 false-clean theme), and common settings issues that turn this into a time-sink for a typesetter; **"Punctuation Sequences" addition folded into that Punctuation Inventory subsection (raised 2026-09-03; confirmed by Kevin Nicholas on 2026-09-03 via PR #46 comment — folded in, not a separate section): "Show sequences" in the Punctuation Inventory's Inventory menu, and its relationship to the "Punctuation (sequences)" Basic Checks option** — reviewing the inventory without "Show sequences" selected can silently miss unmatched punctuation-pair sequences (echoes the false-clean theme again); scoped to punctuation sequences only — quotation-mark-specific complexity is explicitly out of scope here and deferred to a future addition; recurring false-clean callout — **incorporating field case 1** (**reattributed 2026-09-08**: a team denying Basic Checks errors they didn't understand, rather than resolving them) as the concrete example of the false-clean pattern in the Basic Checks context specifically, since Basic Checks is where "deny" is an actual, correct Paratext action (unlike wordlist/spelling status, which has no deny — see `02-wordlist-and-biblical-terms.md` and "SME knowledge notes") | 1 (callout), 6 | 80 — the folded-in treatment keeps 10 minutes under the 90-minute cap. If drafting runs long, trim the reference/book-title portion first (as already flagged for the prior amendment); if that alone isn't enough, this lesson should be split rather than pushed over 90 minutes |
+| `04-formatting-and-references.md` | Formatting checks in structural-first order: marker-pair census, ghost markers, long/short verses, section headings, book titles, references, footnotes (core); subsection (confirmed by Kevin Nicholas on 2026-08-28): Punctuation Inventory (**Tools > Checking Inventories > Punctuation Inventory** — corrected 2026-09-11, was mis-stated as "Checks > Inventories") ahead of typesetting — reviewing/using the inventory itself (not PTXprint or the typesetter's own tooling), confirming the inventory was actually reviewed rather than assumed already handled earlier in the process (echoes the objective-1 false-clean theme), and common settings issues that turn this into a time-sink for a typesetter; **"Punctuation Sequences" addition folded into that Punctuation Inventory subsection (raised 2026-09-03; confirmed by Kevin Nicholas on 2026-09-03 via PR #46 comment — folded in, not a separate section): "Show sequences" in the Punctuation Inventory's Inventory menu, and its relationship to the "Punctuation (sequences)" Basic Checks option** — reviewing the inventory without "Show sequences" selected can silently miss unmatched punctuation-pair sequences (echoes the false-clean theme again); scoped to punctuation sequences only — quotation-mark-specific complexity is explicitly out of scope here and deferred to a future addition; **"Unmatched Pairs of Punctuation" addition (2026-09-11, Jenni Beadle, confirmed from live Paratext screenshots — field case 11)**: a separate, dedicated inventory under Tools > Checking Inventories that catches single unmatched bracket/parenthesis-type pairs directly (e.g. an unmatched "}", "[", "("), complementing rather than replacing "Show sequences" (which catches multi-character punctuation sequences/combinations instead) — both use the same approved/incorrect/needs-review Status pattern seen elsewhere in the course; quotation-mark-specific complexity remains out of scope for both, deferred to the same future addition; recurring false-clean callout — **incorporating field case 1** (**reattributed 2026-09-08**: a team denying Basic Checks errors they didn't understand, rather than resolving them) as the concrete example of the false-clean pattern in the Basic Checks context specifically, since Basic Checks is where "deny" is an actual, correct Paratext action (unlike wordlist/spelling status, which has no deny — see `02-wordlist-and-biblical-terms.md` and "SME knowledge notes") | 1 (callout), 6 | **85 — FLAGGED 2026-09-11: the "Unmatched Pairs of Punctuation" addition pushes this lesson from 80 to an estimated 85 minutes, only 5 under the 90-minute cap.** If drafting confirms it runs longer than 5 minutes of content, trim the reference/book-title portion first (as already flagged for the prior amendment); if that alone isn't enough, this lesson should be split rather than pushed over 90 minutes |
 | `05-glossary-linking-and-layout.md` | Glossary-linking scope (over-linking, core); single- vs. two-column layout and hyphenation decisions (secondary, condensed); the PTXprint draft-PDF read-through (core); recurring false-clean callout | 1 (callout), 7, 8, 9 | 65 |
 | `06-scenario-bank.md` | Mentor-reviewed applied scenarios weighted toward core objectives (2, 5, 6, 7, 9, 10 each get a full scenario), secondary objectives (3, 4, 8) folded into one combined scenario, and objective 1 (false-clean) run as a thread inside two of the core scenarios rather than its own case | 1–10 | 60 |
 | `07-mentor-guide.md` | Facilitator notes: what to watch for in each scenario response, the "good" markers from the SME interview | — | — |
 | `08-quiz.md` | Assessment | 1–10 | — |
-| **Total learner seat time** | | | **340** (includes the 2026-09-03 "Punctuation Sequences" addition, confirmed by Kevin Nicholas on 2026-09-03 as a fold-in — was 335 as confirmed 2026-08-28) |
+| **Total learner seat time** | | | **345** (includes the 2026-09-11 "Unmatched Pairs of Punctuation" addition, +5 minutes, pending drafting confirmation it fits within the 90-minute cap for lesson 04 — was 340, which included the 2026-09-03 "Punctuation Sequences" addition confirmed by Kevin Nicholas as a fold-in, up from 335 as confirmed 2026-08-28) |
 
 ## Assessment plan
 
@@ -353,7 +378,8 @@ cases were added in this review round; the stories below are unchanged.
 7. **(Added 2026-08-28, Kevin Nicholas, post-approval comment on issue #40 — confirmed
    by Kevin Nicholas on 2026-08-28, PR #43.)** Kevin spent significant time,
    while working with a typesetter, going through **Paratext's Punctuation Inventory**
-   (Checks > Inventories) settings ahead of typesetting — this is Paratext's own inventory,
+   (**Tools > Checking Inventories > Punctuation Inventory** — corrected 2026-09-11, was
+   mis-stated as "Checks > Inventories") settings ahead of typesetting — this is Paratext's own inventory,
    not PTXprint or the typesetter's own tooling. He flagged it as a real time-sink worth
    covering. Jenni's placement decision: this belongs alongside the other formatting-check
    areas in `04-formatting-and-references.md`, as its own subsection rather than a passing
@@ -390,6 +416,21 @@ cases were added in this review round; the stories below are unchanged.
     added later, without deleting the original. This clutters the renderings list and can make it
     hard to tell which rendering is actually the team's current, intended one. (This is the more
     likely explanation for the screenshot behind field case 4 above.)
+11. **(Added 2026-09-11, Jenni Beadle, confirmed from live Paratext screenshots reviewed during
+    Stage 5 SME fact-check — CONFIRMED, no pending confirmation needed.)** Paratext has a
+    **separate, dedicated inventory called "Unmatched Pairs of Punctuation"** (also under Tools >
+    Checking Inventories) — a standalone window listing single unmatched punctuation pairs (e.g.
+    an unmatched "}", "[", "(") with a count and a per-row Status column (checkmark = approved, X
+    = incorrect, ? = needs review), the same status pattern used elsewhere in this course. This is
+    **distinct from and complementary to** field case 8's "Show sequences" feature inside the
+    Punctuation Inventory: Unmatched Pairs of Punctuation catches single-character unmatched
+    bracket/parenthesis-type pairs directly, while "Show sequences" catches multi-character
+    punctuation sequences/combinations (e.g. multiple quotation marks combined with spacing or
+    other punctuation like ")"), confirmed via a second screenshot showing rows with Unicode codes,
+    counts, and the same Status column. Both are real, useful, complementary checks — this is an
+    addition to, not a replacement of, the "Show sequences" content. The separate, more complex
+    dedicated quotation-marks check (handling continuing quote marks across paragraph breaks)
+    remains genuinely out of scope for this course, as already noted under field case 8.
 
 **Cross-cutting theme across these cases:** *false-clean results* — a team clears a checklist
 without genuinely checking. The consultant's job is to spot the fake all-clear, reset statuses,
@@ -427,7 +468,10 @@ matching the same rule taught in the team workbook).
   fact-check: this is a Basic Checks–specific mistake, not a wordlist/spelling one, since
   Basic Checks has a genuine deny mechanism that spelling status does not).
 - **References & book names**: missed book-name checks, foreign `\r` abbreviations, inconsistent
-  table of contents.
+  table of contents; unmatched single punctuation pairs (brackets/parentheses) and multi-character
+  punctuation sequences going unnoticed when the two complementary Punctuation Inventory tools
+  (**Unmatched Pairs of Punctuation**, field case 11; "Show sequences," field case 8) aren't both
+  used.
 - **Glossary linking**: over-linked (every occurrence, instead of first-per-section).
 - **Layout & publishing (read-through)**: single- vs. two-column choice, hyphenation.
 - **Cross-cutting spine**: don't trust an old or fake "all clear" — denied errors (Basic Checks'
@@ -510,15 +554,19 @@ marker added after Jenni's 2026-08-27 review), spanning both Translation Tools a
 Print Publishing, anchored to the `2 - With Assistance` ladder rows that reach `3 - Independent`.
 Objectives 2 and 5 were reframed in this review from meaning-judgment to process/consistency-
 checking and team-routing, since an LTC does not normally know the project language. **8 planned
-files** (5 numbered content lessons + scenario bank + mentor guide + quiz), totaling **340 minutes**
-(~5.67 hours) of learner-facing seat time (content lessons + mentor-reviewed scenario bank; mentor
+files** (5 numbered content lessons + scenario bank + mentor guide + quiz), totaling **345 minutes**
+(~5.75 hours) of learner-facing seat time (content lessons + mentor-reviewed scenario bank; mentor
 guide and quiz excluded from the total per convention), now weighted toward the core objectives.
-The 340-minute total includes the Punctuation Inventory subsection added to
+The 345-minute total includes the Punctuation Inventory subsection added to
 `04-formatting-and-references.md` on 2026-08-28 and **confirmed by Kevin Nicholas on 2026-08-28**
 (see the amendment note at the top of this document; previously 320 minutes as approved
-2026-08-27), plus the "Punctuation Sequences" addition of 2026-09-03, **confirmed by Kevin Nicholas on
-2026-09-03** as a fold-in to the existing Punctuation Inventory subsection, which brings
-`04-formatting-and-references.md` to 80 minutes — 10 minutes under the 90-minute cap.
+2026-08-27), the "Punctuation Sequences" addition of 2026-09-03, **confirmed by Kevin Nicholas on
+2026-09-03** as a fold-in to the existing Punctuation Inventory subsection (brought
+`04-formatting-and-references.md` to 80 minutes), and the "Unmatched Pairs of Punctuation" addition
+of 2026-09-11 (Jenni Beadle, field-confirmed), which brings `04-formatting-and-references.md` to an
+estimated **85 minutes — only 5 minutes under the 90-minute cap. Flagged for module-author:** trim
+the reference/book-title portion first if drafting runs longer than estimated, or split the lesson
+rather than exceed 90 minutes.
 Every objective traces to a descriptor component and to both the quiz and the scenario bank. One
 open tension is flagged and left for the Design Approver: whether the lighter, recurring-callout
 treatment of objective 1 (false-clean results) adequately preserves the "spine" framing from the
@@ -594,3 +642,17 @@ case, with the old split-check behavior retained as a real fallback for teams no
 Paratext version. This is a factual update reflecting real-world tool development, not a scope or
 objective-count change; module and time estimates are unchanged. `module-author` may draft or
 revise `03-parallel-passages-and-measures.md` on this basis.
+
+**Amendment, Stage 5 SME fact-check pass, 2026-09-11 (Jenni Beadle) — menu-path correction and a
+second, complementary field-confirmed tool, no re-approval needed:** the Punctuation Inventory menu
+path is corrected throughout this document to **Tools > Checking Inventories > Punctuation
+Inventory** (was wrongly stated as "Checks > Inventories"). A second, dedicated, field-confirmed
+tool — **"Unmatched Pairs of Punctuation"** — is added as field case 11, complementing (not
+replacing) the existing "Show sequences" content (field case 8): it catches single-character
+unmatched bracket/parenthesis-type pairs, while "Show sequences" catches multi-character
+punctuation sequences. The dedicated quotation-marks-across-paragraphs check remains out of scope,
+confirmed still accurate. **This addition pushes `04-formatting-and-references.md` from 80 to an
+estimated 85 minutes (5 minutes under the 90-minute cap) and the course total from 340 to 345
+minutes — flagged for the Design Approver and `module-author`; trim the reference/book-title
+portion first if drafting runs longer than estimated, or split the lesson rather than exceed 90
+minutes.** `module-author` may revise `04-formatting-and-references.md` on this basis.

@@ -1,11 +1,12 @@
 # Lesson 4: Formatting and References
 
-**Estimated time:** 80 minutes
+**Estimated time:** 85 minutes
 
 **Purpose:** Support a team through the structural formatting checks — marker pairs,
-headings, book titles, references, footnotes, and the Punctuation Inventory — working
-structural-first so downstream errors don't hide behind upstream ones, and coach the
-team to a genuinely zero-error result rather than a fast one.
+headings, book titles, references, footnotes, and the Punctuation Inventory and
+Unmatched Pairs of Punctuation — working structural-first so downstream errors don't
+hide behind upstream ones, and coach the team to a genuinely zero-error result rather
+than a fast one.
 
 ## Learning objectives
 
@@ -16,12 +17,15 @@ team to a genuinely zero-error result rather than a fast one.
     references — by working structural-first.
   - Coach a team to a zero-error result without touching their keyboard.
 - You will be able to:
-  - Review and use Paratext's Punctuation Inventory (Checks > Inventories) ahead of
-    typesetting.
+  - Review and use Paratext's Punctuation Inventory (Tools > Checking Inventories >
+    Punctuation Inventory) ahead of typesetting.
   - Select "Show sequences" in its Inventory menu so that the "Punctuation (sequences)"
-    Basic Check is meaningful.
-  - Confirm the inventory was genuinely reviewed rather than assumed already handled.
-  - Recognize the common settings issues that turn it into a time-sink for a
+    Basic Check is meaningful, catching multi-character punctuation sequences.
+  - Use the complementary Unmatched Pairs of Punctuation inventory (Tools > Checking
+    Inventories) to directly catch single unmatched bracket/parenthesis-type pairs.
+  - Confirm both inventories were genuinely reviewed rather than assumed already
+    handled.
+  - Recognize the common settings issues that turn these into a time-sink for a
     typesetter.
 
 ## Connect
@@ -111,39 +115,58 @@ before trusting a zero-error result.
 
 ### The Punctuation Inventory, ahead of typesetting
 
-Paratext's **Punctuation Inventory** (Checks > Inventories) is a separate tool from the
-marker-pair and Basic Checks work above — and separate from PTXprint or anything the
-typesetter runs on their own end. It's Paratext's own inventory of every punctuation
-character used across the project, and it belongs in your formatting review because it
-surfaces problems that are cheap to fix now and expensive to fix once a project reaches
-a typesetter.
+Paratext's **Punctuation Inventory** (Tools > Checking Inventories > Punctuation
+Inventory) is a separate tool from the marker-pair and Basic Checks work above — and
+separate from PTXprint or anything the typesetter runs on their own end. It's Paratext's
+own inventory of every punctuation character used across the project, and it belongs in
+your formatting review because it surfaces problems that are cheap to fix now and
+expensive to fix once a project reaches a typesetter.
+
+Alongside it, under the same **Tools > Checking Inventories** menu, sits a distinct,
+complementary tool: **Unmatched Pairs of Punctuation.** It's its own standalone inventory
+window, listing single unmatched bracket/parenthesis-type characters — an unmatched "}",
+"[", or "(" — each with a count and a per-row **Status** column using the same
+checkmark/red-X/blue-"?" pattern you've already seen on the Parallel Passages Status
+column (checkmark = approved, red X = incorrect, blue "?" = needs review). Where the
+Punctuation Inventory's "Show sequences" option (below) catches multi-character
+punctuation *sequences* — combinations like multiple quotation marks paired with spacing
+or another character such as ")" — Unmatched Pairs of Punctuation instead goes straight
+after single unmatched bracket/parenthesis-type pairs, which is the most direct way to
+catch that specific, common problem. Treat the two as complementary: one doesn't replace
+the other.
 
 One consultant reported spending significant time working alongside a typesetter,
 after the fact, going through the Punctuation Inventory's settings to sort out issues
 that should have been caught earlier — a real time-sink that fell on the typesetter
 instead of getting resolved during the project's own formatting review.
 
-Three things to do with this inventory:
+Four things to do with these inventories:
 
-- **Actually review it, don't assume it's already handled.** Just like the marker-pair
-  and Basic Checks work above, it's easy for a team (or a previous consultant) to assume
-  the Punctuation Inventory "must be fine by now" because the project is far along. That
-  assumption is exactly the false-clean trap this course keeps coming back to — confirm
-  someone has genuinely opened the inventory and reviewed it at this stage, rather than
-  taking its cleanliness on faith.
-- **Check the inventory's own settings**, not just the character list it produces. Loose
-  or inconsistent settings are what turn this check into a time-sink once it reaches a
-  typesetter — unrecognized or unconfigured punctuation characters left unresolved in the
-  inventory's settings can surface late, as a pile of issues the typesetter has to chase
-  down one by one instead of the team resolving them upfront.
-- **Select "Show sequences" in the inventory's Inventory menu**, so that punctuation
-  *sequences* — combinations of punctuation characters, such as unmatched punctuation
-  pairs — are actually inventoried, not just the individual characters. Without it, the
-  **"Punctuation (sequences)"** checkbox under Run Basic Checks doesn't meaningfully check
-  punctuation sequences or combinations, so the review can look complete while a whole
-  class of problems goes unseen. This lesson covers punctuation sequences only;
-  quotation marks specifically are more complicated and are intentionally out of scope
-  here, deferred to a separate, future addition.
+- **Actually review both, don't assume they're already handled.** Just like the
+  marker-pair and Basic Checks work above, it's easy for a team (or a previous
+  consultant) to assume the Punctuation Inventory (and its neighbor, Unmatched Pairs of
+  Punctuation) "must be fine by now" because the project is far along. That assumption is
+  exactly the false-clean trap this course keeps coming back to — confirm someone has
+  genuinely opened both inventories and reviewed them at this stage, rather than taking
+  their cleanliness on faith.
+- **Check the Punctuation Inventory's own settings**, not just the character list it
+  produces. Loose or inconsistent settings are what turn this check into a time-sink once
+  it reaches a typesetter — unrecognized or unconfigured punctuation characters left
+  unresolved in the inventory's settings can surface late, as a pile of issues the
+  typesetter has to chase down one by one instead of the team resolving them upfront.
+- **Select "Show sequences" in the Punctuation Inventory's Inventory menu**, so that
+  punctuation *sequences* — multi-character combinations, such as multiple quotation
+  marks paired with spacing or another punctuation character — are actually inventoried,
+  not just the individual characters. Without it, the **"Punctuation (sequences)"**
+  checkbox under Run Basic Checks doesn't meaningfully check punctuation sequences or
+  combinations, so the review can look complete while a whole class of problems goes
+  unseen. This lesson covers punctuation sequences only; quotation marks specifically are
+  more complicated and are intentionally out of scope here, deferred to a separate,
+  future addition.
+- **Review Unmatched Pairs of Punctuation directly**, using its Status column to work
+  through any single unmatched bracket/parenthesis-type character it lists. Don't treat
+  "Show sequences" as covering this — it catches multi-character sequences, not the
+  single unmatched pairs this separate inventory is built to surface.
 
 That third point comes from a real case. One consultant believed their Punctuation
 Inventory review had been thorough — yet the typesetter later came back with a long list
@@ -155,26 +178,31 @@ review *looked* complete and wasn't — the false-clean pattern again, this time
 by a single unselected menu option rather than by anyone skipping a step.
 
 > **WARNING — watch for a false-clean result here too:** don't let "we're close to done"
-> stand in for "someone reviewed the Punctuation Inventory." Confirming it was actually
-> opened and reviewed — not just assumed already handled earlier in the process — is the
-> single highest-value thing you can do here before the project reaches a typesetter.
+> stand in for "someone reviewed the Punctuation Inventory and Unmatched Pairs of
+> Punctuation." Confirming both were actually opened and reviewed — not just assumed
+> already handled earlier in the process — is the single highest-value thing you can do
+> here before the project reaches a typesetter.
 
 **Key takeaways**
-- The Punctuation Inventory lives in Paratext itself (Checks > Inventories) — it is not
-  a PTXprint or typesetter-side tool, and reviewing it is part of your own formatting
-  check, not something to defer to the typesetter.
-- Confirm it was genuinely reviewed at this stage rather than assumed clean from earlier
-  in the project.
-- Loose or unconfigured settings in the inventory are what create a late time-sink for
-  the typesetter — catching them here is cheaper for everyone.
-- "Show sequences" must be selected in the inventory's Inventory menu for the
-  "Punctuation (sequences)" Basic Check to actually check sequences — without it, the
-  review can look complete and still miss unmatched punctuation pairs. (Quotation marks
+- The Punctuation Inventory and Unmatched Pairs of Punctuation both live in Paratext
+  itself (Tools > Checking Inventories) — neither is a PTXprint or typesetter-side tool,
+  and reviewing both is part of your own formatting check, not something to defer to the
+  typesetter.
+- Confirm both were genuinely reviewed at this stage rather than assumed clean from
+  earlier in the project.
+- Loose or unconfigured settings in the Punctuation Inventory are what create a late
+  time-sink for the typesetter — catching them here is cheaper for everyone.
+- "Show sequences" must be selected in the Punctuation Inventory's Inventory menu for the
+  "Punctuation (sequences)" Basic Check to actually check multi-character sequences —
+  without it, the review can look complete and still miss them. (Quotation marks
   specifically are out of scope for this lesson.)
+- Unmatched Pairs of Punctuation is a separate, complementary inventory that directly
+  lists single unmatched bracket/parenthesis-type pairs — check it too; it isn't replaced
+  by "Show sequences" or vice versa.
 
 ## Challenge
 
-**✏️ Try this:** Five exercises on this lesson's own mechanisms. Write your answers
+**✏️ Try this:** Six exercises on this lesson's own mechanisms. Write your answers
 from memory first, then check each one against the Content section above — the point is
 to find the gaps here, not halfway through a support session.
 
@@ -192,10 +220,10 @@ to find the gaps here, not halfway through a support session.
    Write the one question you'd ask to find out which of the two happened, and say in
    one line why "deny" is a real, correct action in Basic Checks but has no equivalent
    in the wordlist's spelling status.
-4. **Open Checks > Inventories > Punctuation Inventory** in a project you already
-   support, then open its **Inventory** menu and confirm whether **"Show sequences"**
-   is selected. Write down what you found. Then, in one sentence, say what the
-   **"Punctuation (sequences)"** checkbox under Run Basic Checks does and doesn't do
+4. **Open Tools > Checking Inventories > Punctuation Inventory** in a project you
+   already support, then open its **Inventory** menu and confirm whether **"Show
+   sequences"** is selected. Write down what you found. Then, in one sentence, say what
+   the **"Punctuation (sequences)"** checkbox under Run Basic Checks does and doesn't do
    while that option is unselected. One setting, one look — not a full inventory
    review.
 5. **A review can be genuine and still incomplete.** In two lines, say what the
@@ -203,19 +231,24 @@ to find the gaps here, not halfway through a support session.
    they genuinely *did* review the inventory — and what would have made the same
    review complete. Name the difference between a false-clean result produced by a
    skipped step and one produced by an unselected setting.
+6. **Two complementary tools, one gap each.** Open **Tools > Checking Inventories >
+   Unmatched Pairs of Punctuation** in the same project. In one line, say what it lists
+   that "Show sequences" does not, and one line on what "Show sequences" catches that
+   Unmatched Pairs of Punctuation does not.
 
 ## Change
 
 **✏️ Reflection:** Think of a project you support that's getting close to typesetting.
-Has anyone on the team — or you — actually opened the Punctuation Inventory recently, or
-is its "clean" status something everyone is assuming? What would it cost to confirm it
-now versus finding out from a frustrated typesetter later?
+Has anyone on the team — or you — actually opened the Punctuation Inventory and
+Unmatched Pairs of Punctuation recently, or is their "clean" status something everyone is
+assuming? What would it cost to confirm it now versus finding out from a frustrated
+typesetter later?
 
 **Next step:** Before your next formatting-check session, write down the structural-first
 order from this lesson (marker pairs → ghost markers → long/short verses → headings →
 book titles → references → footnotes) somewhere you'll actually have it in front of you,
-and add "Punctuation Inventory — genuinely reviewed?" as a standing question for any
-project nearing typesetting.
+and add "Punctuation Inventory and Unmatched Pairs of Punctuation — both genuinely
+reviewed?" as a standing question for any project nearing typesetting.
 
 **Coming up:** Lesson 5 turns to glossary linking and the final layout and draft-PDF
 read-through — where, like the Punctuation Inventory here, you'll be doing hands-on

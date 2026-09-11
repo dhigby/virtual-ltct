@@ -59,8 +59,10 @@ symptoms of a single cause higher up. Work in this order instead:
    source can indicate a misplaced verse marker, a merged verse, or dropped text — worth
    ruling out before treating everything else in the chapter as a heading or reference
    problem.
-4. **Section headings.** Wrong marker (e.g. a major section head styled as a minor one),
-   missing headings, or headings that don't match the text they introduce.
+4. **Section headings.** The marker itself is rarely the problem — most projects use
+   `\s1` almost exclusively, with `\s2` only occasionally, so a wrong-level marker is
+   uncommon. The real issues to check for are missing headings, or headings that don't
+   match the text they introduce.
 5. **Book titles.** Inconsistent or incorrect book-name and book-title markup, especially
    after a book has been renamed or reorganized mid-project.
 6. **References** (`\r` cross-references) and the **table of contents.** Missed

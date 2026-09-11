@@ -179,8 +179,10 @@ tool check. Write each answer, then verify it against the Content section above.
    assumption over from another project.
 5. **One question, one sentence:** draft the question you'd ask a team to find out
    *where* their agreed approach to numbers, weights, money, and measures is written
-   down. Aim it at locating a document — if your sentence contains any hint of what
-   the rendering should be, rewrite it.
+   down. This could be a project discussion/note on an individual term, or (more
+   likely, given how many terms are typically involved) a single reference document.
+   Aim your question at locating whichever actually exists — if your sentence contains
+   any hint of what the rendering should be, rewrite it.
 
 ## Change
 

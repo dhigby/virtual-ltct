@@ -93,16 +93,20 @@ the wordlist's spelling status (Correct/Incorrect/Undecided only), Basic Checks 
 do carry a real accept/deny mechanism for flagged errors. A documented field case from
 the SME interview behind this course found a team that had **denied errors they didn't
 understand**, rather than resolving them — simply clearing the check's flags instead of
-dealing with what was underneath. A denied error disappears from the outstanding list
-just as thoroughly as a genuinely fixed one, so it's worth checking which happened
-before trusting a zero-error result.
+dealing with what was underneath. When a denied error is shown, it appears in the list
+with **strikethrough text**, so it isn't hidden or disguised as a genuine fix — but
+whether it shows up at all depends on a **View menu** option, **Denied messages**: with
+that option off, denied errors disappear from the list completely, so a check that looks
+short and clean may simply have its denied items switched out of view. Turn on
+**View > Denied messages** to see the full picture before trusting a zero-error result.
 
 > **WARNING — watch for a false-clean result here too:** A Basic Checks run showing zero
 > formatting errors can mean the project is genuinely clean — or it can mean the checks
 > were run once early in the project and never re-run after later revisions introduced
-> new markup, or it can mean errors were denied rather than resolved. Confirm the checks
-> were re-run at this stage and ask whether any flagged errors were denied — the same
-> "we already did that" trap from earlier lessons, now applied to formatting.
+> new markup, or it can mean errors were denied and are currently hidden from view.
+> Confirm the checks were re-run at this stage, and turn on **View > Denied messages** to
+> check whether any struck-through, denied errors are sitting out of sight — the same "we
+> already did that" trap from earlier lessons, now applied to formatting.
 
 **Key takeaways**
 - Work structural-first: marker pairs and ghost markers before headings, titles, and
@@ -110,8 +114,8 @@ before trusting a zero-error result.
 - Your job is to diagnose the cause and coach the team to fix it — you never touch their
   keyboard.
 - A zero-error result only counts if the checks were actually re-run at this stage, not
-  carried forward from an earlier, since-outdated pass — and not the result of errors
-  being denied rather than resolved.
+  carried forward from an earlier, since-outdated pass — and not the result of denied
+  errors sitting hidden because **View > Denied messages** is switched off.
 
 ### The Punctuation Inventory, ahead of typesetting
 
@@ -216,10 +220,11 @@ to find the gaps here, not halfway through a support session.
    state which of the two cascades into other markers elsewhere in the chapter and
    which does not — this is the distinction that keeps you from over-reading a small
    error.
-3. **A denied error and a resolved error look identical** on the outstanding list.
-   Write the one question you'd ask to find out which of the two happened, and say in
-   one line why "deny" is a real, correct action in Basic Checks but has no equivalent
-   in the wordlist's spelling status.
+3. **A resolved error can disappear from the list two different ways.** Write one line
+   on how a denied error actually displays when it's visible (what marks it as denied,
+   not resolved), and one line on the View menu setting that controls whether it shows
+   up at all. Then say in one line why "deny" is a real, correct action in Basic Checks
+   but has no equivalent in the wordlist's spelling status.
 4. **Open Tools > Checking Inventories > Punctuation Inventory** in a project you
    already support, then open its **Inventory** menu and confirm whether **"Show
    sequences"** is selected. Write down what you found. Then, in one sentence, say what

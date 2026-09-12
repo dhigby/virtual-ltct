@@ -319,14 +319,19 @@ cases were added in this review round; the stories below are unchanged.
 
 ### Real field cases
 
-1. **(Reattributed 2026-09-08 — Stage 5 SME fact-check, Jenni Beadle.)** A team **denied Basic
-   Checks errors they didn't understand**, rather than resolving them. The consultant re-ran the
-   check to surface the denied errors and explained the cause of each one. **This is a Basic
-   Checks case specifically** — Basic Checks results have their own, genuine accept/deny
-   mechanism. It is distinct from, and must not be conflated with, the wordlist/spelling status
-   mechanism (field case 2 below), which has no "deny" action: Paratext's spelling status is one
-   of only three states — **Correct, Incorrect, Undecided**. "Denied" belongs to Basic Checks
-   (see `04-formatting-and-references.md`), not to the wordlist/Biblical Terms module.
+1. **(Reattributed 2026-09-08 — Stage 5 SME fact-check, Jenni Beadle. Mechanism corrected
+   2026-09-13.)** A team **denied Basic Checks errors they didn't understand**, rather than
+   resolving them. The consultant re-ran the check to surface the denied errors and explained the
+   cause of each one. **This is a Basic Checks case specifically** — Basic Checks results have
+   their own, genuine accept/deny mechanism. It is distinct from, and must not be conflated with,
+   the wordlist/spelling status mechanism (field case 2 below), which has no "deny" action:
+   Paratext's spelling status is one of only three states — **Correct, Incorrect, Undecided**.
+   "Denied" belongs to Basic Checks (see `04-formatting-and-references.md`), not to the
+   wordlist/Biblical Terms module. **Mechanism, confirmed via screenshot:** a denied error, when
+   shown, displays with **strikethrough** text — it is not visually identical to a resolved one.
+   The real risk is a **View menu** option, **Denied messages**: with it switched off, denied
+   errors are hidden from the list entirely, so a short, clean-looking list may simply have its
+   denied items out of view rather than genuinely resolved.
 2. A wordlist of thousands of words was **all marked Correct** (blanket-approved). The consultant
    reset every entry to *Undecided* and re-ran the wordlist checks, especially for incorrectly
    split or joined words.

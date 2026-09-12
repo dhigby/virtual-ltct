@@ -398,9 +398,14 @@ cases were added in this review round; the stories below are unchanged.
    thought his **Punctuation Inventory** review was thorough, but the typesetter later found
    a long list of **unmatched punctuation pairs** (mostly involving quotation marks) that
    hadn't surfaced. Traced back to not having selected **"Show sequences"** in the
-   Punctuation Inventory's **Inventory menu** — without it, the **"Punctuation (sequences)"**
-   checkbox under Run Basic Checks doesn't meaningfully check punctuation
-   sequences/combinations, so the review looked complete but wasn't. This is scoped to
+   Punctuation Inventory's **Inventory menu**. **(Mechanism corrected 2026-09-13):** the
+   checkbox under Run Basic Checks is just how you choose which check to run — it has
+   nothing to do with whether "Show sequences" is selected. What "Show sequences"
+   actually does is change the Run Basic Checks dialog itself: with it selected, the
+   punctuation checkbox is relabelled **"Punctuation (sequences)"** and checks
+   sequences/combinations; without it, the same checkbox stays a plain "Punctuation"
+   check and only checks individual characters, so the review looked complete but
+   wasn't. This is scoped to
    **punctuation only** for now; quotation marks specifically are more complicated and are
    deferred to a **separate, future addition**, not this course.
 

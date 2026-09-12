@@ -19,8 +19,9 @@ than a fast one.
 - You will be able to:
   - Review and use Paratext's Punctuation Inventory (Tools > Checking Inventories >
     Punctuation Inventory) ahead of typesetting.
-  - Select "Show sequences" in its Inventory menu so that the "Punctuation (sequences)"
-    Basic Check is meaningful, catching multi-character punctuation sequences.
+  - Select "Show sequences" in its Inventory menu so that Run Basic Checks' punctuation
+    checkbox relabels itself "Punctuation (sequences)" and catches multi-character
+    punctuation sequences, rather than staying a plain "Punctuation" check.
   - Use the complementary Unmatched Pairs of Punctuation inventory (Tools > Checking
     Inventories) to directly catch single unmatched bracket/parenthesis-type pairs.
   - Confirm both inventories were genuinely reviewed rather than assumed already
@@ -161,12 +162,15 @@ Four things to do with these inventories:
 - **Select "Show sequences" in the Punctuation Inventory's Inventory menu**, so that
   punctuation *sequences* — multi-character combinations, such as multiple quotation
   marks paired with spacing or another punctuation character — are actually inventoried,
-  not just the individual characters. Without it, the **"Punctuation (sequences)"**
-  checkbox under Run Basic Checks doesn't meaningfully check punctuation sequences or
-  combinations, so the review can look complete while a whole class of problems goes
-  unseen. This lesson covers punctuation sequences only; quotation marks specifically are
-  more complicated and are intentionally out of scope here, deferred to a separate,
-  future addition.
+  not just the individual characters. The checkbox under Run Basic Checks is simply how
+  you choose which check to run — it isn't itself tied to whether "Show sequences" is
+  selected. What "Show sequences" actually does is change the Run Basic Checks dialog:
+  with it selected, the punctuation checkbox is relabelled **"Punctuation (sequences)"**
+  and runs the sequence-level check; without it, the same checkbox stays labelled
+  **"Punctuation"** and only checks individual characters, so the review can look
+  complete while a whole class of problems goes unseen. This lesson covers punctuation
+  sequences only; quotation marks specifically are more complicated and are intentionally
+  out of scope here, deferred to a separate, future addition.
 - **Review Unmatched Pairs of Punctuation directly**, using its Status column to work
   through any single unmatched bracket/parenthesis-type character it lists. Don't treat
   "Show sequences" as covering this — it catches multi-character sequences, not the
@@ -176,8 +180,9 @@ That third point comes from a real case. One consultant believed their Punctuati
 Inventory review had been thorough — yet the typesetter later came back with a long list
 of unmatched punctuation pairs (mostly involving quotation marks) that had never
 surfaced. The cause was traced to "Show sequences" not having been selected in the
-Inventory menu — and without that setting, the "Punctuation (sequences)" checkbox under
-Run Basic Checks doesn't meaningfully check punctuation sequences or combinations. The
+Inventory menu — without it, the Run Basic Checks dialog's punctuation checkbox stayed
+labelled plain "Punctuation" and only checked individual characters, rather than being
+relabelled "Punctuation (sequences)" to check the combinations. The
 review *looked* complete and wasn't — the false-clean pattern again, this time produced
 by a single unselected menu option rather than by anyone skipping a step.
 
@@ -196,10 +201,11 @@ by a single unselected menu option rather than by anyone skipping a step.
   earlier in the project.
 - Loose or unconfigured settings in the Punctuation Inventory are what create a late
   time-sink for the typesetter — catching them here is cheaper for everyone.
-- "Show sequences" must be selected in the Punctuation Inventory's Inventory menu for the
-  "Punctuation (sequences)" Basic Check to actually check multi-character sequences —
-  without it, the review can look complete and still miss them. (Quotation marks
-  specifically are out of scope for this lesson.)
+- "Show sequences" must be selected in the Punctuation Inventory's Inventory menu for
+  Run Basic Checks' punctuation checkbox to relabel itself "Punctuation (sequences)" and
+  actually check multi-character sequences — without it, that same checkbox stays a
+  plain "Punctuation" check, and the review can look complete while still missing them.
+  (Quotation marks specifically are out of scope for this lesson.)
 - Unmatched Pairs of Punctuation is a separate, complementary inventory that directly
   lists single unmatched bracket/parenthesis-type pairs — check it too; it isn't replaced
   by "Show sequences" or vice versa.
@@ -227,10 +233,10 @@ to find the gaps here, not halfway through a support session.
    but has no equivalent in the wordlist's spelling status.
 4. **Open Tools > Checking Inventories > Punctuation Inventory** in a project you
    already support, then open its **Inventory** menu and confirm whether **"Show
-   sequences"** is selected. Write down what you found. Then, in one sentence, say what
-   the **"Punctuation (sequences)"** checkbox under Run Basic Checks does and doesn't do
-   while that option is unselected. One setting, one look — not a full inventory
-   review.
+   sequences"** is selected. Write down what you found. Then, in one sentence, say how
+   the punctuation checkbox under Run Basic Checks is labelled and what it checks while
+   that option is unselected, versus while it's selected. One setting, one look — not a
+   full inventory review.
 5. **A review can be genuine and still incomplete.** In two lines, say what the
    consultant in this lesson's Punctuation Inventory case had got wrong, given that
    they genuinely *did* review the inventory — and what would have made the same

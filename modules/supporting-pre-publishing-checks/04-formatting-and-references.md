@@ -209,7 +209,7 @@ to find the gaps here, not halfway through a support session.
 1. **Reproduce the structural-first order** — all seven steps, in order, from memory.
    Then, for the first two steps only, write one line each on why that step earns its
    place ahead of headings, titles, and references.
-2. **Two unclosed markers, two very different blast radii.** For a missing `\p` after
+2. **Two unclosed markers, two very different effects.** For a missing `\p` after
    a `\s1` section heading, write what gets swallowed and up to what point. For an
    `\f` opened without its matching `\f*`, write what happens when it's unclosed at
    the end of a verse, and what happens when it's unclosed partway through one. Then

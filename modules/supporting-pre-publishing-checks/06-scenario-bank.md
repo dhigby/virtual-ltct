@@ -208,8 +208,9 @@ separate things going on:
   almost in passing, that they added the full "All Biblical Terms" reference list to the
   project to make consulting terms easier.
 - The project's expat admin wants to move to single-column layout because the language
-  has long words and the team has never set up hyphenation — even though the language
-  community's own printed Bibles are conventionally two-column.
+  has long words and the team has never set up hyphenation — even though this NT is the
+  language's first Scripture, so the community's Bible-reading experience so far is
+  entirely in the LWC, and those LWC Bibles are conventionally two-column.
 
 **Context:** All three surfaced in the same conversation; the team sees them as three
 unrelated, minor asks.

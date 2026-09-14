@@ -294,9 +294,11 @@ Receive up again"). Credit answers that suggest a concrete right-sizing step (re
 bulk-added list, keeping only terms actually used).
 
 **Layout/hyphenation (Objective 8):** watch for the learner establishing the
-reader-expectation requirement *before* agreeing to any change — the community's own
-printed Bibles are conventionally two-column, so word length alone shouldn't drive a switch
-to single-column. This is marker **(f)**: advising the surfaced decision based on the right
+reader-expectation requirement *before* agreeing to any change — this NT is the
+language's first Scripture, so the community's only Bible-reading experience is via the
+LWC, and those LWC Bibles are conventionally two-column, so word length alone shouldn't
+drive a switch to single-column. This is marker **(f)**: advising the surfaced decision
+based on the right
 criterion. Because this course's Digital and Print Publishing claim rests on hands-on setup
 as well as advising, a strong answer also describes actually building the hyphenation file
 so long words can break correctly in two-column layout — not just recommending that someone

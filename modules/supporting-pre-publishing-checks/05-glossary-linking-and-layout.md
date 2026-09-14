@@ -171,7 +171,8 @@ answer, then check it against the Content section above.
    surfaces is yours to resolve or is typesetting craft belonging to the typesetter —
    again a test you could apply to any issue, not a ruling on a particular one.
    Finally, check which PTXprint version is installed on the machine you'd actually
-   use with a team, and note whether it's new enough for underfilled-page auto-fill.
+   use with a team, and note whether it's new enough for underfilled-page auto-fill —
+   if it isn't, update to the latest version.
 
 ## Change
 

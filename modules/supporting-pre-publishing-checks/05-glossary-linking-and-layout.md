@@ -64,6 +64,14 @@ translated content.
 > itself for a high-frequency term appearing in an unusually large number of rows before
 > concluding the linking is correctly scoped.
 
+This is the same trap as the Project Plan checkbox from Lesson 1: the Project Plan's
+"Check and link glossary entries" task (Stage 6, Final Preparation for Publication) has
+its own checkbox, but that box is ticked by a person, not generated from the actual
+linking data. A team can tick it as done without the linking having been genuinely
+reviewed — so treat it the same way as any other Project Plan status: a starting point,
+not confirmation. The linked-occurrences report is what actually tells you whether the
+scope was right.
+
 ### Layout and hyphenation: reader expectation, not just word length
 
 A real field case: an expat project admin assumed a **single-column** layout was

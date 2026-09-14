@@ -128,18 +128,20 @@ of these as already handled.
 ## Scenario 4: The Every-Occurrence Glossary (Objective 7 — glossary linking)
 
 **Situation:** You're reviewing a project's glossary links before the final read-through.
-Opening the report from the team's last glossary-linking pass — the log that lists every
-occurrence the operation linked, one row per occurrence with a book/chapter/verse
-reference — you notice one high-frequency term appears in dozens of rows across several
-chapters, not just once per section.
+The team did their glossary linking in batches over several sessions, so there's no
+report left to look back at — each pass's linked-occurrences report was replaced as soon
+as the next batch ran. You want to check whether "angel," a frequent term in this book,
+was linked at the correct scope.
 
 **Context:** The glossary itself already exists and its content is out of scope for you
 — you're only reviewing the linking operation.
 
 **Your task:**
-1. **Diagnose:** What would you check in the linked-occurrences report to confirm this is
-   over-linking (every occurrence) rather than a deliberate, correctly-scoped choice? What
-   does the report actually tell you, and what doesn't it tell you?
+1. **Diagnose:** Since there's no report to open, how would you use Find to check the
+   scope of "angel"'s linking? What exactly would you look for in each Find result's
+   markup to tell over-linking (every occurrence) apart from correctly-scoped linking
+   (first-occurrence-per-section) — and what's the specific way Find's hit list could
+   mislead you if you only skimmed it?
 2. **Say to the team:** Walk through exactly what you'd do to unlink and relink at the
    correct scope, and what you'd explain to the team about why "first occurrence per
    section" matters for readers.

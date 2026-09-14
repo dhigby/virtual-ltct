@@ -46,31 +46,45 @@ and defeats the purpose of a glossary link, which is to point a reader to a defi
 the first time they'd plausibly need it in a given section — not every time the word
 appears.
 
-Running the glossary-link operation doesn't produce a pass/fail status — it produces a
-**report listing every occurrence it linked**, one row per occurrence, each with a
-book/chapter/verse reference and a message like "Linked *angel messenja guy* to a
-glossary entry." To diagnose over-linking: scan that report for a term that shows up in
-many rows — since correctly-scoped linking (first-occurrence-per-section) would produce
-far fewer rows for that same term, a high row count for one term is the direct, visible
-sign it was linked at every occurrence instead. To fix it: **unlink** the over-applied
-marks and **relink at "first occurrence in every section,"** not "all occurrences." This
-is squarely something you can drive yourself in the tool — it's a scope setting, not a
-content judgment — but the same "never touch the team's actual translation" boundary
-still applies to any text changes; the linking operation itself is markup, not
-translated content.
+Running the glossary-link operation doesn't produce a pass/fail status, and it doesn't
+leave behind a durable log either: the linked-occurrences report it shows you is
+**transient** — it gets replaced the moment you link the next item or group, and
+glossary linking is commonly done in batches because it's a complicated operation. So
+you can't tell a team "go check the report" after the fact — by then it's gone. Row
+count wouldn't be a reliable signal anyway, since some glossary terms are naturally far
+more frequent in the text than others; there's no universal "too many rows" threshold to
+apply.
 
-> **WARNING — watch for a false-clean result here too:** The linked-occurrences report
-> finishing without errors doesn't tell you *which* scope was used. Review the report
-> itself for a high-frequency term appearing in an unusually large number of rows before
-> concluding the linking is correctly scoped.
+The durable, re-checkable way to diagnose over-linking is Paratext's **Find** feature.
+Search for the glossary term (e.g., "angel") across the project — Find gives you a live
+results list you can re-run any time, unlike the transient link report. Glossary links
+are marked directly in the text with `\w` and `\w*` around the linked span, in the form
+`\w <surface text>|<rendering>\w*` — for example `\w angel messenja guy\w*`, or, where
+the surface form in the text differs from the glossary entry's canonical rendering,
+`\w angel guy|Angel messenja guy\w*`. Look at each Find result: if `\w...\w*` markup
+wraps **every single occurrence** of the term, that's over-linking; if it wraps only the
+**first occurrence per section**, the scope is correct. To fix over-linking: **unlink**
+the over-applied marks and **relink at "first occurrence in every section,"** not "all
+occurrences." This is squarely something you can drive yourself in the tool — it's a
+scope setting, not a content judgment — but the same "never touch the team's actual
+translation" boundary still applies to any text changes; the linking operation itself is
+markup, not translated content.
+
+> **WARNING — Find will fool you if you skim it:** Find matches the search term both in
+> genuine occurrences in the running text *and* inside the rendering portion of an
+> existing `\w...\w*` marker (since the marker's canonical rendering contains the same
+> words). A high hit count on its own tells you nothing — you have to open each result
+> and check whether it's a fresh occurrence wrapped in its own `\w...\w*` markup, or text
+> that already sits inside another marker's rendering. Don't trust the count; read the
+> markup.
 
 This is the same trap as the Project Plan checkbox from Lesson 1: the Project Plan's
 "Check and link glossary entries" task (Stage 6, Final Preparation for Publication) has
 its own checkbox, but that box is ticked by a person, not generated from the actual
 linking data. A team can tick it as done without the linking having been genuinely
 reviewed — so treat it the same way as any other Project Plan status: a starting point,
-not confirmation. The linked-occurrences report is what actually tells you whether the
-scope was right.
+not confirmation. A Find search over the marked-up text is what actually tells you
+whether the scope was right.
 
 ### Layout and hyphenation: reader expectation, not just word length
 
@@ -122,8 +136,8 @@ properly the typesetter's craft.
 
 **Key takeaways**
 - Over-linking is a scope problem (every occurrence vs. first-per-section) — you can
-  drive the fix yourself, but review the linked-occurrences report for a term appearing
-  in unusually many rows before trusting that the scope is correct.
+  drive the fix yourself, but check via Find (the link report is transient) and inspect
+  the `\w...\w*` markup on each result rather than trusting a hit count.
 - Layout decisions follow reader expectation, not word length alone; once the layout
   is set, building the hyphenation file is hands-on technical work you do yourself.
 - The draft-PDF read-through is your last chance to catch spreads, orphans, footnote
@@ -135,12 +149,12 @@ properly the typesetter's craft.
 **✏️ Try this:** Five short exercises across this lesson's three areas. Write each
 answer, then check it against the Content section above.
 
-1. **Write the report check** that tells over-linking apart from correctly-scoped
-   linking: what kind of term you'd look for in the linked-occurrences report, what row
-   count would point to over-linking, and what row count would point to correct
-   scoping. State it as a general procedure you could run on any project, not a verdict
-   on one. Then add one line on what the report finishing without errors does tell you,
-   and what it doesn't.
+1. **Write the Find check** that tells over-linking apart from correctly-scoped linking:
+   why the linked-occurrences report itself isn't something you can rely on, what you'd
+   search for with Find instead, and what you'd look for in the `\w...\w*` markup on
+   each result to tell the two scopes apart. State it as a general procedure you could
+   run on any project, not a verdict on one. Then add one line on why a high Find hit
+   count alone doesn't prove over-linking.
 2. **Name the relink scope in the tool's own words** — the exact phrasing this lesson
    uses for the correct scope, and the wrong option it's easy to pick instead. Then
    say in one line why that scope is the right one from the reader's side.

@@ -166,11 +166,13 @@ Punctuation Inventory without asking to see it re-opened.
 
 ## Scenario 4: The Every-Occurrence Glossary (Objective 7)
 
-**Watch for in the diagnosis:** the learner should recognize that a "complete" status only
-tells you the linking pass was run, not that it was run at the correct scope — this is a
-narrower instance of the false-clean pattern (a status that looks done isn't necessarily
-done correctly). A strong answer checks the actual link count/pattern for the term rather
-than trusting the completion flag.
+**Watch for in the diagnosis:** the learner should recognize that the linked-occurrences
+report finishing without errors only tells you the linking pass ran, not that it ran at
+the correct scope — this is a narrower instance of the false-clean pattern (a result that
+looks done isn't necessarily done correctly). A strong answer describes actually reviewing
+the report for a term appearing in an unusually large number of rows — since
+correctly-scoped (first-occurrence-per-section) linking would show far fewer rows for the
+same term — rather than trusting that the pass simply completed.
 
 **Watch for in what they'd say to the team:** the learner should describe the concrete
 technical operation — unlink the over-linked term and relink it at first-occurrence-per-
@@ -184,8 +186,9 @@ wrong, that's not the LTC's to fix and isn't really an "escalation" so much as a
 boundary the learner should name. A strong answer explicitly separates "the linking
 operation, which is mine" from "the glossary content, which isn't."
 
-**Common wrong turn:** treating "complete" as sufficient evidence of correct scope; drifting
-into commenting on whether the glossary entry itself is right.
+**Common wrong turn:** treating the report running without errors as sufficient evidence
+of correct scope, rather than actually reading it row by row for a repeated term;
+drifting into commenting on whether the glossary entry itself is right.
 
 ---
 

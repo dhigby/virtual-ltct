@@ -127,18 +127,19 @@ of these as already handled.
 
 ## Scenario 4: The Every-Occurrence Glossary (Objective 7 — glossary linking)
 
-**Situation:** You're reviewing a project's glossary links before the final read-through
-and notice one high-frequency term is linked at nearly every occurrence across several
-chapters, not just its first appearance per section. The team's glossary-linking pass
-shows as "complete."
+**Situation:** You're reviewing a project's glossary links before the final read-through.
+Opening the report from the team's last glossary-linking pass — the log that lists every
+occurrence the operation linked, one row per occurrence with a book/chapter/verse
+reference — you notice one high-frequency term appears in dozens of rows across several
+chapters, not just once per section.
 
 **Context:** The glossary itself already exists and its content is out of scope for you
 — you're only reviewing the linking operation.
 
 **Your task:**
-1. **Diagnose:** What would you check to confirm this is over-linking (every occurrence)
-   rather than a deliberate, correctly-scoped choice? What does a "complete" status
-   actually tell you, and what doesn't it tell you?
+1. **Diagnose:** What would you check in the linked-occurrences report to confirm this is
+   over-linking (every occurrence) rather than a deliberate, correctly-scoped choice? What
+   does the report actually tell you, and what doesn't it tell you?
 2. **Say to the team:** Walk through exactly what you'd do to unlink and relink at the
    correct scope, and what you'd explain to the team about why "first occurrence per
    section" matters for readers.

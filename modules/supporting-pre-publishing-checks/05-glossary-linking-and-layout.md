@@ -46,18 +46,23 @@ and defeats the purpose of a glossary link, which is to point a reader to a defi
 the first time they'd plausibly need it in a given section — not every time the word
 appears.
 
-To diagnose it: check whether a term that appears many times in a section is linked at
-every instance, rather than only its first appearance in that section. To fix it: **unlink**
-the over-applied marks and **relink at "first occurrence in every section,"** not "all
-occurrences." This is squarely something you can drive yourself in the tool — it's a
-scope setting, not a content judgment — but the same "never touch the team's actual
-translation" boundary still applies to any text changes; the linking operation itself is
-markup, not translated content.
+Running the glossary-link operation doesn't produce a pass/fail status — it produces a
+**report listing every occurrence it linked**, one row per occurrence, each with a
+book/chapter/verse reference and a message like "Linked *angel messenja guy* to a
+glossary entry." To diagnose over-linking: scan that report for a term that shows up in
+many rows — since correctly-scoped linking (first-occurrence-per-section) would produce
+far fewer rows for that same term, a high row count for one term is the direct, visible
+sign it was linked at every occurrence instead. To fix it: **unlink** the over-applied
+marks and **relink at "first occurrence in every section,"** not "all occurrences." This
+is squarely something you can drive yourself in the tool — it's a scope setting, not a
+content judgment — but the same "never touch the team's actual translation" boundary
+still applies to any text changes; the linking operation itself is markup, not
+translated content.
 
-> **WARNING — watch for a false-clean result here too:** A glossary-linking pass that
-> shows "complete" doesn't tell you *which* scope was used. Spot-check a high-frequency
-> term across a couple of sections before accepting that the linking is correctly
-> scoped.
+> **WARNING — watch for a false-clean result here too:** The linked-occurrences report
+> finishing without errors doesn't tell you *which* scope was used. Review the report
+> itself for a high-frequency term appearing in an unusually large number of rows before
+> concluding the linking is correctly scoped.
 
 ### Layout and hyphenation: reader expectation, not just word length
 
@@ -109,7 +114,8 @@ properly the typesetter's craft.
 
 **Key takeaways**
 - Over-linking is a scope problem (every occurrence vs. first-per-section) — you can
-  drive the fix yourself, but spot-check before trusting a "complete" status.
+  drive the fix yourself, but review the linked-occurrences report for a term appearing
+  in unusually many rows before trusting that the scope is correct.
 - Layout decisions follow reader expectation, not word length alone; once the layout
   is set, building the hyphenation file is hands-on technical work you do yourself.
 - The draft-PDF read-through is your last chance to catch spreads, orphans, footnote
@@ -121,11 +127,12 @@ properly the typesetter's craft.
 **✏️ Try this:** Five short exercises across this lesson's three areas. Write each
 answer, then check it against the Content section above.
 
-1. **Write the spot-check** that tells over-linking apart from correctly-scoped
-   linking: what kind of term you'd pick, how many sections you'd look across, and
-   what result would point to each of the two. State it as a general procedure you
-   could run on any project, not a verdict on one. Then add one line on what a
-   "complete" status on a linking pass does tell you, and what it doesn't.
+1. **Write the report check** that tells over-linking apart from correctly-scoped
+   linking: what kind of term you'd look for in the linked-occurrences report, what row
+   count would point to over-linking, and what row count would point to correct
+   scoping. State it as a general procedure you could run on any project, not a verdict
+   on one. Then add one line on what the report finishing without errors does tell you,
+   and what it doesn't.
 2. **Name the relink scope in the tool's own words** — the exact phrasing this lesson
    uses for the correct scope, and the wrong option it's easy to pick instead. Then
    say in one line why that scope is the right one from the reader's side.

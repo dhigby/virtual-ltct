@@ -40,7 +40,7 @@ to be different — we're not touching them, this was already checked months ago
 
 **Context:** You open the Parallel Passages tool and look at the relevant verses side by
 side. Several of them show a red question mark in the Status column rather than a
-checkmark — meaning those verses were edited during a revision pass three weeks ago and
+checkmark — meaning those verses were edited during a revision pass some time ago and
 haven't been reviewed again since. You don't speak the team's language, so you can't
 judge the passages' meaning yourself.
 

@@ -10,11 +10,11 @@ coaching, not a single correct fix.
 
 Weighting matches the design doc's assessment plan: one full scenario each for the six
 **core** objectives (2, 5, 6, 7, 9, 10), one combined scenario folding in the three
-**secondary** objectives (3, 4, 8), and the cross-cutting **false-clean** thread (objective
-1) woven inside two of the core scenarios rather than given its own case. Every scenario
-is built from a confirmed SME field case, a stated mistake pattern, or established course
-content from Lessons 1–5 — nothing here is invented beyond what those lessons already
-establish.
+**secondary** objectives (3, 4, 8), and the cross-cutting **false-clean** thread
+(objective 1) woven inside two of the core scenarios rather than given its own case.
+Every scenario is built from a confirmed SME field case, a stated mistake pattern, or
+established course content from Lessons 1–5 — nothing here is invented beyond what those
+lessons already establish.
 
 ## How to use these scenarios
 

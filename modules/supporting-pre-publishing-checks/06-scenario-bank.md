@@ -144,7 +144,10 @@ was linked at the correct scope.
    scope of "angel"'s linking? What exactly would you look for in each Find result's
    markup to tell over-linking (every occurrence) apart from correctly-scoped linking
    (first-occurrence-per-section) — and what's the specific way Find's hit list could
-   mislead you if you only skimmed it?
+   mislead you if you only skimmed it? This project's glossary also has a phrase term
+   that contains "angel" as one of its words (e.g. "angel of the Lord") — if a Find hit
+   for "angel" lands inside a marker whose rendering is that phrase, is that something
+   to fix, or is it correct as-is? Explain your reasoning.
 2. **Say to the team:** Walk through exactly what you'd do to unlink and relink at the
    correct scope, and what you'd explain to the team about why "first occurrence per
    section" matters for readers.

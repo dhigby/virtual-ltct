@@ -196,6 +196,16 @@ see whether it's a fresh occurrence with its own markup or text sitting inside a
 marker's rendering. This is a narrower instance of the false-clean pattern (a result that
 looks done isn't necessarily done correctly).
 
+A strong answer goes one step further and recognizes that a hit sitting inside an
+existing marker might belong to a **different, broader phrase term** rather than being a
+stale or over-linked occurrence of the term being searched — e.g. a Find hit for "angel"
+landing inside a marker rendering "angel of the Lord" is correct and expected, not
+something to fix, because phrase terms are properly linked before their component single
+words so the single word doesn't get separately (and wrongly) linked inside phrase
+territory. A weaker answer treats every hit inside existing markup the same way — either
+waving it off as "already linked, fine" or flagging it as over-linked — without checking
+*whose* rendering it actually is.
+
 **Watch for in what they'd say to the team:** the learner should describe the concrete
 technical operation — unlink the over-linked term and relink it at first-occurrence-per-
 section — and explain to the team *why* first-per-section is the right scope for readers
@@ -212,6 +222,8 @@ operation, which is mine" from "the glossary content, which isn't."
 there, and row count isn't a valid signal anyway since term frequency varies naturally);
 or running a Find search and trusting the hit count without opening results to
 distinguish genuine new occurrences from matches inside an existing marker's rendering;
+treating every hit inside an existing marker as automatically fine or automatically
+over-linked without checking whether it actually belongs to a broader phrase term;
 drifting into commenting on whether the glossary entry itself is right.
 
 ---

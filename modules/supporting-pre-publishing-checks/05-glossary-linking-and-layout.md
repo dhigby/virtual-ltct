@@ -78,6 +78,19 @@ markup, not translated content.
 > that already sits inside another marker's rendering. Don't trust the count; read the
 > markup.
 
+There's a further layer to this same check: a Find hit landing inside an existing
+`\w...\w*` marker isn't automatically "already linked, fine" — you also need to check
+**whose rendering it actually is**. Glossary terms can overlap when one is a phrase
+containing another as a single word — for example "Holy Spirit" (a phrase term) contains
+"Spirit" (also a standalone single-word term). If you're searching for "Spirit" and a hit
+sits inside a marker whose rendering is "Holy Spirit," that's not a stale or over-linked
+occurrence of "Spirit" at all — it's correctly linked to the broader phrase term, and it
+should **not** also be separately linked as "Spirit." The correct workflow is to link
+phrase terms **before** their component single words, precisely so the single word never
+gets wrongly linked inside phrase territory. So when a hit falls inside an existing
+marker, read the rendering, not just the presence of markup: a broader phrase term there
+is expected and correct, not something to flag.
+
 This is the same trap as the Project Plan checkbox from Lesson 1: the Project Plan's
 "Check and link glossary entries" task (Stage 6, Final Preparation for Publication) has
 its own checkbox, but that box is ticked by a person, not generated from the actual

@@ -2,19 +2,19 @@
 
 **Estimated time:** 85 minutes
 
-**Purpose:** Support a team through the structural formatting checks — marker pairs,
-headings, book titles, references, footnotes, and the Punctuation Inventory and
-Unmatched Pairs of Punctuation — working structural-first so downstream errors don't
-hide behind upstream ones, and coach the team to a genuinely zero-error result rather
-than a fast one.
+**Purpose:** Support a team through the structural formatting checks — chapter/verse
+numbers, marker pairs, headings, book titles, references, footnotes, and the
+Punctuation Inventory and Unmatched Pairs of Punctuation — working structural-first so
+downstream errors don't hide behind upstream ones, and coach the team to a genuinely
+zero-error result rather than a fast one.
 
 ## Learning objectives
 
 - You will be able to:
-  - Diagnose formatting-check failures — unclosed marker pairs, ghost markers (a marker
-    left with no content attached, usually debris from an incompletely deleted footnote
-    or cross-reference), wrong markers, and errors in book titles, section headings, and
-    references — by working structural-first.
+  - Diagnose formatting-check failures — chapter/verse numbering errors, unclosed
+    marker pairs, ghost markers (a marker left with no content attached, usually debris
+    from an incompletely deleted footnote or cross-reference), wrong markers, and errors
+    in book titles, section headings, and references — by working structural-first.
   - Coach a team to a zero-error result without touching their keyboard.
 - You will be able to:
   - Review and use Paratext's Punctuation Inventory (Tools > Checking Inventories >
@@ -53,30 +53,35 @@ miscount because the checker is reading swallowed verse content as part of the h
 If you start by fixing the errors at the bottom of a long list, you may be fixing
 symptoms of a single cause higher up. Work in this order instead:
 
-1. **Marker-pair census.** Confirm every paired marker (`\f...\f*`, `\x...\x*`, character
+1. **Chapter/Verse Numbers.** Confirm this Run Basic Checks category — Markers,
+   Characters, Punctuation, References, and Footnote quotes all sit alongside it — comes
+   back clean before anything else, because every other check on this list reports its
+   results by quoting a chapter and verse location, and those locations can't be trusted
+   if the chapter/verse numbering itself has errors (such as a duplicate verse).
+2. **Marker-pair census.** Confirm every paired marker (`\f...\f*`, `\x...\x*`, character
    styles, etc.) actually closes. An unclosed pair is often the single cause behind a
    cluster of downstream-looking errors.
-2. **Ghost markers.** Look for markers left behind with no content attached — often the
+3. **Ghost markers.** Look for markers left behind with no content attached — often the
    debris of a deleted footnote or cross-reference where the marker itself wasn't
    removed. These can silently corrupt export and typesetting even when nothing visibly
    looks wrong on screen.
-3. **Long/short verses.** Verses that run unexpectedly long or short compared to the
+4. **Long/short verses.** Verses that run unexpectedly long or short compared to the
    source can indicate a misplaced verse marker, a merged verse, or dropped text — worth
    ruling out before treating everything else in the chapter as a heading or reference
    problem.
-4. **Section headings.** The marker itself is rarely the problem — most projects use
+5. **Section headings.** The marker itself is rarely the problem — most projects use
    `\s1` almost exclusively, with `\s2` only occasionally, so a wrong-level marker is
    uncommon. The real issues to check for are missing headings, or headings that don't
    match the text they introduce.
-5. **Book titles.** Inconsistent or incorrect book-name and book-title markup, especially
+6. **Book titles.** Inconsistent or incorrect book-name and book-title markup, especially
    after a book has been renamed or reorganized mid-project.
-6. **References** (`\r` shows parallel passages; `\xt` is the actual cross-reference
+7. **References** (`\r` shows parallel passages; `\xt` is the actual cross-reference
    marker) and the **table of contents.** Missed book-name checks, foreign-language `\r`
    abbreviations left unadjusted (a common source:
    bulk-copying `\r` lines from another NT project as a starting point, which carries over
    that project's abbreviations instead of the current project's own), and a table of
    contents that doesn't match the book titles actually in the text.
-7. **Footnotes.** Beyond the marker-pair check in step 1, confirm footnote content and
+8. **Footnotes.** Beyond the marker-pair check in step 2, confirm footnote content and
    placement are sound — a footnote that survives the marker check can still be attached
    to the wrong verse or duplicated. Note that an unclosed `\f` footnote marker (opened
    without its matching `\f*`) has a much narrower effect than the missing-`\p` example
@@ -110,8 +115,10 @@ short and clean may simply have its denied items switched out of view. Turn on
 > already did that" trap from earlier lessons, now applied to formatting.
 
 **Key takeaways**
-- Work structural-first: marker pairs and ghost markers before headings, titles, and
-  references, since upstream breakage can masquerade as unrelated downstream errors.
+- Work structural-first: Chapter/Verse Numbers first, since every other check quotes
+  chapter/verse locations to report results, then marker pairs and ghost markers before
+  headings, titles, and references — upstream breakage can masquerade as unrelated
+  downstream errors.
 - Your job is to diagnose the cause and coach the team to fix it — you never touch their
   keyboard.
 - A zero-error result only counts if the checks were actually re-run at this stage, not
@@ -216,8 +223,8 @@ by a single unselected menu option rather than by anyone skipping a step.
 from memory first, then check each one against the Content section above — the point is
 to find the gaps here, not halfway through a support session.
 
-1. **Reproduce the structural-first order** — all seven steps, in order, from memory.
-   Then, for the first two steps only, write one line each on why that step earns its
+1. **Reproduce the structural-first order** — all eight steps, in order, from memory.
+   Then, for the first three steps only, write one line each on why that step earns its
    place ahead of headings, titles, and references.
 2. **Two unclosed markers, two very different effects.** For a missing `\p` after
    a `\s1` section heading, write what gets swallowed and up to what point. For an
@@ -256,8 +263,9 @@ assuming? What would it cost to confirm it now versus finding out from a frustra
 typesetter later?
 
 **Next step:** Before your next formatting-check session, write down the structural-first
-order from this lesson (marker pairs → ghost markers → long/short verses → headings →
-book titles → references → footnotes) somewhere you'll actually have it in front of you,
+order from this lesson (chapter/verse numbers → marker pairs → ghost markers →
+long/short verses → headings → book titles → references → footnotes) somewhere you'll
+actually have it in front of you,
 and add "Punctuation Inventory and Unmatched Pairs of Punctuation — both genuinely
 reviewed?" as a standing question for any project nearing typesetting.
 

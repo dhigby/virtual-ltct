@@ -123,8 +123,8 @@ What should you do?
 
 ### Section 4: Formatting and References (Questions 13-14)
 
-**Question 13:** Why should formatting checks be worked "structural-first" — marker
-pairs and ghost markers before headings, titles, and references?
+**Question 13:** Why should formatting checks be worked "structural-first" — Chapter/Verse
+Numbers and marker pairs before headings, titles, and references?
 - A) It's required by Paratext's software design
 - B) Upstream breakage, like an unclosed marker pair, can cause a cluster of downstream-looking errors elsewhere
 - C) Headings are always harder to fix than marker pairs

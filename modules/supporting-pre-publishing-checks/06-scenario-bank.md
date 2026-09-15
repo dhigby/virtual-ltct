@@ -101,7 +101,8 @@ routing, not recognizing a specific known error.
 
 **Situation:** A team's Basic Checks show a short list of formatting errors, all in the
 second half of Mark — a heading that doesn't match the text it introduces, and a
-reference that looks garbled. Separately, the team tells you
+reference that looks garbled. The team hasn't mentioned Chapter/Verse Numbers at all —
+they went straight to the marker and reference flags. Separately, the team tells you
 the Punctuation Inventory "was already checked back when we started the project." The
 project has since been through two more revision passes and is headed to a typesetter in
 three weeks.
@@ -111,11 +112,13 @@ of these as already handled.
 
 **Your task:**
 1. **Diagnose:** Before working the Basic Checks list top to bottom, what would you check
-   first, and why? If you find a missing `\p` marker after a section heading partway
-   through Mark, what would you expect that to explain about the other flags — verse text
-   swallowed into the heading style — and how would you confirm it before telling the
-   team? Separately, what's wrong with treating "checked at the start of the project" as
-   current for the Punctuation Inventory?
+   first, and why? (Note that Chapter/Verse Numbers hasn't been confirmed clean yet — why
+   does that have to happen before anything else, including the marker-pair census?) If
+   you then find a missing `\p` marker after a section heading partway through Mark, what
+   would you expect that to explain about the other flags — verse text swallowed into the
+   heading style — and how would you confirm it before telling the team? Separately,
+   what's wrong with treating "checked at the start of the project" as current for the
+   Punctuation Inventory?
 2. **Say to the team:** What would you say to get them to re-run Basic Checks
    structural-first, and what would you specifically ask them to open and show you for
    the Punctuation Inventory?

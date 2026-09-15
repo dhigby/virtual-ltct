@@ -133,26 +133,29 @@ this team's specific Paratext version, or assuming no team could possibly have i
 
 ## Scenario 3: The Inventory Nobody Opened (Objective 6)
 
-**Watch for in the diagnosis:** structural-first triage, starting with Chapter/Verse
-Numbers — a strong answer confirms that check comes back clean *before* anything else,
-including the marker-pair census, because every other check on the list (references,
-footnotes, the heading flag itself) reports its results by quoting a chapter/verse
-location, and those locations can't be trusted if the numbering has errors of its own.
-Only once that's confirmed clean does the learner move to unclosed marker pairs and
-other structural breaks *before* interpreting the individual "heading doesn't match its
-text" flag, because a missing `\p`
-marker after a section heading partway through Mark can cascade into exactly this kind of
-scattered-looking flag list downstream — everything between the heading and the next
-paragraph-style marker (such as `\p`, `\m`, `\q`, etc.) gets swallowed into and rendered as part of the heading, including verse numbers and verse
-text, which is what can
-produce the heading-doesn't-match-text flag and a garbled-looking
-reference. Marker
-**(b)**: diagnose cause, not each symptom separately. On the Punctuation
-Inventory, the learner should flag "checked at the start of the project" as stale by
-definition — the project has had two more revision passes since — and this is the same
-false-clean trap as the harmonized-synoptics scenario: treating "we did this once" as
-current. This is the woven objective-1 thread; credit it explicitly when a learner names
-it as such.
+**Watch for in the diagnosis:** this is a structural-first triage, and it has two parts.
+
+First, Chapter/Verse Numbers. A strong answer confirms that check comes back clean
+*before* anything else, including the marker-pair census — because every other check on
+the list (references, footnotes, the heading flag itself) reports its results by
+quoting a chapter/verse location, and those locations can't be trusted if the numbering
+has errors of its own.
+
+Second, once Chapter/Verse Numbers is confirmed clean, the learner moves to unclosed
+marker pairs and other structural breaks *before* interpreting the individual "heading
+doesn't match its text" flag. A missing `\p` marker after a section heading partway
+through Mark can cascade into exactly this kind of scattered-looking flag list
+downstream: everything between the heading and the next paragraph-style marker (such as
+`\p`, `\m`, `\q`, etc.) gets swallowed into and rendered as part of the heading,
+including verse numbers and verse text — which is what can produce the
+heading-doesn't-match-text flag and a garbled-looking reference. Marker **(b)**:
+diagnose cause, not each symptom separately.
+
+Separately, on the Punctuation Inventory, the learner should flag "checked at the start
+of the project" as stale by definition — the project has had two more revision passes
+since — and this is the same false-clean trap as the harmonized-synoptics scenario:
+treating "we did this once" as current. This is the woven objective-1 thread; credit it
+explicitly when a learner names it as such.
 
 **Watch for in what they'd say to the team:** ask the team to re-run Basic Checks
 structural-first (not top-to-bottom by flag order), and specifically ask to see the
@@ -165,12 +168,14 @@ unrecognized character the learner can't tell is a real problem vs. a font-displ
 go to an LT mentor (a tooling/technical question), not a Translation Consultant. A learner
 who can't distinguish this from a content question has missed marker **(g)**.
 
-**Common wrong turn:** working the Basic Checks flag list in the order it appears rather
-than checking for a structural root cause first; jumping straight to the marker-pair
-census without first confirming Chapter/Verse Numbers is clean — a learner who does this
-has missed the actual first step, even if everything after it is diagnosed correctly;
-accepting "already checked" for the Punctuation Inventory without asking to see it
-re-opened.
+**Common wrong turn:** three separate ways a learner can go wrong here:
+- Working the Basic Checks flag list in the order it appears rather than checking for a
+  structural root cause first.
+- Jumping straight to the marker-pair census without first confirming Chapter/Verse
+  Numbers is clean — this learner has missed the actual first step, even if everything
+  after it is diagnosed correctly.
+- Accepting "already checked" for the Punctuation Inventory without asking to see it
+  re-opened.
 
 ---
 

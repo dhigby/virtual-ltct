@@ -58,9 +58,13 @@ symptoms of a single cause higher up. Work in this order instead:
    back clean before anything else, because every other check on this list reports its
    results by quoting a chapter and verse location, and those locations can't be trusted
    if the chapter/verse numbering itself has errors (such as a duplicate verse).
-2. **Marker-pair census.** Confirm every paired marker (`\f...\f*`, `\x...\x*`, character
-   styles, etc.) actually closes. An unclosed pair is often the single cause behind a
-   cluster of downstream-looking errors.
+2. **Marker-pair census.** Paratext markers come in two kinds: **paragraph markers**
+   (`\p`, `\s`, `\q`, etc.) that apply to a whole paragraph and stand alone, and
+   **paired markers** (`\f...\f*`, `\x...\x*`, character styles, etc.) that wrap a span
+   of text and must open and close correctly. Use the **Markers Inventory** (Tools >
+   Checking Inventories > Markers Inventory) to confirm every paired marker actually
+   closes. An unclosed pair is often the single cause behind a cluster of
+   downstream-looking errors.
 3. **Ghost markers.** Look for markers left behind with no content attached — often the
    debris of a deleted footnote or cross-reference where the marker itself wasn't
    removed. These can silently corrupt export and typesetting even when nothing visibly

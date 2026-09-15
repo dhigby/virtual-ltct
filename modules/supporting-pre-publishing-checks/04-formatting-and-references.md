@@ -44,7 +44,7 @@ cause before chasing individual flags.
 Formatting errors cascade — but only through a real mechanism, not a vague "everything
 after it breaks" effect. A missing `\p` (paragraph marker) after a `\s1` section heading
 is a common, real example: without it, everything from right after the heading text up
-until the next `\p` marker gets swallowed into and rendered *as part of* the section
+until the next paragraph-style marker (such as `\p`, `\m`, `\q`, etc.) gets swallowed into and rendered *as part of* the section
 heading — in the heading's bold/heading style — including verse numbers and verse text
 that should be ordinary body text. That single missing marker can plausibly produce a
 whole cluster of downstream-looking symptoms: an oversized or wrong-looking heading,

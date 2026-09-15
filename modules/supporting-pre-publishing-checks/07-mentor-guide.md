@@ -310,7 +310,7 @@ taught or scored as the established cause.
 the cause is **adding** the full "All Biblical Terms" list into the *project's* Biblical
 Terms (bloating the project and slowing Send/Receive) — not merely having a large list open
 for reference. A strong answer explicitly distinguishes "viewing a big list" from "adding
-that list's contents to the project," since the design doc flags this as the exact
+that list to the project," since the design doc flags this as the exact
 distinction that's hard to get a team to believe. Watch for how they'd explain this to a
 skeptical team — plain-language cause and effect, not just an assertion ("adding thousands
 of terms into the project's own list makes every sync compare and transfer thousands of

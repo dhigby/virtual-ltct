@@ -100,8 +100,8 @@ routing, not recognizing a specific known error.
 ## Scenario 3: The Inventory Nobody Opened (Objective 6 — formatting checks)
 
 **Situation:** A team's Basic Checks show a short list of formatting errors, all in the
-second half of Mark — a heading that seems to be missing, a heading that doesn't match
-the text it introduces, and a reference that looks garbled. Separately, the team tells you
+second half of Mark — a heading that doesn't match the text it introduces, and a
+reference that looks garbled. Separately, the team tells you
 the Punctuation Inventory "was already checked back when we started the project." The
 project has since been through two more revision passes and is headed to a typesetter in
 three weeks.

@@ -135,12 +135,12 @@ this team's specific Paratext version, or assuming no team could possibly have i
 
 **Watch for in the diagnosis:** structural-first triage — a strong answer checks for
 unclosed marker pairs and other structural breaks *before* interpreting the individual
-"missing heading" and "heading doesn't match its text" flags, because a missing `\p`
+"heading doesn't match its text" flag, because a missing `\p`
 marker after a section heading partway through Mark can cascade into exactly this kind of
 scattered-looking flag list downstream — everything between the heading and the next
 paragraph-style marker (such as `\p`, `\m`, `\q`, etc.) gets swallowed into and rendered as part of the heading, including verse numbers and verse
 text, which is what can
-produce the missing-heading and heading-doesn't-match-text flags and a garbled-looking
+produce the heading-doesn't-match-text flag and a garbled-looking
 reference. Marker
 **(b)**: diagnose cause, not each symptom separately. On the Punctuation
 Inventory, the learner should flag "checked at the start of the project" as stale by

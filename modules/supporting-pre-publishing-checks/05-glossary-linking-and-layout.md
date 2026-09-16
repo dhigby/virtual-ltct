@@ -15,7 +15,8 @@ last checks before a team's files go to the typesetter.
 - You will be able to:
   - Advise a team on a single- versus two-column layout decision based on reader and
     community expectation — not just word length.
-  - Set up a hyphenation file so long words can break correctly in a two-column layout.
+  - Enable Show hyphenation in the Wordlist and review/correct the auto-generated
+    hyphenation breaks so long words break correctly in a two-column layout.
 - You will be able to:
   - Lead a team through the final PTXprint draft-PDF read-through.
   - Resolve or triage what it surfaces, deferring true typesetting composition to the
@@ -118,9 +119,13 @@ Digital and Print Publishing competency:
    layout format the LWC Bibles and other printed materials the community currently
    reads and uses follow, rather than defaulting to whichever layout avoids a technical
    problem for the target language.
-2. **Do the technical setup** — once two-column layout is the right call, **build a
-   hyphenation file** so long words can break correctly across the column width. This
-   is genuine hands-on tooling work, not just advice-giving.
+2. **Do the technical setup** — once two-column layout is the right call, open the
+   **Wordlist** and turn on **Show hyphenation** from its View menu (alongside "Show
+   morphology" and "Show spelling status"). This makes Paratext auto-generate a
+   `hyphenatedWords.txt` file from the wordlist, with a hyphenation column you can see.
+   Your job isn't to build that file from scratch — it's to **review the auto-generated
+   hyphenation and correct any wrong breaks** so long words break correctly across the
+   column width. This is genuine hands-on tooling work, not just advice-giving.
 
 ### The final PTXprint draft-PDF read-through
 
@@ -152,7 +157,8 @@ properly the typesetter's craft.
   drive the fix yourself, but check via Find (the link report is transient) and inspect
   the `\w...\w*` markup on each result rather than trusting a hit count.
 - Layout decisions follow reader expectation, not word length alone; once the layout
-  is set, building the hyphenation file is hands-on technical work you do yourself.
+  is set, enabling Show hyphenation and reviewing/correcting the auto-generated
+  hyphenation breaks is hands-on technical work you do yourself.
 - The draft-PDF read-through is your last chance to catch spreads, orphans, footnote
   shifts, heading placement, and underfilled pages — triage what you find rather than
   trying to resolve everything yourself.
@@ -176,9 +182,9 @@ answer, then check it against the Content section above.
    it. Then draft the single question — one sentence — you'd ask a team to establish
    that baseline, aimed at what the community already reads and uses.
 4. **Say where the hands-on half of your role begins.** At what point in the layout
-   sequence does building a hyphenation file become the right next step, and what has
-   to be settled before it? One or two lines — and note whether that step is yours or
-   somebody else's.
+   sequence does enabling Show hyphenation and reviewing the auto-generated breaks
+   become the right next step, and what has to be settled before it? One or two
+   lines — and note whether that step is yours or somebody else's.
 5. **List the five things to watch for** in the draft-PDF read-through, from memory.
    Then write the general test you'd use to decide whether something the read-through
    surfaces is yours to resolve or is typesetting craft belonging to the typesetter —

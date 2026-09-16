@@ -166,7 +166,7 @@ check before agreeing?
 of Wider Communication), and the target language has long words. What concrete
 technical step should you take?
 - A) Recommend switching the community to single-column instead
-- B) Build a hyphenation file so long words can break correctly across the column width
+- B) Enable Show hyphenation in the Wordlist and review/correct the auto-generated hyphenation breaks
 - C) Reduce the font size until words fit
 - D) Ask the team to shorten their vocabulary
 

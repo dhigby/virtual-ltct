@@ -325,9 +325,10 @@ LWC, and those LWC Bibles are conventionally two-column, so word length alone sh
 drive a switch to single-column. This is marker **(f)**: advising the surfaced decision
 based on the right
 criterion. Because this course's Digital and Print Publishing claim rests on hands-on setup
-as well as advising, a strong answer also describes actually building the hyphenation file
-so long words can break correctly in two-column layout — not just recommending that someone
-else do it.
+as well as advising, a strong answer also describes actually enabling Show hyphenation in
+the Wordlist's View menu and reviewing/correcting the auto-generated hyphenation breaks so
+long words break correctly in two-column layout — not just recommending that someone else
+do it.
 
 **Escalation, across all three:** none of these three should need to leave the learner and
 the team — all three are within the learner's own coaching-plus-technical-setup role (per

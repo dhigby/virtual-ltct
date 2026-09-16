@@ -235,7 +235,8 @@ unrelated, minor asks.
 3. **Escalate:** Which of these three, if any, would need to go beyond you and the team,
    and which are entirely within your own coaching and technical-setup role (remember:
    this course's Digital and Print Publishing claim rests on you both advising *and*
-   doing hands-on setup, such as building a hyphenation file)?
+   doing hands-on setup, such as enabling Show hyphenation in the Wordlist and
+   reviewing/correcting the auto-generated hyphenation breaks)?
 
 ---
 

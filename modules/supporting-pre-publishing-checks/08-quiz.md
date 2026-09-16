@@ -19,16 +19,16 @@ diagnostic reasoning — it can't assess live coaching. The mentor-reviewed scen
 
 **Question 1:** A team says every check in Paratext shows clean and they're ready for
 the typesetter. What is the FIRST thing you should do?
-- A) Ask questions to confirm the checks were genuinely reviewed, not just cleared
-- B) Sign off, since the tool shows clean
-- C) Escalate to an LT mentor immediately
+- A) Sign off, since the tool shows clean
+- B) Escalate to an LT mentor immediately
+- C) Ask questions to confirm the checks were genuinely reviewed, not just cleared
 - D) Rerun only the wordlist check
 
 **Question 2:** A team disagrees about whether a parallel passage should be
 harmonized — a genuine content question about Scripture. Who owns that decision, and
 who would you escalate to if expert review is needed?
-- A) You decide it yourself, since you're the consultant in the room
-- B) The team decides; escalate to a Translation Consultant if expert review is needed
+- A) The team decides; escalate to a Translation Consultant if expert review is needed
+- B) You decide it yourself, since you're the consultant in the room
 - C) The typesetter decides
 - D) Escalate to an LT mentor
 
@@ -45,18 +45,18 @@ misspellings were also marked correct rather than left for genuine review. What 
 this pattern most likely indicate?
 - A) The wordlist genuinely has no problems
 - B) The check tool malfunctioned
-- C) The wordlist was blanket-approved rather than genuinely reviewed
-- D) The team used an outdated wordlist
+- C) The team used an outdated wordlist
+- D) The wordlist was blanket-approved rather than genuinely reviewed
 
 **Question 5:** A team tells you their Biblical Terms list is done. You open it and see
 several rows still highlighted with placeholder text ("Double click to enter
 rendering(s) from project text") and a Found count of "0" or blank. What does this
 indicate?
 - A) A software glitch that needs a support ticket
-- B) The terms have been correctly resolved and the blank display is just a display quirk
-- C) The team accidentally deleted those renderings
-- D) Those terms are still at Biblical Terms' normal blank starting state and haven't
+- B) Those terms are still at Biblical Terms' normal blank starting state and haven't
   actually been given a rendering yet
+- C) The team accidentally deleted those renderings
+- D) The terms have been correctly resolved and the blank display is just a display quirk
 
 **Question 6:** While reviewing a Biblical Terms list, you notice one term has several
 candidate renderings listed, but the Found count shows only one of them as actually
@@ -71,9 +71,9 @@ present in the current text. What should the team do?
 they added the entire "All Biblical Terms" reference list to the Project's Biblical
 Terms list. What is the most likely cause, and what should you advise?
 - A) The slowdown is unrelated; check their internet connection
-- B) Adding the full list to the project bloated it; advise right-sizing the project list to terms actually used
+- B) Reinstall Paratext to fix performance
 - C) Viewing a large list always slows Send/Receive; nothing to change
-- D) Reinstall Paratext to fix performance
+- D) Adding the full list to the project bloated it; advise right-sizing the project list to terms actually used
 
 **Question 8:** Per the SME field case, why was the connection between adding a large
 Biblical Terms list and the Send/Receive slowdown "hard to convince the team of"?
@@ -86,27 +86,27 @@ Biblical Terms list and the Send/Receive slowdown "hard to convince the team of"
 
 **Question 9:** What is "over-harmonising" in the context of parallel-passage checks?
 - A) Failing to run the comparison check at all
-- B) Adding too many cross-references
+- B) Forcing all parallel passages to match exactly, erasing legitimate variation
 - C) Confusing the Numbers check with the Measures check
-- D) Forcing all parallel passages to match exactly, erasing legitimate variation
+- D) Adding too many cross-references
 
 **Question 10:** Two accounts of the same event have several differences in wording.
 The team lead says, "those are just supposed to be different — we're not touching
 them." You open the Parallel Passages tool and see the relevant verses still showing a
 red "?" in the Status column, meaning they were edited during a major revision three
 weeks ago and haven't been reviewed since. What should you do?
-- A) Ask the team to review the verses still marked with a red "?" in the Parallel Passages tool, so the flagged differences are genuinely reviewed rather than dismissed from memory
+- A) Escalate to a Translation Consultant without further discussion
 - B) Accept the team lead's explanation immediately, since it sounds reasonable
 - C) Decide yourself whether the passages should match
-- D) Escalate to a Translation Consultant without further discussion
+- D) Ask the team to review the verses still marked with a red "?" in the Parallel Passages tool, so the flagged differences are genuinely reviewed rather than dismissed from memory
 
 **Question 11:** A new, consolidated Paratext check is expected to combine numbers,
 weights, and measures checking into one check, replacing the older, separate Numbers
 check — but not every team's Paratext version has migrated to it yet. Before accepting
 any numbers/measures check results, what should you confirm?
 - A) That it matches your own sense of the correct rendering
-- B) Which check(s) are actually available for the team's specific Paratext version — the new consolidated check, or only the older separate Numbers check — then that whichever is available was run against the team's already-agreed, documented approach to numbers and measures
-- C) That both the old and new checks appear as one combined Biblical Terms list
+- B) That both the old and new checks appear as one combined Biblical Terms list
+- C) Which check(s) are actually available for the team's specific Paratext version — the new consolidated check, or only the older separate Numbers check — then that whichever is available was run against the team's already-agreed, documented approach to numbers and measures
 - D) That the typesetter has reviewed it
 
 **Question 12:** You confirm that a team's Paratext version has not yet migrated to the
@@ -116,9 +116,9 @@ what informal comparison you can do for the measures themselves, and that inform
 comparison turns up an inconsistency between two occurrences of what should be the same
 measurement. You're not sure whether the team's documented approach covers this case.
 What should you do?
-- A) Decide which rendering is correct based on your own judgment
+- A) Refer the gap back to the team to resolve against their own documented approach
 - B) Ignore the flag, since this check area has no established field pattern
-- C) Refer the gap back to the team to resolve against their own documented approach
+- C) Decide which rendering is correct based on your own judgment
 - D) Delete one of the two occurrences
 
 ### Section 4: Formatting and References (Questions 13-14)
@@ -126,48 +126,48 @@ What should you do?
 **Question 13:** Why should formatting checks be worked "structural-first" — Chapter/Verse
 Numbers and marker pairs before headings, titles, and references?
 - A) It's required by Paratext's software design
-- B) Headings are always harder to fix than marker pairs
+- B) Upstream breakage, like an unclosed marker pair, can cause a cluster of downstream-looking errors elsewhere
 - C) The typesetter requires this order
-- D) Upstream breakage, like an unclosed marker pair, can cause a cluster of downstream-looking errors elsewhere
+- D) Headings are always harder to fix than marker pairs
 
 **Question 14:** A team says their Punctuation Inventory "was already checked back
 when we started the project," but the project has since gone through two more
 revision passes and is headed to a typesetter in three weeks. What should you do?
-- A) Ask them to open and genuinely review the Punctuation Inventory now, including its settings, since revisions may have introduced new issues
+- A) Skip this check, since it's outside Paratext's own tools
 - B) Accept it as done, since it was checked once already
 - C) Tell them the typesetter will handle it
-- D) Skip this check, since it's outside Paratext's own tools
+- D) Ask them to open and genuinely review the Punctuation Inventory now, including its settings, since revisions may have introduced new issues
 
 ### Section 5: Glossary Linking and Layout (Questions 15-18)
 
 **Question 15:** What is the correct glossary-linking scope, and what is the common
 field mistake?
 - A) Link every occurrence of a term; the mistake is linking too few
-- B) Link the first occurrence per section; the mistake is over-linking every occurrence
-- C) Link only chapter openings; the mistake is under-linking
+- B) Link only chapter openings; the mistake is under-linking
+- C) Link the first occurrence per section; the mistake is over-linking every occurrence
 - D) Link terms only in footnotes
 
 **Question 16:** You notice a high-frequency term is linked at nearly every occurrence
 across several chapters. What should you do?
-- A) Leave it, since more links help readers
+- A) Unlink the over-applied marks and relink at "first occurrence in every section"
 - B) Delete the glossary entry for that term
-- C) Unlink the over-applied marks and relink at "first occurrence in every section"
+- C) Leave it, since more links help readers
 - D) Ask the team to rewrite the glossary content
 
 **Question 17:** An expat project admin wants single-column layout because the
 language has long words and the team has never used hyphenation. What should you
 check before agreeing?
 - A) Whether single-column is technically easier
-- B) Whether the typesetter prefers single-column
+- B) Ask the team what layout format the LWC (Language of Wider Communication) Bibles they currently use follow
 - C) Nothing — word length settles the decision
-- D) Ask the team what layout format the LWC (Language of Wider Communication) Bibles they currently use follow
+- D) Whether the typesetter prefers single-column
 
 **Question 18:** The community currently reads two-column Bibles in the LWC (Language
 of Wider Communication), and the target language has long words. What concrete
 technical step should you take?
-- A) Enable Show hyphenation in the Wordlist and review/correct the auto-generated hyphenation breaks
+- A) Reduce the font size until words fit
 - B) Recommend switching the community to single-column instead
-- C) Reduce the font size until words fit
+- C) Enable Show hyphenation in the Wordlist and review/correct the auto-generated hyphenation breaks
 - D) Ask the team to shorten their vocabulary
 
 ### Section 6: The Final Read-Through and Escalation (Questions 19-20)
@@ -175,20 +175,20 @@ technical step should you take?
 **Question 19:** During the final PTXprint draft-PDF read-through, what should you be
 watching for?
 - A) Spelling errors in the source text
-- B) Spreads, orphan words, footnote shifts, heading placement, and underfilled pages
+- B) Biblical Terms rendering accuracy
 - C) Whether the wordlist has been re-run
-- D) Biblical Terms rendering accuracy
+- D) Spreads, orphan words, footnote shifts, heading placement, and underfilled pages
 
 **Question 20:** During a draft-PDF read-through you spot an orphan word, a footnote
 shifted two pages from its reference, and a heading landing awkwardly at a column
 break. What is your role regarding these findings?
-- A) Resolve all of them yourself immediately, since you found them
+- A) Resolve or triage each — deciding what's yours to fix, the team's call, or a typesetting composition decision for the typesetter
 - B) Ignore them; that's the typesetter's job entirely
-- C) Resolve or triage each — deciding what's yours to fix, the team's call, or a typesetting composition decision for the typesetter
+- C) Resolve all of them yourself immediately, since you found them
 - D) Escalate all three to a Translation Consultant
 
 ---
 
 ## Answer Key
 
-1. A \| 2. B \| 3. B \| 4. C \| 5. D \| 6. A \| 7. B \| 8. C \| 9. D \| 10. A \| 11. B \| 12. C \| 13. D \| 14. A \| 15. B \| 16. C \| 17. D \| 18. A \| 19. B \| 20. C
+1. C \| 2. A \| 3. B \| 4. D \| 5. B \| 6. A \| 7. D \| 8. C \| 9. B \| 10. D \| 11. C \| 12. A \| 13. B \| 14. D \| 15. C \| 16. A \| 17. B \| 18. C \| 19. D \| 20. A

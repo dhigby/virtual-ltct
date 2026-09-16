@@ -19,8 +19,8 @@ diagnostic reasoning — it can't assess live coaching. The mentor-reviewed scen
 
 **Question 1:** A team says every check in Paratext shows clean and they're ready for
 the typesetter. What is the FIRST thing you should do?
-- A) Sign off, since the tool shows clean
-- B) Ask questions to confirm the checks were genuinely reviewed, not just cleared
+- A) Ask questions to confirm the checks were genuinely reviewed, not just cleared
+- B) Sign off, since the tool shows clean
 - C) Escalate to an LT mentor immediately
 - D) Rerun only the wordlist check
 
@@ -44,8 +44,8 @@ were marked correct with none flagged as suspect, and several entries that are a
 misspellings were also marked correct rather than left for genuine review. What does
 this pattern most likely indicate?
 - A) The wordlist genuinely has no problems
-- B) The wordlist was blanket-approved rather than genuinely reviewed
-- C) The check tool malfunctioned
+- B) The check tool malfunctioned
+- C) The wordlist was blanket-approved rather than genuinely reviewed
 - D) The team used an outdated wordlist
 
 **Question 5:** A team tells you their Biblical Terms list is done. You open it and see
@@ -53,17 +53,17 @@ several rows still highlighted with placeholder text ("Double click to enter
 rendering(s) from project text") and a Found count of "0" or blank. What does this
 indicate?
 - A) A software glitch that needs a support ticket
-- B) Those terms are still at Biblical Terms' normal blank starting state and haven't
+- B) The terms have been correctly resolved and the blank display is just a display quirk
+- C) The team accidentally deleted those renderings
+- D) Those terms are still at Biblical Terms' normal blank starting state and haven't
   actually been given a rendering yet
-- C) The terms have been correctly resolved and the blank display is just a display quirk
-- D) The team accidentally deleted those renderings
 
 **Question 6:** While reviewing a Biblical Terms list, you notice one term has several
 candidate renderings listed, but the Found count shows only one of them as actually
 present in the current text. What should the team do?
-- A) Leave all the renderings in place, since more options can only help
-- B) Review the full rendering list for that term, confirm which rendering is current
+- A) Review the full rendering list for that term, confirm which rendering is current
   and correct, and remove the stale ones no longer found in the text
+- B) Leave all the renderings in place, since more options can only help
 - C) Delete the term from the Biblical Terms list entirely
 - D) Manually retype the rendering as free text
 
@@ -71,32 +71,32 @@ present in the current text. What should the team do?
 they added the entire "All Biblical Terms" reference list to the Project's Biblical
 Terms list. What is the most likely cause, and what should you advise?
 - A) The slowdown is unrelated; check their internet connection
-- B) Viewing a large list always slows Send/Receive; nothing to change
-- C) Adding the full list to the project bloated it; advise right-sizing the project list to terms actually used
+- B) Adding the full list to the project bloated it; advise right-sizing the project list to terms actually used
+- C) Viewing a large list always slows Send/Receive; nothing to change
 - D) Reinstall Paratext to fix performance
 
 **Question 8:** Per the SME field case, why was the connection between adding a large
 Biblical Terms list and the Send/Receive slowdown "hard to convince the team of"?
-- A) The team didn't believe a terms list could affect Send/Receive performance
-- B) The relationship isn't actually real
-- C) It only happens on certain operating systems
+- A) The relationship isn't actually real
+- B) It only happens on certain operating systems
+- C) The team didn't believe a terms list could affect Send/Receive performance
 - D) The team had already right-sized the list
 
 ### Section 3: Parallel Passages and Measures (Questions 9-12)
 
 **Question 9:** What is "over-harmonising" in the context of parallel-passage checks?
 - A) Failing to run the comparison check at all
-- B) Forcing all parallel passages to match exactly, erasing legitimate variation
-- C) Adding too many cross-references
-- D) Confusing the Numbers check with the Measures check
+- B) Adding too many cross-references
+- C) Confusing the Numbers check with the Measures check
+- D) Forcing all parallel passages to match exactly, erasing legitimate variation
 
 **Question 10:** Two accounts of the same event have several differences in wording.
 The team lead says, "those are just supposed to be different — we're not touching
 them." You open the Parallel Passages tool and see the relevant verses still showing a
 red "?" in the Status column, meaning they were edited during a major revision three
 weeks ago and haven't been reviewed since. What should you do?
-- A) Accept the team lead's explanation immediately, since it sounds reasonable
-- B) Ask the team to review the verses still marked with a red "?" in the Parallel Passages tool, so the flagged differences are genuinely reviewed rather than dismissed from memory
+- A) Ask the team to review the verses still marked with a red "?" in the Parallel Passages tool, so the flagged differences are genuinely reviewed rather than dismissed from memory
+- B) Accept the team lead's explanation immediately, since it sounds reasonable
 - C) Decide yourself whether the passages should match
 - D) Escalate to a Translation Consultant without further discussion
 
@@ -126,15 +126,15 @@ What should you do?
 **Question 13:** Why should formatting checks be worked "structural-first" — Chapter/Verse
 Numbers and marker pairs before headings, titles, and references?
 - A) It's required by Paratext's software design
-- B) Upstream breakage, like an unclosed marker pair, can cause a cluster of downstream-looking errors elsewhere
-- C) Headings are always harder to fix than marker pairs
-- D) The typesetter requires this order
+- B) Headings are always harder to fix than marker pairs
+- C) The typesetter requires this order
+- D) Upstream breakage, like an unclosed marker pair, can cause a cluster of downstream-looking errors elsewhere
 
 **Question 14:** A team says their Punctuation Inventory "was already checked back
 when we started the project," but the project has since gone through two more
 revision passes and is headed to a typesetter in three weeks. What should you do?
-- A) Accept it as done, since it was checked once already
-- B) Ask them to open and genuinely review the Punctuation Inventory now, including its settings, since revisions may have introduced new issues
+- A) Ask them to open and genuinely review the Punctuation Inventory now, including its settings, since revisions may have introduced new issues
+- B) Accept it as done, since it was checked once already
 - C) Tell them the typesetter will handle it
 - D) Skip this check, since it's outside Paratext's own tools
 
@@ -150,23 +150,23 @@ field mistake?
 **Question 16:** You notice a high-frequency term is linked at nearly every occurrence
 across several chapters. What should you do?
 - A) Leave it, since more links help readers
-- B) Unlink the over-applied marks and relink at "first occurrence in every section"
-- C) Delete the glossary entry for that term
+- B) Delete the glossary entry for that term
+- C) Unlink the over-applied marks and relink at "first occurrence in every section"
 - D) Ask the team to rewrite the glossary content
 
 **Question 17:** An expat project admin wants single-column layout because the
 language has long words and the team has never used hyphenation. What should you
 check before agreeing?
 - A) Whether single-column is technically easier
-- B) Ask the team what layout format the LWC (Language of Wider Communication) Bibles they currently use follow
-- C) Whether the typesetter prefers single-column
-- D) Nothing — word length settles the decision
+- B) Whether the typesetter prefers single-column
+- C) Nothing — word length settles the decision
+- D) Ask the team what layout format the LWC (Language of Wider Communication) Bibles they currently use follow
 
 **Question 18:** The community currently reads two-column Bibles in the LWC (Language
 of Wider Communication), and the target language has long words. What concrete
 technical step should you take?
-- A) Recommend switching the community to single-column instead
-- B) Enable Show hyphenation in the Wordlist and review/correct the auto-generated hyphenation breaks
+- A) Enable Show hyphenation in the Wordlist and review/correct the auto-generated hyphenation breaks
+- B) Recommend switching the community to single-column instead
 - C) Reduce the font size until words fit
 - D) Ask the team to shorten their vocabulary
 
@@ -191,4 +191,4 @@ break. What is your role regarding these findings?
 
 ## Answer Key
 
-1. B \| 2. B \| 3. B \| 4. B \| 5. B \| 6. B \| 7. C \| 8. A \| 9. B \| 10. B \| 11. B \| 12. C \| 13. B \| 14. B \| 15. B \| 16. B \| 17. B \| 18. B \| 19. B \| 20. C
+1. A \| 2. B \| 3. B \| 4. C \| 5. D \| 6. A \| 7. B \| 8. C \| 9. D \| 10. A \| 11. B \| 12. C \| 13. D \| 14. A \| 15. B \| 16. C \| 17. D \| 18. A \| 19. B \| 20. C

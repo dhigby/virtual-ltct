@@ -20,6 +20,16 @@ route to a colleague SME; the design doc's "SME(s) consulted" field is a startin
 
 ## How
 
+**Read the course on its review site:**
+
+```
+https://competencies.languagetechnology.org/review/<course-slug>/
+```
+
+That is the whole course as a browsable web page -- no GitHub account, no checkout, no
+reading a diff. It rebuilds from the course's branch a couple of minutes after each push,
+so it is always current. (Running locally instead: `/review-site <course-slug>`.)
+
 Read the lessons and quiz against the design doc's **SME knowledge notes** and against your
 own knowledge of the domain. Check specifically:
 

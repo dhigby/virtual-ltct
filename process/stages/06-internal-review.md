@@ -14,7 +14,15 @@ machine and a fact-checker can't.
 
 ## How
 
-Review the course's PR. Read as if you were the learner:
+Use both surfaces, for different questions:
+
+- **The review site** --
+  `https://competencies.languagetechnology.org/review/<course-slug>/` -- for the reading
+  experience. This is the one that tells you whether it *teaches*.
+- **The PR's "Files changed" tab** -- for what actually changed since last time, and to
+  leave line-by-line comments.
+
+Read as if you were the learner:
 
 - Does it teach, or just inform? Does each lesson set up the task, teach the minimum, and
   hand off to practice?

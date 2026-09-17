@@ -66,7 +66,7 @@ You need 80% (8/10) to pass.
 - C) Restart the computer and uninstall Keyman.
 - D) Send an email to technical support immediately.
 
-**Answer key (Section 1):**
+## Answer key (Section 1)
 
 1. A | 2. A | 3. A | 4. A | 5. B | 6. B | 7. B | 8. A,B,C | 9. A | 10. B
 
@@ -129,6 +129,6 @@ You need 80% (8/10) to pass.
 - C) Delete and reinstall Windows
 - D) Change your monitor settings
 
-**Answer key (Section 2):**
+## Answer key (Section 2)
 
 1. A | 2. A | 3. A | 4. B | 5. A | 6. A | 7. A | 8. A,B,C,D | 9. A | 10. A

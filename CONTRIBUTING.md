@@ -82,6 +82,33 @@ Many older courses were delivered from Cypher for Business and imported here onl
 or rough README files. Making this repo their true source of truth is the
 [backfill workstream](process/backfill.md), tracked in [`BACKFILL.md`](BACKFILL.md).
 
+## Reviewing a course without reading markdown
+
+Every course in the pipeline is published as an ordinary website, so a reviewer or a pilot
+learner never has to open a `.md` file or read a diff:
+
+| You are… | Open |
+|---|---|
+| an **SME** (stage 5) or **internal reviewer** (stage 6) | `https://competencies.languagetechnology.org/review/<course-slug>/` |
+| giving it to a **pilot learner** (stage 7) | `https://competencies.languagetechnology.org/learn/<course-slug>/` |
+
+The `/learn/` version leaves out the design document, the mentor guide and the quiz answer
+key — so **send a pilot learner that one**, not `/review/`.
+
+You don't need to install anything to read either. They rebuild a couple of minutes after
+each push, from the course's own branch until it merges and from `main` afterwards, so the
+link keeps working all the way through. Leave feedback as PR or tracker-issue comments, as
+before. `/next-step <slug>` prints the right link from stage 4 on, and `/review-site <slug>`
+serves it on your own machine if you're editing.
+
+**These links are unlisted, not private.** They aren't indexed by search engines and
+nothing links to them from the public competency site, but this repo is public, so anyone
+you give the link to can open it — no sign-in. That's fine for a draft course; just don't
+treat the URL as a password.
+
+> Don't run `mkdocs gh-deploy` yourself — it republishes the whole site and would wipe
+> every course preview until the next automatic build.
+
 ## Small fixes without Claude Code (appendix)
 
 For a typo or a one-line change you don't need Claude Code:

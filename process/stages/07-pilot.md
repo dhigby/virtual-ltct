@@ -15,16 +15,29 @@ assumed knowledge the learner doesn't have.
 
 1. **Recruit one learner** at roughly the target audience's level — ideally a consultant
    or trainee who hasn't seen the material.
-2. Have them work through the lessons, scenario bank, and quiz as a learner would.
-3. **Capture their experience.** Ask:
+2. **Send them the learner view** — and *only* this URL:
+
+   ```
+   https://competencies.languagetechnology.org/learn/<course-slug>/
+   ```
+
+   It holds back the design document, the mentor guide and the quiz answer key, so the
+   learner gets the course as a learner should meet it. It keeps working now that the PR
+   is merged — it simply starts serving from `main` instead of the branch.
+
+   > **Don't send the `/review/` URL to a pilot learner.** That one is the reviewer view
+   > and contains the answer key and the mentor guide's scoring notes.
+
+3. Have them work through the lessons, scenario bank, and quiz as a learner would.
+4. **Capture their experience.** Ask:
    - Where did you get stuck or confused?
    - Did anything feel too fast, too slow, or too long?
    - Did the scenarios feel realistic?
    - Did the quiz test what the lessons taught?
    - What would have helped you most?
-4. Record the feedback as a comment on the tracker issue.
-5. The Author makes fixes; the fixes are merged.
-6. The Pilot Coordinator confirms the issues are addressed.
+5. Record the feedback as a comment on the tracker issue.
+6. The Author makes fixes; the fixes are merged.
+7. The Pilot Coordinator confirms the issues are addressed.
 
 ## Exit criteria
 

@@ -184,12 +184,53 @@ edit `gen_site.py` (structure) and [`docs/stylesheets/extra.css`](docs/styleshee
 descriptors.** Anything in `docs/` is published, so keep repo reference material out of it
 or add it to `exclude_docs` in `mkdocs.yml`.
 
+## Course review sites
+
+The same deploy also publishes each in-flight course as a browsable site, so reviewers and
+pilot learners never have to read a raw markdown diff. **Two views, and the difference
+matters:**
+
+| URL | View | Who | Holds back |
+|---|---|---|---|
+| `…/review/<slug>/` | reviewer | SME (stage 5), internal reviewer (stage 6) | nothing |
+| `…/learn/<slug>/` | learner | **pilot learner (stage 7)** | design doc, mentor guide, video script, quiz answer key |
+
+**Never send a pilot learner the `/review/` URL** — it contains the answer key. Get the URL
+from `course_stage.review_url()` (it is in `--json` and in `/next-step` from stage 4 on);
+never hand-build it, since a legacy folder like `Paratext 9 advanced support` slugs to
+`paratext-9-advanced-support`.
+
+Which git ref a course builds from is decided by **merge-base**, not by an open PR: the
+branch while it has unmerged commits, `main` once it merges. That is what makes one URL
+work across stages 5, 6 and 7, including across the stage-6 merge.
+
+- Preview one course locally: `/review-site <slug>` (or
+  `python scripts/review_site.py --slug <slug> [--view learner]`). It renders your working
+  tree, uncommitted edits included.
+- [`scripts/gen_course_site.py`](scripts/gen_course_site.py) renders a course;
+  [`mkdocs-review.yml`](mkdocs-review.yml) is its config. The docs root is a **flat mirror
+  of the course folder**, which is why the relative links authors already write just work.
+- The learner view is a disclosure boundary and fails closed: a quiz whose answer key can't
+  be cleanly separated is withheld, not partially stripped.
+  [`scripts/check_learner_view.py`](scripts/check_learner_view.py) is the CI gate and
+  **fails the deploy** on a leak.
+- These pages are `noindex` and unlinked from the competency site's nav, and
+  `docs/robots.txt` disallows both paths. They are *unlisted, not secret* — the repo is
+  public, so anyone with the link can read them.
+
+> **Never run `mkdocs gh-deploy` locally.** It force-pushes the whole `gh-pages` branch and
+> would delete every course review site until the next CI run. Deploying is CI's job.
+
 ## Maintainer scripts (`scripts/`)
 
 - `gen_coverage.py` — regenerates `COVERAGE.md` (also run by CI).
 - `check_course_package.py` — validates a course package's completeness/format (run by CI).
   Only checks courses that have opted into the pipeline (those with a `00-design.md`); all
   legacy courses are untouched. `--course <slug>` runs it for one course.
+- `review_site.py` — builds/serves one course's review site locally (`/review-site`).
+- `build_review_sites.py` — builds every in-flight course into the deploy tree (CI).
+- `gen_course_site.py` — `mkdocs-gen-files` hook for `mkdocs-review.yml`; renders one course.
+- `check_learner_view.py` — CI gate: proves the learner view leaks no answer key.
 - `gen_site.py` — `mkdocs-gen-files` build hook; generates the site pages + nav from
   `competencies.yaml` and `competencies/*.md`. Not run by hand; invoked by `mkdocs`.
 - `check_competency_descriptors.py` — validates descriptors stay in sync with the

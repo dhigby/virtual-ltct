@@ -223,6 +223,10 @@ def stage_for(folder, use_gh=True):
             "stage": stage, "stage_key": key, "stage_name": name,
             "stage_doc": doc, "next_action": action, "done": done,
             "design_status": design_status, "published": published, "notes": notes,
+            # Only from stage 4 on: before the content is drafted there is nothing
+            # worth sending anyone, and a link to an empty course invites the
+            # "is it broken?" question this is meant to remove.
+            "review_url": review_url(slug) if stage >= 4 else None,
         }
 
     # --- Stage 2: design approved by someone other than the author ---
@@ -293,6 +297,8 @@ def print_one(info):
         print("  Done:   " + ", ".join(info["done"]))
     print("  Next:   " + info["next_action"])
     print("  How-to: " + info["stage_doc"])
+    if info.get("review_url"):
+        print("  Review: " + info["review_url"])
     gs = info.get("git")
     if gs:
         if gs["on_course_branch"]:

@@ -85,15 +85,26 @@ jobs:
       # Never fails the job: a half-written draft branch must not be able to take down
       # competencies.languagetechnology.org. A course that fails to build gets a
       # placeholder page, so a reviewer's link says "couldn't build" rather than 404.
+      # --source-out captures each course's markdown from the ref it was built from, so
+      # the gate below compares like with like. It must land OUTSIDE site/: those files
+      # still contain the answer keys, and everything under site/ gets published.
       - name: Build course review sites
         env:
           GH_TOKEN: ${{ github.token }}
-        run: python scripts/build_review_sites.py --out site
+        run: |
+          python scripts/build_review_sites.py --out site \
+            --source-out "$RUNNER_TEMP/ltct-review-src"
 
       # This one DOES fail the job. The learner view is what a pilot learner is handed;
       # publishing a quiz answer key into it is worse than not deploying at all.
+      #
+      # --sources, not --all: this checkout is pinned to main (see above) while each
+      # course was built from its own branch, so checking against modules/ here would
+      # verify a ref that never shipped.
       - name: Verify the learner view leaks nothing
-        run: python scripts/check_learner_view.py --built site/learn --all
+        run: |
+          python scripts/check_learner_view.py --built site/learn \
+            --sources "$RUNNER_TEMP/ltct-review-src"
 
       - name: Publish to gh-pages
         run: |

@@ -9,6 +9,12 @@ a single `ghp-import` publishes everything at once:
 
 Usage:
     python scripts/build_review_sites.py --out site [--only <slug>] [--no-fetch]
+                                         [--source-out <dir>]
+
+--source-out captures each course's source markdown from the ref it was built from, for
+scripts/check_learner_view.py --sources. The gate has to compare the built pages against
+the ref that produced them, and on the deploy that is NOT the checkout: the workflow is
+pinned to main while each course is built from its own branch.
 
 TWO PROPERTIES THIS FILE EXISTS TO GUARANTEE:
 
@@ -25,7 +31,9 @@ Ref selection is by merge-base rather than by open PR, which matters more than i
 an SME reviews at stage 5, BEFORE a PR exists, and stage 6 exits by MERGING the PR. A
 merge-base test serves the branch while it has unmerged commits and flips to main the
 moment it merges -- so one URL works across all three stages with no state stored
-anywhere, and no dependency on the GitHub API.
+anywhere, and no dependency on the GitHub API. A squash or rebase merge leaves no such
+ancestry, so ref_for() also flips when the branch proposes nothing further under
+modules/; otherwise a shipped course would keep serving its stale draft forever.
 """
 import argparse
 import datetime
@@ -36,6 +44,8 @@ import shutil
 import subprocess
 import sys
 import tempfile
+
+import yaml
 
 sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent))
 from course_stage import (REPO, SITE, branch_slug, course_folders,  # noqa: E402
@@ -61,13 +71,57 @@ def git_ok(*args):
 
 
 def ref_for(url_slug):
-    """origin/course/<slug> while it has unmerged commits, else origin/main."""
+    """origin/course/<slug> while it still proposes course content, else origin/main."""
     branch = "origin/course/%s" % url_slug
     if not git_ok("rev-parse", "-q", "--verify", branch):
         return "origin/main"
     if git_ok("merge-base", "--is-ancestor", branch, "origin/main"):
         return "origin/main"          # merged (or never diverged): main is the truth
+    # A squash or rebase merge rewrites the commits, so the branch never becomes an
+    # ancestor of main and the test above would keep serving it forever -- pointing a
+    # pilot learner at a stale draft of a course that has already shipped. Content is
+    # the honest question: if the branch proposes nothing further under modules/, main
+    # already has everything it had.
+    if git_ok("diff", "--quiet", "origin/main", branch, "--", "modules"):
+        return "origin/main"
     return branch
+
+
+def current_branch():
+    """This checkout's branch, for the GitHub links a --local build renders."""
+    out = git("rev-parse", "--abbrev-ref", "HEAD")
+    name = out.stdout.strip() if out.returncode == 0 else ""
+    return name if name and name != "HEAD" else "main"
+
+
+def gh_ref(ref):
+    """A ref as GitHub's /blob/ and /edit/ URLs spell it -- no remote-tracking prefix.
+
+    `origin/course/x` is a perfectly good local ref and a 404 on github.com.
+    """
+    return ref[len("origin/"):] if ref.startswith("origin/") else ref
+
+
+def course_title(src, fallback):
+    """The course's own title, from its README frontmatter -- not its folder name."""
+    readme = src / "README.md"
+    try:
+        text = readme.read_text(encoding="utf-8")
+    except OSError:
+        return fallback
+    if text.startswith("---"):
+        end = text.find("\n---", 3)
+        if end != -1:
+            try:
+                fm = yaml.safe_load(text[3:end]) or {}
+            except yaml.YAMLError:
+                fm = {}
+            if isinstance(fm, dict) and str(fm.get("title") or "").strip():
+                return str(fm["title"]).strip()
+    for line in text.split("\n"):
+        if line.startswith("# "):
+            return line[2:].strip() or fallback
+    return fallback
 
 
 def short_sha(ref):
@@ -153,10 +207,10 @@ def build_one(course, view, segment, out_root, pipeline_slugs, placeholder=True)
         "LTCT_COURSE_ROOT": str(course["src"]),
         "LTCT_COURSE_FOLDER": course["src"].name,
         "LTCT_VIEW": view,
-        "LTCT_COURSE_REF": course["ref"],
+        "LTCT_COURSE_REF": course["gh_ref"],
         "LTCT_COURSE_TITLE": course["title"],
         "LTCT_SITE_URL": "%s/%s/%s/" % (SITE, segment, course["url_slug"]),
-        "LTCT_EDIT_URI": "edit/%s/" % course["ref"],
+        "LTCT_EDIT_URI": "edit/%s/" % course["gh_ref"],
         "LTCT_REVIEW_BASE": "%s/%s" % (SITE, segment),
         "LTCT_PIPELINE_SLUGS": pipeline_slugs,
         "LTCT_COURSE_PR": course["pr"] or "",
@@ -180,13 +234,37 @@ def build_one(course, view, segment, out_root, pipeline_slugs, placeholder=True)
         dest.mkdir(parents=True, exist_ok=True)
         (dest / "index.html").write_text(PLACEHOLDER.format(
             slug=html.escape(course["url_slug"]),
-            ref=html.escape(course["ref"]),
+            ref=html.escape(course["gh_ref"]),
             sha=course["sha"],
             when=datetime.datetime.now(datetime.timezone.utc).strftime("%Y-%m-%d %H:%M UTC"),
             source="https://github.com/dhigby/virtual-ltct/tree/%s/modules/%s"
-                   % (course["ref"].replace("origin/", ""), course["src"].name),
+                   % (course["gh_ref"], course["src"].name),
         ), encoding="utf-8")
         return False
+
+
+def capture_sources(src, dest):
+    """Copy a course's source markdown out of its worktree before the worktree dies.
+
+    The learner-view gate lifts each answer key from source and asserts it is absent from
+    the built pages. Reading that source from the checkout would be reading a DIFFERENT
+    ref than the one the pages were built from -- which both misses a real leak on a
+    branch and can fail the deploy on a key that only main has. So the sources travel
+    with the build.
+
+    Markdown is copied whole; everything else becomes an empty file, because the only
+    thing the gate asks of a non-markdown source is whether its NAME got published.
+    """
+    if dest.exists():
+        shutil.rmtree(dest, ignore_errors=True)
+    dest.mkdir(parents=True, exist_ok=True)
+    for p in sorted(src.iterdir()):
+        if p.is_dir() or p.name.startswith("."):
+            continue
+        if p.suffix.lower() == ".md":
+            shutil.copy2(p, dest / p.name)
+        else:
+            (dest / p.name).touch()
 
 
 def write_index(out_root, segment, label, courses, extra=""):
@@ -198,7 +276,7 @@ def write_index(out_root, segment, label, courses, extra=""):
             % (html.escape(c["url_slug"]), html.escape(c["title"]),
                "" if c["ok"][segment] else
                " <span title=\"preview failed\">&#9888;</span>",
-               html.escape(c["stage"]), html.escape(c["ref"].replace("origin/", "")),
+               html.escape(c["stage"]), html.escape(c["gh_ref"]),
                c["sha"]))
     (out_root / segment).mkdir(parents=True, exist_ok=True)
     (out_root / segment / "index.html").write_text(INDEX.format(
@@ -220,6 +298,10 @@ def main():
                     help="exit 1 if any course fails to build, instead of writing a "
                          "placeholder. For PR checks: an author should fix a broken course "
                          "before merge, whereas the deploy must survive one.")
+    ap.add_argument("--source-out",
+                    help="capture each course's source markdown here, from the SAME ref "
+                         "it was built from, for scripts/check_learner_view.py --sources. "
+                         "Must be outside --out: these files include the answer keys.")
     args = ap.parse_args()
 
     out_root = pathlib.Path(args.out).resolve()
@@ -237,6 +319,12 @@ def main():
             print("No such course: %s" % args.only, file=sys.stderr)
             return 2
 
+    source_out = pathlib.Path(args.source_out).resolve() if args.source_out else None
+    if source_out and (source_out == out_root or out_root in source_out.parents):
+        print("--source-out must not be inside --out: it holds the answer keys.",
+              file=sys.stderr)
+        return 2
+
     pipeline_slugs = ",".join(branch_slug(f.name) for f in course_folders())
     worktrees = pathlib.Path(os.environ.get("RUNNER_TEMP") or tempfile.gettempdir())
     worktrees = worktrees / "ltct-review-wt"
@@ -248,8 +336,10 @@ def main():
         if args.local:
             # Validate the content in front of us, not what happens to be on origin.
             src, ref = folder, (os.environ.get("GITHUB_HEAD_REF") or "this checkout")
+            link_ref = os.environ.get("GITHUB_HEAD_REF") or current_branch()
         else:
             ref = ref_for(url_slug)
+            link_ref = gh_ref(ref)
             wt = worktrees / url_slug
             if wt.exists():
                 git("worktree", "remove", "--force", str(wt))
@@ -260,10 +350,10 @@ def main():
             if src is None:
                 # The folder may not exist on that ref (renamed, or not yet pushed).
                 # Fall back to the working tree and say so, rather than build nothing.
-                src, ref = folder, "origin/main"
+                src, ref, link_ref = folder, "origin/main", "main"
         try:
             try:
-                info = stage_for(folder, use_gh=False)
+                info = stage_for(src, use_gh=False)
                 stage = info.get("stage_name", "")
             except Exception:
                 stage = ""
@@ -273,11 +363,14 @@ def main():
                 pr = {}
 
             course = {
-                "url_slug": url_slug, "src": src, "ref": ref,
+                "url_slug": url_slug, "src": src, "ref": ref, "gh_ref": link_ref,
                 "sha": "-" if args.local else short_sha(ref),
-                "title": folder.name, "stage": stage, "pr": pr.get("url", ""),
+                "title": course_title(src, folder.name),
+                "stage": stage, "pr": pr.get("url", ""),
                 "ok": {},
             }
+            if source_out:
+                capture_sources(src, source_out / url_slug)
             for view, segment in VIEWS:
                 good = build_one(course, view, segment, out_root, pipeline_slugs,
                                  placeholder=not args.fail_on_error)
@@ -285,7 +378,7 @@ def main():
                 if not good:
                     failures += 1
             courses.append(course)
-            print("  %-55s %-14s %s" % (url_slug, ref.replace("origin/", ""),
+            print("  %-55s %-14s %s" % (url_slug, gh_ref(ref),
                                         "ok" if all(course["ok"].values()) else "FAILED"))
         finally:
             if wt is not None:

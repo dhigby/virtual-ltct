@@ -15,11 +15,20 @@ Three checks, all fail-closed:
                              catches a key that was published under a heading we failed
                              to recognise.
   3. Withheld pages       -- a quiz the generator could not strip must not be published
-                             with content; it must be the placeholder.
+                             with content; it must be the placeholder. A withheld quiz is
+                             also reported, because it leaves a pilot learner with no
+                             quiz at all (--strict-withheld makes that a failure).
+
+The source it compares against must be the same ref the pages were BUILT from. On the
+deploy those differ: the checkout is pinned to main while each course is built from its
+own branch, so pass --sources (written by build_review_sites.py --source-out) there.
+Reading the checkout instead would both miss a leak on a branch and fail the publish over
+a key that only main has.
 
 Usage:
     python scripts/check_learner_view.py --built <dir>            # one course
     python scripts/check_learner_view.py --built <dir> --all      # <dir>/<slug>/ per course
+    python scripts/check_learner_view.py --built <dir> --sources <dir>   # built from refs
 
 Exit 1 on any leak, with the offending file and the leaked text.
 """
@@ -38,6 +47,9 @@ from course_stage import branch_slug, course_folders  # noqa: E402
 # changes, all three change together, and this check is what makes a mismatch loud.
 KEY_RE = re.compile(r"^## Answer key\b.*$")
 HEADING_RE = re.compile(r"^\s{0,3}(#{1,6})\s")
+# The generator's withheld-quiz placeholder, as it reads once normalise() has run over
+# the rendered page. Kept in step with gen_course_site.py's warning admonition.
+WITHHELD_MARK = "quiz withheld from the learner view"
 EXCLUDED_MD = ("-mentor-guide.md", "-video-script.md")
 LMS_EXPORT_RE = re.compile(r"^(qti[_-]|cypher-)|\.imscc$", re.I)
 
@@ -104,8 +116,8 @@ def haystack_for(built):
     return "\n".join(parts)
 
 
-def check_course(folder, built, problems):
-    slug = branch_slug(folder.name)
+def check_course(folder, built, problems, slug=None, strict_withheld=False):
+    slug = slug or branch_slug(folder.name)
     if not built.is_dir():
         problems.append("%s: built output not found at %s" % (slug, built))
         return
@@ -155,6 +167,36 @@ def check_course(folder, built, problems):
                                     % (slug, quiz.name, probe))
                     break
 
+    # 3. a quiz the generator could not strip must be the placeholder and nothing else.
+    #    Withholding is the safe outcome but not a good one: the pilot learner is handed
+    #    a course with no quiz. It happens when a quiz uses a marker other than the
+    #    canonical "## Answer key" -- which check_course_package.py enforces on the repo,
+    #    while the review site renders whatever ref it is pointed at. So this reports it,
+    #    and --strict-withheld makes it fail, for the PR check where the author who wrote
+    #    the marker is right there to fix it.
+    for quiz in sorted(folder.glob("*-quiz.md")):
+        page = built / re.sub(r"\.md$", "", quiz.name) / "index.html"
+        if not page.is_file():
+            continue
+        rendered = normalise(page.read_text(encoding="utf-8", errors="replace"))
+        if WITHHELD_MARK not in rendered:
+            continue
+        md = quiz.read_text(encoding="utf-8", errors="replace")
+        leaked = [ln for ln in (normalise(x) for x in strip_key_blocks(md).split("\n"))
+                  if len(ln) >= MIN_SIGNIFICANT and ln in rendered]
+        if leaked:
+            problems.append("%s: %s was withheld but its content was published anyway"
+                            "\n      published: %.120s" % (slug, quiz.name, leaked[0]))
+        elif strict_withheld:
+            problems.append(
+                "%s: %s is WITHHELD from the learner view -- its answer key does not use "
+                "the canonical '## Answer key' marker, so a pilot learner gets no quiz."
+                % (slug, quiz.name))
+        else:
+            print("::warning title=Quiz withheld::%s/%s is withheld from the learner view "
+                  "(non-canonical answer-key marker); a pilot learner gets no quiz."
+                  % (slug, quiz.name))
+
 
 def main():
     ap = argparse.ArgumentParser(description=__doc__)
@@ -163,14 +205,37 @@ def main():
     ap.add_argument("--all", action="store_true",
                     help="treat --built as a parent containing <slug>/ per course")
     ap.add_argument("--course", help="folder name under modules/ (single-course mode)")
+    ap.add_argument("--sources",
+                    help="read each course's source from <dir>/<slug>/ rather than from "
+                         "modules/ in this checkout. Written by build_review_sites.py "
+                         "--source-out, and REQUIRED whenever the sites were built from "
+                         "git refs: the deploy builds each course from its own branch "
+                         "while the checkout is pinned to main, so checking against the "
+                         "checkout would check a different ref than the one that shipped.")
+    ap.add_argument("--strict-withheld", action="store_true",
+                    help="fail when a quiz is withheld from the learner view, rather than "
+                         "warning. For the PR check: withholding is safe but leaves a "
+                         "pilot learner with no quiz, and the author can fix the marker.")
     args = ap.parse_args()
 
     built = pathlib.Path(args.built).resolve()
     problems = []
 
-    if args.all:
+    if args.sources:
+        sources = pathlib.Path(args.sources).resolve()
+        captured = sorted(d for d in sources.iterdir() if d.is_dir()) \
+            if sources.is_dir() else []
+        if not captured:
+            print("check_learner_view: no captured sources under %s. Run "
+                  "build_review_sites.py with --source-out." % sources, file=sys.stderr)
+            return 2
+        for folder in captured:
+            check_course(folder, built / folder.name, problems, slug=folder.name,
+                         strict_withheld=args.strict_withheld)
+    elif args.all:
         for folder in course_folders():
-            check_course(folder, built / branch_slug(folder.name), problems)
+            check_course(folder, built / branch_slug(folder.name), problems,
+                         strict_withheld=args.strict_withheld)
     else:
         folders = [f for f in course_folders()
                    if not args.course or f.name == args.course
@@ -178,14 +243,17 @@ def main():
         if len(folders) != 1:
             print("check_learner_view: name exactly one course with --course", file=sys.stderr)
             return 2
-        check_course(folders[0], built, problems)
+        check_course(folders[0], built, problems,
+                     strict_withheld=args.strict_withheld)
 
     if problems:
         print("LEARNER VIEW FAILED -- %d problem(s):\n" % len(problems), file=sys.stderr)
         for p in problems:
             print("  - %s" % p, file=sys.stderr)
-        print("\nThe learner view is what a pilot learner is handed. Fix the generator "
-              "(scripts/gen_course_site.py) before publishing it.", file=sys.stderr)
+        print("\nThe learner view is what a pilot learner is handed. A leak or a published "
+              "exclusion is a bug in scripts/gen_course_site.py; a WITHHELD quiz is a "
+              "non-canonical answer-key marker in the quiz itself -- make it "
+              "'## Answer key', as check_course_package.py requires.", file=sys.stderr)
         return 1
 
     print("Learner view clean: no excluded sources, no answer-key text in any built page "

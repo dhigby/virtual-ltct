@@ -175,16 +175,34 @@ def safe_asset(name):
     return s + ext.lower()
 
 
+def course_rel(p):
+    """A path relative to the course folder -- the form a link in a lesson uses."""
+    return p.relative_to(COURSE).as_posix()
+
+
 md_files, asset_files = [], []
 for _p in sorted(COURSE.iterdir()):
     if _p.is_dir() or _p.name.startswith("."):
         continue
     (md_files if _p.suffix.lower() == ".md" else asset_files).append(_p)
 
+# Assets may sit one or more levels down: CLAUDE.md sanctions `assets/` inside a module
+# folder for its images. Pages stay top-level -- they are the numbered lesson files -- but
+# a nested image must still be copied, or its link falls through to a GitHub *blob* URL
+# and renders as a broken image on the published site.
+for _p in sorted(COURSE.rglob("*")):
+    if _p.is_dir() or _p.parent == COURSE or _p.suffix.lower() == ".md":
+        continue
+    if any(part.startswith(".") for part in _p.relative_to(COURSE).parts):
+        continue
+    asset_files.append(_p)
+
+# Assets are keyed by their course-relative path, because that is what a link says
+# (`assets/diagram.png`); markdown pages are top-level, so their name is that path.
 EXCLUDED = {p.name for p in md_files if excluded_md(p.name)}
-EXCLUDED |= {p.name for p in asset_files if excluded_asset(p.name)}
+EXCLUDED |= {course_rel(p) for p in asset_files if excluded_asset(p.name)}
 INCLUDED = [p for p in md_files if p.name not in EXCLUDED]
-ASSETS = [p for p in asset_files if p.name not in EXCLUDED]
+ASSETS = [p for p in asset_files if course_rel(p) not in EXCLUDED]
 MD_PAGES = {p.name: ("index.md" if p.name == "README.md" else p.name) for p in INCLUDED}
 
 ASSET_MAP, BIG, _seen = {}, {}, set()
@@ -197,10 +215,10 @@ for _p in ASSETS:
             n += 1
         dest = "%s-%d%s" % (stem, n, ext)
     _seen.add(dest)
-    ASSET_MAP[_p.name] = dest
+    ASSET_MAP[course_rel(_p)] = dest
     try:
         if _p.stat().st_size > MAX_ASSET:
-            BIG[_p.name] = _p.stat().st_size
+            BIG[course_rel(_p)] = _p.stat().st_size
     except OSError:
         pass
 
@@ -458,13 +476,13 @@ mkdocs_gen_files.set_edit_path("index.md", "%s/README.md" % REPO_PREFIX)
 
 # ---- assets ---------------------------------------------------------------------------
 for _p in ASSETS:
-    if _p.name in BIG:
+    if course_rel(_p) in BIG:
         continue
     try:
         _data = _p.read_bytes()
     except OSError:
         continue
-    with mkdocs_gen_files.open(ASSET_MAP[_p.name], "wb") as f:
+    with mkdocs_gen_files.open(ASSET_MAP[course_rel(_p)], "wb") as f:
         f.write(_data)
 
 # Theme statics live in the MAIN checkout's docs/ (single source of truth); the review

@@ -1,0 +1,2173 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Draft course package under review -- not published material.">
+      
+      
+      
+        <link rel="canonical" href="https://competencies.languagetechnology.org/review/supporting-pre-publishing-checks/00-design/">
+      
+      
+        <link rel="prev" href="../08-quiz/">
+      
+      
+        <link rel="next" href="../how-to-review/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../assets/favicon.svg">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+    
+    
+      
+        <title>Course Design Document - Supporting Scripture Pre-publishing Checks</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.ec1eaa64.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Inter:300,300i,400,400i,700,700i%7CJetBrains+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Inter";--md-code-font:"JetBrains Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../stylesheets/extra.css">
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  <meta name="robots" content="noindex, nofollow">
+
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="custom" data-md-color-accent="custom">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#course-design-document" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+        <aside class="md-banner">
+          <div class="md-banner__inner md-grid md-typeset">
+            
+            
+  <strong>Draft under review.</strong>
+  Not published material, and not part of the LT Consultant competency framework.
+  Built from <code>course/supporting-pre-publishing-checks</code>.
+
+          </div>
+          
+        </aside>
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href=".." title="Supporting Scripture Pre-publishing Checks" class="md-header__button md-logo" aria-label="Supporting Scripture Pre-publishing Checks" data-md-component="logo">
+      
+  <img src="../assets/logo.svg" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Supporting Scripture Pre-publishing Checks
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Course Design Document
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="custom" data-md-color-accent="custom"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m17.75 4.09-2.53 1.94.91 3.06-2.63-1.81-2.63 1.81.91-3.06-2.53-1.94L12.44 4l1.06-3 1.06 3zm3.5 6.91-1.64 1.25.59 1.98-1.7-1.17-1.7 1.17.59-1.98L15.75 11l2.06-.05L18.5 9l.69 1.95zm-2.28 4.95c.83-.08 1.72 1.1 1.19 1.85-.32.45-.66.87-1.08 1.27C15.17 23 8.84 23 4.94 19.07c-3.91-3.9-3.91-10.24 0-14.14.4-.4.82-.76 1.27-1.08.75-.53 1.93.36 1.85 1.19-.27 2.86.69 5.83 2.89 8.02a9.96 9.96 0 0 0 8.02 2.89m-1.64 2.02a12.08 12.08 0 0 1-7.8-3.47c-2.17-2.19-3.33-5-3.49-7.82-2.81 3.14-2.7 7.96.31 10.98 3.02 3.01 7.84 3.12 10.98.31"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="custom" data-md-color-accent="custom"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0-7 2.39 3.42C13.65 5.15 12.84 5 12 5s-1.65.15-2.39.42zM3.34 7l4.16-.35A7.2 7.2 0 0 0 5.94 8.5c-.44.74-.69 1.5-.83 2.29zm.02 10 1.76-3.77a7.131 7.131 0 0 0 2.38 4.14zM20.65 7l-1.77 3.79a7.02 7.02 0 0 0-2.38-4.15zm-.01 10-4.14.36c.59-.51 1.12-1.14 1.54-1.86.42-.73.69-1.5.83-2.29zM12 22l-2.41-3.44c.74.27 1.55.44 2.41.44.82 0 1.63-.17 2.37-.44z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/dhigby/virtual-ltct" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    dhigby/virtual-ltct
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="Supporting Scripture Pre-publishing Checks" class="md-nav__button md-logo" aria-label="Supporting Scripture Pre-publishing Checks" data-md-component="logo">
+      
+  <img src="../assets/logo.svg" alt="logo">
+
+    </a>
+    Supporting Scripture Pre-publishing Checks
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/dhigby/virtual-ltct" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    dhigby/virtual-ltct
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Supporting Scripture Pre-publishing Checks
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lessons
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Lessons
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../01-supporting-the-final-turn/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lesson 1: Supporting the Final Turn
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../02-wordlist-and-biblical-terms/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lesson 2: Wordlist and Biblical Terms
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../03-parallel-passages-and-measures/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lesson 3: Parallel Passages and Measures
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../04-formatting-and-references/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lesson 4: Formatting and References
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../05-glossary-linking-and-layout/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lesson 5: Glossary Linking and Layout
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Facilitator materials
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Facilitator materials
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../06-scenario-bank/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Scenario bank
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../07-mentor-guide/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Mentor guide
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../08-quiz/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Quiz
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Reference
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Reference
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Course Design Document
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Course Design Document
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#course-overview" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Course overview
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#outcome-level-open-question-resolve-before-approval" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Outcome-level open question (resolve before approval)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#scope" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Scope
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#learning-objectives" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Learning objectives
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#module-breakdown" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Module breakdown
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#assessment-plan" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Assessment plan
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#sme-knowledge-notes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        SME knowledge notes
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="SME knowledge notes">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#real-field-cases" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Real field cases
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#common-mistakes-organized-by-check-area-jennis-chosen-axis-finalized-2026-08-24" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Common mistakes, organized by check area (Jenni's chosen axis — finalized 2026-08-24)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#what-good-looks-like-at-the-target-level-finalized-jenni-approved-this-list" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What "good" looks like at the target level (finalized — Jenni approved this list)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tool-version-specifics" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Tool-version specifics
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#summary-and-handoff" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Summary and handoff
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../how-to-review/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    How to review this
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#course-overview" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Course overview
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#outcome-level-open-question-resolve-before-approval" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Outcome-level open question (resolve before approval)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#scope" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Scope
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#learning-objectives" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Learning objectives
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#module-breakdown" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Module breakdown
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#assessment-plan" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Assessment plan
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#sme-knowledge-notes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        SME knowledge notes
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="SME knowledge notes">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#real-field-cases" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Real field cases
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#common-mistakes-organized-by-check-area-jennis-chosen-axis-finalized-2026-08-24" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Common mistakes, organized by check area (Jenni's chosen axis — finalized 2026-08-24)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#what-good-looks-like-at-the-target-level-finalized-jenni-approved-this-list" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What "good" looks like at the target level (finalized — Jenni approved this list)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tool-version-specifics" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Tool-version specifics
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#summary-and-handoff" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Summary and handoff
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+    <a href="https://github.com/dhigby/virtual-ltct/edit/course/supporting-pre-publishing-checks/modules/supporting-pre-publishing-checks/00-design.md" title="Edit this page" class="md-content__button md-icon" rel="edit">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M10 20H6V4h7v5h5v3.1l2-2V8l-6-6H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h4zm10.2-7c.1 0 .3.1.4.2l1.3 1.3c.2.2.2.6 0 .8l-1 1-2.1-2.1 1-1c.1-.1.2-.2.4-.2m0 3.9L14.1 23H12v-2.1l6.1-6.1z"/></svg>
+    </a>
+  
+  
+
+
+<h1 id="course-design-document">Course Design Document<a class="headerlink" href="#course-design-document" title="Permanent link">&para;</a></h1>
+<blockquote>
+<p><strong>Before proceeding:</strong> Copy this file into your new course folder as <code>00-design.md</code>. Content drafting must not begin until this document is approved by a human reviewer. This is stage 1 of the <a href="https://github.com/dhigby/virtual-ltct/blob/course/supporting-pre-publishing-checks/process/PROCESS.md">production pipeline</a> — see <a href="https://github.com/dhigby/virtual-ltct/blob/course/supporting-pre-publishing-checks/process/stages/01-design.md"><code>process/stages/01-design.md</code></a> and <a href="https://github.com/dhigby/virtual-ltct/blob/course/supporting-pre-publishing-checks/process/stages/02-approve.md"><code>02-approve.md</code></a>.</p>
+</blockquote>
+<h2 id="course-overview">Course overview<a class="headerlink" href="#course-overview" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Item</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Title</strong></td>
+<td>Supporting Scripture Pre-publishing Checks</td>
+</tr>
+<tr>
+<td><strong>Competencies addressed</strong></td>
+<td>Translation Tools; Digital and Print Publishing</td>
+</tr>
+<tr>
+<td><strong>Target outcome level</strong></td>
+<td>3 - Independent — confirmed at approval; the mentor-reviewed scenario bank is mandatory (see "Outcome-level open question" below)</td>
+</tr>
+<tr>
+<td><strong>SME(s) consulted</strong></td>
+<td>Jenni Beadle — design interview conducted 2026-08-24/25 (recorded verbatim in "SME knowledge notes" below). Doug Higby — course author, ruled (2026-08-25 meeting) that the course must map to an honest CBC rung rather than blend levels.</td>
+</tr>
+<tr>
+<td><strong>Design status</strong></td>
+<td>Approved by Kevin Nicholas on 2026-08-27</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>Amendment, confirmed by Kevin Nicholas on 2026-08-28:</strong> Kevin raised a new field case
+post-approval, on issue #40 — significant time spent with a typesetter working through
+Paratext's <strong>Punctuation Inventory</strong> (Tools &gt; Checking Inventories &gt; Punctuation Inventory)
+settings ahead of typesetting.
+Jenni placed this as a new subsection of <code>04-formatting-and-references.md</code> (see that
+row in "Module breakdown" and field case 7 in "SME knowledge notes" below). Kevin confirmed
+(PR #43) the placement and time budget are correctly scoped. <code>module-author</code> may proceed
+with drafting <code>04-formatting-and-references.md</code>.</p>
+<p><strong>Amendment confirmed by Kevin Nicholas on 2026-09-03 (comment on PR #46) — raised during
+Stage 5 SME fact-check, 2026-09-03:</strong> Kevin raised a further field case, confirmed by Jenni
+Beadle's team on the same date — the Punctuation Inventory's <strong>Inventory menu &gt; "Show
+sequences"</strong> option is what makes the <strong>"Punctuation (sequences)"</strong> checkbox under Run Basic
+Checks actually check punctuation sequences/combinations meaningfully. Jenni had proposed
+this as a new, separate section in <code>04-formatting-and-references.md</code>; <strong>Kevin's ruling is to
+fold it into the existing Punctuation Inventory subsection as a "Punctuation Sequences"
+addition instead</strong> (see that row in "Module breakdown" and field case 8 in "SME knowledge
+notes" below), scoped to punctuation sequences only (quotation-mark specifics are explicitly
+out of scope, deferred to a future addition). The lighter treatment revises the lesson's
+time estimate to <strong>80 minutes</strong> (Jenni's separate-section proposal had estimated 85), keeping
+10 minutes of headroom under the 90-minute cap. <code>module-author</code> may revise
+<code>04-formatting-and-references.md</code> accordingly.</p>
+<p><strong>Amendment, Stage 5 SME fact-check pass, 2026-09-06 (Jenni Beadle):</strong> Objective 3's field
+case (the "no-selection rendering error" / Paratext auto-grabbing the first word of the verse)
+is <strong>UNCONFIRMED, pending a reply from support.bible</strong> — Jenni saw it once, in one project, has
+not been able to reproduce it since (including in that same project's current version), and it
+was never a reported Paratext error. A screenshot of that one project instead showed something
+closer to a stale/old rendering left in place alongside a later, correct rendering added without
+deleting the original. Two NEW findings, confirmed from live Paratext screenshots reviewed the
+same day, are added in their place as the primary teaching content for objective 3 and lesson
+<code>02-wordlist-and-biblical-terms.md</code>: (1) blank renderings are the tool's normal default starting
+state, coached via the Found column/count rather than eyeballing the list, and (2) stale/
+duplicate renderings can pile up when an old rendering isn't deleted after a correct one is
+added. See field case 4 (revised), field cases 9–10 (new), and the revised objective 3 below.
+These two new findings are already confirmed and do not need to wait on support.bible; only the
+no-selection/auto-grab mechanism itself remains pending.</p>
+<p><strong>Amendment, Stage 5 SME fact-check pass, 2026-09-08 (Jenni Beadle) — terminology/attribution
+correction, no re-approval needed:</strong> Field case 1 ("denied errors") is a <strong>Basic Checks</strong>
+case — Basic Checks results have their own real accept/deny mechanism. It had been conflated
+into the wordlist/Biblical Terms module (<code>02-wordlist-and-biblical-terms.md</code>) alongside field
+case 2 (wordlist blanket-approval), which is wrong: Paratext's spelling/wordlist status has
+only three states — <strong>Correct, Incorrect, Undecided</strong> — there is no "deny" action for a word.
+Corrected: field case 1 is now explicitly flagged as Basic Checks-specific in "SME knowledge
+notes"; the <code>02-wordlist-and-biblical-terms.md</code> module-breakdown row no longer implies field
+case 1 lives there and now describes its false-clean content using Correct/Incorrect/Undecided
+terminology; the <code>04-formatting-and-references.md</code> row now incorporates field case 1 as its
+concrete Basic Checks false-clean example; and the "Common mistakes" section's Wordlist/spelling
+and Formatting &amp; markup/Basic Checks bullets are corrected accordingly. Objective 1's wording is
+generalized so it no longer implies "denied errors" is a wordlist-specific example. This is a
+terminology/attribution fix only — objective 1 still covers the false-clean thread generally,
+module scope and time estimates are unchanged, and no new approval is required.</p>
+<p><strong>Amendment, Stage 5 SME fact-check pass, 2026-09-10 (Jenni Beadle) — support.bible query
+resolved, no re-approval needed:</strong> A support.bible programmer replied to Jenni's pending query
+(open since 2026-09-06) with a plausible explanation for the field case 4 rendering behavior:
+the team had likely run Paratext's <strong>Guess Renderings</strong> feature before the project had enough
+translated data for it to work reliably, which caused it to default to the verse's first word as
+a guessed rendering. This is a real, named Paratext feature, not a hypothetical — and critically,
+translators would <strong>not</strong> consciously notice this happening, since it's an automated/background
+action rather than something like forgetting to select text. This is now promoted from
+"unconfirmed, pending" to a credible, attributed third pattern to watch for in Biblical Terms
+renderings — attributed as "likely cause per a support.bible programmer," not stated as certain
+fact — alongside the two already-confirmed patterns (blank renderings, stale/duplicate
+renderings), which remain the primary teaching content for objective 3 and lesson
+<code>02-wordlist-and-biblical-terms.md</code>. Jenni also confirmed a coaching technique for spotting it:
+scanning through a term's occurrences using the down arrow to quickly step through verses makes
+it visually obvious when a rendering is just repeating the verse's first word, pattern-matching
+the verse text. See field case 4 (revised again below), the revised objective 3, and the
+"Tool-version specifics" section. <code>module-author</code> may revise <code>02-wordlist-and-biblical-terms.md</code>
+on this basis.</p>
+<p><strong>Amendment, 2026-09-11 (Jenni Beadle and Doug Higby) — factual update on Numbers/Measures tool
+maturity, no re-approval needed:</strong> Jenni and Doug have worked together to build a new,
+<strong>consolidated Numbers check that covers numbers, weights, and measures together in one check</strong>,
+replacing the old split Numbers/Measures approach (Measures itself was never released as its own
+separate check, so it is being absorbed into this new consolidated check rather than "replaced"
+in its own right). It is currently <strong>in testing</strong> — Jenni has manually imported it under a
+working/test label for testing purposes only, which is not its eventual real name and is not
+used anywhere in this document; it is described functionally throughout as <strong>"the new
+consolidated Numbers check (covering numbers, weights, and measures)."</strong> Jenni and Doug expect
+it to ship before this course publishes, but it is <strong>not yet confirmed/released</strong> as of this
+writing. Because it is still in testing, and because not every team will be on a Paratext
+version that has it once it does ship, the underlying skill objective 5 teaches — confirm what's
+actually available in a team's specific Paratext version before relying on it — is unchanged and
+remains essential: older or unmigrated projects may continue to show only the old, separate
+Numbers check (with no Measures check at all) for some time after the new consolidated check
+releases. This is a factual/content update reflecting real-world tool development, not a scope
+or objective-count change. See the revised objective 5, the revised <code>03-parallel-passages-and-
+measures.md</code> module-breakdown row, the revised Numbers/Measures field case, and the revised
+"Tool-version specifics" section below. <code>module-author</code> may draft or revise
+<code>03-parallel-passages-and-measures.md</code> on this basis.</p>
+<p><strong>Amendment, Stage 5 SME fact-check pass, 2026-09-11 (Jenni Beadle) — menu-path correction and a
+second, complementary field-confirmed tool, no re-approval needed:</strong> Two corrections, confirmed
+via live Paratext screenshots. First, <strong>the menu path for the Punctuation Inventory has been
+wrong throughout this document</strong> — it is at <strong>Tools &gt; Checking Inventories &gt; Punctuation
+Inventory</strong>, not "Checks &gt; Inventories"; every occurrence is corrected. Second, a <strong>separate,
+dedicated inventory called "Unmatched Pairs of Punctuation"</strong> exists (also under Tools &gt; Checking
+Inventories), confirmed via a live screenshot: a standalone window listing single unmatched
+punctuation pairs (e.g. an unmatched "}", "[", "(") with a count and a per-row Status column
+(checkmark = approved, X = incorrect, ? = needs review) — the same status pattern used elsewhere
+in this course. This is <strong>distinct from and complementary to</strong> the existing "Show sequences"
+feature within Punctuation Inventory (field case 8): Unmatched Pairs of Punctuation catches
+single-character unmatched bracket/parenthesis-type pairs directly, while "Show sequences"
+catches multi-character punctuation sequences/combinations (e.g. multiple quotation marks
+combined with spacing or other punctuation), confirmed via a second screenshot. Both are real,
+useful checks the LTC should know about — this is an addition, not a replacement of either. The
+separate, more complex dedicated quotation-marks check (handling continuing quote marks across
+paragraph breaks) <strong>remains genuinely out of scope</strong>, confirmed still accurate — the existing
+"quotation marks deferred to a future addition" language is unchanged. See field case 11 (new)
+in "SME knowledge notes," the revised <code>04-formatting-and-references.md</code> module-breakdown row, and
+the menu-path correction throughout. <strong>Flag for the Design Approver / module-author: this
+addition may push lesson 04 over its 80-minute estimate (10 minutes under the 90-minute cap) —
+see the module-breakdown row for a trim recommendation if so.</strong> <code>module-author</code> may revise
+<code>04-formatting-and-references.md</code> accordingly.</p>
+<p><strong>Amendment, Stage 5 SME fact-check pass, 2026-09-15 (Jenni Beadle) — mandatory first-step
+correction, no re-approval needed:</strong> The structural-first formatting-check order taught in this
+course (marker-pair census → ghost markers → long/short verses → headings → book titles →
+references → footnotes, 7 steps) was missing its actual mandatory first step: <strong>Chapter/Verse
+Numbers</strong> — a distinct check category in Paratext's Run Basic Checks dialog, alongside Markers,
+Characters, Punctuation, References, and Footnote quotes. Every other check in this lesson
+quotes/relies on chapter and verse locations to report its results, which become unreliable or
+ambiguous if chapter/verse numbering has errors (e.g. duplicate verses) — so Chapter/Verse
+Numbers must always be confirmed clean <strong>first</strong>. The order is now <strong>8 steps</strong>, not 7. This is a
+factual correction reflecting real Paratext check dependencies, not a scope change. See the
+revised objective 6, the revised <code>04-formatting-and-references.md</code> module-breakdown row, and
+field case 12 (new) in "SME knowledge notes." <strong>Flag for module-author: lesson 04 is already at
+an estimated 85 minutes (5 under the 90-minute cap, per the 2026-09-11 "Unmatched Pairs of
+Punctuation" addition) — keep the new Chapter/Verse Numbers step's content concise (e.g. one line
+explaining why it must come first) and consider trimming elsewhere in the lesson (the
+reference/book-title portion is the standing trim candidate) to compensate if needed.</strong>
+<code>module-author</code> may revise <code>04-formatting-and-references.md</code> on this basis.</p>
+<p><strong>Amendment, Stage 5 SME fact-check pass, 2026-09-17 (Jenni Beadle) — hyphenation mechanism
+correction, no re-approval needed:</strong> Objective 8 and the <code>05-glossary-linking-and-layout.md</code>
+module-breakdown row wrongly framed the LTC's hands-on layout work as "building a hyphenation
+file" for a two-column layout. Confirmed via a live Paratext screenshot: hyphenation is
+<strong>automatically generated by the Wordlist tool</strong>, not hand-built. The Wordlist's <strong>View menu</strong>
+has a <strong>"Show hyphenation"</strong> option (alongside "Show morphology" and "Show spelling status");
+enabling it displays a hyphenation column, and Paratext auto-generates a <code>hyphenatedWords.txt</code>
+file. The LTC's actual hands-on job is to <strong>enable Show hyphenation, then review and correct any
+wrong hyphenation breaks</strong> the automatic generation produced — not to build the file from
+scratch. This is a factual/mechanism correction, not a scope change: the objective still covers
+the same underlying skill (genuine hands-on layout/hyphenation tooling work, which is what keeps
+the course's Digital and Print Publishing "hands-on setup" claim honest), just correcting what
+that work actually is. See the revised objective 8, the revised <code>05-glossary-linking-and-layout.md</code>
+row, field case 5 (revised) and the "Common mistakes" Layout &amp; publishing bullet below.
+<code>module-author</code> may revise <code>05-glossary-linking-and-layout.md</code> on this basis.</p>
+<p><strong>Amendment, Stage 5 SME fact-check pass, 2026-09-18 (Jenni Beadle) — support.bible reply
+confirms and enriches the hyphenation mechanism, no re-approval needed:</strong> A support.bible reply
+has now confirmed the 2026-09-17 correction (Paratext's Wordlist auto-generates hyphenation; the
+LTC reviews/corrects it) and added substantially richer mechanism detail: the exact menu path
+(Tools &gt; Wordlist &gt; View menu &gt; "Show hyphenation"); the meaning of <code>=</code> marks in a word
+(acceptable break points, e.g. <code>an=ti=no=mi=an=ism</code>); the <strong>grey tick / green tick</strong> approval
+status per word (grey = Paratext's guess, unapproved; click to approve, or edit the <code>=</code> marks to
+correct a wrong guess, which turns the tick green automatically); <strong>batch approval</strong> of correct
+guesses via shift-click/Ctrl-click to extend a selection, then Wordlist tab menu &gt; Edit &gt; "Approve
+word hyphenation"; the <strong><code>hyphenatedWords.txt</code> asterisk convention</strong> (lines with <code>*</code> are
+team-approved, lines without are still Paratext's unapproved guesses), saved when the Wordlist
+closes; that guesses improve as more words are approved, so not every remaining word needs
+individual approval once guesses are reliable; that <strong>PTXprint's draft-PDF export uses both
+approved and guessed hyphenations</strong>, but best practice is to approve before publication rather
+than rely on unapproved guesses going to print; that in a <strong>Study Bible Publication project the
+Wordlist is view-only</strong>, so hyphenation can't be approved directly there; and an important
+distinction from <strong>word break characters</strong> (for scripts without space-separated words), which are
+a separate setting under Project &gt; Project settings &gt; Language settings &gt; Other Characters tab,
+not to be conflated with hyphenation. An advanced/optional detail — customizing <code>HardHyphen</code>,
+<code>SoftHyphen</code>, <code>SoftHyphenOut</code>, and <code>HyphenatedMarkers</code> at the top of <code>hyphenatedWords.txt</code> — is
+noted as lighter-touch, optional content, not core teaching. This is a factual/detail enrichment
+of the already-correct mechanism, not a scope change. See field case 5 (revised again below) and
+the revised <code>05-glossary-linking-and-layout.md</code> module-breakdown row. <strong>Time-budget note:</strong> lesson
+05 is revised from 65 to <strong>75 minutes</strong> to accommodate the fuller workflow (grey/green ticks,
+batch approval, the asterisk convention, the Study Bible Publication caveat, and a brief mention
+of the word-break-characters distinction) — still 15 minutes under the 90-minute cap; the course
+total rises from 345 to <strong>355 minutes</strong> accordingly. <code>module-author</code> may draft
+<code>05-glossary-linking-and-layout.md</code> on this basis.</p>
+</blockquote>
+<h2 id="outcome-level-open-question-resolve-before-approval">Outcome-level open question (resolve before approval)<a class="headerlink" href="#outcome-level-open-question-resolve-before-approval" title="Permanent link">&para;</a></h2>
+<p>The <code>README.md</code> frontmatter and issue #40 both target <code>3 - Independent</code>, delivered self-paced
+with "a self-check rubric rather than a mentor in the loop." That conflicts with this repo's
+mapping policy (<code>process/notes/cbc-level-mapping.md</code>): <strong>a self-study module, on its own,
+delivers <code>1 - Has Knowledge</code>; higher rungs are earned through mentor-supported practice, not by
+finishing the module.</strong></p>
+<p>The SME interview softened but did not resolve this: "Independent" here means independent at
+the <em>support/diagnose/coach</em> role — a real doing-with-a-team competency, not a solo technical
+skill — which is a more defensible claim than most self-paced <code>3 - Independent</code> courses. Doug's
+ruling was to <strong>stay within the CBC as defined</strong> rather than merge or reinterpret levels, and
+Jenni's recommendation was either (a) re-level the course to <code>1 - Has Knowledge</code>, or (b) keep
+<code>3 - Independent</code> but <strong>build in genuine mentored practice</strong> — a real supporting session, or at
+minimum a mentor-reviewed scenario bank, not just reading plus a quiz.</p>
+<p><strong>This design proceeds on option (b)</strong>, since it best matches the course's purpose (preparing a
+consultant to actually support a team, not just recognize the checks) and the SME's field
+material is rich enough to support mentor-reviewed scenarios. The module breakdown below
+therefore treats the scenario bank as <strong>mentor-reviewed</strong>, not self-checked, and the mentor guide
+is a required structural file, not optional. <strong>The Design Approver must confirm this resolution
+(or direct a re-level to <code>1 - Has Knowledge</code>) before this document is approved</strong> — it is the one
+open decision left from the SME interview.</p>
+<blockquote>
+<p><strong>Resolved at approval (2026-08-27):</strong> the Design Approver (Kevin Nicholas) confirmed option
+(b) — the course keeps <code>3 - Independent</code>, and the mentor-reviewed scenario bank plus required
+mentor guide are what earn that claim. They are not optional components.</p>
+<p><strong>Clarification, agreed by Doug Higby (course author) and Jenni Beadle (SME), 2026-09-08 — not
+a new open question, and no re-approval required.</strong> This reinforces the resolution above rather
+than revisiting it. Doug and Jenni agreed on a clean split between the two components so they
+don't blur together: the five lessons' self-study material — including their Challenge
+sections — is deliberately <strong>self-check/recall</strong> work (write an answer from memory, then verify
+it against the lesson's own Content section), which builds and confirms <code>1 - Has Knowledge</code>
+only. The mentor-reviewed, evaluated Scenario Bank (<code>06-scenario-bank.md</code>) remains the <strong>sole</strong>
+component that earns the course's <code>3 - Independent</code> claim, per Kevin Nicholas's approval ruling
+above. Doug has already reworked the Challenge sections in all five lessons (01–05) to this
+self-check style (e.g. "write X from memory, then check it against the Content section above,"
+rather than "a team tells you X, what would you do") — this is implemented, not proposed.</p>
+</blockquote>
+<h2 id="scope">Scope<a class="headerlink" href="#scope" title="Permanent link">&para;</a></h2>
+<p><strong>In scope</strong> — the pre-publishing <strong>text checks</strong>, matching workbook chapters 3–6 and 8 of
+<a href="https://github.com/dhigby/virtual-ltct/blob/course/supporting-pre-publishing-checks/modules/scripture-pre-publishing-checks/README.md">Scripture Pre-publishing Checks</a> ("Finalizing Your
+Translation for Publication"):
+- Parallel passages (ch. 3)
+- Proper names and Biblical Terms, including the wordlist/spell-checking check area (ch. 4)
+- Numbers and Measures — <strong>anticipated to become one consolidated check</strong> (covering numbers,
+  weights, and measures together), currently in testing and expected to ship before this course
+  publishes but not yet confirmed/released; until then, and for teams not yet on the newer
+  Paratext version once it ships, the old <strong>separate Numbers check</strong> (limited scope, with no
+  separate Measures check) remains the fallback case (see "Tool-version specifics" below) (ch. 5)
+- Formatting checks — structural integrity, section headings, book titles, references, footnotes
+  (ch. 6)
+- The final draft-PDF read-through in PTXprint (ch. 8)
+- The glossary-linking <strong>operation and its checks</strong> (marks live in the text) — glossary <em>content</em>
+  itself is out of scope (see below)</p>
+<p><strong>Out of scope</strong> — publication <em>furniture</em>: illustrations, front/back matter, and glossary
+<em>content</em> (workbook chapters 1, 2, 7). These need a separate, not-yet-built course ("Course B").
+This course states "a glossary exists" as a prerequisite where the linking operation is taught.</p>
+<h2 id="learning-objectives">Learning objectives<a class="headerlink" href="#learning-objectives" title="Permanent link">&para;</a></h2>
+<p>Objectives are anchored to the <code>2 - With Assistance</code> row of each ladder component in
+<code>competencies/translation-tools.md</code> and <code>competencies/digital-and-print-publishing.md</code> — the row
+whose <code>Reaches</code> column is <code>3 - Independent</code> — per the ladder-offset rule.</p>
+<p><strong>Priority column (added after SME review, 2026-08-27):</strong> Jenni reviewed the drafted objectives
+and flagged that objectives 2 and 5, as originally written, asked the LTC learner to judge
+<em>linguistic meaning</em> — something an LTC does not normally have the language knowledge to do (they
+typically don't speak the project language). Both are <strong>reframed below</strong> so the LTC's job is
+process/consistency-checking and routing to the team, not adjudicating meaning themselves. Jenni
+also assessed that objectives 1, 3, 4, and 8 describe situations that occur <strong>less frequently in
+the field</strong> than 6, 7, 9, 10 (confirmed as core/solid) and the reframed 2 and 5. The table below
+marks each objective <strong>Core</strong> or <strong>Secondary</strong> so the module breakdown and scenario bank can weight
+lesson depth toward the objectives learners will actually meet most often, without dropping
+secondary objectives or their competency coverage.</p>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>Priority</th>
+<th>Objective</th>
+<th>Source</th>
+<th>Assessed by</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>Secondary*</td>
+<td>Learner can recognize a "false-clean" check result — denied Basic Checks errors, a mass-approved (blanket "Correct") wordlist status, or other blanket-approved statuses — in any check area, and lead the team to reveal what was hidden, reset statuses, and re-run the check honestly. (Denying an error is a Basic Checks–specific mechanism, distinct from wordlist/spelling status, which has only Correct/Incorrect/Undecided — see "SME knowledge notes.")</td>
+<td>Translation Tools 2.0, <code>2 - With Assistance</code> — "Assist in training others on the use of translation tools"</td>
+<td>Quiz + Scenario Bank (spine scenario)</td>
+</tr>
+<tr>
+<td>2</td>
+<td>Core</td>
+<td>Learner can confirm that a parallel-passage comparison check was actually run and its results reviewed by the team, flag passages the tool surfaces as inconsistent (by the tool's own comparison, not the learner's own linguistic judgment) back to the team for adjudication, and check that the team's own decisions about legitimate variation vs. over-harmonising — not the LTC's — are driving the resolution</td>
+<td>Translation Tools 2.0, <code>2 - With Assistance</code></td>
+<td>Quiz + Scenario Bank</td>
+</tr>
+<tr>
+<td>3</td>
+<td>Secondary</td>
+<td>Learner can recognize incomplete Biblical Terms coverage — blank renderings (the tool's default starting state) presented as a finished list — by checking the Found column/count rather than eyeballing the list, recognize stale/duplicate renderings left in place after a correct rendering was added without deleting the original, and coach the team to complete and clean up the list — without taking over their keyboard. Learner can also recognize a third pattern — a rendering that just repeats the verse's first word, likely caused by running <strong>Guess Renderings</strong> before the project had enough translated data for it to work reliably (per a support.bible programmer's reply, 2026-09-10; not something translators would consciously notice, since it's automated/background) — by scanning a term's occurrences with the down arrow to quickly step through verses, which makes the first-word pattern visually obvious. (This third pattern is now confirmed/attributed, not unconfirmed — see "SME knowledge notes," field case 4 revised 2026-09-10 — but remains secondary to the two primary patterns above.)</td>
+<td>Translation Tools 2.0, <code>2 - With Assistance</code></td>
+<td>Quiz + Scenario Bank</td>
+</tr>
+<tr>
+<td>4</td>
+<td>Secondary</td>
+<td>Learner can diagnose configuration-caused Send/Receive and performance slowdowns from over-adding terms to the <em>Project</em> Biblical Terms list, and advise the team on right-sizing it</td>
+<td>Translation Tools 5.0 (Scripture Collaboration), <code>2 - With Assistance</code> — "Advise users in best-practices for collaboration and data safety... assist users to configure plans and tasks in a way that helps them"</td>
+<td>Quiz + Scenario Bank</td>
+</tr>
+<tr>
+<td>5</td>
+<td>Core</td>
+<td>Learner can confirm whether the team's Paratext version has the new consolidated Numbers check (covering numbers, weights, and measures) or still only the old separate Numbers check, run whichever is available against the team's <em>already-agreed and documented</em> approach (not the LTC's own judgment of what the rendering should be), and refer any gaps or contradictions the check surfaces back to the team to resolve rather than deciding new renderings</td>
+<td>Translation Tools 2.0, <code>2 - With Assistance</code></td>
+<td>Quiz + Scenario Bank</td>
+</tr>
+<tr>
+<td>6</td>
+<td>Core</td>
+<td>Learner can diagnose formatting-check failures — unclosed marker pairs, ghost markers, wrong markers, book-title/heading/reference errors — working structural-first <strong>starting with Chapter/Verse Numbers</strong> (confirmed clean before anything else, since references, footnotes, and other verse-based checks quote chapter/verse locations and their reported results become unreliable or ambiguous if those numbers have errors, e.g. duplicate verses — corrected 2026-09-15, Jenni Beadle), and coach a team to a zero-error result</td>
+<td>Translation Tools 2.0, <code>2 - With Assistance</code></td>
+<td>Quiz + Scenario Bank</td>
+</tr>
+<tr>
+<td>7</td>
+<td>Core</td>
+<td>Learner can diagnose over-linked glossary marking (every occurrence vs. first-per-section) and coach the team to unlink and relink at the correct scope</td>
+<td>Translation Tools 2.0, <code>2 - With Assistance</code></td>
+<td>Quiz + Scenario Bank</td>
+</tr>
+<tr>
+<td>8</td>
+<td>Secondary</td>
+<td>Learner can advise a team on a single- vs. two-column layout decision based on reader/community expectation (not just word length), and, since Paratext auto-generates hyphenation via the Wordlist tool, enable <strong>Show hyphenation</strong> (Wordlist's View menu) and review/correct the resulting automatic hyphenation breaks — approving correct guesses (individually or in batches) and fixing wrong ones — so long words break correctly in a two-column layout (corrected 2026-09-17, Jenni Beadle — was wrongly framed as "build a hyphenation file from scratch"; enriched 2026-09-18 per a confirming support.bible reply)</td>
+<td>Digital and Print Publishing 1.0 (Print Publishing), <code>2 - With Assistance</code> — "Customize and use appropriate tools to produce publishable output for Scripture and dictionaries"</td>
+<td>Quiz + Scenario Bank</td>
+</tr>
+<tr>
+<td>9</td>
+<td>Core</td>
+<td>Learner can lead a team through the final PTXprint draft-PDF read-through (spreads, orphan words, footnote shifts, heading placement, underfilled pages) and resolve or triage what it surfaces, deferring true typesetting composition to the typesetter</td>
+<td>Digital and Print Publishing 1.0, <code>2 - With Assistance</code></td>
+<td>Quiz + Scenario Bank</td>
+</tr>
+<tr>
+<td>10</td>
+<td>Core</td>
+<td>Learner can decide, for any surfaced issue, whether it is theirs to resolve, the team's translation decision, or needs escalation (an LT mentor for tooling, a Translation Consultant for content)</td>
+<td>Translation Tools 2.0, <code>2 - With Assistance</code></td>
+<td>Quiz + Scenario Bank</td>
+</tr>
+</tbody>
+</table>
+<p>** <strong>Objective 5 / Numbers-vs-Measures — resolved, updated 2026-09-11.</strong> Objective 5 originally
+covered the LTC's process/routing role across <strong>two separate checks</strong> (Numbers, released but
+limited in scope; Measures, still under development and not yet reliably available), per Jenni's
+2026-09-01 correction (see "Tool-version specifics" below). As of 2026-09-11 (Jenni Beadle and
+Doug Higby), a new <strong>consolidated Numbers check covering numbers, weights, and measures together</strong>
+is in testing and expected to ship before this course publishes, intended to replace the old
+separate Numbers check (Measures was never released as its own check, so it is absorbed rather
+than separately "replaced"). Objective 5 is worded to cover <strong>either state</strong> — the new consolidated
+check if the team's Paratext version has it, or the old separate Numbers check if not — since the
+underlying skill (confirm what's actually available before relying on it, then route gaps back to
+the team) is unchanged. It is kept as a single objective here for the same reason it originally
+was. <strong>Ruled by Kevin Nicholas (Design Approver), 2026-08-31, PR #44: objective 5 stays a single
+objective.</strong> That ruling still holds under the 2026-09-11 update — this is a factual update to
+reflect real tool development, not a scope change, and does not require re-ruling.</p>
+<p>* <strong>Objective 1 / spine tension — flagged, not resolved.</strong> Objective 1 (recognizing false-clean
+results) was the SME's original <strong>spine scenario</strong>, framed in the interview as a cross-cutting
+thread running through <em>every</em> check area across the whole course, not a single stand-alone topic.
+Jenni's frequency assessment in this review round rates it lower-frequency in the field than the
+core objectives above, which pulls toward giving it lighter, secondary billing. Those two signals
+are in tension: downgrading objective 1 to a single lightly-covered section could weaken the
+spine/spiral structure that was a deliberate design premise from the earlier interview (see "SME
+knowledge notes" below). <strong>This design does not silently resolve that tension</strong> — it keeps
+objective 1 recurring in small touches across the core lessons (a short "watch for a false-clean
+result here too" callout in each core check-area lesson) rather than either (a) a standalone heavy
+module or (b) dropping the spine framing. <strong>The Design Approver should confirm this treatment is
+what Jenni intends</strong>, or direct a different balance between "spine" and "secondary."</p>
+<blockquote>
+<p><strong>Resolved at approval (2026-08-27):</strong> the Design Approver (Kevin Nicholas) confirmed the
+recurring-callout treatment — a short false-clean watch-for in each core check-area lesson,
+plus the theme woven through two scenario-bank cases, with no heavy standalone module.</p>
+</blockquote>
+<h2 id="module-breakdown">Module breakdown<a class="headerlink" href="#module-breakdown" title="Permanent link">&para;</a></h2>
+<p>Weighting after SME review: lesson depth and scenario-bank cases now concentrate on the core
+objectives (2, 5, 6, 7, 9, 10). The secondary objectives (1, 3, 4, 8) are still taught and still
+assessed, but consolidated into lighter sections rather than each getting standalone billing —
+except objective 1, which per the flagged tension above is kept as a short recurring callout inside
+each core check-area lesson instead of either a heavy standalone module or being dropped.</p>
+<blockquote>
+<p><strong>Clarification, Doug Higby and Jenni Beadle, 2026-09-08:</strong> each of the five lessons below
+(01–05) ends in a Challenge section that is a <strong>self-check/recall exercise</strong> — write an answer
+from memory, then verify it against that lesson's own Content section — not an applied,
+scenario-style task. This keeps the lessons honestly at <code>1 - Has Knowledge</code> and leaves the
+applied, evaluated scenario work solely to the mentor-reviewed <code>06-scenario-bank.md</code> row below,
+so the two components don't blur together. Already implemented in lessons 01–05.</p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th>File</th>
+<th>Topic</th>
+<th>Objectives covered</th>
+<th>Estimated minutes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>01-supporting-the-final-turn.md</code></td>
+<td>The translation process as a 6-stage spiral; Stage 6 as the final turn re-running earlier checks; the cross-cutting spine (false-clean results) introduced as a recurring watch-for, not a standalone topic; the consultant's role (diagnose, coach, never touch the keyboard); when to escalate</td>
+<td>1 (light touch), 10</td>
+<td>35</td>
+</tr>
+<tr>
+<td><code>02-wordlist-and-biblical-terms.md</code></td>
+<td>Biblical Terms list completion and cleanup (secondary, condensed): recognizing blank renderings as the tool's normal default starting state and confirming genuine completion via the Found column/count rather than eyeballing the list; recognizing stale/duplicate renderings left in place after a correct rendering was added without deleting the original; a third pattern — a rendering that just repeats the verse's first word, likely caused by running <strong>Guess Renderings</strong> before the project had enough translated data (per a support.bible programmer's reply, 2026-09-10 — see field case 4, revised) — noted as a real, attributed pattern to watch for (no longer unconfirmed/pending), spotted by scanning a term's occurrences with the <strong>down arrow</strong> to quickly step through verses so the first-word repetition becomes visually obvious; Project Biblical Terms bloat and performance (secondary, condensed); recurring false-clean callout for this check area, resting solely on the confirmed <strong>blanket-approval pattern</strong> — a wordlist mass-marked <strong>Correct</strong> — described using correct spelling-status terminology (<strong>Correct / Incorrect / Undecided</strong>), not "denied" (<strong>reattributed 2026-09-08</strong>: the "denied errors" field case belongs to Basic Checks in <code>04-formatting-and-references.md</code>, not here — see "SME knowledge notes," field case 1)</td>
+<td>1 (callout), 3, 4</td>
+<td>40</td>
+</tr>
+<tr>
+<td><code>03-parallel-passages-and-measures.md</code></td>
+<td>Parallel passages: confirming the comparison check was run and routing tool-flagged inconsistencies to the team (core, expanded); Numbers and Measures: confirming whether the team's Paratext version has the <strong>new consolidated Numbers check (covering numbers, weights, and measures)</strong> — in testing as of 2026-09-11, anticipated to be the primary case by the time this course publishes — or still only the <strong>old separate Numbers check</strong> (limited scope, no separate Measures check), which remains a real fallback scenario for teams not yet on the newer version; running whichever is available against the team's already-agreed, documented approach, and routing gaps back to the team (core, expanded); recurring false-clean callout</td>
+<td>1 (callout), 2, 5</td>
+<td>60</td>
+</tr>
+<tr>
+<td><code>04-formatting-and-references.md</code></td>
+<td>Formatting checks in structural-first order, now <strong>8 steps</strong> (corrected 2026-09-15, Jenni Beadle — was 7, missing its actual mandatory first step): <strong>(0) Chapter/Verse Numbers first and confirmed clean</strong>, because every other check here (references, footnotes, verse-based markers, etc.) quotes/relies on chapter and verse locations to report its results, which become unreliable or ambiguous if chapter/verse numbering has errors (e.g. duplicate verses); then (1) marker-pair census, (2) ghost markers, (3) long/short verses, (4) section headings, (5) book titles, (6) references, (7) footnotes (core); subsection (confirmed by Kevin Nicholas on 2026-08-28): Punctuation Inventory (<strong>Tools &gt; Checking Inventories &gt; Punctuation Inventory</strong> — corrected 2026-09-11, was mis-stated as "Checks &gt; Inventories") ahead of typesetting — reviewing/using the inventory itself (not PTXprint or the typesetter's own tooling), confirming the inventory was actually reviewed rather than assumed already handled earlier in the process (echoes the objective-1 false-clean theme), and common settings issues that turn this into a time-sink for a typesetter; <strong>"Punctuation Sequences" addition folded into that Punctuation Inventory subsection (raised 2026-09-03; confirmed by Kevin Nicholas on 2026-09-03 via PR #46 comment — folded in, not a separate section): "Show sequences" in the Punctuation Inventory's Inventory menu, and its relationship to the "Punctuation (sequences)" Basic Checks option</strong> — reviewing the inventory without "Show sequences" selected can silently miss unmatched punctuation-pair sequences (echoes the false-clean theme again); scoped to punctuation sequences only — quotation-mark-specific complexity is explicitly out of scope here and deferred to a future addition; <strong>"Unmatched Pairs of Punctuation" addition (2026-09-11, Jenni Beadle, confirmed from live Paratext screenshots — field case 11)</strong>: a separate, dedicated inventory under Tools &gt; Checking Inventories that catches single unmatched bracket/parenthesis-type pairs directly (e.g. an unmatched "}", "[", "("), complementing rather than replacing "Show sequences" (which catches multi-character punctuation sequences/combinations instead) — both use the same approved/incorrect/needs-review Status pattern seen elsewhere in the course; quotation-mark-specific complexity remains out of scope for both, deferred to the same future addition; recurring false-clean callout — <strong>incorporating field case 1</strong> (<strong>reattributed 2026-09-08</strong>: a team denying Basic Checks errors they didn't understand, rather than resolving them) as the concrete example of the false-clean pattern in the Basic Checks context specifically, since Basic Checks is where "deny" is an actual, correct Paratext action (unlike wordlist/spelling status, which has no deny — see <code>02-wordlist-and-biblical-terms.md</code> and "SME knowledge notes")</td>
+<td>1 (callout), 6</td>
+<td><strong>85 — FLAGGED 2026-09-11: the "Unmatched Pairs of Punctuation" addition pushes this lesson from 80 to an estimated 85 minutes, only 5 under the 90-minute cap.</strong> If drafting confirms it runs longer than 5 minutes of content, trim the reference/book-title portion first (as already flagged for the prior amendment); if that alone isn't enough, this lesson should be split rather than pushed over 90 minutes. <strong>FURTHER FLAGGED 2026-09-15 (Jenni Beadle):</strong> the new mandatory first step (Chapter/Verse Numbers) adds content on top of this already-tight 85-minute estimate, with only 5 minutes of headroom left under the 90-minute cap. <code>module-author</code> should keep this new step's content concise — e.g. one line explaining why Chapter/Verse Numbers must be confirmed clean before any other check — and should consider trimming something elsewhere in the lesson (the reference/book-title portion is the standing trim candidate) to compensate if the addition doesn't fit within the remaining headroom</td>
+</tr>
+<tr>
+<td><code>05-glossary-linking-and-layout.md</code></td>
+<td>Glossary-linking scope (over-linking, core); single- vs. two-column layout decisions (secondary, condensed); Paratext's Wordlist-driven automatic hyphenation — enabling <strong>Show hyphenation</strong> (Wordlist's View menu) and reviewing/correcting the resulting automatically-generated hyphenation breaks, not building a hyphenation file from scratch (corrected 2026-09-17, Jenni Beadle); <strong>enriched 2026-09-18 per a confirming support.bible reply</strong> to cover the fuller workflow: the grey-tick (guessed, unapproved) vs. green-tick (approved) status per word, approving a correct guess by clicking its tick or fixing a wrong one by editing its <code>=</code> break marks, batch-approving many correct words at once via shift-click/Ctrl-click then Wordlist tab menu &gt; Edit &gt; "Approve word hyphenation," and the <code>hyphenatedWords.txt</code> asterisk convention (starred lines = team-approved, unstarred = still guesses); a brief note that a <strong>Study Bible Publication project's Wordlist is view-only</strong> (hyphenation can't be approved there) and that hyphenation is <strong>distinct from "word break characters"</strong> (a separate Project settings &gt; Language settings setting, for scripts without space-separated words); the advanced <code>HardHyphen</code>/<code>SoftHyphen</code>/<code>SoftHyphenOut</code>/<code>HyphenatedMarkers</code> customization settings are flagged as optional/lighter-touch, not core teaching; the PTXprint draft-PDF read-through (core); recurring false-clean callout</td>
+<td>1 (callout), 7, 8, 9</td>
+<td><strong>75 — revised 2026-09-18 (was 65): the fuller confirmed hyphenation workflow needs modest additional content; still 15 minutes under the 90-minute cap</strong></td>
+</tr>
+<tr>
+<td><code>06-scenario-bank.md</code></td>
+<td>Mentor-reviewed applied scenarios weighted toward core objectives (2, 5, 6, 7, 9, 10 each get a full scenario), secondary objectives (3, 4, 8) folded into one combined scenario, and objective 1 (false-clean) run as a thread inside two of the core scenarios rather than its own case</td>
+<td>1–10</td>
+<td>60</td>
+</tr>
+<tr>
+<td><code>07-mentor-guide.md</code></td>
+<td>Facilitator notes: what to watch for in each scenario response, the "good" markers from the SME interview</td>
+<td>—</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>08-quiz.md</code></td>
+<td>Assessment</td>
+<td>1–10</td>
+<td>—</td>
+</tr>
+<tr>
+<td><strong>Total learner seat time</strong></td>
+<td></td>
+<td></td>
+<td><strong>355</strong> (includes the 2026-09-18 hyphenation-workflow enrichment to lesson 05, +10 minutes — was 345, which included the 2026-09-11 "Unmatched Pairs of Punctuation" addition, +5 minutes, pending drafting confirmation it fits within the 90-minute cap for lesson 04 — was 340, which included the 2026-09-03 "Punctuation Sequences" addition confirmed by Kevin Nicholas as a fold-in, up from 335 as confirmed 2026-08-28)</td>
+</tr>
+</tbody>
+</table>
+<h2 id="assessment-plan">Assessment plan<a class="headerlink" href="#assessment-plan" title="Permanent link">&para;</a></h2>
+<p>A 20-question quiz (<code>08-quiz.md</code>), 80% (16/20) to pass, drawn from all ten objectives but
+question-count weighted toward the core objectives (2, 5, 6, 7, 9, 10 get roughly two questions
+each; the secondary objectives 1, 3, 4, 8 share the remainder) — mixed recognition/diagnosis-
+reasoning format (e.g. "given this check result, what happened and what do you do next"), since the
+quiz alone can only assess recognition, not live coaching. The mentor-reviewed scenario bank
+(<code>06-scenario-bank.md</code>) is the component that earns the <code>3 - Independent</code> claim (see "Outcome-level
+open question" above): six scenarios weighted the same way — one full scenario each for the six
+core objectives, one combined scenario folding in the three remaining secondary objectives
+(3, 4, 8), and objective 1 (false-clean results) woven as a thread inside two of the core scenarios
+rather than given its own case, per the flagged spine tension above. Each scenario is built from a
+confirmed SME field case or a stated mistake pattern, asking the learner to write out how they
+would diagnose the situation, what they would say to the team, and what (if anything) they would
+escalate. A mentor scores each against the <code>07-mentor-guide.md</code> watch-for list, not just against
+a right answer — consistent with <code>2 - With Assistance</code>/<code>3 - Independent</code> assessment being about
+reasoning and coaching quality, not a single correct fix.</p>
+<h2 id="sme-knowledge-notes">SME knowledge notes<a class="headerlink" href="#sme-knowledge-notes" title="Permanent link">&para;</a></h2>
+<p>Recorded from Jenni Beadle's SME interview for issue #40, 2026-08-24/25. Not fabricated —
+this is the field material actually reported; anything not covered here (notably the
+numbers/weights/measures check area) has <strong>no confirmed field case yet</strong> and should not be
+invented for scenario content.</p>
+<p><strong>Update, SME review 2026-08-27:</strong> Jenni's review of the drafted objectives confirmed that the
+LTC's role in the field cases below was never to judge linguistic meaning herself — the
+process/routing framing of objectives 2 and 5 (confirm the check ran, refer the tool's own
+flagged inconsistencies to the team for a decision) matches how these situations actually play
+out. She also assessed the Biblical Terms no-selection rendering error case (4) and the layout/hyphenation case
+(5) as lower-frequency in her own field experience than the wordlist false-clean cases (1, 2) and
+the Biblical Terms bloat case (6) — hence objectives 3 and 8 (drawn from cases 4 and 5) being
+marked Secondary above, along with objective 4 (case 6) and objective 1 (cases 1–2, under the
+flagged spine tension). Objective 7 (glossary over-linking, case 3) remains Core. No new field
+cases were added in this review round; the stories below are unchanged.</p>
+<h3 id="real-field-cases">Real field cases<a class="headerlink" href="#real-field-cases" title="Permanent link">&para;</a></h3>
+<ol>
+<li><strong>(Reattributed 2026-09-08 — Stage 5 SME fact-check, Jenni Beadle. Mechanism corrected
+   2026-09-13.)</strong> A team <strong>denied Basic Checks errors they didn't understand</strong>, rather than
+   resolving them. The consultant re-ran the check to surface the denied errors and explained the
+   cause of each one. <strong>This is a Basic Checks case specifically</strong> — Basic Checks results have
+   their own, genuine accept/deny mechanism. It is distinct from, and must not be conflated with,
+   the wordlist/spelling status mechanism (field case 2 below), which has no "deny" action:
+   Paratext's spelling status is one of only three states — <strong>Correct, Incorrect, Undecided</strong>.
+   "Denied" belongs to Basic Checks (see <code>04-formatting-and-references.md</code>), not to the
+   wordlist/Biblical Terms module. <strong>Mechanism, confirmed via screenshot:</strong> a denied error, when
+   shown, displays with <strong>strikethrough</strong> text — it is not visually identical to a resolved one.
+   The real risk is a <strong>View menu</strong> option, <strong>Denied messages</strong>: with it switched off, denied
+   errors are hidden from the list entirely, so a short, clean-looking list may simply have its
+   denied items out of view rather than genuinely resolved.</li>
+<li>A wordlist of thousands of words was <strong>all marked Correct</strong> (blanket-approved). The consultant
+   reset every entry to <em>Undecided</em> and re-ran the wordlist checks, especially for incorrectly
+   split or joined words.</li>
+<li>Glossary links were applied to <strong>every occurrence</strong> of a term rather than the first occurrence
+   per section. The consultant unlinked and relinked at "first occurrence in every section," not
+   "all."</li>
+<li><strong>(Revised 2026-09-10 — support.bible replied; mechanism now a credible, attributed
+   explanation, promoted from UNCONFIRMED.)</strong> Jenni originally reported a team's Biblical Terms
+   rendering where the first word of the verse appeared to have been auto-grabbed by Paratext as
+   the term's rendering, first framed as the team not having <em>selected</em> the correct word/phrase
+   before adding it. On the 2026-09-06 Stage 5 fact-check pass, Jenni noted she'd only ever seen
+   this once, in one project, could not reproduce it, and it was never a reported Paratext error,
+   so she submitted a question to support.bible. <strong>A support.bible programmer replied on
+   2026-09-10</strong> with a plausible explanation: the team had likely run Paratext's <strong>Guess
+   Renderings</strong> feature before the project had enough translated data for it to work reliably,
+   which caused it to default to the verse's first word as a guessed rendering. Guess Renderings
+   is a real, named Paratext feature — not a hypothetical — and importantly, this reframes the
+   mechanism as an <strong>automated/background action the translators likely would not have
+   consciously noticed</strong>, rather than a conscious slip like "forgot to select text." This
+   explanation is credible enough to teach, attributed as <strong>"likely cause per a support.bible
+   programmer,"</strong> not stated as certain fact. It is presented as a third pattern to watch for in
+   Biblical Terms renderings, alongside — but secondary to — the two already-confirmed patterns
+   (blank renderings, field case 9; stale/duplicate renderings, field case 10), since the original
+   screenshot itself was inconclusive between the two explanations. <strong>Confirmed coaching
+   technique (Jenni, 2026-09-10):</strong> to check for this, scan through a term's occurrences using the
+   <strong>down arrow</strong> to quickly step through verses — it becomes visually obvious when a rendering is
+   just the verse's first word, repeating a pattern that matches the verse text.</li>
+<li>An expat project admin assumed <strong>single-column</strong> layout (the language has long words and the
+   team had never used hyphenation), but the community currently reads/uses Bibles in a
+   <strong>Language of Wider Communication (LWC)</strong> — this is a Bible translation project, so the
+   community doesn't yet have a Bible of its own in their language — and those <strong>LWC Bibles are
+   conventionally published in two columns</strong>, which sets the readers' layout expectation. The
+   layout has to match that reader expectation, not just word length. The consultant established
+   the reader-expectation requirement with the team, then addressed hyphenation for the
+   two-column layout. <strong>(Mechanism corrected 2026-09-17, Jenni Beadle — Stage 5 fact-check,
+   confirmed via a live screenshot):</strong> hyphenation in Paratext is not hand-built — it is
+   <strong>automatically generated by the Wordlist tool</strong>. The Wordlist's <strong>View menu</strong> has a
+   <strong>"Show hyphenation"</strong> option (alongside "Show morphology" and "Show spelling status");
+   enabling it displays a hyphenation column and Paratext auto-generates a
+   <code>hyphenatedWords.txt</code> file. The consultant's actual hands-on job is to <strong>enable Show
+   hyphenation, then review and correct any wrong hyphenation breaks</strong> the automatic
+   generation produced — not to build the file from scratch. This is still a concrete case
+   where the consultant both advises a publishing-layout decision <em>and</em> does genuine
+   hands-on tooling work — confirming Digital and Print Publishing is honestly earned by
+   this course, just via this corrected mechanism. <strong>(Enriched 2026-09-18, Jenni Beadle — a
+   support.bible reply confirmed the mechanism and added detail.)</strong> The path is Tools menu &gt;
+   Wordlist &gt; (Wordlist's own tab menu) &gt; View menu &gt; "Show hyphenation." Equal signs (<code>=</code>) in a
+   word mark acceptable break points (e.g. <code>an=ti=no=mi=an=ism</code>). Each word shows a <strong>grey tick</strong>
+   if Paratext only guessed the hyphenation (unapproved) — click the tick to approve a correct
+   guess (it turns green), or click the word and edit the <code>=</code> marks to fix a wrong guess, which
+   turns the tick green automatically. Many correct words can be approved at once: select the
+   first word, shift-click (consecutive) or Ctrl-click (non-consecutive) to extend the selection,
+   then Wordlist tab menu &gt; Edit &gt; "Approve word hyphenation." Changes save to
+   <code>hyphenatedWords.txt</code> in the project folder when the Wordlist closes; lines <strong>without</strong> an
+   asterisk are still Paratext's guesses, lines <strong>with</strong> a leading <code>*</code> are team-approved. As more
+   words are approved, Paratext's guesses improve, so once guesses are reliable enough, not every
+   remaining word needs individual approval. PTXprint's draft-PDF export uses both approved and
+   guessed hyphenations, but best practice is to approve hyphenation before publication rather
+   than send unapproved guesses to print. In a <strong>Study Bible Publication project specifically, the
+   Wordlist is view-only</strong> — hyphenation can't be approved directly there. Hyphenation is
+   <strong>distinct from "word break characters"</strong> (for scripts without space-separated words), which
+   are configured separately under Project &gt; Project settings &gt; Language settings &gt; Other
+   Characters tab — the two must not be conflated. Advanced/optional: <code>hyphenatedWords.txt</code>'s
+   first items can be edited to customize <code>HardHyphen</code> (the visible printed hyphen), <code>SoftHyphen</code>
+   (the <code>=</code> break marker in the file), <code>SoftHyphenOut</code> (what's sent to the typesetter, e.g. a soft
+   hyphen or zero-width space), and <code>HyphenatedMarkers</code> (which paragraph styles get hyphenated) —
+   this is lighter-touch, optional detail, not core teaching.</li>
+<li>
+<p>A consultant <strong>added the entire "All Biblical Terms" list into the Project's Biblical Terms</strong>
+   (not just selected it for viewing). Per Paratext's own help documentation, "All Biblical
+   Terms" lists every Greek, Hebrew, and Aramaic term occurring 500 times or less — potentially
+   tens of thousands of entries depending on project scope (the SME observed one whole-Bible
+   project with around 20,000 entries in this list) — versus "Major Biblical Terms," a curated
+   subset of over 8,500 terms organized into semantic domains. The slowdown came specifically
+   from adding the terms to the <em>project</em> — bloating the project and slowing Send/Receive — not
+   from merely viewing a large list. It was <strong>hard to convince the team of the actual cause</strong>.
+   The support skill here is diagnosing a configuration-caused performance problem and advising
+   the team to right-size the project's Biblical Terms list.</p>
+</li>
+<li>
+<p><strong>(Added 2026-08-28, Kevin Nicholas, post-approval comment on issue #40 — confirmed
+   by Kevin Nicholas on 2026-08-28, PR #43.)</strong> Kevin spent significant time,
+   while working with a typesetter, going through <strong>Paratext's Punctuation Inventory</strong>
+   (<strong>Tools &gt; Checking Inventories &gt; Punctuation Inventory</strong> — corrected 2026-09-11, was
+   mis-stated as "Checks &gt; Inventories") settings ahead of typesetting — this is Paratext's own inventory,
+   not PTXprint or the typesetter's own tooling. He flagged it as a real time-sink worth
+   covering. Jenni's placement decision: this belongs alongside the other formatting-check
+   areas in <code>04-formatting-and-references.md</code>, as its own subsection rather than a passing
+   scenario detail, partly framed as "confirm this was actually reviewed, don't just
+   assume it's already handled" — echoing the false-clean theme from field cases 1–2 and
+   objective 1.</p>
+</li>
+<li>
+<p><strong>(Added 2026-09-03, Kevin Nicholas, raised during Stage 5 SME fact-check — confirmed
+   by Jenni Beadle's team on 2026-09-03; placement confirmed by Kevin on 2026-09-03 — folded
+   into the existing Punctuation Inventory subsection of lesson 04, not a separate section.)</strong> Kevin
+   thought his <strong>Punctuation Inventory</strong> review was thorough, but the typesetter later found
+   a long list of <strong>unmatched punctuation pairs</strong> (mostly involving quotation marks) that
+   hadn't surfaced. Traced back to not having selected <strong>"Show sequences"</strong> in the
+   Punctuation Inventory's <strong>Inventory menu</strong>. <strong>(Mechanism corrected 2026-09-13):</strong> the
+   checkbox under Run Basic Checks is just how you choose which check to run — it has
+   nothing to do with whether "Show sequences" is selected. What "Show sequences"
+   actually does is change the Run Basic Checks dialog itself: with it selected, the
+   punctuation checkbox is relabelled <strong>"Punctuation (sequences)"</strong> and checks
+   sequences/combinations; without it, the same checkbox stays a plain "Punctuation"
+   check and only checks individual characters, so the review looked complete but
+   wasn't. This is scoped to
+   <strong>punctuation only</strong> for now; quotation marks specifically are more complicated and are
+   deferred to a <strong>separate, future addition</strong>, not this course.</p>
+</li>
+<li>
+<p><strong>(Added 2026-09-06, Jenni Beadle, confirmed from live Paratext screenshots reviewed during
+   Stage 5 SME fact-check — CONFIRMED, no pending confirmation needed.)</strong> Paratext's Biblical
+   Terms tool starts <strong>every term</strong> with an English gloss (or the localization's source language)
+   and a <strong>blank rendering</strong>, shown highlighted (e.g. orange) with placeholder text like "Double
+   click to enter rendering(s) from project text." The task itself is straightforward — work
+   through the list and add the appropriate rendering for each term — and a blank rendering is
+   <strong>not a bug or a trap</strong>, just the tool's normal starting state. But a team can still present a
+   <strong>partially-completed list as "done"</strong> without genuinely having filled it in, so the relevant
+   false-clean-adjacent check here is confirming genuine completion via the <strong>Found column/count</strong>
+   on each row (e.g. "2/2" vs. an unfilled row), not eyeballing the list.</p>
+</li>
+<li><strong>(Added 2026-09-06, Jenni Beadle, confirmed from live Paratext screenshots reviewed during
+    Stage 5 SME fact-check — CONFIRMED, no pending confirmation needed.)</strong> A term can end up with a
+    <strong>long list of multiple candidate renderings</strong>, most of which are not actually found in the
+    current text — e.g. an old (possibly wrong) rendering left in place after a correct one was
+    added later, without deleting the original. This clutters the renderings list and can make it
+    hard to tell which rendering is actually the team's current, intended one. (This is the more
+    likely explanation for the screenshot behind field case 4 above.)</li>
+<li>
+<p><strong>(Added 2026-09-11, Jenni Beadle, confirmed from live Paratext screenshots reviewed during
+    Stage 5 SME fact-check — CONFIRMED, no pending confirmation needed.)</strong> Paratext has a
+    <strong>separate, dedicated inventory called "Unmatched Pairs of Punctuation"</strong> (also under Tools &gt;
+    Checking Inventories) — a standalone window listing single unmatched punctuation pairs (e.g.
+    an unmatched "}", "[", "(") with a count and a per-row Status column (checkmark = approved, X
+    = incorrect, ? = needs review), the same status pattern used elsewhere in this course. This is
+    <strong>distinct from and complementary to</strong> field case 8's "Show sequences" feature inside the
+    Punctuation Inventory: Unmatched Pairs of Punctuation catches single-character unmatched
+    bracket/parenthesis-type pairs directly, while "Show sequences" catches multi-character
+    punctuation sequences/combinations (e.g. multiple quotation marks combined with spacing or
+    other punctuation like ")"), confirmed via a second screenshot showing rows with Unicode codes,
+    counts, and the same Status column. Both are real, useful, complementary checks — this is an
+    addition to, not a replacement of, the "Show sequences" content. The separate, more complex
+    dedicated quotation-marks check (handling continuing quote marks across paragraph breaks)
+    remains genuinely out of scope for this course, as already noted under field case 8.</p>
+</li>
+<li>
+<p><strong>(Added 2026-09-15, Jenni Beadle, Stage 5 fact-check correction.)</strong> The structural-first
+    formatting-check order taught in this course was missing its actual mandatory first step:
+    <strong>Chapter/Verse Numbers</strong> — a distinct check category in Paratext's Run Basic Checks dialog,
+    alongside Markers, Characters, Punctuation, References, and Footnote quotes. Every other check
+    in this lesson (references, footnotes, verse-based markers, etc.) quotes/relies on chapter and
+    verse locations to report its results — if there are chapter/verse numbering errors (e.g.
+    duplicate verses), those other checks' reported locations become unreliable or ambiguous. So
+    Chapter/Verse Numbers must always be confirmed clean <strong>first</strong>, before marker-pair census or
+    anything else. The structural-first order is now 8 steps, not 7 (see the revised
+    <code>04-formatting-and-references.md</code> module-breakdown row and objective 6).</p>
+</li>
+</ol>
+<p><strong>Cross-cutting theme across these cases:</strong> <em>false-clean results</em> — a team clears a checklist
+without genuinely checking. The consultant's job is to spot the fake all-clear, reset statuses,
+and re-review — while the <strong>translator does the actual fix</strong> ("never touch their keyboard,"
+matching the same rule taught in the team workbook).</p>
+<h3 id="common-mistakes-organized-by-check-area-jennis-chosen-axis-finalized-2026-08-24">Common mistakes, organized by check area (Jenni's chosen axis — finalized 2026-08-24)<a class="headerlink" href="#common-mistakes-organized-by-check-area-jennis-chosen-axis-finalized-2026-08-24" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>Wordlist / spelling</strong> (its own area — a spiral, high-volume check across tens of thousands of
+  words): blanket-approving the whole wordlist (mass-marking entries <strong>Correct</strong>) instead of
+  genuinely reviewing it. (Spelling status has only three states — Correct, Incorrect,
+  Undecided — there is no "deny" action here; see the reattribution note under Formatting &amp;
+  markup / Basic Checks below.)</li>
+<li><strong>Biblical Terms &amp; renderings</strong>: leaving blank renderings in place while presenting the list as
+  done (confirm via the Found column/count, not eyeballing); letting stale/duplicate renderings
+  pile up when a correct rendering is added but an old, possibly-wrong one isn't deleted; a
+  rendering that is just the verse's first word repeated, <strong>likely caused by running Guess
+  Renderings before the project had enough translated data</strong> (per a support.bible programmer's
+  reply, 2026-09-10 — see field case 4, revised) — spotted by scanning a term's occurrences with
+  the down arrow to quickly step through verses.</li>
+<li><strong>Parallel passages</strong>: over-harmonising — forcing all parallel passages to match exactly and
+  erasing legitimate variation. They must be consistent in <em>meaning</em>, not necessarily identical in
+  <em>form</em>.</li>
+<li><strong>Numbers &amp; Measures</strong> (see "Tool-version specifics" below): a new <strong>consolidated Numbers check
+  covering numbers, weights, and measures together</strong> is in testing (as of 2026-09-11) and expected
+  to ship before this course publishes, replacing the old separate Numbers check (Measures was
+  never released separately, so it is absorbed rather than replaced in its own right); until it
+  ships — and for teams not yet on the newer version afterward — the old separate Numbers check
+  (limited scope, no separate Measures check) remains the fallback. <strong>Open</strong> — this area is still
+  new to the SME; no field case yet for either the old or new check. Do not invent one for scenario
+  content; fill from experience if one surfaces before drafting.</li>
+<li><strong>Formatting &amp; markup / Basic Checks</strong>: wrong markers, unclosed footnote pairs (<code>\f…\f*</code>),
+  wrong-case characters; <strong>denying Basic Checks errors they didn't understand, rather than
+  resolving them</strong> (field case 1 — <strong>reattributed 2026-09-08</strong>, Jenni Beadle's Stage 5
+  fact-check: this is a Basic Checks–specific mistake, not a wordlist/spelling one, since
+  Basic Checks has a genuine deny mechanism that spelling status does not); <strong>skipping Chapter/
+  Verse Numbers as the mandatory first check</strong> (field case 12, <strong>added 2026-09-15</strong>, Jenni
+  Beadle) — running marker-pair census or other checks before confirming chapter/verse numbers
+  are clean makes those other checks' reported locations unreliable or ambiguous whenever a
+  chapter/verse numbering error (e.g. a duplicate verse) is present.</li>
+<li><strong>References &amp; book names</strong>: missed book-name checks, foreign <code>\r</code> abbreviations, inconsistent
+  table of contents; unmatched single punctuation pairs (brackets/parentheses) and multi-character
+  punctuation sequences going unnoticed when the two complementary Punctuation Inventory tools
+  (<strong>Unmatched Pairs of Punctuation</strong>, field case 11; "Show sequences," field case 8) aren't both
+  used.</li>
+<li><strong>Glossary linking</strong>: over-linked (every occurrence, instead of first-per-section).</li>
+<li><strong>Layout &amp; publishing (read-through)</strong>: single- vs. two-column choice; hyphenation is
+  automatically generated by the Wordlist tool (enable <strong>Show hyphenation</strong> in its View menu),
+  so the actual mistake to watch for is not enabling it, not approving/correcting the grey-tick
+  guesses it produces (individually or via batch approval), or relying on unapproved guesses at
+  print time instead of approving hyphenation first (corrected 2026-09-17, enriched 2026-09-18,
+  Jenni Beadle — was wrongly framed as building a hyphenation file by hand).</li>
+<li><strong>Cross-cutting spine</strong>: don't trust an old or fake "all clear" — denied errors (Basic Checks'
+  own accept/deny mechanism), skipped checks, or mass-approved/blanket statuses (e.g. a wordlist
+  mass-marked Correct) can occur in <em>any</em> of the areas above, using whichever accept/reject
+  mechanism that area actually has, and it's the pattern the consultant must watch for
+  everywhere, not just once.</li>
+</ul>
+<p><strong>Spiral framing (key design premise, Jenni's language):</strong> the translation process is a
+<strong>6-stage spiral</strong>; Stage 6 (pre-publishing) is the <strong>final turn</strong> — re-running checks begun back
+in Stage 1, driven this time to zero-error. Long-running checks — especially the wordlist — still
+surface errors at Stage 6 even though they've "already been done." <em>Spine + spiral</em> together are
+the course's central insight: <strong>"we already did that" is the trap</strong> the consultant has to watch
+for, at every check area, every turn of the spiral.</p>
+<h3 id="what-good-looks-like-at-the-target-level-finalized-jenni-approved-this-list">What "good" looks like at the target level (finalized — Jenni approved this list)<a class="headerlink" href="#what-good-looks-like-at-the-target-level-finalized-jenni-approved-this-list" title="Permanent link">&para;</a></h3>
+<p>Observable markers of a competent supporting consultant:
+- (a) <strong>Doesn't trust a clean result</strong> — actively reveals denied or mass-approved items and
+  re-checks (the spine).
+- (b) <strong>Diagnoses cause, not symptom</strong>, and explains each check in plain terms the team can
+  understand.
+- (c) <strong>Coaches, doesn't take over the keyboard.</strong>
+- (d) <strong>Drives the tools correctly</strong> — chooses the sensible list/option (e.g. link
+  first-per-section, not every occurrence) and can undo a bad move.
+- (e) <strong>Judges legitimate variation vs. error</strong>, especially in parallel passages.
+- (f) <strong>Advises the surfaced decisions</strong> (layout, hyphenation, renderings) and defers to the team
+  or another consultant where it's genuinely their call, not the LTC's.
+- (g) <strong>Knows when to escalate</strong> — an LT mentor for tooling problems, a Translation Consultant for
+  content/translation decisions.
+- (h) <strong>Attention to detail</strong>, especially in the formatting checks and the final read-through
+  (Jenni's addition to the list).</p>
+<h3 id="tool-version-specifics">Tool-version specifics<a class="headerlink" href="#tool-version-specifics" title="Permanent link">&para;</a></h3>
+<ul>
+<li>The team workbook's chapter 8 (final draft-PDF read-through) was verified against
+  <strong>PTXprint 3.0.38</strong>; PTXprint is updated often, so menu labels may move between versions.
+  Underfilled-page auto-fill is available from <strong>PTXprint v3.0.19+</strong>.</li>
+<li><strong>Correction, SME review 2026-09-01 (Jenni Beadle, confirmed via a screenshot of the actual
+  Open Biblical Terms List dialog):</strong> Numbers and Measures were, at that time, <strong>two separate
+  checks in Paratext, not a combined "Measures and Money and Numbers" list.</strong> The <strong>Numbers</strong>
+  check/list already existed and had been released, but its scope was fairly limited. A
+  <strong>Measures</strong> check (money/weights) was still <strong>under development and not yet released</strong>. Both
+  appeared as separate entries in Paratext's Open Biblical Terms List dialog alongside other
+  unrelated lists (Major Biblical Terms, All Biblical Terms, NT Key Biblical Terms,
+  Inclusive/Exclusive Pronouns, Younger/Older Siblings, etc.) — there was no single combined list
+  to point learners at.</li>
+<li><strong>Update, 2026-09-11 (Jenni Beadle and Doug Higby):</strong> since the above, Jenni and Doug have worked
+  together to build a <strong>new, consolidated Numbers check that covers numbers, weights, and measures
+  together in one check</strong>, intended to replace the old separate Numbers check (Measures itself was
+  never released separately, so it is absorbed into the new check rather than "replaced" in its
+  own right). It is <strong>currently in testing</strong> — Jenni has manually imported it under a working/test
+  label for testing purposes only; that label is <strong>not</strong> its eventual real name and is not used
+  anywhere in this design document. It is described here functionally, as <strong>"the new consolidated
+  Numbers check (covering numbers, weights, and measures)."</strong> Jenni and Doug expect it to be
+  released before this course publishes, but as of this writing it is <strong>not yet confirmed/
+  released</strong>. Because of this, and because not every team will immediately be on a Paratext
+  version that has it once it does ship, the underlying skill this course teaches — confirm what's
+  actually available in a team's specific Paratext version before relying on it, and route gaps
+  back to the team — remains essential. Teach the new consolidated check as the <strong>anticipated
+  primary case</strong> by the time this course is in use, with the older split-check behavior (separate,
+  limited-scope Numbers check; no separate Measures check) as a <strong>real fallback scenario</strong> for
+  teams on older or unmigrated Paratext versions.</li>
+<li><strong>Resolved, 2026-09-10 (Jenni Beadle) — support.bible replied:</strong> the reported first-word
+  rendering behavior (open as a pending question since 2026-09-06) now has a credible, attributed
+  explanation from a support.bible programmer: the team likely ran Paratext's <strong>Guess Renderings</strong>
+  feature before the project had enough translated data for it to work reliably, defaulting the
+  rendering to the verse's first word. Guess Renderings is a real, named Paratext feature. Treat
+  this as <strong>"likely cause per a support.bible programmer,"</strong> not certain fact, and as a secondary
+  pattern alongside the two already-confirmed findings (blank-rendering default state,
+  stale/duplicate renderings — field cases 9–10); see field case 4 (revised 2026-09-10) for the
+  confirmed coaching technique (scanning occurrences with the down arrow).</li>
+</ul>
+<hr />
+<h3 id="summary-and-handoff">Summary and handoff<a class="headerlink" href="#summary-and-handoff" title="Permanent link">&para;</a></h3>
+<p><strong>10 learning objectives</strong> (6 Core: 2, 5, 6, 7, 9, 10; 4 Secondary: 1, 3, 4, 8 — see the priority
+marker added after Jenni's 2026-08-27 review), spanning both Translation Tools and Digital and
+Print Publishing, anchored to the <code>2 - With Assistance</code> ladder rows that reach <code>3 - Independent</code>.
+Objectives 2 and 5 were reframed in this review from meaning-judgment to process/consistency-
+checking and team-routing, since an LTC does not normally know the project language. <strong>8 planned
+files</strong> (5 numbered content lessons + scenario bank + mentor guide + quiz), totaling <strong>355 minutes</strong>
+(~5.9 hours) of learner-facing seat time (content lessons + mentor-reviewed scenario bank; mentor
+guide and quiz excluded from the total per convention), now weighted toward the core objectives.
+The 345-minute total includes the Punctuation Inventory subsection added to
+<code>04-formatting-and-references.md</code> on 2026-08-28 and <strong>confirmed by Kevin Nicholas on 2026-08-28</strong>
+(see the amendment note at the top of this document; previously 320 minutes as approved
+2026-08-27), the "Punctuation Sequences" addition of 2026-09-03, <strong>confirmed by Kevin Nicholas on
+2026-09-03</strong> as a fold-in to the existing Punctuation Inventory subsection (brought
+<code>04-formatting-and-references.md</code> to 80 minutes), and the "Unmatched Pairs of Punctuation" addition
+of 2026-09-11 (Jenni Beadle, field-confirmed), which brings <code>04-formatting-and-references.md</code> to an
+estimated <strong>85 minutes — only 5 minutes under the 90-minute cap. Flagged for module-author:</strong> trim
+the reference/book-title portion first if drafting runs longer than estimated, or split the lesson
+rather than exceed 90 minutes.
+Every objective traces to a descriptor component and to both the quiz and the scenario bank. One
+open tension is flagged and left for the Design Approver: whether the lighter, recurring-callout
+treatment of objective 1 (false-clean results) adequately preserves the "spine" framing from the
+original SME interview, or whether it should get heavier standalone treatment despite its lower
+field frequency.</p>
+<p><strong>This document is now the contract</strong> for <code>module-author</code> and <code>quiz-writer</code>: they are to draft
+only the modules and objectives specified here, not freelance additional content or competencies.</p>
+<p><strong>Before drafting begins, this design needs human approval — and specifically rulings on two open
+points</strong>: (1) the outcome-level open question above (confirm <code>3 - Independent</code> with mandatory
+mentor-reviewed scenarios, as designed here, or direct a re-level to <code>1 - Has Knowledge</code>), and
+(2) the objective-1/spine tension flagged in "Learning objectives" (confirm the recurring-callout
+treatment, or direct heavier standalone treatment for false-clean recognition). Requesting review
+from the Design Approver per stage 2 of the pipeline.</p>
+<blockquote>
+<p><strong>Both rulings made at approval (2026-08-27):</strong> <code>3 - Independent</code> confirmed with the
+mentor-reviewed scenario bank mandatory, and the recurring-callout spine treatment confirmed.
+See the resolution notes in each section above. Drafting may begin.</p>
+</blockquote>
+<p><strong>Amendment confirmed by Kevin Nicholas on 2026-08-28 (PR #43):</strong> the Punctuation Inventory
+subsection added to <code>04-formatting-and-references.md</code> (field case 7, module-breakdown row, and
+revised 335-minute total) is confirmed correctly scoped and placed. <code>module-author</code> may draft
+<code>04-formatting-and-references.md</code>.</p>
+<p><strong>Amendment confirmed by Kevin Nicholas on 2026-09-03 (comment on PR #46; raised during Stage 5
+SME fact-check, 2026-09-03):</strong> the "Show sequences" material (Punctuation Inventory's Inventory
+menu) and its relationship to the "Punctuation (sequences)" Basic Checks option is confirmed
+correctly scoped (punctuation sequences only; quotation marks deferred to a future addition).
+Kevin's ruling on placement: <strong>fold it into the existing Punctuation Inventory subsection of
+<code>04-formatting-and-references.md</code> as a "Punctuation Sequences" addition, not a separate section</strong>
+(field case 8, module-breakdown row, and revised 340-minute total). The lighter treatment puts
+the lesson at 80 minutes, 10 under the cap. <code>module-author</code> may revise
+<code>04-formatting-and-references.md</code>.</p>
+<p><strong>Amendment, Stage 5 SME fact-check pass, 2026-09-06 (Jenni Beadle):</strong> Objective 3 and its
+underlying field case (the "no-selection rendering error") are revised — the auto-grab mechanism
+is now marked <strong>unconfirmed, pending a reply from support.bible</strong> (Jenni saw it once,
+unreproducible since, never a reported Paratext error), rather than removed outright. Objective 3
+now primarily teaches two <strong>confirmed</strong> patterns from live Paratext screenshots reviewed the same
+day: blank renderings as the tool's default starting state (confirmed via the Found column/count)
+and stale/duplicate renderings piling up when an old rendering isn't deleted after a correct one
+is added (field cases 9–10). The <code>02-wordlist-and-biblical-terms.md</code> module-breakdown row is
+revised accordingly; its estimated time (40 minutes) is unchanged. These two new findings do not
+need to wait on support.bible; only the auto-grab mechanism itself remains pending, and this
+document will be amended again once that reply arrives. <code>module-author</code> may draft or revise
+<code>02-wordlist-and-biblical-terms.md</code> on this basis.</p>
+<p><strong>Amendment, Stage 5 SME fact-check pass, 2026-09-10 (Jenni Beadle) — support.bible query
+resolved:</strong> the reply arrived. A support.bible programmer's plausible explanation — the team
+likely ran <strong>Guess Renderings</strong> before the project had enough translated data, causing it to
+default to the verse's first word — promotes the field case 4 mechanism from unconfirmed/pending
+to a credible, attributed third pattern (attributed as "likely cause per a support.bible
+programmer," not certain fact), taught alongside but secondary to the two already-confirmed
+patterns (blank renderings, stale/duplicate renderings). Jenni also confirmed a coaching
+technique: scanning a term's occurrences with the down arrow to quickly step through verses,
+which makes the first-word repetition visually obvious. Field case 4, objective 3, the
+<code>02-wordlist-and-biblical-terms.md</code> module-breakdown row, the "Common mistakes" Biblical Terms
+bullet, and the "Tool-version specifics" section are all revised accordingly; estimated time for
+<code>02-wordlist-and-biblical-terms.md</code> (40 minutes) is unchanged. <code>module-author</code> may draft or revise
+<code>02-wordlist-and-biblical-terms.md</code> on this basis.</p>
+<p><strong>Amendment, 2026-09-11 (Jenni Beadle and Doug Higby) — Numbers/Measures tool development, no
+re-approval needed:</strong> a new, consolidated Numbers check that covers numbers, weights, and measures
+together in one check is in testing and expected to ship before this course publishes, replacing
+the old separate Numbers check (Measures was never released as its own check, so it is absorbed
+rather than separately replaced). It is described functionally throughout this document — not by
+the working/test label Jenni used for manual testing import, which is not its eventual real name.
+Objective 5's wording, the "Scope" section, the <code>03-parallel-passages-and-measures.md</code>
+module-breakdown row, the "Common mistakes" Numbers &amp; Measures bullet, and the "Tool-version
+specifics" section are all revised to teach the new consolidated check as the anticipated primary
+case, with the old split-check behavior retained as a real fallback for teams not yet on the newer
+Paratext version. This is a factual update reflecting real-world tool development, not a scope or
+objective-count change; module and time estimates are unchanged. <code>module-author</code> may draft or
+revise <code>03-parallel-passages-and-measures.md</code> on this basis.</p>
+<p><strong>Amendment, Stage 5 SME fact-check pass, 2026-09-11 (Jenni Beadle) — menu-path correction and a
+second, complementary field-confirmed tool, no re-approval needed:</strong> the Punctuation Inventory menu
+path is corrected throughout this document to <strong>Tools &gt; Checking Inventories &gt; Punctuation
+Inventory</strong> (was wrongly stated as "Checks &gt; Inventories"). A second, dedicated, field-confirmed
+tool — <strong>"Unmatched Pairs of Punctuation"</strong> — is added as field case 11, complementing (not
+replacing) the existing "Show sequences" content (field case 8): it catches single-character
+unmatched bracket/parenthesis-type pairs, while "Show sequences" catches multi-character
+punctuation sequences. The dedicated quotation-marks-across-paragraphs check remains out of scope,
+confirmed still accurate. <strong>This addition pushes <code>04-formatting-and-references.md</code> from 80 to an
+estimated 85 minutes (5 minutes under the 90-minute cap) and the course total from 340 to 345
+minutes — flagged for the Design Approver and <code>module-author</code>; trim the reference/book-title
+portion first if drafting runs longer than estimated, or split the lesson rather than exceed 90
+minutes.</strong> <code>module-author</code> may revise <code>04-formatting-and-references.md</code> on this basis.</p>
+<p><strong>Amendment, Stage 5 SME fact-check pass, 2026-09-15 (Jenni Beadle) — mandatory first-step
+correction, no re-approval needed:</strong> the structural-first formatting-check order was missing its
+actual mandatory first step, <strong>Chapter/Verse Numbers</strong> — a distinct Run Basic Checks category that
+every other check in this lesson (references, footnotes, verse-based markers) depends on for
+reliable reported locations; a chapter/verse numbering error (e.g. a duplicate verse) makes those
+other checks' results unreliable or ambiguous. The order is now <strong>8 steps</strong>, leading with
+Chapter/Verse Numbers, not 7. Objective 6, the <code>04-formatting-and-references.md</code> module-breakdown
+row, and the "Common mistakes" Formatting &amp; markup bullet are revised; field case 12 (new) is added
+to "SME knowledge notes." This is a factual correction, not a scope change. <strong>Time-budget flag:</strong>
+lesson 04 is already at an estimated 85 minutes (5 under the 90-minute cap, per the 2026-09-11
+"Unmatched Pairs of Punctuation" addition); <code>module-author</code> should keep the new step's content
+concise (e.g. one line explaining why it must come first) and consider trimming elsewhere in the
+lesson (the reference/book-title portion is the standing trim candidate) to compensate if the
+addition doesn't fit within the remaining headroom, rather than silently absorbing it or pushing
+the lesson over 90 minutes. <code>module-author</code> may revise <code>04-formatting-and-references.md</code> on this
+basis.</p>
+<p><strong>Amendment, Stage 5 SME fact-check pass, 2026-09-17 (Jenni Beadle) — hyphenation mechanism
+correction, no re-approval needed:</strong> objective 8 and the course's Digital and Print Publishing
+"hands-on setup" claim had wrongly framed the LTC's hyphenation work as building a hyphenation
+file by hand. Confirmed via a live Paratext screenshot: hyphenation is <strong>automatically generated
+by the Wordlist tool</strong> — its <strong>View menu</strong> has a <strong>"Show hyphenation"</strong> option (alongside "Show
+morphology" and "Show spelling status") that, when enabled, displays a hyphenation column and
+auto-generates a <code>hyphenatedWords.txt</code> file. The LTC's real hands-on job is to <strong>enable Show
+hyphenation, then review and correct any wrong hyphenation breaks</strong> the automatic generation
+produced, not to build the file from scratch. Objective 8, the <code>05-glossary-linking-and-layout.md</code>
+module-breakdown row, field case 5, and the "Common mistakes" Layout &amp; publishing bullet are all
+revised accordingly; the underlying skill and time estimates are unchanged — this is a
+factual/mechanism correction, not a scope change. <code>module-author</code> may revise
+<code>05-glossary-linking-and-layout.md</code> on this basis.</p>
+<p><strong>Amendment, Stage 5 SME fact-check pass, 2026-09-18 (Jenni Beadle) — support.bible reply confirms
+and enriches the hyphenation mechanism, no re-approval needed:</strong> a support.bible reply confirmed
+the 2026-09-17 mechanism correction and added detail the LTC needs to actually do the task: the
+exact menu path (Tools &gt; Wordlist &gt; View menu &gt; "Show hyphenation"), the meaning of <code>=</code> break
+marks, the grey-tick (guessed)/green-tick (approved) status per word and how to approve or correct
+it, batch approval via shift-click/Ctrl-click plus Wordlist tab menu &gt; Edit &gt; "Approve word
+hyphenation," the <code>hyphenatedWords.txt</code> asterisk convention for approved vs. guessed lines, the
+Study Bible Publication view-only caveat, the distinction from separately-configured word break
+characters, and the advanced (optional, non-core) <code>HardHyphen</code>/<code>SoftHyphen</code>/<code>SoftHyphenOut</code>/
+<code>HyphenatedMarkers</code> customization settings. Objective 8, field case 5, and the
+<code>05-glossary-linking-and-layout.md</code> module-breakdown row are revised accordingly. Lesson 05's
+estimated time is revised from 65 to <strong>75 minutes</strong> to accommodate the richer content (still 15
+minutes under the 90-minute cap); the course total rises from 345 to <strong>355 minutes</strong>. This is a
+factual/detail enrichment, not a scope change. <code>module-author</code> may draft
+<code>05-glossary-linking-and-layout.md</code> on this basis.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+    
+      
+      <nav class="md-footer__inner md-grid" aria-label="Footer" >
+        
+          
+          <a href="../08-quiz/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Quiz">
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+            </div>
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Previous
+              </span>
+              <div class="md-ellipsis">
+                Quiz
+              </div>
+            </div>
+          </a>
+        
+        
+          
+          <a href="../how-to-review/" class="md-footer__link md-footer__link--next" aria-label="Next: How to review this">
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Next
+              </span>
+              <div class="md-ellipsis">
+                How to review this
+              </div>
+            </div>
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11z"/></svg>
+            </div>
+          </a>
+        
+      </nav>
+    
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["navigation.sections", "navigation.top", "navigation.footer", "toc.follow", "search.suggest", "search.highlight", "content.action.edit", "content.code.copy"], "search": "../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.d7400e89.min.js"></script>
+      
+    
+  </body>
+</html>

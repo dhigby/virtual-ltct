@@ -1,0 +1,2311 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Draft course package under review -- not published material.">
+      
+      
+      
+        <link rel="canonical" href="https://competencies.languagetechnology.org/review/coretech-computer-hardware/06-mentor-guide/">
+      
+      
+        <link rel="prev" href="../05-scenario-bank/">
+      
+      
+        <link rel="next" href="../07-quiz/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../assets/favicon.svg">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+    
+    
+      
+        <title>MENTOR GUIDE - CoreTech: Computer Hardware</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.ec1eaa64.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Inter:300,300i,400,400i,700,700i%7CJetBrains+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Inter";--md-code-font:"JetBrains Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../stylesheets/extra.css">
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  <meta name="robots" content="noindex, nofollow">
+
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="custom" data-md-color-accent="custom">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#mentor-guide" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+        <aside class="md-banner">
+          <div class="md-banner__inner md-grid md-typeset">
+            
+            
+  <strong>Draft under review.</strong>
+  Not published material, and not part of the LT Consultant competency framework.
+  Built from <code>main</code>.
+
+          </div>
+          
+        </aside>
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href=".." title="CoreTech: Computer Hardware" class="md-header__button md-logo" aria-label="CoreTech: Computer Hardware" data-md-component="logo">
+      
+  <img src="../assets/logo.svg" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            CoreTech: Computer Hardware
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              MENTOR GUIDE
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="custom" data-md-color-accent="custom"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m17.75 4.09-2.53 1.94.91 3.06-2.63-1.81-2.63 1.81.91-3.06-2.53-1.94L12.44 4l1.06-3 1.06 3zm3.5 6.91-1.64 1.25.59 1.98-1.7-1.17-1.7 1.17.59-1.98L15.75 11l2.06-.05L18.5 9l.69 1.95zm-2.28 4.95c.83-.08 1.72 1.1 1.19 1.85-.32.45-.66.87-1.08 1.27C15.17 23 8.84 23 4.94 19.07c-3.91-3.9-3.91-10.24 0-14.14.4-.4.82-.76 1.27-1.08.75-.53 1.93.36 1.85 1.19-.27 2.86.69 5.83 2.89 8.02a9.96 9.96 0 0 0 8.02 2.89m-1.64 2.02a12.08 12.08 0 0 1-7.8-3.47c-2.17-2.19-3.33-5-3.49-7.82-2.81 3.14-2.7 7.96.31 10.98 3.02 3.01 7.84 3.12 10.98.31"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="custom" data-md-color-accent="custom"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0-7 2.39 3.42C13.65 5.15 12.84 5 12 5s-1.65.15-2.39.42zM3.34 7l4.16-.35A7.2 7.2 0 0 0 5.94 8.5c-.44.74-.69 1.5-.83 2.29zm.02 10 1.76-3.77a7.131 7.131 0 0 0 2.38 4.14zM20.65 7l-1.77 3.79a7.02 7.02 0 0 0-2.38-4.15zm-.01 10-4.14.36c.59-.51 1.12-1.14 1.54-1.86.42-.73.69-1.5.83-2.29zM12 22l-2.41-3.44c.74.27 1.55.44 2.41.44.82 0 1.63-.17 2.37-.44z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/dhigby/virtual-ltct" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    dhigby/virtual-ltct
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="CoreTech: Computer Hardware" class="md-nav__button md-logo" aria-label="CoreTech: Computer Hardware" data-md-component="logo">
+      
+  <img src="../assets/logo.svg" alt="logo">
+
+    </a>
+    CoreTech: Computer Hardware
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/dhigby/virtual-ltct" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    dhigby/virtual-ltct
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    CoreTech: Computer Hardware
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lessons
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Lessons
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../01-module-1/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    MODULE 1: UNDERSTANDING LAPTOP SYSTEMS
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../02-module-2/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    MODULE 2: DIAGNOSING HARDWARE PROBLEMS
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../03-module-3/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    MODULE 3: PRACTICAL DECISIONS AND APPLICATION
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../04-module-4/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    MODULE 4: POWER, SAFETY & DATA PROTECTION IN THE FIELD
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Facilitator materials
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Facilitator materials
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../05-scenario-bank/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    SCENARIOS BANK FOR ASSESSMENT
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    MENTOR GUIDE
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    MENTOR GUIDE
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#f3-the-charging-problem-answer-guide" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        F3: The Charging Problem — Answer Guide
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#c1-the-cascade-of-problems-answer-guide" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        C1: The Cascade of Problems — Answer Guide
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#c2-the-gradual-decline-answer-guide" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        C2: The Gradual Decline — Answer Guide
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#p3-the-data-dilemma-answer-guide" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        P3: The Data Dilemma — Answer Guide
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#c3-the-diagnostic-challenge-answer-guide" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        C3: The Diagnostic Challenge — Answer Guide
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="C3: The Diagnostic Challenge — Answer Guide">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#possible-explanations" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Possible Explanations
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#systematic-diagnostic-process" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Systematic Diagnostic Process
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#solution-based-on-most-likely-cause" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Solution Based on Most Likely Cause
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#alternative-hypothesis-if-initial-diagnosis-wrong" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Alternative Hypothesis if Initial Diagnosis Wrong
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#common-mistakes-to-watch-for" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Common Mistakes to Watch For
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#teaching-points" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Teaching Points
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#what-exceptional-answers-include" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What Exceptional Answers Include
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#this-scenario-tests" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        This Scenario Tests
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#c4-the-site-survey-answer-guide" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        C4: The Site Survey — Answer Guide
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#c5-the-reassuring-user-answer-guide" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        C5: The Reassuring User — Answer Guide
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#general-assessment-guidance" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        GENERAL ASSESSMENT GUIDANCE
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="GENERAL ASSESSMENT GUIDANCE">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#what-youre-evaluating-across-all-scenarios" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What You're Evaluating Across All Scenarios
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#providing-feedback" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Providing Feedback
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#remember" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Remember
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#scenario-difficulty-progression" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        SCENARIO DIFFICULTY PROGRESSION
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="SCENARIO DIFFICULTY PROGRESSION">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#foundational-f1-f3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Foundational (F1-F3)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#intermediate-i1-i3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Intermediate (I1-I3)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#complex-c1-c5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Complex (C1-C5)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#common-learner-challenges" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        COMMON LEARNER CHALLENGES
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="COMMON LEARNER CHALLENGES">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#challenge-1-jumping-to-conclusions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Challenge 1: Jumping to Conclusions
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#challenge-2-over-reliance-on-hardware-solutions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Challenge 2: Over-reliance on Hardware Solutions
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#challenge-3-missing-environmental-clues" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Challenge 3: Missing Environmental Clues
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#challenge-4-poor-remote-communication" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Challenge 4: Poor Remote Communication
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#challenge-5-no-prevention-focus" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Challenge 5: No Prevention Focus
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../07-quiz/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Assessment Quiz
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Reference
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Reference
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../00-design/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Course Design Document
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../consultant-triage-card/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Consultant's Triage Card
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../how-to-review/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    How to review this
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#f3-the-charging-problem-answer-guide" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        F3: The Charging Problem — Answer Guide
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#c1-the-cascade-of-problems-answer-guide" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        C1: The Cascade of Problems — Answer Guide
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#c2-the-gradual-decline-answer-guide" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        C2: The Gradual Decline — Answer Guide
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#p3-the-data-dilemma-answer-guide" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        P3: The Data Dilemma — Answer Guide
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#c3-the-diagnostic-challenge-answer-guide" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        C3: The Diagnostic Challenge — Answer Guide
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="C3: The Diagnostic Challenge — Answer Guide">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#possible-explanations" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Possible Explanations
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#systematic-diagnostic-process" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Systematic Diagnostic Process
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#solution-based-on-most-likely-cause" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Solution Based on Most Likely Cause
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#alternative-hypothesis-if-initial-diagnosis-wrong" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Alternative Hypothesis if Initial Diagnosis Wrong
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#common-mistakes-to-watch-for" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Common Mistakes to Watch For
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#teaching-points" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Teaching Points
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#what-exceptional-answers-include" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What Exceptional Answers Include
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#this-scenario-tests" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        This Scenario Tests
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#c4-the-site-survey-answer-guide" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        C4: The Site Survey — Answer Guide
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#c5-the-reassuring-user-answer-guide" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        C5: The Reassuring User — Answer Guide
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#general-assessment-guidance" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        GENERAL ASSESSMENT GUIDANCE
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="GENERAL ASSESSMENT GUIDANCE">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#what-youre-evaluating-across-all-scenarios" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What You're Evaluating Across All Scenarios
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#providing-feedback" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Providing Feedback
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#remember" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Remember
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#scenario-difficulty-progression" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        SCENARIO DIFFICULTY PROGRESSION
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="SCENARIO DIFFICULTY PROGRESSION">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#foundational-f1-f3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Foundational (F1-F3)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#intermediate-i1-i3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Intermediate (I1-I3)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#complex-c1-c5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Complex (C1-C5)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#common-learner-challenges" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        COMMON LEARNER CHALLENGES
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="COMMON LEARNER CHALLENGES">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#challenge-1-jumping-to-conclusions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Challenge 1: Jumping to Conclusions
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#challenge-2-over-reliance-on-hardware-solutions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Challenge 2: Over-reliance on Hardware Solutions
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#challenge-3-missing-environmental-clues" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Challenge 3: Missing Environmental Clues
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#challenge-4-poor-remote-communication" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Challenge 4: Poor Remote Communication
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#challenge-5-no-prevention-focus" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Challenge 5: No Prevention Focus
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+    <a href="https://github.com/dhigby/virtual-ltct/edit/main/modules/coretech-computer-hardware/06-mentor-guide.md" title="Edit this page" class="md-content__button md-icon" rel="edit">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M10 20H6V4h7v5h5v3.1l2-2V8l-6-6H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h4zm10.2-7c.1 0 .3.1.4.2l1.3 1.3c.2.2.2.6 0 .8l-1 1-2.1-2.1 1-1c.1-.1.2-.2.4-.2m0 3.9L14.1 23H12v-2.1l6.1-6.1z"/></svg>
+    </a>
+  
+  
+
+
+<h1 id="mentor-guide">MENTOR GUIDE<a class="headerlink" href="#mentor-guide" title="Permanent link">&para;</a></h1>
+<p><strong>Purpose:</strong> Guide for mentors assessing learner responses to the <a href="../05-scenario-bank/">scenario bank</a>.</p>
+<p><strong>Format:</strong> Detailed answer keys for the seven mentor-assessed scenarios, plus general assessment guidance that applies across all scenarios.</p>
+<blockquote>
+<p><strong>Coverage note.</strong> Keys are present for every <strong>mentor-assessed</strong> scenario: <strong>F3, C1, C2, C3,
+C4, C5 and P3</strong>. The C3 key came from the delivered Cypher material; F3, C1, C2 and P3 were
+written for the 2026-07-28 revision; C4 and C5 are new scenarios from that revision.</p>
+<p>Keys for <strong>F1, F2, I1, I2, I3, P1, P2 and P4</strong> are not present. Those are worked as guided or
+optional practice with sample answers embedded directly in the lesson files (Module 2 §2.5 and
+Activity 2.2 contain full worked answers for F1, F2 and I1), or are reserve-pool scenarios not
+formally assessed. Use the general guidance below for any of them.</p>
+</blockquote>
+<hr />
+<h2 id="f3-the-charging-problem-answer-guide">F3: The Charging Problem — Answer Guide<a class="headerlink" href="#f3-the-charging-problem-answer-guide" title="Permanent link">&para;</a></h2>
+<p><em>(Priya, rural India — first mentor-assessed submission, from Module 2 §2.5.)</em></p>
+<p><strong>What's being tested:</strong> whether the learner can distinguish between three candidate causes that produce an identical symptom, and whether they connect the environmental context to the failure. This is the first thing they submit, so assess generously on polish and strictly on <em>method</em>.</p>
+<p><strong>The three candidates, all consistent with "plugged in, not charging":</strong></p>
+<ol>
+<li><strong>Battery degradation</strong> — most likely. Two years old in a workspace regularly at 35–40°C is a hard life for a lithium cell; heat roughly doubles the degradation rate for each ~10°C above room temperature. A battery too degraded to accept charge reports exactly this.</li>
+<li><strong>Power adapter failure or under-delivery</strong> — voltage fluctuations stress adapters, and a partially failed adapter may power the machine while lacking the headroom to charge as well. A counterfeit or under-wattage replacement adapter behaves the same way.</li>
+<li><strong>Charging circuitry / port damage</strong> — least likely without physical trauma, but voltage fluctuation damage does reach the charge controller.</li>
+</ol>
+<p><strong>Distinguishing tests — the core of a good answer:</strong></p>
+<ul>
+<li><strong><code>powercfg /batteryreport</code></strong> (Windows) — compare design capacity against full-charge capacity. A large gap is direct confirmation of degradation, and this is the single most decisive test. Strong answers name it.</li>
+<li><strong>Substitute a known-good adapter</strong> — if it charges, the adapter was the fault. This is why a spare adapter belongs in the field kit.</li>
+<li><strong>Check the adapter's temperature and its label</strong> — a working adapter under load is warm; stone cold suggests it's dead. Confirm the wattage matches the laptop's requirement.</li>
+<li><strong>Wiggle the connector / try another outlet</strong> — cheap, rules out port and outlet.</li>
+<li><strong>Look for swelling</strong> — a two-year-old battery in a 40°C room is a genuine swelling candidate, and this makes the case a safety question rather than a convenience one. <strong>A learner who checks for swelling here is thinking well ahead of the syllabus at this point; credit it strongly.</strong></li>
+</ul>
+<p><strong>Immediate recommendations:</strong> confirm the diagnosis before ordering parts; if degradation is confirmed and power is reliable enough, she can work plugged in while a battery ships; if the adapter is at fault, that's a cheaper and faster fix.</p>
+<p><strong>Long-term prevention — where the environmental thinking shows:</strong> address the <em>voltage fluctuations</em> (this is an AVR site, not a surge-strip site — though note learners at this point have only met Module 2, so don't penalise "surge protector" here; do raise it in the debrief and flag that Module 4 revisits it); reduce heat exposure; enable the vendor charge limit so a desk-bound user isn't holding a hot pack at 100%; buy only a properly specified replacement battery, never a suspiciously cheap one.</p>
+<p><strong>Common mistakes:</strong> naming one cause and stopping; ordering a battery before testing; missing the environment entirely and treating it as a component fault with no context; proposing no test that would distinguish battery from adapter.</p>
+<hr />
+<h2 id="c1-the-cascade-of-problems-answer-guide">C1: The Cascade of Problems — Answer Guide<a class="headerlink" href="#c1-the-cascade-of-problems-answer-guide" title="Permanent link">&para;</a></h2>
+<p><em>(Lisa, Ethiopia — Module 3 §3.4.)</em></p>
+<p><strong>What's being tested:</strong> whether a safety signal overrides the instinct to keep troubleshooting, and whether the learner can plan under a hard deadline with almost no local resources.</p>
+<p><strong>DANGER — the thing that decides this scenario.</strong> Lisa reports <strong>a faint burning smell</strong>. That is a stop sign. The correct answer is that she <strong>must stop attempting to power the machine on</strong>, full stop. A learner who designs an elegant diagnostic sequence that has her keep pressing the power button has failed the scenario regardless of how good the rest is. Say so directly in feedback.</p>
+<p><strong>Symptom analysis — expected content:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Symptom</th>
+<th>What it indicates</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Battery stopped charging right after the surge</td>
+<td>Charging circuit or adapter damaged by the surge — this was the first warning, days ago</td>
+</tr>
+<tr>
+<td>Power light comes on briefly then dies</td>
+<td>Power delivery failing under load; motherboard or power path damage</td>
+</tr>
+<tr>
+<td>Clicking from inside</td>
+<td>Almost certainly the hard drive — mechanical failure, possibly surge-induced</td>
+</tr>
+<tr>
+<td>Screen black</td>
+<td>Consistent with the machine never completing power-up</td>
+</tr>
+<tr>
+<td>Faint burning smell</td>
+<td>A short somewhere. This is the safety finding</td>
+</tr>
+</tbody>
+</table>
+<p>Strong answers note this is <strong>multiple simultaneous failures from one event</strong>, and that the surge is the common cause — the machine took a hit with no protection, and the "it seemed to work" period afterwards was damage already present but not yet fatal. Excellent answers observe that continuing to work on battery power after the charging failure is what consumed the remaining safety margin.</p>
+<p><strong>Urgency assessment:</strong> no further troubleshooting. This machine is out of service. The honest assessment is that it is likely unrecoverable in useful time — surge damage across the power path plus a failing drive on a machine four hours from parts is not a repair Lisa can drive.</p>
+<p><strong>Action plan — look for this ordering:</strong></p>
+<ol>
+<li><strong>Stop. Unplug. Don't power it on again.</strong> Safety first, and it also preserves any chance for the drive.</li>
+<li><strong>The data question.</strong> What's on the drive, and is it backed up? If critical translation work exists only there, that is the highest-value thing in the situation — and it may be recoverable by removing the drive and reading it externally, <em>even though the laptop is dead.</em> A clicking drive means one careful attempt, imaged, not repeated tries.</li>
+<li><strong>Restore work capability inside one week</strong> — this is the actual deliverable. Borrow from the worker two hours away; that contact was given in the brief for a reason, and a learner who doesn't use it has missed a resource. Also check for organisational loaner equipment.</li>
+<li><strong>Escalate with documentation</strong> — surge event, symptoms, burning smell explicitly stated, tests not performed and why.</li>
+<li><strong>Communicate honestly about the deadline</strong> — if the work genuinely can't be done in a week on borrowed equipment, saying so now is better than discovering it on day six.</li>
+</ol>
+<p><strong>Prevention / systemic changes:</strong> power protection specified to the site (an AVR or line-interactive UPS, not just a surge strip — and if the learner has reached Module 4, expect that distinction); unplug during storms as a habit; backups with physical separation; and the meta-lesson — <strong>the "not charging" message days earlier was the moment to intervene.</strong> Strong answers identify that early warning as the real failure point.</p>
+<p><strong>Common mistakes:</strong> troubleshooting past the burning smell; treating the clicking drive as the main event and missing the safety issue; forgetting the data entirely; ignoring the nearby colleague; no honest conversation about the deadline.</p>
+<hr />
+<h2 id="c2-the-gradual-decline-answer-guide">C2: The Gradual Decline — Answer Guide<a class="headerlink" href="#c2-the-gradual-decline-answer-guide" title="Permanent link">&para;</a></h2>
+<p><em>(Robert, Cameroon — Module 3 §3.4.)</em></p>
+<p><strong>What's being tested:</strong> pattern recognition across time, and a genuinely difficult judgment call where both options are defensible. There is no single right answer to the repair-vs-replace question; there is a right <em>way of reasoning</em> about it.</p>
+<p><strong>Pattern analysis — expected content.</strong> The timeline matters more than any individual symptom:</p>
+<ul>
+<li>3 months: unexplained restarts</li>
+<li>2 months: program crashes</li>
+<li>1 month: display artifacts and flicker</li>
+<li>This week: external drive not recognised, explicit "hardware malfunction" error</li>
+</ul>
+<p>This is <strong>progressive, multi-subsystem degradation</strong> — power/stability, then display, then I/O. Symptoms spreading across <em>unrelated</em> subsystems over months is the signature of a common underlying cause rather than a sequence of coincidences. The strongest candidates:</p>
+<ul>
+<li><strong>Motherboard degradation</strong> — heat and dust over time, cracked solder joints, failing capacitors. Best fits symptoms appearing across independent subsystems.</li>
+<li><strong>Thermal damage accumulating</strong> — the hot dusty environment is stated, and heat cycling is exactly what cracks joints and ages components.</li>
+<li><strong>Power delivery instability</strong> — could produce restarts, crashes, and I/O flakiness.</li>
+</ul>
+<p>Look for the learner to say explicitly that this is <strong>not</strong> a single component to swap. A learner who proposes "replace the display" has missed the pattern.</p>
+<p><strong>Urgency:</strong> high, but for the <strong>data</strong>, not the hardware. He hasn't backed up in 10 days, and a machine throwing hardware-malfunction errors could stop booting tomorrow. Immediate action is a backup, today, before any diagnosis.</p>
+<p><strong>The judgment call — how to assess it.</strong> The trade-off is genuinely hard, and both answers can earn full credit:</p>
+<ul>
+<li><strong>Toward replacement:</strong> 2–3 month lead time means requesting <em>now</em> is the only way to have it before the machine dies. Multi-subsystem failure on an old machine in a harsh environment rarely recovers. Six-hour journey to IT makes repair impractical.</li>
+<li><strong>Toward continuing:</strong> it still works. Three months of degradation suggests it may last a few more. Requesting a replacement doesn't preclude using this one meanwhile.</li>
+</ul>
+<p><strong>The answer that resolves it: do both.</strong> Request the replacement immediately (because of the lead time) <em>and</em> keep working carefully on this machine with rigorous backups (because he has to). These are not alternatives — the lead time is what makes them compatible. Credit this strongly; it's the insight the scenario is built around.</p>
+<p><strong>Action plan should include:</strong> back up today and then daily/continuously; verify the backup restores; get irreplaceable material off first; submit the replacement request now with the timeline documented; reduce thermal stress (clean vents safely, improve airflow, cooler location); consider repasting given the age and heat; expect further degradation and plan around it; keep the external drive attached as little as possible if the I/O is flaky.</p>
+<p><strong>Helping Robert decide — communication:</strong> lay out the timeline arithmetic plainly (2–3 months to get a replacement vs. an unknown remaining life measured in weeks-to-months), separate the data risk from the hardware risk so he sees they need different responses, and be clear that requesting a replacement is not giving up on the current machine. Strong answers recognise Robert's actual anxiety is about <em>losing data</em>, and that this is solvable today and cheaply — addressing that first will change how he hears the rest.</p>
+<p><strong>Common mistakes:</strong> treating the symptoms as four separate problems; leading with diagnosis instead of backup; recommending a 6-hour journey to IT for a machine that needs replacing; treating repair and replacement as mutually exclusive; missing that the lead time is the decisive variable.</p>
+<hr />
+<h2 id="p3-the-data-dilemma-answer-guide">P3: The Data Dilemma — Answer Guide<a class="headerlink" href="#p3-the-data-dilemma-answer-guide" title="Permanent link">&para;</a></h2>
+<p><em>(Sofia, rural Bolivia — Module 4 §4.3.)</em></p>
+<p><strong>What's being tested:</strong> one thing, sequencing. Everything about this scenario is designed to tempt the learner into the wrong order.</p>
+<p><strong>What's happening:</strong> a clicking drive is a mechanically failing hard drive. The clicking has been going for days, files are now corrupting, and the machine is slow and freezing — the drive is failing <em>now</em>, in progress. It could stop responding entirely at any moment, and each power-on is another chance it doesn't come back.</p>
+<p><strong>The correct first action, and the entire point of the scenario:</strong> <strong>stop using the computer and image the drive.</strong> Not repair it, not run CHKDSK, not finish the deadline work, not copy the important folders — image the whole drive, once, and work from the copy.</p>
+<p><strong>DANGER for mentors:</strong> <code>CHKDSK /R</code> on this drive is the worst available option and it is the one many learners will reach for, because the course they may have previously taken taught it. It forces a full-surface read/write pass that frequently kills a dying drive mid-scan and can overwrite recoverable data. <strong>A learner who recommends CHKDSK here has failed the scenario's central point</strong>, and this deserves direct, specific feedback rather than a gentle note — the whole scenario exists to catch it.</p>
+<p><strong>Urgency and priority — expected reasoning:</strong> the interviews with elderly speakers are <strong>unrecoverable</strong>. The deadline is in three days and is, in the end, negotiable; the recordings are not. A learner who prioritises the deadline over the data has the values inverted, and should be asked directly: which of these two things can be obtained again later?</p>
+<p><strong>Action plan — look for this shape:</strong></p>
+<ol>
+<li><strong>Stop working on the machine immediately.</strong> Every minute of ordinary use is risk with no benefit. Shut down.</li>
+<li><strong>Do not run repair tools.</strong></li>
+<li><strong>Image the drive</strong> — sector-by-sector, ideally with <code>ddrescue</code> from a Linux live USB (which she can boot without touching the failing installation). Imaging reads each area once in order and tolerates bad sectors; browsing folders makes the drive seek repeatedly across the most fragile thing it owns.</li>
+<li>If imaging isn't achievable, <strong>copy the irreplaceable recordings first</strong>, in one pass, largest priority first — not the whole home folder.</li>
+<li><strong>Verify the copy</strong> — that the audio files actually play, not merely that they copied.</li>
+<li><strong>Then, and only then</strong>, address continuing to work: a borrowed machine, restore from the image, deal with the deadline.</li>
+<li><strong>Know when to stop.</strong> If the drive stops responding and the recordings aren't off, further attempts reduce what a professional recovery service could retrieve. That's the point to escalate and talk about a recovery budget, not to try a fourth time.</li>
+</ol>
+<p><strong>Prevention:</strong> backups with physical separation and versioning; treat the clicking sound as an emergency the day it starts, not a week later (name this explicitly — Sofia worked for days through an audible warning, which is the behavioural failure here); recognise that irreplaceable field recordings warrant getting off the capture machine promptly as routine practice, not at backup time; and the archive caveat — a single SSD in a hot cupboard is not long-term storage.</p>
+<p><strong>What exceptional answers include:</strong> explicitly refusing CHKDSK and saying why; naming imaging (and ideally <code>ddrescue</code>) rather than file copying; using a live USB so the failing installation is never booted; distinguishing "the deadline" from "the data" and ranking them; a stated stop-point for amateur recovery; verifying the copies play; and compassion in the communication — Sofia is panicking, she made an understandable mistake, and the message she needs first is "stop, don't touch it, we can probably save this."</p>
+<hr />
+<h2 id="c3-the-diagnostic-challenge-answer-guide">C3: The Diagnostic Challenge — Answer Guide<a class="headerlink" href="#c3-the-diagnostic-challenge-answer-guide" title="Permanent link">&para;</a></h2>
+<p><strong>What's Happening:</strong></p>
+<p>This scenario is deliberately ambiguous and could be either hardware OR software (or both). It tests whether learners can think through multiple hypotheses and design systematic diagnostic processes.</p>
+<h3 id="possible-explanations">Possible Explanations<a class="headerlink" href="#possible-explanations" title="Permanent link">&para;</a></h3>
+<p><strong>HARDWARE possibilities:</strong></p>
+<p><strong>1. Failing touchpad:</strong></p>
+<ul>
+<li>Touchpad becoming hypersensitive or registering phantom touches</li>
+<li>Temperature changes affect touchpad calibration</li>
+<li>Could explain cursor jumping and "touches" when not touching</li>
+<li>"Worse in morning when cold" supports this (hardware behaves differently at different temperatures)</li>
+</ul>
+<p><strong>2. Touchpad palm rejection failure:</strong></p>
+<ul>
+<li>Not detecting palms vs. intentional touches</li>
+<li>Could cause cursor jumping while typing</li>
+<li>But doesn't explain cursor moving when hands completely off</li>
+</ul>
+<p><strong>3. Physical damage or moisture in touchpad:</strong></p>
+<ul>
+<li>Temperature extremes could cause condensation</li>
+<li>Morning cold then warming up leads to condensation</li>
+<li>Could create false inputs</li>
+</ul>
+<p><strong>4. Keyboard or touchpad cable issue:</strong></p>
+<ul>
+<li>Loose connection affected by temperature changes</li>
+<li>Could cause erratic behavior</li>
+<li>Temperature cycling (cold night, warm day) stresses connections</li>
+</ul>
+<p><strong>5. Motherboard issue:</strong></p>
+<ul>
+<li>Less likely but possible</li>
+<li>Temperature-dependent electrical problems</li>
+</ul>
+<p><strong>SOFTWARE possibilities:</strong></p>
+<p><strong>1. Malware (despite antivirus):</strong></p>
+<ul>
+<li>Remote access trojan (RAT)</li>
+<li>Could explain cursor moving and programs opening "on their own"</li>
+<li>Antivirus isn't perfect</li>
+<li>"Things starting on their own" is classic RAT behavior</li>
+<li>BUT: "worse in morning" doesn't fit malware pattern well</li>
+</ul>
+<p><strong>2. Software conflict or driver issue:</strong></p>
+<ul>
+<li>Touchpad driver corrupted or conflicting</li>
+<li>Recent Windows update causing problems</li>
+<li>Software behaving strangely at startup (timing issue)</li>
+</ul>
+<p><strong>3. Accessibility feature accidentally enabled:</strong></p>
+<ul>
+<li>Mouse Keys or similar feature</li>
+<li>Could cause unexpected cursor behavior</li>
+<li>Less likely given description</li>
+</ul>
+<p><strong>4. Background process interfering:</strong></p>
+<ul>
+<li>Some program taking control at specific times</li>
+<li>Scheduled task running in morning</li>
+<li>Could explain timing pattern</li>
+</ul>
+<p><strong>BOTH (hardware + software):</strong></p>
+<p><strong>5. Hardware problem triggering software response:</strong></p>
+<ul>
+<li>Touchpad malfunction causing OS to misinterpret inputs</li>
+<li>Fits most of the symptoms</li>
+</ul>
+<p><strong>POWER-RELATED (the hypothesis most learners miss):</strong></p>
+<p><strong>6. Ungrounded mains supply causing capacitive interference with the touchpad:</strong></p>
+<ul>
+<li>Two-prong outlets with no earth are normal in much of the field, including mountainous Nepal</li>
+<li>A laptop power supply leaks a small current to the chassis by design; with no earth it has nowhere to go, and the chassis floats at a voltage</li>
+<li>The touchpad senses tiny capacitance changes, so a floating chassis produces <strong>exactly these symptoms</strong> — jumping cursor, phantom clicks, pointer drift</li>
+<li>Fits <em>"even when my hands are only on the keyboard"</em> better than palm rejection does</li>
+<li>Fits <strong>"worse in the morning"</strong> at least as well as temperature: mornings are when the machine has been plugged in charging overnight and is still on mains, and morning is also when generator or grid load patterns differ most</li>
+<li>Explains why the antivirus finds nothing and why the user's care about downloads is irrelevant</li>
+</ul>
+<p><strong>This is the cheapest hypothesis to test and should be tested first</strong> — see Phase 2 below. A learner who reaches for it, or who designs a test that would incidentally catch it, is thinking about the user's actual environment rather than working down a generic checklist. Credit that highly.</p>
+<p>Note for mentors: this hypothesis was <strong>absent from the delivered version of this course</strong>. Learners who took the earlier version won't have met it, so don't treat its absence as a failure — but do teach it in the debrief, because it recurs constantly in the field and is trivially cheap to rule in or out.</p>
+<h3 id="systematic-diagnostic-process">Systematic Diagnostic Process<a class="headerlink" href="#systematic-diagnostic-process" title="Permanent link">&para;</a></h3>
+<p>Strong answers will design a <strong>methodical elimination process:</strong></p>
+<p><strong>Phase 1 — Gather more information (questions to ask Kenji):</strong></p>
+<p><strong>1. Clarify the "on its own" behavior:</strong></p>
+<ul>
+<li>What exactly happens? (cursor just moves, or clicks happen too?)</li>
+<li>Which programs open?</li>
+<li>Does it happen at specific times or randomly?</li>
+<li>Does it ever happen when he's watching but not touching anything?</li>
+</ul>
+<p><strong>2. Temperature correlation details:</strong></p>
+<ul>
+<li>What's the morning temperature vs. during day?</li>
+<li>Does behavior improve as computer warms up, or stay bad all day?</li>
+<li>Has he noticed condensation on or around computer?</li>
+</ul>
+<p><strong>3. Timing patterns:</strong></p>
+<ul>
+<li>Only first thing in morning, or other times too?</li>
+<li>How long after starting computer does it begin?</li>
+<li>Does restarting help or make it worse?</li>
+</ul>
+<p><strong>4. Recent changes:</strong></p>
+<ul>
+<li>Any new software installed?</li>
+<li>Any Windows updates recently?</li>
+<li>Any physical incidents (drops, spills)?</li>
+<li>Working in new location?</li>
+</ul>
+<p><strong>5. Antivirus and security:</strong></p>
+<ul>
+<li>What antivirus? When last updated?</li>
+<li>Full scan recently?</li>
+<li>Any security warnings ever?</li>
+</ul>
+<p><strong>Phase 2 — Simple tests (non-invasive):</strong></p>
+<p><strong>6. Run on battery, unplugged — do this first.</strong></p>
+<ul>
+<li>Have Kenji unplug the adapter and work on battery alone for several minutes</li>
+<li><strong>Cursor settles on battery, misbehaves plugged in → ungrounded supply / power path</strong>, not the touchpad</li>
+<li>Misbehaves equally either way → the power supply is exonerated and the remaining hypotheses stand</li>
+<li>Costs nothing, needs no tools, takes one minute, and eliminates an entire branch of the tree</li>
+<li>Strong answers put a test like this early precisely <em>because</em> it's free; a learner who sequences expensive or invasive tests ahead of it has missed something about test design</li>
+</ul>
+<p><strong>7. Disable touchpad test:</strong></p>
+<ul>
+<li>External USB mouse + completely disable touchpad in settings</li>
+<li>If problems stop then touchpad hardware issue</li>
+<li>If problems continue then NOT touchpad (malware or other cause)</li>
+<li><strong>This is the key diagnostic test for separating hardware from software</strong></li>
+</ul>
+<p><strong>8. Safe Mode test:</strong></p>
+<ul>
+<li>Boot into Safe Mode</li>
+<li>Does behavior occur in Safe Mode?</li>
+<li>If NO then software/driver issue</li>
+<li>If YES then more likely hardware</li>
+</ul>
+<p><strong>9. Temperature test:</strong></p>
+<ul>
+<li>Let computer warm to room temperature before starting</li>
+<li>Does it change behavior?</li>
+<li>Work in warmer location one morning - does it help?</li>
+</ul>
+<p><strong>10. Touchpad settings check:</strong></p>
+<ul>
+<li>Adjust sensitivity settings</li>
+<li>Disable tap-to-click</li>
+<li>Change palm rejection settings</li>
+<li>Does any setting change the behavior?</li>
+</ul>
+<p><strong>Phase 3 — Software investigation (if touchpad test suggests software):</strong></p>
+<p><strong>11. Malware scan with multiple tools:</strong></p>
+<ul>
+<li>Second opinion scan (Malwarebytes or similar)</li>
+<li>Check startup programs</li>
+<li>Review recent software installations</li>
+<li>Check browser extensions</li>
+</ul>
+<p><strong>12. Driver investigation:</strong></p>
+<ul>
+<li>Update touchpad drivers</li>
+<li>Roll back recent driver updates</li>
+<li>Check for Windows updates</li>
+</ul>
+<p><strong>13. Process monitoring:</strong></p>
+<ul>
+<li>Watch what processes run in morning</li>
+<li>Check scheduled tasks</li>
+<li>Monitor network activity</li>
+</ul>
+<p><strong>Phase 4 — Hardware investigation (if tests suggest hardware):</strong></p>
+<p><strong>14. Physical inspection:</strong></p>
+<ul>
+<li>Look for condensation, especially in morning</li>
+<li>Check for touchpad damage</li>
+<li>Feel for unusual heat in touchpad area</li>
+</ul>
+<p><strong>15. Environmental controls:</strong></p>
+<ul>
+<li>Store computer in warmer location overnight</li>
+<li>Use sealed bag with desiccant if condensation suspected</li>
+<li>Eliminate temperature cycling</li>
+</ul>
+<h3 id="solution-based-on-most-likely-cause">Solution Based on Most Likely Cause<a class="headerlink" href="#solution-based-on-most-likely-cause" title="Permanent link">&para;</a></h3>
+<p><strong>If touchpad hardware issue (a strong fit — but test the power path first, since the ungrounded-supply hypothesis fits the same evidence and costs nothing to rule out):</strong></p>
+<p><em>Immediate solutions:</em></p>
+<ul>
+<li>Disable built-in touchpad completely</li>
+<li>Use external USB mouse permanently</li>
+<li>Adjust storage to minimize temperature cycling</li>
+</ul>
+<p><em>Long-term solutions:</em></p>
+<ul>
+<li>Touchpad replacement (if available/affordable)</li>
+<li>Environmental controls (warmer storage, less temperature swing)</li>
+<li>Continue with external mouse (practical workaround)</li>
+</ul>
+<p><em>Why this fits well:</em></p>
+<ul>
+<li>Temperature correlation (hardware affected by cold)</li>
+<li>Cursor behavior even when not typing (rules out palm rejection)</li>
+<li>"Worse in morning" fits hardware temperature sensitivity</li>
+<li>Mountain location = extreme temperature cycling</li>
+</ul>
+<p><strong>If ungrounded supply (test 6 shows the cursor settles on battery):</strong></p>
+<p><em>Immediate:</em></p>
+<ul>
+<li>Work on battery for precision typing, as an instant free workaround</li>
+<li>Try a different outlet, ideally one known to be properly earthed</li>
+</ul>
+<p><em>Longer term:</em></p>
+<ul>
+<li>Have the outlet's earth checked and corrected — this is a building electrical fix, not a computer fix</li>
+<li>If no earthed outlet exists anywhere, this is a site-level finding worth escalating: it affects every machine there, not just Kenji's, and it also bears on power protection generally (see Module 4)</li>
+</ul>
+<p><em>Why learners should like this outcome:</em> it explains all the symptoms, costs nothing to confirm, and the fix is unrelated to the laptop. It's a good illustration that the answer is sometimes not in the machine at all.</p>
+<p><strong>If malware (less likely but possible):</strong></p>
+<p><em>Immediate:</em></p>
+<ul>
+<li>Full system scan with multiple tools</li>
+<li>Check all startup programs</li>
+<li>Review installed software</li>
+<li>Change all passwords</li>
+<li>Disconnect from network while investigating</li>
+</ul>
+<p><em>If confirmed malware:</em></p>
+<ul>
+<li>Full system cleanup or reinstall</li>
+<li>Restore from clean backup if available</li>
+<li>Review security practices</li>
+</ul>
+<h3 id="alternative-hypothesis-if-initial-diagnosis-wrong">Alternative Hypothesis if Initial Diagnosis Wrong<a class="headerlink" href="#alternative-hypothesis-if-initial-diagnosis-wrong" title="Permanent link">&para;</a></h3>
+<p>Strong answers will show contingency thinking:</p>
+<blockquote>
+<p>"If disabling the touchpad doesn't resolve the cursor movement, then we're likely looking at malware despite the antivirus. The next step would be intensive malware investigation with multiple scanning tools and process monitoring. The temperature correlation might be coincidental, or the malware might be triggered by specific startup conditions that happen to occur more in the morning."</p>
+</blockquote>
+<p>OR:</p>
+<blockquote>
+<p>"If malware scans come back clean and the external mouse also shows strange behavior, we'd need to investigate motherboard or system-level issues, which would likely require professional diagnosis or replacement."</p>
+</blockquote>
+<h3 id="common-mistakes-to-watch-for">Common Mistakes to Watch For<a class="headerlink" href="#common-mistakes-to-watch-for" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Jumping to conclusion without systematic investigation</li>
+<li>Not designing an elimination process</li>
+<li>Missing the touchpad disable test (key diagnostic step)</li>
+<li><strong>Never considering the power supply at all</strong> — treating "erratic input" as necessarily a touchpad-or-malware question</li>
+<li><strong>Sequencing costly or invasive tests ahead of free ones.</strong> The battery test and the touchpad-disable test between them cut the hypothesis space in half and cost nothing; a plan that opens the case before running either is poorly ordered even if it eventually arrives somewhere sensible</li>
+<li>Not considering temperature as genuine hardware factor</li>
+<li>Dismissing malware too quickly because antivirus is running</li>
+<li>Not having contingency plan for wrong initial diagnosis</li>
+<li>Overcomplicated diagnosis when simple test (disable touchpad) would clarify</li>
+<li>Not thinking about practical workarounds (external mouse)</li>
+</ul>
+<h3 id="teaching-points">Teaching Points<a class="headerlink" href="#teaching-points" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Ambiguous symptoms require systematic elimination, not guessing</li>
+<li>Design tests that clearly distinguish between hypotheses</li>
+<li>Environmental factors (temperature) genuinely affect hardware</li>
+<li>Simple tests (disable touchpad) can quickly narrow possibilities</li>
+<li>Always have "if I'm wrong" backup hypothesis</li>
+<li>Good diagnosis is about process, not jumping to answers</li>
+<li>Some problems have simple workarounds even if root cause unclear</li>
+<li>Remote diagnosis means designing tests user can perform</li>
+<li>Multiple possible explanations = need decision tree, not single answer</li>
+</ul>
+<h3 id="what-exceptional-answers-include">What Exceptional Answers Include<a class="headerlink" href="#what-exceptional-answers-include" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Clear acknowledgment that this could be multiple things</li>
+<li>Well-structured diagnostic decision tree</li>
+<li>Specific test that distinguishes hardware from software (touchpad disable)</li>
+<li>Questions to gather more information before recommending tests</li>
+<li>Recognition of temperature as legitimate diagnostic clue</li>
+<li>Practical workaround (external mouse) while investigating</li>
+<li>Contingency thinking ("if this doesn't work, then...")</li>
+<li>Both hardware and software investigation paths</li>
+<li>Appropriate level of skepticism about antivirus (not foolproof)</li>
+<li>Environmental context (mountain location, temperature extremes) informing diagnosis</li>
+</ul>
+<h3 id="this-scenario-tests">This Scenario Tests<a class="headerlink" href="#this-scenario-tests" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Tolerance for ambiguity</li>
+<li>Systematic diagnostic thinking</li>
+<li>Hypothesis generation</li>
+<li>Test design to distinguish between hypotheses</li>
+<li>Recognition that environmental factors matter</li>
+<li>Ability to create decision trees, not just linear troubleshooting</li>
+<li>Knowing when you need more information</li>
+<li>Having backup plans</li>
+<li>Practical problem-solving (workarounds)</li>
+</ul>
+<p>This is perhaps the most advanced diagnostic challenge because there's no single "right answer" - it's about the process and thinking, not reaching a predetermined conclusion.</p>
+<hr />
+<h2 id="c4-the-site-survey-answer-guide">C4: The Site Survey — Answer Guide<a class="headerlink" href="#c4-the-site-survey-answer-guide" title="Permanent link">&para;</a></h2>
+<p><strong>What's being tested:</strong> whether the learner can specify power protection to a <em>profile</em> rather than reciting "get a surge protector," and whether they design data protection that a real person will actually follow.</p>
+<p><strong>The power profile, decoded.</strong> Each detail in the brief points to a different requirement, and strong answers will separate them rather than treating "bad power" as one thing:</p>
+<table>
+<thead>
+<tr>
+<th>Detail in the brief</th>
+<th>What it means</th>
+<th>What it requires</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Lights dim when the mill runs</td>
+<td>Voltage <strong>sag</strong> under load</td>
+<td>AVR — a surge protector does nothing here</td>
+</tr>
+<tr>
+<td>Outages most days, minutes to hours</td>
+<td>Loss of supply</td>
+<td>UPS for the short ones; battery/solar thinking for the long ones</td>
+</tr>
+<tr>
+<td>Two-prong outlets</td>
+<td>No earth</td>
+<td>Electrical work; expect the tingle and touchpad symptoms</td>
+</tr>
+<tr>
+<td>Shared diesel generator</td>
+<td>Transients on start/stop/changeover</td>
+<td>Working habits + AVR</td>
+</tr>
+<tr>
+<td>Wet-season electrical storms</td>
+<td><strong>Surges</strong></td>
+<td>Surge protection, treated as a consumable</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Model answer on equipment:</strong> a <strong>line-interactive UPS</strong> per workstation (or one covering the group), because it is the only option that addresses sag <em>and</em> outage together; the "line-interactive" qualifier matters because a cheap standby UPS won't regulate voltage. Surge protection is included in most such units, but its MOVs are consumable and need replacing — say so. Cheaper alternatives and what they fail at: a surge strip alone leaves the mill-induced sags and all the outages unaddressed (and the sags are what will kill the adapters); an AVR alone fixes the sags but users still lose work several times a day, and the wet-season storms are still a risk if it lacks surge protection.</p>
+<p>Excellent answers will also note that with outages lasting <strong>several hours</strong>, no UPS bridges that — so the real design question is whether laptops simply run on battery through long outages, which makes <strong>battery health</strong> a first-class concern and points at spare batteries, charge-limit settings, and enough charging capacity.</p>
+<p><strong>Grounding — expected content:</strong> two-prong outlets mean chassis leakage has no path to earth. Consequences to warn the team about <em>in advance</em>: (a) a harmless-but-alarming tingle on metal-cased laptops, (b) <strong>erratic touchpad behaviour that will be misdiagnosed as a faulty touchpad or malware</strong> if nobody knows to expect it, and (c) it undermines surge protection, since surge devices divert energy to earth and can't do so properly without one. The best answers recommend having an electrician establish a proper earth as part of setting the office up — it is far cheaper before people move in — and tell the team the battery test so they don't chase phantom hardware faults later.</p>
+<p><strong>Generator practice — expected content:</strong> unplug and run on battery through start-up, shutdown and changeover; don't share a circuit with the clinic's motor loads if avoidable; AVR between generator and equipment. Credit any answer that recognises changeover as the dangerous moment rather than steady running.</p>
+<p><strong>Data protection — expected content:</strong> oral histories are irreplaceable and cannot be re-recorded, so this is the highest-stakes part of the answer. Look for: multiple copies with <strong>physical separation</strong> (not a backup drive in the same bag); recognition that slow internet means prioritising <em>what</em> gets off-site rather than "back up everything"; a periodic physical courier of a drive being a legitimate off-site strategy where bandwidth isn't; versioned rather than purely synced copies; <strong>restore testing</strong>; and the encryption question — if these laptops are imaged with BitLocker/FileVault, IT must hold the recovery keys, and setting that up belongs in the deployment, not after the first failure. Strong answers also flag that a single archive SSD in a hot cupboard is not safe long-term storage.</p>
+<p><strong>Question 5 — what would you ask.</strong> There is no fixed list; assess whether the questions would change the recommendation. Good examples: What's the actual measured voltage range (is a cheap plug-in voltage monitor worth sending)? What's the budget, and is it per-laptop or total? Can equipment be procured and serviced locally, or does everything ship in — because an unserviceable UPS with a dead battery in two years is worse than no UPS? Who will own the maintenance (replacing MOV strips, testing restores)? Are the laptops' RAM/storage/battery even serviceable on these models? Is there mobile data as a backup path for small critical files?</p>
+<p><strong>Common mistakes:</strong> recommending a surge protector for the whole profile; recommending a UPS without noticing hours-long outages exceed its scope; ignoring grounding entirely; designing a backup regime requiring bandwidth the site doesn't have; forgetting encryption keys; treating this as a purely equipment answer with no working habits or ownership attached.</p>
+<hr />
+<h2 id="c5-the-reassuring-user-answer-guide">C5: The Reassuring User — Answer Guide<a class="headerlink" href="#c5-the-reassuring-user-answer-guide" title="Permanent link">&para;</a></h2>
+<p><strong>What's being tested:</strong> whether the learner can hear a <strong>safety emergency inside a casually worded message</strong>, correctly refuse the question they were asked in favour of the one that matters, and then communicate that without frightening or shaming the user.</p>
+<p><strong>The correct triage — this is the whole scenario.</strong> Amina asked about random shutdowns. The urgent item is the <strong>swelling battery</strong>, and every symptom she dismissed is evidence for it:</p>
+<ul>
+<li>Sustained heat over months → accelerated lithium degradation</li>
+<li><strong>Kept plugged in at 100% constantly, in a hot room</strong> → the single worst thing for battery longevity</li>
+<li>Battery life collapsed to ~20 minutes → the cell is badly degraded</li>
+<li><strong>Trackpad has gone stiff</strong> → the pack is expanding and pushing up from directly beneath it</li>
+<li><strong>Laptop sits unevenly / won't sit flat</strong> → the bottom cover is bulging. It isn't the desk.</li>
+</ul>
+<p>These are not five problems. They are <strong>one mechanism with five symptoms</strong>, and a learner who assembles them into a single story has done the main thing this scenario asks. The random shutdowns are plausibly a <em>sixth</em> symptom (a failing pack unable to deliver stable power), which is the neat part: answering the safety question may resolve the question she actually asked.</p>
+<p>A learner who dives into shutdown diagnosis — event logs, thermal monitoring, memory tests — while a swelling battery goes unremarked has <strong>failed the scenario</strong>, however technically competent the rest is. Say so plainly in feedback; this is exactly the failure mode the stop-sign material exists to prevent.</p>
+<p><strong>First three instructions — model answer:</strong></p>
+<ol>
+<li><strong>Shut it down and unplug it now, and don't charge it again until we've checked something.</strong> Give the reason immediately — don't issue an alarming instruction with no explanation.</li>
+<li><strong>Look at it on a flat table and tell me what you see:</strong> does it rock? Is there a gap along the seams? Is the bottom bulging? Press nothing.</li>
+<li><strong>If the battery is removable and comes out without any force, take it out</strong> — the laptop will run on mains without it. If it resists at all, leave it alone and we'll arrange a replacement.</li>
+</ol>
+<p>Credit answers that get the <em>ordering</em> right (stop the hazard before gathering information) and that explicitly warn against pressing, prying, or forcing.</p>
+<p><strong>The shutdowns, once the battery is handled:</strong> candidates to distinguish — a failing battery unable to deliver stable current (test: does it still shut down on mains with the battery removed?); thermal shutdown (test: monitor temperatures under load, remembering that throttling and shutdown are different severities and that a still fan at idle is normal); bad power at the wall in a hot inland office (test: does it correlate with time of day or other equipment starting?); and the possibility that removing the battery ends the shutdowns entirely, which is itself the diagnosis. Good answers name a distinguishing test per hypothesis rather than listing causes.</p>
+<p><strong>Prevention — expected content:</strong> enable the vendor <strong>battery charge limit</strong> so a desk-bound user isn't holding a hot pack at 100% indefinitely; improve the thermal situation (hard surface, airflow, coolest available spot, vent cleaning done safely); consider whether the room itself can be improved; check what she replaces the battery with, because a counterfeit will repeat this faster.</p>
+<p><strong>Communication — what good looks like:</strong> name the seriousness without drama, put the cause on the environment rather than on her ("this is what heat does to batteries here — it's very common and it isn't something you did wrong"), explicitly credit her for reporting the details even though she thought they were unimportant, and close with the reassurance that is <em>true</em>: the laptop is probably fine and this is most likely a battery replacement, not a lost machine. Watch for two failure modes — under-communicating urgency to avoid alarming her, and over-communicating in a way that implies she was negligent. She reported every relevant symptom accurately; she just didn't know what they meant. That's the consultant's job, not hers.</p>
+<p><strong>Teaching point for the debrief:</strong> users routinely bury the important detail behind a reassurance — "otherwise fine," "no big deal," "I think that's just the desk." Train yourself to read past the framing to the observations. Amina's message contains a complete and accurate description of a swelling battery; nothing was missing except interpretation.</p>
+<hr />
+<h2 id="general-assessment-guidance">GENERAL ASSESSMENT GUIDANCE<a class="headerlink" href="#general-assessment-guidance" title="Permanent link">&para;</a></h2>
+<h3 id="what-youre-evaluating-across-all-scenarios">What You're Evaluating Across All Scenarios<a class="headerlink" href="#what-youre-evaluating-across-all-scenarios" title="Permanent link">&para;</a></h3>
+<p><strong>1. Diagnostic Reasoning:</strong></p>
+<ul>
+<li>Do they think systematically or jump to conclusions?</li>
+<li>Do they consider multiple possibilities?</li>
+<li>Do they ask clarifying questions?</li>
+<li>Do they use context clues effectively?</li>
+</ul>
+<p><strong>2. Technical Knowledge:</strong></p>
+<ul>
+<li>Do they understand hardware components and how they fail?</li>
+<li>Do they recognize common failure patterns?</li>
+<li>Do they know when problems are related vs. independent?</li>
+</ul>
+<p><strong>3. Practical Judgment:</strong></p>
+<ul>
+<li>Do they recommend appropriate solutions for the context?</li>
+<li>Do they consider resource constraints (remote location, parts availability)?</li>
+<li>Do they know when to troubleshoot vs. escalate vs. replace?</li>
+<li>Do they think about user capability when suggesting fixes?</li>
+</ul>
+<p><strong>4. Communication:</strong></p>
+<ul>
+<li>Are their explanations clear?</li>
+<li>Would a language worker be able to follow their guidance?</li>
+<li>Do they explain their reasoning?</li>
+</ul>
+<p><strong>5. Prevention Mindset:</strong></p>
+<ul>
+<li>Do they think beyond the immediate fix?</li>
+<li>Do they identify root causes (environmental, workflow, etc.)?</li>
+<li>Do they provide actionable preventive advice?</li>
+</ul>
+<p><strong>6. Professional Judgment:</strong></p>
+<ul>
+<li>Do they understand their role as consultant vs. hands-on technician?</li>
+<li>Do they know their limitations?</li>
+<li>Do they think about data protection and work continuity?</li>
+</ul>
+<h3 id="providing-feedback">Providing Feedback<a class="headerlink" href="#providing-feedback" title="Permanent link">&para;</a></h3>
+<p><strong>For Strong Responses:</strong></p>
+<ul>
+<li>Acknowledge what they did well</li>
+<li>Point out excellent reasoning or insights</li>
+<li>Suggest minor refinements or additional considerations</li>
+<li>Example: "Your systematic approach to isolating the touchpad issue was excellent. You might also consider..."</li>
+</ul>
+<p><strong>For Adequate Responses:</strong></p>
+<ul>
+<li>Confirm what was correct</li>
+<li>Highlight what they missed or could improve</li>
+<li>Ask probing questions to develop their thinking</li>
+<li>Point them to resources or concepts to study</li>
+<li>Example: "You correctly identified overheating, but let's think about why the environmental context matters here..."</li>
+</ul>
+<p><strong>For Weak Responses:</strong></p>
+<ul>
+<li>Identify where reasoning went wrong</li>
+<li>Work through the scenario together</li>
+<li>Focus on teaching the diagnostic process, not just the "answer"</li>
+<li>Assign additional practice in areas of weakness</li>
+<li>Example: "Let's step back and apply the four-step framework to this scenario. What would you observe first?"</li>
+</ul>
+<h3 id="remember">Remember<a class="headerlink" href="#remember" title="Permanent link">&para;</a></h3>
+<p><strong>There are often multiple valid approaches:</strong></p>
+<ul>
+<li>Assess the reasoning, not whether they match your exact answer</li>
+<li>Assess the process, not just the conclusion</li>
+<li>Context matters - good consultants adapt to circumstances</li>
+<li>The goal is developing thinking skills, not memorizing troubleshooting steps</li>
+</ul>
+<p><strong>Use scenarios to identify learning needs:</strong></p>
+<ul>
+<li>Where does this learner need more practice?</li>
+<li>What concepts need reinforcement?</li>
+<li>What skills are developing well?</li>
+</ul>
+<p><strong>The mentorship continues beyond these scenarios:</strong></p>
+<ul>
+<li>These are just the starting point</li>
+<li>Real-world cases will build their expertise</li>
+<li>Document patterns you see across multiple learners to improve the course</li>
+</ul>
+<hr />
+<h2 id="scenario-difficulty-progression">SCENARIO DIFFICULTY PROGRESSION<a class="headerlink" href="#scenario-difficulty-progression" title="Permanent link">&para;</a></h2>
+<h3 id="foundational-f1-f3">Foundational (F1-F3)<a class="headerlink" href="#foundational-f1-f3" title="Permanent link">&para;</a></h3>
+<p><strong>What they test:</strong></p>
+<ul>
+<li>Basic component knowledge</li>
+<li>Simple cause-and-effect reasoning</li>
+<li>Ability to ask diagnostic questions</li>
+<li>Environmental awareness</li>
+</ul>
+<p><strong>Expected skill level:</strong></p>
+<ul>
+<li>Just completed Module 1-2</li>
+<li>Can identify major components</li>
+<li>Understands basic failure patterns</li>
+<li>Beginning to apply systematic thinking</li>
+</ul>
+<h3 id="intermediate-i1-i3">Intermediate (I1-I3)<a class="headerlink" href="#intermediate-i1-i3" title="Permanent link">&para;</a></h3>
+<p><strong>What they test:</strong></p>
+<ul>
+<li>Systematic diagnostic process</li>
+<li>Considering multiple possibilities</li>
+<li>Prioritizing tests</li>
+<li>Remote communication skills</li>
+</ul>
+<p><strong>Expected skill level:</strong></p>
+<ul>
+<li>Completed Module 2</li>
+<li>Comfortable with diagnostic framework</li>
+<li>Recognizes common patterns</li>
+<li>Can design test sequences</li>
+</ul>
+<h3 id="complex-c1-c5">Complex (C1-C5)<a class="headerlink" href="#complex-c1-c5" title="Permanent link">&para;</a></h3>
+<p><strong>What they test:</strong></p>
+<ul>
+<li>Decision-making under constraints</li>
+<li>Risk assessment</li>
+<li>Systems thinking</li>
+<li>Professional judgment</li>
+<li>Handling ambiguity</li>
+</ul>
+<p><strong>Expected skill level:</strong></p>
+<ul>
+<li>Completed all modules (C4 and C5 assume Module 4)</li>
+<li>Ready for real consulting work</li>
+<li>Can handle uncertainty</li>
+<li>Thinks strategically</li>
+</ul>
+<hr />
+<h2 id="common-learner-challenges">COMMON LEARNER CHALLENGES<a class="headerlink" href="#common-learner-challenges" title="Permanent link">&para;</a></h2>
+<h3 id="challenge-1-jumping-to-conclusions">Challenge 1: Jumping to Conclusions<a class="headerlink" href="#challenge-1-jumping-to-conclusions" title="Permanent link">&para;</a></h3>
+<p><strong>Symptom:</strong> Learner immediately identifies one cause without considering alternatives</p>
+<p><strong>Intervention:</strong></p>
+<ul>
+<li>Ask: "What else could cause these symptoms?"</li>
+<li>Emphasize the Isolate step of framework</li>
+<li>Practice generating multiple hypotheses</li>
+</ul>
+<h3 id="challenge-2-over-reliance-on-hardware-solutions">Challenge 2: Over-reliance on Hardware Solutions<a class="headerlink" href="#challenge-2-over-reliance-on-hardware-solutions" title="Permanent link">&para;</a></h3>
+<p><strong>Symptom:</strong> Always recommends replacement or complex repairs</p>
+<p><strong>Intervention:</strong></p>
+<ul>
+<li>Discuss cost-benefit and resource constraints</li>
+<li>Practice identifying simple fixes and workarounds</li>
+<li>Emphasize context-appropriate solutions</li>
+</ul>
+<h3 id="challenge-3-missing-environmental-clues">Challenge 3: Missing Environmental Clues<a class="headerlink" href="#challenge-3-missing-environmental-clues" title="Permanent link">&para;</a></h3>
+<p><strong>Symptom:</strong> Doesn't connect symptoms to environment (heat, dust, humidity, power)</p>
+<p><strong>Intervention:</strong></p>
+<ul>
+<li>Review Module 1 Section 1.4</li>
+<li>Practice identifying environmental factors in scenarios</li>
+<li>Ask: "What does the context tell us?"</li>
+</ul>
+<h3 id="challenge-4-poor-remote-communication">Challenge 4: Poor Remote Communication<a class="headerlink" href="#challenge-4-poor-remote-communication" title="Permanent link">&para;</a></h3>
+<p><strong>Symptom:</strong> Instructions are vague or assume too much user knowledge</p>
+<p><strong>Intervention:</strong></p>
+<ul>
+<li>Practice writing step-by-step instructions</li>
+<li>Review Module 2 Section 2.4</li>
+<li>Role-play remote support scenarios</li>
+</ul>
+<h3 id="challenge-5-no-prevention-focus">Challenge 5: No Prevention Focus<a class="headerlink" href="#challenge-5-no-prevention-focus" title="Permanent link">&para;</a></h3>
+<p><strong>Symptom:</strong> Only addresses immediate problem, no preventive advice</p>
+<p><strong>Intervention:</strong></p>
+<ul>
+<li>Ask: "How could this have been prevented?"</li>
+<li>Emphasize consultant role includes prevention</li>
+<li>Review real-world cost of recurring problems</li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+    
+      
+      <nav class="md-footer__inner md-grid" aria-label="Footer" >
+        
+          
+          <a href="../05-scenario-bank/" class="md-footer__link md-footer__link--prev" aria-label="Previous: SCENARIOS BANK FOR ASSESSMENT">
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+            </div>
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Previous
+              </span>
+              <div class="md-ellipsis">
+                SCENARIOS BANK FOR ASSESSMENT
+              </div>
+            </div>
+          </a>
+        
+        
+          
+          <a href="../07-quiz/" class="md-footer__link md-footer__link--next" aria-label="Next: Assessment Quiz">
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Next
+              </span>
+              <div class="md-ellipsis">
+                Assessment Quiz
+              </div>
+            </div>
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11z"/></svg>
+            </div>
+          </a>
+        
+      </nav>
+    
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["navigation.sections", "navigation.top", "navigation.footer", "toc.follow", "search.suggest", "search.highlight", "content.action.edit", "content.code.copy"], "search": "../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.d7400e89.min.js"></script>
+      
+    
+  </body>
+</html>

@@ -1,0 +1,261 @@
+<p>
+  <strong>Target Audience:</strong> Trainee Language Technology Consultants<br>
+  <strong>Duration:</strong> 60 minutes<br>
+  <strong>Level:</strong> With Assistance<br>
+  <strong>Framework:</strong> Learning That Lasts (Connect, Content, Challenge, Change)
+</p>
+
+<div style="border: 1px solid #d0d0d0; border-radius: 6px; padding: 16px 20px; margin: 16px 0; background-color: #fafafa;">
+  <h3 style="margin-top: 0;">Learning Objectives</h3>
+  <p>By the end of this lesson you will be able to:</p>
+  <ul>
+    <li>Explain what the Quotation types tab controls and why it is separate from the Quote marks tab.</li>
+    <li>Configure each of the seven quotation type settings for a given language's conventions.</li>
+    <li>Distinguish between recommended settings and custom settings.</li>
+  </ul>
+</div>
+
+<p>The Quote marks tab from Lesson 2 tells Paratext <em>which</em> characters are quote marks; it does not say <em>when</em> marks should appear. On a real project a language may mark narrator citations one way and self-quotes another. This lesson gives the check its second input &mdash; the rules that decide, per kind of speech, whether marks are expected &mdash; so it stops flagging correct text and starts catching real omissions.</p>
+
+<div style="background-color: #e3f2fd; border-left: 4px solid #2196f3; padding: 12px 16px; margin: 16px 0;">
+  <p style="margin: 0;"><strong>INFO</strong> This lesson uses the <code>tamba</code> fictional project. See the course introduction for its quotation conventions. You should have completed Lesson 2's Quote marks configuration on Tamba before starting here.</p>
+</div>
+
+<hr style="border: 2px solid black;">
+
+<p><img src="/files/7780768/connect.png" alt="connect" style="width: 144px; height: 194px;"></p>
+
+<p>You have told Paratext which characters are quote marks. But knowing the characters is not the same as knowing <em>when they should be there</em>.</p>
+
+<p><strong>&#9999;&#65039; Reflection.</strong> Think about the language you support (or Scripture in a language you know well):</p>
+
+<ul>
+  <li>When the narrator quotes the Old Testament, does that citation get dialogue quote marks, or is it left as plain text?</li>
+  <li>When the text reports speech indirectly &mdash; "He said that the road was long" &mdash; should quote marks appear at all?</li>
+  <li>If a checker flagged <em>every</em> indirect-speech verse as "missing quotation mark," would that be the translation's fault or the check's setup?</li>
+</ul>
+
+<p>Those are exactly the distinctions the Quotation types tab exists to encode. Hold your answers.</p>
+
+<hr style="border: 2px solid black;">
+
+<p><img src="/files/7780768/content.png" alt="content" style="width: 167px; height: 194px;"></p>
+
+<p><em>This is the second half of configuring the check for the <strong>Translation Tools</strong> competency. Lesson 2 was about characters; this lesson is about expectations. Getting the type settings right here eliminates whole categories of false positives before you ever begin triage in Lesson 4.</em></p>
+
+<p>The <strong>Quotation types</strong> tab controls whether Paratext <em>expects</em> quotation marks for each semantic category of speech. This is independent of <em>which characters</em> are used (that is the Quote marks tab's job). The Quotation types tab answers: for this type of speech, should marks always appear, never appear, or is either acceptable?</p>
+
+<p>Navigate to: &#9776; &gt; Project settings &gt; Quotation Rules &gt; <strong>Quotation types</strong> tab.</p>
+
+<p><img src="Images/ss-L289-quotation-types-tab.png" alt="The Quotation types tab showing the seven type rows, each with a drop-down selector, and the Recommended/Custom settings controls at the top." style="max-width: 100%;"></p>
+
+<h3>Enabling the check (administrator only)</h3>
+
+<p>At the top of the tab is the checkbox <strong>Enable the Quotation types check in Run basic checks</strong>. Only a project administrator can check this box &mdash; the status bar confirms: "Only a project administrator can enable this tab." Any user can configure the radio buttons and drop-downs below; it is only the enable checkbox that requires administrator access. If you are not an administrator, configure the settings in this lesson, then ask your project administrator to check the enable box.</p>
+
+<p><strong>WARNING:</strong> The Quotation types check only checks first-level quotes in non-Deuterocanonical books.</p>
+
+<h3>The seven quotation types</h3>
+
+<p>The tab lists seven types. Each type has a <strong>drop-down</strong> with three active options (plus the default):</p>
+
+<ul>
+  <li><strong>Use quote marks</strong> &mdash; Paratext expects marks to be present; missing marks are flagged as errors.</li>
+  <li><strong>Never use quote marks</strong> &mdash; Paratext expects no marks; unexpected marks are flagged as errors.</li>
+  <li><strong>Quote marks are optional</strong> &mdash; either is acceptable; the check does not flag errors for this type.</li>
+</ul>
+
+<p>A count in parentheses appears next to each type name showing how many occurrences of that type are in your project scope &mdash; useful for gauging how much a given setting will affect your results.</p>
+
+<p><strong>NOTE:</strong> Even if all types are set to Optional, quotes that do not correspond to any recognized quotation type will still be reported.</p>
+
+<table border="1" style="border-collapse: collapse;">
+  <tr><th style="padding: 6px 12px;">Type</th><th style="padding: 6px 12px;">Meaning</th></tr>
+  <tr><td style="padding: 6px 12px;">Normal</td><td style="padding: 6px 12px;">Direct speech between characters in the narrative</td></tr>
+  <tr><td style="padding: 6px 12px;">Quotation from another source</td><td style="padding: 6px 12px;">A narrator or character quotes scripture, another text, or a source outside the narrative</td></tr>
+  <tr><td style="padding: 6px 12px;">Self quote</td><td style="padding: 6px 12px;">A character quotes their own earlier words</td></tr>
+  <tr><td style="padding: 6px 12px;">Continued quotation</td><td style="padding: 6px 12px;">A speech that continues across a paragraph break using a continuation convention</td></tr>
+  <tr><td style="padding: 6px 12px;">Potential</td><td style="padding: 6px 12px;">Paratext identifies this as a possible quotation but cannot determine the type</td></tr>
+  <tr><td style="padding: 6px 12px;">Indirect</td><td style="padding: 6px 12px;">Reported speech: "He said that the road was long" (no direct marks in the source)</td></tr>
+  <tr><td style="padding: 6px 12px;">Hypothetical</td><td style="padding: 6px 12px;">Speech in a conditional or hypothetical frame: "If I were king, I would say&hellip;"</td></tr>
+</table>
+
+<h3>Recommended settings</h3>
+
+<p>When you first open the Quotation types tab, Paratext offers <strong>Recommended settings</strong>. These are sensible defaults for most translations:</p>
+
+<table border="1" style="border-collapse: collapse;">
+  <tr><th style="padding: 6px 12px;">Type</th><th style="padding: 6px 12px;">Recommended setting</th></tr>
+  <tr><td style="padding: 6px 12px;">Normal</td><td style="padding: 6px 12px;">Use quote marks</td></tr>
+  <tr><td style="padding: 6px 12px;">Quotation from another source</td><td style="padding: 6px 12px;">Use quote marks</td></tr>
+  <tr><td style="padding: 6px 12px;">Self quote</td><td style="padding: 6px 12px;">Use quote marks</td></tr>
+  <tr><td style="padding: 6px 12px;">Continued quotation</td><td style="padding: 6px 12px;">Never use quote marks</td></tr>
+  <tr><td style="padding: 6px 12px;">Potential</td><td style="padding: 6px 12px;">Quote marks are optional</td></tr>
+  <tr><td style="padding: 6px 12px;">Indirect</td><td style="padding: 6px 12px;">Quote marks are optional</td></tr>
+  <tr><td style="padding: 6px 12px;">Hypothetical</td><td style="padding: 6px 12px;">Never use quote marks</td></tr>
+</table>
+
+<p>If your language follows these conventions, select <strong>Use recommended settings</strong> and you are done. If your language diverges, select <strong>Custom settings</strong> and adjust each type's drop-down individually.</p>
+
+<div style="background-color: #f5f5f5; border-left: 4px solid #9e9e9e; padding: 12px 16px; margin: 16px 0;">
+  <p style="margin: 0;"><strong>NOTE</strong> The values Paratext pre-fills under "Use recommended settings" are set by Paratext &mdash; verify what appears in your version before relying on the table above as the exact recommended defaults. (The table above reflects Paratext 9.5 defaults confirmed on a built <code>tamba</code> project; earlier drafts of this lesson had Quotation from another source and Indirect backwards &mdash; both actually default to a "marks expected/optional" leaning rather than "never," which is why Tamba's Exercise 3.2 customization list below touches more rows than you might expect.)</p>
+</div>
+
+<p><strong>TIP:</strong> Complete the settings on both the Quote marks tab and the Quotation types tab before clicking <strong>OK</strong> &mdash; the OK button saves all changes from both tabs at once.</p>
+
+<p>If another project in your organization uses the same quotation type conventions, click <strong>Copy quotation type settings...</strong> at the bottom of the dialog to import that project's settings rather than configuring each drop-down manually.</p>
+
+<p><strong>NOTE:</strong> A dividing line in the dialog separates the first three types (Normal, Quotation from another source, Self quote) from the lower four (Continued quotation, Potential, Indirect, Hypothetical). The upper group covers standard direct speech; the lower group covers special speech categories.</p>
+
+<div style="border: 1px solid #d0d0d0; border-radius: 6px; padding: 16px 20px; margin: 16px 0; background-color: #fafafa;">
+  <h3 style="margin-top: 0;">Key Takeaways</h3>
+  <ul>
+    <li>The Quotation types tab controls whether Paratext <em>expects</em> marks for each category of speech &mdash; separate from, and complementary to, the character configuration on the Quote marks tab.</li>
+    <li>Use recommended settings as a starting point; switch to Custom settings only when the defaults produce incorrect results.</li>
+    <li>Configuring types correctly reduces triage work in Lesson 4 by eliminating whole categories of expected exceptions before the check runs.</li>
+    <li>Only a project administrator can enable the check &mdash; if you are not one, configure the settings and ask an administrator to enable it.</li>
+  </ul>
+</div>
+
+<hr style="border: 2px solid black;">
+
+<p><img src="/files/7780768/challenge.png" alt="challenge" style="width: 142px; height: 194px;"></p>
+
+<p>You are configuring the Tamba project's quotation types after a working session with the translation team. Each exercise produces settings a mentor can check against Tamba's conventions.</p>
+
+<h3>Exercise 3.1 &mdash; Read Tamba's current quotation types</h3>
+
+<p>Open the Tamba project and navigate to &#9776; &gt; Project settings &gt; Quotation Rules &gt; Quotation types tab.</p>
+
+<p><strong>&#9999;&#65039;</strong> Before changing anything, record the current setting for each type:</p>
+
+<table border="1" style="border-collapse: collapse;">
+  <tr><th style="padding: 6px 12px;">Type</th><th style="padding: 6px 12px;">Current setting</th></tr>
+  <tr><td style="padding: 6px 12px;">Normal</td><td style="padding: 6px 12px;">?</td></tr>
+  <tr><td style="padding: 6px 12px;">Quotation from another source</td><td style="padding: 6px 12px;">?</td></tr>
+  <tr><td style="padding: 6px 12px;">Self quote</td><td style="padding: 6px 12px;">?</td></tr>
+  <tr><td style="padding: 6px 12px;">Continued quotation</td><td style="padding: 6px 12px;">?</td></tr>
+  <tr><td style="padding: 6px 12px;">Potential</td><td style="padding: 6px 12px;">?</td></tr>
+  <tr><td style="padding: 6px 12px;">Indirect</td><td style="padding: 6px 12px;">?</td></tr>
+  <tr><td style="padding: 6px 12px;">Hypothetical</td><td style="padding: 6px 12px;">?</td></tr>
+</table>
+
+<p>Tamba's settings should match the recommended defaults above. Confirm this before moving on.</p>
+
+<h3>Exercise 3.2 &mdash; Customize quotation types for Tamba</h3>
+
+<p>After reviewing Tamba's text with the translation team, you have determined the following four things:</p>
+
+<ol>
+  <li>Tamba does not mark narrator scripture citations with quote marks &mdash; these appear as plain narrative text.</li>
+  <li>Tamba's First level uses a Quote Continuer at new paragraph: a long First level speech repeats the opening mark &ldquo; at the head of each continued paragraph rather than closing and reopening. (Second and Third level have no continuer &mdash; those close and reopen fully instead, so they never produce a "Continued quotation" instance.)</li>
+  <li>When a character quotes their own earlier words (a self-quote), Tamba treats it the same as any other direct speech: it <strong>must</strong> be marked with quotation marks.</li>
+  <li>Tamba never marks reported/indirect speech (e.g. "He told them that the harvest was near") &mdash; no quote marks appear at all.</li>
+</ol>
+
+<p><strong>Step 1</strong> &mdash; Check the current recommended settings against items 1, 2, and 4. None of the three match Tamba's conventions:</p>
+
+<ul>
+  <li>Quotation from another source = <strong>Use quote marks</strong> by default &mdash; Tamba doesn't mark narrator citations, so this must change to <em>Quote marks are optional</em> (or the check will flag every unmarked citation, including Luke 4:18, as a missing quote).</li>
+  <li>Continued quotation = <strong>Never use quote marks</strong> by default &mdash; Tamba's First level continuer means a mark (&ldquo;) is expected at the head of every continued paragraph; "Never use quote marks" would flag that expected continuer as an error. This must change to <em>Use quote marks</em>.</li>
+  <li>Indirect = <strong>Quote marks are optional</strong> by default &mdash; that wouldn't flag a translator who mistakenly adds marks to reported speech. Since Tamba's convention is that indirect speech is <em>never</em> marked, set this to <em>Never use quote marks</em> so a stray mark there gets caught.</li>
+</ul>
+
+<p><strong>Step 2</strong> &mdash; Check the current recommended setting for <strong>Self quote</strong>. Unlike the other three, Self quote already defaults to <strong>Use quote marks</strong> &mdash; which is exactly what Tamba needs (item 3). No change required here; confirm it and move on.</p>
+
+<p>Click <strong>Custom settings</strong> at the top of the tab. This switches all drop-downs to editable mode. Change <strong>Quotation from another source</strong> from <em>Use quote marks</em> to <strong>Quote marks are optional</strong>, change <strong>Continued quotation</strong> from <em>Never use quote marks</em> to <strong>Use quote marks</strong>, and change <strong>Indirect</strong> from <em>Quote marks are optional</em> to <strong>Never use quote marks</strong>. Leave <strong>Self quote</strong> at <em>Use quote marks</em> &mdash; it was already correct.</p>
+
+<p>The correct final settings for Tamba:</p>
+
+<table border="1" style="border-collapse: collapse;">
+  <tr><th style="padding: 6px 12px;">Type</th><th style="padding: 6px 12px;">Correct setting for Tamba</th><th style="padding: 6px 12px;">Changed from default?</th><th style="padding: 6px 12px;">Reason</th></tr>
+  <tr><td style="padding: 6px 12px;">Normal</td><td style="padding: 6px 12px;">Use quote marks</td><td style="padding: 6px 12px;">No</td><td style="padding: 6px 12px;">Tamba marks all direct speech</td></tr>
+  <tr><td style="padding: 6px 12px;">Quotation from another source</td><td style="padding: 6px 12px;"><strong>Quote marks are optional</strong></td><td style="padding: 6px 12px;">Yes &mdash; default is Use quote marks</td><td style="padding: 6px 12px;">Narrator scripture citations are not marked</td></tr>
+  <tr><td style="padding: 6px 12px;">Self quote</td><td style="padding: 6px 12px;">Use quote marks</td><td style="padding: 6px 12px;">No &mdash; already the default</td><td style="padding: 6px 12px;">Tamba treats self-quotes the same as Normal speech</td></tr>
+  <tr><td style="padding: 6px 12px;">Continued quotation</td><td style="padding: 6px 12px;"><strong>Use quote marks</strong></td><td style="padding: 6px 12px;">Yes &mdash; default is Never use quote marks</td><td style="padding: 6px 12px;">Tamba's First level continuer means a mark is expected at every continued paragraph</td></tr>
+  <tr><td style="padding: 6px 12px;">Potential</td><td style="padding: 6px 12px;">Quote marks are optional</td><td style="padding: 6px 12px;">No</td><td style="padding: 6px 12px;">Uncertain cases should not generate errors</td></tr>
+  <tr><td style="padding: 6px 12px;">Indirect</td><td style="padding: 6px 12px;"><strong>Never use quote marks</strong></td><td style="padding: 6px 12px;">Yes &mdash; default is Quote marks are optional</td><td style="padding: 6px 12px;">Reported speech is not marked</td></tr>
+  <tr><td style="padding: 6px 12px;">Hypothetical</td><td style="padding: 6px 12px;">Never use quote marks</td><td style="padding: 6px 12px;">No</td><td style="padding: 6px 12px;">Hypothetical speech is not marked</td></tr>
+</table>
+
+<div style="background-color: #fff8e1; border-left: 4px solid #ffc107; padding: 12px 16px; margin: 16px 0;">
+  <p style="margin: 0;"><strong>WARNING</strong> Before you re-run: the Quotation types check itself only runs if a project administrator has ticked <strong>Enable the Quotation types check in Run basic checks</strong> (see the Content section above). Exercise 1.1 deliberately left this unticked. If it is still unticked, ask your administrator to enable it now &mdash; none of the settings above will affect the check results until they do.</p>
+</div>
+
+<p><strong>Check your work:</strong></p>
+
+<ul>
+  <li>Save and re-run the check. Phase A's self-quotes are already correctly marked, so leaving Self quote at its default produces no <em>new</em> flags on <code>tamba</code>. (If a self-quote were missing its marks, this setting is what would catch it &mdash; that's exactly the behavior Exercise 4.1 exercises in Lesson 4.)</li>
+  <li>Confirm that Luke 4:18 (narrator Isaiah citation) is not flagged, now that Quotation from another source = Optional means no marks are required there.</li>
+  <li>Check a verse with indirect speech and confirm it is not flagged, now that Indirect = Never use quote marks matches Tamba's convention of leaving reported speech unmarked. Then confirm that a <em>stray</em> mark deliberately added to an indirect-speech verse (try it on a scratch copy) <em>is</em> flagged &mdash; that's the difference Optional wouldn't have caught.</li>
+  <li>Confirm that Matthew 5:4&ndash;7:27 (every paragraph reopening with the First level continuer &ldquo; as the sermon runs on) is <em>not</em> flagged, now that Continued quotation = Use quote marks recognizes the continuer as expected rather than treating it as a stray mark.</li>
+</ul>
+
+<p><strong>&#9999;&#65039; Produce this (a mentor will review it).</strong> Write one sentence per type explaining <em>why</em> Tamba diverges from (or keeps) the recommended default &mdash; three diverge (Quotation from another source, Continued quotation, Indirect), one keeps the default (Self quote). A mentor will compare your final settings table to Tamba's conventions.</p>
+
+<hr style="border: 2px solid black;">
+
+<p><img src="/files/7780768/change.png" alt="change" style="width: 145px; height: 194px;"></p>
+
+<p><strong>Self-assessment &mdash; can you explain it to a colleague?</strong></p>
+
+<div class="ui-flipbox ui-component" data-widget-type="flipbox" data-shape="square">
+<div class="flipbox-container" data-widget-part="flipbox-container" data-valign="center" style="height: 172px;">
+<div class="flipbox-inner">
+<div class="flipbox-front">
+<div class="flipbox-content" data-max-chars="250">
+<p><strong>Question 1</strong></p>
+<p>A language never uses dialogue quote marks for indirect speech ("He said that the road was long"). Which quotation type covers this, and what setting is correct?</p>
+</div>
+</div>
+<div class="flipbox-back">
+<div class="flipbox-content" data-max-chars="250">
+<p><strong>Answer</strong></p>
+<p>Indirect &mdash; set it to Never use quote marks: the check reports an error if marks appear unexpectedly and stays quiet when they are absent.</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<div class="ui-flipbox ui-component" data-widget-type="flipbox" data-shape="square">
+<div class="flipbox-container" data-widget-part="flipbox-container" data-valign="center" style="height: 172px;">
+<div class="flipbox-inner">
+<div class="flipbox-front">
+<div class="flipbox-content" data-max-chars="250">
+<p><strong>Question 2</strong></p>
+<p>Recommended settings have Continued quotation = Never use quote marks. Your language repeats an opening mark at the start of each continued paragraph. Does this conflict?</p>
+</div>
+</div>
+<div class="flipbox-back">
+<div class="flipbox-content" data-max-chars="250">
+<p><strong>Answer</strong></p>
+<p>Yes &mdash; "Never" expects no marks at a continued paragraph, so the repeated opening mark would be flagged. Change Continued quotation to Use quote marks (or Optional, if the continuer is used inconsistently).</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<div class="ui-flipbox ui-component" data-widget-type="flipbox" data-shape="square">
+<div class="flipbox-container" data-widget-part="flipbox-container" data-valign="center" style="height: 172px;">
+<div class="flipbox-inner">
+<div class="flipbox-front">
+<div class="flipbox-content" data-max-chars="250">
+<p><strong>Question 3</strong></p>
+<p>A result appears on a narrator OT citation verse. "Quotation from another source" is set to Use quote marks. Real error or configuration issue &mdash; and what do you do?</p>
+</div>
+</div>
+<div class="flipbox-back">
+<div class="flipbox-content" data-max-chars="250">
+<p><strong>Answer</strong></p>
+<p>A configuration issue &mdash; if the language doesn't mark narrator citations, change Quotation from another source to Quote marks are optional and re-run. Fix the configuration, never edit correct text.</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<p><strong>&#9999;&#65039; Take it to your context.</strong> For one real language you support, fill in the seven-type table with the setting you'd choose for each, and flag any type where the language diverges from Paratext's recommended default.</p>
+
+<p><strong>Next step.</strong> You have now given the check both of its inputs &mdash; characters (Lesson 2) and expectations (this lesson). In Lesson 4 you put a configured project to work: reading real results, telling real errors from configuration problems, and clearing the check to zero.</p>

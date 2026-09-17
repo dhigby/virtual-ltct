@@ -1,0 +1,1570 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Draft course package under review -- not published material.">
+      
+      
+      
+        <link rel="canonical" href="https://competencies.languagetechnology.org/review/coretech-computer-hardware/00-design/">
+      
+      
+        <link rel="prev" href="../07-quiz/">
+      
+      
+        <link rel="next" href="../consultant-triage-card/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../assets/favicon.svg">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+    
+    
+      
+        <title>Course Design Document - CoreTech: Computer Hardware</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.ec1eaa64.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Inter:300,300i,400,400i,700,700i%7CJetBrains+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Inter";--md-code-font:"JetBrains Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../stylesheets/extra.css">
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  <meta name="robots" content="noindex, nofollow">
+
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="custom" data-md-color-accent="custom">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#course-design-document" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+        <aside class="md-banner">
+          <div class="md-banner__inner md-grid md-typeset">
+            
+            
+  <strong>Draft under review.</strong>
+  Not published material, and not part of the LT Consultant competency framework.
+  Built from <code>main</code>.
+
+          </div>
+          
+        </aside>
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href=".." title="CoreTech: Computer Hardware" class="md-header__button md-logo" aria-label="CoreTech: Computer Hardware" data-md-component="logo">
+      
+  <img src="../assets/logo.svg" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            CoreTech: Computer Hardware
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Course Design Document
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="custom" data-md-color-accent="custom"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m17.75 4.09-2.53 1.94.91 3.06-2.63-1.81-2.63 1.81.91-3.06-2.53-1.94L12.44 4l1.06-3 1.06 3zm3.5 6.91-1.64 1.25.59 1.98-1.7-1.17-1.7 1.17.59-1.98L15.75 11l2.06-.05L18.5 9l.69 1.95zm-2.28 4.95c.83-.08 1.72 1.1 1.19 1.85-.32.45-.66.87-1.08 1.27C15.17 23 8.84 23 4.94 19.07c-3.91-3.9-3.91-10.24 0-14.14.4-.4.82-.76 1.27-1.08.75-.53 1.93.36 1.85 1.19-.27 2.86.69 5.83 2.89 8.02a9.96 9.96 0 0 0 8.02 2.89m-1.64 2.02a12.08 12.08 0 0 1-7.8-3.47c-2.17-2.19-3.33-5-3.49-7.82-2.81 3.14-2.7 7.96.31 10.98 3.02 3.01 7.84 3.12 10.98.31"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="custom" data-md-color-accent="custom"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0-7 2.39 3.42C13.65 5.15 12.84 5 12 5s-1.65.15-2.39.42zM3.34 7l4.16-.35A7.2 7.2 0 0 0 5.94 8.5c-.44.74-.69 1.5-.83 2.29zm.02 10 1.76-3.77a7.131 7.131 0 0 0 2.38 4.14zM20.65 7l-1.77 3.79a7.02 7.02 0 0 0-2.38-4.15zm-.01 10-4.14.36c.59-.51 1.12-1.14 1.54-1.86.42-.73.69-1.5.83-2.29zM12 22l-2.41-3.44c.74.27 1.55.44 2.41.44.82 0 1.63-.17 2.37-.44z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/dhigby/virtual-ltct" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    dhigby/virtual-ltct
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="CoreTech: Computer Hardware" class="md-nav__button md-logo" aria-label="CoreTech: Computer Hardware" data-md-component="logo">
+      
+  <img src="../assets/logo.svg" alt="logo">
+
+    </a>
+    CoreTech: Computer Hardware
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/dhigby/virtual-ltct" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    dhigby/virtual-ltct
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    CoreTech: Computer Hardware
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lessons
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Lessons
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../01-module-1/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    MODULE 1: UNDERSTANDING LAPTOP SYSTEMS
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../02-module-2/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    MODULE 2: DIAGNOSING HARDWARE PROBLEMS
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../03-module-3/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    MODULE 3: PRACTICAL DECISIONS AND APPLICATION
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../04-module-4/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    MODULE 4: POWER, SAFETY & DATA PROTECTION IN THE FIELD
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Facilitator materials
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Facilitator materials
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../05-scenario-bank/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    SCENARIOS BANK FOR ASSESSMENT
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../06-mentor-guide/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    MENTOR GUIDE
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../07-quiz/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Assessment Quiz
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Reference
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Reference
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Course Design Document
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Course Design Document
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#course-overview" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Course overview
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#why-this-course-is-in-the-pipeline" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Why this course is in the pipeline
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#learning-objectives" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Learning objectives
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#module-breakdown" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Module breakdown
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#assessment-plan" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Assessment plan
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#sme-knowledge-notes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        SME knowledge notes
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="SME knowledge notes">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#corrections-to-delivered-content" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Corrections to delivered content
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#new-material-the-field-context-gaps" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        New material (the field-context gaps)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#deliberately-out-of-scope" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Deliberately out of scope
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#notes-for-the-human-sme-at-stage-5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Notes for the human SME at stage 5
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#how-this-document-works" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        How this document works
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../consultant-triage-card/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Consultant's Triage Card
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../how-to-review/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    How to review this
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#course-overview" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Course overview
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#why-this-course-is-in-the-pipeline" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Why this course is in the pipeline
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#learning-objectives" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Learning objectives
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#module-breakdown" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Module breakdown
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#assessment-plan" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Assessment plan
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#sme-knowledge-notes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        SME knowledge notes
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="SME knowledge notes">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#corrections-to-delivered-content" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Corrections to delivered content
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#new-material-the-field-context-gaps" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        New material (the field-context gaps)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#deliberately-out-of-scope" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Deliberately out of scope
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#notes-for-the-human-sme-at-stage-5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Notes for the human SME at stage 5
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#how-this-document-works" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        How this document works
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+    <a href="https://github.com/dhigby/virtual-ltct/edit/main/modules/coretech-computer-hardware/00-design.md" title="Edit this page" class="md-content__button md-icon" rel="edit">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M10 20H6V4h7v5h5v3.1l2-2V8l-6-6H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h4zm10.2-7c.1 0 .3.1.4.2l1.3 1.3c.2.2.2.6 0 .8l-1 1-2.1-2.1 1-1c.1-.1.2-.2.4-.2m0 3.9L14.1 23H12v-2.1l6.1-6.1z"/></svg>
+    </a>
+  
+  
+
+
+<h1 id="course-design-document">Course Design Document<a class="headerlink" href="#course-design-document" title="Permanent link">&para;</a></h1>
+<h2 id="course-overview">Course overview<a class="headerlink" href="#course-overview" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Item</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Title</strong></td>
+<td>CoreTech: Computer Hardware</td>
+</tr>
+<tr>
+<td><strong>Competencies addressed</strong></td>
+<td>Computer Hardware</td>
+</tr>
+<tr>
+<td><strong>Target outcome level</strong></td>
+<td>2 - With Assistance</td>
+</tr>
+<tr>
+<td><strong>SME(s) consulted</strong></td>
+<td>Technical review by Claude (Opus 5) acting as hardware SME, 2026-07-28 — 18 findings, all addressed in this revision. <strong>A human SME must still sign off stage 5</strong> before this revision goes to internal review; the model-specific claims flagged below are the priority checks. Earlier AI reviews: Claude.AI (undated), Gemini (2026-03-28).</td>
+</tr>
+<tr>
+<td><strong>Design status</strong></td>
+<td>Approved by Doug Higby on 2026-07-28</td>
+</tr>
+</tbody>
+</table>
+<h2 id="why-this-course-is-in-the-pipeline">Why this course is in the pipeline<a class="headerlink" href="#why-this-course-is-in-the-pipeline" title="Permanent link">&para;</a></h2>
+<p>This course was <strong>delivered in Cypher for Business</strong> and backfilled into the repo as a faithful
+import (see <a href="https://github.com/dhigby/virtual-ltct/blob/main/process/backfill.md"><code>process/backfill.md</code></a> and <a href="https://github.com/dhigby/virtual-ltct/blob/main/BACKFILL.md"><code>BACKFILL.md</code></a>).
+Backfilled courses are grandfathered out of the full package.</p>
+<p>An SME review on 2026-07-28 found 18 technical issues, including <strong>three where following the
+content as written damages hardware or destroys data</strong>:</p>
+<ul>
+<li>CHKDSK taught as a failing-drive diagnostic (it accelerates failure and overwrites
+  recoverable data)</li>
+<li>compressed-air instructions that destroy fan bearings and pack dust into the heatsink</li>
+<li>swollen lithium batteries — the primary fire risk in hot climates — absent from the entire course</li>
+</ul>
+<p>It also found that the power-protection guidance recommends the wrong equipment for the
+dominant field failure mode (surge strips for brownout damage). Fixing these is a <strong>substantive
+revision</strong>, which under <code>process/backfill.md</code> moves the course out of the grandfathered track
+and into the 8-stage pipeline. Hence this design doc.</p>
+<p><strong>Board note:</strong> the <em>delivered</em> course remains <code>Online</code> in Cypher. This revision moves through
+the pipeline in parallel; the board status should not be walked backwards from <code>Online</code> until
+the revised version is ready to replace it at stage 8.</p>
+<h2 id="learning-objectives">Learning objectives<a class="headerlink" href="#learning-objectives" title="Permanent link">&para;</a></h2>
+<p>One row per objective. The <code>Source</code> column names the level from the
+<a href="https://github.com/dhigby/virtual-ltct/blob/main/competencies/computer-hardware.md"><code>competencies/computer-hardware.md</code></a> activity ladder
+that the objective draws from. That descriptor has a single component — <em>"Can effectively use
+and troubleshoot current and recent computer and mobile hardware"</em> — with a
+Learner → Advanced Beginner → Practitioner → Trainer ladder.</p>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>Objective</th>
+<th>Source</th>
+<th>Assessed by</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>Learner can identify the major hardware components inside a laptop and explain each one's function</td>
+<td>Learner ("identify the various hardware components of a computer and understand their function")</td>
+<td>Quiz + Module 1 Activity 1.2a/1.2b</td>
+</tr>
+<tr>
+<td>2</td>
+<td>Learner can explain how storage, RAM, CPU, cooling and power interact as a system, and use that to locate a bottleneck</td>
+<td>Learner → Advanced Beginner</td>
+<td>Quiz + Module 1 Activity 1.3</td>
+</tr>
+<tr>
+<td>3</td>
+<td>Learner can recognise how heat, dust, humidity and power quality stress hardware, and read environmental context as diagnostic evidence</td>
+<td>Learner → Advanced Beginner</td>
+<td>Quiz + Module 1 Activity 1.4a/1.4b</td>
+</tr>
+<tr>
+<td>4</td>
+<td>Learner can distinguish a hardware fault from a software fault using OS-independent tests (BIOS/UEFI, Linux live USB, external monitor)</td>
+<td>Advanced Beginner ("spend time with an IT professional while they troubleshoot")</td>
+<td>Quiz + Module 2 Activity 2.1</td>
+</tr>
+<tr>
+<td>5</td>
+<td>Learner can apply the Observe → Isolate → Test → Decide framework to turn a vague complaint into a specific, actionable diagnosis</td>
+<td>Advanced Beginner</td>
+<td>Quiz + Module 2 Activity 2.2 + all scenario submissions</td>
+</tr>
+<tr>
+<td>6</td>
+<td>Learner can recognise the six common failure patterns from symptoms, including model-specific POST signalling (beep codes vs. LED blink patterns) and serviceability limits (soldered RAM)</td>
+<td>Advanced Beginner → Practitioner</td>
+<td>Quiz + Module 2 Activity 2.3</td>
+</tr>
+<tr>
+<td>7</td>
+<td>Learner can guide a remote user through diagnostic and maintenance steps without damaging hardware</td>
+<td>Advanced Beginner → Practitioner</td>
+<td>Quiz + Module 2 Activity 2.4</td>
+</tr>
+<tr>
+<td>8</td>
+<td>Learner can identify and respond to the three field safety hazards — swollen battery, damaged adapter, burning smell — and knows that each ends troubleshooting rather than continuing it</td>
+<td>Practitioner (professional judgment)</td>
+<td>Quiz + Module 4 Activity 4.2 + scenarios C1, C5</td>
+</tr>
+<tr>
+<td>9</td>
+<td>Learner can specify appropriate power protection for a site's power profile — surge strip vs. AVR vs. line-interactive UPS — and account for generator, inverter and grounding conditions</td>
+<td>Practitioner ("recommend appropriate hardware for language program use")</td>
+<td>Quiz + Module 4 Activity 4.1 + scenario C4</td>
+</tr>
+<tr>
+<td>10</td>
+<td>Learner can protect irreplaceable data through backup discipline, encryption-key custody, and correct handling of a failing drive (image first, never CHKDSK)</td>
+<td>Practitioner</td>
+<td>Quiz + Module 4 Activity 4.3 + scenario P3 (assessed, Module 4 §4.3)</td>
+</tr>
+<tr>
+<td>11</td>
+<td>Learner can make and justify repair / escalate / replace decisions under real resource constraints, and design workarounds that keep a user working</td>
+<td>Practitioner ("troubleshoot hardware issues, and recommend appropriate hardware")</td>
+<td>Quiz + Module 3 Activity 3.1/3.2 + scenarios C1–C3</td>
+</tr>
+<tr>
+<td>12</td>
+<td>Learner can assemble a practical field toolkit — diagnostic software, physical tools, documentation templates and a contact network</td>
+<td>Practitioner → Trainer</td>
+<td>Quiz + Module 3 Activity 3.3</td>
+</tr>
+</tbody>
+</table>
+<h2 id="module-breakdown">Module breakdown<a class="headerlink" href="#module-breakdown" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>File</th>
+<th>Topic</th>
+<th>Objectives covered</th>
+<th>Estimated minutes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>01-module-1.md</code></td>
+<td>Understanding Laptop Systems (components, system interactions, environmental factors)</td>
+<td>1, 2, 3</td>
+<td>65</td>
+</tr>
+<tr>
+<td><code>02-module-2.md</code></td>
+<td>Diagnosing Hardware Problems (hardware vs. software, the four-step framework, six failure patterns, remote troubleshooting)</td>
+<td>4, 5, 6, 7</td>
+<td>85</td>
+</tr>
+<tr>
+<td><code>03-module-3.md</code></td>
+<td>Practical Decisions and Application (repair/escalate/replace, resource constraints, toolkit, complex scenarios)</td>
+<td>11, 12</td>
+<td>65</td>
+</tr>
+<tr>
+<td><code>04-module-4.md</code></td>
+<td>Power, Safety &amp; Data Protection in the Field</td>
+<td>8, 9, 10</td>
+<td>70</td>
+</tr>
+<tr>
+<td><code>05-scenario-bank.md</code></td>
+<td>15 assessment scenarios</td>
+<td>5, 8, 9, 10, 11</td>
+<td>15</td>
+</tr>
+<tr>
+<td><code>06-mentor-guide.md</code></td>
+<td>Assessment criteria and answer keys</td>
+<td>—</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>07-quiz.md</code></td>
+<td>Assessment (27 questions)</td>
+<td>1–12</td>
+<td>20</td>
+</tr>
+<tr>
+<td><code>consultant-triage-card.md</code></td>
+<td>Job aid submitted with every scenario</td>
+<td>8, 10</td>
+<td>—</td>
+</tr>
+<tr>
+<td><strong>Total learner seat time</strong></td>
+<td></td>
+<td></td>
+<td><strong>320</strong></td>
+</tr>
+</tbody>
+</table>
+<p><strong>No video script yet.</strong> It is the one remaining stage-3 artifact and is deliberately deferred
+until the human SME sign-off at stage 5, because scripting content that may still change wastes
+the effort. <code>check_course_package.py</code> reports its absence as a warning, not an error. It is a
+known gap, not an oversight.</p>
+<p>Module 4 is <strong>new in this revision</strong>. It exists because the SME review's four highest-severity
+gaps — battery swelling, power protection specification, generator/inverter/grounding, and data
+protection — form one coherent topic that Modules 1–3 had no room for without breaching the
+90-minute lesson cap. Module 2 grows to 85 minutes, which is at the practical limit; any further
+additions must split rather than overflow.</p>
+<p>The triage card is deliberately <strong>outside the <code>NN-</code> numbering</strong> so
+<code>scripts/check_course_package.py</code> does not treat a one-page job aid as a lesson and demand
+duration and phase headings from it.</p>
+<h2 id="assessment-plan">Assessment plan<a class="headerlink" href="#assessment-plan" title="Permanent link">&para;</a></h2>
+<p>A <strong>27-question quiz, 80% (22/27) to pass</strong>, covering all 12 objectives. Weighting follows
+consequence rather than page count: the safety and data-protection objectives (8, 9, 10) carry
+9 of the 27 questions despite Module 4 being one lesson of four, because those are the items
+where a wrong answer burns a laptop or loses irreplaceable language data. Objectives 11 and 12
+are only lightly sampled (one question each) because judgment-under-constraint and a produced
+reference guide are assessed properly by scenario and artifact, not by multiple choice. Several
+questions are written as <em>corrections</em> of the plausible-but-wrong answer the previous version of
+this course would have produced (CHKDSK on a clicking drive, surge strip for brownouts, beeps as
+the only POST signal) — that is intentional, since the delivered course taught those.</p>
+<p>Hands-on assessment is the 15-scenario bank, worked with a
+<a href="../consultant-triage-card/">Consultant's Triage Card</a> and submitted to a mentor. <strong>Mentor-assessed
+scenarios are F3 (Module 2), C1–C3 (Module 3), and P3, C4 and C5 (Module 4)</strong> — the mentor guide
+carries a full answer key for each of those seven. F1, F2, I1 are worked as guided practice with
+sample answers embedded in Module 2; I2 and I3 are optional extra practice; P1, P2 and P4 are a
+reserve pool. The bank carries a where-used table so nothing is silently unused.</p>
+<h2 id="sme-knowledge-notes">SME knowledge notes<a class="headerlink" href="#sme-knowledge-notes" title="Permanent link">&para;</a></h2>
+<p>Findings from the 2026-07-28 SME review, recorded here as the contract for content. Numbering
+matches the review.</p>
+<h3 id="corrections-to-delivered-content">Corrections to delivered content<a class="headerlink" href="#corrections-to-delivered-content" title="Permanent link">&para;</a></h3>
+<ol>
+<li><strong>CHKDSK is a filesystem tool, not a drive-health tool.</strong> On a mechanically failing drive
+   <code>CHKDSK /R</code> forces a full-surface pass that often finishes the drive off and overwrites
+   recoverable data. Correct order on a clicking drive: stop using it → read SMART → image the
+   whole drive → only then consider filesystem repair. CHKDSK's legitimate use is repairing
+   filesystem corruption on a <em>healthy</em> drive after power loss — keep that, relabelled.</li>
+<li><strong>Swollen batteries.</strong> Field-checkable signs: trackpad stops clicking or feels raised, bottom
+   cover bulging, laptop rocks instead of sitting flat, keyboard deck lifting, lid won't close
+   flush. Response: stop charging, stop using, do not press or puncture, never in checked
+   luggage or on aircraft, store cool and away from flammables pending disposal.</li>
+<li><strong>Compressed air destroys fans.</strong> Blasting a vent spins the fan past its rated RPM (wrecking
+   the bearing) and packs dust deeper into the heatsink fins. Hold the fan blade still with a
+   toothpick or cotton bud, or blow only against the exhaust direction. Keep the existing
+   "brush away from the openings" and "don't invert the can" advice — both correct.</li>
+<li><strong>Beep codes are obsolete on most modern laptops.</strong> Machines built since roughly 2015 largely
+   have no PC speaker and signal POST failures via <strong>LED blink patterns</strong> — Dell amber/white
+   blink counts, HP caps-lock/num-lock blinks, Lenovo power-button blinks. Teach both, and teach
+   looking the pattern up for the specific model. ⚠️ <strong>Human SME: spot-check the per-vendor
+   patterns against current vendor documentation before publication.</strong></li>
+<li><strong>Soldered RAM.</strong> Most thin-and-lights, all Apple Silicon Macs, and many XPS/Latitude/Surface
+   models have non-removable LPDDR memory. "Reseat the RAM" must be preconditioned on confirming
+   the model has SODIMM slots (Crucial system scanner or iFixit — both already cited in the
+   course).</li>
+<li><strong>85°C needs context.</strong> Modern mobile CPUs are designed to run to ~95–100°C and <strong>throttle</strong>
+   (symptom: slow) rather than shut down; true thermal shutdown is nearer 100–105°C. Sustained<blockquote>
+<p>85°C under load = a thermal problem worth fixing. Throttling (slow) and shutdown (off) are
+   different severities and the course must not blur them.</p>
+</blockquote>
+</li>
+<li><strong>Zero-RPM idle.</strong> Most modern laptops deliberately stop the fan at idle, so "fan not
+   spinning" is not evidence of failure. Load the CPU and watch RPM in HWMonitor before
+   concluding the fan is dead.</li>
+<li><strong>Dust does not cause static discharge</strong> — it is an insulator and a thermal blanket. The real
+   mechanisms are airflow blockage and, with humidity, conductive grime bridging contacts.</li>
+<li><strong>OS-independent tests are the strongest hardware/software discriminators and both are
+    free.</strong> "Can you reach the BIOS/UEFI setup screen, and does the fault happen there?" —
+    failure before any OS loads is near-conclusive for hardware. And a <strong>Linux live USB</strong>: if the
+    machine boots and runs cleanly from USB, the hardware is fine and the OS or drive is suspect.
+    Needs no internet, which matters given the course's own point about field bandwidth. Connect
+    this to the existing Ventoy mention.</li>
+</ol>
+<h3 id="new-material-the-field-context-gaps">New material (the field-context gaps)<a class="headerlink" href="#new-material-the-field-context-gaps" title="Permanent link">&para;</a></h3>
+<ol>
+<li><strong>Power protection is three different products.</strong> A MOV surge strip clamps <em>transient spikes
+   only</em> and does nothing for <strong>brownouts, sags and sustained over-voltage</strong> — which is what
+   actually kills power bricks and charging circuits on weak grids, and is exactly what the
+   Priya and Lisa scenarios describe. An <strong>AVR</strong> corrects sag/swell; a <strong>line-interactive UPS</strong>
+   adds a battery and rides through the outages the course keeps citing. Also: <strong>MOVs are
+   consumable and fail silently</strong> — in a high-surge area a surge strip is a 12–24-month
+   replaceable item, and cheap units have no end-of-life indicator. Retire the
+   "$20 surge protector prevents an $800 motherboard replacement" line; it teaches the wrong
+   purchase. Useful reframe: on a laptop the external brick is a <strong>sacrificial buffer</strong> — it
+   dies first and takes the hit for the motherboard, so a dead brick after a storm is the system
+   working as designed.</li>
+<li><strong>Generator and inverter power.</strong> Cheap <strong>modified-sine-wave inverters</strong> make bricks buzz,
+    run hot and die early; <strong>generators</strong> swing in frequency and throw load-step spikes when a
+    fridge or pump starts. Guidance: prefer pure-sine inverters, run on battery through
+    generator start/stop and changeover.</li>
+<li><strong>Ungrounded power belongs in Kenji's answer key.</strong> Two-prong outlets with no earth are
+    normal in much of the field. The resulting Y-capacitor leakage current causes the "tingle"
+    on an aluminium chassis <strong>and is a documented cause of erratic, jumpy touchpad behaviour.</strong>
+    It fits Kenji's evidence at least as well as temperature does — mornings are when the
+    machine is plugged in after charging overnight — and it is trivially testable remotely:
+    <strong>unplug and run on battery; if the cursor settles, it's the power path, not the touchpad.</strong>
+    Add as a hypothesis and as the cheap early test in the C3 mentor key.</li>
+<li><strong>The toolkit section has no tools.</strong> Physical kit is the constraint-buster for this
+    audience: <strong>Philips #00 and T5 Torx</strong> cover most laptops (pentalobe for Apple), plus thermal
+    paste, a soft brush, and a manual bulb blower. Small, cheap, shippable — which matters when
+    parts have 6–8 week lead times.</li>
+<li><strong>Repasting.</strong> "Dried thermal paste" is named as a cause and never revisited. For an old,
+    hot, out-of-warranty laptop with no parts pipeline, a $3 tube of paste is among the
+    highest-leverage interventions available and ships easily. Belongs in the
+    constant-overheating workaround.</li>
+<li><strong>Vendor charge limits</strong> implement the course's own "don't leave it plugged in 24/7 in heat"
+    advice at zero cost: Lenovo Conservation Mode, Dell Primary AC Use, ASUS 60/80% limits,
+    macOS Optimized Charging. ⚠️ <strong>Human SME: verify these setting names against current
+    vendor UIs.</strong></li>
+<li><strong>Counterfeit chargers and batteries</strong> are endemic in low-resource markets and are a leading
+    cause of both swelling and dead charging circuits. Rule: match OEM voltage, wattage and
+    connector exactly; treat an implausibly cheap "OEM" battery as counterfeit.</li>
+<li><strong>Full-disk encryption can turn a fixable fault into total data loss.</strong> If the org images
+    laptops with BitLocker/FileVault on, a drive swap or recovery is impossible without the
+    recovery key, and users routinely don't know they have one. "Do you have your recovery key?"
+    goes on the triage card beside "is the data backed up?"</li>
+<li><strong>Two data points.</strong> The existing "use internet café/library computers" suggestion is wrong
+    for the P3 scenario's irreplaceable interviews with elderly speakers — that data must never
+    touch a shared machine; say so. And SSDs deserve better than "SSD wear (less common)": they
+    fail <strong>without warning</strong> (no clicking), often going read-only or vanishing outright, and
+    <strong>unpowered SSDs stored hot lose charge retention over months to years</strong> — directly relevant
+    to archived field drives.</li>
+</ol>
+<h3 id="deliberately-out-of-scope">Deliberately out of scope<a class="headerlink" href="#deliberately-out-of-scope" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Component-level board repair, reflow, and micro-soldering — beyond the consultant role, which
+  is diagnosis and recommendation, not repair.</li>
+<li>Desktop and server hardware. The course is laptop-only, matching what language workers use.</li>
+<li>The advanced discourse of RAID, virtualisation and NAS storage.</li>
+<li>The five additions from the 2026-03-28 Gemini review are <strong>subsumed, not adopted wholesale</strong>:
+  its power-quality (§3), sensory-diagnostics (§2) and ESD/tooling (§4) points are covered by
+  SME items 4/10/13; its damaged-component photo gallery (§1) is deferred for want of licensed
+  images; its intake-form template (§5) already exists in Module 3 §3.3 and is now referenced
+  from the triage card.</li>
+</ul>
+<h3 id="notes-for-the-human-sme-at-stage-5">Notes for the human SME at stage 5<a class="headerlink" href="#notes-for-the-human-sme-at-stage-5" title="Permanent link">&para;</a></h3>
+<p>Priority checks, in order: per-vendor LED blink patterns (item 5), vendor battery
+charge-limit setting names (item 15), the 85/95/100–105°C threshold figures (item 7), and
+whether the AVR-vs-UPS recommendation matches what the organisation can actually procure and
+ship to field locations (item 4). Everything else rests on general hardware mechanisms rather
+than model-specific detail.</p>
+<hr />
+<h3 id="how-this-document-works">How this document works<a class="headerlink" href="#how-this-document-works" title="Permanent link">&para;</a></h3>
+<ol>
+<li><strong>Read</strong> the competency descriptor(s) under <code>competencies/</code> for each competency listed above. Lift your learning objectives from their observable criteria and activity ladders, not from thin air.</li>
+<li><strong>Interview the SME</strong> before drafting objectives or module breakdown. Ask: real field cases they've seen, what learners most commonly get wrong, what "good" looks like at your target outcome level, any tool-version specifics. Record answers in the SME knowledge notes section.</li>
+<li><strong>Enforce the 90-minute rule.</strong> Each numbered module file (01-, 02-, …) has a documented estimated duration, stated at the top as <code>**Estimated time:** X minutes</code>, and must not exceed 90 minutes. If your content can't fit, split it into another file rather than overflowing — update this table and the <code>module-author</code> will implement it.</li>
+<li><strong>Align objectives with assessment.</strong> Every objective in the table above must map to at least one quiz question or scenario. Every quiz question and scenario must trace back to an objective — no orphan assessments.</li>
+<li><strong>Outcome-level verb choice.</strong> Verbs follow the CBC level (see <code>outcome-levels.yaml</code>): <code>1 - Has Knowledge</code> uses recognize/explain language; <code>2 - With Assistance</code> uses perform/configure language; <code>3 - Independent</code> uses unaided-judgment language ("resolve," "recover from"); <code>4 - Expert</code> uses teaching language ("train others to," "critique"). Remember the ladder offset: objectives for level N come from the descriptor row labelled level N-1, the row that <em>reaches</em> N.</li>
+<li><strong>Hand off.</strong> Once approved, this document becomes a contract: the <code>module-author</code> and <code>quiz-writer</code> agents will draft content and assessment to fulfill it, not freelance or add unstated competencies.</li>
+</ol>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+    
+      
+      <nav class="md-footer__inner md-grid" aria-label="Footer" >
+        
+          
+          <a href="../07-quiz/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Assessment Quiz">
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+            </div>
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Previous
+              </span>
+              <div class="md-ellipsis">
+                Assessment Quiz
+              </div>
+            </div>
+          </a>
+        
+        
+          
+          <a href="../consultant-triage-card/" class="md-footer__link md-footer__link--next" aria-label="Next: Consultant&#39;s Triage Card">
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Next
+              </span>
+              <div class="md-ellipsis">
+                Consultant's Triage Card
+              </div>
+            </div>
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11z"/></svg>
+            </div>
+          </a>
+        
+      </nav>
+    
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["navigation.sections", "navigation.top", "navigation.footer", "toc.follow", "search.suggest", "search.highlight", "content.action.edit", "content.code.copy"], "search": "../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.d7400e89.min.js"></script>
+      
+    
+  </body>
+</html>

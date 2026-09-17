@@ -1,0 +1,2067 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Draft course package under review -- not published material.">
+      
+      
+      
+        <link rel="canonical" href="https://competencies.languagetechnology.org/learn/coretech-computer-hardware/02-module-2/">
+      
+      
+        <link rel="prev" href="../01-module-1/">
+      
+      
+        <link rel="next" href="../03-module-3/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../assets/favicon.svg">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+    
+    
+      
+        <title>MODULE 2: DIAGNOSING HARDWARE PROBLEMS - CoreTech: Computer Hardware</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.ec1eaa64.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Inter:300,300i,400,400i,700,700i%7CJetBrains+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Inter";--md-code-font:"JetBrains Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../stylesheets/extra.css">
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  <meta name="robots" content="noindex, nofollow">
+
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="custom" data-md-color-accent="custom">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#module-2-diagnosing-hardware-problems" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+        <aside class="md-banner">
+          <div class="md-banner__inner md-grid md-typeset">
+            
+            
+  <strong>Draft under review.</strong>
+  Not published material, and not part of the LT Consultant competency framework.
+  Built from <code>main</code>.
+
+          </div>
+          
+        </aside>
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href=".." title="CoreTech: Computer Hardware" class="md-header__button md-logo" aria-label="CoreTech: Computer Hardware" data-md-component="logo">
+      
+  <img src="../assets/logo.svg" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            CoreTech: Computer Hardware
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              MODULE 2: DIAGNOSING HARDWARE PROBLEMS
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="custom" data-md-color-accent="custom"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m17.75 4.09-2.53 1.94.91 3.06-2.63-1.81-2.63 1.81.91-3.06-2.53-1.94L12.44 4l1.06-3 1.06 3zm3.5 6.91-1.64 1.25.59 1.98-1.7-1.17-1.7 1.17.59-1.98L15.75 11l2.06-.05L18.5 9l.69 1.95zm-2.28 4.95c.83-.08 1.72 1.1 1.19 1.85-.32.45-.66.87-1.08 1.27C15.17 23 8.84 23 4.94 19.07c-3.91-3.9-3.91-10.24 0-14.14.4-.4.82-.76 1.27-1.08.75-.53 1.93.36 1.85 1.19-.27 2.86.69 5.83 2.89 8.02a9.96 9.96 0 0 0 8.02 2.89m-1.64 2.02a12.08 12.08 0 0 1-7.8-3.47c-2.17-2.19-3.33-5-3.49-7.82-2.81 3.14-2.7 7.96.31 10.98 3.02 3.01 7.84 3.12 10.98.31"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="custom" data-md-color-accent="custom"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0-7 2.39 3.42C13.65 5.15 12.84 5 12 5s-1.65.15-2.39.42zM3.34 7l4.16-.35A7.2 7.2 0 0 0 5.94 8.5c-.44.74-.69 1.5-.83 2.29zm.02 10 1.76-3.77a7.131 7.131 0 0 0 2.38 4.14zM20.65 7l-1.77 3.79a7.02 7.02 0 0 0-2.38-4.15zm-.01 10-4.14.36c.59-.51 1.12-1.14 1.54-1.86.42-.73.69-1.5.83-2.29zM12 22l-2.41-3.44c.74.27 1.55.44 2.41.44.82 0 1.63-.17 2.37-.44z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/dhigby/virtual-ltct" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    dhigby/virtual-ltct
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="CoreTech: Computer Hardware" class="md-nav__button md-logo" aria-label="CoreTech: Computer Hardware" data-md-component="logo">
+      
+  <img src="../assets/logo.svg" alt="logo">
+
+    </a>
+    CoreTech: Computer Hardware
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/dhigby/virtual-ltct" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    dhigby/virtual-ltct
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    CoreTech: Computer Hardware
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lessons
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Lessons
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../01-module-1/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    MODULE 1: UNDERSTANDING LAPTOP SYSTEMS
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    MODULE 2: DIAGNOSING HARDWARE PROBLEMS
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    MODULE 2: DIAGNOSING HARDWARE PROBLEMS
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#learning-objectives" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Learning Objectives
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#connect" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Connect
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#content" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Content
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Content">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#section-21-hardware-vs-software-making-the-distinction" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Section 2.1: Hardware vs. Software — Making the Distinction
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Section 2.1: Hardware vs. Software — Making the Distinction">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-when-does-it-happen" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. When Does It Happen?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-is-it-consistent-or-variable" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. Is It Consistent or Variable?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-does-it-respond-to-software-fixes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. Does It Respond to Software Fixes?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#4-does-it-happen-outside-the-operating-system-the-strongest-test" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. Does It Happen Outside the Operating System? (the strongest test)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#activity-21-hardware-or-software" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Activity 2.1: Hardware or Software?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#section-22-the-systematic-diagnostic-process" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Section 2.2: The Systematic Diagnostic Process
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Section 2.2: The Systematic Diagnostic Process">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#step-1-observe-gather-information" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 1: Observe (Gather Information)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-2-isolate-narrow-down-possibilities" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 2: Isolate (Narrow Down Possibilities)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-3-test-confirm-your-hypothesis" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 3: Test (Confirm Your Hypothesis)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-4-decide-recommend-action" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 4: Decide (Recommend Action)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#activity-22-apply-the-framework-miguels-scenario" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Activity 2.2: Apply the Framework — Miguel's Scenario
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#section-23-common-failure-patterns" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Section 2.3: Common Failure Patterns
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Section 2.3: Common Failure Patterns">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#pattern-1-battery-issues" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Pattern 1: Battery Issues
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pattern-2-overheating-and-thermal-shutdown" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Pattern 2: Overheating and Thermal Shutdown
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pattern-3-storage-drive-problems" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Pattern 3: Storage Drive Problems
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pattern-4-display-issues" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Pattern 4: Display Issues
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pattern-5-ram-issues" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Pattern 5: RAM Issues
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pattern-6-power-and-charging-problems" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Pattern 6: Power and Charging Problems
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#activity-23-pattern-recognition" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Activity 2.3: Pattern Recognition
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#section-24-remote-troubleshooting-skills" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Section 2.4: Remote Troubleshooting Skills
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#communication-strategies" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Communication Strategies
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#activity-24-write-remote-instructions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Activity 2.4: Write Remote Instructions
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#challenge" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Challenge
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Challenge">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#section-25-guided-practice-scenarios" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Section 2.5: Guided Practice Scenarios
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Section 2.5: Guided Practice Scenarios">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#scenario-1-the-black-screen" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Scenario 1: The Black Screen
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#scenario-2-the-intermittent-shutdown" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Scenario 2: The Intermittent Shutdown
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#practice-scenario-3-your-independent-work" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Practice Scenario 3: Your Independent Work
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#change" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Change
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Change">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#before-module-3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Before Module 3
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#what-youve-learned-in-module-2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What You've Learned in Module 2
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../03-module-3/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    MODULE 3: PRACTICAL DECISIONS AND APPLICATION
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../04-module-4/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    MODULE 4: POWER, SAFETY & DATA PROTECTION IN THE FIELD
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Practice and assessment
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Practice and assessment
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../05-scenario-bank/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    SCENARIOS BANK FOR ASSESSMENT
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../07-quiz/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Assessment Quiz
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Reference
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Reference
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../consultant-triage-card/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Consultant's Triage Card
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../how-to-review/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    How to review this
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#learning-objectives" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Learning Objectives
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#connect" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Connect
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#content" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Content
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Content">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#section-21-hardware-vs-software-making-the-distinction" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Section 2.1: Hardware vs. Software — Making the Distinction
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Section 2.1: Hardware vs. Software — Making the Distinction">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-when-does-it-happen" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. When Does It Happen?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-is-it-consistent-or-variable" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. Is It Consistent or Variable?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-does-it-respond-to-software-fixes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. Does It Respond to Software Fixes?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#4-does-it-happen-outside-the-operating-system-the-strongest-test" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. Does It Happen Outside the Operating System? (the strongest test)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#activity-21-hardware-or-software" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Activity 2.1: Hardware or Software?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#section-22-the-systematic-diagnostic-process" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Section 2.2: The Systematic Diagnostic Process
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Section 2.2: The Systematic Diagnostic Process">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#step-1-observe-gather-information" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 1: Observe (Gather Information)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-2-isolate-narrow-down-possibilities" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 2: Isolate (Narrow Down Possibilities)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-3-test-confirm-your-hypothesis" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 3: Test (Confirm Your Hypothesis)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-4-decide-recommend-action" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 4: Decide (Recommend Action)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#activity-22-apply-the-framework-miguels-scenario" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Activity 2.2: Apply the Framework — Miguel's Scenario
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#section-23-common-failure-patterns" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Section 2.3: Common Failure Patterns
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Section 2.3: Common Failure Patterns">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#pattern-1-battery-issues" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Pattern 1: Battery Issues
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pattern-2-overheating-and-thermal-shutdown" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Pattern 2: Overheating and Thermal Shutdown
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pattern-3-storage-drive-problems" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Pattern 3: Storage Drive Problems
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pattern-4-display-issues" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Pattern 4: Display Issues
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pattern-5-ram-issues" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Pattern 5: RAM Issues
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pattern-6-power-and-charging-problems" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Pattern 6: Power and Charging Problems
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#activity-23-pattern-recognition" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Activity 2.3: Pattern Recognition
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#section-24-remote-troubleshooting-skills" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Section 2.4: Remote Troubleshooting Skills
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#communication-strategies" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Communication Strategies
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#activity-24-write-remote-instructions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Activity 2.4: Write Remote Instructions
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#challenge" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Challenge
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Challenge">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#section-25-guided-practice-scenarios" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Section 2.5: Guided Practice Scenarios
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Section 2.5: Guided Practice Scenarios">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#scenario-1-the-black-screen" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Scenario 1: The Black Screen
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#scenario-2-the-intermittent-shutdown" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Scenario 2: The Intermittent Shutdown
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#practice-scenario-3-your-independent-work" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Practice Scenario 3: Your Independent Work
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#change" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Change
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Change">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#before-module-3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Before Module 3
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#what-youve-learned-in-module-2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What You've Learned in Module 2
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+    <a href="https://github.com/dhigby/virtual-ltct/edit/main/modules/coretech-computer-hardware/02-module-2.md" title="Edit this page" class="md-content__button md-icon" rel="edit">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M10 20H6V4h7v5h5v3.1l2-2V8l-6-6H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h4zm10.2-7c.1 0 .3.1.4.2l1.3 1.3c.2.2.2.6 0 .8l-1 1-2.1-2.1 1-1c.1-.1.2-.2.4-.2m0 3.9L14.1 23H12v-2.1l6.1-6.1z"/></svg>
+    </a>
+  
+  
+
+
+<h1 id="module-2-diagnosing-hardware-problems">MODULE 2: DIAGNOSING HARDWARE PROBLEMS<a class="headerlink" href="#module-2-diagnosing-hardware-problems" title="Permanent link">&para;</a></h1>
+<p><strong>Estimated time:</strong> 85 minutes
+<strong>Target Audience:</strong> Trainee Language Technology Consultants
+<strong>Format:</strong> Asynchronous self-paced learning</p>
+<h2 id="learning-objectives">Learning Objectives<a class="headerlink" href="#learning-objectives" title="Permanent link">&para;</a></h2>
+<p>By the end of this module, you will be able to:
+- Distinguish between hardware and software problems, using tests that don't depend on the operating system
+- Use a systematic diagnostic process
+- Recognise common hardware failure patterns, and know how a given laptop actually signals a startup failure
+- Guide users through diagnostic steps remotely without damaging their hardware
+- Apply diagnostic thinking to realistic scenarios</p>
+<hr />
+<h2 id="connect">Connect<a class="headerlink" href="#connect" title="Permanent link">&para;</a></h2>
+<p>In Module 1, you learned what's inside a laptop and how components interact as a system. You also met Miguel — his slow computer is waiting for a proper diagnosis. In this module you'll gain the tools to do that systematically.</p>
+<p>Before we start, think back to the Mini-Scenario from Module 1. You wrote down your initial thoughts about Miguel's computer. Take a moment to review what you wrote:
+- What did you think was causing his problem?
+- How confident were you in that guess?
+- What information did you wish you had?</p>
+<p>By the end of this module, you'll be able to answer those questions systematically — not by guessing, but by following a diagnostic process. You'll also return to Miguel's scenario with new tools and see how your initial thinking compares.</p>
+<hr />
+<h2 id="content">Content<a class="headerlink" href="#content" title="Permanent link">&para;</a></h2>
+<p><em>The diagnostic approach you'll use in this course — observe carefully, isolate the likely cause, test systematically, then decide on action — is the same underlying thinking you'll find across all courses in this program. Whether you're diagnosing an overheating laptop, a font that won't display, or an operating system problem, the mindset is the same: gather information before you act, and work methodically rather than by guesswork. In this course, we apply that thinking to computer hardware.</em></p>
+<h3 id="section-21-hardware-vs-software-making-the-distinction">Section 2.1: Hardware vs. Software — Making the Distinction<a class="headerlink" href="#section-21-hardware-vs-software-making-the-distinction" title="Permanent link">&para;</a></h3>
+<p><strong>Time:</strong> 15 minutes (includes Activity 2.1)</p>
+<p>As a consultant, one of your most important skills is quickly determining: "Is this a hardware problem or a software problem?" This determines whether you can help remotely or need to escalate, whether the issue can be fixed or requires replacement, and how urgent the situation is.</p>
+<p>Many symptoms can be caused by either hardware or software — slowness, crashes, display problems, file corruption, startup issues. So how do you tell the difference?</p>
+<h4 id="1-when-does-it-happen">1. When Does It Happen?<a class="headerlink" href="#1-when-does-it-happen" title="Permanent link">&para;</a></h4>
+<p><strong>Hardware issues:</strong> occur at specific times (when hot, when cold, when moved), happen before OS fully loads, correlate with environmental conditions, progressive (get worse over time).</p>
+<p><strong>Software issues:</strong> happen with specific programs or tasks, occur after OS has loaded, may start after software installation/update, may be intermittent but not environmentally linked.</p>
+<p><strong>Examples:</strong> computer crashes when running specific software = likely software. Computer crashes more often on hot afternoons = likely hardware (cooling).</p>
+<h4 id="2-is-it-consistent-or-variable">2. Is It Consistent or Variable?<a class="headerlink" href="#2-is-it-consistent-or-variable" title="Permanent link">&para;</a></h4>
+<p><strong>Hardware issues:</strong> usually consistent once triggered, follow patterns (always when hot, always after 20 minutes), show physical symptoms (beeps, clicking sounds, smell, heat).</p>
+<p><strong>Software issues:</strong> may be inconsistent or random, sometimes fixed by restart, no physical symptoms.</p>
+<h4 id="3-does-it-respond-to-software-fixes">3. Does It Respond to Software Fixes?<a class="headerlink" href="#3-does-it-respond-to-software-fixes" title="Permanent link">&para;</a></h4>
+<p><strong>Hardware issues:</strong> don't improve with software troubleshooting, reinstalling programs doesn't help, system restore doesn't fix it, Safe Mode doesn't change behaviour.</p>
+<p><strong>Software issues:</strong> may improve with updates, reinstalls, or restarts, Safe Mode often behaves differently, specific to certain programs or functions.</p>
+<h4 id="4-does-it-happen-outside-the-operating-system-the-strongest-test">4. Does It Happen Outside the Operating System? (the strongest test)<a class="headerlink" href="#4-does-it-happen-outside-the-operating-system-the-strongest-test" title="Permanent link">&para;</a></h4>
+<p>The three questions above are useful heuristics, but they're all inferences. There are two tests
+that settle the question much closer to conclusively — and both are <strong>free and need no internet</strong>,
+which matters when field bandwidth won't support downloading a diagnostic tool.</p>
+<p><strong>Test 1 — the BIOS/UEFI setup screen.</strong> Ask the user to power on and immediately press the setup
+key for their model (commonly F2, F10, F12, Del or Esc — it's usually shown briefly on screen).
+This screen runs from firmware, <em>before any operating system loads at all</em>. Then ask: does the
+problem still happen here?</p>
+<ul>
+<li>Screen is garbled, or won't display, or the machine won't reach setup at all → <strong>hardware</strong>,
+  near-conclusively. No OS is running, so no OS can be at fault.</li>
+<li>Setup screen looks perfect and behaves normally → the display, GPU and basic system are alive,
+  and suspicion shifts to the OS, drivers or drive.</li>
+</ul>
+<p>This is the single most valuable question you can ask a remote user about a startup problem, and
+almost nobody thinks to ask it.</p>
+<p><strong>Test 2 — a Linux live USB.</strong> Booting a machine from a Linux USB stick runs a complete, known-good
+operating system entirely from the USB, without touching the installed OS or drive.</p>
+<ul>
+<li>Boots and runs cleanly from USB → the hardware is fundamentally fine. Your problem is the
+  installed OS, its drivers, or the drive it lives on.</li>
+<li>Same faults appear from USB → <strong>hardware</strong>, and now you know it isn't a software problem no
+  matter how much the user has been told to reinstall.</li>
+</ul>
+<p>You'll build one of these in <a href="../03-module-3/">Module 3</a> using Ventoy. It's the most useful single
+item in a field consultant's kit, and it's the closest thing this course has to a universal
+answer to "is it hardware or software?"</p>
+<p><strong>INFO</strong>
+Both tests share a logic worth internalising: <strong>isolate the layer</strong>. If you can make the problem
+happen with a different operating system, or with no operating system at all, you have proven it
+isn't the operating system. Every good hardware/software test is some version of this move.</p>
+<h3 id="activity-21-hardware-or-software">Activity 2.1: Hardware or Software?<a class="headerlink" href="#activity-21-hardware-or-software" title="Permanent link">&para;</a></h3>
+<p><strong>Time:</strong> 5 minutes — for each scenario, determine if it's more likely hardware or software and write down your reasoning.</p>
+<p><strong>A.</strong> Computer freezes only when using video conferencing software. Other programs work fine. Started after recent Windows update.</p>
+<p><strong>B.</strong> Computer makes three beeps when you press power button, screen stays black. Happened suddenly after transporting laptop in backpack.</p>
+<p><strong>C.</strong> Files keep getting corrupted. Multiple programs crash. Computer sometimes makes clicking sounds. Gets worse over time.</p>
+<p><strong>D.</strong> Specific application won't launch — gives error message. All other programs work normally. Computer otherwise functions well.</p>
+<p><strong>E.</strong> Computer shuts down without warning, especially when running multiple programs. Bottom of laptop feels very hot. Fan is very loud. Been getting worse over 3 months.</p>
+<p><strong>F.</strong> Computer boots to a blue screen every time. User has reinstalled Windows twice and it still happens. For each of A–F, also name <strong>one OS-independent test</strong> you would ask for.</p>
+<p><strong>TIP</strong>
+Answers: <strong>A</strong> — Software (specific to one program, started after update); test: does it happen from a Linux live USB? <strong>B</strong> — Hardware (startup failure signalled before the OS loads, occurred after physical shock — unseated RAM is the classic cause, but confirm the machine has removable RAM first); test: can it reach the BIOS/UEFI setup screen? <strong>C</strong> — Hardware (clicking = failing hard drive, progressive, affects multiple areas); test: SMART status — and back up before testing anything. <strong>D</strong> — Software (single application issue, error message); test: does the app fail for a different user account? <strong>E</strong> — Hardware (thermal symptoms, progressive, correlates with system load); test: watch temperatures under load. <strong>F</strong> — Hardware, despite looking like software: two clean reinstalls that didn't fix it is strong evidence the fault is underneath the OS; test: memory diagnostic, and a Linux live USB — if Linux also crashes, it's RAM or storage, not Windows.</p>
+<p>Key principle: look for physical symptoms, environmental correlations, and whether the problem crosses multiple programs. Hardware problems usually affect the whole system; software problems are often more specific. And when a user tells you they've "already reinstalled everything," treat that as <em>evidence</em>, not as a dead end — it's an OS-independence test they've already run for you.</p>
+<h3 id="section-22-the-systematic-diagnostic-process">Section 2.2: The Systematic Diagnostic Process<a class="headerlink" href="#section-22-the-systematic-diagnostic-process" title="Permanent link">&para;</a></h3>
+<p><strong>Time:</strong> 20 minutes (includes Activity 2.2)</p>
+<p>Good consultants don't guess — they follow a systematic process. Here's the framework you'll use for every hardware issue: <strong>OBSERVE → ISOLATE → TEST → DECIDE</strong>.</p>
+<h4 id="step-1-observe-gather-information">Step 1: Observe (Gather Information)<a class="headerlink" href="#step-1-observe-gather-information" title="Permanent link">&para;</a></h4>
+<p><strong>About the symptom:</strong> what exactly happens? When did it start? Does it happen every time or intermittently? What were you doing when it happened?</p>
+<p><strong>About patterns:</strong> when does it happen (time of day, specific activities, after certain duration)? When does it NOT happen? Is it getting worse, better, or staying the same?</p>
+<p><strong>About context:</strong> any recent changes (new software, updates, physical incidents)? Any environmental factors (heat, storm, transport)? What's the work environment like?</p>
+<p><strong>About the computer:</strong> how old is it? Any previous problems? When was it last cleaned/maintained?</p>
+<p><strong>Physical symptoms:</strong> any sounds (beeps, clicking, grinding, fan noise)? Any smells (burning, electrical)? Any heat (where specifically)? Any visible damage?</p>
+<p><em>Why this matters: "slow computer" could be anything, but "slow startup, normal after, clicking sound from left side, started after power outage" strongly suggests a failing hard drive damaged by a power surge.</em></p>
+<h4 id="step-2-isolate-narrow-down-possibilities">Step 2: Isolate (Narrow Down Possibilities)<a class="headerlink" href="#step-2-isolate-narrow-down-possibilities" title="Permanent link">&para;</a></h4>
+<p><strong>Use symptoms to eliminate possibilities:</strong> no display but computer powers on → NOT power system, likely display or graphics. Slow but no crashes → NOT likely RAM, probably storage or cooling. Happens only on battery → battery or charging system.</p>
+<p><strong>Use timing clues:</strong> during startup → storage or RAM. After 20 minutes of use → cooling system. Immediately after transport → unseated component. Gradually worsening → component degradation.</p>
+<p><strong>Use environmental clues:</strong> more problems in heat → cooling or battery. More problems in morning (cold/humid) → condensation, connections. After power outage → power system, possibly storage corruption.</p>
+<p><strong>Consider interactions:</strong> multiple symptoms might be one failing component affecting others. Example: failing cooling → CPU overheats → throttles → appears slow → crashes.</p>
+<h4 id="step-3-test-confirm-your-hypothesis">Step 3: Test (Confirm Your Hypothesis)<a class="headerlink" href="#step-3-test-confirm-your-hypothesis" title="Permanent link">&para;</a></h4>
+<p><strong>Observation tests (no intervention):</strong> monitor temperatures during use, listen for specific sounds, note when problems occur vs. don't occur, watch startup sequence carefully.</p>
+<p><strong>Software tests (information gathering):</strong> run built-in diagnostics (<code>powercfg /batteryreport</code>, Windows Memory Diagnostic), read drive health with CrystalDiskInfo, check system temperatures with monitoring software, review event logs for error patterns, test with external monitor (isolates display vs. graphics).</p>
+<p><strong>Simple hardware tests (user can perform):</strong> reach the BIOS/UEFI setup screen, boot from a Linux live USB, disable touchpad and use external mouse, try different power outlet, boot in Safe Mode, remove peripherals.</p>
+<p><strong>The free test everyone forgets — a power drain reset.</strong> For any "won't turn on at all" case, before anything else: unplug the adapter, remove the battery if it's removable, then <strong>hold the power button down for 30 seconds</strong>. Reconnect and try again. This discharges residual power and clears a latched power state, and it resolves a surprising share of dead-laptop cases at zero cost and zero risk. Make it step one of every no-boot sequence.</p>
+<p><strong>DANGER</strong>
+<strong>Never run CHKDSK on a drive you suspect is physically failing.</strong> CHKDSK checks the <em>filesystem</em> — the index of where files live — not the health of the drive hardware. On a drive that is mechanically failing, <code>CHKDSK /R</code> forces an intensive read/write pass across the entire surface. That frequently finishes off a dying drive mid-scan, and it can overwrite data that a professional recovery service could otherwise have retrieved. If you hear clicking, or SMART reports reallocated or pending sectors, the correct order is: <strong>stop using the drive → read SMART → image the whole drive → only then think about repair.</strong> CHKDSK's legitimate job is fixing filesystem corruption on a <em>healthy</em> drive, typically after a power cut interrupted a write. That's a real and common need in field conditions — just not this one.</p>
+<p><strong>Reading SMART, specifically.</strong> "Check SMART status" is useless advice without knowing what to look at. In CrystalDiskInfo, the overall health summary (Good / Caution / Bad) is the headline, but the attributes that actually matter are:</p>
+<ul>
+<li><strong>Reallocated Sectors Count</strong> — sectors that already failed and were swapped for spares. Any non-zero value on a spinning drive deserves attention; a rising value means active, ongoing failure.</li>
+<li><strong>Current Pending Sector Count</strong> — sectors that are failing right now and haven't been remapped yet. This is the most urgent one. Non-zero means back up immediately.</li>
+<li><strong>Uncorrectable Sector Count</strong> — data already lost.</li>
+<li>For SSDs: <strong>Percentage Used</strong> / <strong>Wear Leveling Count</strong> (how much write life is consumed) and <strong>Media &amp; Data Integrity Errors</strong>.</li>
+</ul>
+<p>A "Caution" summary with a rising pending-sector count is a drive to evacuate today, not next week.</p>
+<p><strong>Guided hardware tests (you walk user through):</strong> reseat RAM, clean vents, check cable connections, let system cool and retry.</p>
+<p><em>The key: choose tests that will clearly distinguish between your top hypotheses. "If it's X, this test will show Y. If it's Z, this test will show W."</em></p>
+<h4 id="step-4-decide-recommend-action">Step 4: Decide (Recommend Action)<a class="headerlink" href="#step-4-decide-recommend-action" title="Permanent link">&para;</a></h4>
+<p>Based on your findings, determine the appropriate next step:
+- <strong>If clearly diagnosable and fixable:</strong> guide user through fix (cleaning, reseating, settings change) and provide preventive advice.
+- <strong>If part replacement needed:</strong> assess urgency, recommend specific part and where to source it, consider workarounds while waiting.
+- <strong>If complex or diagnosis uncertain:</strong> escalate to IT support with documentation; explain what you've ruled out (saves them time).
+- <strong>If repair isn't practical:</strong> cost/benefit analysis, replacement recommendation, short-term alternatives.</p>
+<p><strong>DANGER</strong>
+If diagnosis indicates imminent failure — especially a failing storage drive — the first action is always immediate data backup before anything else. A drive that's clicking or showing SMART errors could fail completely at any moment. Back up first, diagnose second.</p>
+<p><strong>Context matters in decisions:</strong> remote location with no parts = different decision than city with tech support nearby. Critical deadline next week = different urgency than routine maintenance. Expensive repair on old computer = maybe better to replace.</p>
+<h3 id="activity-22-apply-the-framework-miguels-scenario">Activity 2.2: Apply the Framework — Miguel's Scenario<a class="headerlink" href="#activity-22-apply-the-framework-miguels-scenario" title="Permanent link">&para;</a></h3>
+<p><strong>Time:</strong> 10 minutes</p>
+<p>Remember Miguel from Module 1? "My computer is running really slowly now. It used to start up in less than a minute, but now it takes 5–7 minutes. Once it's running, programs work mostly okay, but they take a while to open." Context: 18 months in location, frequent power outages, no surge protector.</p>
+<p>Work through each step before reading the sample answers below:
+- <strong>STEP 1 — OBSERVE:</strong> what additional questions would you ask Miguel? Write at least 4.
+- <strong>STEP 2 — ISOLATE:</strong> based on "slow startup, normal operation after," which component is most likely involved? What are you ruling out?
+- <strong>STEP 3 — TEST:</strong> what tests would you have Miguel perform? List at least 2.
+- <strong>STEP 4 — DECIDE:</strong> if your hypothesis is correct, what would you recommend? Consider both immediate action and prevention.</p>
+<p><strong>TIP</strong>
+<strong>Sample answers — OBSERVE:</strong> Does the computer have an HDD or SSD? Do you hear any clicking or grinding sounds during startup? How full is your hard drive? Have you seen any error messages about disk problems?</p>
+<p><strong>ISOLATE:</strong> Most likely — storage drive (HDD) failing or severely full. Slow startup suggests loading OS from storage is the bottleneck. Normal operation after suggests CPU and RAM are fine. Power outages without surge protection could have damaged the drive over time.</p>
+<p><strong>TEST:</strong> Check drive health by reading <strong>SMART</strong> with CrystalDiskInfo — look at reallocated and pending sector counts (not CHKDSK; if this drive is failing, CHKDSK could finish it off). Check free space. Listen during startup — clicking confirms a failing HDD, though note that an SSD gives no audible warning at all. Check event logs for disk errors.</p>
+<p><strong>DECIDE — if drive is failing:</strong> IMMEDIATE: get the data off NOW — image the drive rather than browsing files, and don't run CHKDSK. SHORT TERM: prepare for drive replacement. PREVENTION: power protection — and note that Miguel's context is <em>frequent outages</em>, not lightning, so a surge strip is the wrong purchase here. Repeated abrupt power loss is what corrupted this drive, which points at a line-interactive UPS (see <a href="../04-module-4/">Module 4</a>). If the drive is just very full: free up space, move files to external storage, and still fix the power. Notice how the systematic process turns "computer is slow" (vague) into "failing hard drive, needs imaging and replacement, and the underlying cause is unprotected power" (specific, actionable).</p>
+<h3 id="section-23-common-failure-patterns">Section 2.3: Common Failure Patterns<a class="headerlink" href="#section-23-common-failure-patterns" title="Permanent link">&para;</a></h3>
+<p><strong>Time:</strong> 25 minutes (includes Activity 2.3)</p>
+<p>You'll see certain problems again and again. Recognising these patterns helps you diagnose faster and more accurately.</p>
+<h4 id="pattern-1-battery-issues">Pattern 1: Battery Issues<a class="headerlink" href="#pattern-1-battery-issues" title="Permanent link">&para;</a></h4>
+<p><strong>Symptoms:</strong> won't charge or charges very slowly, "plugged in, not charging" message, battery drains very quickly, computer won't run on battery at all, battery percentage jumps around.</p>
+<p><strong>Likely causes:</strong> battery degradation (age + heat), power adapter failure, charging port damage, charging circuitry problem.</p>
+<p><strong>Diagnose:</strong> check battery health report (<code>powercfg /batteryreport</code> on Windows), try wiggling power cable (loose port?), check adapter temperature (should be warm, not extremely hot), try different outlet, try different adapter if available.</p>
+<p><strong>Common context:</strong> batteries 2+ years old in hot climates, power voltage fluctuations, physical damage to ports.</p>
+<p><strong>Solutions:</strong> replace battery or adapter as appropriate; port repair may need a professional; can often continue working plugged in even with dead battery.</p>
+<p><strong>Prevention:</strong> appropriate power protection, avoid extreme heat, don't leave plugged in 24/7 in very hot environments (most vendors ship a charge-limit setting that enforces this for you — see <a href="../04-module-4/">Module 4</a>), careful with charging port, and never fit a counterfeit battery.</p>
+<h4 id="pattern-2-overheating-and-thermal-shutdown">Pattern 2: Overheating and Thermal Shutdown<a class="headerlink" href="#pattern-2-overheating-and-thermal-shutdown" title="Permanent link">&para;</a></h4>
+<p><strong>Symptoms:</strong> unexpected shutdowns (no warning), shutdowns more common with intensive tasks, very loud fan noise, computer hot to touch (especially bottom/sides), slowness that improves after cooling, more problems during hot parts of day.</p>
+<p><strong>Likely causes:</strong> dust blocking cooling vents, fan failure, dried thermal paste, working in hot environment.</p>
+<p><strong>Diagnose:</strong> check temperature with monitoring software, visual inspection of vents (dust visible?), note correlation with workload and time of day, check if problem improves after cooling.</p>
+<p><strong>WARNING</strong>
+Two things people routinely get wrong here.</p>
+<p><strong>A silent fan is usually normal.</strong> Most modern laptops use <strong>zero-RPM idle</strong> — the fan deliberately stops when the machine is cool. "The fan isn't spinning" tells you nothing on its own. To actually test the fan, load the CPU (open several programs, play a video) and watch the RPM reading in HWMonitor. A fan that stays at 0 RPM <em>while the CPU is above 70°C</em> has failed. A fan at 0 RPM on an idle machine is working as designed.</p>
+<p><strong>85°C is not the failure point.</strong> Modern mobile CPUs are designed to run to roughly 95–100°C and will <strong>throttle</strong> — deliberately slow themselves down — to stay there. True thermal shutdown is nearer 100–105°C. So read the two symptoms differently:
+- <strong>Slow under load, temperatures 85–100°C</strong> → thermal throttling. A real problem worth fixing, but the protection is working.
+- <strong>Abrupt power-off</strong> → either it hit the shutdown limit, or the problem isn't thermal at all and you should look at the power system.</p>
+<p>Sustained temperatures above 85°C under load mean a thermal problem worth acting on. They do not mean the machine is about to die.</p>
+<p><strong>Common context:</strong> dusty environments (dry season especially), months without cleaning, hot workspaces without AC, working on soft surfaces that block vents.</p>
+<p><strong>Solutions:</strong> clean vents and fan (compressed air or careful brushing), improve workspace ventilation, laptop cooling pad if available, fan replacement if fan has failed.</p>
+<p><strong>Prevention:</strong> monthly cleaning in dusty environments, always use on hard flat surface, keep vents clear, work in coolest available location.</p>
+<h4 id="pattern-3-storage-drive-problems">Pattern 3: Storage Drive Problems<a class="headerlink" href="#pattern-3-storage-drive-problems" title="Permanent link">&para;</a></h4>
+<p><strong>Failing drive symptoms:</strong> clicking or grinding sounds, very slow performance (especially startup), files corrupting or disappearing, frequent crashes, "Disk error" messages, computer freezes when accessing files.</p>
+<p><strong>Full drive symptoms:</strong> slow performance, "Disk full" warnings, can't save files, programs won't update or install.</p>
+<p><strong>Likely causes:</strong> HDD mechanical failure (clicking = very bad sign), SSD failure, full drive, corruption from power issues, physical shock damage.</p>
+<p><strong>Diagnose:</strong> listen for clicking (classic failing HDD sound), check drive space, read SMART with CrystalDiskInfo, note if problems correlate with file access.</p>
+<p><strong>INFO</strong>
+<strong>SSDs fail differently from hard drives, and more treacherously.</strong> There is no clicking, no grinding — no audible warning of any kind. An SSD typically fails by abruptly going read-only, disappearing from the system entirely, or corrupting data silently. By the time the user notices, there's often no window left to copy anything off.</p>
+<p>Three consequences for field work:</p>
+<ul>
+<li><strong>SMART is your only early warning on an SSD.</strong> Watch Percentage Used / Wear Leveling Count. Check it on a schedule rather than waiting for symptoms.</li>
+<li><strong>Counterfeit and grossly overstated SSDs and memory cards are common in low-resource markets.</strong> A "1 TB" card for a few dollars is firmware-faked and will corrupt data once you write past its real capacity. For language documentation this is a data-loss event waiting to happen — buy storage from a source you trust, and verify real capacity by writing and reading back a full test load before trusting it with recordings.</li>
+<li><strong>An unpowered SSD left in a hot place slowly loses data.</strong> SSDs hold data as trapped electrical charge, which leaks away over time — faster the hotter the storage. An archive drive sitting in a hot cupboard for a year or two is not the safe long-term store people assume. For irreplaceable recordings, power archive drives up periodically, keep more than one copy, and don't rely on a single SSD left in a drawer.</li>
+</ul>
+<p><strong>Common context:</strong> HDDs in hot/dusty environments or after physical shock, language workers collecting large audio/video files, power outages causing corruption, older drives (3+ years).</p>
+<p><strong>Solutions:</strong> if failing — backup immediately, replace drive. If full — free space, move files to external storage. If corrupted — attempt repair, prepare for replacement.</p>
+<p><strong>Prevention:</strong> regular backups, monitor drive space (don't let it exceed 80%), power protection appropriate to the site — abrupt power loss mid-write is a leading cause of filesystem corruption, so on a site with frequent outages this means a UPS rather than a surge strip — careful transport, consider SSD when replacing.</p>
+<h4 id="pattern-4-display-issues">Pattern 4: Display Issues<a class="headerlink" href="#pattern-4-display-issues" title="Permanent link">&para;</a></h4>
+<p><strong>Symptoms:</strong> screen stays black (but computer powers on), flickering or intermittent display, lines or artifacts on screen, very dim display (backlight issue), colours wrong or washed out, spots or clouding.</p>
+<p><strong>Likely causes:</strong> loose display cable, backlight failure, display panel damage, graphics hardware problem, humidity damage.</p>
+<p><strong>Diagnose:</strong> test with external monitor (KEY TEST — if external works, problem is in display assembly; if external also fails, problem is in graphics hardware). Check brightness settings. Gently press around screen bezel (loose connection?). Note if intermittent or constant. Look for physical damage.</p>
+<p><strong>Common context:</strong> physical pressure on closed lid, humidity causing condensation, display cable damage from opening/closing repeatedly, impact or drop.</p>
+<p><strong>Solutions:</strong> if cable loose — reseating (may need professional). If backlight failed — replacement (expensive). If graphics issue — may need motherboard repair. Workaround: external monitor while arranging repair.</p>
+<p><strong>Prevention:</strong> protect laptop during transport, don't put pressure on closed lid, store in dry location, open/close gently.</p>
+<h4 id="pattern-5-ram-issues">Pattern 5: RAM Issues<a class="headerlink" href="#pattern-5-ram-issues" title="Permanent link">&para;</a></h4>
+<p><strong>Symptoms:</strong> a startup failure signalled before anything reaches the screen (see the POST signalling note below), computer powers on but no display, blue screen errors, random crashes or freezes, program crashes, often happens after physical shock.</p>
+<p><strong>Likely causes:</strong> RAM not seated properly (became dislodged), RAM module failure, RAM slot corrosion (humidity), incompatible RAM (if recently upgraded).</p>
+<p><strong>Diagnose:</strong> identify how the machine is signalling the failure (below), run a memory diagnostic if the machine boots at all, and — only after confirming the RAM is removable — reseat the modules and try one stick at a time. Note if the problem started after transport or in humid conditions.</p>
+<p><strong>Common context:</strong> rough transport (vibration unseats RAM), humid environments (corrosion), after opening computer for other reasons.</p>
+<p><strong>Solutions:</strong> reseat RAM (remove and reinstall firmly), clean contacts gently if corrosion visible, replace RAM if module has failed.</p>
+<p><strong>Prevention:</strong> careful transport (padded case), humidity control, ensure RAM properly seated after any internal work.</p>
+<p><strong>WARNING</strong>
+<strong>"Three beeps means RAM" is a decade out of date, and it will strand you.</strong></p>
+<p>Older computers had a small internal speaker and signalled startup (POST) failures with patterns of beeps. <strong>Most laptops built since roughly 2015 have no speaker at all.</strong> They signal the same failures by <strong>blinking an LED</strong> instead:</p>
+<table>
+<thead>
+<tr>
+<th>Vendor</th>
+<th>How it signals a POST failure</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Dell</td>
+<td>Amber/white power-LED blink counts (e.g. 2 amber then 3 white)</td>
+</tr>
+<tr>
+<td>HP</td>
+<td>Blinks the caps-lock or num-lock LED</td>
+</tr>
+<tr>
+<td>Lenovo</td>
+<td>Blinks the power button</td>
+</tr>
+<tr>
+<td>Apple</td>
+<td>No POST codes; use Apple Diagnostics (hold <strong>D</strong> at startup)</td>
+</tr>
+</tbody>
+</table>
+<p>So the right question to a remote user is not "do you hear beeps?" but: <strong>"When you press power, do you hear any pattern of beeps, or see any light blinking in a repeating pattern? Count the pattern exactly and tell me the laptop's exact model."</strong> Then look up that pattern for that model — the codes are manufacturer-specific and a blink count means completely different things on different brands.</p>
+<p>If a user reports silence and no blinking, that is not evidence the machine is fine. It may simply have no way to tell you.</p>
+<p><strong>WARNING</strong>
+<strong>Check whether the RAM is removable before you ask anyone to reseat it.</strong></p>
+<p>A large and growing share of laptops have <strong>RAM soldered directly to the motherboard</strong> — most thin-and-light models, all Apple Silicon Macs, and many Dell XPS/Latitude and Microsoft Surface machines. There is nothing to reseat, and sending a nervous user through a teardown to find that out is all risk and no benefit.</p>
+<p>Confirm serviceability first, using tools this course already points you at:</p>
+<ol>
+<li>Look up the exact model on <strong>iFixit</strong> — the teardown will show either SODIMM slots or soldered chips.</li>
+<li>Or run the <strong>Crucial system scanner</strong> on the machine, which reports whether memory is upgradeable.</li>
+<li>If the RAM turns out to be soldered, unseated RAM is off your hypothesis list entirely — and a POST failure on such a machine goes straight to escalation, because the fix is a motherboard.</li>
+</ol>
+<p>The same question applies to storage: many modern laptops have soldered storage too.</p>
+<h4 id="pattern-6-power-and-charging-problems">Pattern 6: Power and Charging Problems<a class="headerlink" href="#pattern-6-power-and-charging-problems" title="Permanent link">&para;</a></h4>
+<p><strong>Symptoms:</strong> computer won't turn on at all, power light flickers or doesn't stay on, computer dies immediately when unplugged, charging light doesn't come on, works only when plugged in, burning smell from adapter.</p>
+<p><strong>Likely causes:</strong> dead power adapter, damaged charging port, charging circuitry failure (motherboard), completely dead battery, power button failure (rare).</p>
+<p><strong>Diagnose:</strong> check adapter (warm? any cable damage?), check charging light when plugged in, try different outlet, wiggle connection (loose port?), smell adapter.</p>
+<p><strong>WARNING</strong>
+A burning smell from a power adapter means stop using it immediately. Don't plug it in again — it's a fire risk. Replace it before the computer is used again.</p>
+<p><strong>Common context:</strong> voltage fluctuations/power surges, physical damage to adapter or port, old adapter (cables fray over time).</p>
+<p><strong>Solutions:</strong> replace adapter (most common), port repair (may need professional), battery replacement, motherboard repair (expensive, often not worth it).</p>
+<p><strong>Prevention:</strong> appropriate power protection (ESSENTIAL — and "appropriate" does a lot of work in that sentence; a surge protector alone is the wrong answer for most field sites, which is the subject of <a href="../04-module-4/">Module 4</a>), unplug during storms, careful cable management, replace adapters at first sign of damage.</p>
+<p><strong>INFO</strong>
+One reassuring thing about laptops: the external power brick is a <strong>sacrificial buffer.</strong> It sits between the wall and the motherboard, and when bad power arrives, the brick is designed to be what dies. A dead adapter after a thunderstorm is usually the system working exactly as intended — a $40 part absorbed a hit that would otherwise have reached an $800 motherboard. This is why "the adapter died" is often good news, and why desktops (which have no such buffer) fare worse on bad power.</p>
+<h3 id="activity-23-pattern-recognition">Activity 2.3: Pattern Recognition<a class="headerlink" href="#activity-23-pattern-recognition" title="Permanent link">&para;</a></h3>
+<p><strong>Time:</strong> 5 minutes — match each scenario to its most likely pattern and component.</p>
+<p><strong>Scenario A:</strong> Computer worked fine yesterday. Today user transported it 4 hours on rough roads. Now it makes three beeps and screen stays black. (Also: what would you need to confirm before recommending a fix, and what would you ask if the machine made no sound at all?)</p>
+<p><strong>Scenario B:</strong> Over the past month, computer has gotten progressively slower. Now takes 10 minutes to start. User hears clicking sounds. Works in hot, dusty environment.</p>
+<p><strong>Scenario C:</strong> Computer shuts down suddenly after 30–45 minutes of use. Fan is very loud before shutdown. Happens more on hot afternoons. Been getting worse.</p>
+<p><strong>Scenario D:</strong> Computer won't turn on. Charging light doesn't come on when plugged in. User mentions recent thunderstorm. Adapter feels unusually cool (not even warm).</p>
+<p><strong>TIP</strong>
+Answers: <strong>A</strong> — Pattern 5 (RAM issues) — a POST failure straight after rough transport points to unseated RAM. But confirm the model has removable RAM before recommending a reseat; if it's soldered, this escalates instead. If the machine made no sound at all, ask whether any LED is blinking in a repeating pattern, and get the exact model so you can look the code up — silence may just mean the machine has no speaker. <strong>B</strong> — Pattern 3 (Storage drive failure) — clicking HDD, progressive slowness; back up before testing anything. <strong>C</strong> — Pattern 2 (Overheating) — thermal shutdown, loud fan, environmental correlation. <strong>D</strong> — Pattern 6 (Power problems) — dead adapter, likely from the surge. Note the adapter being stone cold is the clue: a working adapter under load is warm.</p>
+<h3 id="section-24-remote-troubleshooting-skills">Section 2.4: Remote Troubleshooting Skills<a class="headerlink" href="#section-24-remote-troubleshooting-skills" title="Permanent link">&para;</a></h3>
+<p><strong>Time:</strong> 10 minutes (includes Activity 2.4)</p>
+<p>As a language technology consultant, you won't be physically present with the user. You need to gather information through questions, guide users through steps they can perform, assess their comfort level with different tasks, and know when to escalate rather than push beyond user capability.</p>
+<h3 id="communication-strategies">Communication Strategies<a class="headerlink" href="#communication-strategies" title="Permanent link">&para;</a></h3>
+<p><strong>1. Ask Clear, Specific Questions</strong></p>
+<p>Vague: "Is it slow?" — Specific: "How long does it take from when you press the power button until you can start working? And once you're working, do programs respond quickly or is there delay?"</p>
+<p>Vague: "Does it get hot?" — Specific: "Where exactly does it feel hot — bottom, sides, near the vents? Can you hold your hand there comfortably or is it too hot to touch?"</p>
+<p><strong>2. Give Step-by-Step Instructions</strong></p>
+<p>One step at a time. Very specific — not "check the RAM" but "look for small green circuit boards with chips on them." Check understanding at each step. Use pause points ("before you remove anything, take a photo"). Always include safety warnings ("make sure the computer is powered off and unplugged").</p>
+<p><strong>3. Assess Comfort Level</strong></p>
+<p>Before asking someone to open their computer: "Have you ever opened the back of a laptop before?" "How comfortable would you feel removing a couple of screws and looking inside?" If they're uncertain: "Let's try these external tests first" or "Is there anyone nearby who has done this before who could help?"</p>
+<p><strong>4. Use Visual Aids</strong></p>
+<p>Send photos or diagrams. Reference iFixit teardowns for their specific model. Video calls if bandwidth allows. Ask them to take photos and send them.</p>
+<p><strong>5. Document Everything</strong></p>
+<p>Good documentation tracks patterns across users, smooths escalation to IT, builds organisational knowledge, and prevents repeat questions. Document: symptoms (specific details), tests performed, results, actions taken, recommendations.</p>
+<h3 id="activity-24-write-remote-instructions">Activity 2.4: Write Remote Instructions<a class="headerlink" href="#activity-24-write-remote-instructions" title="Permanent link">&para;</a></h3>
+<p><strong>Time:</strong> 5 minutes</p>
+<p>Write step-by-step instructions for guiding a user through checking and cleaning their computer's vents externally. Assume the user has never done this before. Write 5–7 steps clear enough to follow via email or chat. Write your answer in your learning journal before reading the sample answer below.</p>
+<p><strong>TIP</strong>
+<strong>Sample Answer:</strong> 1. Power off your computer completely and unplug the power adapter. Let it cool for at least 10 minutes. 2. Find the ventilation slots — usually along the sides or back edge, they look like narrow slits or grilles. Take a photo and send it to me if you're not sure. 3. Look at the vents in good light. Do you see dust or debris inside? Is it blocking the openings? 4. If you see dust: using a soft brush (like a clean paintbrush) or a dry cloth, gently brush away any dust from the outside. Brush AWAY from the openings so you're pulling dust out, not pushing it in. 5. If you have compressed air, read the warning below first — the technique matters. 6. After cleaning, take another photo so I can see the result. 7. Let me know if you noticed a lot of dust buildup — that might explain your overheating issues! Key elements: safety (power off, cool down), specificity, confirmation (photos), clear technique, connection to the problem.</p>
+<p><strong>DANGER</strong>
+<strong>Blasting compressed air into a laptop vent damages the machine.</strong> This is the most common well-intentioned mistake in laptop maintenance, and the old advice to "use short bursts into the vents" causes two distinct kinds of harm:</p>
+<ol>
+<li><strong>It destroys the fan.</strong> The air spins the fan far beyond the speed it was built for. There is no load on it and nothing limiting it, and the bearing gets wrecked — so you create the grinding, noisy, failing fan you were trying to prevent.</li>
+<li><strong>It packs the dust in deeper.</strong> Blowing inward drives dust off the intake grille and into the heat sink fins, where it mats together. Surface dust a brush could have removed becomes a blockage that needs the machine opened up.</li>
+</ol>
+<p><strong>If you use compressed air, do it like this:</strong></p>
+<ul>
+<li><strong>Stop the fan from spinning first.</strong> Hold the blade still with a toothpick or a cotton bud through the vent. If you can't reach the fan, don't use air at all — brush instead.</li>
+<li><strong>Blow against the exhaust direction</strong>, so dust exits the way it came in rather than being pushed further inside.</li>
+<li>Keep the can upright, 15 cm (6 inches) away, in short bursts. Held at an angle, these cans spray liquid propellant onto the electronics.</li>
+</ul>
+<p><strong>When you have no compressed air</strong> — which is common, since cans are often unavailable or expensive in the field — a soft brush and a <strong>manual bulb blower</strong> (the rubber squeeze bulb sold for cleaning camera lenses) do the job safely and reusably. A bulb blower can't over-spin a fan because it can't generate that much pressure. It's a better field tool than a can for exactly that reason.</p>
+<p>Do <strong>not</strong> substitute an air-compressor line: workshop compressors deliver far too much pressure and their air carries water and oil.</p>
+<hr />
+<h2 id="challenge">Challenge<a class="headerlink" href="#challenge" title="Permanent link">&para;</a></h2>
+<h3 id="section-25-guided-practice-scenarios">Section 2.5: Guided Practice Scenarios<a class="headerlink" href="#section-25-guided-practice-scenarios" title="Permanent link">&para;</a></h3>
+<p><strong>Time:</strong> 15 minutes — for each scenario, apply the four-step framework, identify which failure pattern it matches, and write out your complete diagnostic plan.</p>
+<p>For every scenario in this section, also fill out a <a href="../consultant-triage-card/">Consultant's Triage Card</a>. It takes a minute and forces you to check the seven things that are easy to skip under pressure — data status, safety risk, encryption keys, the single fastest isolating test, whether the part is even serviceable, the site's power profile, and how the user keeps working tomorrow.</p>
+<h4 id="scenario-1-the-black-screen">Scenario 1: The Black Screen<a class="headerlink" href="#scenario-1-the-black-screen" title="Permanent link">&para;</a></h4>
+<p>James in Papua New Guinea says his computer "won't turn on." When you ask him to describe exactly what happens, he says: "I press the power button and I can hear the fan running, and there's a small light on the front that comes on, but the screen stays completely black." James works in a coastal area with high humidity. This morning he noticed some condensation on his desk.</p>
+<p>Work through the diagnostic process and write down your answers before reading the teaching points.
+1. <strong>OBSERVE:</strong> what additional questions would you ask?
+2. <strong>ISOLATE:</strong> based on symptoms, what components are most likely involved? What can you rule out?
+3. <strong>TEST:</strong> what tests would you recommend? Put them in order.
+4. <strong>DECIDE:</strong> what would you recommend based on likely causes?</p>
+<p><strong>TIP</strong>
+<strong>OBSERVE:</strong> Has this happened before? Did anything unusual happen yesterday? Is there visible moisture on or around the computer? If you shine a flashlight on the screen, do you see anything faint?</p>
+<p><strong>ISOLATE:</strong> Computer powers on (fan runs, power light on) → power system works. Screen stays black → display or graphics or connection issue. Given humidity context, likely moisture interfering with connections. Pattern 4 (display) or Pattern 5 (RAM), complicated by humidity.</p>
+<p><strong>TEST (least to most invasive):</strong> 1. Let it dry — power off, remove battery if possible, let sit several hours in dry location. Do not keep trying to power it on while damp. 2. Power drain reset — hold power 30 seconds while unplugged. 3. Can he reach the BIOS/UEFI setup screen? If the setup screen displays fine, the panel and graphics are alive. 4. External monitor test — definitively separates display from graphics. 5. Any beeps, or any LED blinking in a repeating pattern? Get the exact model and look the code up. 6. Flashlight test — faint image means the backlight failed. 7. Only if the model has removable RAM and he's comfortable: reseat it.</p>
+<p><strong>DECIDE — immediate:</strong> don't keep trying to start it, let it dry completely, try restarting after it's dry. If problem persists: if external monitor works → display assembly issue. If external also fails → try reseating RAM. If RAM reseat doesn't help → IT support. Prevention: sealed container with silica gel, acclimate to room temp before starting. Key insight: solution isn't technical repair, it's letting it dry!</p>
+<h4 id="scenario-2-the-intermittent-shutdown">Scenario 2: The Intermittent Shutdown<a class="headerlink" href="#scenario-2-the-intermittent-shutdown" title="Permanent link">&para;</a></h4>
+<p>David in Chad contacts you frustrated because his laptop has shut down unexpectedly three times this week. No warning — it just turns off suddenly. Sometimes it works fine for hours after restarting, other times it shuts down again within 30 minutes. It seems to happen more often when he's running his translation software with multiple documents open. It's dry season, dust is a constant problem, his office has no air conditioning, and he's been in location 8 months with no maintenance on the computer.</p>
+<p>Apply the diagnostic framework — write your answers before reading the teaching points.
+1. <strong>OBSERVE:</strong> what questions would you ask?
+2. <strong>ISOLATE:</strong> what's your primary hypothesis? Alternative possibilities?
+3. <strong>TEST:</strong> design tests to confirm/rule out your hypothesis.
+4. <strong>DECIDE:</strong> recommended solution and if problem persists.</p>
+<p><strong>TIP</strong>
+<strong>OBSERVE:</strong> Is the fan very loud before shutdown? Does the bottom/sides feel very hot? Does it happen more in the afternoon? Where do you work — on a desk, lap, or cushion? Can you see dust in the vents?</p>
+<p><strong>ISOLATE:</strong> Primary hypothesis — overheating due to dust accumulation (Pattern 2). Supports: dry season, dust problem, 8 months no maintenance, shutdowns during intensive work. Alternatives: power adapter failure (but would expect more consistent behaviour), RAM issue (but would expect crashes not clean shutdowns).</p>
+<p><strong>TEST:</strong> Temperature check — download HWMonitor or Core Temp, what temperatures right before shutdown? (Sustained CPU temperatures over 85°C confirm a thermal problem.) Fan check — running loudly? Running at all? Visual inspection — dust visible in vents? Pattern test — does shutdown happen more during hot part of day?</p>
+<p><strong>DECIDE — immediate:</strong> clean cooling vents (walk David through external cleaning with brush/compressed air). Improve airflow — use on hard flat surface, elevate slightly, position away from walls. Reduce heat generation — close unnecessary programs, work in coolest part of office. If comfortable opening: internal cleaning of fan and heat sink. If persists: fan might be failing → escalate to IT. Prevention: monthly external vent cleaning, quarterly internal cleaning, always use on proper surface. Key insight: simple maintenance solves many "hardware problems."</p>
+<h4 id="practice-scenario-3-your-independent-work">Practice Scenario 3: Your Independent Work<a class="headerlink" href="#practice-scenario-3-your-independent-work" title="Permanent link">&para;</a></h4>
+<p>Now try one completely on your own.</p>
+<p>Priya in rural India reports that her laptop battery "isn't charging properly." The charging light comes on when she plugs it in, but the battery percentage doesn't seem to increase. Sometimes it says "plugged in, not charging" in the system tray. The laptop is about 2 years old. Priya's area experiences significant voltage fluctuations. The temperature in her workspace regularly reaches 35–40°C during the day.</p>
+<p><strong>Write out your complete diagnostic plan following the four-step framework. Submit to your mentor:</strong>
+1. OBSERVE: questions you'd ask (at least 5)
+2. ISOLATE: most likely cause(s) and reasoning
+3. TEST: specific diagnostic steps in order
+4. DECIDE: recommended solution(s) and prevention</p>
+<p>Submit a completed <a href="../consultant-triage-card/">Consultant's Triage Card</a> alongside your plan — this scenario is Scenario F3 in the <a href="../05-scenario-bank/">scenario bank</a>.</p>
+<hr />
+<h2 id="change">Change<a class="headerlink" href="#change" title="Permanent link">&para;</a></h2>
+<h3 id="before-module-3">Before Module 3<a class="headerlink" href="#before-module-3" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Make sure you've completed Practice Scenario 3 (Priya) and submitted to your mentor</li>
+<li>Review the six failure patterns — can you recognise each one from symptoms alone?</li>
+<li>Practise writing clear, step-by-step instructions with someone you know</li>
+<li><strong>Optional extra practice:</strong> the <a href="../05-scenario-bank/">scenario bank</a> contains two further intermediate scenarios for this module — <strong>I2: The Mysterious Beeping</strong> and <strong>I3: The Performance Puzzle</strong>. Work either or both the same way as Practice Scenario 3 and submit to your mentor if you want more feedback before Module 3.</li>
+</ul>
+<h3 id="what-youve-learned-in-module-2">What You've Learned in Module 2<a class="headerlink" href="#what-youve-learned-in-module-2" title="Permanent link">&para;</a></h3>
+<p><strong>Hardware vs. software distinction:</strong> three key questions — when does it happen, is it consistent, does it respond to software fixes — help you classify problems quickly. Two further tests settle it much more firmly, and both are free: can the machine reach the <strong>BIOS/UEFI setup screen</strong>, and does the fault still happen from a <strong>Linux live USB</strong>? Both work by isolating the layer — prove the operating system isn't running and you've proven the operating system isn't at fault.</p>
+<p><strong>What not to do:</strong> never run CHKDSK on a drive you think is physically failing (image it first), never blast compressed air into a vent without stopping the fan, and never ask a user to reseat RAM before confirming the RAM is removable. Each of these turns a diagnosis into a second fault.</p>
+<p><strong>The four-step framework (Observe/Isolate/Test/Decide):</strong> systematic diagnosis turns vague complaints into specific, actionable findings. Good observation often points directly to the cause.</p>
+<p><strong>Six common failure patterns:</strong> battery, overheating, storage, display, RAM, and power problems each have recognisable symptom sets, common contexts, and proven diagnostic approaches. Watch the two traps: a silent fan is normally <em>correct</em> (zero-RPM idle), and a silent startup failure may mean the laptop has no speaker and is blinking an LED at you instead.</p>
+<p><strong>Remote troubleshooting:</strong> clear specific questions, step-by-step instructions, assessing user comfort level, visual aids, and documentation are the tools of effective remote support.</p>
+<p>Good diagnosis is systematic, not guesswork. Environmental and timing clues are diagnostic gold. Prevention is part of your job — don't just fix, help users avoid future problems.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+    
+      
+      <nav class="md-footer__inner md-grid" aria-label="Footer" >
+        
+          
+          <a href="../01-module-1/" class="md-footer__link md-footer__link--prev" aria-label="Previous: MODULE 1: UNDERSTANDING LAPTOP SYSTEMS">
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+            </div>
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Previous
+              </span>
+              <div class="md-ellipsis">
+                MODULE 1: UNDERSTANDING LAPTOP SYSTEMS
+              </div>
+            </div>
+          </a>
+        
+        
+          
+          <a href="../03-module-3/" class="md-footer__link md-footer__link--next" aria-label="Next: MODULE 3: PRACTICAL DECISIONS AND APPLICATION">
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Next
+              </span>
+              <div class="md-ellipsis">
+                MODULE 3: PRACTICAL DECISIONS AND APPLICATION
+              </div>
+            </div>
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11z"/></svg>
+            </div>
+          </a>
+        
+      </nav>
+    
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["navigation.sections", "navigation.top", "navigation.footer", "toc.follow", "search.suggest", "search.highlight", "content.action.edit", "content.code.copy"], "search": "../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.d7400e89.min.js"></script>
+      
+    
+  </body>
+</html>

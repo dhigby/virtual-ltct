@@ -1,0 +1,26 @@
+﻿Find lines that do not start with backslash code#f#\r\n[^\\]
+Find close codes preceded by a space# \\\w+\* ?
+Find long poetic lines#f#\\q(\s+\\v )?[^\r]{70,}
+Find non-word characters before footnote callers#f#[^\w]\\f\s
+Find missing capitals after period#f#\.\s+["¿¡'?]*[a-z]
+
+Count SFM clusters#c#\\\S+
+Count all cap words#cr#\b[A-Z][A-Z]+\b
+Count footnote marker patterns#cni#\\f .*\\f\*
+Count cross reference marker patterns#cni#\\x .*\\x\*
+Count book reference abbreviations#c#[A-Z]\w\w?\.(?=\s*\d)
+Count verse number patterns#ci#\\v\s+\S+
+Count chapter/verse patterns#crd#\d[\-\d.:;, ]+
+
+Extract (...)#e#\([^\)]+\)|<[^>]+>
+Extract cross references#e#\\x .*\\x\*
+Extract all footnotes#e#\\f .*\\f\*
+Extract and sort all lines#es#\\.*
+Extract outlines#e#(\\id ...|\\io.*)
+Extract when ms1 and io1 should match (ms2/io2 etc)#e#(\\id ...|\\ms1.*|\\io1.*)
+
+Replace Mt 3-4 => Mt 3--4#r#([A-Z]\w\w*\.? \d+)-(\d+)#\1--\2
+Replace missing space after \v#r#\\v(\d)#\\v \1
+
+
+

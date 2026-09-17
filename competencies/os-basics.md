@@ -1,6 +1,7 @@
 ---
 name: OS Basics
 category: Core Technical
+slug: os-basics
 source_label: OS-Basics
 in_framework: true
 target_statement: Is able to troubleshoot operating system installation issues, configure for optimal use, and teach best practices.

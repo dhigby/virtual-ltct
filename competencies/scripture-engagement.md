@@ -1,6 +1,7 @@
 ---
 name: Scripture Engagement
 category: Education
+slug: scripture-engagement
 source_label: Domain-specific education
 in_framework: true
 target_statement: "Has pursue domain specific knowledge via formal education or equivalent in one of the following: translation, linguistics, literacy / education or scripture engagment."

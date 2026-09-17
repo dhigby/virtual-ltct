@@ -59,6 +59,18 @@
           }
         ]
       }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Write|Edit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python \"${CLAUDE_PROJECT_DIR:-.}/scripts/session_hooks.py\" refresh-now 2>/dev/null || true",
+            "timeout": 10
+          }
+        ]
+      }
     ]
   }
 }

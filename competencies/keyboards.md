@@ -1,7 +1,7 @@
 ---
 name: Keyboards
 category: Core Technical
-slug: keyboards
+source_label: Keyboards
 in_framework: true
 target_statement: Is able to teach others how to install and configure keyboard solutions for typing language characters.
 outcome_levels:
@@ -27,6 +27,10 @@ last_updated: 2026-07-01
 # Keyboards
 
 **Category:** Core Technical
+
+## Description
+
+Ability to create and implement customized solutions for typing non-standard characters.
 
 ## Why it matters
 

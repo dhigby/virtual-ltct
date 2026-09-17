@@ -1,7 +1,7 @@
 ---
 name: Computer Hardware
 category: Core Technical
-slug: computer-hardware
+source_label: Computer Hardware
 in_framework: true
 target_statement: Is able to troubleshoot basic computer hardware problems.
 outcome_levels:
@@ -29,6 +29,10 @@ last_updated: 2026-07-01
 # Computer Hardware
 
 **Category:** Core Technical
+
+## Description
+
+Familiarity with basic components of a computer
 
 ## Why it matters
 

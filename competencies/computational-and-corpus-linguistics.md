@@ -1,7 +1,7 @@
 ---
 name: Computational and Corpus Linguistics
 category: Technology Domain
-slug: computational-and-corpus-linguistics
+source_label: Computational and Corpus Linguistics
 in_framework: true
 target_statement: Is able to use and teach computational tools for corpus and data analysis
 outcome_levels:
@@ -38,6 +38,10 @@ last_updated: 2026-07-01
 # Computational and Corpus Linguistics
 
 **Category:** Technology Domain
+
+## Description
+
+Knowledge of the computational tools for corpus and data analysis.
 
 ## Why it matters
 

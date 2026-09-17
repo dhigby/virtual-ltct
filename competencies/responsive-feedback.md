@@ -1,7 +1,7 @@
 ---
 name: Responsive Feedback
 category: Professional
-slug: responsive-feedback
+source_label: Responsive Feedback
 in_framework: true
 target_statement: Has the ability to describe a software issue in a meaningful way for developers to act on.
 outcome_levels:
@@ -19,12 +19,16 @@ resources:
   - title: Github Issues
     url: https://guides.github.com/features/issues/
 source: Lang Tech Competencies.xlsx
-last_updated: 2026-07-01
+last_updated: 2026-09-03
 ---
 
 # Responsive Feedback
 
 **Category:** Professional
+
+## Description
+
+Knowledge to describe a software issue in a meaningful way for developers to act on.
 
 ## Why it matters
 

@@ -6,6 +6,7 @@ on:
     paths:
       - 'competencies/**'
       - 'competencies.yaml'
+      - 'outcome-levels.yaml'   # gen_site.py builds the level scale from this
       - 'COVERAGE.md'
       - 'mkdocs.yml'
       - 'scripts/gen_site.py'
@@ -35,5 +36,14 @@ jobs:
           restore-keys: mkdocs-material-
           path: ~/.cache
       - run: pip install -r docs-requirements.txt
+      # Social cards (link previews for Slack/email) render with Cairo. They are enabled
+      # only when CI=true — see the `social` plugin in mkdocs.yml — so a local
+      # `mkdocs serve` needs none of this.
+      - name: Install social-card imaging dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libcairo2-dev libfreetype6-dev libffi-dev \
+            libjpeg-dev libpng-dev libz-dev
+          pip install "mkdocs-material[imaging]"
       - name: Build and deploy to gh-pages
         run: mkdocs gh-deploy --force

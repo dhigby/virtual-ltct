@@ -16,6 +16,7 @@ their own correctness.
 
 Stage detection is not duplicated here; it comes from course_stage.py.
 """
+import datetime
 import json
 import os
 import sys
@@ -46,17 +47,114 @@ LTC session protocol (this repo builds one course at a time):
    Competency names must match competencies.yaml verbatim or CI fails."""
 
 
-def emit(event, context):
-    """Print an additionalContext hook result for `event`."""
-    if not context:
+def emit(event, context, system_message=None):
+    """Print a hook result for `event`.
+
+    Two audiences, two channels -- keep them straight:
+
+    * `context` -> `additionalContext`. MODEL-facing. Injected into Claude's context
+      and invisible on screen. Cheap to repeat.
+    * `system_message` -> `systemMessage`. HUMAN-facing, rendered in the UI. This is
+      the only way a contributor actually sees any of this. Use it sparingly:
+      anything printed on every single turn stops being read.
+
+    `suppressOutput` stays on throughout -- it hides this JSON itself from the
+    transcript. It does not hide `systemMessage`, which has its own display path.
+    """
+    if not context and not system_message:
         return
-    print(json.dumps({
-        "hookSpecificOutput": {
+    out = {"suppressOutput": True}
+    if context:
+        out["hookSpecificOutput"] = {
             "hookEventName": event,
             "additionalContext": context,
-        },
-        "suppressOutput": True,
-    }))
+        }
+    if system_message:
+        out["systemMessage"] = system_message
+    print(json.dumps(out))
+
+
+def now_path():
+    return cs.REPO / ".claude" / "NOW.md"
+
+
+def write_now_file(slug=None):
+    """Rewrite .claude/NOW.md -- the tab contributors keep pinned in VS Code.
+
+    The status line is a terminal feature and does not show in the VS Code sidebar,
+    so this file is the always-visible "where am I" indicator. Gitignored: it is
+    per-person session state, not repo content.
+    """
+    stamp = datetime.datetime.now().strftime("%Y-%m-%d %H:%M")
+    lines = []
+
+    if slug:
+        info = brief_for(slug)
+        gs = info["git"]
+        lines += [
+            "# Now — " + slug,
+            "",
+            "| | |",
+            "| --- | --- |",
+            "| **Course** | `" + slug + "` |",
+            "| **Branch** | `" + str(gs.get("current_branch")) + "` |",
+            "| **Stage** | " + info["stage_key"] + " of 8 — " + info["stage_name"] + " |",
+            "",
+            "## ▶ Do this next",
+            "",
+            info["next_action"],
+            "",
+            "How-to: [`" + info["stage_doc"] + "`](../" + info["stage_doc"] + ")",
+            "",
+        ]
+        if info["done"]:
+            lines += ["## ✅ Already done", ""]
+            lines += ["- " + d for d in info["done"]]
+            lines += [""]
+        if gs.get("dirty_modules"):
+            lines += ["> **Uncommitted changes** exist under `modules/`.", ""]
+        if info["notes"]:
+            lines += ["## Notes", ""]
+            lines += ["- " + n for n in info["notes"]]
+            lines += [""]
+    else:
+        lines += [
+            "# Now — no course selected",
+            "",
+            "Ask Claude for a course, or run **`/work-on <slug>`** to start. This repo "
+            "builds **one course at a time**.",
+            "",
+        ]
+        rows = [cs.stage_for(f, use_gh=False) for f in cs.course_folders()]
+        if rows:
+            lines += ["| Course | Stage | Needs next |", "| --- | --- | --- |"]
+            for r in sorted(rows, key=lambda r: (-r["stage"], r["slug"])):
+                lines.append("| `" + r["slug"] + "` | " + r["stage_key"] + " | "
+                             + r["stage_name"] + " |")
+            lines += [""]
+        else:
+            lines += ["No courses are in the pipeline yet — see `ROADMAP.md`.", ""]
+
+    lines += [
+        "---",
+        "",
+        "## The five rules",
+        "",
+        "1. **One course per session.** `/work-on <slug>` puts you on its branch.",
+        "2. **Never edit `modules/` on `main`.** Claude will refuse; `/work-on` fixes it.",
+        "3. **Do the current stage only.** The eight stages are gates.",
+        "4. **Use the stage's agent** and its `process/stages/<NN>-*.md` how-to.",
+        "5. **Never hand-edit `COVERAGE.md`**; competency names must match "
+        "`competencies.yaml` verbatim.",
+        "",
+        "_Auto-generated " + stamp + " by `scripts/session_hooks.py`. Not tracked by "
+        "git. Keep this tab pinned._",
+        "",
+    ]
+
+    p = now_path()
+    p.parent.mkdir(parents=True, exist_ok=True)
+    p.write_text("\n".join(lines), encoding="utf-8")
 
 
 def read_payload():
@@ -111,6 +209,13 @@ def cmd_session_start():
             lines.append("  Note: " + n)
         lines += ["", "Confirm with the user that this is still the course they want "
                       "before working. If not, run /work-on <slug> to switch."]
+        seen = [
+            "📦 " + slug + "  ·  stage " + info["stage_key"] + "/8  ·  "
+            + info["stage_name"],
+            "▶ Next: " + info["next_action"],
+            "",
+            "Full detail in .claude/NOW.md — keep that tab pinned.",
+        ]
     else:
         rows = [cs.stage_for(f, use_gh=False) for f in cs.course_folders()]
         lines.append("No course branch is checked out (currently on '"
@@ -128,16 +233,24 @@ def cmd_session_start():
             lines.append("")
             lines.append("Ask which of these they want (or whether it is a new course). "
                          "Do not guess, and do not offer to work several at once.")
+            seen = ["No course selected. Pick one, then run /work-on <slug>:", ""]
+            for r in sorted(rows, key=lambda r: (-r["stage"], r["slug"])):
+                seen.append("  " + r["slug"].ljust(width) + "  stage "
+                            + r["stage_key"].ljust(4) + "  " + r["stage_name"])
+            seen += ["", "Full detail in .claude/NOW.md — keep that tab pinned."]
         else:
             lines.append("No courses are in the pipeline yet -- see ROADMAP.md or run "
                          "the coverage-strategist agent to pick one.")
+            seen = ["No courses are in the pipeline yet — see ROADMAP.md."]
 
-    emit("SessionStart", "\n".join(lines))
+    write_now_file(slug)
+    emit("SessionStart", "\n".join(lines), system_message="\n".join(seen))
 
 
 def cmd_prompt_banner():
     branch = current_branch()
     slug = course_from_branch(branch)
+    seen = None
     if slug:
         try:
             info = brief_for(slug)
@@ -147,11 +260,17 @@ def cmd_prompt_banner():
                     + "\nStage how-to: " + info["stage_doc"])
         except Exception:
             head = "Active course branch: " + str(branch)
+        # Deliberately no systemMessage here. A banner on every turn is noise the
+        # reader learns to skip; .claude/NOW.md carries the same facts, persistently.
     else:
         head = ("No course branch is checked out (on '" + str(branch) + "'). Establish "
                 "which ONE course this is for and run /work-on <slug> before editing "
                 "anything under modules/.")
-    emit("UserPromptSubmit", head + "\n\n" + PROTOCOL)
+        # The one case worth interrupting for: they are about to work with no course
+        # selected, which is how content lands on main.
+        seen = ("⚠ No course selected (on '" + str(branch) + "') — run /work-on <slug> "
+                "before editing anything under modules/.")
+    emit("UserPromptSubmit", head + "\n\n" + PROTOCOL, system_message=seen)
 
 
 def cmd_guard_modules():
@@ -219,10 +338,20 @@ def cmd_statusline():
           + "  [" + str(branch) + "]")
 
 
+def cmd_refresh_now():
+    """Rewrite .claude/NOW.md after a write, so the pinned tab tracks reality.
+
+    Creating a quiz or video script advances the stage; this is what makes that
+    progress visible instead of merely true. Prints nothing.
+    """
+    write_now_file(course_from_branch(current_branch()))
+
+
 COMMANDS = {
     "session-start": cmd_session_start,
     "prompt-banner": cmd_prompt_banner,
     "guard-modules": cmd_guard_modules,
+    "refresh-now": cmd_refresh_now,
     "statusline": cmd_statusline,
 }
 

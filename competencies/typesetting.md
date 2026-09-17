@@ -1,7 +1,7 @@
 ---
 name: Typesetting
 category: Technology Domain
-slug: typesetting
+source_label: Typesetting
 in_framework: true
 target_statement: Is able to assist users with typesetting final complex documents.
 outcome_levels:
@@ -36,12 +36,16 @@ resources:
   - title: SILAS (Smart Interactive Layout Assistant for Scripture)
     url: http://lingtransoft.info/apps/silas-smart-interactive-layout-assistant-scripture
 source: Lang Tech Competencies.xlsx
-last_updated: 2026-07-01
+last_updated: 2026-09-03
 ---
 
 # Typesetting
 
 **Category:** Technology Domain
+
+## Description
+
+Knowledge of the tools for typesetting final complex documents.
 
 ## Why it matters
 

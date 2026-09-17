@@ -1,7 +1,7 @@
 ---
 name: Data Conversion
 category: Technology Domain
-slug: data-conversion
+source_label: Data Conversion
 in_framework: true
 target_statement: Can use and teach a scripting language to do data conversion and cleanup.
 outcome_levels:
@@ -32,12 +32,16 @@ resources:
   - title: Consistent Changes Program
     url: https://software.sil.org/cc/
 source: Lang Tech Competencies.xlsx
-last_updated: 2026-07-01
+last_updated: 2026-08-31
 ---
 
 # Data Conversion
 
 **Category:** Technology Domain
+
+## Description
+
+Knowledge of a scripting language to do data conversion.
 
 ## Why it matters
 

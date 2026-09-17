@@ -1,7 +1,7 @@
 ---
 name: Adult Education
 category: Core
-slug: adult-education
+source_label: Adult Education
 in_framework: true
 resources:
   []

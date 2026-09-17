@@ -210,10 +210,20 @@ work across stages 5, 6 and 7, including across the stage-6 merge.
 - [`scripts/gen_course_site.py`](scripts/gen_course_site.py) renders a course;
   [`mkdocs-review.yml`](mkdocs-review.yml) is its config. The docs root is a **flat mirror
   of the course folder**, which is why the relative links authors already write just work.
-- The learner view is a disclosure boundary and fails closed: a quiz whose answer key can't
-  be cleanly separated is withheld, not partially stripped.
-  [`scripts/check_learner_view.py`](scripts/check_learner_view.py) is the CI gate and
-  **fails the deploy** on a leak.
+- **Quiz answer keys use one marker:** a `## Answer key` H2, optionally qualified
+  (`## Answer key (Section 1)`) and repeatable. `check_course_package.py` fails CI on any
+  other form. It is standardised precisely so the learner view never has to guess where a
+  key starts.
+- The learner view is a disclosure boundary and fails closed: a quiz whose answer key
+  can't be cleanly separated is withheld, not partially stripped — enforcement removes the
+  guessing, not the verification.
+  [`scripts/check_learner_view.py`](scripts/check_learner_view.py) is the gate; it **fails
+  the deploy** on a leak, and [`review-site.yml`](.github/workflows/review-site.yml) runs
+  it on every PR touching a course, so a bad marker is caught by its author.
+- On a PR, a course that fails to build **blocks the merge**
+  (`build_review_sites.py --local --fail-on-error`); on deploy it gets a placeholder page
+  and the publish carries on. Deliberate: a course that can't render can't be reviewed,
+  but one broken draft must not take the published site down.
 - These pages are `noindex` and unlinked from the competency site's nav, and
   `docs/robots.txt` disallows both paths. They are *unlisted, not secret* — the repo is
   public, so anyone with the link can read them.

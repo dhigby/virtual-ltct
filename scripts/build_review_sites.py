@@ -140,8 +140,13 @@ INDEX = """<!DOCTYPE html>
 """
 
 
-def build_one(course, view, segment, out_root, pipeline_slugs):
-    """Build one (course, view). Returns True on success; writes a placeholder on failure."""
+def build_one(course, view, segment, out_root, pipeline_slugs, placeholder=True):
+    """Build one (course, view). Returns True on success.
+
+    On failure: writes a placeholder page when `placeholder` (the deploy, which must
+    survive a broken draft), or just reports when not (a PR check, where the author
+    should fix it before merge).
+    """
     dest = out_root / segment / course["url_slug"]
     env = dict(os.environ)
     env.update({
@@ -166,9 +171,12 @@ def build_one(course, view, segment, out_root, pipeline_slugs):
         return True
     except (subprocess.CalledProcessError, subprocess.TimeoutExpired) as exc:
         detail = (getattr(exc, "stderr", "") or "")[-1500:]
-        print("::warning title=Review build failed::%s (%s) from %s"
-              % (course["url_slug"], view, course["ref"]))
+        print("::%s title=Review build failed::%s (%s) from %s"
+              % ("warning" if placeholder else "error",
+                 course["url_slug"], view, course["ref"]))
         print(detail, file=sys.stderr)
+        if not placeholder:
+            return False
         dest.mkdir(parents=True, exist_ok=True)
         (dest / "index.html").write_text(PLACEHOLDER.format(
             slug=html.escape(course["url_slug"]),
@@ -205,12 +213,19 @@ def main():
     ap.add_argument("--out", required=True, help="output root (the built competency site)")
     ap.add_argument("--only", help="build just this course")
     ap.add_argument("--no-fetch", action="store_true")
+    ap.add_argument("--local", action="store_true",
+                    help="build from this checkout rather than from git refs -- what a PR "
+                         "check wants, since the point is to validate the proposed content")
+    ap.add_argument("--fail-on-error", action="store_true",
+                    help="exit 1 if any course fails to build, instead of writing a "
+                         "placeholder. For PR checks: an author should fix a broken course "
+                         "before merge, whereas the deploy must survive one.")
     args = ap.parse_args()
 
     out_root = pathlib.Path(args.out).resolve()
     out_root.mkdir(parents=True, exist_ok=True)
 
-    if not args.no_fetch:
+    if not args.no_fetch and not args.local:
         git("fetch", "--no-tags", "--prune", "origin",
             "+refs/heads/*:refs/remotes/origin/*")
 
@@ -229,20 +244,24 @@ def main():
 
     for folder in folders:
         url_slug = branch_slug(folder.name)
-        ref = ref_for(url_slug)
-        wt = worktrees / url_slug
-        if wt.exists():
-            git("worktree", "remove", "--force", str(wt))
-            shutil.rmtree(wt, ignore_errors=True)
-        wt.parent.mkdir(parents=True, exist_ok=True)
-
-        added = git("worktree", "add", "--detach", str(wt), ref)
-        try:
+        wt = None
+        if args.local:
+            # Validate the content in front of us, not what happens to be on origin.
+            src, ref = folder, (os.environ.get("GITHUB_HEAD_REF") or "this checkout")
+        else:
+            ref = ref_for(url_slug)
+            wt = worktrees / url_slug
+            if wt.exists():
+                git("worktree", "remove", "--force", str(wt))
+                shutil.rmtree(wt, ignore_errors=True)
+            wt.parent.mkdir(parents=True, exist_ok=True)
+            added = git("worktree", "add", "--detach", str(wt), ref)
             src = find_course_dir(wt / "modules", url_slug) if added.returncode == 0 else None
             if src is None:
                 # The folder may not exist on that ref (renamed, or not yet pushed).
                 # Fall back to the working tree and say so, rather than build nothing.
                 src, ref = folder, "origin/main"
+        try:
             try:
                 info = stage_for(folder, use_gh=False)
                 stage = info.get("stage_name", "")
@@ -254,21 +273,24 @@ def main():
                 pr = {}
 
             course = {
-                "url_slug": url_slug, "src": src, "ref": ref, "sha": short_sha(ref),
+                "url_slug": url_slug, "src": src, "ref": ref,
+                "sha": "-" if args.local else short_sha(ref),
                 "title": folder.name, "stage": stage, "pr": pr.get("url", ""),
                 "ok": {},
             }
             for view, segment in VIEWS:
-                good = build_one(course, view, segment, out_root, pipeline_slugs)
+                good = build_one(course, view, segment, out_root, pipeline_slugs,
+                                 placeholder=not args.fail_on_error)
                 course["ok"][segment] = good
                 if not good:
                     failures += 1
             courses.append(course)
             print("  %-55s %-14s %s" % (url_slug, ref.replace("origin/", ""),
-                                        "ok" if all(course["ok"].values()) else "PLACEHOLDER"))
+                                        "ok" if all(course["ok"].values()) else "FAILED"))
         finally:
-            git("worktree", "remove", "--force", str(wt))
-            shutil.rmtree(wt, ignore_errors=True)
+            if wt is not None:
+                git("worktree", "remove", "--force", str(wt))
+                shutil.rmtree(wt, ignore_errors=True)
 
     write_index(out_root, "review", "review", courses,
                 extra=" This is the <strong>reviewer</strong> view: it includes design "
@@ -277,12 +299,19 @@ def main():
                 extra=" This is the <strong>learner</strong> view: design documents, "
                       "mentor guides and quiz answers are not included.")
 
+    if args.fail_on_error:
+        print("\n%d course(s), %d view build(s) failed." % (len(courses), failures))
+        if failures:
+            print("A course that cannot be rendered cannot be reviewed. Reproduce it with "
+                  "`python scripts/review_site.py --slug <slug>`.", file=sys.stderr)
+        return 1 if failures else 0
+
     print("\n%d course(s), %d view build(s) fell back to a placeholder."
           % (len(courses), failures))
     if courses:
         print("Reviewer index: %s/review/" % SITE)
         print("Example:        %s" % review_url(courses[0]["url_slug"]))
-    # Always 0: a broken draft must not fail the deploy of everything else.
+    # Otherwise always 0: a broken draft must not fail the deploy of everything else.
     return 0
 
 

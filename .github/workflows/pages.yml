@@ -1,21 +1,40 @@
 name: Publish site
 
+# Publishes two things from one job, into one gh-pages tree:
+#
+#   /                    the competency framework site (mkdocs.yml)
+#   /review/<slug>/      each in-flight course, full package, for SME + internal review
+#   /learn/<slug>/       each in-flight course, no spoilers, for a pilot learner
+#
+# They share a deploy because `ghp-import` replaces the WHOLE gh-pages tree. Publishing
+# them separately would mean each deploy silently deleted the other's output.
+
 on:
   push:
-    branches: [main]
+    # course/** so a draft's preview refreshes as its author commits -- an SME should not
+    # have to wait for a merge to re-read it.
+    branches: [main, 'course/**']
     paths:
       - 'competencies/**'
       - 'competencies.yaml'
       - 'outcome-levels.yaml'   # gen_site.py builds the level scale from this
       - 'COVERAGE.md'
+      - 'modules/**'
       - 'mkdocs.yml'
+      - 'mkdocs-review.yml'
       - 'scripts/gen_site.py'
+      - 'scripts/gen_course_site.py'
+      - 'scripts/build_review_sites.py'
+      - 'scripts/check_learner_view.py'
+      - 'overrides/**'
       - 'docs/**'
+      - 'docs-review/**'
       - 'docs-requirements.txt'
   workflow_dispatch:
 
 permissions:
   contents: write
+  pull-requests: read      # build_review_sites.py links each course to its PR
 
 concurrency:
   group: pages
@@ -26,24 +45,60 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          # ALWAYS main, never github.ref. A push to course/<slug> would otherwise build
+          # the competency site, mkdocs.yml and gen_site.py from an unreviewed draft
+          # branch and publish that. Course content enters only through the worktrees
+          # that build_review_sites.py creates, so the job is a pure function of
+          # (main, the in-flight branches).
+          ref: main
+          fetch-depth: 0     # merge-base ref selection + per-course worktrees need history
+
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
+
       - name: Cache MkDocs build deps
         uses: actions/cache@v4
         with:
           key: mkdocs-material-${{ github.sha }}
           restore-keys: mkdocs-material-
           path: ~/.cache
+
       - run: pip install -r docs-requirements.txt
+
       # Social cards (link previews for Slack/email) render with Cairo. They are enabled
       # only when CI=true — see the `social` plugin in mkdocs.yml — so a local
-      # `mkdocs serve` needs none of this.
+      # `mkdocs serve` needs none of this. The review sites switch CI off again so they
+      # don't pay for it once per course.
       - name: Install social-card imaging dependencies
         run: |
           sudo apt-get update
           sudo apt-get install -y libcairo2-dev libfreetype6-dev libffi-dev \
             libjpeg-dev libpng-dev libz-dev
           pip install "mkdocs-material[imaging]"
-      - name: Build and deploy to gh-pages
-        run: mkdocs gh-deploy --force
+
+      # This is the gate. If the published framework site can't build, nothing ships.
+      - name: Build the competency site
+        run: mkdocs build --strict -d site
+
+      # Never fails the job: a half-written draft branch must not be able to take down
+      # competencies.languagetechnology.org. A course that fails to build gets a
+      # placeholder page, so a reviewer's link says "couldn't build" rather than 404.
+      - name: Build course review sites
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: python scripts/build_review_sites.py --out site
+
+      # This one DOES fail the job. The learner view is what a pilot learner is handed;
+      # publishing a quiz answer key into it is worse than not deploying at all.
+      - name: Verify the learner view leaks nothing
+        run: python scripts/check_learner_view.py --built site/learn --all
+
+      - name: Publish to gh-pages
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          ghp-import -n -p -f -b gh-pages \
+            -m "Deploy ${GITHUB_SHA::7}: competency site + course review sites" \
+            site

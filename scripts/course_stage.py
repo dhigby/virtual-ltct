@@ -56,6 +56,18 @@ def branch_for(slug):
     return "course/" + branch_slug(slug)
 
 
+# The published review site. Defined HERE, once, for the same reason stage detection is:
+# /next-step, /review-site, the process docs and the deploy driver must not each carry
+# their own copy of the URL and drift apart.
+SITE = "https://competencies.languagetechnology.org"
+
+
+def review_url(slug, view="reviewer"):
+    """Browsable URL for a course. view='learner' is the no-spoilers view for a pilot."""
+    segment = "review" if view == "reviewer" else "learn"
+    return "%s/%s/%s/" % (SITE, segment, branch_slug(slug))
+
+
 def is_lesson(name):
     """01-*.md, 02-*.md, ... but not the package's own non-lesson files."""
     if not re.match(r"^\d{2}-", name):

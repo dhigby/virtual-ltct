@@ -12,6 +12,7 @@ progress is tracked on the GitHub Project board.
 | What | Where |
 | --- | --- |
 | **Course content** | [`modules/<slug>/`](modules/) — one folder per course, plain markdown |
+| **Why this repo exists** | [`INTENT.md`](INTENT.md) — the problem, constraints, and what's out of scope; read before changing the tooling or process |
 | **How we build courses** | [`process/PROCESS.md`](process/PROCESS.md) — the 8-stage production pipeline, roles, and agents |
 | **New to the team?** | [`ONBOARDING.md`](ONBOARDING.md) — setup and your first contribution |
 | **Progress tracking** | The **LTC Training Modules** GitHub Project (board) — status, priority, owner |

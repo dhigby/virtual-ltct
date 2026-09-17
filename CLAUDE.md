@@ -4,6 +4,12 @@ Guidance for AI assistants working in this repo. This is a **content repository*
 the Language Technology Consultant (LTC) training curriculum — markdown training modules,
 not an application. There is no build/test/run loop; the "checks" are content + coverage.
 
+**Read [`INTENT.md`](INTENT.md) before building or changing anything in this repo** — tooling,
+scripts, process, the sites. It states the problem this repo exists to solve, its hard
+constraints, and what is deliberately out of scope. This file gives you the rules; `INTENT.md`
+gives you the *why*, so you can decide the cases the rules don't cover. A proposed change that
+contradicts it should be raised, not routed around.
+
 ## How a session in this repo runs (read this first)
 
 **One course per session.** Contributors here work on a single course at a time, and most

@@ -101,6 +101,11 @@ link keeps working all the way through. Leave feedback as PR or tracker-issue co
 before. `/next-step <slug>` prints the right link from stage 4 on, and `/review-site <slug>`
 serves it on your own machine if you're editing.
 
+**These links are unlisted, not private.** They aren't indexed by search engines and
+nothing links to them from the public competency site, but this repo is public, so anyone
+you give the link to can open it — no sign-in. That's fine for a draft course; just don't
+treat the URL as a password.
+
 > Don't run `mkdocs gh-deploy` yourself — it republishes the whole site and would wipe
 > every course preview until the next automatic build.
 

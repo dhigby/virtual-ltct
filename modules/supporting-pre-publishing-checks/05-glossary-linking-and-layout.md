@@ -1,6 +1,6 @@
 # Lesson 5: Glossary Linking and Layout
 
-**Estimated time:** 65 minutes
+**Estimated time:** 75 minutes
 
 **Purpose:** Support a team through the glossary-linking operation, layout and
 hyphenation decisions for print, and the final PTXprint draft-PDF read-through — the
@@ -15,8 +15,9 @@ last checks before a team's files go to the typesetter.
 - You will be able to:
   - Advise a team on a single- versus two-column layout decision based on reader and
     community expectation — not just word length.
-  - Enable Show hyphenation in the Wordlist and review/correct the auto-generated
-    hyphenation breaks so long words break correctly in a two-column layout.
+  - Use the Wordlist's Show hyphenation view to approve correct guesses and correct
+    wrong ones — individually and in batches — so long words break correctly in a
+    two-column layout.
 - You will be able to:
   - Lead a team through the final PTXprint draft-PDF read-through.
   - Resolve or triage what it surfaces, deferring true typesetting composition to the
@@ -119,13 +120,53 @@ Digital and Print Publishing competency:
    layout format the LWC Bibles and other printed materials the community currently
    reads and uses follow, rather than defaulting to whichever layout avoids a technical
    problem for the target language.
-2. **Do the technical setup** — once two-column layout is the right call, open the
-   **Wordlist** and turn on **Show hyphenation** from its View menu (alongside "Show
-   morphology" and "Show spelling status"). This makes Paratext auto-generate a
-   `hyphenatedWords.txt` file from the wordlist, with a hyphenation column you can see.
-   Your job isn't to build that file from scratch — it's to **review the auto-generated
-   hyphenation and correct any wrong breaks** so long words break correctly across the
-   column width. This is genuine hands-on tooling work, not just advice-giving.
+2. **Do the technical setup** — once two-column layout is the right call, open
+   **Tools > Wordlist**, and from the Wordlist's own tab menu choose **View > Show
+   hyphenation** (alongside "Show morphology" and "Show spelling status"). This adds a
+   hyphenation column showing Paratext's guessed break points for each word, marked with
+   equal signs — e.g. `an=ti=no=mi=an=ism` — each `=` a place the word may legitimately
+   break across a column.
+
+   Every guessed word carries a tick showing its approval status:
+   - A **grey tick** means Paratext *guessed* the breaks — not yet reviewed.
+   - A **green tick** means the breaks are **approved**.
+
+   Your job is to work through the guesses:
+   - **Correct guess** — click the grey tick; it turns green. Approved.
+   - **Wrong guess** — click the word and add or remove `=` marks where the breaks
+     should actually fall; the tick turns green automatically once you edit it.
+   - **Batch-approve a run of correct words** — select the first word, then
+     shift-click to extend a consecutive selection (or Ctrl-click to pick several
+     non-consecutive ones), then use the Wordlist's tab menu > **Edit > Approve word
+     hyphenation** to approve them all at once. As you approve more words, Paratext's
+     guesses get better, so late in the review not every remaining word needs
+     individual attention.
+
+   Your approvals save to **`hyphenatedWords.txt`** in the project folder when you close
+   the Wordlist. Lines *without* a leading asterisk are still just Paratext's unapproved
+   guesses; a leading `*` marks a line the team has approved.
+
+   > **WARNING:** PTXprint's draft-PDF export will use unapproved guesses as well as
+   > approved hyphenation, so a draft can look fine even with guesses left unreviewed.
+   > Best practice is to approve hyphenation before the files go to print — don't let
+   > unapproved guesses ride through to the final publication.
+
+   > **NOTE:** In a Study Bible Publication project, the Wordlist is view-only, so
+   > hyphenation can't be approved there directly — watch for this if a team's project
+   > is set up that way.
+
+   Don't confuse this with **word break characters** (used for scripts that don't
+   separate words with spaces), which is a separate setting under Project > Project
+   settings > Language settings > Other Characters tab — a different problem from
+   hyphenating long words within a two-column layout.
+
+   > **TIP:** For advanced or unusual cases, `hyphenatedWords.txt` itself can be
+   > hand-edited to customize which characters represent hard/soft hyphens and
+   > hyphenated markers (`HardHyphen`, `SoftHyphen`, `SoftHyphenOut`,
+   > `HyphenatedMarkers`). That's beyond what most teams need — the approve/correct
+   > workflow above covers the normal case.
+
+   This is genuine hands-on tooling work, not just advice-giving.
 
 ### The final PTXprint draft-PDF read-through
 
@@ -157,8 +198,10 @@ properly the typesetter's craft.
   drive the fix yourself, but check via Find (the link report is transient) and inspect
   the `\w...\w*` markup on each result rather than trusting a hit count.
 - Layout decisions follow reader expectation, not word length alone; once the layout
-  is set, enabling Show hyphenation and reviewing/correcting the auto-generated
-  hyphenation breaks is hands-on technical work you do yourself.
+  is set, working the Wordlist's Show hyphenation view — approving correct guesses
+  (grey tick → green), fixing wrong ones with `=` marks, and batch-approving with
+  shift-click/Ctrl-click — is hands-on technical work you do yourself, and it should
+  be done before print, since PTXprint's draft PDF will use unapproved guesses too.
 - The draft-PDF read-through is your last chance to catch spreads, orphans, footnote
   shifts, heading placement, and underfilled pages — triage what you find rather than
   trying to resolve everything yourself.
@@ -181,10 +224,12 @@ answer, then check it against the Content section above.
    tell you about a layout choice, and one line on what actually sets the baseline for
    it. Then draft the single question — one sentence — you'd ask a team to establish
    that baseline, aimed at what the community already reads and uses.
-4. **Say where the hands-on half of your role begins.** At what point in the layout
-   sequence does enabling Show hyphenation and reviewing the auto-generated breaks
-   become the right next step, and what has to be settled before it? One or two
-   lines — and note whether that step is yours or somebody else's.
+4. **Say where the hands-on half of your role begins, and walk the approve/correct
+   loop.** At what point in the layout sequence does opening the Wordlist's Show
+   hyphenation view become the right next step, and what has to be settled before it?
+   Then, for a word Paratext has guessed wrong, describe the two clicks that take it
+   from grey tick to green — and separately, describe how you'd approve ten
+   already-correct guesses in one action rather than one at a time.
 5. **List the five things to watch for** in the draft-PDF read-through, from memory.
    Then write the general test you'd use to decide whether something the read-through
    surfaces is yours to resolve or is typesetting craft belonging to the typesetter —

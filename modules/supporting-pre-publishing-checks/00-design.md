@@ -164,6 +164,35 @@
 > row, field case 5 (revised) and the "Common mistakes" Layout & publishing bullet below.
 > `module-author` may revise `05-glossary-linking-and-layout.md` on this basis.
 
+> **Amendment, Stage 5 SME fact-check pass, 2026-09-18 (Jenni Beadle) — support.bible reply
+> confirms and enriches the hyphenation mechanism, no re-approval needed:** A support.bible reply
+> has now confirmed the 2026-09-17 correction (Paratext's Wordlist auto-generates hyphenation; the
+> LTC reviews/corrects it) and added substantially richer mechanism detail: the exact menu path
+> (Tools > Wordlist > View menu > "Show hyphenation"); the meaning of `=` marks in a word
+> (acceptable break points, e.g. `an=ti=no=mi=an=ism`); the **grey tick / green tick** approval
+> status per word (grey = Paratext's guess, unapproved; click to approve, or edit the `=` marks to
+> correct a wrong guess, which turns the tick green automatically); **batch approval** of correct
+> guesses via shift-click/Ctrl-click to extend a selection, then Wordlist tab menu > Edit > "Approve
+> word hyphenation"; the **`hyphenatedWords.txt` asterisk convention** (lines with `*` are
+> team-approved, lines without are still Paratext's unapproved guesses), saved when the Wordlist
+> closes; that guesses improve as more words are approved, so not every remaining word needs
+> individual approval once guesses are reliable; that **PTXprint's draft-PDF export uses both
+> approved and guessed hyphenations**, but best practice is to approve before publication rather
+> than rely on unapproved guesses going to print; that in a **Study Bible Publication project the
+> Wordlist is view-only**, so hyphenation can't be approved directly there; and an important
+> distinction from **word break characters** (for scripts without space-separated words), which are
+> a separate setting under Project > Project settings > Language settings > Other Characters tab,
+> not to be conflated with hyphenation. An advanced/optional detail — customizing `HardHyphen`,
+> `SoftHyphen`, `SoftHyphenOut`, and `HyphenatedMarkers` at the top of `hyphenatedWords.txt` — is
+> noted as lighter-touch, optional content, not core teaching. This is a factual/detail enrichment
+> of the already-correct mechanism, not a scope change. See field case 5 (revised again below) and
+> the revised `05-glossary-linking-and-layout.md` module-breakdown row. **Time-budget note:** lesson
+> 05 is revised from 65 to **75 minutes** to accommodate the fuller workflow (grey/green ticks,
+> batch approval, the asterisk convention, the Study Bible Publication caveat, and a brief mention
+> of the word-break-characters distinction) — still 15 minutes under the 90-minute cap; the course
+> total rises from 345 to **355 minutes** accordingly. `module-author` may draft
+> `05-glossary-linking-and-layout.md` on this basis.
+
 ## Outcome-level open question (resolve before approval)
 
 The `README.md` frontmatter and issue #40 both target `3 - Independent`, delivered self-paced
@@ -252,7 +281,7 @@ secondary objectives or their competency coverage.
 | 5 | Core | Learner can confirm whether the team's Paratext version has the new consolidated Numbers check (covering numbers, weights, and measures) or still only the old separate Numbers check, run whichever is available against the team's *already-agreed and documented* approach (not the LTC's own judgment of what the rendering should be), and refer any gaps or contradictions the check surfaces back to the team to resolve rather than deciding new renderings | Translation Tools 2.0, `2 - With Assistance` | Quiz + Scenario Bank |
 | 6 | Core | Learner can diagnose formatting-check failures — unclosed marker pairs, ghost markers, wrong markers, book-title/heading/reference errors — working structural-first **starting with Chapter/Verse Numbers** (confirmed clean before anything else, since references, footnotes, and other verse-based checks quote chapter/verse locations and their reported results become unreliable or ambiguous if those numbers have errors, e.g. duplicate verses — corrected 2026-09-15, Jenni Beadle), and coach a team to a zero-error result | Translation Tools 2.0, `2 - With Assistance` | Quiz + Scenario Bank |
 | 7 | Core | Learner can diagnose over-linked glossary marking (every occurrence vs. first-per-section) and coach the team to unlink and relink at the correct scope | Translation Tools 2.0, `2 - With Assistance` | Quiz + Scenario Bank |
-| 8 | Secondary | Learner can advise a team on a single- vs. two-column layout decision based on reader/community expectation (not just word length), and, since Paratext auto-generates hyphenation via the Wordlist tool, enable **Show hyphenation** (Wordlist's View menu) and review/correct the resulting automatic hyphenation breaks so long words break correctly in a two-column layout (corrected 2026-09-17, Jenni Beadle — was wrongly framed as "build a hyphenation file from scratch") | Digital and Print Publishing 1.0 (Print Publishing), `2 - With Assistance` — "Customize and use appropriate tools to produce publishable output for Scripture and dictionaries" | Quiz + Scenario Bank |
+| 8 | Secondary | Learner can advise a team on a single- vs. two-column layout decision based on reader/community expectation (not just word length), and, since Paratext auto-generates hyphenation via the Wordlist tool, enable **Show hyphenation** (Wordlist's View menu) and review/correct the resulting automatic hyphenation breaks — approving correct guesses (individually or in batches) and fixing wrong ones — so long words break correctly in a two-column layout (corrected 2026-09-17, Jenni Beadle — was wrongly framed as "build a hyphenation file from scratch"; enriched 2026-09-18 per a confirming support.bible reply) | Digital and Print Publishing 1.0 (Print Publishing), `2 - With Assistance` — "Customize and use appropriate tools to produce publishable output for Scripture and dictionaries" | Quiz + Scenario Bank |
 | 9 | Core | Learner can lead a team through the final PTXprint draft-PDF read-through (spreads, orphan words, footnote shifts, heading placement, underfilled pages) and resolve or triage what it surfaces, deferring true typesetting composition to the typesetter | Digital and Print Publishing 1.0, `2 - With Assistance` | Quiz + Scenario Bank |
 | 10 | Core | Learner can decide, for any surfaced issue, whether it is theirs to resolve, the team's translation decision, or needs escalation (an LT mentor for tooling, a Translation Consultant for content) | Translation Tools 2.0, `2 - With Assistance` | Quiz + Scenario Bank |
 
@@ -309,11 +338,11 @@ each core check-area lesson instead of either a heavy standalone module or being
 | `02-wordlist-and-biblical-terms.md` | Biblical Terms list completion and cleanup (secondary, condensed): recognizing blank renderings as the tool's normal default starting state and confirming genuine completion via the Found column/count rather than eyeballing the list; recognizing stale/duplicate renderings left in place after a correct rendering was added without deleting the original; a third pattern — a rendering that just repeats the verse's first word, likely caused by running **Guess Renderings** before the project had enough translated data (per a support.bible programmer's reply, 2026-09-10 — see field case 4, revised) — noted as a real, attributed pattern to watch for (no longer unconfirmed/pending), spotted by scanning a term's occurrences with the **down arrow** to quickly step through verses so the first-word repetition becomes visually obvious; Project Biblical Terms bloat and performance (secondary, condensed); recurring false-clean callout for this check area, resting solely on the confirmed **blanket-approval pattern** — a wordlist mass-marked **Correct** — described using correct spelling-status terminology (**Correct / Incorrect / Undecided**), not "denied" (**reattributed 2026-09-08**: the "denied errors" field case belongs to Basic Checks in `04-formatting-and-references.md`, not here — see "SME knowledge notes," field case 1) | 1 (callout), 3, 4 | 40 |
 | `03-parallel-passages-and-measures.md` | Parallel passages: confirming the comparison check was run and routing tool-flagged inconsistencies to the team (core, expanded); Numbers and Measures: confirming whether the team's Paratext version has the **new consolidated Numbers check (covering numbers, weights, and measures)** — in testing as of 2026-09-11, anticipated to be the primary case by the time this course publishes — or still only the **old separate Numbers check** (limited scope, no separate Measures check), which remains a real fallback scenario for teams not yet on the newer version; running whichever is available against the team's already-agreed, documented approach, and routing gaps back to the team (core, expanded); recurring false-clean callout | 1 (callout), 2, 5 | 60 |
 | `04-formatting-and-references.md` | Formatting checks in structural-first order, now **8 steps** (corrected 2026-09-15, Jenni Beadle — was 7, missing its actual mandatory first step): **(0) Chapter/Verse Numbers first and confirmed clean**, because every other check here (references, footnotes, verse-based markers, etc.) quotes/relies on chapter and verse locations to report its results, which become unreliable or ambiguous if chapter/verse numbering has errors (e.g. duplicate verses); then (1) marker-pair census, (2) ghost markers, (3) long/short verses, (4) section headings, (5) book titles, (6) references, (7) footnotes (core); subsection (confirmed by Kevin Nicholas on 2026-08-28): Punctuation Inventory (**Tools > Checking Inventories > Punctuation Inventory** — corrected 2026-09-11, was mis-stated as "Checks > Inventories") ahead of typesetting — reviewing/using the inventory itself (not PTXprint or the typesetter's own tooling), confirming the inventory was actually reviewed rather than assumed already handled earlier in the process (echoes the objective-1 false-clean theme), and common settings issues that turn this into a time-sink for a typesetter; **"Punctuation Sequences" addition folded into that Punctuation Inventory subsection (raised 2026-09-03; confirmed by Kevin Nicholas on 2026-09-03 via PR #46 comment — folded in, not a separate section): "Show sequences" in the Punctuation Inventory's Inventory menu, and its relationship to the "Punctuation (sequences)" Basic Checks option** — reviewing the inventory without "Show sequences" selected can silently miss unmatched punctuation-pair sequences (echoes the false-clean theme again); scoped to punctuation sequences only — quotation-mark-specific complexity is explicitly out of scope here and deferred to a future addition; **"Unmatched Pairs of Punctuation" addition (2026-09-11, Jenni Beadle, confirmed from live Paratext screenshots — field case 11)**: a separate, dedicated inventory under Tools > Checking Inventories that catches single unmatched bracket/parenthesis-type pairs directly (e.g. an unmatched "}", "[", "("), complementing rather than replacing "Show sequences" (which catches multi-character punctuation sequences/combinations instead) — both use the same approved/incorrect/needs-review Status pattern seen elsewhere in the course; quotation-mark-specific complexity remains out of scope for both, deferred to the same future addition; recurring false-clean callout — **incorporating field case 1** (**reattributed 2026-09-08**: a team denying Basic Checks errors they didn't understand, rather than resolving them) as the concrete example of the false-clean pattern in the Basic Checks context specifically, since Basic Checks is where "deny" is an actual, correct Paratext action (unlike wordlist/spelling status, which has no deny — see `02-wordlist-and-biblical-terms.md` and "SME knowledge notes") | 1 (callout), 6 | **85 — FLAGGED 2026-09-11: the "Unmatched Pairs of Punctuation" addition pushes this lesson from 80 to an estimated 85 minutes, only 5 under the 90-minute cap.** If drafting confirms it runs longer than 5 minutes of content, trim the reference/book-title portion first (as already flagged for the prior amendment); if that alone isn't enough, this lesson should be split rather than pushed over 90 minutes. **FURTHER FLAGGED 2026-09-15 (Jenni Beadle):** the new mandatory first step (Chapter/Verse Numbers) adds content on top of this already-tight 85-minute estimate, with only 5 minutes of headroom left under the 90-minute cap. `module-author` should keep this new step's content concise — e.g. one line explaining why Chapter/Verse Numbers must be confirmed clean before any other check — and should consider trimming something elsewhere in the lesson (the reference/book-title portion is the standing trim candidate) to compensate if the addition doesn't fit within the remaining headroom |
-| `05-glossary-linking-and-layout.md` | Glossary-linking scope (over-linking, core); single- vs. two-column layout decisions (secondary, condensed); Paratext's Wordlist-driven automatic hyphenation — enabling **Show hyphenation** (Wordlist's View menu) and reviewing/correcting the resulting automatically-generated hyphenation breaks, not building a hyphenation file from scratch (corrected 2026-09-17, Jenni Beadle); the PTXprint draft-PDF read-through (core); recurring false-clean callout | 1 (callout), 7, 8, 9 | 65 |
+| `05-glossary-linking-and-layout.md` | Glossary-linking scope (over-linking, core); single- vs. two-column layout decisions (secondary, condensed); Paratext's Wordlist-driven automatic hyphenation — enabling **Show hyphenation** (Wordlist's View menu) and reviewing/correcting the resulting automatically-generated hyphenation breaks, not building a hyphenation file from scratch (corrected 2026-09-17, Jenni Beadle); **enriched 2026-09-18 per a confirming support.bible reply** to cover the fuller workflow: the grey-tick (guessed, unapproved) vs. green-tick (approved) status per word, approving a correct guess by clicking its tick or fixing a wrong one by editing its `=` break marks, batch-approving many correct words at once via shift-click/Ctrl-click then Wordlist tab menu > Edit > "Approve word hyphenation," and the `hyphenatedWords.txt` asterisk convention (starred lines = team-approved, unstarred = still guesses); a brief note that a **Study Bible Publication project's Wordlist is view-only** (hyphenation can't be approved there) and that hyphenation is **distinct from "word break characters"** (a separate Project settings > Language settings setting, for scripts without space-separated words); the advanced `HardHyphen`/`SoftHyphen`/`SoftHyphenOut`/`HyphenatedMarkers` customization settings are flagged as optional/lighter-touch, not core teaching; the PTXprint draft-PDF read-through (core); recurring false-clean callout | 1 (callout), 7, 8, 9 | **75 — revised 2026-09-18 (was 65): the fuller confirmed hyphenation workflow needs modest additional content; still 15 minutes under the 90-minute cap** |
 | `06-scenario-bank.md` | Mentor-reviewed applied scenarios weighted toward core objectives (2, 5, 6, 7, 9, 10 each get a full scenario), secondary objectives (3, 4, 8) folded into one combined scenario, and objective 1 (false-clean) run as a thread inside two of the core scenarios rather than its own case | 1–10 | 60 |
 | `07-mentor-guide.md` | Facilitator notes: what to watch for in each scenario response, the "good" markers from the SME interview | — | — |
 | `08-quiz.md` | Assessment | 1–10 | — |
-| **Total learner seat time** | | | **345** (includes the 2026-09-11 "Unmatched Pairs of Punctuation" addition, +5 minutes, pending drafting confirmation it fits within the 90-minute cap for lesson 04 — was 340, which included the 2026-09-03 "Punctuation Sequences" addition confirmed by Kevin Nicholas as a fold-in, up from 335 as confirmed 2026-08-28) |
+| **Total learner seat time** | | | **355** (includes the 2026-09-18 hyphenation-workflow enrichment to lesson 05, +10 minutes — was 345, which included the 2026-09-11 "Unmatched Pairs of Punctuation" addition, +5 minutes, pending drafting confirmation it fits within the 90-minute cap for lesson 04 — was 340, which included the 2026-09-03 "Punctuation Sequences" addition confirmed by Kevin Nicholas as a fold-in, up from 335 as confirmed 2026-08-28) |
 
 ## Assessment plan
 
@@ -410,7 +439,29 @@ cases were added in this review round; the stories below are unchanged.
    generation produced — not to build the file from scratch. This is still a concrete case
    where the consultant both advises a publishing-layout decision *and* does genuine
    hands-on tooling work — confirming Digital and Print Publishing is honestly earned by
-   this course, just via this corrected mechanism.
+   this course, just via this corrected mechanism. **(Enriched 2026-09-18, Jenni Beadle — a
+   support.bible reply confirmed the mechanism and added detail.)** The path is Tools menu >
+   Wordlist > (Wordlist's own tab menu) > View menu > "Show hyphenation." Equal signs (`=`) in a
+   word mark acceptable break points (e.g. `an=ti=no=mi=an=ism`). Each word shows a **grey tick**
+   if Paratext only guessed the hyphenation (unapproved) — click the tick to approve a correct
+   guess (it turns green), or click the word and edit the `=` marks to fix a wrong guess, which
+   turns the tick green automatically. Many correct words can be approved at once: select the
+   first word, shift-click (consecutive) or Ctrl-click (non-consecutive) to extend the selection,
+   then Wordlist tab menu > Edit > "Approve word hyphenation." Changes save to
+   `hyphenatedWords.txt` in the project folder when the Wordlist closes; lines **without** an
+   asterisk are still Paratext's guesses, lines **with** a leading `*` are team-approved. As more
+   words are approved, Paratext's guesses improve, so once guesses are reliable enough, not every
+   remaining word needs individual approval. PTXprint's draft-PDF export uses both approved and
+   guessed hyphenations, but best practice is to approve hyphenation before publication rather
+   than send unapproved guesses to print. In a **Study Bible Publication project specifically, the
+   Wordlist is view-only** — hyphenation can't be approved directly there. Hyphenation is
+   **distinct from "word break characters"** (for scripts without space-separated words), which
+   are configured separately under Project > Project settings > Language settings > Other
+   Characters tab — the two must not be conflated. Advanced/optional: `hyphenatedWords.txt`'s
+   first items can be edited to customize `HardHyphen` (the visible printed hyphen), `SoftHyphen`
+   (the `=` break marker in the file), `SoftHyphenOut` (what's sent to the typesetter, e.g. a soft
+   hyphen or zero-width space), and `HyphenatedMarkers` (which paragraph styles get hyphenated) —
+   this is lighter-touch, optional detail, not core teaching.
 6. A consultant **added the entire "All Biblical Terms" list into the Project's Biblical Terms**
    (not just selected it for viewing). Per Paratext's own help documentation, "All Biblical
    Terms" lists every Greek, Hebrew, and Aramaic term occurring 500 times or less — potentially
@@ -542,9 +593,10 @@ matching the same rule taught in the team workbook).
 - **Glossary linking**: over-linked (every occurrence, instead of first-per-section).
 - **Layout & publishing (read-through)**: single- vs. two-column choice; hyphenation is
   automatically generated by the Wordlist tool (enable **Show hyphenation** in its View menu),
-  so the actual mistake to watch for is not enabling it and/or reviewing the resulting
-  automatic breaks (corrected 2026-09-17, Jenni Beadle — was wrongly framed as building a
-  hyphenation file by hand).
+  so the actual mistake to watch for is not enabling it, not approving/correcting the grey-tick
+  guesses it produces (individually or via batch approval), or relying on unapproved guesses at
+  print time instead of approving hyphenation first (corrected 2026-09-17, enriched 2026-09-18,
+  Jenni Beadle — was wrongly framed as building a hyphenation file by hand).
 - **Cross-cutting spine**: don't trust an old or fake "all clear" — denied errors (Basic Checks'
   own accept/deny mechanism), skipped checks, or mass-approved/blanket statuses (e.g. a wordlist
   mass-marked Correct) can occur in *any* of the areas above, using whichever accept/reject
@@ -625,8 +677,8 @@ marker added after Jenni's 2026-08-27 review), spanning both Translation Tools a
 Print Publishing, anchored to the `2 - With Assistance` ladder rows that reach `3 - Independent`.
 Objectives 2 and 5 were reframed in this review from meaning-judgment to process/consistency-
 checking and team-routing, since an LTC does not normally know the project language. **8 planned
-files** (5 numbered content lessons + scenario bank + mentor guide + quiz), totaling **345 minutes**
-(~5.75 hours) of learner-facing seat time (content lessons + mentor-reviewed scenario bank; mentor
+files** (5 numbered content lessons + scenario bank + mentor guide + quiz), totaling **355 minutes**
+(~5.9 hours) of learner-facing seat time (content lessons + mentor-reviewed scenario bank; mentor
 guide and quiz excluded from the total per convention), now weighted toward the core objectives.
 The 345-minute total includes the Punctuation Inventory subsection added to
 `04-formatting-and-references.md` on 2026-08-28 and **confirmed by Kevin Nicholas on 2026-08-28**
@@ -757,4 +809,20 @@ produced, not to build the file from scratch. Objective 8, the `05-glossary-link
 module-breakdown row, field case 5, and the "Common mistakes" Layout & publishing bullet are all
 revised accordingly; the underlying skill and time estimates are unchanged — this is a
 factual/mechanism correction, not a scope change. `module-author` may revise
+`05-glossary-linking-and-layout.md` on this basis.
+
+**Amendment, Stage 5 SME fact-check pass, 2026-09-18 (Jenni Beadle) — support.bible reply confirms
+and enriches the hyphenation mechanism, no re-approval needed:** a support.bible reply confirmed
+the 2026-09-17 mechanism correction and added detail the LTC needs to actually do the task: the
+exact menu path (Tools > Wordlist > View menu > "Show hyphenation"), the meaning of `=` break
+marks, the grey-tick (guessed)/green-tick (approved) status per word and how to approve or correct
+it, batch approval via shift-click/Ctrl-click plus Wordlist tab menu > Edit > "Approve word
+hyphenation," the `hyphenatedWords.txt` asterisk convention for approved vs. guessed lines, the
+Study Bible Publication view-only caveat, the distinction from separately-configured word break
+characters, and the advanced (optional, non-core) `HardHyphen`/`SoftHyphen`/`SoftHyphenOut`/
+`HyphenatedMarkers` customization settings. Objective 8, field case 5, and the
+`05-glossary-linking-and-layout.md` module-breakdown row are revised accordingly. Lesson 05's
+estimated time is revised from 65 to **75 minutes** to accommodate the richer content (still 15
+minutes under the 90-minute cap); the course total rises from 345 to **355 minutes**. This is a
+factual/detail enrichment, not a scope change. `module-author` may draft
 `05-glossary-linking-and-layout.md` on this basis.

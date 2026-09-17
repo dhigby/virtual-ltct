@@ -10,7 +10,8 @@ Two severities:
     * a lesson file or scenario bank missing `**Estimated time:** N minutes`, or N > 90
     * a lesson file missing one of the four Learning That Lasts phase headings
       (## Connect, ## Content, ## Challenge, ## Change), or having them out of order
-    * a quiz file present but missing a pass threshold or a pipe-separated answer key
+    * a quiz file present but missing a pass threshold, a pipe-separated answer key,
+      or a canonical '## Answer key' marker above it
     * a malformed `**Design status**` line in 00-design.md
 
   Retro-fit / backfilled courses (a `00-design.md` whose design status is a retro-fit note)
@@ -37,6 +38,20 @@ TIME_RE = re.compile(r"^\*\*Estimated time:\*\*\s*(\d+)\s*minutes", re.MULTILINE
 DESIGN_STATUS_RE = re.compile(r"^\|\s*\*\*Design status\*\*\s*\|(.+)\|", re.MULTILINE)
 ANSWER_KEY_RE = re.compile(r"^\s*1\.\s*\S+(\s*\\?\|\s*\d+\.\s*\S+)+", re.MULTILINE)
 THRESHOLD_RE = re.compile(r"\b\d{1,3}\s*%|\bto pass\b", re.IGNORECASE)
+
+# The answer key's MARKER, not its content. Standardised so that tooling never has to
+# guess where a key begins: scripts/gen_course_site.py strips these blocks to build the
+# learner view a pilot learner is handed, and a marker it cannot recognise means the quiz
+# is withheld from that view entirely. The marker may repeat -- a backfilled course can
+# carry more than one quiz in a file -- and may be qualified, e.g.
+# "## Answer key (Section 1)".
+CANONICAL_KEY_RE = re.compile(r"^## Answer key\b.*$")
+# Anything that merely LOOKS like a key marker, so a non-conforming one is reported
+# rather than passing silently because a conforming one exists elsewhere in the file.
+ANY_KEY_MARKER_RE = re.compile(
+    r"^[ ]{0,3}(?:#{1,6}[ \t]*answer[ \t]*key\b.*|\*{1,2}[ \t]*answer[ \t]*key\b.*)$",
+    re.IGNORECASE | re.MULTILINE)
+
 MAX_MINUTES = 90
 
 # The Learning That Lasts four-phase lesson structure, as H2s in this order.
@@ -118,6 +133,17 @@ def check_course(folder):
             errors.append(f"{slug}/{quiz.name}: no pass threshold stated in the body")
         if not ANSWER_KEY_RE.search(qtext):
             errors.append(f"{slug}/{quiz.name}: no pipe-separated answer key found")
+        markers = ANY_KEY_MARKER_RE.findall(qtext)
+        if not markers:
+            errors.append(f"{slug}/{quiz.name}: the answer key is not marked -- put it "
+                          f"under a '## Answer key' heading")
+        for marker in markers:
+            if not CANONICAL_KEY_RE.match(marker.strip()):
+                errors.append(
+                    f"{slug}/{quiz.name}: answer key marked {marker.strip()!r} -- it must "
+                    f"be a '## Answer key' heading (optionally qualified, e.g. "
+                    f"'## Answer key (Section 1)'). The learner view is built by stripping "
+                    f"these blocks, so an unrecognised marker withholds the whole quiz.")
 
     # --- completeness (warnings only) ---
     if not any(is_lesson(n) for n in files):

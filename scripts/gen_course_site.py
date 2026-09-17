@@ -95,18 +95,28 @@ def split_frontmatter(text):
 # --------------------------------------------------------------------------------------
 # Answer-key stripping -- the learner view's disclosure boundary
 #
-# Keys are NOT consistently marked across the corpus. Three shapes exist today:
-#   "## Answer Key" / "## Answer key"      (an H2 -- most courses)
-#   "**Answer key:**"                      (a bold paragraph, no heading)
-#   "**Answer key (Section 1):**" twice    (interleaved mid-document)
-# so truncating at the first "## Answer" heading would leak answers in real files.
-# Strip every block, then re-scan; anything left means we did not understand the file
-# and the caller must withhold the page entirely.
+# The marker is standardised: an answer key sits under a "## Answer key" H2, optionally
+# qualified ("## Answer key (Section 1)"), and may repeat within one file. That is
+# enforced at authoring time by scripts/check_course_package.py, so this code recognises
+# ONE shape rather than guessing at several.
+#
+# It still verifies its own output rather than trusting that check, and withholds the
+# whole page if anything key-shaped survives. Two reasons that is not belt-and-braces
+# paranoia: check_course_package.py only lints courses that have opted into the pipeline
+# with a 00-design.md, while this renders any course folder it is pointed at; and this is
+# a disclosure boundary, where "CI was green on the repo" is a weaker guarantee than
+# "this file parsed the way I expected". INTENT.md: never optimise this into "strip what
+# we can."
 # --------------------------------------------------------------------------------------
-KEY_RE = re.compile(r"^\s{0,3}(#{1,6}\s*answer\s*key|\*{1,2}answer\s*key)", re.I | re.M)
+KEY_RE = re.compile(r"^## Answer key\b.*$", re.M)
 HEADING_RE = re.compile(r"^\s{0,3}(#{1,6})\s")
-# Conservative extras: inline per-option answer marking that KEY_RE would not catch.
-RESIDUAL_RE = re.compile(r"\(\s*correct\s*\)|^\s{0,3}\*{1,2}\s*correct answer", re.I | re.M)
+# Anything key-shaped that ISN'T the canonical marker, plus inline per-option answer
+# marking. Finding one of these after stripping means this file is not what we assumed.
+RESIDUAL_RE = re.compile(
+    r"^[ ]{0,3}(?:#{1,6}[ \t]*answer[ \t]*key\b|\*{1,2}[ \t]*answer[ \t]*key\b)"
+    r"|\(\s*correct\s*\)"
+    r"|^[ ]{0,3}\*{1,2}[ \t]*correct answer",
+    re.I | re.M)
 
 
 def strip_answer_keys(md):
@@ -119,18 +129,15 @@ def strip_answer_keys(md):
             out.append(line)
             i += 1
             continue
-        # Found a marker. Decide what terminates its block.
-        h = HEADING_RE.match(line)
-        level = len(h.group(1)) if h else None
+        # Canonical marker is an H2, so the block runs to the next H1 or H2.
         i += 1
         while i < len(lines):
             nxt = HEADING_RE.match(lines[i])
-            if nxt and (level is None or len(nxt.group(1)) <= level):
-                break          # next heading of same-or-higher rank ends the block
+            if nxt and len(nxt.group(1)) <= 2:
+                break
             i += 1
     text = "\n".join(out).rstrip() + "\n"
-    ok = KEY_RE.search(text) is None and RESIDUAL_RE.search(text) is None
-    return text, ok
+    return text, RESIDUAL_RE.search(text) is None
 
 
 # --------------------------------------------------------------------------------------

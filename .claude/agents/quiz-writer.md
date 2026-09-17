@@ -34,8 +34,20 @@ Use `modules/_template/04-quiz.md` as the file skeleton.
 - State an explicit pass threshold in the document body (e.g. "You need 80% (16/20) to
   pass") — this is content, not frontmatter; never add quiz metadata to the module's
   YAML frontmatter.
-- End with an answer key on its own line, pipe-separated, e.g.
-  `1. B | 2. C | 3. A | ...`.
+- End with an answer key under a `## Answer key` heading — **exactly that, an H2, that
+  capitalisation** — with the key itself on its own line, pipe-separated, e.g.
+
+  ```markdown
+  ## Answer key
+
+  1. B | 2. C | 3. A | ...
+  ```
+
+  The marker is not cosmetic. The learner view a pilot learner is given is built by
+  stripping these blocks out, so a heading the tooling doesn't recognise means the whole
+  quiz is withheld from them. `scripts/check_course_package.py` fails CI on any other
+  form. If a file genuinely holds more than one quiz, repeat the heading and qualify it
+  (`## Answer key (Section 1)`) rather than inventing a different marker.
 
 ## What you don't do
 

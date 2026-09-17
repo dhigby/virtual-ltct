@@ -33,9 +33,10 @@ import sys
 sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent))
 from course_stage import branch_slug, course_folders  # noqa: E402
 
-# Kept deliberately in step with gen_course_site.py. If you change the markers there,
-# change them here -- the two are meant to disagree loudly, not silently.
-KEY_RE = re.compile(r"^\s{0,3}(#{1,6}\s*answer\s*key|\*{1,2}answer\s*key)", re.I)
+# The canonical marker, enforced at authoring time by check_course_package.py and
+# stripped by gen_course_site.py. Deliberately kept in step with those two: if the marker
+# changes, all three change together, and this check is what makes a mismatch loud.
+KEY_RE = re.compile(r"^## Answer key\b.*$")
 HEADING_RE = re.compile(r"^\s{0,3}(#{1,6})\s")
 EXCLUDED_MD = ("-mentor-guide.md", "-video-script.md")
 LMS_EXPORT_RE = re.compile(r"^(qti[_-]|cypher-)|\.imscc$", re.I)
@@ -73,12 +74,10 @@ def strip_key_blocks(md):
             out.append(lines[i])
             i += 1
             continue
-        h = HEADING_RE.match(lines[i])
-        level = len(h.group(1)) if h else None
         i += 1
         while i < len(lines):
             nxt = HEADING_RE.match(lines[i])
-            if nxt and (level is None or len(nxt.group(1)) <= level):
+            if nxt and len(nxt.group(1)) <= 2:
                 break
             i += 1
     return "\n".join(out)

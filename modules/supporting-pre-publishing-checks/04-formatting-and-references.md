@@ -178,7 +178,12 @@ Four things to do with these inventories:
   with it selected, the punctuation checkbox is relabelled **"Punctuation (sequences)"**
   and runs the sequence-level check; without it, the same checkbox stays labelled
   **"Punctuation"** and only checks individual characters, so the review can look
-  complete while a whole class of problems goes unseen. This lesson covers punctuation
+  complete while a whole class of problems goes unseen. A flagged result under
+  "Punctuation (sequences)" reads something like `Invalid or unknown punctuation
+  combination: ?'"_` or `Invalid or unknown punctuation combination: !]_` (the
+  underscore stands for a space in Paratext's display), each tied to a specific
+  reference such as ROM 3:5 — combinations Paratext doesn't recognize as valid, often
+  quotation marks paired with other punctuation. This lesson covers punctuation
   sequences only; quotation marks specifically are more complicated and are intentionally
   out of scope here, deferred to a separate, future addition.
 - **Review Unmatched Pairs of Punctuation directly**, using its Status column to work
@@ -253,8 +258,9 @@ to find the gaps here, not halfway through a support session.
    review complete. Name the difference between a false-clean result produced by a
    skipped step and one produced by an unselected setting.
 6. **Two complementary tools, one gap each.** Open **Tools > Checking Inventories >
-   Unmatched Pairs of Punctuation** in the same project. In one line, say what it lists
-   that "Show sequences" does not, and one line on what "Show sequences" catches that
+   Unmatched Pairs of Punctuation** in the same project, alongside the Punctuation
+   Inventory you already opened in exercise 4. In one line, say what it lists that
+   "Show sequences" does not, and one line on what "Show sequences" catches that
    Unmatched Pairs of Punctuation does not.
 
 ## Change

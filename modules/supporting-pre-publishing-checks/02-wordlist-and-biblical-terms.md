@@ -10,8 +10,10 @@ fix without touching their keyboard.
 ## Learning objectives
 
 - You will be able to:
-  - Recognize a wordlist that has been blanket-approved rather than genuinely reviewed.
-  - Coach a team to reset it and re-run the check honestly.
+  - Recognize that Paratext has no technical way to detect a blanket-approved wordlist,
+    and ask the team directly instead of relying on the tool.
+  - Coach a team to reset the whole wordlist to Undecided when there's doubt, and
+    re-review it together honestly.
 - You will be able to:
   - Recognize incomplete Biblical Terms coverage — blank renderings presented as done.
   - Recognize stale or duplicate renderings left uncleaned.
@@ -41,17 +43,28 @@ SME interview behind this course:
   leaves the same false impression of a resolved list.
 
 In both cases, the check tool *looked* clean. Nothing in the display told you the team
-had actually engaged with it. Your job is to **re-run the check to surface what was
-hidden** — the wholesale approvals, the forgotten Undecided entries — and walk the team
-through *why* each flagged item was raised, especially incorrectly split or joined
-words, which are common in a mass-approved list. Once the cause is explained, **reset
-the relevant entries to unknown** and have the team re-review them properly. You explain
-and coach; the translator does the actual review and correction.
+had actually engaged with it. There is **no technical way in Paratext to detect that a
+wordlist was blanket-approved** — the tool doesn't distinguish an entry reviewed one at
+a time from one swept up in a bulk approval, and the **Project Plan only shows a count
+of "Incorrect" spelling-status entries**; it doesn't flag or count Undecided entries,
+and it can't surface bulk approval at all. So your job starts with a conversation, not a
+tool: **ask the team directly** whether entries were reviewed individually or approved
+in bulk, and whether any suspicion of that exists. If there's any doubt, the safe
+practice is to **reset the entire wordlist to Undecided** — not just the entries that
+look suspect — and work through the list together with the team from a clean slate.
+Resetting the whole list loses nothing: the words and their spelling data are
+unaffected, only the approval status resets. Once reset, walk the team through *why*
+each flagged item was raised, especially incorrectly split or joined words, which are
+common in a mass-approved list. You explain and coach; the translator does the actual
+review and correction.
 
-> **WARNING — watch for a false-clean result here too:** Before you accept that "the
-> wordlist is done," check whether entries were reviewed one at a time or approved in
-> bulk, and whether any entries are actually sitting at Undecided rather than genuinely
-> resolved. A clean-looking status bar tells you nothing about which of those happened.
+> **WARNING — watch for a false-clean result here too:** A clean-looking status bar (or
+> a Project Plan showing zero "Incorrect" entries) tells you nothing about whether the
+> list was genuinely reviewed or blanket-approved — there's no technical check for that,
+> and the Project Plan doesn't track Undecided entries either. If you have any doubt,
+> ask the team directly whether blanket approval happened, and if there's any
+> uncertainty, reset the whole wordlist to Undecided and re-review it together rather
+> than trying to isolate "the relevant entries."
 > (Note: a word's spelling status is only ever Correct, Incorrect, or Undecided — there's
 > no "deny" action here. That's a Basic Checks concept, covered in Lesson 4.)
 
@@ -129,15 +142,18 @@ rather than the full reference list. Note also that the Open Biblical Terms List
 several separate lists side by side (Major Biblical Terms, All Biblical Terms, NT Key
 Biblical Terms, Inclusive/Exclusive Pronouns, Younger/Older Siblings, and others),
 and — as covered in Lesson 3 — **Numbers** and **Measures** are two more separate
-entries there, not a single combined "Measures and Money and Numbers" list: Numbers is
-a released check with limited scope, while Measures is still under development and not
-yet reliably available. Don't assume every project's terms lists look identical, or
-that a list you've seen behave one way in one project will exist or behave the same
-way in another.
+entries there, not a single combined "Measures and Money and Numbers" list: Measures
+was never released as its own check, and its functionality is being folded into a new
+consolidated check covering numbers, weights, and measures together, replacing the
+older, separate Numbers check — though not every team's Paratext version has migrated
+to it yet. Don't assume every project's terms lists look identical, or that a list
+you've seen behave one way in one project will exist or behave the same way in another.
 
 **Key takeaways**
-- A clean wordlist status can hide mass-approval or forgotten Undecided entries —
-  re-run the check to find out, and reset entries the team hasn't genuinely reviewed.
+- There's no technical way to detect a blanket-approved wordlist, and the Project Plan
+  only counts "Incorrect" entries — it doesn't flag Undecided or bulk approval. Ask the
+  team directly, and if there's doubt, reset the whole wordlist to Undecided (this loses
+  nothing) and re-review it together.
 - Blank renderings are Biblical Terms' normal starting state, not a bug — check the
   Found column/count to confirm a list is genuinely complete, not just look clean.
 - Stale or duplicate renderings can pile up on a term over time; coach the team to

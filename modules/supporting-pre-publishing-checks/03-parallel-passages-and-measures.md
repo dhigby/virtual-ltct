@@ -199,4 +199,3 @@ the check ran and you've seen everything it found."
 **Coming up:** Lesson 4 turns to formatting checks and references — working
 structural-first through marker pairs, headings, and the Punctuation Inventory ahead of
 typesetting.
-alongside your coaching role.

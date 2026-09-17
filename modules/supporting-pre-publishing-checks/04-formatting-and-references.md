@@ -141,9 +141,8 @@ expensive to fix once a project reaches a typesetter.
 Alongside it, under the same **Tools > Checking Inventories** menu, sits a distinct,
 complementary tool: **Unmatched Pairs of Punctuation.** It's its own standalone inventory
 window, listing single unmatched bracket/parenthesis-type characters — an unmatched "}",
-"[", or "(" — each with a count and a per-row **Status** column using the same
-checkmark/red-X/blue-"?" pattern you've already seen on the Parallel Passages Status
-column (checkmark = approved, red X = incorrect, blue "?" = needs review). Where the
+"[", or "(" — each with a count and a per-row **Status** column, using its own
+Status column: checkmark = approved, red X = incorrect, blue "?" = needs review. Where the
 Punctuation Inventory's "Show sequences" option (below) catches multi-character
 punctuation *sequences* — combinations like multiple quotation marks paired with spacing
 or another character such as ")" — Unmatched Pairs of Punctuation instead goes straight

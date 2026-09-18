@@ -10,11 +10,11 @@ coaching, not a single correct fix.
 
 Weighting matches the design doc's assessment plan: one full scenario each for the six
 **core** objectives (2, 5, 6, 7, 9, 10), one combined scenario folding in the three
-**secondary** objectives (3, 4, 8), and the cross-cutting **false-clean** thread (objective
-1) woven inside two of the core scenarios rather than given its own case. Every scenario
-is built from a confirmed SME field case, a stated mistake pattern, or established course
-content from Lessons 1–5 — nothing here is invented beyond what those lessons already
-establish.
+**secondary** objectives (3, 4, 8), and the cross-cutting **false-clean** thread
+(objective 1) woven inside two of the core scenarios rather than given its own case.
+Every scenario is built from a confirmed SME field case, a stated mistake pattern, or
+established course content from Lessons 1–5 — nothing here is invented beyond what those
+lessons already establish.
 
 ## How to use these scenarios
 
@@ -34,25 +34,25 @@ establish.
 
 ## Scenario 1: The Harmonized Synoptics (Objective 2 — parallel passages)
 
-**Situation:** You're supporting a team nearing Stage 6. Their parallel-passage
-comparison check shows several flagged differences between two accounts of the same
-event. The team lead tells you, "Those are just supposed to be different — we're not
-touching them, this was already checked months ago."
+**Situation:** You're supporting a team nearing Stage 6. Two accounts of the same event
+have several differences in wording. The team lead tells you, "Those are just supposed
+to be different — we're not touching them, this was already checked months ago."
 
-**Context:** Paratext's checks don't show a "last run" date on screen, so you open
-Project History to check for yourself. The dated, categorized entries show a revision
-pass logged three weeks ago, but no entry showing the parallel-passage check category
-touched or re-run since then — the flags on screen predate the revision. You don't speak
-the team's language, so you can't judge the passages' meaning yourself.
+**Context:** You open the Parallel Passages tool and look at the relevant verses side by
+side. Several of them show a red question mark in the Status column rather than a
+checkmark — meaning those verses were edited during a revision pass some time ago and
+haven't been reviewed again since. You don't speak the team's language, so you can't
+judge the passages' meaning yourself.
 
 **Your task:**
 1. **Diagnose:** What would you confirm before accepting the team lead's explanation?
-   How would you use Project History to check whether the parallel-passage check has
-   actually been re-run since the last revision pass, and how does what you find there
-   connect to the "we already did that" trap from Lesson 1?
-2. **Say to the team:** How would you ask the team to re-run the check and walk through
-   the results, without implying you doubt their judgment about legitimate variation?
-3. **Escalate:** If the team's re-run check surfaces a genuine disagreement inside the
+   How would you use the Parallel Passages tool's Status column to check whether the
+   relevant verses have actually been reviewed since the last revision pass, and how
+   does what you find there connect to the "we already did that" trap from Lesson 1?
+2. **Say to the team:** How would you ask the team to open the Parallel Passages tool
+   and walk through the verses still marked with a red "?", without implying you doubt
+   their judgment about legitimate variation?
+3. **Escalate:** If the team's review surfaces a genuine disagreement inside the
    team about whether a difference is legitimate variation or an error, who handles that
    — you, the team, or someone else? Say why.
 
@@ -61,32 +61,36 @@ the team's language, so you can't judge the passages' meaning yourself.
 ## Scenario 2: The Undocumented Measure (Objective 5 — Numbers and Measures)
 
 **Situation:** A team asks you to check their Bible for consistent renderings of
-weights and measures. When you go looking, you find that this Paratext version's
-**Measures** check is still under development and isn't reliably available — but the
-separate **Numbers** check is released and running. Once you confirm this and run the
-Numbers check where it applies, along with what informal comparison you can do for the
-measures themselves, you find an inconsistency between two occurrences of what should
-be the same measurement — one passage renders it one way, another passage renders it
-differently. You ask the team what their documented approach to measures is, and they
-aren't sure such a document exists; someone recalls "a decision early on" but nobody can
-point to where it's written.
+numbers, weights, and measures. When you go looking, you find that this team's Paratext
+version has not yet migrated to the new consolidated numbers/weights/measures check —
+they still only have the older, separate **Numbers** check, and there is no working
+Measures check available to them at all. You confirm this, then run the Numbers check
+where it applies, along with what informal comparison you can do for the measures
+themselves. That informal comparison turns up an inconsistency between two occurrences
+of what should be the same measurement — one passage renders it one way, another
+passage renders it differently. You ask the team what their documented approach to
+measures is, and they aren't sure such a document exists; someone recalls "a decision
+early on" but nobody can point to where it's written.
 
-**Context:** This check area has no single well-known field "gotcha" the way the
-wordlist or Biblical Terms tool does, and it's newer territory — part of your job here
-is confirming what's actually available and mature enough to rely on before you lean on
-it, and the rest is process and routing, not recognizing a specific known error.
+**Context:** A new consolidated check that covers numbers, weights, and measures
+together is expected to become available before too long, but rollout doesn't reach
+every team's Paratext version at once — this team is one of the ones still on the older
+setup. This check area has no single well-known field "gotcha" the way the wordlist or
+Biblical Terms tool does; part of your job here is confirming what's actually available
+for this team's specific version before you lean on it, and the rest is process and
+routing, not recognizing a specific known error.
 
 **Your task:**
-1. **Diagnose:** How would you confirm, for this team's Paratext version, which of
-   Numbers and Measures is actually available and mature enough to rely on — and what
-   would you do about the measurement inconsistency if the Measures check itself can't
-   be trusted to catch it yet? Separately, what would you check first about the
-   inconsistency you did find — the check result itself, or whether an agreed approach
-   exists at all? What's the difference between "the check found an inconsistency" and
-   "the team has no documented standard to check against"?
-2. **Say to the team:** How would you explain the difference between the two checks'
-   maturity to the team, and how would you help them either locate their existing
-   decision or agree on one now, without proposing a rendering yourself?
+1. **Diagnose:** How would you confirm, for this team's Paratext version, whether they
+   have the new consolidated check or only the older, separate Numbers check with no
+   working Measures check — and what would you do about the measurement inconsistency
+   given that no working check can catch it reliably on their version? Separately, what
+   would you check first about the inconsistency you did find — the check result itself,
+   or whether an agreed approach exists at all? What's the difference between "an
+   inconsistency turned up" and "the team has no documented standard to check against"?
+2. **Say to the team:** How would you explain to the team what their Paratext version
+   does and doesn't have available yet, and how would you help them either locate their
+   existing decision or agree on one now, without proposing a rendering yourself?
 3. **Escalate:** Once an approach is documented, whose job is it to decide which of the
    two flagged renderings is correct — and is there any version of this situation that
    would need a Translation Consultant rather than staying inside the team?
@@ -96,8 +100,9 @@ it, and the rest is process and routing, not recognizing a specific known error.
 ## Scenario 3: The Inventory Nobody Opened (Objective 6 — formatting checks)
 
 **Situation:** A team's Basic Checks show a short list of formatting errors, all in the
-second half of Mark — a few "wrong marker" flags on section headings, one heading that
-seems to be missing, and a reference that looks garbled. Separately, the team tells you
+second half of Mark — a heading that doesn't match the text it introduces, and a
+reference that looks garbled. The team hasn't mentioned Chapter/Verse Numbers at all —
+they went straight to the marker and reference flags. Separately, the team tells you
 the Punctuation Inventory "was already checked back when we started the project." The
 project has since been through two more revision passes and is headed to a typesetter in
 three weeks.
@@ -107,10 +112,13 @@ of these as already handled.
 
 **Your task:**
 1. **Diagnose:** Before working the Basic Checks list top to bottom, what would you check
-   first, and why? If you find an unclosed footnote marker partway through Mark, what
-   would you expect that to explain about the other flags — and how would you confirm it
-   before telling the team? Separately, what's wrong with treating "checked at the start
-   of the project" as current for the Punctuation Inventory?
+   first, and why? (Note that Chapter/Verse Numbers hasn't been confirmed clean yet — why
+   does that have to happen before anything else, including the marker-pair census?) If
+   you then find a missing `\p` marker after a section heading partway through Mark, what
+   would you expect that to explain about the other flags — verse text swallowed into the
+   heading style — and how would you confirm it before telling the team? Separately,
+   what's wrong with treating "checked at the start of the project" as current for the
+   Punctuation Inventory?
 2. **Say to the team:** What would you say to get them to re-run Basic Checks
    structural-first, and what would you specifically ask them to open and show you for
    the Punctuation Inventory?
@@ -122,18 +130,24 @@ of these as already handled.
 
 ## Scenario 4: The Every-Occurrence Glossary (Objective 7 — glossary linking)
 
-**Situation:** You're reviewing a project's glossary links before the final read-through
-and notice one high-frequency term is linked at nearly every occurrence across several
-chapters, not just its first appearance per section. The team's glossary-linking pass
-shows as "complete."
+**Situation:** You're reviewing a project's glossary links before the final read-through.
+The team did their glossary linking in batches over several sessions, so there's no
+report left to look back at — each pass's linked-occurrences report was replaced as soon
+as the next batch ran. You want to check whether "angel," a frequent term in this book,
+was linked at the correct scope.
 
 **Context:** The glossary itself already exists and its content is out of scope for you
 — you're only reviewing the linking operation.
 
 **Your task:**
-1. **Diagnose:** What would you check to confirm this is over-linking (every occurrence)
-   rather than a deliberate, correctly-scoped choice? What does a "complete" status
-   actually tell you, and what doesn't it tell you?
+1. **Diagnose:** Since there's no report to open, how would you use Find to check the
+   scope of "angel"'s linking? What exactly would you look for in each Find result's
+   markup to tell over-linking (every occurrence) apart from correctly-scoped linking
+   (first-occurrence-per-section) — and what's the specific way Find's hit list could
+   mislead you if you only skimmed it? This project's glossary also has a phrase term
+   that contains "angel" as one of its words (e.g. "angel of the Lord") — if a Find hit
+   for "angel" lands inside a marker whose rendering is that phrase, is that something
+   to fix, or is it correct as-is? Explain your reasoning.
 2. **Say to the team:** Walk through exactly what you'd do to unlink and relink at the
    correct scope, and what you'd explain to the team about why "first occurrence per
    section" matters for readers.
@@ -193,23 +207,27 @@ sort it out."
 **Situation:** A team going into their final formatting and layout push has three
 separate things going on:
 
-- A Biblical Terms rendering that looks implausible for the term it's attached to.
+- A Biblical Terms list the team calls "done," but several rows are still showing the
+  blank/highlighted placeholder state, and one term carries multiple candidate
+  renderings, most no longer found in the current text.
 - Send/Receive has become noticeably slower over the last month; the team mentions,
   almost in passing, that they added the full "All Biblical Terms" reference list to the
   project to make consulting terms easier.
-- The project's expat admin wants to move to single-column layout because the language
-  has long words and the team has never set up hyphenation — even though the language
-  community's own printed Bibles are conventionally two-column.
+- The project's expat admin wants to stay with a single-column layout because the language
+  has long words and the team has never set up hyphenation — even though this NT is the
+  language's first Scripture, so the community's Bible-reading experience so far is
+  entirely in the LWC, and those LWC Bibles are conventionally two-column.
 
 **Context:** All three surfaced in the same conversation; the team sees them as three
 unrelated, minor asks.
 
 **Your task:**
-1. **Diagnose:** For the Biblical Terms rendering, what would you check to determine
-   whether this is the no-selection rendering error, and how would you confirm it? For the
-   Send/Receive slowdown, what's the actual cause, and why is it not simply "having a big
-   list open"? For the layout question, what should determine the choice instead of word
-   length alone?
+1. **Diagnose:** For the Biblical Terms list, what would you check to determine whether
+   the "done" claim is genuine — and separately, what would you check to confirm which of
+   a term's several candidate renderings is actually current versus a stale leftover? For
+   the Send/Receive slowdown, what's the actual cause, and why is it not simply "having a
+   big list open"? For the layout question, what should determine the choice instead of
+   word length alone?
 2. **Say to the team:** For each of the three, write what you'd say to the team —
    including how you'd explain the Send/Receive cause to a team that's skeptical the two
    things (adding terms, slower Send/Receive) are connected, and how you'd establish the
@@ -217,7 +235,8 @@ unrelated, minor asks.
 3. **Escalate:** Which of these three, if any, would need to go beyond you and the team,
    and which are entirely within your own coaching and technical-setup role (remember:
    this course's Digital and Print Publishing claim rests on you both advising *and*
-   doing hands-on setup, such as building a hyphenation file)?
+   doing hands-on setup, such as enabling Show hyphenation in the Wordlist and
+   reviewing/correcting the auto-generated hyphenation breaks)?
 
 ---
 

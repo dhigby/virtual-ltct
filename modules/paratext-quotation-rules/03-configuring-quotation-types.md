@@ -51,7 +51,7 @@ always appear, never appear, or is either acceptable?
 
 Navigate to: ☰ > Project settings > Quotation Rules > **Quotation types** tab.
 
-![The Quotation types tab showing the seven type rows, each with a drop-down selector, and the Recommended/Custom settings controls at the top.](ss-L289-quotation-types-tab.png)
+![The Quotation types tab showing the seven type rows, each with a drop-down selector, and the Recommended/Custom settings controls at the top.](Images/ss-L289-quotation-types-tab.png)
 
 ### Enabling the check (administrator only)
 

@@ -30,7 +30,7 @@ and troubleshooting one specific check (Quotations), which is squarely `2 - With
 | --- | --- | --- | --- |
 | 1 | Learner can explain why the Quotation check produces no trustworthy results before it is configured, and name the two inputs it needs (inventory + rules). | Translation Tools §2.0 (use/troubleshoot) | Quiz §1; Lesson 1 exercise 1.1 |
 | 2 | Learner can enter the correct opening/closing quote-mark characters for each nesting level on the Quote marks tab and verify them via the Example preview. | Translation Tools §2.0 | Quiz §2; Lesson 2 exercises 2.1–2.2 |
-| 3 | Learner can configure the Quote Continuer at new paragraph and recognize the word-medial apostrophe conflict as a confirmed limitation Language Settings cannot resolve when the character is also a quote mark. | Translation Tools §2.0 (troubleshoot) | Quiz §2; Lesson 2 exercises 2.1–2.2 (continuer), 2.3 (apostrophe) |
+| 3 | Learner can configure the Quote Continuer at new paragraph **together with the Continuer required at marker list** (deriving that list from the paragraph markers the project actually uses), explain why the continuer character alone does nothing without the list, and recognize the word-medial apostrophe conflict as a confirmed limitation Language Settings cannot resolve when the character is also a quote mark. | Translation Tools §2.0 (troubleshoot) | Quiz §2; Lesson 2 exercises 2.1–2.2 (continuer + required-at list), 2.3 (apostrophe) |
 | 4 | Learner can configure each of the seven Quotation types for a given language's conventions and distinguish recommended vs. custom settings. | Translation Tools §2.0 | Quiz §3; Lesson 3 exercises 3.1–3.2 |
 | 5 | Learner can classify a check result as a real error or a configuration problem and take the correct corrective action for each. | Translation Tools §2.0 (troubleshoot) | Quiz §4; Lesson 4 exercise 4.1 |
 | 6 | Learner can work a result set to zero actionable errors, book by book, without silencing correct text. | Translation Tools §2.0 | Quiz §4; Lesson 4 exercise 4.2 |
@@ -43,14 +43,14 @@ One row per numbered lesson file. Each stays ≤ 90 minutes.
 | File | Topic | Objectives covered | Estimated minutes |
 | --- | --- | --- | --- |
 | `01-what-the-quotation-check-does.md` | What the check does and why configuration matters | 1 | 30 |
-| `02-setting-up-quote-marks.md` | The Quote marks tab; nesting levels; continuer; apostrophe conflict | 2, 3 | 75 |
+| `02-setting-up-quote-marks.md` | The Quote marks tab; nesting levels; continuer + Continuer required at list; apostrophe conflict | 2, 3 | 90 |
 | `03-configuring-quotation-types.md` | The Quotation types tab; seven types; recommended vs. custom | 4 | 60 |
 | `04-interpreting-and-clearing-the-check.md` | Triage: real error vs. config problem; reaching zero | 5, 6 | 75 |
 | `05-scenario-bank.md` | Applied practice: three unfamiliar languages (Velna, Menda, Waku) | 7 | 90 |
 | `06-mentor-guide.md` | Facilitator notes: project setup, phasing, error seeding | — | — |
 | `07-quiz.md` | Assessment | 1–7 | 20 |
 | `08-video-script.md` | Recording script for Cypher upload | — | — |
-| **Total learner seat time** | | | **~350** (course runs longer than the 270-min guide; each lesson stays under the 90-min cap) |
+| **Total learner seat time** | | | **~365** (course runs longer than the 270-min guide; each lesson stays within the 90-min cap) |
 
 ## Assessment plan
 
@@ -73,6 +73,22 @@ following field knowledge (to be confirmed at SME fact-check, stage 5):_
   the single most common real-world stumbling block, precisely because the UI suggests a fix
   that doesn't work; the correct handling is to verify and document the result, not chase a
   configuration change.
+- The **Quote Continuer at new paragraph** cell does nothing on its own. The check only treats
+  a mark at the head of a paragraph as a continuer where that paragraph's marker (or
+  previous-marker/marker transition, e.g. `p/q1`) is listed in the **Continuer required at**
+  field on the same tab. With the field empty, every continuer is read as a fresh opening mark
+  that is never closed, and a long speech such as the Sermon on the Mount produces an unclosed
+  quote result at every paragraph — confirmed against Paratext 9.5 (K. Nicholas, 2026-09-03).
+  The shipped Tamba Phase B project carries `p p/q1 m/q1 s1/pi pi/pi b/q1`; Lesson 2 has the
+  learner enter that value on Phase A so Lesson 3's expected results are reproducible. The
+  list is derived from where the project's text actually places continuers, not from a fixed
+  catalogue: Runda quotes poetry inside speech without repeating `«` on the `\q1` line, so its
+  list is `p` alone, and adding `p/q1` produces "Expected continuers [«] are missing" at
+  Matthew 2:6 and 4:6 (confirmed 2026-09-08). Too short a list yields unclosed-quote cascades;
+  too long a list yields missing-continuer results. With grid and list both entered on a fresh
+  Tamba Phase A and the Quotation types check still disabled, the Quotations check on all books
+  returns "No errors found" (confirmed 2026-09-08) — so Lesson 2 ends at zero, and Lesson 3's
+  Continued-quotation claim is only testable once the types check is enabled.
 - The **Quotation types** check is a separate, administrator-enabled check that only checks
   first-level quotes in non-Deuterocanonical books.
 - Same-character open/close (em-dash languages like the fictional Waku) cannot always be

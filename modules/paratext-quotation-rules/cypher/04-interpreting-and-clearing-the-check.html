@@ -1,0 +1,217 @@
+<p>
+  <strong>Target Audience:</strong> Trainee Language Technology Consultants<br>
+  <strong>Duration:</strong> 75 minutes<br>
+  <strong>Level:</strong> With Assistance<br>
+  <strong>Framework:</strong> Learning That Lasts (Connect, Content, Challenge, Change)
+</p>
+
+<div style="border: 1px solid #d0d0d0; border-radius: 6px; padding: 16px 20px; margin: 16px 0; background-color: #fafafa;">
+  <h3 style="margin-top: 0;">Learning Objectives</h3>
+  <p>By the end of this lesson you will be able to:</p>
+  <ul>
+    <li>Classify a check result as a real error or a configuration problem.</li>
+    <li>Take the correct corrective action for each type.</li>
+    <li>Recognize the rare case where a result is neither &mdash; a genuine collision Paratext cannot resolve through configuration &mdash; and know what to do with it instead.</li>
+    <li>Work through a result set systematically to reach zero actionable errors.</li>
+  </ul>
+</div>
+
+<p>A configured check still produces results &mdash; and on a real project the whole value of your work is being able to look at each one and decide, correctly and quickly, whether to fix the <em>text</em> or fix the <em>settings</em>. This lesson is where configuration becomes troubleshooting: reading results, classifying them, and clearing a book to zero without silencing correct Scripture.</p>
+
+<div style="background-color: #e3f2fd; border-left: 4px solid #2196f3; padding: 12px 16px; margin: 16px 0;">
+  <p style="margin: 0;"><strong>INFO</strong> This lesson uses the <code>tamba</code> fictional project in <strong>Phase B</strong> (configured, with five seeded errors). Your facilitator distributes the Phase B project &mdash; make sure it is restored in your Paratext before starting the Challenge exercises.</p>
+</div>
+
+<hr style="border: 2px solid black;">
+
+<p><img src="/files/7780768/connect.png" alt="connect" style="width: 144px; height: 194px;"></p>
+
+<p>By now the Tamba project is configured (Lessons 2 and 3). Run the check and you will still see results &mdash; but now they <em>mean</em> something. The skill this lesson builds is the judgment call you will make dozens of times on a real project: <strong>fix the text, or fix the settings?</strong></p>
+
+<p><strong>&#9999;&#65039; Reflection.</strong> Think back to Lesson 1 &mdash; the unconfigured check that refused to examine the text at all, and the team lead's project drowning in false positives &mdash; and to a project you support:</p>
+
+<ul>
+  <li>When a check lights up, what is your first instinct &mdash; start editing verses, or step back and ask whether the settings are right?</li>
+  <li>What would go wrong if you "fixed" a check result by deleting a quotation mark from correctly translated text?</li>
+  <li>How might you tell, at a glance, whether a batch of similar results is one settings gap or many separate text mistakes?</li>
+</ul>
+
+<hr style="border: 2px solid black;">
+
+<p><img src="/files/7780768/content.png" alt="content" style="width: 167px; height: 194px;"></p>
+
+<p><em>This closes the <strong>Translation Tools</strong> "use and troubleshoot" loop: you configured the check, now you interpret it. The core discipline is never editing correct text just to make a result disappear &mdash; that corrupts the translation to quiet a tool.</em></p>
+
+<p>After configuration you will typically have two kinds of results:</p>
+
+<ol>
+  <li><strong>Real errors</strong> &mdash; a mark is genuinely missing, extra, or at the wrong level. Fix these in the text.</li>
+  <li><strong>Configuration problems</strong> &mdash; the check flags something that reveals a gap in your inventory or rules. Fix these by refining the configuration, not by editing the text.</li>
+</ol>
+
+<div style="background-color: #fff8e1; border-left: 4px solid #ffc107; padding: 12px 16px; margin: 16px 0;">
+  <p style="margin: 0;"><strong>WARNING</strong> A rare third case: occasionally a result is neither. When the same character is used as both a Second (or Third) level closing mark and a word-medial apostrophe, Paratext's Word-medial punctuation setting (Language Settings &gt; Other Characters) &mdash; which looks built for exactly this &mdash; does not actually suppress the resulting "closing quote found as a word medial character" flag, confirmed against real Paratext 9.5 behavior. There is no text fix (the apostrophe is correct) and no configuration fix (the setting doesn't take effect once the character is already a quote mark). The correct action is to verify the flagged instance really is a genuine apostrophe, then leave it and move on &mdash; document it for whoever inherits the project rather than losing time hunting for a setting that doesn't exist. You'll meet this exact case in Exercise 4.1, item 5.</p>
+</div>
+
+<p>The one real fix, when it's available, is upstream of the check entirely: if the language's orthography is still being finalized, this is worth raising with the translation team as a reason to pick a different, unique character for the apostrophe &mdash; Lesson 2 recommends &#700; (U+02BC MODIFIER LETTER APOSTROPHE), the character Unicode itself designates for an apostrophe functioning as a letter rather than as punctuation. That eliminates the collision outright rather than living with documented false positives &mdash; but it's a project-level decision for the team, not a Paratext setting, and it isn't available at all for a fixed text like Tamba's, where the orthography (real or fictional) is already settled.</p>
+
+<p><img src="Images/ss-L429-results-with-highlight.png" alt="The Quotations check results panel after full configuration, showing a manageable list of results. One result is highlighted with the verse open alongside it, demonstrating how to read a result entry (location, message, and the text in context)." style="max-width: 100%;"></p>
+
+<p>Read each result as three parts: the <strong>location</strong> (book, chapter, verse), the <strong>message</strong> (what the check thinks is wrong), and the <strong>text in context</strong> (open the verse and look). A useful heuristic: the same message repeated across many verses usually points to a <strong>configuration gap</strong>; a one-off result usually points to a <strong>real error</strong> in that verse.</p>
+
+<div style="border: 1px solid #d0d0d0; border-radius: 6px; padding: 16px 20px; margin: 16px 0; background-color: #fafafa;">
+  <h3 style="margin-top: 0;">Key Takeaways</h3>
+  <ul>
+    <li>Almost every result is one of two types: real error (fix the text) or configuration problem (fix the Quote marks tab or Quotation types tab).</li>
+    <li>Never edit correct text to make a result disappear &mdash; fix the configuration instead.</li>
+    <li>The one confirmed exception: a quote-mark/apostrophe character collision. Neither fix applies &mdash; verify it's genuine, document it, and move on.</li>
+    <li>Work book by book &mdash; Matthew first, then expand. A full-NT result list is overwhelming; a single-book list is actionable.</li>
+  </ul>
+</div>
+
+<hr style="border: 2px solid black;">
+
+<p><img src="/files/7780768/challenge.png" alt="challenge" style="width: 142px; height: 194px;"></p>
+
+<p>The <code>tamba</code> project is in <strong>Phase B</strong>: fully configured, but seeded with five deliberate issues. Your job is to triage them correctly, then clear a book to zero. Your filled-in tables and reasoning are what a mentor reviews.</p>
+
+<h3>Exercise 4.1 &mdash; Triage a dirty result set</h3>
+
+<p>The <code>tamba</code> project has been seeded with five issues &mdash; but the check reports <strong>seven</strong> results, because one issue (#3) is a single broken mark whose damage is reported back as three separate, differently-worded results at three different verses. This is common: a break in the middle of a nested quotation chain confuses the tracking on both sides of the break, so the checker reports the symptom in multiple places even though there is exactly one thing to fix. <strong>Before reading further, fill in the Your prediction column for all five rows &mdash; write 1 (Real error), 2 (Configuration problem), or 3 (Neither &mdash; cannot be resolved through configuration). For row 3, make one prediction that covers all three linked results.</strong> Only after you have written a prediction for every row should you read the discovery prompts and open the verses.</p>
+
+<table border="1" style="border-collapse: collapse;">
+  <tr><th style="padding: 6px 12px;">#</th><th style="padding: 6px 12px;">Location</th><th style="padding: 6px 12px;">Check message</th><th style="padding: 6px 12px;">Your prediction</th><th style="padding: 6px 12px;">Actual type</th></tr>
+  <tr><td style="padding: 6px 12px;">1</td><td style="padding: 6px 12px;">Matthew 5:3</td><td style="padding: 6px 12px;">"Closing quote mark is possibly missing before verse 7:28"</td><td style="padding: 6px 12px;">?</td><td style="padding: 6px 12px;">?</td></tr>
+  <tr><td style="padding: 6px 12px;">2</td><td style="padding: 6px 12px;">Luke 4:18</td><td style="padding: 6px 12px;">"Closing quote mark is possibly missing before verse 20"</td><td style="padding: 6px 12px;">?</td><td style="padding: 6px 12px;">?</td></tr>
+  <tr><td style="padding: 6px 12px;">3</td><td style="padding: 6px 12px;">John 3:10, 3:16, 3:21 &mdash; <strong>one seed, three linked results</strong></td><td style="padding: 6px 12px;">3:10: "Quote opened; see following message for error" &middot; 3:16: "Expected continuers [&ldquo;] are missing OR quote not closed; see preceding message" &middot; 3:21: "Closing quote mark [&rdquo;] found without matching opening"</td><td style="padding: 6px 12px;">?</td><td style="padding: 6px 12px;">?</td></tr>
+  <tr><td style="padding: 6px 12px;">4</td><td style="padding: 6px 12px;">Acts 2:25</td><td style="padding: 6px 12px;">"Opening quote mark found without matching closing quote mark"</td><td style="padding: 6px 12px;">?</td><td style="padding: 6px 12px;">?</td></tr>
+  <tr><td style="padding: 6px 12px;">5</td><td style="padding: 6px 12px;">Romans 1:1</td><td style="padding: 6px 12px;">"Closing quote mark [&rsquo; U+2019] found as a word medial character. Sometimes caused when a closing quote is incorrectly used as an apostrophe"</td><td style="padding: 6px 12px;">?</td><td style="padding: 6px 12px;">?</td></tr>
+</table>
+
+<div class="ui-tabs ui-component" data-widget-type="tabs">
+<div class="tab-headers">
+<div class="tab-header active" data-widget-part="tab-header" data-widget-action="tab-switch" data-tab-index="0"><strong>&#9999;&#65039; Discovery prompts</strong></div>
+<div class="tab-header" data-widget-part="tab-header" data-widget-action="tab-switch" data-tab-index="1"><strong>Expected resolution (answer key)</strong></div>
+</div>
+<div class="tab-content active" data-widget-part="tab-content" data-tab-index="0" style="display: block !important;">
+<h3>Answer these before you open the verses</h3>
+<ul>
+  <li>Matthew 5:3 opens a speech that runs through verse 7:28 &mdash; the whole Sermon on the Mount, not just the Beatitudes. What closing mark should appear at 7:28, and what does the check report when it is absent?</li>
+  <li>Luke 4:18 contains an Isaiah citation. Does Tamba use dialogue marks for narrator scripture citations? If not, what should you do with a stray opening &ldquo; before the citation? Notice the check doesn't call this mark "unexpected" &mdash; it just treats it as a legitimate new opening and complains that <em>its</em> close is missing, wherever the next real closing mark happens to fall. What does that tell you about how much the checker actually "knows" about your language's conventions?</li>
+  <li>John 3:10, 3:16, and 3:21 are three separate results, but open the whole span in one sitting. The inner quotation at 3:16 is Second level. What character should the Second level opening mark be in Tamba? If you see a straight " (U+0022) instead, is that a valid Tamba Second level mark? Once you spot the one broken mark, ask yourself: does fixing only that one character, then re-running the check, clear all three results, or just one?</li>
+  <li>Acts 2:25&ndash;28: Peter cites Psalm 16 in Second level marks as one continuous span across several paragraph breaks. Recall the Tamba conventions table: what does Tamba do with quotation marks at each new paragraph of continued speech? Does this text follow that convention?</li>
+  <li>Romans 1:1 has no dialogue. How could &rsquo; (U+2019) inside a word cause the check to report a quotation problem? Try the fix Lesson 2 taught for this exact situation (Word-medial punctuation in Language Settings) and re-run the check with a genuinely fresh run, not just "Rerun" on the open panel. Does the result actually clear?</li>
+</ul>
+</div>
+<div class="tab-content" data-widget-part="tab-content" data-tab-index="1" style="display: none !important;">
+<h3>Answer key &mdash; check after committing your predictions</h3>
+<table border="1" style="border-collapse: collapse;">
+  <tr><th style="padding: 6px 12px;">#</th><th style="padding: 6px 12px;">Actual type</th><th style="padding: 6px 12px;">Action</th></tr>
+  <tr><td style="padding: 6px 12px;">1</td><td style="padding: 6px 12px;">Real error</td><td style="padding: 6px 12px;">Add the missing &rdquo; (U+201D) at the end of Matthew 7:28. The First level speech opened with &ldquo; (U+201C) at verse 5:3 and runs continuously through the whole Sermon on the Mount; the closing mark at 7:28 was deleted.</td></tr>
+  <tr><td style="padding: 6px 12px;">2</td><td style="padding: 6px 12px;">Real error</td><td style="padding: 6px 12px;">Delete the stray &ldquo; (U+201C) before the Isaiah citation in Luke 4:18. Tamba does not mark narrator scripture citations; the mark was added by mistake.</td></tr>
+  <tr><td style="padding: 6px 12px;">3</td><td style="padding: 6px 12px;">Real error (one fix, three results)</td><td style="padding: 6px 12px;">The Second level opening mark in John 3:16 is a straight " (U+0022) rather than &lsquo; (U+2018). That single wrong character is what produces all three results: the checker reports the true Second level quote as "opened" at 3:10 (where it actually starts), then loses track at 3:16 because the mark there isn't recognized as the expected continuation, then reports an orphaned First-level-looking closing mark at 3:21 that no longer has anything to match against. Replace the one character at 3:16 with &lsquo; (U+2018), confirm the closing &rsquo; (U+2019) is present at the end of the quotation, re-run the check, and all three results &mdash; 3:10, 3:16, and 3:21 &mdash; should clear together. Do not chase 3:10 or 3:21 individually; there is nothing wrong at those verses themselves.</td></tr>
+  <tr><td style="padding: 6px 12px;">4</td><td style="padding: 6px 12px;">Real error</td><td style="padding: 6px 12px;">Tamba restarts quotation marks at every paragraph break, but the Psalm 16 citation runs from 2:25 to 2:28 as one unbroken Second level span. Edit the text: close with &rsquo; (U+2019) at the end of each paragraph and reopen with &lsquo; (U+2018) at the start of the next, so every paragraph carries a complete pair.</td></tr>
+  <tr><td style="padding: 6px 12px;">5</td><td style="padding: 6px 12px;">Neither &mdash; confirmed unresolvable</td><td style="padding: 6px 12px;">The &rsquo; (U+2019) in Romans 1:1 is a genuine apostrophe inside a word, which Paratext reads as the Second level closing mark with no matching opener. Adding &rsquo; to &#9776; &gt; Project settings &gt; Language Settings &gt; Other Characters &gt; Word-medial punctuation looks like the fix (and is what Lesson 2 teaches), but confirmed against real Paratext 9.5 behavior, it does <strong>not</strong> suppress this result &mdash; the check keeps flagging it even after the setting is saved and a fully fresh check is run. There is no text change to make either (the apostrophe is correct as written). Verify the character really is a word-medial apostrophe, then leave the result and move on; note it for anyone else who picks up this project so they don't re-attempt the same fix.</td></tr>
+</table>
+</div>
+</div>
+
+<h3>Exercise 4.2 &mdash; Reach zero <em>actionable</em> errors</h3>
+
+<p><strong>Goal:</strong> Work through the full result list for the <code>tamba</code> project until every result has either been cleared (by fixing the text or adjusting the configuration) or, for the one confirmed unresolvable case, verified and documented as an expected false positive. "Zero actionable errors" does not mean a literal zero-length results list once Romans is in scope &mdash; it means nothing left in the list still needs your action.</p>
+
+<p><strong>Steps:</strong></p>
+
+<ol>
+  <li>Limit the scope to Matthew first. Work that book to zero results before expanding &mdash; Matthew has no unresolvable cases, so a true zero is the right target there.</li>
+  <li>Work through the results top-to-bottom.</li>
+  <li>For each result: open the verse, classify it, take the appropriate action.
+    <ul>
+      <li><strong>Real error:</strong> edit the verse text to fix the mark, then re-run.</li>
+      <li><strong>Configuration problem:</strong> adjust the Quote marks tab or Quotation types tab, then re-run. Do not edit the text to make marks disappear &mdash; fix the configuration instead.</li>
+      <li><strong>Neither (confirmed unresolvable):</strong> a quote-mark/apostrophe collision, like Romans 1:1. Verify the flagged character is genuinely a word-medial apostrophe, then leave it &mdash; do not keep trying configuration changes to clear it, and do not edit the text.</li>
+    </ul>
+  </li>
+  <li>After fixing a batch of real errors, re-run the check to confirm the count drops.</li>
+  <li>Once Matthew is clean, expand the scope one book at a time through the NT. When you reach Romans, expect the count to stop at 1 (the 1:1 apostrophe) rather than reaching 0 &mdash; that remaining result is correct, not a sign something is still wrong.</li>
+  <li>When unsure whether a result is a real error or a configuration problem, look at how often the same message appears: the same message repeated across many verses usually points to a configuration gap; a one-off result usually points to a real error in that verse.</li>
+  <li>Watch for <strong>linked results</strong>: a cluster of <em>different</em> messages at nearby verses &mdash; typically an "opened"/"quote opened" message, followed by an "expected continuer" or "not closed" message, followed by an orphaned "closing mark found without matching opening" further on &mdash; usually traces back to one broken mark in the middle of the chain, not three separate errors. Fix the one mark, re-run, and confirm the whole cluster clears together before treating any of the other verses in the cluster as needing their own fix.</li>
+</ol>
+
+<p><strong>Completion criteria:</strong></p>
+
+<ul>
+  <li>The Quotations check shows 0 results for every book except Romans.</li>
+  <li>Romans shows exactly 1 result (the 1:1 apostrophe), verified as a genuine word-medial apostrophe and documented rather than chased with further configuration changes.</li>
+</ul>
+
+<p><img src="Images/ss-L477-zero-results.png" alt="The Quotations check results panel showing zero results, confirming the check is clean." style="max-width: 100%;"></p>
+
+<p><strong>&#9999;&#65039; Produce this (a mentor will review it).</strong> Submit your completed triage table (predictions + actual types) and a one-line note for each result on the action you took and why. The point a mentor is checking is your <em>reasoning</em> &mdash; that you fixed text only for real errors and settings only for configuration problems.</p>
+
+<hr style="border: 2px solid black;">
+
+<p><img src="/files/7780768/change.png" alt="change" style="width: 145px; height: 194px;"></p>
+
+<p><strong>Self-assessment &mdash; can you explain it to a colleague?</strong></p>
+
+<div class="ui-flipbox ui-component" data-widget-type="flipbox" data-shape="square">
+<div class="flipbox-container" data-widget-part="flipbox-container" data-valign="center" style="height: 172px;">
+<div class="flipbox-inner">
+<div class="flipbox-front">
+<div class="flipbox-content" data-max-chars="250">
+<p><strong>Question 1</strong></p>
+<p>Luke 22:35 says "Missing closing quotation mark," but the speech runs to verse 38 and closes correctly there. What type of result is this, and what should you do?</p>
+</div>
+</div>
+<div class="flipbox-back">
+<div class="flipbox-content" data-max-chars="250">
+<p><strong>Answer</strong></p>
+<p>Likely a real error: if a paragraph break sits between 35 and 38, Tamba expects the &ldquo; continuer at its head &mdash; add it where missing. If there is no break, look for an unclosed Second or Third level quote inside the speech.</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<div class="ui-flipbox ui-component" data-widget-type="flipbox" data-shape="square">
+<div class="flipbox-container" data-widget-part="flipbox-container" data-valign="center" style="height: 172px;">
+<div class="flipbox-inner">
+<div class="flipbox-front">
+<div class="flipbox-content" data-max-chars="250">
+<p><strong>Question 2</strong></p>
+<p>You have cleared all real errors in Matthew but 6 results remain, and the text is correct. What should you do next?</p>
+</div>
+</div>
+<div class="flipbox-back">
+<div class="flipbox-content" data-max-chars="250">
+<p><strong>Answer</strong></p>
+<p>They are configuration problems, not text errors &mdash; review each to find the missing rule or setting (e.g. a Quotation types value that doesn't match the language), adjust, and re-run until they clear.</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<div class="ui-flipbox ui-component" data-widget-type="flipbox" data-shape="square">
+<div class="flipbox-container" data-widget-part="flipbox-container" data-valign="center" style="height: 172px;">
+<div class="flipbox-inner">
+<div class="flipbox-front">
+<div class="flipbox-content" data-max-chars="250">
+<p><strong>Question 3</strong></p>
+<p>The check shows an unexpected Second level quotation mark in Romans 8:1, a verse with no dialogue. What is the most likely cause and correct action?</p>
+</div>
+</div>
+<div class="flipbox-back">
+<div class="flipbox-content" data-max-chars="250">
+<p><strong>Answer</strong></p>
+<p>A real error &mdash; a stray quotation character, likely copied from a source text. Open the verse, find the stray mark, and delete it: a text correction, not a configuration change.</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<p><strong>&#9999;&#65039; Take it to your context.</strong> Recall a real check result you (or a translator you support) have seen. Would you now classify it as a real error or a configuration problem &mdash; and what would you have done differently knowing the two-type distinction?</p>
+
+<p><strong>Next step.</strong> You have taken one language, Tamba, from an unconfigured check to zero actionable errors. The scenario bank puts the full workflow &mdash; inventory &rarr; rules &rarr; check &rarr; triage &mdash; to work on three unfamiliar languages (Velna, Menda, Waku), each with its own conventions and edge cases.</p>

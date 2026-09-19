@@ -1,6 +1,7 @@
 ---
 name: Literacy or MLE
 category: Education
+slug: literacy-or-mle
 source_label: Domain-specific education
 in_framework: true
 target_statement: "Has pursue domain specific knowledge inliteracy or MLE via formal education or equivalent."

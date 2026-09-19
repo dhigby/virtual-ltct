@@ -1,0 +1,110 @@
+# Course review site -- ONE course, ONE view, per build.
+#
+# Separate from mkdocs.yml on purpose: that config publishes the competency framework
+# to the site root, this one renders a draft course package for reviewers (stages 5-6)
+# and pilot learners (stage 7). Everything is driven by environment variables, set by
+# scripts/review_site.py (local) or scripts/build_review_sites.py (CI). Don't run this
+# config by hand without them -- gen_course_site.py will tell you what's missing.
+
+site_name: !ENV [LTCT_COURSE_TITLE, 'Course review']
+site_description: Draft course package under review -- not published material.
+site_url: !ENV [LTCT_SITE_URL, '']
+repo_url: https://github.com/dhigby/virtual-ltct
+repo_name: dhigby/virtual-ltct
+edit_uri: !ENV [LTCT_EDIT_URI, 'edit/main/']
+
+# Deliberately empty (just a .gitkeep). Every page, and the theme's css/logo/favicon,
+# is written into the in-memory tree by gen_course_site.py. Reusing docs/ instead would
+# drag CNAME into each course build -- harmless nested, but a live landmine if anyone
+# ever pointed ghp-import at one of these output dirs.
+docs_dir: docs-review
+site_dir: site-review
+
+# Safe to keep strict: gen_course_site.py resolves or rewrites every internal link and
+# falls back to a GitHub blob URL, so MkDocs never sees an unresolvable target.
+strict: true
+
+exclude_docs: |
+  .gitkeep
+
+validation:
+  links:
+    # Drafts get edited constantly; a link to a heading someone has since renamed
+    # should not take down a whole course preview.
+    anchors: info
+    unrecognized_links: warn
+
+theme:
+  name: material
+  custom_dir: overrides          # noindex + the "draft under review" banner
+  logo: assets/logo.svg
+  favicon: assets/favicon.svg
+  features:
+    - navigation.sections
+    - navigation.top
+    - navigation.footer
+    - toc.follow
+    - search.suggest
+    - search.highlight
+    - content.action.edit
+    - content.code.copy
+  font:
+    text: Inter
+    code: JetBrains Mono
+  palette:
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: custom
+      accent: custom
+      toggle:
+        icon: material/weather-night
+        name: Switch to dark mode
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: custom
+      accent: custom
+      toggle:
+        icon: material/weather-sunny
+        name: Switch to light mode
+
+extra_css:
+  - stylesheets/extra.css
+
+extra:
+  ltct_ref: !ENV [LTCT_COURSE_REF, 'main']
+  ltct_view: !ENV [LTCT_VIEW, 'reviewer']
+
+plugins:
+  - search
+  - gen-files:
+      scripts:
+        - scripts/gen_course_site.py
+  - literate-nav:
+      nav_file: SUMMARY.md
+  # No `social` plugin: it needs Cairo and would run once per course per view.
+
+hooks:
+  - scripts/mkdocs_hooks.py      # keeps SUMMARY.md out of the built pages
+
+markdown_extensions:
+  - admonition
+  - attr_list
+  - md_in_html
+  - tables
+  - def_list
+  - footnotes
+  # Course lessons are hand-authored and DO contain fenced code blocks. The main
+  # mkdocs.yml has no fence extension at all -- it never needs one, since every page
+  # there is generated -- so these must be declared here or code renders as prose.
+  - pymdownx.superfences
+  - pymdownx.highlight:
+      anchor_linenums: true
+  - pymdownx.inlinehilite
+  - pymdownx.details
+  - pymdownx.tasklist:
+      custom_checkbox: true
+  - pymdownx.emoji:
+      emoji_index: !!python/name:material.extensions.emoji.twemoji
+      emoji_generator: !!python/name:material.extensions.emoji.to_svg
+  - toc:
+      permalink: true

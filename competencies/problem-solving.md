@@ -1,6 +1,7 @@
 ---
 name: Problem Solving
 category: Professional
+slug: problem-solving
 source_label: Problem Solving
 in_framework: true
 target_statement: Demonstrates use of creative, effective, and efficient solutions to complex problems

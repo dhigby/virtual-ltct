@@ -107,6 +107,6 @@ This comprehensive quiz covers all nine modules. You need 80% (16/20) to pass.
 - C) Paratext
 - D) Bloom
 ---
-## Answer Key
+## Answer key
 1. B \| 2. C \| 3. A \| 4. C \| 5. B \| 6. C \| 7. B \| 8. B \| 9. C \| 10. B \| 11. B \| 12. C \| 13. D \| 14. B \| 15. B \| 16. E \| 17. B \| 18. A \| 19. B \| 20. B
 

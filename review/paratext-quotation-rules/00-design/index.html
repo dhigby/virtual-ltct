@@ -1034,9 +1034,9 @@ and troubleshooting one specific check (Quotations), which is squarely <code>2 -
 </tr>
 <tr>
 <td>3</td>
-<td>Learner can configure the Quote Continuer at new paragraph and recognize the word-medial apostrophe conflict as a confirmed limitation Language Settings cannot resolve when the character is also a quote mark.</td>
+<td>Learner can configure the Quote Continuer at new paragraph <strong>together with the Continuer required at marker list</strong> (deriving that list from the paragraph markers the project actually uses), explain why the continuer character alone does nothing without the list, and recognize the word-medial apostrophe conflict as a confirmed limitation Language Settings cannot resolve when the character is also a quote mark.</td>
 <td>Translation Tools §2.0 (troubleshoot)</td>
-<td>Quiz §2; Lesson 2 exercises 2.1–2.2 (continuer), 2.3 (apostrophe)</td>
+<td>Quiz §2; Lesson 2 exercises 2.1–2.2 (continuer + required-at list), 2.3 (apostrophe)</td>
 </tr>
 <tr>
 <td>4</td>
@@ -1084,9 +1084,9 @@ and troubleshooting one specific check (Quotations), which is squarely <code>2 -
 </tr>
 <tr>
 <td><code>02-setting-up-quote-marks.md</code></td>
-<td>The Quote marks tab; nesting levels; continuer; apostrophe conflict</td>
+<td>The Quote marks tab; nesting levels; continuer + Continuer required at list; apostrophe conflict</td>
 <td>2, 3</td>
-<td>75</td>
+<td>90</td>
 </tr>
 <tr>
 <td><code>03-configuring-quotation-types.md</code></td>
@@ -1128,7 +1128,7 @@ and troubleshooting one specific check (Quotations), which is squarely <code>2 -
 <td><strong>Total learner seat time</strong></td>
 <td></td>
 <td></td>
-<td><strong>~350</strong> (course runs longer than the 270-min guide; each lesson stays under the 90-min cap)</td>
+<td><strong>~365</strong> (course runs longer than the 270-min guide; each lesson stays within the 90-min cap)</td>
 </tr>
 </tbody>
 </table>
@@ -1150,6 +1150,22 @@ following field knowledge (to be confirmed at SME fact-check, stage 5):</em></p>
   the single most common real-world stumbling block, precisely because the UI suggests a fix
   that doesn't work; the correct handling is to verify and document the result, not chase a
   configuration change.</li>
+<li>The <strong>Quote Continuer at new paragraph</strong> cell does nothing on its own. The check only treats
+  a mark at the head of a paragraph as a continuer where that paragraph's marker (or
+  previous-marker/marker transition, e.g. <code>p/q1</code>) is listed in the <strong>Continuer required at</strong>
+  field on the same tab. With the field empty, every continuer is read as a fresh opening mark
+  that is never closed, and a long speech such as the Sermon on the Mount produces an unclosed
+  quote result at every paragraph — confirmed against Paratext 9.5 (K. Nicholas, 2026-09-03).
+  The shipped Tamba Phase B project carries <code>p p/q1 m/q1 s1/pi pi/pi b/q1</code>; Lesson 2 has the
+  learner enter that value on Phase A so Lesson 3's expected results are reproducible. The
+  list is derived from where the project's text actually places continuers, not from a fixed
+  catalogue: Runda quotes poetry inside speech without repeating <code>«</code> on the <code>\q1</code> line, so its
+  list is <code>p</code> alone, and adding <code>p/q1</code> produces "Expected continuers [«] are missing" at
+  Matthew 2:6 and 4:6 (confirmed 2026-09-08). Too short a list yields unclosed-quote cascades;
+  too long a list yields missing-continuer results. With grid and list both entered on a fresh
+  Tamba Phase A and the Quotation types check still disabled, the Quotations check on all books
+  returns "No errors found" (confirmed 2026-09-08) — so Lesson 2 ends at zero, and Lesson 3's
+  Continued-quotation claim is only testable once the types check is enabled.</li>
 <li>The <strong>Quotation types</strong> check is a separate, administrator-enabled check that only checks
   first-level quotes in non-Deuterocanonical books.</li>
 <li>Same-character open/close (em-dash languages like the fictional Waku) cannot always be

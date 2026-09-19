@@ -865,7 +865,7 @@
 <p><strong>Outcome level:</strong> 2 - With Assistance<br>
 <strong>Competencies:</strong> Translation Tools<br>
 <strong>Content type:</strong> content<br>
-<strong>4 lessons</strong> &middot; about 5.5 hours<br>
+<strong>4 lessons</strong> &middot; about 5.8 hours<br>
 <strong>Built from:</strong> <code>course/paratext-quotation-rules</code><br>
 <strong>Pull request:</strong> <a href="https://github.com/dhigby/virtual-ltct/pull/41">41</a><br></p>
 <p>You are reading the <strong>learner view</strong> -- the course as a learner sees it. The design document, mentor guide and quiz solutions are not included.</p>
@@ -982,8 +982,55 @@
 - First level (primary speech) uses a Quote Continuer at new paragraph: continued speech repeats the opening mark <code>“</code> (U+201C) at the start of each new paragraph, with the closing mark <code>”</code> (U+201D) appearing only once, at the very end of the whole speech.
 - Second and Third level have no continuer — a Second or Third level quotation that spans a paragraph break closes fully and reopens fully at each new paragraph instead.
 - Third level is used only in Matthew, John, and Revelation where a character quotes scripture inside dialogue.
-- Poetry lines (<code>\q</code>, <code>\q2</code>, <code>\q3</code>) are never marked with quotation characters; only prose speech uses marks.</p>
-<p>Keep this reference table open as you work through Lessons 1–4. The scenario bank introduces three further fictional languages, each with its own conventions table.</p>
+- When a speech quotes Scripture as poetry, the First level continuer <code>“</code> is repeated at the head of the first <code>\q1</code> line (e.g. Matthew 2:6 <code>\q1 “ ‘Oro iu, Betliem…</code>); the following <code>\q2</code>/<code>\q1</code> lines of the same poem carry no mark.
+- <strong>Continuer required at:</strong> <code>p p/q1 m/q1 s1/pi pi/pi b/q1</code> — every <code>\p</code> inside a speech, a <code>\q1</code> that follows <code>\p</code>, <code>\m</code> or <code>\b</code>, and an indented <code>\pi</code> that follows <code>\s1</code> or another <code>\pi</code>.
+- Phase A text contains no apostrophes, so the <code>’</code> collision described under Runda does not arise in Tamba.</p>
+<p>Lesson 2 also uses a second fictional project, <strong>Runda</strong> (<code>runda</code>), for the guillemet and apostrophe exercises:</p>
+<table>
+<thead>
+<tr>
+<th>Level</th>
+<th>Name</th>
+<th>Opening mark</th>
+<th>Unicode</th>
+<th>Closing mark</th>
+<th>Unicode</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>First level</td>
+<td>Primary speech</td>
+<td><code>«</code></td>
+<td>U+00AB</td>
+<td><code>»</code></td>
+<td>U+00BB</td>
+</tr>
+<tr>
+<td>Second level</td>
+<td>Embedded speech</td>
+<td><code>‘</code></td>
+<td>U+2018</td>
+<td><code>’</code></td>
+<td>U+2019</td>
+</tr>
+<tr>
+<td>Third level</td>
+<td>—</td>
+<td><em>(not used)</em></td>
+<td></td>
+<td><em>(not used)</em></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Additional facts about Runda quotation style:</strong>
+- First level uses a Quote Continuer at new paragraph: <code>«</code> (U+00AB) is repeated at the start of each new <code>\p</code> paragraph of a continued speech.
+- Second level has no continuer.
+- Poetry quoted inside speech (Matthew 2:6, 4:6, the Beatitudes 5:3–10) does <strong>not</strong> repeat the continuer on <code>\q1</code> lines — the poem opens straight into the Second level <code>‘</code>, or simply runs on.
+- <strong>Continuer required at:</strong> <code>p</code> — nothing else, because the text carries continuers only at <code>\p</code>. Listing <code>p/q1</code> produces "Expected continuers [«] are missing" at every quoted poem.
+- Runda's text uses <code>’</code> (U+2019) as an apostrophe throughout — word-medial (<em>don’t</em>) and word-final possessive (<em>righteousness’ sake</em>, Matthew 5:10) — so it collides with the Second level closing mark. That is deliberate: Exercise 2.3 is built on it.</p>
+<p>Keep these reference tables open as you work through Lessons 1–4. The scenario bank introduces three further fictional languages, each with its own conventions table.</p>
 <hr />
 <h2 id="quick-reference-unicode-characters-used-in-this-course">Quick Reference — Unicode Characters Used in This Course<a class="headerlink" href="#quick-reference-unicode-characters-used-in-this-course" title="Permanent link">&para;</a></h2>
 <table>

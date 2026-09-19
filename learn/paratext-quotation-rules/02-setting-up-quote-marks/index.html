@@ -475,6 +475,23 @@
     </span>
   </a>
   
+    <nav class="md-nav" aria-label="Content">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#continuer-required-at-the-half-of-the-continuer-people-miss" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Continuer required at — the half of the continuer people miss
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
       
         <li class="md-nav__item">
@@ -809,6 +826,23 @@
     </span>
   </a>
   
+    <nav class="md-nav" aria-label="Content">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#continuer-required-at-the-half-of-the-continuer-people-miss" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Continuer required at — the half of the continuer people miss
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
       
         <li class="md-nav__item">
@@ -898,7 +932,7 @@
 
 
 <h1 id="lesson-2-setting-up-quote-marks">Lesson 2 — Setting Up Quote Marks<a class="headerlink" href="#lesson-2-setting-up-quote-marks" title="Permanent link">&para;</a></h1>
-<p><strong>Estimated time:</strong> 75 minutes</p>
+<p><strong>Estimated time:</strong> 90 minutes</p>
 <blockquote>
 <p>This lesson uses the <code>tamba</code> and <code>runda</code> fictional projects. See the
 <a href="../#the-fictional-project">course README</a> for their quotation conventions.</p>
@@ -911,7 +945,8 @@ meaningful to look for. This lesson gives the check the first of its two inputs.
 <p>By the end of this lesson you will be able to:</p>
 <ul>
 <li>Navigate to the Quote marks tab and enter the correct characters for each nesting level.</li>
-<li>Configure the Quote Continuer at new paragraph for languages that use continuation marks.</li>
+<li>Configure the Quote Continuer at new paragraph for languages that use continuation marks,
+  and fill the <strong>Continuer required at</strong> list that tells the check <em>where</em> to expect it.</li>
 <li>Recognize the word-medial punctuation conflict when the same character serves as both a
   closing mark and an apostrophe, and explain why it cannot be fully resolved through Paratext
   settings when that character is also configured as a quote mark.</li>
@@ -949,9 +984,49 @@ paragraph break. Navigate to:</p>
 - <strong>Quote Continuer at new paragraph</strong> — the character repeated at the beginning of a new
   paragraph when a quotation continues (many languages leave this blank)
 - <strong>Closing</strong> — the character that ends a quotation at that level</p>
-<p>Below the grid the tab has several additional checkboxes (such as <strong>Closing quotes close</strong>,
-<strong>List all quote marks...</strong>, and <strong>Continuer required at...</strong>). Hover over any label to see its
-description in the status bar at the bottom of the dialog.</p>
+<p>Below the grid the tab has a few additional settings — checkboxes such as <strong>Closing quotes
+close</strong> and <strong>List all quote marks...</strong>, and one text field, <strong>Continuer required at</strong>, which
+matters far more than its size suggests. Hover over any label to see its description in the
+status bar at the bottom of the dialog.</p>
+<h3 id="continuer-required-at-the-half-of-the-continuer-people-miss">Continuer required at — the half of the continuer people miss<a class="headerlink" href="#continuer-required-at-the-half-of-the-continuer-people-miss" title="Permanent link">&para;</a></h3>
+<p>The continuer cell in the grid tells Paratext <em>which character</em> continues a speech. It does
+<strong>not</strong> tell Paratext <em>where</em> to expect that character. Without that second piece, the check
+has no way to tell a continuer <code>“</code> at the head of a paragraph from a brand-new opening <code>“</code>, so
+it reads every one as a fresh quotation that is never closed. A long speech that runs across
+many paragraphs — the Sermon on the Mount, for instance — then produces an unclosed-quote
+result at every paragraph, even though the continuer cell is filled in correctly. (Confirmed
+against Paratext 9.5.)</p>
+<p>The <strong>Continuer required at</strong> field supplies the <em>where</em>. It is a space-separated list of
+paragraph-marker contexts. Each entry takes one of two shapes:</p>
+<ul>
+<li><strong>A bare marker</strong>, such as <code>p</code> — a continuer is required at the start of every <code>\p</code>
+  paragraph that falls inside an open quotation.</li>
+<li><strong>A previous-marker / marker pair</strong>, such as <code>p/q1</code> — a continuer is required at a <code>\q1</code>
+  line only when it directly follows a <code>\p</code> paragraph. This is how you cover a speech that moves
+  from prose into quoted poetry (<code>p/q1</code>, <code>b/q1</code>, <code>m/q1</code>), or through indented paragraphs
+  (<code>s1/pi</code>, <code>pi/pi</code>), without demanding a continuer on every poetry line.</li>
+</ul>
+<p><strong>Where does the list come from?</strong> From the text, not from a catalogue. You do not need to know
+every USFM paragraph marker — only the ones <em>this project</em> uses at points where a speech can
+run on. Two ways to find them:</p>
+<ol>
+<li>Open a long speech (the Sermon on the Mount in Matthew 5–7 is ideal) and note every
+   paragraph marker that appears between its opening and closing marks. Each is a candidate
+   entry; each change of marker inside the speech is a candidate pair. Then check the text at
+   each candidate: does the continuer character actually appear there? A marker the text does
+   <em>not</em> carry a continuer at must stay off the list, even if it sits inside the speech.</li>
+<li>Use Paratext's <strong>Markers inventory</strong> (☰ &gt; Tools &gt; Checking Inventories) to list every
+   marker the project uses at all, with a count for each. Select a paragraph marker in the
+   upper pane and the lower pane lists every verse where it occurs, so you can double-click into
+   a few and see whether they fall inside speech. Keep the paragraph markers that do. Section
+   headings (<code>\s1</code>) never carry a continuer themselves, but a paragraph that <em>follows</em> a heading
+   inside a running speech may, which is what a pair like <code>s1/pi</code> expresses.</li>
+</ol>
+<p><img alt="The Markers inventory window for a project, with the upper pane listing markers, their counts and style names (p 1122, pi 434, q1 117, q2 118, nb 1, among others) and the lower pane listing the verses where the selected marker p occurs." src="https://github.com/dhigby/virtual-ltct/blob/course/paratext-quotation-rules/modules/paratext-quotation-rules/Images/ss-L106-markers-inventory.png" /></p>
+<p>Most New Testament projects end up with a list of four to six entries. A project with heavy
+poetry, lists, or indented material has a longer list, but it is built the same way. Both
+exercises below give you the finished list for the project so you can concentrate on the
+mechanics; the <strong>Take it to your context</strong> task at the end asks you to derive one yourself.</p>
 <p>At the bottom of the dialog:
 - <strong>Example</strong> — a live text preview showing how your configured marks look in a sample
   passage. Use this to visually confirm that you have selected the correct characters.
@@ -988,6 +1063,10 @@ place. You'll see this firsthand in the third exercise below.</p>
   dialog — confirm the code point, not just the shape.</li>
 <li>The Quote Continuer at new paragraph is optional; leave it blank if your language closes and
   reopens the marks at each paragraph break.</li>
+<li>If you fill the continuer cell, you <strong>must</strong> also fill <strong>Continuer required at</strong> with the
+  paragraph markers (and marker transitions like <code>p/q1</code>) where the continuer is expected. The
+  character alone does nothing; with the list empty, every continuer is reported as an unclosed
+  opening mark.</li>
 <li>When a closing-quote character doubles as an apostrophe, Word-medial punctuation in Language
   Settings does <strong>not</strong> suppress the resulting check result (confirmed against real Paratext
   9.5 behavior) — treat every such flag as an expected false positive to verify and set aside
@@ -1044,12 +1123,78 @@ using the dropdown arrow (▼) on each cell:</p>
 6. Check the <strong>Example</strong> section at the bottom of the dialog. The sample text should show
    <code>“…‘…’…”</code> — curly double quotes at the outer level and curly single quotes for embedded
    speech.
-7. Click <strong>OK</strong>.</p>
+7. In the <strong>Continuer required at</strong> field below the grid, enter exactly:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>p p/q1 m/q1 s1/pi pi/pi b/q1
+</code></pre></div>
+<p>Type it with single spaces between entries. Do not skip this step — see the table after
+   the steps for what each entry is doing.
+8. Click <strong>OK</strong>.</p>
+<p><img alt="The Quote marks tab for Tamba after entry: “ in the First level Opening and Continuer cells and ” in its Closing cell, ‘ and ’ at Second level with the Continuer cell at *none*, “ and ” at Third level, and the Continuer required at field below the grid reading p p/q1 m/q1 s1/pi pi/pi b/q1. The Example section shows “ repeated at the head of each continued \p paragraph." src="../ss-L202-tamba-quote-marks.png" /></p>
 <p>Tamba uses English-style curly quotes at all three levels. First level speech that spans a
 paragraph break repeats the opening mark <code>“</code> (U+201C) as a Quote Continuer at the head of each
 new paragraph; the closing mark <code>”</code> (U+201D) appears only once, at the very end of the whole
 speech. Second and Third level have no continuer — a quotation at either of those levels that
 spans a paragraph break closes fully and reopens fully at each new paragraph instead.</p>
+<p><strong>Why that list?</strong> Tamba's text uses ordinary <code>\p</code> paragraphs for most speech, quoted poetry
+introduced from prose or after a blank line, and indented <code>\pi</code> paragraphs after section
+headings. Each entry covers one of those situations:</p>
+<table>
+<thead>
+<tr>
+<th>Entry</th>
+<th>Continuer required…</th>
+<th>Where Tamba does this</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>p</code></td>
+<td>at the start of every <code>\p</code> paragraph inside an open speech</td>
+<td>Every verse of the Sermon on the Mount (Matthew 5:4–7:27)</td>
+</tr>
+<tr>
+<td><code>p/q1</code></td>
+<td>at a <code>\q1</code> poetry line that follows a <code>\p</code> paragraph</td>
+<td>A speech that quotes Scripture as poetry mid-paragraph</td>
+</tr>
+<tr>
+<td><code>m/q1</code></td>
+<td>at a <code>\q1</code> line that follows a <code>\m</code> (no-indent) paragraph</td>
+<td>Same, after a continuation paragraph</td>
+</tr>
+<tr>
+<td><code>b/q1</code></td>
+<td>at a <code>\q1</code> line that follows a <code>\b</code> blank line</td>
+<td>A second stanza of quoted poetry</td>
+</tr>
+<tr>
+<td><code>s1/pi</code></td>
+<td>at an indented <code>\pi</code> paragraph that follows a <code>\s1</code> heading</td>
+<td>A speech that continues past a section heading</td>
+</tr>
+<tr>
+<td><code>pi/pi</code></td>
+<td>at a <code>\pi</code> paragraph that follows another <code>\pi</code></td>
+<td>Consecutive indented paragraphs within one speech</td>
+</tr>
+</tbody>
+</table>
+<p>If you were configuring Tamba from scratch you would build this list by reading Matthew 5–7
+and Acts 2 and noting which markers appear inside the speeches. You will do exactly that for a
+real project in the <strong>Take it to your context</strong> task.</p>
+<p><strong>Check it worked.</strong> Run the Quotation check (☰ &gt; Tools &gt; Run basic checks, Quotations only)
+on all of Tamba's books. With the grid <em>and</em> the list filled, the result should be <strong>"No errors
+found"</strong> — Phase A's text is clean, and the Sermon on the Mount (Matthew 5:3–7:27) now reads as
+one correctly continued speech. Two other outcomes tell you what went wrong:</p>
+<ul>
+<li><em>"Quotation punctuation is not used in project TAMBA"</em> — the grid is still empty. The dialog
+  was closed with Cancel or the window's X instead of <strong>OK</strong>. Reopen it, re-enter, click OK.</li>
+<li>A run of unclosed-quote results at every verse from Matthew 5:4 onward — the grid saved but
+  the <strong>Continuer required at</strong> field is empty or has a typo. That field is by far the most
+  common cause of this pattern.</li>
+</ul>
+<p>(This is only the Quotations check. The separate Quotation types check, which Lesson 3
+configures, is not enabled yet and adds its own results once it is.)</p>
 <p><strong>TIP</strong> Hover over any column or row label ("Opening", "Closing", "Quotes (First level)",
 etc.) to see a description of that field in the status bar at the bottom of the dialog.</p>
 <h3 id="exercise-22-enter-quote-marks-for-runda">Exercise 2.2 — Enter quote marks for Runda<a class="headerlink" href="#exercise-22-enter-quote-marks-for-runda" title="Permanent link">&para;</a></h3>
@@ -1099,8 +1244,23 @@ level.</p>
 6. Leave all Third level cells at <strong>*none*</strong>.
 7. Check the <strong>Example</strong> section at the bottom of the dialog. You should see «...» for First
    level speech and ‘...’ for embedded speech.
-8. Click <strong>OK</strong>.</p>
-<p><img alt="The Quote marks tab for Runda after entry, showing « and » in First level cells and the Second level Opening/Closing filled." src="../ss-L227-runda-quote-marks.png" /></p>
+8. In the <strong>Continuer required at</strong> field, enter just:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>p
+</code></pre></div>
+<p>Runda's text does use <code>\q1</code>/<code>\q2</code> poetry inside speech — Matthew 2:6 and 4:6 quote Scripture
+   that way — but look at how it is written: the poetry line opens straight into the Second
+   level <code>‘</code> with no <code>«</code> in front of it. Runda repeats its continuer only at <code>\p</code> paragraphs, so
+   <code>p</code> is the whole list. Adding <code>p/q1</code> here would make the check demand a <code>«</code> the text never
+   carries, and you would get "Expected continuers [«] are missing" at every quoted poem.
+9. Click <strong>OK</strong>.</p>
+<p><strong>Check it worked.</strong> Run the Quotation check on Matthew. You should see <strong>no</strong> "Expected
+continuers" or "Quote opened; see following message" results at Matthew 2:5–6 or 4:6. What you
+<em>will</em> see is a long list of "Closing quote [’] found as a word medial character" results — one
+for almost every apostrophe in the book — plus a pair of results at <strong>5:3 and 5:10</strong> that look
+alarming: "Opening quote mark found without matching closing quote mark: «" at 5:3 and "Closing
+quote [’] found without matching opening" at 5:10. Leave all of these alone for now. Exercise 2.3
+is about exactly these results, including why 5:3 is reported when nothing at 5:3 is wrong.</p>
+<p><img alt="The Quote marks tab for Runda after entry, showing « and » in First level cells, the Second level Opening/Closing filled, and the Continuer required at field reading p." src="../ss-L227-runda-quote-marks.png" /></p>
 <p><strong>✏️ Compare.</strong> Runda and Tamba both fill the Quote Continuer cell at First level — Runda with
 <code>«</code>, Tamba with <code>“</code> — because both languages repeat the opening mark at the start of each
 continued paragraph rather than closing and reopening. Now compare Second level: both leave it
@@ -1108,6 +1268,34 @@ blank there, since embedded quotations in both languages close and reopen fully 
 continuing across a paragraph break. The convention table drives the configuration — never the
 other way around, so don't assume one language's pattern applies to another, or that every
 nesting level within the same language behaves the same way.</p>
+<p>Now compare the two <strong>Continuer required at</strong> lists. Both languages use a continuer, but Tamba's
+list has six entries and Runda's has one, because the list describes what the <em>text does</em>, not
+what the language's punctuation convention says. Both projects quote poetry inside speech;
+Tamba's text repeats the continuer at the head of the poetry, Runda's does not. Get the list
+wrong in either direction and the check tells you, with a different message each way:</p>
+<table>
+<thead>
+<tr>
+<th>List is…</th>
+<th>What you see</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Too short (a marker the text <em>does</em> continue at is missing)</td>
+<td>"Quote opened…" followed by an unclosed-quote result at every paragraph of a long speech</td>
+<td>Tamba with an empty field: the whole Sermon on the Mount</td>
+</tr>
+<tr>
+<td>Too long (a marker the text does <em>not</em> continue at is listed)</td>
+<td>"Expected continuers [«] are missing" at each place the listed marker occurs inside speech</td>
+<td>Runda with <code>p/q1</code> added: Matthew 2:6, 4:6</td>
+</tr>
+</tbody>
+</table>
+<p>Either way the fix is in the field, not the text. The text is the authority; the list is
+your description of it.</p>
 <h3 id="exercise-23-the-word-medial-punctuation-conflict-and-its-limit">Exercise 2.3 — The word-medial punctuation conflict (and its limit)<a class="headerlink" href="#exercise-23-the-word-medial-punctuation-conflict-and-its-limit" title="Permanent link">&para;</a></h3>
 <p>Recall from the Content section: some languages use the same character as a <strong>closing mark</strong>
 at the single-quote level <em>and</em> as an <strong>apostrophe</strong> within words. Paratext has a field that
@@ -1125,8 +1313,9 @@ quote mark — a hyphen used word-medially, for instance. Paratext will warn you
 character here that's also registered as a quote mark in Quotation Rules ("unique characters
 are recommended"); that warning is a real signal, not just caution — it means the setting won't
 do what you're about to try to use it for.</p>
-<p><strong>Do it (Runda):</strong> Runda uses <code>’</code> (U+2019) as its Second level closing mark. Suppose Runda also
-uses <code>’</code> as an apostrophe — a genuine collision.</p>
+<p><strong>Do it (Runda):</strong> Runda uses <code>’</code> (U+2019) as its Second level closing mark — and its text also
+uses <code>’</code> as an apostrophe in <em>don’t</em>, <em>can’t</em>, <em>righteousness’ sake</em>. A genuine collision, and
+you already saw its footprint in the results at the end of Exercise 2.2.</p>
 <ol>
 <li>Navigate to ☰ &gt; Project settings &gt; Language Settings &gt; Other Characters tab.</li>
 <li>In the <strong>Word-medial punctuation</strong> field, enter <code>’</code> (U+2019). Paratext will warn that this
@@ -1137,10 +1326,25 @@ uses <code>’</code> as an apostrophe — a genuine collision.</p>
    found as a word medial character" for every genuine apostrophe, exactly as before you added
    the setting. This is the expected, confirmed outcome — not a sign you configured something
    wrong.</li>
+<li><strong>Now look at Matthew 5:3 and 5:10.</strong> The same collision has a second, nastier face. In
+   <em>don’t</em> the <code>’</code> sits between two letters, so the check at least recognizes it as
+   word-medial and says so. In <code>righteousness’ sake</code> (5:10) the <code>’</code> is at the <strong>end</strong> of the word
+   — a plural possessive — so the check simply sees a Second level closing mark with no opening
+   and reports "Closing quote [’] found without matching opening". Worse, that stray close
+   knocks the check off the First level speech it was tracking, so it also reports "Opening
+   quote mark found without matching closing quote mark: «" back at <strong>5:3</strong>, where the Sermon
+   on the Mount begins. Nothing is wrong at 5:3: the speech closes correctly with <code>»</code> at 7:27.
+   One apostrophe, two results, and the scarier one points at the wrong verse. Word-medial
+   punctuation cannot help here either; it never applied to word-final characters in the first
+   place. Runda's Matthew has a handful more of these (<em>kings’</em> 11:8, <em>Moses’</em> 23:2, <em>widows’</em>
+   23:13, <em>Jesus’</em> 27:57–58), so expect the pattern to repeat.</li>
 </ol>
 <p><strong>What to do instead, in real triage:</strong> treat each of these results as a known false positive.
-Open the verse, confirm the flagged character really is a word-medial apostrophe (not an actual
-unclosed quotation), and move on — there is no setting that will make the result disappear.
+Open the verse, confirm the flagged character really is an apostrophe (word-medial or a
+word-final possessive, not an actual unclosed quotation), and move on — there is no setting that
+will make the result disappear. When a word-final apostrophe drags in a second result at the
+start of the enclosing speech, check that the speech really does close where it should, then
+set both results aside together.
 Document this for whoever inherits the project, so a future checker doesn't waste time hunting
 for a fix that doesn't exist.</p>
 <p><strong>If the orthography is still being decided:</strong> this is the one situation where the team has a
@@ -1164,18 +1368,20 @@ which collides the moment <code>’</code> is also a quote mark, exactly like Ru
 no contractions or apostrophes, so this conflict never comes up there — but if Tamba's real
 orthography later needed apostrophes written with <code>’</code>, this is the same unresolvable collision
 you just saw in Runda, not something a setting change would fix.</p>
-<p><strong>✏️ Produce this (a mentor will review it).</strong> After all three exercises, jot 2–3 sentences: which
-project(s) and level(s) needed a Quote Continuer and why, and what you observed when you tried
-the Word-medial punctuation fix for the apostrophe conflict — including that it did not
-suppress the check result. A mentor will check your configured Quote marks tabs against the
-README convention tables.</p>
+<p><strong>✏️ Produce this (a mentor will review it).</strong> After all three exercises, jot 3–4 sentences: which
+project(s) and level(s) needed a Quote Continuer and why, what the <strong>Continuer required at</strong>
+list adds that the continuer cell alone does not, and what you observed when you tried the
+Word-medial punctuation fix for the apostrophe conflict — including that it did not suppress
+the check result. A mentor will check your configured Quote marks tabs, including the
+Continuer required at field, against the README convention tables.</p>
 <h2 id="change">Change<a class="headerlink" href="#change" title="Permanent link">&para;</a></h2>
 <p><strong>Self-assessment — can you explain it to a colleague?</strong></p>
 <ol>
 <li>A language uses <code>««</code> (U+00AB U+00AB) and <code>»»</code> (U+00BB U+00BB) for First level speech and <code>«</code>
    / <code>»</code> for Second level speech. Where do you enter these characters in PT 9.5?</li>
 <li>What is the Quote Continuer at new paragraph column for? Give an example of when you would
-   leave it blank.</li>
+   leave it blank. And if you <em>do</em> fill it, what else must you fill, and what happens if you
+   don't?</li>
 <li>Your Second level closing mark is <code>’</code> (U+2019). The quotation check is flagging apostrophes
    inside words as unclosed quotations. Can you make this result disappear through
    configuration, and if not, what should you actually do about it?</li>
@@ -1185,7 +1391,10 @@ Project settings &gt; Quotation Rules) — <code>««</code> in the First level 
 level Closing cell, <code>«</code> in the Second level Opening cell, and <code>»</code> in the Second level Closing
 cell. (2) It is the character repeated at the start of each new paragraph when one speech spans
 multiple paragraphs; leave it blank when the language closes and reopens the marks at each
-paragraph break (as most Western European languages do). (3) No — adding <code>’</code> to ☰ &gt; Project
+paragraph break (as most Western European languages do). If you fill it, you must also fill
+<strong>Continuer required at</strong> with the paragraph markers and marker transitions (e.g. <code>p p/q1</code>)
+where the continuer is expected; otherwise the check reads every continuer as a new opening
+mark that is never closed and floods a long speech with unclosed-quote results. (3) No — adding <code>’</code> to ☰ &gt; Project
 settings &gt; Language Settings &gt; Other Characters tab &gt; Word-medial punctuation does not suppress
 this result when <code>’</code> is also a configured quote mark (confirmed against real Paratext 9.5
 behavior). Treat each flagged instance as an expected false positive: open the verse, confirm
@@ -1193,8 +1402,10 @@ it's a genuine apostrophe, and move past it during triage rather than searching 
 that will clear it.</p>
 <p><strong>✏️ Take it to your context.</strong> For one real language you support, write the three-row Quote
 marks table (First/Second/Third level, Opening / Continuer / Closing) as you believe it should
-be configured. Note any character that doubles as an apostrophe — that's your word-medial
-punctuation candidate.</p>
+be configured. If any level has a continuer, open the longest speech in the project's text,
+list every paragraph marker that appears inside it, and draft the <strong>Continuer required at</strong>
+list from that — bare markers for paragraphs, pairs for the transitions. Note any character
+that doubles as an apostrophe — that's your word-medial punctuation candidate.</p>
 <p><strong>Next step.</strong> The Quote marks tab tells Paratext <em>which characters</em> are quote marks. In
 <a href="../03-configuring-quotation-types/">Lesson 3</a> you give it the second input — the <strong>Quotation
 types</strong> tab, which tells the check <em>when</em> marks are expected for each kind of speech.</p>

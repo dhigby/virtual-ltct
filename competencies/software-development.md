@@ -1,7 +1,6 @@
 ---
 name: Software Development
 category: Technology Domain
-slug: software-development
 source_label: Software Development
 in_framework: true
 target_statement: Can develop or improve a software solution to a complex problem.

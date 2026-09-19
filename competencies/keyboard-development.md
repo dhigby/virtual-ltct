@@ -1,7 +1,6 @@
 ---
 name: Keyboard Development
 category: Technology Domain
-slug: keyboard-development
 source_label: Keyboard Development
 in_framework: true
 target_statement: Can develop and trains others to develop custom keyboard and data-entry tools.

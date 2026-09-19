@@ -1,7 +1,6 @@
 ---
 name: Typesetting
 category: Technology Domain
-slug: typesetting
 source_label: Typesetting
 in_framework: true
 target_statement: Is able to assist users with typesetting final complex documents.

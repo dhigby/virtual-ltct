@@ -1,7 +1,6 @@
 ---
 name: Responsive Feedback
 category: Professional
-slug: responsive-feedback
 source_label: Responsive Feedback
 in_framework: true
 target_statement: Has the ability to describe a software issue in a meaningful way for developers to act on.

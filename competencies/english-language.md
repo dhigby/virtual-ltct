@@ -1,7 +1,6 @@
 ---
 name: English Language
 category: Professional
-slug: english-language
 source_label: English Language
 in_framework: true
 target_statement: Can understand English training and technical publications and convey to others what they learned.
@@ -28,8 +27,7 @@ resources:
   - title: Assessment Grid
     url: https://rm.coe.int/CoERMPublicCommonSearchServices/DisplayDCTMContent?documentId=090000168045bb52
 source: Lang Tech Competencies.xlsx
-last_updated: 2026-08-31
----
+last_updated: 2026-09-17
 
 # English Language
 

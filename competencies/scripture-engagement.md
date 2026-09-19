@@ -1,7 +1,6 @@
 ---
 name: Scripture Engagement
 category: Education
-slug: scripture-engagement
 source_label: Domain-specific education
 in_framework: true
 target_statement: "Has pursue domain specific knowledge via formal education or equivalent in one of the following: translation, linguistics, literacy / education or scripture engagment."
@@ -16,7 +15,7 @@ resources:
   - title: Scripture Use and Impact
     url:  https://www.sil.org/translation/scripture-use-and-impact
 source: Lang Tech Competencies.xlsx
-last_updated: 2026-09-03
+last_updated: 2026-09-17
 ---
 
 # Scripture Engagement
@@ -41,7 +40,7 @@ Have a good understanding of Scripture Engagement used for Bible translation and
 
 _Each row is a level a learner is **at**; its activities are what they do to reach the level in the final column._
 
-### 1.0 — -
+### 1.0 — Has knowledge in Scripture Engagement
 
 | Current level | Suggested activities | Reaches |
 | --- | --- | --- |

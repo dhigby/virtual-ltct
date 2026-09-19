@@ -1,7 +1,6 @@
 ---
 name: Linguistics
 category: Education
-slug: linguistics
 source_label: Domain-specific education
 in_framework: true
 target_statement: "Has pursue knowledge in linguistics via formal education or equivalent."
@@ -16,7 +15,7 @@ resources:
   - title: SIL Linguistics
     url:  https://www.sil.org/linguistics
 source: Lang Tech Competencies.xlsx
-last_updated: 2026-09-03
+last_updated: 2026-09-17
 ---
 
 # Linguistics
@@ -41,7 +40,7 @@ Have a good understanding of linguistics used for Bible translation and language
 
 _Each row is a level a learner is **at**; its activities are what they do to reach the level in the final column._
 
-### 1.0 — -
+### 1.0 — Has knowledge in linguistics
 
 | Current level | Suggested activities | Reaches |
 | --- | --- | --- |

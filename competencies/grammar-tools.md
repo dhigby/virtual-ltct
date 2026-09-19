@@ -1,7 +1,6 @@
----
+﻿---
 name: Grammar Tools
 category: Technology Domain
-slug: grammar-tools
 source_label: Grammar Tools
 in_framework: true
 target_statement: Is able to consult others in the effective use of grammar tools. This include interlinear and parsing tools.
@@ -30,7 +29,7 @@ last_updated: 2026-09-02
 
 ##Description
 
-Can consult others in the effective use of grammar tools.  This includes interlinear and parsing tools.
+Knowledgable in the use of grammar tools.  This includes interlinear and parsing tools.
 
 ## Why it matters
 

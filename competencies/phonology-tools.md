@@ -1,7 +1,6 @@
 ---
 name: Phonology Tools
 category: Technology Domain
-slug: phonology-tools
 source_label: Phonology Tools
 in_framework: true
 target_statement: Is able to use the tools for doing phonological analysis and is able to consult others in their use
@@ -33,6 +32,10 @@ last_updated: 2026-09-03
 # Phonology Tools
 
 **Category:** Technology Domain
+
+## Description
+
+Knowledgable about the current phonology tools.
 
 ## Why it matters
 

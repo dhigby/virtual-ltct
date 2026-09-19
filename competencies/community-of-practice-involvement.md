@@ -1,7 +1,6 @@
 ---
 name: Community of Practice Involvement
 category: Professional
-slug: community-of-practice-involvement
 source_label: CoP Involvement
 in_framework: true
 target_statement: Can communicate with peers both to find and to share solutions to problems.

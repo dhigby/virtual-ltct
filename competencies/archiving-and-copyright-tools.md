@@ -1,7 +1,6 @@
 ---
 name: Archiving and Copyright Tools
 category: Technology Domain
-slug: archiving-and-copyright-tools
 source_label: Archiving & Copyright
 in_framework: true
 target_statement: Can promote archiving and proper use and licensing of intellectual property.

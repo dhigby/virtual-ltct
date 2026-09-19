@@ -1,7 +1,6 @@
 ---
 name: Literacy Tools
 category: Technology Domain
-slug: literacy-tools
 source_label: Literacy Tools
 in_framework: true
 target_statement: Is able to use the tools that assist literacy and education workers in their work and is able to consult others in their use. This includes primer development and easy reader development.
@@ -38,7 +37,7 @@ last_updated: 2026-09-02
 
 **Category:** Technology Domain
 
-##Description
+## Description
 
 Knowledge of the tools that assist literacy and education workers in their work and can consult others in their use.  This includes primer development and easy reader development
 

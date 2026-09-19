@@ -1,7 +1,6 @@
 ---
 name: Translation
 category: Education
-slug: translation
 source_label: Domain-specific education
 in_framework: true
 target_statement: "Has pursue domain specific knowledge via formal education or equivalent in one of the following: translation, linguistics, literacy / education or scripture engagment."
@@ -16,7 +15,7 @@ resources:
   - title: SIL Training in Translation
     url:  https://www.sil.org/training/translation
 source: Lang Tech Competencies.xlsx
-last_updated: 2026-09-03
+last_updated: 2026-09-17
 ---
 
 # Translation
@@ -31,7 +30,7 @@ Domain-specific knowledge in translation
 
 ## Why it matters
 
-Have a good understanding of translation  used for Bible translation and language development work.
+Have a good understanding of translation used for Bible translation and language development work.
 
 ## Target competency
 
@@ -41,7 +40,7 @@ Have a good understanding of translation  used for Bible translation and languag
 
 _Each row is a level a learner is **at**; its activities are what they do to reach the level in the final column._
 
-### 1.0 — -
+### 1.0 — Has knowledge in translation
 
 | Current level | Suggested activities | Reaches |
 | --- | --- | --- |

@@ -90,7 +90,7 @@ Note: At Second level Menda uses **single guillemets in reversed order** — the
 
 At Third level Menda returns to **double guillemets** — `«` opens and `»` closes, the same characters as First level. Third level is rare; John 19:21 is the key example.
 
-![The Quote marks tab for the Menda project, with Second level Opening set to › and Second level Closing set to ‹. The Example section at the bottom shows the marks in correct nested order.](ss-L560-menda-quote-marks.png)
+![The Quote marks tab for the Menda project, with Second level Opening set to › and Second level Closing set to ‹. The Example section at the bottom shows the marks in correct nested order.](Images/ss-L560-menda-quote-marks.png)
 
 **Discovery prompts:**
 - Why might it be confusing that the opening mark for Second level is the right-pointing single guillemet? What would happen if you entered it in the Closing field by mistake?
@@ -158,7 +158,7 @@ also fills **Continuer required at** with `p p/q1 b/q1 m/q1` — the paragraph-m
 where the check must insist on the continuer. Copy it exactly; without it the check does not
 enforce the continuer at those paragraph breaks.
 
-![The Quote marks tab for the Waku project, with the em dash in all three First level cells (Opening, Continuer, and Closing), “ and ” at Second level, and ‘ and ’ at Third level. The Example section at the bottom shows the same em dash serving as opener, continuer, and closer in the preview text.](ss-L156-waku-quote-marks.png)
+![The Quote marks tab for the Waku project, with the em dash in all three First level cells (Opening, Continuer, and Closing), “ and ” at Second level, and ‘ and ’ at Third level. The Example section at the bottom shows the same em dash serving as opener, continuer, and closer in the preview text.](Images/ss-L156-waku-quote-marks.png)
 
 **Note on same-character open/close:** When the same character serves as both opener and closer, Paratext relies on structural context (paragraph markers, verse boundaries, and surrounding text flow) to determine which role the em dash plays. Because this context-based interpretation may not resolve every case unambiguously, human review of flagged em-dash results is always required for Waku.
 
@@ -169,7 +169,7 @@ enforce the continuer at those paragraph breaks.
 - The John 17:26 result is a different residual class from the parentheticals: the text there is *correct* — Jesus's prayer (17:1–26) opens with `—`, carries the `—` continuer at every paragraph, and closes with `—` at the end of verse 26 — but with the same character serving as opener, closer, and continuer across a long multi-paragraph speech, Paratext's context-based tracking loses the open/close state and reports the speech as possibly unclosed. No text change fixes it without breaking Waku's convention. Verify the marks are all present, then document.
 - For all seven: consider whether the parenthetical verses can be reworded to use different punctuation. Where rewording is not feasible (and always for John 17:26, where the text is already correct), add a Project Note (☰ > Insert > Project note...) explaining the result so the consultant can verify during review.
 
-![The Quotations check results panel for Waku across all books, showing the seven residual results: word-medial em dash results in Mark 13, Luke 9:3, and Acts 3:1, plus the possibly-missing closing mark at John 17:26. Mark 13:14 is open alongside, showing its parenthetical em dashes in context.](ss-L163-waku-residual-results.png)
+![The Quotations check results panel for Waku across all books, showing the seven residual results: word-medial em dash results in Mark 13, Luke 9:3, and Acts 3:1, plus the possibly-missing closing mark at John 17:26. Mark 13:14 is open alongside, showing its parenthetical em dashes in context.](Images/ss-L163-waku-residual-results.png)
 
 ## Scenario bank summary
 - The same four-step workflow (inventory → rules → check → triage) applies to every language, however unusual its quotation conventions.

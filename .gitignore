@@ -45,3 +45,15 @@ change.png
 # Session state written by scripts/session_hooks.py - the "where am I" tab each
 # contributor pins in VS Code. Per-person and regenerated on every session start.
 .claude/NOW.md
+
+# Per-machine Claude Code permission grants -- references other, unrelated
+# local projects and paths, so it is never shared config.
+.claude/settings.local.json
+
+# Per-course scratch staging used while producing cypher/ paste-ready HTML —
+# regenerable working files, not source.
+modules/*/Temp/
+
+# Raw checking-assistant tool exports — not course content, may contain
+# unpublished translation-project data.
+**/checking-assistant-*.txt

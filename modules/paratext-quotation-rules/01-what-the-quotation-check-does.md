@@ -92,11 +92,11 @@ results of these checks is dependent upon the information you have provided in t
 and quotation rules for your project."* This is expected — the point of this challenge is that
 the check cannot give accurate results until it is configured.
 
-![The Run basic checks dialog with Quotations ticked, Choose Books selected, and all NT books included.](ss-L108-run-basic-checks.png)
+![The Run basic checks dialog with Quotations ticked, Choose Books selected, and all NT books included.](Images/ss-L108-run-basic-checks.png)
 
 5. Look at the results list.
 
-![The Quotations check results panel with no results at all, showing only the notice "Quotation punctuation is not used in project TAMBA" and pointing to Project settings > Quotation rules.](ss-L113-unconfigured-results.png)
+![The Quotations check results panel with no results at all, showing only the notice "Quotation punctuation is not used in project TAMBA" and pointing to Project settings > Quotation rules.](Images/ss-L113-unconfigured-results.png)
 
 **TIP** For all configuration work in Lessons 2–4, use **Current Book** in the Run basic
 checks dialog and keep Matthew open — it has heavy, representative dialogue and keeps results

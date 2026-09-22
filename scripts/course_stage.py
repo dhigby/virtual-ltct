@@ -40,9 +40,10 @@ CYPHER_RE = re.compile(r"^\s*cypher:\s*\S+", re.MULTILINE)
 # same reason; so must anything that enumerates courses.
 NOT_A_COURSE = {"_template"}
 
-# Screenshot links are parsed by check_course_package.check_images, which owns the
-# convention (see process/stages/03-draft.md). Imported rather than re-implemented so
-# the gate and the CI check can never disagree about what counts as a missing shot.
+# Visuals are parsed by check_course_package, which owns the conventions (see
+# process/stages/03-draft.md): check_images for screenshot links, lesson_visuals for the
+# every-lesson-has-a-visual rule. Imported rather than re-implemented so the gate and the
+# CI check can never disagree about what counts as a missing shot or a bare lesson.
 try:
     import check_course_package as _pkg
 except Exception:  # pragma: no cover - keep stage detection working without it
@@ -56,6 +57,17 @@ def pending_screenshots(folder):
     _errors, warnings = _pkg.check_images(folder, folder.name)
     prefix = "screenshot not captured yet -- "
     return [w.split(prefix, 1)[1] for w in warnings if prefix in w]
+
+
+def missing_visuals(folder):
+    """Return (lessons with no visual, lesson 1 if it has no overview video).
+
+    Every lesson carries a screenshot, diagram, image or video; lesson 1 is the course
+    overview, so its visual is the overview video. Both shortfalls hold a course at 3e.
+    """
+    if _pkg is None:
+        return [], []
+    return _pkg.lesson_visuals(folder)
 
 
 def branch_slug(slug):
@@ -240,10 +252,12 @@ def stage_for(folder, use_gh=True):
             "stage": stage, "stage_key": key, "stage_name": name,
             "stage_doc": doc, "next_action": action, "done": done,
             "design_status": design_status, "published": published, "notes": notes,
-            # Only from stage 4 on: before the content is drafted there is nothing
-            # worth sending anyone, and a link to an empty course invites the
-            # "is it broken?" question this is meant to remove.
-            "review_url": review_url(slug) if stage >= 4 else None,
+            # Only once the content is drafted: before that there is nothing worth
+            # sending anyone, and a link to an empty course invites the "is it broken?"
+            # question this is meant to remove. 3e counts -- the lessons are all there by
+            # then, only the visuals are outstanding, so a review already in flight keeps
+            # its URL when a course falls back here for a missing visual.
+            "review_url": review_url(slug) if (stage >= 4 or key == "3e") else None,
         }
 
     # --- Stage 2: design approved by someone other than the author ---
@@ -279,24 +293,35 @@ def stage_for(folder, use_gh=True):
     done.append("3c. Quiz")
 
     if not any(n.endswith("-video-script.md") for n in files):
-        return result(3, "3d", "Draft -- video script", "process/stages/03-draft.md",
-                      "Use the video-script-writer agent to write the video script for "
-                      "modules/" + slug + "/.")
-    done.append("3d. Video script")
-
-    # --- Stage 3e: screenshots the author briefed but nobody has captured yet ---
-    # The links and their alt text are written during 3a-3d; the files can only appear
-    # once a human opens the tool. That handover is the one part of a draft an agent
-    # cannot finish, so it gets its own gate rather than being discovered at review.
-    pending = pending_screenshots(folder)
-    if pending:
-        shots = "; ".join(pending[:3]) + ("; ..." if len(pending) > 3 else "")
-        return result(3, "3e", "Draft -- capture screenshots",
+        return result(3, "3d", "Draft -- overview video script",
                       "process/stages/03-draft.md",
-                      "Capture " + str(len(pending)) + " screenshot(s) for modules/"
-                      + slug + "/ and commit them under its assets/ folder. Each image "
-                      "link's alt text says which state to capture: " + shots)
-    done.append("3e. Screenshots")
+                      "Use the video-script-writer agent to write the overview video "
+                      "script (the companion to lesson 1) for modules/" + slug + "/.")
+    done.append("3d. Overview video script")
+
+    # --- Stage 3e: the visuals -- every lesson has one, and the briefed shots exist ---
+    # Two shortfalls, both of which need a human. A lesson with no visual at all needs one
+    # chosen and written in; a briefed shot needs someone to open the tool, which is the
+    # one part of a draft an agent cannot finish. Either holds the course here rather than
+    # being discovered at review, which is what makes the stage-4 gate real.
+    bare, overview = missing_visuals(folder)
+    pending = pending_screenshots(folder)
+    if bare or overview or pending:
+        todo = []
+        if overview:
+            todo.append("lesson 1 (" + overview[0] + ") is the course overview and needs "
+                        "its overview video linked with '**Watch the video:** ...'")
+        if bare:
+            todo.append("no visual yet in " + ", ".join(bare)
+                        + " -- add a screenshot, diagram, image or video to each")
+        if pending:
+            shots = "; ".join(pending[:3]) + ("; ..." if len(pending) > 3 else "")
+            todo.append("capture " + str(len(pending)) + " screenshot(s) into its assets/ "
+                        "folder; each image link's alt text says which state to "
+                        "capture: " + shots)
+        return result(3, "3e", "Draft -- visuals", "process/stages/03-draft.md",
+                      "Finish the visuals for modules/" + slug + "/: " + "; ".join(todo))
+    done.append("3e. Visuals")
 
     # --- Stage 8: published (the only late stage with a repo signal) ---
     if published:

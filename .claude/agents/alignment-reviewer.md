@@ -1,6 +1,6 @@
 ---
 name: alignment-reviewer
-description: Validates course content against its design doc, checking objective coverage, assessment traceability, module durations, lesson structure (Learning That Lasts phases), and quiz format. Use before a course goes to Internal Review to ensure design-to-content alignment.
+description: Validates course content against its design doc, checking objective coverage, assessment traceability, module durations, lesson structure (Learning That Lasts phases), per-lesson visuals, and quiz format. Use before a course goes to Internal Review to ensure design-to-content alignment.
 tools: Read, Glob, Grep
 model: inherit
 ---
@@ -19,7 +19,8 @@ reviewer relies on.
 1. **Design doc.** Read `00-design.md` in the course folder — the learning objectives,
    module breakdown, assessment plan, and SME knowledge notes.
 2. **All content files.** Read every numbered lesson file (`01-*.md`, `02-*.md`, …), the
-   scenario bank, the mentor guide, and the quiz in the course folder.
+   scenario bank, the mentor guide, the quiz, and any video script in the course folder.
+   Also list the course's `assets/` folder, so you can see which linked images exist.
 3. **Competencies.yaml** (read-only reference) and the course module's `README.md`
    frontmatter.
 
@@ -81,7 +82,31 @@ Format: a table with "Check", "Status", and "Finding" columns. Mark as ✓ (pass
   of order. As *advisory*, list any lesson whose Connect/Change/Challenge is present but
   hollow (heading only, missing its substance), with a short supporting quote.
 
-### e. Quiz format compliance
+### e. Lesson visuals
+
+- **Check (blocking):** every numbered lesson carries at least one visual — a screenshot,
+  a diagram, an image, or a video. Two forms count:
+  - an image link, `![<what it shows>](assets/…)`; the file may legitimately not be
+    captured yet (that is stage 3e's business, not yours), but the link and its alt text
+    must be there;
+  - a video line, `**Watch the video:** …`.
+  **Lesson 1 is the course overview, so its visual is the overview video** — it carries the
+  `**Watch the video:**` line, and `NN-video-script.md` exists to script it. A later lesson
+  may also have its own optional script, named `NN-lesson-<L>-video-script.md`.
+- **Check (substance — advisory):** a visual has to earn its place. Flag one that merely
+  decorates: a screenshot of a screen the prose never refers to, a diagram restating a
+  sentence, or alt text that does not describe the state shown. Where a lesson teaches a
+  sequence of clicks, say whether the shot shows the step the learner will struggle with.
+- **Finding:** list each lesson and the visual it carries. As *blocking*, name any lesson
+  with none, and lesson 1 if it has no overview video. As *advisory*, name any visual that
+  does not pull its weight.
+
+> A course should not reach you with a bare lesson — `course_stage.py` holds it at stage 3e
+> and `check_course_package.py` warns. If one does, that is the finding: send it back to
+> 3e rather than waving it through, because this is the last gate before a human reviewer
+> spends their time on it.
+
+### f. Quiz format compliance
 
 - **Check:** The quiz file (`NN-quiz.md`) follows house style:
   - Questions are grouped into labeled sections (e.g., "Section 1: Workflow & Integration
@@ -95,7 +120,7 @@ Format: a table with "Check", "Status", and "Finding" columns. Mark as ✓ (pass
 - **Finding:** Describe what the quiz includes and what it's missing. Flag any format
   violations.
 
-### f. Competency name accuracy
+### g. Competency name accuracy
 
 - **Check:** All competency names appearing in the course frontmatter, the design doc, or
   the lesson/quiz content match `competencies.yaml` verbatim (including `&` and

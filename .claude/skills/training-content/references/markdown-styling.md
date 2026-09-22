@@ -54,6 +54,31 @@ Maps to `.time-estimate` when converted to HTML.
 
 *Italic (`*text*`)* for contextual emphasis within sentences. Use sparingly.
 
+## Visuals
+
+Every lesson carries at least one — a screenshot, a diagram, an image or a video. Two
+forms, and both can be written before the artifact exists.
+
+**Image (screenshot or diagram):**
+
+```markdown
+![The Quote marks tab with « and » in the First level Opening and Closing cells.](assets/ss-02-quote-marks-tab.png)
+```
+
+The path is always relative and always under `assets/`. The alt text describes the **exact
+state shown** — it is the screen-reader text, the reviewer's check, *and* the brief for
+whoever captures the shot. `![alt text](…)` is rejected by CI. Diagrams are `.svg` files
+under the same rules; don't use a ` ```mermaid ` fence, which has no renderer here.
+
+**Video:**
+
+```markdown
+**Watch the video:** [Tour of the quotation check](https://vimeo.com/…)
+**Watch the video:** _To be recorded at stage 8._
+```
+
+Lesson 1 is the course overview, so its visual is the overview video.
+
 ## Callout patterns
 
 **Information callout:**
@@ -139,4 +164,5 @@ typography, color coding by content type, and responsive layout.
 - [ ] `---` (if used) only between major phases
 - [ ] No `[bracketed]` placeholder text left in final output
 - [ ] Concrete examples in the Content section, ending with Key Takeaways
+- [ ] At least one visual — screenshot, diagram, image or video (lesson 1: the overview video)
 - [ ] No "For Mentors" section in the lesson — that content goes in `NN-mentor-guide.md`

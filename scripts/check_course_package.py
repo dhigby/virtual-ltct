@@ -150,6 +150,63 @@ def is_lesson(name):
                               "-quiz.md", "-video-script.md"))
 
 
+# --- every lesson carries a visual --------------------------------------------------------
+# A course teaches a tool, and a lesson that is a wall of prose asks the learner to picture
+# software they have never seen. So every lesson carries one visual -- a screenshot, a
+# diagram, an image, or a video. Two forms count, and both can be written before the
+# artifact itself exists, which is what lets an agent finish a draft:
+#
+#   ![<what it shows>](assets/...)   an image -- check_images above owns its rules, and the
+#                                    file may legitimately not be captured yet (stage 3e)
+#   **Watch the video:** ...         a video -- the convention already documented in
+#                                    .claude/skills/training-content/references/
+#                                    markdown-styling.md, and recorded at stage 8
+#
+# Lesson 1 is the course overview, so its visual is the overview video rather than a
+# picture. That is reported separately because the fix is a different artifact.
+#
+# WARNING, not error, for the same reason a missing screenshot file is: a half-drafted
+# lesson legitimately has no visual yet, and failing CI on the normal mid-draft state would
+# break the very workflow this supports. The gate is stage 3e (scripts/course_stage.py),
+# and the alignment reviewer blocks on it at stage 4.
+WATCH_RE = re.compile(r"^\*\*Watch the video:\*\*", re.MULTILINE)
+
+
+def lesson_visuals(folder):
+    """Return (lessons_missing_a_visual, overview_lesson_missing_its_video).
+
+    Both are lists of file names, in lesson order. Structured rather than prose so that
+    course_stage.py can report the shortfall without parsing warning strings.
+    """
+    lessons = sorted((p for p in folder.glob("*.md") if is_lesson(p.name)),
+                     key=lambda p: p.name)
+    missing, overview = [], []
+    for i, p in enumerate(lessons):
+        text = FENCE_RE.sub("", p.read_text(encoding="utf-8"))
+        has_image = IMAGE_LINK_RE.search(text) is not None
+        has_video = WATCH_RE.search(text) is not None
+        if i == 0:
+            if not has_video:
+                overview.append(p.name)
+        elif not (has_image or has_video):
+            missing.append(p.name)
+    return missing, overview
+
+
+def check_visuals(folder, slug):
+    """Return (errors, warnings) for the every-lesson-has-a-visual rule. Warnings only."""
+    missing, overview = lesson_visuals(folder)
+    warnings = []
+    for name in overview:
+        warnings.append(f"{slug}/{name}: lesson 1 is the course overview -- it should carry "
+                        f"the overview video ('**Watch the video:** ...'), scripted at "
+                        f"stage 3d")
+    for name in missing:
+        warnings.append(f"{slug}/{name}: no visual yet -- every lesson needs a screenshot, "
+                        f"diagram, image or video (see process/stages/03-draft.md)")
+    return [], warnings
+
+
 def check_course(folder):
     """Return (errors, warnings) for one opted-in course folder."""
     errors, warnings = [], []
@@ -230,6 +287,11 @@ def check_course(folder):
     img_errors, img_warnings = check_images(folder, slug)
     errors += img_errors
     warnings += img_warnings
+
+    # --- every lesson carries a visual ---
+    vis_errors, vis_warnings = check_visuals(folder, slug)
+    errors += vis_errors
+    warnings += vis_warnings
 
     # --- completeness (warnings only) ---
     if not any(is_lesson(n) for n in files):

@@ -27,9 +27,20 @@ activity, scenario, or reflection question tied to field work. Roughly 10 minute
 
 ## Content
 
-[Core teaching content: clear explanations of key concepts, real-world examples, and
-visuals or videos where helpful. Roughly 25–30 minutes of a 60-minute lesson. End with
-a short **Key Takeaways** bullet list.]
+[Core teaching content: clear explanations of key concepts and real-world examples.
+Roughly 25–30 minutes of a 60-minute lesson. End with a short **Key Takeaways** bullet
+list.]
+
+[**Every lesson carries at least one visual** — a screenshot, a diagram, an image or a
+video — and it usually belongs here. Delete whichever of these two does not apply:]
+
+![The exact state the screenshot must show, described specifically enough that someone
+else can reproduce it.](assets/ss-01-what-it-shows.png)
+
+**Watch the video:** _To be recorded at stage 8._
+
+[Lesson 1 is the course overview, so its visual is the overview video — keep the
+`**Watch the video:**` line here and script it at stage 3d.]
 
 ## Challenge
 

@@ -95,7 +95,7 @@
             
   <strong>Draft under review.</strong>
   Not published material, and not part of the LT Consultant competency framework.
-  Built from <code>course/paratext-quotation-rules</code>.
+  Built from <code>main</code>.
 
           </div>
           
@@ -1054,7 +1054,7 @@
 
 
   
-    <a href="https://github.com/dhigby/virtual-ltct/edit/course/paratext-quotation-rules/modules/paratext-quotation-rules/08-video-script.md" title="Edit this page" class="md-content__button md-icon" rel="edit">
+    <a href="https://github.com/dhigby/virtual-ltct/edit/main/modules/paratext-quotation-rules/08-video-script.md" title="Edit this page" class="md-content__button md-icon" rel="edit">
       
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M10 20H6V4h7v5h5v3.1l2-2V8l-6-6H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h4zm10.2-7c.1 0 .3.1.4.2l1.3 1.3c.2.2.2.6 0 .8l-1 1-2.1-2.1 1-1c.1-.1.2-.2.4-.2m0 3.9L14.1 23H12v-2.1l6.1-6.1z"/></svg>
     </a>
@@ -1081,7 +1081,7 @@ human step.</p>
 dialog open, <strong>Quotations</strong> ticked, and <strong>Choose Books</strong> set to the whole New Testament.
 The presenter clicks <strong>OK</strong> — and the results panel comes back with no results at all,
 just the notice <em>"Quotation punctuation is not used in project TAMBA."</em> (This is the
-state captured in <code>Images/ss-L108-run-basic-checks.png</code> and <code>Images/ss-L113-unconfigured-results.png</code>
+state captured in <code>assets/ss-01-run-basic-checks.png</code> and <code>assets/ss-01-unconfigured-results.png</code>
 — record it live so the anticlimax lands.)</p>
 <p><strong>Voiceover:</strong> "This is what the Quotation check says on a project nobody has configured
 yet: nothing. Not 'no errors found' — nothing. It won't even look at the text, because it
@@ -1132,11 +1132,11 @@ you'll go build that configuration yourself."</p>
 </thead>
 <tbody>
 <tr>
-<td>Live navigation: click the project menu <strong>☰ &gt; Project settings &gt; Quotation Rules</strong>. (State shown in <code>Images/ss-L152-project-menu-quotation-rules.png</code>.) Land on the <strong>Quote marks</strong> tab.</td>
+<td>Live navigation: click the project menu <strong>☰ &gt; Project settings &gt; Quotation Rules</strong>. (State shown in <code>assets/ss-02-project-menu-quotation-rules.png</code>.) Land on the <strong>Quote marks</strong> tab.</td>
 <td>"Here's input one. Project menu, Project settings, Quotation Rules, and the Quote marks tab. This is where you tell Paratext the characters."</td>
 </tr>
 <tr>
-<td>Slow pan across the three-by-three grid. Highlight the three rows, then the three columns. (Layout in <code>Images/ss-L172-quote-marks-tab-layout.png</code>.)</td>
+<td>Slow pan across the three-by-three grid. Highlight the three rows, then the three columns. (Layout in <code>assets/ss-02-quote-marks-tab-layout.png</code>.)</td>
 <td>"Three rows are your nesting levels: first-level speech, a quote inside a quote, and a quote inside that. Three columns: the Opening mark, the Quote Continuer at a new paragraph, and the Closing mark. The middle column answers one question: when a speech runs across paragraphs, does this language repeat a mark at each new paragraph, or close and reopen? Tamba repeats its opening mark, so its First-level Continuer is filled; its embedded levels close and reopen, so theirs stay blank."</td>
 </tr>
 <tr>
@@ -1144,11 +1144,11 @@ you'll go build that configuration yourself."</p>
 <td>"Enter characters with the dropdown on each cell, never by typing — that's how you're sure you picked U+201C and not a straight keyboard quote. And every time, glance down at the Example preview. If the sample sentence shows the marks you expect, you got it right. This is your single best safety check."</td>
 </tr>
 <tr>
-<td>Brief cut to the Runda Quote marks tab showing guillemets and a filled Continuer cell. (<code>Images/ss-L227-runda-quote-marks.png</code>.)</td>
+<td>Brief cut to the Runda Quote marks tab showing guillemets and a filled Continuer cell. (<code>assets/ss-02-runda-quote-marks.png</code>.)</td>
 <td>"Different language, same grid. Runda uses French guillemets and, like Tamba, repeats its opening mark at each new paragraph — its Continuer cell holds « instead of “. The tab doesn't change; only the characters do."</td>
 </tr>
 <tr>
-<td>Cut to Language Settings: <strong>☰ &gt; Project settings &gt; Language Settings &gt; Other Characters</strong> tab, with <code>’</code> in the <strong>Word-medial punctuation</strong> field, warning icon visible. (<code>Images/ss-L241-language-settings-other-chars.png</code>.)</td>
+<td>Cut to Language Settings: <strong>☰ &gt; Project settings &gt; Language Settings &gt; Other Characters</strong> tab, with <code>’</code> in the <strong>Word-medial punctuation</strong> field, warning icon visible. (<code>assets/ss-02-language-settings-other-chars.png</code>.)</td>
 <td>"One gotcha that traps almost everyone — and it doesn't resolve the way you'd expect. If your closing single-quote is U+2019 and that same character is also an apostrophe inside words, the check reads every apostrophe as an unclosed quote. This field, Language Settings, Other Characters, Word-medial punctuation, looks built for exactly this. Add the character here, save, run a fresh check — and the apostrophes are still flagged. Confirmed on Paratext 9.5: once a character is claimed as a quote mark, this setting doesn't override that. There's no fix for this one. The real skill is recognizing it, verifying it's a genuine apostrophe, and documenting it instead of chasing a setting that doesn't exist."</td>
 </tr>
 </tbody>
@@ -1166,7 +1166,7 @@ you'll go build that configuration yourself."</p>
 </thead>
 <tbody>
 <tr>
-<td>Click the <strong>Quotation types</strong> tab. Show the seven type rows and the Recommended/Custom controls at the top. (<code>Images/ss-L289-quotation-types-tab.png</code>.)</td>
+<td>Click the <strong>Quotation types</strong> tab. Show the seven type rows and the Recommended/Custom controls at the top. (<code>assets/ss-03-quotation-types-tab.png</code>.)</td>
 <td>"Input two lives on the second tab. This one isn't about characters at all — it's about meaning. For each of seven kinds of speech, you tell Paratext: expect marks, never expect marks, or don't care."</td>
 </tr>
 <tr>
@@ -1192,7 +1192,7 @@ you'll go build that configuration yourself."</p>
 </thead>
 <tbody>
 <tr>
-<td>Re-run the check across the whole New Testament. Show the now-short results panel with one result highlighted and the verse open alongside it. (<code>Images/ss-L429-results-with-highlight.png</code>.)</td>
+<td>Re-run the check across the whole New Testament. Show the now-short results panel with one result highlighted and the verse open alongside it. (<code>assets/ss-04-results-with-highlight.png</code>.)</td>
 <td>"Now re-run the check across the whole New Testament — and look at the difference. The check finally has something to say, and it's seven results across five books, every one of them meaningful. This is a list you can actually work."</td>
 </tr>
 <tr>
@@ -1204,7 +1204,7 @@ you'll go build that configuration yourself."</p>
 <td>"Quick tell: the same message on lots of verses usually means a configuration gap. A one-off usually means a real error in that one verse. Work top to bottom, re-run after each batch, and watch the count fall."</td>
 </tr>
 <tr>
-<td>Show the results panel at zero. (<code>Images/ss-L477-zero-results.png</code>.)</td>
+<td>Show the results panel at zero. (<code>assets/ss-04-zero-results.png</code>.)</td>
 <td>"The goal for each book is zero — Matthew clean first, then expand one book at a time. Zero doesn't mean the text is perfect; it means every result has been looked at and resolved deliberately. That's what a consultant is trusting when they pick up the book."</td>
 </tr>
 </tbody>
@@ -1222,11 +1222,11 @@ you'll go build that configuration yourself."</p>
 </thead>
 <tbody>
 <tr>
-<td>Cut to the Menda Quote marks tab, Second level showing <code>›</code> opening and <code>‹</code> closing, with the Example preview confirming the nested order. (<code>Images/ss-L560-menda-quote-marks.png</code>.)</td>
+<td>Cut to the Menda Quote marks tab, Second level showing <code>›</code> opening and <code>‹</code> closing, with the Example preview confirming the nested order. (<code>assets/ss-05-menda-quote-marks.png</code>.)</td>
 <td>"Once you know the workflow, it's the same four steps for any language, however strange the marks. Here's Menda, where the second level opens with a right-pointing single guillemet and closes with a left-pointing one — reversed from what your eye expects. Get them backwards and the check fires on every embedded quote. The Example preview at the bottom is exactly how you catch it before you click OK."</td>
 </tr>
 <tr>
-<td>Slide listing the three scenario languages: <strong>Velna (guillemets), Menda (reversed nesting), Waku (em-dash — stretch).</strong> At "That last one won't fully clear by configuration alone," briefly cut to the Waku results panel showing seven remaining results on a correctly configured project (<code>Images/ss-L163-waku-residual-results.png</code>), then return to the slide.</td>
+<td>Slide listing the three scenario languages: <strong>Velna (guillemets), Menda (reversed nesting), Waku (em-dash — stretch).</strong> At "That last one won't fully clear by configuration alone," briefly cut to the Waku results panel showing seven remaining results on a correctly configured project (<code>assets/ss-05-waku-residual-results.png</code>), then return to the slide.</td>
 <td>"In the scenario bank you'll do three of these on your own: guillemets, that reversed nesting, and — if you want the stretch — a language that uses the em dash for both opening and closing. That last one won't fully clear by configuration alone; you'll document the leftovers in a Project Note so the consultant knows they were reviewed on purpose."</td>
 </tr>
 </tbody>

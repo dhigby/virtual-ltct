@@ -1097,7 +1097,7 @@
 2. Go to <strong>Advanced</strong>.
 3. Click <strong>RegEx Pal...</strong>.</p>
 <p>Once open, RegEx Pal has its own <strong>Find</strong>, <strong>Replace</strong>, and <strong>Count/Extract</strong> modes, and a <strong>User</strong> menu of ready-made operations, shown here running a live search on a project:</p>
-<p><img alt="RegEx Pal open on a Spanish project, with a Find pattern matching capitalised words after &quot;rey&quot; (king), highlighting matches for review." src="../RegExPal-pp.png" /></p>
+<p><img alt="RegEx Pal open on a Spanish project, with a Find pattern matching capitalised words after &quot;rey&quot; (king), highlighting matches for review." src="../ss-01-regex-pal-find-pattern.png" /></p>
 <p><strong>NOTE</strong> RegEx Pal opens scoped to whichever project you opened it from. If you need to work with a different project, close RegEx Pal and reopen it from that project's menu instead.</p>
 <h3 id="what-is-the-user-menu">What Is the User Menu?<a class="headerlink" href="#what-is-the-user-menu" title="Permanent link">&para;</a></h3>
 <p>The <strong>User Menu</strong> in Paratext RegEx Pal is a list of saved regex operations that you can run on your project with a single click. Someone has already done the work of writing the regex — all you need to do is select the right operation and run it.</p>
@@ -1148,7 +1148,7 @@
 2. Click <strong>User</strong> in the menu bar.
 3. Click <strong>Count all cap words</strong>.
 4. Look at the results.</p>
-<p><img alt="RegEx Pal showing the results of Count all cap words on a French exercise project — each distinct all-cap word listed with its occurrence count and references, plus a total row." src="../countAllCaps.png" /></p>
+<p><img alt="RegEx Pal showing the results of Count all cap words on a French exercise project — each distinct all-cap word listed with its occurrence count and references, plus a total row." src="../ss-01-count-all-cap-words.png" /></p>
 <p><strong>What the results look like:</strong> each distinct all-cap word appears in the list along with how many times it occurred and its references — for example, <code>3: ACTES [ACT 1:0, ACT 1:0, ACT 1:0]</code> means "ACTES" occurred 3 times, at those three locations. A <strong>TOTAL</strong> row at the end sums every match.</p>
 <p><strong>What to do with the result:</strong>
 - Think about whether the number seems right for the book you selected.
@@ -1168,7 +1168,7 @@
 2. Click <strong>User</strong> in the menu bar.
 3. Click <strong>Extract all footnotes</strong>.
 4. Look through the list of results.</p>
-<p><img alt="RegEx Pal showing the results of Extract all footnotes on a French exercise project — the Yes/No/Yes To All/Cancel buttons are greyed out, since Extract has already produced its list and doesn't need per-match confirmation." src="../extract-footnotes.png" /></p>
+<p><img alt="RegEx Pal showing the results of Extract all footnotes on a French exercise project — the Yes/No/Yes To All/Cancel buttons are greyed out, since Extract has already produced its list and doesn't need per-match confirmation." src="../ss-01-extract-all-footnotes.png" /></p>
 <p><strong>NOTE</strong> You'll see the same Yes/No/Yes To All/Cancel buttons here as in Find and Replace, but they're greyed out for Extract — the list is already complete, so there's nothing left to confirm.</p>
 <p><strong>What to do with the results:</strong>
 - Read through the extracted footnotes.
@@ -1187,13 +1187,13 @@
 1. Use <strong>Tools &gt; Choose Books</strong> to select a test book — ideally not your main working book while you are learning.
 2. Click <strong>User</strong> in the menu bar, then click <strong>Replace missing space after \v</strong>. This loads the Find pattern (<code>\\v(\d)</code>) and Replace pattern (<code>\\v \1</code>), and puts you in Replace mode.
 3. Switch to <strong>Tools &gt; Find</strong> (or Ctrl+F) to run that same pattern as a Find first — this shows you every match without changing anything, so you can see the full scope before committing to anything.</p>
-<p><img alt="RegEx Pal in Find mode, previewing the same \v(\d) pattern used by Replace missing space after \v — the match (\v8) is highlighted, and the Yes/No/Yes To All/Cancel buttons are greyed out since Find mode never changes text." src="../Regex-Find2.png" /></p>
+<p><img alt="RegEx Pal in Find mode, previewing the same \v(\d) pattern used by Replace missing space after \v — the match (\v8) is highlighted, and the Yes/No/Yes To All/Cancel buttons are greyed out since Find mode never changes text." src="../ss-01-find-mode-preview.png" /></p>
 <ol>
 <li>When you're ready, switch back to <strong>Tools &gt; Replace</strong> (or Ctrl+H).</li>
 <li>RegEx Pal steps through your selected book(s) and stops at each match it finds. A dialog shows the project, the reference (e.g. GEN 1), the Find pattern it matched (<code>\\v(\d)</code>), and the Replace pattern it's about to apply (<code>\\v \1</code>).</li>
 <li>For each match, choose <strong>Yes</strong> to apply that one fix, <strong>No</strong> to skip it, <strong>Yes To All</strong> to apply the fix to every remaining match without further prompts, or <strong>Cancel</strong> to stop.</li>
 </ol>
-<p><img alt="RegEx Pal's Replace confirmation dialog, showing a match for \v8 (highlighted, top panel) about to become \v 8 (highlighted, bottom panel) with the space added, alongside Yes/No/Yes To All/Cancel." src="../RegEx-replace.png" /></p>
+<p><img alt="RegEx Pal's Replace confirmation dialog, showing a match for \v8 (highlighted, top panel) about to become \v 8 (highlighted, bottom panel) with the space added, alongside Yes/No/Yes To All/Cancel." src="../ss-01-replace-confirmation.png" /></p>
 <p><strong>NOTE</strong> Switching between <strong>Tools &gt; Find</strong> and <strong>Tools &gt; Replace</strong> keeps your loaded pattern, but clears whatever results list was showing — that's expected, not a sign you've lost your pattern. Each mode simply shows its own results.</p>
 <p><strong>Key Point:</strong> This operation gives you two layers of safety: a Find preview beforehand (steps 3-4) showing the full scope, and an interactive confirmation for every match during the Replace itself (steps 5-6). Use both — don't skip the Find preview just because the Replace is already interactive.</p>
 <blockquote>

@@ -1167,19 +1167,19 @@ explanation.</p>
 <td>"Underneath Paratext, the Mercurial engine that manages Send/Receive numbers every change: version 1, version 2, version 3. That's the whole mechanism behind what you're about to see."</td>
 </tr>
 <tr>
-<td><code>image-4.png</code> — the edit made at the start of Matthew, with a point marked in project history.</td>
+<td><code>assets/ss-02-edit-matthew.png</code> — the edit made at the start of Matthew, with a point marked in project history.</td>
 <td>"Picture two translators, both starting from the same version — call it 18. One of them edits Matthew and marks a point in history."</td>
 </tr>
 <tr>
-<td><code>image-5.png</code> — the edit made at the start of Mark, also marked in project history.</td>
+<td><code>assets/ss-02-edit-mark.png</code> — the edit made at the start of Mark, also marked in project history.</td>
 <td>"At the same time, the other edits Mark, from that same starting version, and also marks a point."</td>
 </tr>
 <tr>
-<td><code>image-6.png</code> — the merged project history after both users Send/Receive.</td>
+<td><code>assets/ss-02-project-history-two-points.png</code> — the merged project history after both users Send/Receive.</td>
 <td>"Both edits were meant to become 'version 19.' Mercurial can't allow two version 19s, so it picks one, renumbers the other to 20, and the merge becomes 21. The numbering is completely consistent — it's just not necessarily the order the edits actually happened in real time."</td>
 </tr>
 <tr>
-<td><code>image.png</code> — Compare Versions showing the Matthew edit appearing to be undone.</td>
+<td><code>assets/ss-02-compare-versions-apparent-undo.png</code> — Compare Versions showing the Matthew edit appearing to be undone.</td>
 <td>"Now someone runs Compare Versions, checking the Matthew edit against the point where Mark was edited — and it looks like the Matthew edit vanished. It didn't. This is exactly the illusion the version-numbering mismatch creates. Nothing was lost."</td>
 </tr>
 <tr>
@@ -1257,15 +1257,15 @@ Keep the two cases (full restore vs. merge) visually distinct on screen.</p>
 <td>"First, close Paratext. Then open the HG Workbench from the project folder's right-click menu."</td>
 </tr>
 <tr>
-<td><code>image-1.png</code> — a note file deletion visible in recent history.</td>
+<td><code>assets/ss-04-hg-deleted-note-file.png</code> — a note file deletion visible in recent history.</td>
 <td>"If the deletion was recent, you can usually spot it directly in the history list, like this."</td>
 </tr>
 <tr>
-<td><code>image-3.png</code> — the revision-set query box with <code>removes(\"*.*\")</code> entered.</td>
+<td><code>assets/ss-04-hg-removes-query.png</code> — the revision-set query box with <code>removes(\"*.*\")</code> entered.</td>
 <td>"If you can't spot it, search directly: type<code>removes(\"*.*\")</code> in the revision set query box — press Ctrl-S if that box isn't showing — and it will find the deletion for you."</td>
 </tr>
 <tr>
-<td><code>image-2.png</code> — right-click the file at the revision before the deletion, choose <strong>Save at revision.</strong></td>
+<td><code>assets/ss-04-hg-save-at-revision.png</code> — right-click the file at the revision before the deletion, choose <strong>Save at revision.</strong></td>
 <td>"Go to the history point just<em>before</em> the deletion, right-click the file, and choose Save at revision. Paratext will suggest a filename with an <code>@</code> and a version number tacked on."</td>
 </tr>
 <tr>
@@ -1277,7 +1277,7 @@ Keep the two cases (full restore vs. merge) visually distinct on screen.</p>
 <td>"For the merge case specifically: open the new file in a plain text editor and remove its first two lines. Open the old file and remove its last line. Paste the old file's remaining content above what's left of the new file, and save. That stitches the two note histories into one valid file."</td>
 </tr>
 <tr>
-<td><code>image-7.png</code> — Paratext restarted, showing the recovered notes.</td>
+<td><code>assets/ss-04-hg-save-filename.png</code> — Paratext restarted, showing the recovered notes.</td>
 <td>"Restart Paratext, confirm the notes are back, and do a Send/Receive to circulate them to the rest of the team."</td>
 </tr>
 <tr>
@@ -1366,7 +1366,7 @@ and submit your answers to your mentor for feedback before you take the quiz."</
 <li><strong>Live-demo caution — Segment 4 and Segment 5.</strong> If recording any of the delete-project
   or revert-books actions live rather than on a title card, do it against a disposable
   test project, never a real team's project. The lesson's own screenshots
-  (<code>image-1.png</code> through <code>image-7.png</code> in this module folder) were captured from a test
+  (<code>assets/ss-04-hg-deleted-note-file.png</code> through <code>assets/ss-04-hg-save-filename.png</code> in this module folder) were captured from a test
   project built for this purpose — reuse them as static cues rather than re-recording the
   TortoiseHG steps live unless a fresh recording is specifically wanted.</li>
 <li><strong>Confirm menu paths against the current Paratext 9 build before recording.</strong> The

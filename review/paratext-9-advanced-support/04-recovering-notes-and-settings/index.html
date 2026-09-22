@@ -1068,23 +1068,23 @@ Settings.)</p>
 <li>If you know the file was recently deleted, inspect the recent history points to find it. For
    example, in this history, one user's note file was deleted:</li>
 </ol>
-<p><img alt="note file deleted" src="../image-1.png" /></p>
+<p><img alt="The TortoiseHg Workbench on the NBV repository, with the revision graph open and Notes_test1white.xml marked with a red X in the file list — the note file was deleted in that revision." src="../ss-04-hg-deleted-note-file.png" /></p>
 <ol>
 <li>If you can't find it that way, search for a file deletion directly: type <code>removes("*.*")</code> in
    the revision set query box.</li>
 </ol>
-<p><img alt="alt text" src="../image-3.png" /></p>
+<p><img alt="The TortoiseHg revision set query box containing removes(&quot;*.*&quot;), filtering the revision list down to changeset 25 — the one that removed files." src="../ss-04-hg-removes-query.png" /></p>
 <p>If the revision set query box isn't visible, click in the list of revisions and press
    <code>Ctrl-S</code>.</p>
 <p><strong>Recovering the deleted file</strong></p>
 <p>Go to the history point just <em>before</em> the file was deleted, right-click on the file, and choose
 "Save at revision."</p>
-<p><img alt="alt text" src="../image-2.png" /></p>
+<p><img alt="The TortoiseHg file list with Notes_test1white.xml right-clicked and “Save at Revision…” (Ctrl+Shift+S) highlighted in the context menu." src="../ss-04-hg-save-at-revision.png" /></p>
 <p>The save dialog will suggest a filename with <code>@</code> followed by a version number appended. To
 restore the file under its original name, delete those extra characters before saving. Once
 that's done, restart Paratext — you should now see the missing notes — and do a Send/Receive to
 circulate them to the rest of the project's users.</p>
-<p><img alt="alt text" src="../image-7.png" /></p>
+<p><img alt="The “Save file to” dialog open on the NBV project folder, with the File name field reading Notes_test1white@24.xml — an arrow points at the @24 revision suffix that must be removed before Paratext will read the file." src="../ss-04-hg-save-filename.png" /></p>
 <p><strong>When only the older notes are missing (a merge, not a straight restore)</strong></p>
 <p>Sometimes a user has some recent notes visible, but the older ones are gone. This usually means
 the notes file was deleted a while ago, and the user has simply been creating new notes since

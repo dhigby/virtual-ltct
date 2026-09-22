@@ -55,60 +55,68 @@ before reattempting.
 
 ## Scenario 1: The Harmonized Synoptics (Objective 2)
 
-**Watch for in the diagnosis:** the learner should know that Paratext's checks don't show
-a "last run" date on screen, so the way to verify or refute the team lead's claim is to
-open Project History and read its dated, categorized entries — comparing when the
-relevant check category was last actually touched/re-run against the dated revision-pass
-entries in the same log. A strong answer names Project History specifically rather than
-implying the check screen itself would show the gap. This is marker **(a)**: don't trust a
+**Watch for in the diagnosis:** the learner should know that the Parallel Passages tool
+doesn't algorithmically flag inconsistencies — it displays passages side by side (with
+original-language text) for the team to judge, and tracks review status per verse in a
+Status column: a checkmark means reviewed and approved, a red "?" means the verse was
+edited since it was last approved and needs review again. The way to verify or refute
+the team lead's claim is to open the Parallel Passages tool and check the Status column
+for the relevant verses, not to dig through Project History (Project History is not the
+mechanism for this check). A strong answer names the Status column specifically — a red
+"?" on a verse edited during the recent revision pass is direct evidence the "already
+checked" claim doesn't hold for that verse. This is marker **(a)**: don't trust a
 clean/settled-sounding result just because the team is confident about it. A weak answer
 accepts the team lead's explanation at face value and moves on to judging the passages
 itself.
 
 **Watch for in what they'd say to the team:** the learner does not attempt to judge whether
-the flagged differences are legitimate variation or error — they don't speak the language.
-A strong answer asks the team to re-run the check and walk through each flagged difference
-themselves, framed as routine process ("let's make sure the re-run reflects the latest
-revision") rather than as doubting the team's judgment — marker **(e)**, correctly deferred
-to the people who can actually judge meaning.
+the differences are legitimate variation or error — they don't speak the language.
+A strong answer asks the team to open the Parallel Passages tool and walk through each
+verse still showing a red "?" themselves, framed as routine process ("let's make sure
+everything edited in the recent revision gets reviewed again") rather than as doubting
+the team's judgment — marker **(e)**, correctly deferred to the people who can actually
+judge meaning.
 
-**Watch for in escalation:** if the re-run surfaces a genuine internal disagreement about
+**Watch for in escalation:** if the review surfaces a genuine internal disagreement about
 legitimate variation vs. error, that stays with the team (or moves to a Translation
 Consultant if the team can't resolve it themselves) — not the LTC. The LTC's job stops at
-confirming the check ran and routing the result. A learner who offers to arbitrate the
-disagreement has missed marker **(f)**.
+confirming the review happened and routing the result. A learner who offers to arbitrate
+the disagreement has missed marker **(f)**.
 
 **Common wrong turn:** treating "these are supposed to be different" as sufficient without
-checking whether the check that would confirm that has actually been re-run.
+checking the Status column for verses that still need review; reaching for Project
+History instead of the Parallel Passages tool itself.
 
 ---
 
 ## Scenario 2: The Undocumented Measure (Objective 5)
 
-**Watch for in the diagnosis:** the learner should first recognize that Numbers and
-Measures are **two separate checks at two different levels of maturity** — Numbers is
-released (limited scope), Measures is still under development and not reliably
-available — and should confirm which one(s) are actually usable for this team's
-Paratext version before leaning on either. A strong answer explicitly notes that if
-Measures can't be trusted to catch the inconsistency yet, that changes what the check
-result can tell you, not just how you interpret it. From there, the learner should
-distinguish two different problems that look similar — "the check found an
-inconsistency" (a normal, expected check result) vs. "the team has no documented
-standard to check against" (a process gap that has to be fixed before the check result
-means anything). A strong answer checks for the existence of a documented approach
-*first*, before treating the flagged inconsistency as something to resolve. A weak
-answer treats "numbers/measures" as one check and never raises the maturity question at
-all.
+**Watch for in the diagnosis:** the learner should first recognize that Paratext's
+numbers/weights/measures checking is in transition: a **new consolidated check**
+(covering numbers, weights, and measures together) is expected to replace the older,
+separate Numbers check, but not every team's Paratext version has migrated to it yet.
+This team is still on the older setup — only the separate Numbers check, with no working
+Measures check at all — and the learner should confirm that specifically for this
+team's version rather than assuming either way. A strong answer explicitly notes that
+because no working check can catch the weights/measures inconsistency reliably on this
+version, that changes what the informal comparison can tell you, not just how you
+interpret it. From there, the learner should distinguish two different problems that
+look similar — "an inconsistency turned up" (a normal, expected finding) vs. "the team
+has no documented standard to check against" (a process gap that has to be fixed before
+the finding means anything). A strong answer checks for the existence of a documented
+approach *first*, before treating the flagged inconsistency as something to resolve. A
+weak answer never asks which check(s) this team's version actually has, or assumes the
+new consolidated check must already be available everywhere.
 
-**Watch for in what they'd say to the team:** the learner explains, in plain terms, that
-Numbers and Measures aren't the same check and aren't equally reliable yet in this
-team's Paratext version, and helps the team locate or establish their own documented
-approach — asking questions, prompting them to search prior notes or ask whoever made
-"the decision early on" — without proposing a rendering themselves. This is marker
-**(f)**: the numbers/measures rendering is the team's call, not the LTC's, and this
-scenario has no field "gotcha" to diagnose — it's pure process/routing (per the design
-doc, this check area has no confirmed field case yet, so don't expect or reward an
-invented technical cause).
+**Watch for in what they'd say to the team:** the learner explains, in plain terms, what
+this team's Paratext version does and doesn't have available yet — the older Numbers
+check only, no reliable Measures coverage — and helps the team locate or establish their
+own documented approach — asking questions, prompting them to search prior notes or ask
+whoever made "the decision early on" — without proposing a rendering themselves. This is
+marker **(f)**: the numbers/measures rendering is the team's call, not the LTC's, and
+this scenario has no field "gotcha" to diagnose — it's pure process/routing (per the
+design doc, this check area has no confirmed field case yet, so don't expect or reward
+an invented technical cause).
 
 **Watch for in escalation:** once an approach exists, deciding which of the two flagged
 renderings is correct stays with the team; a Translation Consultant only enters if the team
@@ -118,23 +126,36 @@ by default, without first establishing whether the team can resolve it internall
 skipped a step.
 
 **Common wrong turn:** proposing which rendering is "right" instead of routing the decision
-back to the team; treating Numbers and Measures as one combined check and never checking
-whether Measures is even mature enough to rely on for this team's Paratext version.
+back to the team; assuming the new consolidated check is available without confirming it for
+this team's specific Paratext version, or assuming no team could possibly have it yet.
 
 ---
 
 ## Scenario 3: The Inventory Nobody Opened (Objective 6)
 
-**Watch for in the diagnosis:** structural-first triage — a strong answer checks for
-unclosed marker pairs and other structural breaks *before* interpreting the individual
-"wrong marker" and "missing heading" flags, because a single unclosed footnote marker
-partway through Mark can cascade into exactly this kind of scattered-looking flag list
-downstream. Marker **(b)**: diagnose cause, not each symptom separately. On the Punctuation
-Inventory, the learner should flag "checked at the start of the project" as stale by
-definition — the project has had two more revision passes since — and this is the same
-false-clean trap as the harmonized-synoptics scenario: treating "we did this once" as
-current. This is the woven objective-1 thread; credit it explicitly when a learner names
-it as such.
+**Watch for in the diagnosis:** this is a structural-first triage, and it has two parts.
+
+First, Chapter/Verse Numbers. A strong answer confirms that check comes back clean
+*before* anything else, including the marker-pair census — because every other check on
+the list (references, footnotes, the heading flag itself) reports its results by
+quoting a chapter/verse location, and those locations can't be trusted if the numbering
+has errors of its own.
+
+Second, once Chapter/Verse Numbers is confirmed clean, the learner moves to unclosed
+marker pairs and other structural breaks *before* interpreting the individual "heading
+doesn't match its text" flag. A missing `\p` marker after a section heading partway
+through Mark can cascade into exactly this kind of scattered-looking flag list
+downstream: everything between the heading and the next paragraph-style marker (such as
+`\p`, `\m`, `\q`, etc.) gets swallowed into and rendered as part of the heading,
+including verse numbers and verse text — which is what can produce the
+heading-doesn't-match-text flag and a garbled-looking reference. Marker **(b)**:
+diagnose cause, not each symptom separately.
+
+Separately, on the Punctuation Inventory, the learner should flag "checked at the start
+of the project" as stale by definition — the project has had two more revision passes
+since — and this is the same false-clean trap as the harmonized-synoptics scenario:
+treating "we did this once" as current. This is the woven objective-1 thread; credit it
+explicitly when a learner names it as such.
 
 **Watch for in what they'd say to the team:** ask the team to re-run Basic Checks
 structural-first (not top-to-bottom by flag order), and specifically ask to see the
@@ -147,19 +168,43 @@ unrecognized character the learner can't tell is a real problem vs. a font-displ
 go to an LT mentor (a tooling/technical question), not a Translation Consultant. A learner
 who can't distinguish this from a content question has missed marker **(g)**.
 
-**Common wrong turn:** working the Basic Checks flag list in the order it appears rather
-than checking for a structural root cause first; accepting "already checked" for the
-Punctuation Inventory without asking to see it re-opened.
+**Common wrong turn:** three separate ways a learner can go wrong here:
+- Working the Basic Checks flag list in the order it appears rather than checking for a
+  structural root cause first.
+- Jumping straight to the marker-pair census without first confirming Chapter/Verse
+  Numbers is clean — this learner has missed the actual first step, even if everything
+  after it is diagnosed correctly.
+- Accepting "already checked" for the Punctuation Inventory without asking to see it
+  re-opened.
 
 ---
 
 ## Scenario 4: The Every-Occurrence Glossary (Objective 7)
 
-**Watch for in the diagnosis:** the learner should recognize that a "complete" status only
-tells you the linking pass was run, not that it was run at the correct scope — this is a
-narrower instance of the false-clean pattern (a status that looks done isn't necessarily
-done correctly). A strong answer checks the actual link count/pattern for the term rather
-than trusting the completion flag.
+**Watch for in the diagnosis:** the learner should recognize that the linked-occurrences
+report isn't available to check after the fact — it's transient and gets replaced by
+each new batch's report — so trying to "go look at the report" isn't a workable answer
+here. A strong answer instead describes searching for the term with Find (a live,
+re-runnable results list) and opening each result to check whether the `\w...\w*`
+markup wraps every occurrence (over-linking) or only the first occurrence per section
+(correct scope) — rather than reasoning from row counts or frequency at all, since some
+terms are naturally far more frequent than others and there's no meaningful "too many"
+threshold. The learner should also flag, unprompted or when asked, that Find will match
+the term both in genuine text occurrences *and* inside the rendering of an existing
+`\w...\w*` marker — so a hit count alone proves nothing; each result has to be read to
+see whether it's a fresh occurrence with its own markup or text sitting inside another
+marker's rendering. This is a narrower instance of the false-clean pattern (a result that
+looks done isn't necessarily done correctly).
+
+A strong answer goes one step further and recognizes that a hit sitting inside an
+existing marker might belong to a **different, broader phrase term** rather than being a
+stale or over-linked occurrence of the term being searched — e.g. a Find hit for "angel"
+landing inside a marker rendering "angel of the Lord" is correct and expected, not
+something to fix, because phrase terms are properly linked before their component single
+words so the single word doesn't get separately (and wrongly) linked inside phrase
+territory. A weaker answer treats every hit inside existing markup the same way — either
+waving it off as "already linked, fine" or flagging it as over-linked — without checking
+*whose* rendering it actually is.
 
 **Watch for in what they'd say to the team:** the learner should describe the concrete
 technical operation — unlink the over-linked term and relink it at first-occurrence-per-
@@ -173,8 +218,13 @@ wrong, that's not the LTC's to fix and isn't really an "escalation" so much as a
 boundary the learner should name. A strong answer explicitly separates "the linking
 operation, which is mine" from "the glossary content, which isn't."
 
-**Common wrong turn:** treating "complete" as sufficient evidence of correct scope; drifting
-into commenting on whether the glossary entry itself is right.
+**Common wrong turn:** trying to "check the report" for row counts (it won't still be
+there, and row count isn't a valid signal anyway since term frequency varies naturally);
+or running a Find search and trusting the hit count without opening results to
+distinguish genuine new occurrences from matches inside an existing marker's rendering;
+treating every hit inside an existing marker as automatically fine or automatically
+over-linked without checking whether it actually belongs to a broader phrase term;
+drifting into commenting on whether the glossary entry itself is right.
 
 ---
 
@@ -238,21 +288,29 @@ the team is asking the LTC to "just sort it out."
 Score this one in three parts — each sub-item maps to its own secondary objective, and a
 learner can be strong on one and weak on another.
 
-**Biblical Terms rendering (Objective 3):** watch for the learner naming the
-no-selection rendering error specifically — the team added a term's rendering without first
-*selecting* the correct text, so Paratext auto-grabbed the verse's first word — and
-describing how to confirm it (checking what text was actually selected/highlighted when
-the rendering was added, or simply looking at whether the "rendering" is just the verse's
-opening word regardless of the term). Marker **(b)**: diagnose the actual cause. The fix —
-deleting the bad rendering, then selecting the correct text and adding it properly — should
-be described as something the learner **coaches the team through**, not performs on the
-team's keyboard (marker **(c)**).
+**Biblical Terms list (Objective 3):** watch for the learner recognizing two distinct,
+confirmed patterns rather than reaching for a single "gotcha" mechanism. First,
+incomplete coverage: rows still showing the blank/highlighted placeholder state
+("Double click to enter rendering(s)…") mean those terms simply haven't been given a
+rendering yet — this is the tool's normal starting state, not a bug — and the way to
+confirm genuine completion is checking the **Found** column/count row by row, not
+trusting a "we're done" claim at face value. Second, stale/duplicate renderings: a term
+carrying several candidate renderings, most no longer found in the current text,
+signals an old rendering left in place after a correct one was added later without
+deleting the original. Marker **(b)**: diagnose the actual cause for each, rather than
+treating the list as simply wrong. The fix in both cases — filling in the remaining
+blank rows, and reviewing/removing stale renderings — should be described as something
+the learner **coaches the team through**, not performs on the team's keyboard (marker
+**(c)**). A learner who confidently names "the no-selection rendering error" as the
+mechanism here has overreached: that pattern was reported once by the SME, has never
+been reproduced since, and isn't confirmed with Paratext support — it shouldn't be
+taught or scored as the established cause.
 
 **Send/Receive slowdown (Objective 4):** watch for the learner correctly identifying that
 the cause is **adding** the full "All Biblical Terms" list into the *project's* Biblical
 Terms (bloating the project and slowing Send/Receive) — not merely having a large list open
 for reference. A strong answer explicitly distinguishes "viewing a big list" from "adding
-that list's contents to the project," since the design doc flags this as the exact
+that list to the project," since the design doc flags this as the exact
 distinction that's hard to get a team to believe. Watch for how they'd explain this to a
 skeptical team — plain-language cause and effect, not just an assertion ("adding thousands
 of terms into the project's own list makes every sync compare and transfer thousands of
@@ -261,13 +319,16 @@ Receive up again"). Credit answers that suggest a concrete right-sizing step (re
 bulk-added list, keeping only terms actually used).
 
 **Layout/hyphenation (Objective 8):** watch for the learner establishing the
-reader-expectation requirement *before* agreeing to any change — the community's own
-printed Bibles are conventionally two-column, so word length alone shouldn't drive a switch
-to single-column. This is marker **(f)**: advising the surfaced decision based on the right
+reader-expectation requirement *before* agreeing to any change — this NT is the
+language's first Scripture, so the community's only Bible-reading experience is via the
+LWC, and those LWC Bibles are conventionally two-column, so word length alone shouldn't
+drive a switch to single-column. This is marker **(f)**: advising the surfaced decision
+based on the right
 criterion. Because this course's Digital and Print Publishing claim rests on hands-on setup
-as well as advising, a strong answer also describes actually building the hyphenation file
-so long words can break correctly in two-column layout — not just recommending that someone
-else do it.
+as well as advising, a strong answer also describes actually enabling Show hyphenation in
+the Wordlist's View menu and reviewing/correcting the auto-generated hyphenation breaks so
+long words break correctly in two-column layout — not just recommending that someone else
+do it.
 
 **Escalation, across all three:** none of these three should need to leave the learner and
 the team — all three are within the learner's own coaching-plus-technical-setup role (per

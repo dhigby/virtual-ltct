@@ -15,8 +15,9 @@ content_type: content
 [8-stage production pipeline](../../process/PROCESS.md), tracked on
 [issue #40](https://github.com/dhigby/virtual-ltct/issues/40). The design document
 (`00-design.md`) was approved, and all content — lessons 01–05, the scenario bank, the mentor
-guide, and the quiz — is fully drafted. The course now moves through Stage 4 (alignment
-review) and Stage 5 (SME fact-check) before internal review, pilot, and publish.
+guide, and the quiz — is fully drafted, has passed alignment review (Stage 4), and has passed
+SME fact-check (Stage 5). The course is now in Stage 6 (Internal Review), ahead of pilot and
+publish.
 Run `/next-step supporting-pre-publishing-checks` to see where it stands.
 
 ---

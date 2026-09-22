@@ -38,3 +38,11 @@ content doesn't already cover.
 - Don't touch frontmatter, `competencies:`, or `target_outcome_level`.
 - Don't write lesson content, the scenario bank, the mentor guide, or the quiz — flag
   gaps in those instead of filling them yourself.
+- **Don't touch the language data.** Any local-language example in the lesson content is
+  real project data: carry it across verbatim, character for character, and never gloss,
+  translate, "correct" or read meaning into it. The presenter is a consultant who doesn't
+  speak the language either, so write the on-screen cue and the voiceover around what the
+  *tool* is doing. Where a demo step needs an example the lesson doesn't supply, leave a
+  marked note for the presenter instead of inventing one — and if the script needs the
+  data spoken aloud, put a "confirm pronunciation with the project team" line in the notes
+  rather than guessing at it.

@@ -107,9 +107,18 @@ separate faithful-import workstream — see [`process/backfill.md`](process/back
    Stubs carry a banner; the goal is to replace stubs with authored content over time.
 
 5. **Don't commit large video files.** Link to Vimeo/Google Drive under `external_links:`
-   in frontmatter instead. Small images are fine in the module folder (e.g. `assets/`).
+   in frontmatter instead.
 
-6. **Lesson duration header.** Every numbered lesson file and the scenario bank opens, right
+6. **Screenshots live in `modules/<slug>/assets/`**, named
+   `ss-<lesson number>-<what-it-shows>.png` (lowercase, hyphens, no spaces), and are
+   **committed, never hotlinked** — a remote image rots and takes the published page's
+   picture with it. An agent writes the image link and its alt text where the shot
+   belongs; a human captures the file (stage **3e**). The alt text must describe the
+   exact state shown, because it is the screen-reader text *and* the brief for whoever
+   takes the shot — `![alt text](…)` is a defect. `check_course_package.py` enforces all
+   of this, and `/next-step` reports any shot still outstanding.
+
+7. **Lesson duration header.** Every numbered lesson file and the scenario bank opens, right
    under the H1, with `**Estimated time:** X minutes` — no lesson exceeds 90 minutes. This is
    verified by the alignment-reviewer agent and by `scripts/check_course_package.py`.
 

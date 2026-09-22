@@ -44,9 +44,9 @@ folder — see the lesson's "Before you start" step for details and installation
 
 ## Pending items
 
-- **Screenshots** — four of the five original images have been replaced: `RegExPal-pp.png`
-  (Opening RegEx Pal), `countAllCaps.png` (Count), `extract footnotes.png` (Extract), and
-  `RegEx-replace.png` (Replace). A bonus screenshot (`Regex-Find2.png`) was also added
+- **Screenshots** — four of the five original images have been replaced: `assets/ss-01-regex-pal-find-pattern.png`
+  (Opening RegEx Pal), `assets/ss-01-count-all-cap-words.png` (Count), `assets/ss-01-extract-all-footnotes.png` (Extract), and
+  `assets/ss-01-replace-confirmation.png` (Replace). A bonus screenshot (`assets/ss-01-find-mode-preview.png`) was also added
   illustrating the Find-preview step before Replace. The Category 1 "Find close codes
   preceded by a space" screenshot is the one still missing — optional polish, not blocking,
   since the lesson text already describes it accurately.

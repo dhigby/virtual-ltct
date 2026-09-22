@@ -54,12 +54,12 @@ Settings.)
 3. If you know the file was recently deleted, inspect the recent history points to find it. For
    example, in this history, one user's note file was deleted:
 
-   ![note file deleted](image-1.png)
+   ![The TortoiseHg Workbench on the NBV repository, with the revision graph open and Notes_test1white.xml marked with a red X in the file list — the note file was deleted in that revision.](assets/ss-04-hg-deleted-note-file.png)
 
 4. If you can't find it that way, search for a file deletion directly: type `removes("*.*")` in
    the revision set query box.
 
-   ![alt text](image-3.png)
+   ![The TortoiseHg revision set query box containing removes("*.*"), filtering the revision list down to changeset 25 — the one that removed files.](assets/ss-04-hg-removes-query.png)
 
    If the revision set query box isn't visible, click in the list of revisions and press
    `Ctrl-S`.
@@ -69,14 +69,14 @@ Settings.)
 Go to the history point just *before* the file was deleted, right-click on the file, and choose
 "Save at revision."
 
-![alt text](image-2.png)
+![The TortoiseHg file list with Notes_test1white.xml right-clicked and “Save at Revision…” (Ctrl+Shift+S) highlighted in the context menu.](assets/ss-04-hg-save-at-revision.png)
 
 The save dialog will suggest a filename with `@` followed by a version number appended. To
 restore the file under its original name, delete those extra characters before saving. Once
 that's done, restart Paratext — you should now see the missing notes — and do a Send/Receive to
 circulate them to the rest of the project's users.
 
-![alt text](image-7.png)
+![The “Save file to” dialog open on the NBV project folder, with the File name field reading Notes_test1white@24.xml — an arrow points at the @24 revision suffix that must be removed before Paratext will read the file.](assets/ss-04-hg-save-filename.png)
 
 **When only the older notes are missing (a merge, not a straight restore)**
 

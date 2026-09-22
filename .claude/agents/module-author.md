@@ -58,6 +58,16 @@ different instructional style.
   Content must fit into the module without exceeding the 90-minute cap declared in the
   design doc; if it can't, recommend splitting into another module rather than
   overflowing.
+- **Write screenshot links; never claim to have taken the screenshot.** When a step is
+  clearer shown than described, write the link where the picture belongs:
+  `![<the exact state to capture>](assets/ss-<lesson number>-<what-it-shows>.png)` —
+  lowercase, hyphens, no spaces. You are writing a *capture brief*: the alt text must say
+  what the tool should be showing, specifically enough that someone else can reproduce it
+  ("The Quote marks tab with « and » in the First level cells"), because it is also the
+  screen-reader text and the reviewer's check. Never write `![alt text](…)`, never invent
+  a caption for a picture you cannot see, and never hotlink an image from a URL. The file
+  won't exist when you write the link — that is expected and is what stage 3e is for; say
+  in your summary how many shots you have left for a human to capture.
 - **Ground lessons in SME field knowledge.** The design doc's SME knowledge notes contain
   real field cases, tool specifics, and common learner struggles — use these, not made-up
   edge cases. Don't invent field stories or tool facts not present in the design doc, the

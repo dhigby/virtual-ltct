@@ -10,6 +10,15 @@ on the tracker. Do them in order — later artifacts depend on earlier ones bein
 > content doesn't fit, split it into another numbered file. The alignment check (stage 4)
 > and CI both verify this.
 
+> **Screenshots.** The agent writes the image *link* and its alt text where the shot
+> belongs; a human captures the picture. Files go in `modules/<slug>/assets/`, named
+> `ss-<lesson number>-<what-it-shows>.png` — lowercase, hyphens, no spaces. The alt text
+> is not decoration: it is simultaneously the screen-reader text, the reviewer's check,
+> and the brief telling whoever holds the mouse *which state to capture*, so
+> `![alt text](…)` is a defect and CI rejects it. Never hotlink an image from Google
+> Drive, Notion or a site — a remote image rots and takes the published page's picture
+> with it. Step **3e** below is where the capturing happens.
+
 > **The lesson shape (the "4 Cs").** Every lesson body follows the *Learning That Lasts*
 > four-phase structure, as `##` sections in order: **Connect** (activate prior
 > knowledge), **Content** (core instruction, ending in Key Takeaways), **Challenge**
@@ -59,6 +68,24 @@ pipe-separated answer key. ✅ Tick **"3c. Quiz written"**.
 The script for the recording step — cold open, on-screen/voiceover pairing, runtime
 estimate. ✅ Tick **"3d. Video script drafted"**.
 
+## 3e — Capture the screenshots (human, with the tool open)
+
+The only step no agent can finish for you. `/next-step` lists every shot still
+outstanding, each with the alt text that says what to capture:
+
+```bash
+python scripts/course_stage.py --slug <slug>
+```
+
+For each one: put the tool in that state, capture, save it into `modules/<slug>/assets/`
+under exactly the filename the link expects, and commit. Use a real project the learner
+would recognise, and check the shot for anything that shouldn't be public — this repo is
+public, so no unpublished draft text, no personal details, no credentials on screen.
+
+Note the tool version you captured against in the design doc's SME notes. Screenshots age
+when the tool ships a new release, and the next person needs to know what they're looking
+at. ✅ Tick **"3e. Screenshots captured"**.
+
 ## Exit criteria
 
 - All package files present: numbered lessons, `NN-scenario-bank.md`, `NN-mentor-guide.md`,
@@ -66,6 +93,8 @@ estimate. ✅ Tick **"3d. Video script drafted"**.
 - Every lesson and the scenario bank state `**Estimated time:** X minutes`, none over 90.
 - Every lesson contains the four *Learning That Lasts* phase sections, in order:
   `## Connect`, `## Content`, `## Challenge`, `## Change`.
+- Every image link resolves to a committed file under `assets/`, with alt text that
+  describes the state shown.
 
 ## Then
 

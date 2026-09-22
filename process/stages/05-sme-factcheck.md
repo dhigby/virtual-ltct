@@ -34,6 +34,9 @@ Read the lessons and quiz against the design doc's **SME knowledge notes** and a
 own knowledge of the domain. Check specifically:
 
 - Tool names, versions, menu paths, and procedures are correct and current.
+- **Screenshots show what the surrounding text says they show,** and show a version of
+  the tool a learner will recognise. A shot that has drifted from the current release is
+  worse than no shot, because the learner trusts it over the prose.
 - Field scenarios are realistic for consultants working with translators and language
   workers in the field.
 - No factual claim is wrong, outdated, or oversimplified to the point of being misleading.

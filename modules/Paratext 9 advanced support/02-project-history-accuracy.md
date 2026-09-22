@@ -47,22 +47,22 @@ order in which the two edits actually happened.
 Here is exactly the scenario that causes confusion. One user makes this edit at the beginning of
 Matthew, then marks a point in project history:
 
-![alt text](image-4.png)
+![Paratext Compare versions on MAT 1:1, with Steven White's 15:30 edit on the left and the baseline on the right: “The genealogical record” replaces “This is the record of the genealogy”.](assets/ss-02-edit-matthew.png)
 
 A second user makes this edit at the beginning of Mark, then also marks a point in project
 history:
 
-![alt text](image-5.png)
+![Paratext Compare versions on MRK 1:1, with test1white's 15:31 edit on the left and the baseline on the right: “good news” replaces “gospel”.](assets/ss-02-edit-mark.png)
 
 After both users Send/Receive, the project history looks like this:
 
-![alt text](image-6.png)
+![The Project History dialog for NBV (22 versions), with two adjacent history points boxed in red: test1white's “edit to Mark 1:1” listed above Steven White's “edit in Mat 1:1”, both dated 2026-07-13.](assets/ss-02-project-history-two-points.png)
 
 If someone then runs Compare Versions on Matthew, comparing the history point from when Mark
 was edited against the history point from when Matthew was edited, the edit to Matthew *appears
 to have been undone*:
 
-![alt text](image.png)
+![Paratext Compare versions on MAT 1:1, comparing the 15:31 Mark history point (left) against the 15:30 Matthew history point (right). The Matthew edit appears to have been undone, because the history points are not in strict chronological order.](assets/ss-02-compare-versions-apparent-undo.png)
 
 **This is an illusion.** Nothing was undone. History points in the repository are not always in
 strict chronological order, so comparing across them can make an earlier edit look like it was

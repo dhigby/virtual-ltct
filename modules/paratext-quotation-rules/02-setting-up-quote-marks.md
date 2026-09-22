@@ -49,7 +49,7 @@ paragraph break. Navigate to:
 
 project menu **☰ > Project settings > Quotation Rules**, then click the **Quote marks** tab.
 
-![The project menu open showing Project settings highlighted, and Quotation Rules selected in the submenu.](Images/ss-L152-project-menu-quotation-rules.png)
+![The project menu open showing Project settings highlighted, and Quotation Rules selected in the submenu.](assets/ss-02-project-menu-quotation-rules.png)
 
 The tab has a grid with three rows and three columns.
 
@@ -106,7 +106,7 @@ run on. Two ways to find them:
    headings (`\s1`) never carry a continuer themselves, but a paragraph that *follows* a heading
    inside a running speech may, which is what a pair like `s1/pi` expresses.
 
-![The Markers inventory window for a project, with the upper pane listing markers, their counts and style names (p 1122, pi 434, q1 117, q2 118, nb 1, among others) and the lower pane listing the verses where the selected marker p occurs.](Images/ss-L106-markers-inventory.png)
+![The Markers inventory window for a project, with the upper pane listing markers, their counts and style names (p 1122, pi 434, q1 117, q2 118, nb 1, among others) and the lower pane listing the verses where the selected marker p occurs.](assets/ss-02-markers-inventory.png)
 
 Most New Testament projects end up with a list of four to six entries. A project with heavy
 poetry, lists, or indented material has a longer list, but it is built the same way. Both
@@ -119,7 +119,7 @@ At the bottom of the dialog:
 - **Copy quote mark settings...** button — imports character settings from another project
   (useful when a related project uses the same conventions).
 
-![The Quote marks tab with the three-row, three-column grid visible, showing the additional settings below the grid.](Images/ss-L172-quote-marks-tab-layout.png)
+![The Quote marks tab with the three-row, three-column grid visible, showing the additional settings below the grid.](assets/ss-02-quote-marks-tab-layout.png)
 
 **One more setting lives elsewhere, but it has a real limit.** Some languages use the same
 character for two purposes: as the **closing quotation mark** at the single-quote level *and*
@@ -205,7 +205,7 @@ using the dropdown arrow (▼) on each cell:
    the steps for what each entry is doing.
 8. Click **OK**.
 
-![The Quote marks tab for Tamba after entry: “ in the First level Opening and Continuer cells and ” in its Closing cell, ‘ and ’ at Second level with the Continuer cell at *none*, “ and ” at Third level, and the Continuer required at field below the grid reading p p/q1 m/q1 s1/pi pi/pi b/q1. The Example section shows “ repeated at the head of each continued \p paragraph.](Images/ss-L202-tamba-quote-marks.png)
+![The Quote marks tab for Tamba after entry: “ in the First level Opening and Continuer cells and ” in its Closing cell, ‘ and ’ at Second level with the Continuer cell at *none*, “ and ” at Third level, and the Continuer required at field below the grid reading p p/q1 m/q1 s1/pi pi/pi b/q1. The Example section shows “ repeated at the head of each continued \p paragraph.](assets/ss-02-tamba-quote-marks.png)
 
 Tamba uses English-style curly quotes at all three levels. First level speech that spans a
 paragraph break repeats the opening mark `“` (U+201C) as a Quote Continuer at the head of each
@@ -295,7 +295,7 @@ alarming: "Opening quote mark found without matching closing quote mark: «" at 
 quote [’] found without matching opening" at 5:10. Leave all of these alone for now. Exercise 2.3
 is about exactly these results, including why 5:3 is reported when nothing at 5:3 is wrong.
 
-![The Quote marks tab for Runda after entry, showing « and » in First level cells, the Second level Opening/Closing filled, and the Continuer required at field reading p.](Images/ss-L227-runda-quote-marks.png)
+![The Quote marks tab for Runda after entry, showing « and » in First level cells, the Second level Opening/Closing filled, and the Continuer required at field reading p.](assets/ss-02-runda-quote-marks.png)
 
 **✏️ Compare.** Runda and Tamba both fill the Quote Continuer cell at First level — Runda with
 `«`, Tamba with `“` — because both languages repeat the opening mark at the start of each
@@ -333,7 +333,7 @@ has a **Word-medial punctuation** field. Its own help text says any character li
 treated as part of a word when it appears between two alphabetic characters, so the checker
 should not misread it as a closing mark.
 
-![The Language Settings dialog open on the Other Characters tab, showing the Word-medial punctuation field with a right single quotation mark entered.](Images/ss-L241-language-settings-other-chars.png)
+![The Language Settings dialog open on the Other Characters tab, showing the Word-medial punctuation field with a right single quotation mark entered.](assets/ss-02-language-settings-other-chars.png)
 
 **Where this genuinely helps:** punctuation characters that are *not* also configured as a
 quote mark — a hyphen used word-medially, for instance. Paratext will warn you if you enter a

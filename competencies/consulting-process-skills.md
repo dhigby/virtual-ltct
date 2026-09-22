@@ -1,6 +1,7 @@
 ---
 name: Consulting Process Skills
 category: Core
+slug: consulting-process-skills
 source_label: Skills Required for a Consulting Session
 in_framework: true
 resources:

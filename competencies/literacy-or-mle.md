@@ -1,9 +1,10 @@
 ---
-name: Literacy and MLE
+name: Literacy or MLE
 category: Education
+slug: literacy-or-mle
 source_label: Domain-specific education
 in_framework: true
-target_statement: "Has pursue domain specific knowledge in literacy and MLE via formal education or equivalent."
+target_statement: "Has pursue domain specific knowledge in literacy or MLE via formal education or equivalent."
 outcome_levels:
   - "0 - No Competency"
   - "1 - Has Knowledge"
@@ -22,25 +23,25 @@ last_updated: 2026-09-17
 
 **Category:** Education
 
-> This applies the workbook's single **Domain-specific education** ladder to the **Literacy and MLE** domain; the framework calls out each domain separately, so the rationale and activities below are shared across them.
+> This applies the workbook's single **Domain-specific education** ladder to the **Literacy or MLE** domain; the framework calls out each domain separately, so the rationale and activities below are shared across them.
 
 ## Description
 
-Domain-specific knowledge in literacy and MLE
+Domain-specific knowledge in literacy or MLE
 
 ## Why it matters
 
-Have a good understanding of literacy and MLE used for Bible translation and language development work.
+Have a good understanding of literacy or MLE used for Bible translation and language development work.
 
 ## Target competency
 
-> Has pursue domain specific knowledge in literacy and MLE via formal education or equivalent.
+> Has pursue domain specific knowledge in literacy or MLE via formal education or equivalent.
 
 ## Progression by component
 
 _Each row is a level a learner is **at**; its activities are what they do to reach the level in the final column._
 
-### 1.0 — Has knowledge in literacy and MLE
+### 1.0 — Has knowledge in literacy or MLE
 
 | Current level | Suggested activities | Reaches |
 | --- | --- | --- |

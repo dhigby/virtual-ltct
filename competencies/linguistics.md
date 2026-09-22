@@ -1,6 +1,7 @@
 ---
 name: Linguistics
 category: Education
+slug: linguistics
 source_label: Domain-specific education
 in_framework: true
 target_statement: "Has pursue knowledge in linguistics via formal education or equivalent."

@@ -1,6 +1,7 @@
 ---
 name: Recording Tools
 category: Technology Domain
+slug: recording-tools
 source_label: Recording Tools
 in_framework: true
 target_statement: is able to use the tools that assist language workers to record their work, either audio and/or video and is able to consult others on their use
@@ -15,13 +16,13 @@ resources:
     url: https://software.sil.org/hearthis/
   - title: Audacity
     url: https://www.audacityteam.org/
-  - title:Glyssen
+  - title: Glyssen
     url: https://software.sil.org/glyssen/
   - title: Transcriber
     url: https://software.sil.org/siltranscriber/
   - title: Audio Project Manager
     url: https://software.sil.org/audioprojectmanager/
-  - title Voice over tips for better sounding voice over
+  - title: Voice over tips for better sounding voice over
     url: https://www.youtube.com/watch?v=fSPWpIWUuJA
 source: Lang Tech Competencies.xlsx
 last_updated: 2026-09-03

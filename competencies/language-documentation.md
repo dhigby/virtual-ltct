@@ -1,6 +1,7 @@
 ---
 name: Language Documentation
 category: Technology Domain
+slug: language-documentation
 source label: Language Documentation
 in_framework: true
 target_statement: Can teach tools to document both living and endangered languages. Can identify quality audio and video recordings, teach best practices, and edit or clean up these files.

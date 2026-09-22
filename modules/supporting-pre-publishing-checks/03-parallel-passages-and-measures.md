@@ -15,6 +15,7 @@ You will be able to:
   - Flag any verse pairings still showing a red "?" back to the team for their own
     decision.
   - Recognize the difference between legitimate variation and over-harmonising.
+
 You will be able to:
   - Confirm which numbers/measures check(s) are actually available for the team's
     Paratext version — the new consolidated check, or the older separate Numbers check

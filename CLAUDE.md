@@ -47,6 +47,37 @@ re-derive a course's stage by hand.
 numbered file inside it (`01-*.md`, …), capped at 90 minutes. (The board field "Module
 Status" predates this terminology — read "Module" there as *course*.)
 
+## Who an LTC is — and what that changes about the content
+
+Three facts about the job shape almost every authoring decision here. They are easy to
+violate by accident, because the natural way to write a training example breaks all three.
+
+- **An LTC does not speak the languages they support.** They consult on the *technology* —
+  Paratext, keyboards, fonts, FieldWorks, Bloom, backups — for teams translating into
+  languages the consultant cannot read. So never write a lesson, scenario or quiz item
+  whose answer depends on the consultant judging whether the text itself is right. The
+  competence being taught is diagnosing the tool, the data and the workflow, and knowing
+  which questions belong back with the translation team.
+
+- **The work is often the first translation ever into that language.** Assume nothing is
+  already in place: no settled orthography, no spell-check dictionary, no existing digital
+  corpus, no font or keyboard someone else already made, no Wikipedia article to check
+  against. Examples that quietly assume any of that exists describe a world the learner
+  doesn't work in.
+
+- **AI cannot read these languages — and the examples are real.** Training here uses real
+  data from real projects, not invented languages; that realism is the point and must not
+  be swapped for a made-up example. But these are minority languages, largely absent from
+  model training data, so **never assume you can look at local language data and tell what
+  it means, whether it is correct, or what the fix is.** Don't gloss, translate, judge or
+  silently normalise it, and don't recommend a solution derived from reading it — a
+  plausible-looking answer about text you cannot actually read lands in front of a learner
+  with no way to check it. Real examples come from a human: the author, the project, or
+  the SME at stage 5. When a draft needs one you don't have, leave a marked placeholder
+  saying what the example must show rather than filling it in. The same holds for stating
+  facts about a named language's script, tone marking or character set: get it from a
+  human, or don't state it.
+
 ## Competency levels (CBC) — and the offset that trips everyone up
 
 This curriculum exists to advance people through the **Competency-Based Certification (CBC)**
@@ -269,6 +300,10 @@ Change** — budgeted by the lesson's `**Estimated time:**` header (roughly 10 /
 [`.claude/skills/training-content/`](.claude/skills/training-content/SKILL.md), defines
 the methodology — prefer it when drafting or revising module content. The alignment
 reviewer (stage 4) verifies the four phases are present in each lesson.
+
+Before inventing an example, a scenario or a quiz item that involves a language, re-read
+[Who an LTC is](#who-an-ltc-is--and-what-that-changes-about-the-content) above — it
+constrains all four phases, and the Challenge phase most of all.
 
 See [README.md](README.md) and [CONTRIBUTING.md](CONTRIBUTING.md) for the human-facing
 contributor workflow (browser editing, GitHub Desktop, adding modules via issue template).

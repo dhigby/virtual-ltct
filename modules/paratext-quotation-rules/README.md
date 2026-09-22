@@ -77,9 +77,26 @@ Lessons 1–4 use a single fictional project called **Tamba New Testament** (`ta
 - First level (primary speech) uses a Quote Continuer at new paragraph: continued speech repeats the opening mark `“` (U+201C) at the start of each new paragraph, with the closing mark `”` (U+201D) appearing only once, at the very end of the whole speech.
 - Second and Third level have no continuer — a Second or Third level quotation that spans a paragraph break closes fully and reopens fully at each new paragraph instead.
 - Third level is used only in Matthew, John, and Revelation where a character quotes scripture inside dialogue.
-- Poetry lines (`\q`, `\q2`, `\q3`) are never marked with quotation characters; only prose speech uses marks.
+- When a speech quotes Scripture as poetry, the First level continuer `“` is repeated at the head of the first `\q1` line (e.g. Matthew 2:6 `\q1 “ ‘Oro iu, Betliem…`); the following `\q2`/`\q1` lines of the same poem carry no mark.
+- **Continuer required at:** `p p/q1 m/q1 s1/pi pi/pi b/q1` — every `\p` inside a speech, a `\q1` that follows `\p`, `\m` or `\b`, and an indented `\pi` that follows `\s1` or another `\pi`.
+- Phase A text contains no apostrophes, so the `’` collision described under Runda does not arise in Tamba.
 
-Keep this reference table open as you work through Lessons 1–4. The scenario bank introduces three further fictional languages, each with its own conventions table.
+Lesson 2 also uses a second fictional project, **Runda** (`runda`), for the guillemet and apostrophe exercises:
+
+| Level | Name | Opening mark | Unicode | Closing mark | Unicode |
+|-------|------|-------------|---------|-------------|----------|
+| First level | Primary speech | `«` | U+00AB | `»` | U+00BB |
+| Second level | Embedded speech | `‘` | U+2018 | `’` | U+2019 |
+| Third level | — | *(not used)* | | *(not used)* | |
+
+**Additional facts about Runda quotation style:**
+- First level uses a Quote Continuer at new paragraph: `«` (U+00AB) is repeated at the start of each new `\p` paragraph of a continued speech.
+- Second level has no continuer.
+- Poetry quoted inside speech (Matthew 2:6, 4:6, the Beatitudes 5:3–10) does **not** repeat the continuer on `\q1` lines — the poem opens straight into the Second level `‘`, or simply runs on.
+- **Continuer required at:** `p` — nothing else, because the text carries continuers only at `\p`. Listing `p/q1` produces "Expected continuers [«] are missing" at every quoted poem.
+- Runda's text uses `’` (U+2019) as an apostrophe throughout — word-medial (*don’t*) and word-final possessive (*righteousness’ sake*, Matthew 5:10) — so it collides with the Second level closing mark. That is deliberate: Exercise 2.3 is built on it.
+
+Keep these reference tables open as you work through Lessons 1–4. The scenario bank introduces three further fictional languages, each with its own conventions table.
 
 ---
 

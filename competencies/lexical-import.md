@@ -1,7 +1,6 @@
 ---
 name: Lexical Import
 category: Technology Domain
-slug: lexical-import
 source_label: Lexical Import
 in_framework: true
 target_statement: Can disambiguate and import language data into current lexical software

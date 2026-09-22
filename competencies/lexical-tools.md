@@ -1,7 +1,6 @@
 ---
 name: Lexical Tools
 category: Technology Domain
-slug: lexical-tools
 source_label: Lexical-tools
 in_framework: true
 target_statement: Is able to consult others in building and using lexicons.

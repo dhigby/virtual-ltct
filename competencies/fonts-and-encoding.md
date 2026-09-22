@@ -1,7 +1,6 @@
 ---
 name: Fonts & Encoding
 category: Core Technical
-slug: fonts-and-encoding
 source_label: Fonts & Encoding
 in_framework: true
 target_statement: Is able troubleshoot font and character display issues, and convert between encodings.
@@ -35,7 +34,7 @@ last_updated: 2026-09-02
 
 **Category:** Core Technical
 
-##Description
+## Description
 
 Understanding usage and development of fonts, encoding, and glyphs used to display scripts.
 

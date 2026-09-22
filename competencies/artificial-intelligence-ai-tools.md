@@ -1,7 +1,6 @@
 ---
 name: Artificial Intelligence (AI) Tools
 category: Technology Domain
-slug: artificial-intelligence-ai-tools
 source_label: Artificial Intelligence AI tools
 in_framework: true
 target_statement: Is able to apply general and specialized AI tools effectively, critically, and responsibly in language technology work, and can guide others in their use.
@@ -12,14 +11,33 @@ outcome_levels:
   - "3 - Independent"
   - "4 - Expert"
 resources:
-  []
+  - title: Claude prompting guide 
+    url: https://docs.claude.com/en/docs/build-with-claude/prompt-engineering/overview
+  - title: OpenAI Academy
+    url: https://academy.openai.com
+  - title: Google AI Essentials / Google AI for Education 
+    url: https://ai.google
+  - title: Scripture Forge 
+    url: https://software.sil.org/scriptureforge/
+  - title: Scripture Forge software
+    url: https://scriptureforge.org/
+  - title: SIL AI and NLP 
+    url: https://ai.sil.org/
+  - title: Hugging Face
+    url: https://huggingface.co
+  - title: TAUS
+    url: https://www.taus.net
 source: Lang Tech Competencies.xlsx
-last_updated: 2026-07-01
+last_updated: 2026-09-17
 ---
 
 # Artificial Intelligence (AI) Tools
 
 **Category:** Technology Domain
+
+## Description
+
+Knowledge of general and specialized Artificial Intelligence tools
 
 ## Why it matters
 

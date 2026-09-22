@@ -1,10 +1,9 @@
 ---
-name: Literacy or MLE
+name: Literacy and MLE
 category: Education
-slug: literacy-or-mle
 source_label: Domain-specific education
 in_framework: true
-target_statement: "Has pursue domain specific knowledge inliteracy or MLE via formal education or equivalent."
+target_statement: "Has pursue domain specific knowledge in literacy and MLE via formal education or equivalent."
 outcome_levels:
   - "0 - No Competency"
   - "1 - Has Knowledge"
@@ -16,14 +15,14 @@ resources:
   - title: SIL Training in Literacy and Education
     url:  https://www.sil.org/literacy-education/training-literacy-and-education-work
 source: Lang Tech Competencies.xlsx
-last_updated: 2026-09-03
+last_updated: 2026-09-17
 ---
 
 # Literacy or MLE
 
 **Category:** Education
 
-> This applies the workbook's single **Domain-specific education** ladder to the **Literacy or MLE** domain; the framework calls out each domain separately, so the rationale and activities below are shared across them.
+> This applies the workbook's single **Domain-specific education** ladder to the **Literacy and MLE** domain; the framework calls out each domain separately, so the rationale and activities below are shared across them.
 
 ## Description
 
@@ -31,17 +30,17 @@ Domain-specific knowledge in literacy and MLE
 
 ## Why it matters
 
-Have a good understanding of literacy or MLE used for Bible translation and language development work.
+Have a good understanding of literacy and MLE used for Bible translation and language development work.
 
 ## Target competency
 
-> Has pursue domain specific knowledge via formal education or equivalent in one of the following: translation, linguistics, literacy / education or scripture engagment.
+> Has pursue domain specific knowledge in literacy and MLE via formal education or equivalent.
 
 ## Progression by component
 
 _Each row is a level a learner is **at**; its activities are what they do to reach the level in the final column._
 
-### 1.0 — -
+### 1.0 — Has knowledge in literacy and MLE
 
 | Current level | Suggested activities | Reaches |
 | --- | --- | --- |

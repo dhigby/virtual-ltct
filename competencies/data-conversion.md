@@ -1,7 +1,6 @@
 ---
 name: Data Conversion
 category: Technology Domain
-slug: data-conversion
 source_label: Data Conversion
 in_framework: true
 target_statement: Can use and teach a scripting language to do data conversion and cleanup.

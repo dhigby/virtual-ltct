@@ -28,7 +28,7 @@ Same three-way resolution as [`/next-step`](next-step.md):
 | View | Who it's for | What it holds back |
 |---|---|---|
 | `reviewer` (default) | SME (stage 5), internal reviewer (stage 6) | nothing |
-| `learner` | **pilot learner (stage 7)**, or "what will this feel like?" | design doc, mentor guide, video script, quiz answer key |
+| `learner` | **pilot learner (stage 7)**, or "what will this feel like?" | design doc, mentor guide, video scripts, quiz answer key |
 
 **Never send a pilot learner the reviewer view** — it contains the answer key and the
 mentor guide's scoring notes. If the person asks for something to give a learner, or

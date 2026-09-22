@@ -69,9 +69,37 @@ exactly** one in [`competencies.yaml`](competencies.yaml), or it won't count tow
 coverage (and CI fails). Don't edit `status`/`priority` here — those live on the Project
 board.
 
-## Screenshots
+## Visuals: every lesson has one
 
-Teaching a tool usually means showing it. Screenshots go in the course's own `assets/`
+Teaching a tool means showing it. So **every lesson has at least one visual** — a
+screenshot, a diagram, an image, or a video. A lesson that is all prose asks the reader to
+picture a screen they have never seen.
+
+Which one depends on what the learner needs:
+
+| Use a… | When |
+| --- | --- |
+| **Screenshot** | They have to find or recognise something on screen. The usual choice. |
+| **Diagram** | You're showing how parts relate, or a decision: "if this, then that." |
+| **Image** | A photo of real hardware or a field setup makes the point. |
+| **Video** | You're orienting them to a whole workflow before they try it. |
+
+**Lesson 1 is the course overview, so its visual is the overview video.** While the video
+is still unrecorded, the lesson carries this line, and whoever publishes the course
+replaces it with the real link:
+
+```markdown
+**Watch the video:** _To be recorded at stage 8._
+```
+
+Don't commit the video file itself — videos live on Vimeo or Drive and are linked.
+
+`/next-step` tells you which lessons still need a visual, and the alignment check (stage 4)
+won't pass a course that has a lesson without one.
+
+### Screenshots and diagrams
+
+These are committed files. They go in the course's own `assets/`
 folder, named so the filename says what the picture is:
 
 ```text
@@ -95,6 +123,10 @@ Two things to watch: **paste the file into the repo**, never link to an image on
 Drive, Notion or a website (those links expire and the picture silently disappears from
 the published course); and **remember the repo is public**, so check the shot for
 unpublished translation text, personal details or anything else that shouldn't be seen.
+
+A diagram works the same way — save it as an `.svg` in `assets/`, with the same naming and
+the same description. (Don't write a ` ```mermaid ` block: nothing in this repo draws
+those, so it would appear on the published page as a lump of code.)
 
 ## What not to commit
 

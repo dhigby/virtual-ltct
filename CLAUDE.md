@@ -140,14 +140,31 @@ separate faithful-import workstream — see [`process/backfill.md`](process/back
 5. **Don't commit large video files.** Link to Vimeo/Google Drive under `external_links:`
    in frontmatter instead.
 
-6. **Screenshots live in `modules/<slug>/assets/`**, named
-   `ss-<lesson number>-<what-it-shows>.png` (lowercase, hyphens, no spaces), and are
-   **committed, never hotlinked** — a remote image rots and takes the published page's
-   picture with it. An agent writes the image link and its alt text where the shot
-   belongs; a human captures the file (stage **3e**). The alt text must describe the
-   exact state shown, because it is the screen-reader text *and* the brief for whoever
-   takes the shot — `![alt text](…)` is a defect. `check_course_package.py` enforces all
-   of this, and `/next-step` reports any shot still outstanding.
+6. **Every lesson carries a visual** — a screenshot, a diagram, an image or a video.
+   These courses teach software, and a lesson of unbroken prose asks the learner to
+   picture a screen they have never seen. The author chooses which while drafting (stage
+   **3a**); CI warns while a course is in draft and the alignment check (stage **4**)
+   blocks. **Lesson 1 is the course overview, so its visual is the overview video.**
+
+   - **Screenshots and diagrams** live in `modules/<slug>/assets/`, named
+     `ss-<lesson number>-<what-it-shows>.png` (lowercase, hyphens, no spaces), and are
+     **committed, never hotlinked** — a remote image rots and takes the published page's
+     picture with it. An agent writes the image link and its alt text where the shot
+     belongs; a human captures the file (stage **3e**). The alt text must describe the
+     exact state shown, because it is the screen-reader text *and* the brief for whoever
+     takes the shot — `![alt text](…)` is a defect. Diagrams are `.svg` files under the
+     same rules; there is no mermaid renderer configured, so a ` ```mermaid ` fence would
+     publish as a block of code.
+   - **Videos** are referenced, never committed: `**Watch the video:** [title](url)`, or
+     `**Watch the video:** _To be recorded at stage 8._` until it exists.
+   - **Video scripts** are `NN-video-script.md` for the overview video, and the optional
+     `NN-lesson-<L>-video-script.md` for a later lesson. Keep `-video-script.md` **last**
+     in the filename: five places in the tooling identify a script by that ending, and a
+     name like `09-video-script-03.md` is treated as a lesson *and* leaks into the
+     learner view.
+
+   `check_course_package.py` enforces all of this, and `/next-step` reports any lesson
+   without a visual and any shot still outstanding.
 
 7. **Lesson duration header.** Every numbered lesson file and the scenario bank opens, right
    under the H1, with `**Estimated time:** X minutes` — no lesson exceeds 90 minutes. This is
@@ -233,7 +250,7 @@ matters:**
 | URL | View | Who | Holds back |
 |---|---|---|---|
 | `…/review/<slug>/` | reviewer | SME (stage 5), internal reviewer (stage 6) | nothing |
-| `…/learn/<slug>/` | learner | **pilot learner (stage 7)** | design doc, mentor guide, video script, quiz answer key |
+| `…/learn/<slug>/` | learner | **pilot learner (stage 7)** | design doc, mentor guide, video scripts, quiz answer key |
 
 **Never send a pilot learner the `/review/` URL** — it contains the answer key. Get the URL
 from `course_stage.review_url()` (it is in `--json` and in `/next-step` from stage 4 on);

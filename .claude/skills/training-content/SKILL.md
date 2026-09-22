@@ -104,8 +104,9 @@ lesson's `**Estimated time:**` header and make sure the phases add up to it.
   Connect`).
 - **Content** *(~25–30 min)* — deliver only the knowledge needed to *attempt* the task, then
   stop. Videos, concept explanations, worked distinctions, real-world examples. Vary modality
-  (video, demonstration, reading) — adults have diverse styles. Close with a short **Key
-  takeaways** list.
+  (video, demonstration, reading) — adults have diverse styles. **Every lesson carries at
+  least one visual** (screenshot, diagram, image or video) and it usually belongs here; see
+  `references/markdown-styling.md`. Close with a short **Key takeaways** list.
 - **Challenge** *(~15–20 min)* — the learner applies the content to a **realistic field
   scenario** and produces something a mentor can review (a diagnosis, a plan, a 2–3 sentence
   recommendation). Scenarios use named people in real contexts with real constraints (power

@@ -9,8 +9,8 @@ read one section, read [The 30-second answer](#the-30-second-answer).
 | --- | --- |
 | **Course** | One folder under `modules/<slug>/`. Addresses one or more competencies; holds the whole content package. |
 | **Lesson** | One numbered file inside a course (`01-*.md`, `02-*.md`, …), capped at **90 minutes** of learner seat time. |
-| **Package** | The full set of files a finished content course has (design, lessons, scenario bank, mentor guide, quiz, video script). See [`modules/_template/`](../modules/_template/). |
-| **Online** | The course is delivered — its video is recorded and uploaded to Cypher for Business. This is the *done* state. (We do **not** say "Delivered"; the board option is `Online`.) |
+| **Package** | The full set of files a finished content course has (design, lessons, scenario bank, mentor guide, quiz, overview video script). Every lesson also carries a visual — screenshot, diagram, image or video. See [`modules/_template/`](../modules/_template/). |
+| **Online** | The course is delivered — its video(s) are recorded and uploaded to Cypher for Business. This is the *done* state. (We do **not** say "Delivered"; the board option is `Online`.) |
 
 > The GitHub Project board is titled "LTC Training Modules" and its field is called
 > "Module Status" — for historical reasons. Read "Module" there as **course**.
@@ -45,7 +45,7 @@ Every content course moves through eight stages. Each has a one-page how-to unde
 | 5 | [SME fact-check](stages/05-sme-factcheck.md) | SME | Verify tools/facts/field detail | SME Check |
 | 6 | [Internal review](stages/06-internal-review.md) | Internal Reviewer | Review PR + merge | Internal Review |
 | 7 | [Pilot](stages/07-pilot.md) | Pilot Coordinator | Run with one learner | Pilot |
-| 8 | [Record & publish](stages/08-publish.md) | Publisher | Record video, upload to Cypher | Publishing → Online |
+| 8 | [Record & publish](stages/08-publish.md) | Publisher | Record the video(s), upload to Cypher | Publishing → Online |
 
 The stages are gates, not suggestions: don't start drafting before the design is
 approved, and don't publish before the pilot. `/work-on` and `/next-step` tell you which
@@ -100,7 +100,7 @@ Fill in your team's actual people here:
 
 Each course has exactly **one** tracking issue on the board — the "Course production
 tracker." Its checklist mirrors the eight stages (with the draft stage split into its
-four artifacts). Checking a box records progress; the [`/next-step`](../.claude/commands/next-step.md)
+five sub-steps). Checking a box records progress; the [`/next-step`](../.claude/commands/next-step.md)
 command treats the actual files in the repo as the source of truth and will flag any
 checkbox that disagrees with reality.
 

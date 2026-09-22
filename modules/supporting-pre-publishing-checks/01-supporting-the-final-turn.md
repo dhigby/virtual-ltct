@@ -32,7 +32,10 @@ course keeps coming back to.
 ## Content
 
 **The 6-stage spiral.** A Bible translation project moves through six stages on its way
-to publication, not a single straight-line pass. Jenni Beadle's framing (from the SME
+to publication, not a single straight-line pass. The translation progresses through six
+stages, but can be thought of as a spiral rather than a straight line — the same checks
+come back around more than once, at increasing levels of polish, rather than each one
+being done exactly once and left behind. Jenni Beadle's framing (from the SME
 interview behind this course) is a **6-stage spiral**: comparison, terms, formatting,
 and other checks appear across the process, but not on a fixed schedule of "run at every
 stage." Some checks get attention early and again later; others get missed at one stage

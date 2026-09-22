@@ -69,11 +69,37 @@ exactly** one in [`competencies.yaml`](competencies.yaml), or it won't count tow
 coverage (and CI fails). Don't edit `status`/`priority` here — those live on the Project
 board.
 
+## Screenshots
+
+Teaching a tool usually means showing it. Screenshots go in the course's own `assets/`
+folder, named so the filename says what the picture is:
+
+```text
+modules/<course-slug>/assets/ss-01-run-basic-checks.png
+```
+
+`ss`, then the lesson number, then what it shows — lowercase, hyphens, no spaces. Link to
+it from the lesson with a **description of what the picture shows**, not the word "image":
+
+```markdown
+![The Run basic checks dialog with Quotations ticked and all NT books selected.](assets/ss-01-run-basic-checks.png)
+```
+
+That description does three jobs: it's what someone using a screen reader hears, it tells
+a reviewer whether the right thing was captured, and — if the picture hasn't been taken
+yet — it tells whoever takes it which state to put the tool in. So Claude will often write
+the link *before* the picture exists; `/next-step` then lists the shots still needed. CI
+rejects `![alt text](…)`.
+
+Two things to watch: **paste the file into the repo**, never link to an image on Google
+Drive, Notion or a website (those links expire and the picture silently disappears from
+the published course); and **remember the repo is public**, so check the shot for
+unpublished translation text, personal details or anything else that shouldn't be seen.
+
 ## What not to commit
 
 - Large video files. Link to Vimeo or Google Drive instead (put the URL under
-  `external_links:` in the frontmatter). Small images are fine under the course's `assets/`
-  folder.
+  `external_links:` in the frontmatter). Screenshots and small images are fine — see above.
 - `COVERAGE.md` — it's generated automatically; don't hand-edit it.
 
 ## Backfilling legacy courses

@@ -40,6 +40,23 @@ CYPHER_RE = re.compile(r"^\s*cypher:\s*\S+", re.MULTILINE)
 # same reason; so must anything that enumerates courses.
 NOT_A_COURSE = {"_template"}
 
+# Screenshot links are parsed by check_course_package.check_images, which owns the
+# convention (see process/stages/03-draft.md). Imported rather than re-implemented so
+# the gate and the CI check can never disagree about what counts as a missing shot.
+try:
+    import check_course_package as _pkg
+except Exception:  # pragma: no cover - keep stage detection working without it
+    _pkg = None
+
+
+def pending_screenshots(folder):
+    """Alt texts of image links in a course whose file has not been captured yet."""
+    if _pkg is None:
+        return []
+    _errors, warnings = _pkg.check_images(folder, folder.name)
+    prefix = "screenshot not captured yet -- "
+    return [w.split(prefix, 1)[1] for w in warnings if prefix in w]
+
 
 def branch_slug(slug):
     """Canonical branch-safe form of a course folder name.
@@ -266,6 +283,20 @@ def stage_for(folder, use_gh=True):
                       "Use the video-script-writer agent to write the video script for "
                       "modules/" + slug + "/.")
     done.append("3d. Video script")
+
+    # --- Stage 3e: screenshots the author briefed but nobody has captured yet ---
+    # The links and their alt text are written during 3a-3d; the files can only appear
+    # once a human opens the tool. That handover is the one part of a draft an agent
+    # cannot finish, so it gets its own gate rather than being discovered at review.
+    pending = pending_screenshots(folder)
+    if pending:
+        shots = "; ".join(pending[:3]) + ("; ..." if len(pending) > 3 else "")
+        return result(3, "3e", "Draft -- capture screenshots",
+                      "process/stages/03-draft.md",
+                      "Capture " + str(len(pending)) + " screenshot(s) for modules/"
+                      + slug + "/ and commit them under its assets/ folder. Each image "
+                      "link's alt text says which state to capture: " + shots)
+    done.append("3e. Screenshots")
 
     # --- Stage 8: published (the only late stage with a repo signal) ---
     if published:

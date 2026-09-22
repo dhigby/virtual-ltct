@@ -20,6 +20,7 @@ Run `/next-step <slug>` in Claude Code any time to see where this course is and 
 - [ ] [3b. Scenario bank + mentor guide drafted](https://github.com/dhigby/virtual-ltct/blob/main/process/stages/03-draft.md)
 - [ ] [3c. Quiz written](https://github.com/dhigby/virtual-ltct/blob/main/process/stages/03-draft.md)
 - [ ] [3d. Video script drafted](https://github.com/dhigby/virtual-ltct/blob/main/process/stages/03-draft.md)
+- [ ] [3e. Screenshots captured](https://github.com/dhigby/virtual-ltct/blob/main/process/stages/03-draft.md)
 - [ ] [4. Alignment check passed](https://github.com/dhigby/virtual-ltct/blob/main/process/stages/04-alignment.md)
 - [ ] [5. SME fact-check passed](https://github.com/dhigby/virtual-ltct/blob/main/process/stages/05-sme-factcheck.md)
 - [ ] [6. Internal review passed](https://github.com/dhigby/virtual-ltct/blob/main/process/stages/06-internal-review.md)

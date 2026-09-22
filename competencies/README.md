@@ -21,6 +21,14 @@ activity ladder or sub-competencies with observable criteria.
   it. If you keep descriptors outside the repo, re-copy from `main` before each round.
 - **Open a pull request.** The sync check runs on every PR touching `competencies/**`, so
   a broken key is caught before it reaches `main` rather than after.
+- **A competency's URL is a citation — don't move a page silently.** The published URL is
+  `/<category>/<descriptor filename>/`, and the CBC program cites these as reference
+  points. Three things move a page: renaming a file here, moving a competency to a
+  different category in [`competencies.yaml`](../competencies.yaml), or renaming a
+  category key there — the last moves every page in that category at once. If you do any
+  of them, add the old path to `redirect_maps` in [`mkdocs.yml`](../mkdocs.yml) in the
+  same change, so the old link keeps resolving. Note the frontmatter `category:` is
+  display metadata only; the URL follows `competencies.yaml`.
 - **Browse the rendered site:** <https://dhigby.github.io/virtual-ltct/> — the published
   version of everything here, grouped by category with search.
 - **`resources:` is the reading list**, hand-maintained here and rendered as each page's

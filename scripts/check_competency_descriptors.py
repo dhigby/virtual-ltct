@@ -6,11 +6,16 @@ descriptors. This check fails (exit 1) if they drift:
 
   * a framework competency has no descriptor (except exempt placeholders),
   * a descriptor names a competency that isn't in the framework,
-  * a descriptor's frontmatter is malformed or missing a required key,
+  * a descriptor's frontmatter is malformed or missing `name` or `category`,
   * a descriptor self-reports `in_framework: false`,
   * a descriptor's `resources:` entries aren't `{title, url}` links,
-  * a descriptor's `outcome_levels:` drift from the CBC scale in outcome-levels.yaml,
-  * or a descriptor's filename doesn't match its `slug`.
+  * or a descriptor's `outcome_levels:` drift from the CBC scale in outcome-levels.yaml.
+
+`slug:` is reported as a WARNING, not a failure. The published URL is built from the
+filename (gen_site.py falls back to the file stem), so a missing slug changes nothing —
+but a slug that disagrees with the filename means the page has moved, which breaks any
+link anyone already shared. Warning keeps that visible without failing the build over a
+key carrying no information the filename doesn't already have.
 
 Run:  python scripts/check_competency_descriptors.py
 Requires: pyyaml. Read-only — makes no changes.
@@ -48,7 +53,7 @@ def main():
     framework = {n for names in yaml.safe_load(YAML.read_text(encoding="utf-8")).values()
                  for n in names}
     ladder, _, legacy = _levels.load()
-    errors, seen = [], {}
+    errors, warnings, seen = [], [], {}
 
     for md in sorted(OUT.glob("*.md")):
         if md.name == "README.md":
@@ -62,9 +67,12 @@ def main():
             errors.append(f"{md.name}: missing frontmatter or `name`")
             continue
         # These files are hand-authored now, so guard the keys humans might drop.
-        for key in ("name", "category", "slug"):
+        for key in ("name", "category"):
             if not fm.get(key):
                 errors.append(f"{md.name}: missing required frontmatter key `{key}`")
+        if not fm.get("slug"):
+            warnings.append(f"{md.name}: no `slug` — the page will publish at "
+                            f"'{md.stem}', taken from the filename")
         # `resources:` is a list of {title, url} links that scripts/gen_site.py renders as
         # each page's Further Information section. Hand-maintained, so guard the shape.
         resources = fm.get("resources")
@@ -105,7 +113,9 @@ def main():
             errors.append(f"{md.name}: duplicate descriptor for '{name}' (also {seen[name]})")
         seen[name] = md.name
         if fm.get("slug") and md.stem != fm["slug"]:
-            errors.append(f"{md.name}: filename does not match slug '{fm['slug']}'")
+            warnings.append(f"{md.name}: `slug` is '{fm['slug']}' but the filename "
+                            f"publishes at '{md.stem}' — if the rename is intended, "
+                            f"update `slug` to match; links to the old URL will break")
         if name not in framework:
             errors.append(f"{md.name}: '{name}' is not in competencies.yaml")
         elif fm.get("in_framework") is False:
@@ -119,12 +129,17 @@ def main():
     print(f"framework: {len(framework)} competencies "
           f"({len(EXEMPT & framework)} exempt) · descriptors: {len(seen)} · "
           f"covered: {covered}")
+    if warnings:
+        print(f"\n{len(warnings)} warning(s) - reported, not fatal:")
+        for w in warnings:
+            print("  !", w)
     if errors:
         print(f"\n{len(errors)} problem(s):")
         for e in errors:
             print("  -", e)
         sys.exit(1)
-    print("OK — descriptors and framework are in sync.")
+    print("OK — descriptors and framework are in sync."
+          + (" See warnings above." if warnings else ""))
 
 
 if __name__ == "__main__":

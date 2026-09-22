@@ -1,6 +1,7 @@
 ---
 name: Phonetic Tools
 category: Technology Domain
+slug: phonetic-tools
 source_label: Phonetics Tools
 in_framework: true
 target_statement: Is able to use the tools for doing phonetic analysis and is able to consult others in their use

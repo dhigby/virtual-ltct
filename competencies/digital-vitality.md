@@ -1,6 +1,7 @@
 ---
 name: Digital Vitality
 category: Technology Domain
+slug: digital-vitality
 label_solver: Digital Vitality
 in_framework: true
 target_statement: Demonstrates the ability to inform and assist communities in the digitization of their language

@@ -1,6 +1,7 @@
 ---
 name: Digital and Print Publishing
 category: Technology Domain
+slug: digital-and-print-publishing
 source_label: Digital and Print Publishing
 in_framework: true
 target_statement: Is able to use the tools that assist language workers to publish their work electronically and on paper and is able to consult others on their use.

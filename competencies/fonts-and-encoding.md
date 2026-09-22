@@ -1,6 +1,7 @@
 ---
 name: Fonts & Encoding
 category: Core Technical
+slug: fonts-and-encoding
 source_label: Fonts & Encoding
 in_framework: true
 target_statement: Is able troubleshoot font and character display issues, and convert between encodings.

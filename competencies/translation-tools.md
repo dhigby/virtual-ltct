@@ -1,7 +1,8 @@
 ---
 name: Translation Tools
 category: Technology Domain
-source_label:Translation Tools
+slug: translation-tools
+source_label: Translation Tools
 in_framework: true
 target_statement: Is able to train others in the effective use of current Translation tools.
 outcome_levels:

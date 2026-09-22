@@ -61,7 +61,7 @@ Have a good understanding of one of the language domains used for Bible translat
 
 _Each row is a level a learner is **at**; its activities are what they do to reach the level in the final column._
 
-### 1.0 — -
+### 1.0 — Has knowledge in one of the language domains
 
 | Current level | Suggested activities | Reaches |
 | --- | --- | --- |

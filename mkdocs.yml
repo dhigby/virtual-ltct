@@ -68,6 +68,15 @@ plugins:
         - scripts/gen_site.py
   - literate-nav:
       nav_file: SUMMARY.md
+  # A competency page's URL is /<category>/<descriptor filename>/, and those URLs are
+  # cited as reference points by the CBC program. Three things move a page: renaming a
+  # descriptor file, moving a competency to another category in competencies.yaml, or
+  # renaming a category key there (which moves every page beneath it at once). When you
+  # do any of those, add the old path here so the citation keeps resolving. Paths are
+  # the generated ones ('<category-slug>/<slug>.md'), not competencies/<slug>.md. The
+  # build is strict, so a redirect pointing at a page that doesn't exist fails CI.
+  - redirects:
+      redirect_maps: {}
   # Link-preview cards for Slack/email. Needs the native imaging libraries, so it
   # runs in CI only — `mkdocs serve` locally stays dependency-free.
   - social:

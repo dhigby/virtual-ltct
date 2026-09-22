@@ -49,6 +49,17 @@ Use `modules/_template/04-quiz.md` as the file skeleton.
   form. If a file genuinely holds more than one quiz, repeat the heading and qualify it
   (`## Answer key (Section 1)`) rather than inventing a different marker.
 
+## Language data in questions
+
+A scenario question often carries real text, file contents or settings from a real
+project. Keep them real — never substitute an invented language. What must never happen
+is a question whose correct answer depends on *reading* that text: you can't read it, the
+learner can't read it, and neither can the consultant the question is training. The answer
+has to turn on the tool, the setting, the file or the workflow. Don't gloss or translate
+the data, don't alter a character of it when you copy it in, and if a question needs data
+you don't have, leave a marked placeholder saying what it must show rather than inventing
+a line of the language.
+
 ## What you don't do
 
 - Don't touch the module's `README.md` frontmatter or any `competencies:` /

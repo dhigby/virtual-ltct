@@ -75,6 +75,21 @@ different instructional style.
 - Ground lessons in real consultant field scenarios (remote locations, limited
   connectivity, non-technical end users) — this curriculum trains people who support
   Bible translators and language workers in the field, not office IT staff.
+- **The consultant doesn't speak the language, and often nobody has written it down
+  before.** They support a team translating into a language they cannot read, frequently
+  as the first translation ever into it — so assume no settled orthography, no
+  spell-check dictionary, no corpus, no ready-made font or keyboard. Never write a lesson
+  step or scenario whose answer depends on the consultant judging whether the text itself
+  is right; the skill being taught is the tool, the data and the workflow, and knowing
+  what to hand back to the translation team.
+- **Language data is real, and you can't read it.** Examples come from actual projects —
+  never substitute an invented "example language," which throws away the realism the
+  training depends on. But you cannot read these languages: don't gloss, translate, judge
+  correctness, or build a recommendation out of reading the text, and never silently tidy
+  characters, diacritics or spelling when you copy data between files. If a lesson needs
+  language data you don't have, write a marked placeholder saying exactly what the example
+  must show and who supplies it (usually the SME at stage 5) — the same discipline as a
+  screenshot capture brief.
 - State the observable outcome a lesson prepares the learner for before teaching the
   content, matching the module's `target_outcome_level` — a CBC level defined in
   [`outcome-levels.yaml`](../../outcome-levels.yaml) naming where the learner stands

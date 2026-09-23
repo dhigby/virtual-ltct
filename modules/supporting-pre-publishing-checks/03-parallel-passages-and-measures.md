@@ -59,13 +59,13 @@ What the tool *does* track is **review status**, per verse, in a **Status column
 - A red **question mark (?)** means the verse has been edited since it was last
   approved and needs to be looked at again.
 
-![The Parallel Passages tool with the Status column showing a green checkmark on one row and a red "?" on another, plus the "Show differences" button.](images/L3-4a.PP-Changed-text-menu.png)
-*Checkmark = reviewed and approved; red "?" = edited since approval, needs another look.*
-
 You can filter the list down to exactly the rows that need attention using the dropdown
 above the table:
 
-![The Parallel Passages filter dropdown, with "Changed text" selected below "All references" and "Unapproved references."](images/L3-4b.PP-Changed-text.png)
+![The Parallel Passages filter dropdown, with "Changed text" selected below "All references" and "Unapproved references."](images/L3-4a.PP-Changed-text-menu.png)
+
+![The Parallel Passages tool with the Status column showing a green checkmark on one row and a red "?" on another, plus the "Show differences" button.](images/L3-4b.PP-Changed-text.png)
+*Checkmark = reviewed and approved; red "?" = edited since approval, needs another look.*
 
 Clicking the "Show differences" icon on a flagged row opens a side-by-side comparison of
 the two verses so you can see exactly what changed:

@@ -76,6 +76,9 @@ project text." This isn't a bug or a trap the tool is setting for the team; it's
 the tool's normal starting state, and the task is straightforward: work through the
 list and add the appropriate rendering for each term from the project's own text.
 
+![A Biblical Terms row still at its default state: orange highlight, "Double click to enter rendering(s) from project text."](images/L2-1.Blank-BT-Row.png)
+*A term still at its default, unfilled state — not an error, just unfinished.*
+
 Where this becomes a false-clean risk is the same pattern as the wordlist above: a team
 can present a partially-completed Biblical Terms list as "done" without having actually
 gone through and filled in every term. The check that catches this isn't eyeballing the
@@ -148,6 +151,9 @@ consolidated check covering numbers, weights, and measures together, replacing t
 older, separate Numbers check — though not every team's Paratext version has migrated
 to it yet. Don't assume every project's terms lists look identical, or that a list
 you've seen behave one way in one project will exist or behave the same way in another.
+
+![The Open Biblical Terms List dialog, showing Major Biblical Terms, All Biblical Terms, Numbers, and other lists as separate entries.](images/L2-5.BT-choose-list.png)
+*Numbers and Measures are separate entries here — never one combined list.*
 
 **Key takeaways**
 - There's no technical way to detect a blanket-approved wordlist, and the Project Plan

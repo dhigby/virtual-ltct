@@ -58,6 +58,9 @@ symptoms of a single cause higher up. Work in this order instead:
    back clean before anything else, because every other check on this list reports its
    results by quoting a chapter and verse location, and those locations can't be trusted
    if the chapter/verse numbering itself has errors (such as a duplicate verse).
+
+![The Run Basic Checks dialog with Chapter/verse numbers checked, and the book-selection and OK controls numbered 1 through 4.](images/L4-6.BasicCheck-Chap-verse.png)
+*Confirm this one first — everything else on this list depends on it.*
 2. **Marker-pair census.** Paratext markers come in two kinds: **paragraph markers**
    (`\p`, `\s`, `\q`, etc.) that apply to a whole paragraph and stand alone, and
    **paired markers** (`\f...\f*`, `\x...\x*`, character styles, etc.) that wrap a span

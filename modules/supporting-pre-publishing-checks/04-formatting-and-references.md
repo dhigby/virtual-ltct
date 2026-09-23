@@ -50,6 +50,12 @@ that should be ordinary body text. That single missing marker can plausibly prod
 whole cluster of downstream-looking symptoms: an oversized or wrong-looking heading,
 verse numbers that appear to have vanished from the normal flow, and references that
 miscount because the checker is reading swallowed verse content as part of the heading.
+
+![A section heading with a \p marker correctly in place before verse 21, so verses 19-22 render as normal body text below the heading.](images/L4-7a.Before.png)
+
+![The same passage with the \p marker missing: verses 19 and 20 have been swallowed into the \s1 heading style, rendered in bold as if they were part of the heading title.](images/L4-7b.After.png)
+*One missing paragraph marker, and the verse numbers disappear into the heading.*
+
 If you start by fixing the errors at the bottom of a long list, you may be fixing
 symptoms of a single cause higher up. Work in this order instead:
 

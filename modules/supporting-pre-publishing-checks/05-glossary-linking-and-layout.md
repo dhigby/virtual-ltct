@@ -183,6 +183,18 @@ the team's last look before the typesetter. Work through it methodically, watchi
 - **Heading placement** — headings sitting awkwardly at a page or column break.
 - **Underfilled pages** — pages with noticeably more white space than their neighbors.
 
+![A two-page PTXprint spread where a section heading has been pushed to the top of the second column, leaving a large block of white space at the bottom of the first column.](images/L5-16.c.awkward-heading-break.png)
+*A heading held together with its paragraph pushed the whole block to the next column — leaving this underfilled gap behind it.*
+
+The read-through also turns up composition issues beyond this list — picture sizing and
+spacing, and page-margin spacing, for example:
+
+![A PTXprint spread where the left-hand page's illustration is oversized relative to the page, and the right-hand page's illustration sits with almost no gap between its caption/credit text and the picture itself.](images/L5-16.d.Picture-size.png)
+*An oversized picture, and one crowded too close to its own credit text — both are typesetting-craft issues to flag, not fix yourself.*
+
+![A page where the running header sits almost flush against the first line of body text, with no visible top margin.](images/L5-16.e.top-margin.png)
+*Not enough top-margin space between the running header and the body text below it.*
+
 This course's team workbook material was verified against **PTXprint 3.0.38**;
 PTXprint updates often, so specific menu labels may have moved by the time you're
 using it — verify against the version in front of you rather than assuming the exact

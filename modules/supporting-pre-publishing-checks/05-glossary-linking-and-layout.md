@@ -68,6 +68,14 @@ the surface form in the text differs from the glossary entry's canonical renderi
 ![A Paratext Find search result for "talk fo God," showing one occurrence as plain bold text (MAT 1:22) and another wrapped in \w talk fo God|guy who talk fo God\w* markup (MAT 2:5).](images/L5-13.Find-w-markup.png)
 *This is the markup a correctly-scoped link leaves behind.*
 
+You don't have to run Find to spot this markup — it's visible directly in the text
+editor too. The rendering half of a `\w...\w*` marker displays in **light grey**, right
+in the running text, which makes linked terms easy to scan for by eye as you read through
+a passage:
+
+![A passage of running text in the Paratext editor, with two \w...\w* markers visible: "angel guy|Angel messenja guy" and "talk fo God|guy who talk fo God," the rendering half shown in light grey.](images/L5-glossary-links-shown-in-grey.png)
+*The grey text is the marker's rendering half — visible right in the text, not just in Find results.*
+
 Look at each Find result: if `\w...\w*` markup
 wraps **every single occurrence** of the term, that's over-linking; if it wraps only the
 **first occurrence per section**, the scope is correct. To fix over-linking: **unlink**

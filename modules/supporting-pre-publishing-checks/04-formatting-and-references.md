@@ -67,6 +67,7 @@ symptoms of a single cause higher up. Work in this order instead:
 
 ![The Run Basic Checks dialog with Chapter/verse numbers checked, and the book-selection and OK controls numbered 1 through 4.](images/L4-6.BasicCheck-Chap-verse.png)
 *Confirm this one first — everything else on this list depends on it.*
+
 2. **Marker-pair census.** Paratext markers come in two kinds: **paragraph markers**
    (`\p`, `\s`, `\q`, etc.) that apply to a whole paragraph and stand alone, and
    **paired markers** (`\f...\f*`, `\x...\x*`, character styles, etc.) that wrap a span
@@ -74,6 +75,9 @@ symptoms of a single cause higher up. Work in this order instead:
    Checking Inventories > Markers Inventory) to confirm every paired marker actually
    closes. An unclosed pair is often the single cause behind a cluster of
    downstream-looking errors.
+
+![The Markers Inventory dialog listing markers, their counts, and style names (Chapter Number, Footnote, End Marker, and others).](images/L4-8.MarkersInventory.png)
+*This is where you check that every paired marker actually closes.*
 3. **Ghost markers.** Look for markers left behind with no content attached — often the
    debris of a deleted footnote or cross-reference where the marker itself wasn't
    removed. These can silently corrupt export and typesetting even when nothing visibly
@@ -118,6 +122,14 @@ whether it shows up at all depends on a **View menu** option, **Denied messages*
 that option off, denied errors disappear from the list completely, so a check that looks
 short and clean may simply have its denied items switched out of view. Turn on
 **View > Denied messages** to see the full picture before trusting a zero-error result.
+
+![The View menu open with "Denied messages" highlighted.](images/L4-12a.View-Denied.png)
+
+![A denied error shown with strikethrough text: "Expected continuers ["] are missing OR quote not closed."](images/L4-12b.Denied-Error-strike-through.png)
+*Denied errors are struck through — but only if this view option is on.*
+
+![A Basic Checks results list with the top item reading "Denied message(s) not shown."](images/L4-12c.Denied-Error-not-shown.png)
+*With the view option off, the list simply tells you denied messages exist without showing them.*
 
 > **WARNING — watch for a false-clean result here too:** A Basic Checks run showing zero
 > formatting errors can mean the project is genuinely clean — or it can mean the checks
@@ -187,18 +199,28 @@ Four things to do with these inventories:
   with it selected, the punctuation checkbox is relabelled **"Punctuation (sequences)"**
   and runs the sequence-level check; without it, the same checkbox stays labelled
   **"Punctuation"** and only checks individual characters, so the review can look
-  complete while a whole class of problems goes unseen. A flagged result under
-  "Punctuation (sequences)" reads something like `Invalid or unknown punctuation
-  combination: ?'"_` or `Invalid or unknown punctuation combination: !]_` (the
-  underscore stands for a space in Paratext's display), each tied to a specific
-  reference such as ROM 3:5 — combinations Paratext doesn't recognize as valid, often
-  quotation marks paired with other punctuation. This lesson covers punctuation
-  sequences only; quotation marks specifically are more complicated and are intentionally
-  out of scope here, deferred to a separate, future addition.
+  complete while a whole class of problems goes unseen.
+
+  ![The Punctuation (sequences) inventory's Inventory menu, with "Show sequences" checked and highlighted.](images/L4-9.Punctuation-inventory-Show-Sequences.png)
+  *This checkbox is what makes "Punctuation (sequences)" mean anything.*
+
+  A flagged result under "Punctuation (sequences)" looks like this — each combination
+  Paratext doesn't recognize as valid, tied to a specific reference, often quotation
+  marks paired with other punctuation:
+
+  ![A list of flagged punctuation-sequence results, e.g. "ROM 3:5 Invalid or unknown punctuation combination: ?_(" and "ROM 9:20 Invalid or unknown punctuation combination: ?'"_".](images/L4-11.Punctuation-sequences-result.png)
+  *This is what a flagged sequence actually looks like.*
+
+  This lesson covers punctuation sequences only; quotation marks specifically are more
+  complicated and are intentionally out of scope here, deferred to a separate, future
+  addition.
 - **Review Unmatched Pairs of Punctuation directly**, using its Status column to work
   through any single unmatched bracket/parenthesis-type character it lists. Don't treat
   "Show sequences" as covering this — it catches multi-character sequences, not the
   single unmatched pairs this separate inventory is built to surface.
+
+  ![The Unmatched Pairs of Punctuation inventory, listing single-character pairs like "(", "]", ")" with counts and a Status column (blue "?", green check, red X).](images/L4-10.Unmatched-Pairs-Punctuation.png)
+  *A direct list of unmatched brackets and parentheses.*
 
 That third point comes from a real case. One consultant believed their Punctuation
 Inventory review had been thorough — yet the typesetter later came back with a long list

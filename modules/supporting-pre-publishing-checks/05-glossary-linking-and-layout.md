@@ -131,6 +131,9 @@ Digital and Print Publishing competency:
    - A **grey tick** means Paratext *guessed* the breaks — not yet reviewed.
    - A **green tick** means the breaks are **approved**.
 
+   ![The Wordlist's Show hyphenation view, with a Hyphenation column showing grey ticks (unreviewed) and green ticks (approved) alongside each word.](images/L5-14.Wordlist-hyphenation.png)
+   *Grey = Paratext's guess; green = a human confirmed it.*
+
    Your job is to work through the guesses:
    - **Correct guess** — click the grey tick; it turns green. Approved.
    - **Wrong guess** — click the word and add or remove `=` marks where the breaks

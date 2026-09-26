@@ -101,6 +101,9 @@ coach the fix: have the team review the full rendering list for a term, confirm 
 rendering(s) are current and correct, and remove the stale ones themselves — you're
 coaching this, not doing it at their keyboard.
 
+![A Biblical Terms row for "adikos" showing three candidate renderings ("da bad guys," "no on us," "no do da ting") but a Found count of only 2/11.](images/L2-2-TermMult-only-2-used.png)
+*Renderings pile up over time — the Found column tells you which one is actually live.*
+
 > **NOTE:** A related, less common pattern: a rendering that's just the verse's first
 > word, repeated across a term's occurrences, rather than an actual translation. Per a
 > support.bible programmer's reply to the SME interview behind this course, the likely

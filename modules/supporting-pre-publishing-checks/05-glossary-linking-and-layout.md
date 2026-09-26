@@ -63,7 +63,12 @@ results list you can re-run any time, unlike the transient link report. Glossary
 are marked directly in the text with `\w` and `\w*` around the linked span, in the form
 `\w <surface text>|<rendering>\w*` — for example `\w angel messenja guy\w*`, or, where
 the surface form in the text differs from the glossary entry's canonical rendering,
-`\w angel guy|Angel messenja guy\w*`. Look at each Find result: if `\w...\w*` markup
+`\w angel guy|Angel messenja guy\w*`.
+
+![A Paratext Find search result for "talk fo God," showing one occurrence as plain bold text (MAT 1:22) and another wrapped in \w talk fo God|guy who talk fo God\w* markup (MAT 2:5).](images/L5-13.Find-w-markup.png)
+*This is the markup a correctly-scoped link leaves behind.*
+
+Look at each Find result: if `\w...\w*` markup
 wraps **every single occurrence** of the term, that's over-linking; if it wraps only the
 **first occurrence per section**, the scope is correct. To fix over-linking: **unlink**
 the over-applied marks and **relink at "first occurrence in every section,"** not "all
@@ -92,6 +97,13 @@ phrase terms **before** their component single words, precisely so the single wo
 gets wrongly linked inside phrase territory. So when a hit falls inside an existing
 marker, read the rendering, not just the presence of markup: a broader phrase term there
 is expected and correct, not something to flag.
+
+> **TIP — checking every linked term at once, not one at a time:** Searching one
+> glossary term at a time doesn't scale if you want a full audit rather than checking a
+> single reported problem term. Paratext's Find supports regular expressions: prefix
+> your search with `regex:` (no space after the colon), then search for
+> `\w[^\]*\w\*` — confirmed working, returning every `\w...\w*` occurrence in one pass
+> (22 results in Matthew alone on a test search) rather than one term at a time.
 
 This is the same trap as the Project Plan checkbox from Lesson 1: the Project Plan's
 "Check and link glossary entries" task (Stage 6, Final Preparation for Publication) has

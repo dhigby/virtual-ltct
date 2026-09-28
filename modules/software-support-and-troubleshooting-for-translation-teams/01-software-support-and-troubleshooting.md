@@ -6,6 +6,8 @@
 
 **Purpose:** Apply a systematic approach to diagnosing and resolving translation software issues while supporting translators effectively.
 
+**Watch the video:** _To be recorded at stage 8._
+
 ## Connect
 
 **Time:** 10 minutes
@@ -95,7 +97,16 @@ Rather than randomly trying things, work methodically:
 
 **5. Know When to Escalate**
 
-You won't solve every problem immediately. Learn to recognize when you need to:
+You won't solve every problem immediately. Learn to recognize the signs that it's time to escalate:
+
+<!-- SME: confirm escalation triggers (stage 5) -->
+- You've tried the usual fixes and you're making no progress
+- You suspect data corruption
+- The fix needs administrator rights you don't have
+- The problem is beyond what you know
+- The translator's deadline is close and you're still investigating
+
+When you see one of these signs, choose the next step that fits:
 - Consult someone more experienced
 - Contact software vendor support
 - Restore from backup and move forward

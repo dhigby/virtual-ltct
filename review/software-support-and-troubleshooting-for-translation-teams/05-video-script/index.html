@@ -1,0 +1,1438 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Draft course package under review -- not published material.">
+      
+      
+      
+        <link rel="canonical" href="https://competencies.languagetechnology.org/review/software-support-and-troubleshooting-for-translation-teams/05-video-script/">
+      
+      
+        <link rel="prev" href="../04-quiz/">
+      
+      
+        <link rel="next" href="../00-design/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../assets/favicon.svg">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+    
+    
+      
+        <title>Video script - Software Support and Troubleshooting for Translation Teams</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.ec1eaa64.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Inter:300,300i,400,400i,700,700i%7CJetBrains+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Inter";--md-code-font:"JetBrains Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../stylesheets/extra.css">
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  <meta name="robots" content="noindex, nofollow">
+
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="custom" data-md-color-accent="custom">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#video-script" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+        <aside class="md-banner">
+          <div class="md-banner__inner md-grid md-typeset">
+            
+            
+  <strong>Draft under review.</strong>
+  Not published material, and not part of the LT Consultant competency framework.
+  Built from <code>course/software-support-and-troubleshooting-for-translation-teams</code>.
+
+          </div>
+          
+        </aside>
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href=".." title="Software Support and Troubleshooting for Translation Teams" class="md-header__button md-logo" aria-label="Software Support and Troubleshooting for Translation Teams" data-md-component="logo">
+      
+  <img src="../assets/logo.svg" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Software Support and Troubleshooting for Translation Teams
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Video script
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="custom" data-md-color-accent="custom"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m17.75 4.09-2.53 1.94.91 3.06-2.63-1.81-2.63 1.81.91-3.06-2.53-1.94L12.44 4l1.06-3 1.06 3zm3.5 6.91-1.64 1.25.59 1.98-1.7-1.17-1.7 1.17.59-1.98L15.75 11l2.06-.05L18.5 9l.69 1.95zm-2.28 4.95c.83-.08 1.72 1.1 1.19 1.85-.32.45-.66.87-1.08 1.27C15.17 23 8.84 23 4.94 19.07c-3.91-3.9-3.91-10.24 0-14.14.4-.4.82-.76 1.27-1.08.75-.53 1.93.36 1.85 1.19-.27 2.86.69 5.83 2.89 8.02a9.96 9.96 0 0 0 8.02 2.89m-1.64 2.02a12.08 12.08 0 0 1-7.8-3.47c-2.17-2.19-3.33-5-3.49-7.82-2.81 3.14-2.7 7.96.31 10.98 3.02 3.01 7.84 3.12 10.98.31"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="custom" data-md-color-accent="custom"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0-7 2.39 3.42C13.65 5.15 12.84 5 12 5s-1.65.15-2.39.42zM3.34 7l4.16-.35A7.2 7.2 0 0 0 5.94 8.5c-.44.74-.69 1.5-.83 2.29zm.02 10 1.76-3.77a7.131 7.131 0 0 0 2.38 4.14zM20.65 7l-1.77 3.79a7.02 7.02 0 0 0-2.38-4.15zm-.01 10-4.14.36c.59-.51 1.12-1.14 1.54-1.86.42-.73.69-1.5.83-2.29zM12 22l-2.41-3.44c.74.27 1.55.44 2.41.44.82 0 1.63-.17 2.37-.44z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/dhigby/virtual-ltct" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    dhigby/virtual-ltct
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="Software Support and Troubleshooting for Translation Teams" class="md-nav__button md-logo" aria-label="Software Support and Troubleshooting for Translation Teams" data-md-component="logo">
+      
+  <img src="../assets/logo.svg" alt="logo">
+
+    </a>
+    Software Support and Troubleshooting for Translation Teams
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/dhigby/virtual-ltct" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    dhigby/virtual-ltct
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Software Support and Troubleshooting for Translation Teams
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lessons
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Lessons
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../01-software-support-and-troubleshooting/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Software Support and Troubleshooting for Translation Teams
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Facilitator materials
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Facilitator materials
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../02-scenario-bank/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Scenario bank
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../03-mentor-guide/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Mentor guide
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../04-quiz/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Quiz
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Video script
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Video script
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#overview-cold-open" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Overview / cold open
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#script" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Script
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Script">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#segment-1-what-these-messages-really-are-companion-to-lesson-section-1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Segment 1: What these messages really are (companion to lesson Section 1)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#segment-2-the-roadmap-companion-to-lesson-section-2-overview" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Segment 2: The roadmap (companion to lesson Section 2, overview)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#segment-3-clarify-the-problem-companion-to-framework-step-1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Segment 3: Clarify the Problem (companion to framework step 1)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#segment-4-understand-the-context-then-reproduce-companion-to-framework-steps-2-and-3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Segment 4: Understand the Context, then Reproduce (companion to framework steps 2 and 3)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#segment-5-test-systematically-companion-to-framework-step-4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Segment 5: Test Systematically (companion to framework step 4)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#segment-6-know-when-to-escalate-companion-to-framework-step-5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Segment 6: Know When to Escalate (companion to framework step 5)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#segment-7-how-you-talk-while-you-work-companion-to-lesson-section-3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Segment 7: How you talk while you work (companion to lesson Section 3)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#segment-8-patterns-youll-see-and-your-toolkit-companion-to-lesson-sections-4-and-5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Segment 8: Patterns you'll see, and your toolkit (companion to lesson Sections 4 and 5)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#call-to-action-close" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Call to action / close
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#notes-for-the-presenter" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Notes for the presenter
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Reference
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Reference
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../00-design/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Course Design Document
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../how-to-review/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    How to review this
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#overview-cold-open" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Overview / cold open
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#script" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Script
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Script">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#segment-1-what-these-messages-really-are-companion-to-lesson-section-1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Segment 1: What these messages really are (companion to lesson Section 1)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#segment-2-the-roadmap-companion-to-lesson-section-2-overview" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Segment 2: The roadmap (companion to lesson Section 2, overview)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#segment-3-clarify-the-problem-companion-to-framework-step-1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Segment 3: Clarify the Problem (companion to framework step 1)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#segment-4-understand-the-context-then-reproduce-companion-to-framework-steps-2-and-3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Segment 4: Understand the Context, then Reproduce (companion to framework steps 2 and 3)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#segment-5-test-systematically-companion-to-framework-step-4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Segment 5: Test Systematically (companion to framework step 4)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#segment-6-know-when-to-escalate-companion-to-framework-step-5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Segment 6: Know When to Escalate (companion to framework step 5)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#segment-7-how-you-talk-while-you-work-companion-to-lesson-section-3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Segment 7: How you talk while you work (companion to lesson Section 3)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#segment-8-patterns-youll-see-and-your-toolkit-companion-to-lesson-sections-4-and-5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Segment 8: Patterns you'll see, and your toolkit (companion to lesson Sections 4 and 5)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#call-to-action-close" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Call to action / close
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#notes-for-the-presenter" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Notes for the presenter
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+    <a href="https://github.com/dhigby/virtual-ltct/edit/course/software-support-and-troubleshooting-for-translation-teams/modules/software-support-and-troubleshooting-for-translation-teams/05-video-script.md" title="Edit this page" class="md-content__button md-icon" rel="edit">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M10 20H6V4h7v5h5v3.1l2-2V8l-6-6H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h4zm10.2-7c.1 0 .3.1.4.2l1.3 1.3c.2.2.2.6 0 .8l-1 1-2.1-2.1 1-1c.1-.1.2-.2.4-.2m0 3.9L14.1 23H12v-2.1l6.1-6.1z"/></svg>
+    </a>
+  
+  
+
+
+<h1 id="video-script">Video script<a class="headerlink" href="#video-script" title="Permanent link">&para;</a></h1>
+<p>Companion recording script for the course <strong>Software Support and Troubleshooting for
+Translation Teams</strong>. This is the overview video: it shows the learner the shape of the
+five-step troubleshooting framework and the communication habits that go with it, before
+they work through the lesson, the scenario bank and the quiz. It is <strong>not</strong> a read-aloud of
+the lesson. The lesson carries the full question lists, issue categories and toolkit; the
+video's job is to make the framework feel familiar and to change the learner's first
+reaction to a panicked message. Recording happens outside this repo, and uploading to
+Cypher for Business is a separate human step.</p>
+<p>This course is tool-agnostic and has no hands-on software exercise, so the video is mostly
+<strong>slides with voiceover</strong>, plus one optional screen-share moment (Segment 3). It builds on
+an earlier recording of this course whose captions are in <code>video_captions.vtt</code>. Where those
+captions agree with the lesson, this script keeps their wording and tone. Where they don't,
+it follows the lesson.</p>
+<p><strong>Estimated runtime:</strong> 9–10 minutes.
+<strong>Companion lesson file(s):</strong> <code>01-software-support-and-troubleshooting.md</code> (the course's
+single lesson and its overview). The close hands off to <code>02-scenario-bank.md</code>.</p>
+<h2 id="overview-cold-open">Overview / cold open<a class="headerlink" href="#overview-cold-open" title="Permanent link">&para;</a></h2>
+<blockquote>
+<p>Runtime target: ~60 seconds. Open on the message, not a title slide.</p>
+</blockquote>
+<p><strong>On-screen:</strong> A plain chat/email mock-up holding the lesson's Connect message, word for
+word:</p>
+<p><em>"Help! Nothing is working. I was translating yesterday and everything was fine, but today
+when I opened the program, my work isn't showing up. I have a deadline tomorrow and I'm
+panicking. What do I do?"</em></p>
+<p><strong>Voiceover:</strong> "We've all been there. Either you're the one sending a frantic message for
+tech help, or you're the one receiving it. And for a translator, when a piece of software
+breaks, it isn't a small annoyance. It's a direct threat to a deadline. So imagine this
+lands in your inbox. You can feel the panic coming through the screen. So what's your gut
+reaction? Do you start firing back possible fixes right away? Or, honestly, do you feel a
+bit of that panic yourself, worried you won't know the answer? That first instinct is what
+this course is about. Being good at support isn't about being a genius with every answer
+memorised. It's about having a calm, methodical system that lets you walk into that chaos
+and bring some order to it."</p>
+<h2 id="script">Script<a class="headerlink" href="#script" title="Permanent link">&para;</a></h2>
+<h3 id="segment-1-what-these-messages-really-are-companion-to-lesson-section-1">Segment 1: What these messages really are (companion to lesson Section 1)<a class="headerlink" href="#segment-1-what-these-messages-really-are-companion-to-lesson-section-1" title="Permanent link">&para;</a></h3>
+<blockquote>
+<p>~1 minute. Framing. Keep it quick.</p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th>On-screen</th>
+<th>Voiceover / talking points</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Slide: a range from <strong>"I can't find the button"</strong> to <strong>"the synchronization is corrupted"</strong>.</td>
+<td>"Support requests for translation teams run from simple misunderstandings, like 'I can't find the button', to real technical problems, like corrupted synchronisation. And you won't know everything about every tool. That's okay."</td>
+</tr>
+<tr>
+<td>Slide, key point: <strong>Effective support = knowing how to figure out what's wrong, and where to find help.</strong></td>
+<td>"Effective support isn't about knowing every answer straight away. It's about knowing how to work out systematically what's wrong, and where to find help when you need it."</td>
+</tr>
+<tr>
+<td>Slide with three icons: <strong>Technical troubleshooting</strong>, <strong>Translator workflows and context</strong>, <strong>Clear, empathetic communication</strong>.</td>
+<td>"Your role combines three things. You need the technical skills to work out the problem. You need to understand how translators actually work. And you need the communication skills to keep a stressed person calm and focused. So how do you juggle all of that? You use a framework. It isn't a boring checklist. It's what brings structure to the mess and gets you to a solution without wasting time."</td>
+</tr>
+</tbody>
+</table>
+<h3 id="segment-2-the-roadmap-companion-to-lesson-section-2-overview">Segment 2: The roadmap (companion to lesson Section 2, overview)<a class="headerlink" href="#segment-2-the-roadmap-companion-to-lesson-section-2-overview" title="Permanent link">&para;</a></h3>
+<blockquote>
+<p>~30 seconds. Show all five steps once. Leave this slide up long enough to read.</p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th>On-screen</th>
+<th>Voiceover / talking points</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Slide, five numbered steps in a row: <strong>1. Clarify the Problem → 2. Understand the Context → 3. Reproduce the Problem → 4. Test Systematically → 5. Know When to Escalate.</strong></td>
+<td>"Here's your roadmap. Five steps you can apply to almost any problem you come across. Clarify the problem. Understand the context. Reproduce the problem. Test systematically. Know when to escalate. Follow them in this order and you stop reacting to the panic and start solving the actual problem. Let's walk through them."</td>
+</tr>
+</tbody>
+</table>
+<h3 id="segment-3-clarify-the-problem-companion-to-framework-step-1">Segment 3: Clarify the Problem (companion to framework step 1)<a class="headerlink" href="#segment-3-clarify-the-problem-companion-to-framework-step-1" title="Permanent link">&para;</a></h3>
+<blockquote>
+<p>~1.5 minutes. The heart of the video. The Send/Receive example makes the point, so don't rush it.</p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th>On-screen</th>
+<th>Voiceover / talking points</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Slide: <strong>"Nothing works." "It's broken."</strong> with the label <em>= a starting point, not a problem description.</em></td>
+<td>"Everything starts with that panicked message. 'It's broken' is only the signal flare. Your first job, before anything else, is to get past the emotion and find out what's really going on."</td>
+</tr>
+<tr>
+<td>Slide: the five clarifying questions, one at a time. <strong>What were you trying to do? / What happened instead? / When did you first notice this? / Has anything changed recently? / Can you show me exactly what you're seeing?</strong></td>
+<td>"So you ask. What were you trying to do? What happened instead? When did you first notice it, since the timeline helps point to a cause. Has anything changed recently, like an update, new files, or a different location? And can you show me exactly what you're seeing, whether that's a screenshot, the error message, or what's on screen."</td>
+</tr>
+<tr>
+<td>Slide: <strong>"Send/Receive isn't working."</strong> Then reveal six possible meanings, each with its likely direction: greyed-out button (permissions) / starts but never finishes (network or server) / shows an error (a specific error to diagnose) / completes but <em>their</em> changes don't appear (synchronisation) / completes but <em>another user's</em> changes don't appear (synchronisation, or the other user hasn't run Send/Receive yet) / can't find where to click (unfamiliar interface). <em>Optional:</em> a brief screen-share of a Send/Receive button on a demo project. See the presenter notes.</td>
+<td>"Here's why questions matter so much. A translator tells you 'Send/Receive isn't working.' What does 'isn't working' actually mean? The button might be greyed out, which points to permissions. It might start and never finish, which points to the network or the server. It might show an error message. It might finish, but their changes don't show up. Or it finishes, but a teammate's changes don't show up, maybe because the teammate hasn't run Send/Receive yet. Or they just can't find where to click. Each of those has a different cause and a different fix. Your questions are what turn a vague complaint into something you can actually fix."</td>
+</tr>
+</tbody>
+</table>
+<h3 id="segment-4-understand-the-context-then-reproduce-companion-to-framework-steps-2-and-3">Segment 4: Understand the Context, then Reproduce (companion to framework steps 2 and 3)<a class="headerlink" href="#segment-4-understand-the-context-then-reproduce-companion-to-framework-steps-2-and-3" title="Permanent link">&para;</a></h3>
+<blockquote>
+<p>~1.5 minutes. Two steps, one segment. Step 2 is where new consultants most often fall short, so give it its full time.</p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th>On-screen</th>
+<th>Voiceover / talking points</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Slide, four context headings: <strong>Project structure / Collaboration setup / Work environment / Recent changes.</strong></td>
+<td>"Once you know the symptom, look at the context around it. Is this a team project or individual files? Brand new, or running for years? Are several people working on the same data, and how are they sharing it? Are they in the field with limited connectivity, or in an office with stable internet? On their own device or a shared computer? And what just changed? A new operating system, a new software version, someone new on the team?"</td>
+</tr>
+<tr>
+<td>Same slide, caption added: <strong>Context tells you what's normal, and what isn't.</strong></td>
+<td>"You can't tell whether something is abnormal until you know what normal looks like for this team. Context helps you ask the right questions and get to the likely causes faster."</td>
+</tr>
+<tr>
+<td>Slide: <strong>See it for yourself.</strong> Icons for screen-share and for working side by side.</td>
+<td>"Step three: whenever you can, see the problem for yourself, or have the translator show you exactly what's happening. Watching lets you check what's actually occurring against what they think is happening. You'll notice details they wouldn't think to mention, and you can test possible fixes right there."</td>
+</tr>
+<tr>
+<td>Slide: <strong>"It's not working" → "I'm clicking the wrong button."</strong></td>
+<td>"Sometimes 'it's not working' turns out to be 'I'm clicking the wrong button' or 'I'm looking in the wrong place.' Screen-sharing shows you that straight away. Talking about it might never have got you there."</td>
+</tr>
+</tbody>
+</table>
+<h3 id="segment-5-test-systematically-companion-to-framework-step-4">Segment 5: Test Systematically (companion to framework step 4)<a class="headerlink" href="#segment-5-test-systematically-companion-to-framework-step-4" title="Permanent link">&para;</a></h3>
+<blockquote>
+<p>~1 minute. Keep the file example as a simple ladder on screen.</p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th>On-screen</th>
+<th>Voiceover / talking points</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Slide, four rules: <strong>Simplest, most common causes first / Change one thing at a time / Write down what you tried / Understand <em>why</em> the fix worked.</strong></td>
+<td>"Now test, and do it methodically, not by trying things at random. Start with the simplest, most common causes. Change one thing at a time so you know what worked. Write down what you tried and what happened. And when something fixes it, make sure you understand why."</td>
+</tr>
+<tr>
+<td>Slide, a four-rung ladder titled <strong>"The file won't open."</strong> 1. Can they open <em>other</em> files? 2. Can someone else open <em>this</em> file? 3. Does it open on a different computer? 4. Is there a backup to try?</td>
+<td>"Say a file won't open. Can they open other files? That tells you whether it's this file or all files. Can someone else open this one? That's the file versus their setup. Does it open on a different computer? That's their device versus the file. And is there a backup they can try, to work around a corrupted file? Every question cuts the possibilities down to something you can manage."</td>
+</tr>
+</tbody>
+</table>
+<h3 id="segment-6-know-when-to-escalate-companion-to-framework-step-5">Segment 6: Know When to Escalate (companion to framework step 5)<a class="headerlink" href="#segment-6-know-when-to-escalate-companion-to-framework-step-5" title="Permanent link">&para;</a></h3>
+<blockquote>
+<p>~1–1.5 minutes. The attitude matters more than the list. Let the "not a failure" line land.</p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th>On-screen</th>
+<th>Voiceover / talking points</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Slide, five signs it's time to escalate: <strong>You've tried the usual fixes and you're making no progress / You suspect data corruption / The fix needs administrator rights you don't have / The problem is beyond what you know / The translator's deadline is close and you're still investigating.</strong></td>
+<td>"You won't solve every problem straight away, so part of the skill is spotting the red flags. If you've tried the usual fixes and you're getting nowhere, it's time. If you even suspect data corruption, it's time. If the fix needs admin rights you don't have, or it's just beyond what you know, it's time to escalate. And if the translator's deadline is close and you're still investigating, that's a good time to bring in reinforcements too."</td>
+</tr>
+<tr>
+<td>Slide, four next steps: <strong>Consult someone more experienced / Contact software vendor support / Restore from backup and move forward / Find a workaround rather than a complete fix.</strong></td>
+<td>"When you see one of those signs, pick the route that fits. Bring in someone more experienced. Contact the software vendor's support. Restore from backup and move forward. Or find a workaround so the translator can keep working, even without a complete fix yet."</td>
+</tr>
+<tr>
+<td>Slide: <strong>Escalating is not failing.</strong></td>
+<td>"And let this one sink in: knowing your limits and being willing to ask for help is a strength, not a weakness. Escalating isn't a sign you failed. It's a professional decision that protects the translator and their work."</td>
+</tr>
+</tbody>
+</table>
+<h3 id="segment-7-how-you-talk-while-you-work-companion-to-lesson-section-3">Segment 7: How you talk while you work (companion to lesson Section 3)<a class="headerlink" href="#segment-7-how-you-talk-while-you-work-companion-to-lesson-section-3" title="Permanent link">&para;</a></h3>
+<blockquote>
+<p>~1.5 minutes. Put each phrase on screen as it's spoken. These are the lines learners will reuse.</p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th>On-screen</th>
+<th>Voiceover / talking points</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Slide: <strong>"I can hear this is really frustrating. Let's figure out what's happening together."</strong></td>
+<td>"A good framework is only half of it. How you communicate while you work through the steps makes all the difference, especially with a deadline hanging over someone. Think about a sentence like this. You've acknowledged their stress, and you've made it a partnership: let's figure this out together. You're not just tech support any more. You're an ally, and that brings the tension right down."</td>
+</tr>
+<tr>
+<td>Slide: <strong>"I'm going to ask you some questions to help me understand exactly what's going on. Then we'll work through this systematically."</strong></td>
+<td>"Tell them what you're doing. When they know why you're asking all these questions, the questions stop feeling like a delay."</td>
+</tr>
+<tr>
+<td>Slide: <strong>"I haven't seen this exact error before, but let me check a few things with you."</strong></td>
+<td>"Be honest about what you know and what you don't. Pretending to know, or offering false reassurance, will get you into trouble. 'I haven't seen this one before, but let me check a few things with you' is far more reassuring than faking it."</td>
+</tr>
+<tr>
+<td>Slide: <strong>"I want to investigate this properly rather than guess. Can I get back to you in two hours with a solution or at least a clearer picture of what's happening?"</strong></td>
+<td>"Manage expectations. If you need time to research, say so, and say when you'll get back to them. That's much better than going quiet, because silence is where a user's anxiety really starts to spiral."</td>
+</tr>
+<tr>
+<td>Slide: a simple three-column table headed <strong>Problem / Symptoms / Solution</strong>.</td>
+<td>"And when you solve something, write it down. Problem, symptoms, solution. It helps you next time, and over time it becomes a resource for the whole team."</td>
+</tr>
+</tbody>
+</table>
+<h3 id="segment-8-patterns-youll-see-and-your-toolkit-companion-to-lesson-sections-4-and-5">Segment 8: Patterns you'll see, and your toolkit (companion to lesson Sections 4 and 5)<a class="headerlink" href="#segment-8-patterns-youll-see-and-your-toolkit-companion-to-lesson-sections-4-and-5" title="Permanent link">&para;</a></h3>
+<blockquote>
+<p>~45 seconds. A preview only. Do not walk every bullet. The lesson has the detail.</p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th>On-screen</th>
+<th>Voiceover / talking points</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Slide, five category tiles: <strong>Synchronization / Missing work or data / Installation &amp; compatibility / Performance / User interface confusion.</strong></td>
+<td>"Every situation is different, but some patterns come up again and again. Synchronisation problems. Work that seems to be missing. Installation and compatibility trouble after an update. Performance problems on big projects. And someone who simply can't find a feature, often because the interface changed. The lesson goes through what usually causes each one and where to start looking. Take the time to read it. Knowing these patterns makes the first questions much easier to choose."</td>
+</tr>
+<tr>
+<td>Slide, four toolkit headings: <strong>Knowledge resources / Diagnostic tools / Communication tools / Personal habits.</strong></td>
+<td>"The lesson ends by helping you build a support toolkit: where to find answers, tools for seeing what the translator sees, templates for questions and progress updates, and habits like keeping notes on what you've solved."</td>
+</tr>
+</tbody>
+</table>
+<h2 id="call-to-action-close">Call to action / close<a class="headerlink" href="#call-to-action-close" title="Permanent link">&para;</a></h2>
+<blockquote>
+<p>~45 seconds.</p>
+</blockquote>
+<p><strong>On-screen:</strong> Return to the cold-open message. Then a closing slide showing the new loop,
+<strong>Pause → Ask → Test one thing at a time → Communicate throughout</strong>, and below it:
+<strong>Lesson → Scenario bank → Submit to your mentor → Quiz.</strong></p>
+<p><strong>Voiceover:</strong> "So let's tie it together. The panicked message comes in. Your old instinct
+might be to jump in with answers. Your new instinct is to pause and ask questions before you
+diagnose. You test one thing at a time so you know what worked. And you communicate the
+whole way through. That loop is what separates good troubleshooters from great ones. Now
+work through the lesson. When you reach the Challenge, you'll see a message just like this
+one. Write down the first three questions you'd ask. Then go on to the scenario bank, which
+has two more real-world situations, and submit your written answers to your mentor for
+feedback before you take the quiz. The next time one of these messages lands in your inbox,
+you'll have a system. The only question left is: what's the first clarifying question
+you're going to ask?"</p>
+<h2 id="notes-for-the-presenter">Notes for the presenter<a class="headerlink" href="#notes-for-the-presenter" title="Permanent link">&para;</a></h2>
+<ul>
+<li><strong>This is an orientation, not the lesson read aloud.</strong> The lesson has the complete
+  question lists, issue categories and toolkit. If the recording runs long, cut Segment 8
+  first, then shorten Segment 4. Don't cut the Send/Receive example (Segment 3) or the
+  communication phrases (Segment 7).</li>
+<li><strong>Tool-agnostic course.</strong> Apart from "Send/Receive", which comes from the lesson's own
+  example, don't name a specific translation program on camera or imply the steps belong to
+  one tool. The design doc keeps this course tool-agnostic on purpose (SME decision, Q5).</li>
+<li><strong>Optional screen-share in Segment 3.</strong> If you show a Send/Receive button, use a demo or
+  practice project. Don't show real project text, names or server details. This repo and
+  the published video are public. If there's no suitable demo project, stay on the slide.</li>
+<li><strong>No language data on screen.</strong> The lesson has no local-language examples and neither
+  does this script. Don't add a real error screenshot or any project text in a language
+  you don't speak to "illustrate" a point. If a future edit needs one, it has to come from
+  the project team or the author, with permission, and shown without any gloss or comment
+  on what it says.</li>
+<li><strong>Keep the cold-open message word for word.</strong> It is the lesson's Connect prompt, and
+  learners will see it again when they open the lesson.</li>
+<li><strong>Terms to put on screen:</strong> the five step names (Segment 2, and ideally as a small
+  progress strip during Segments 3–6), and <strong>Send/Receive</strong> the first time it's said, so
+  learners who haven't met the feature yet can see it's a named action.</li>
+<li><strong>Don't promise specific fixes.</strong> The Send/Receive causes in Segment 3 are the lesson's
+  "likely direction" for each symptom, not guaranteed diagnoses. Say "points to", not
+  "is caused by".</li>
+<li><strong>Escalation signs (Segment 6).</strong> The five signs come from the earlier recording
+  (<code>video_captions.vtt</code>) and now match the lesson's "Know When to Escalate" list word for
+  word. That list is flagged for SME confirmation at stage 5. If the SME changes it, update
+  this slide and voiceover to match the lesson before recording.</li>
+<li><strong>Pacing:</strong> Segment 2's roadmap slide and the Segment 7 phrases each need enough screen
+  time to read. Don't talk over a slide change.</li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+    
+      
+      <nav class="md-footer__inner md-grid" aria-label="Footer" >
+        
+          
+          <a href="../04-quiz/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Quiz">
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+            </div>
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Previous
+              </span>
+              <div class="md-ellipsis">
+                Quiz
+              </div>
+            </div>
+          </a>
+        
+        
+          
+          <a href="../00-design/" class="md-footer__link md-footer__link--next" aria-label="Next: Course Design Document">
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Next
+              </span>
+              <div class="md-ellipsis">
+                Course Design Document
+              </div>
+            </div>
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11z"/></svg>
+            </div>
+          </a>
+        
+      </nav>
+    
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["navigation.sections", "navigation.top", "navigation.footer", "toc.follow", "search.suggest", "search.highlight", "content.action.edit", "content.code.copy"], "search": "../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.d7400e89.min.js"></script>
+      
+    
+  </body>
+</html>

@@ -95,7 +95,7 @@
             
   <strong>Draft under review.</strong>
   Not published material, and not part of the LT Consultant competency framework.
-  Built from <code>main</code>.
+  Built from <code>course/supporting-pre-publishing-checks</code>.
 
           </div>
           
@@ -763,6 +763,34 @@
 
               
             
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../09-video-script/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Video script
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
           </ul>
         </nav>
       
@@ -1010,7 +1038,7 @@
 
 
   
-    <a href="https://github.com/dhigby/virtual-ltct/edit/main/modules/supporting-pre-publishing-checks/04-formatting-and-references.md" title="Edit this page" class="md-content__button md-icon" rel="edit">
+    <a href="https://github.com/dhigby/virtual-ltct/edit/course/supporting-pre-publishing-checks/modules/supporting-pre-publishing-checks/04-formatting-and-references.md" title="Edit this page" class="md-content__button md-icon" rel="edit">
       
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M10 20H6V4h7v5h5v3.1l2-2V8l-6-6H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h4zm10.2-7c.1 0 .3.1.4.2l1.3 1.3c.2.2.2.6 0 .8l-1 1-2.1-2.1 1-1c.1-.1.2-.2.4-.2m0 3.9L14.1 23H12v-2.1l6.1-6.1z"/></svg>
     </a>
@@ -1062,8 +1090,11 @@ heading — in the heading's bold/heading style — including verse numbers and 
 that should be ordinary body text. That single missing marker can plausibly produce a
 whole cluster of downstream-looking symptoms: an oversized or wrong-looking heading,
 verse numbers that appear to have vanished from the normal flow, and references that
-miscount because the checker is reading swallowed verse content as part of the heading.
-If you start by fixing the errors at the bottom of a long list, you may be fixing
+miscount because the checker is reading swallowed verse content as part of the heading.</p>
+<p><img alt="A section heading with a \p marker correctly in place before verse 21, so verses 19-22 render as normal body text below the heading." src="../L4-7a.Before.png" /></p>
+<p><img alt="The same passage with the \p marker missing: verses 19 and 20 have been swallowed into the \s1 heading style, rendered in bold as if they were part of the heading title." src="../L4-7b.After.png" />
+<em>One missing paragraph marker, and the verse numbers disappear into the heading.</em></p>
+<p>If you start by fixing the errors at the bottom of a long list, you may be fixing
 symptoms of a single cause higher up. Work in this order instead:</p>
 <ol>
 <li><strong>Chapter/Verse Numbers.</strong> Confirm this Run Basic Checks category — Markers,
@@ -1071,6 +1102,10 @@ symptoms of a single cause higher up. Work in this order instead:</p>
    back clean before anything else, because every other check on this list reports its
    results by quoting a chapter and verse location, and those locations can't be trusted
    if the chapter/verse numbering itself has errors (such as a duplicate verse).</li>
+</ol>
+<p><img alt="The Run Basic Checks dialog with Chapter/verse numbers checked, and the book-selection and OK controls numbered 1 through 4." src="../L4-6.BasicCheck-Chap-verse.png" />
+<em>Confirm this one first — everything else on this list depends on it.</em></p>
+<ol>
 <li><strong>Marker-pair census.</strong> Paratext markers come in two kinds: <strong>paragraph markers</strong>
    (<code>\p</code>, <code>\s</code>, <code>\q</code>, etc.) that apply to a whole paragraph and stand alone, and
    <strong>paired markers</strong> (<code>\f...\f*</code>, <code>\x...\x*</code>, character styles, etc.) that wrap a span
@@ -1078,35 +1113,37 @@ symptoms of a single cause higher up. Work in this order instead:</p>
    Checking Inventories &gt; Markers Inventory) to confirm every paired marker actually
    closes. An unclosed pair is often the single cause behind a cluster of
    downstream-looking errors.</li>
-<li><strong>Ghost markers.</strong> Look for markers left behind with no content attached — often the
+</ol>
+<p><img alt="The Markers Inventory dialog listing markers, their counts, and style names (Chapter Number, Footnote, End Marker, and others)." src="../L4-8.MarkersInventory.png" />
+<em>This is where you check that every paired marker actually closes.</em>
+3. <strong>Ghost markers.</strong> Look for markers left behind with no content attached — often the
    debris of a deleted footnote or cross-reference where the marker itself wasn't
    removed. These can silently corrupt export and typesetting even when nothing visibly
-   looks wrong on screen.</li>
-<li><strong>Long/short verses.</strong> Verses that run unexpectedly long or short compared to the
+   looks wrong on screen.
+4. <strong>Long/short verses.</strong> Verses that run unexpectedly long or short compared to the
    source can indicate a misplaced verse marker, a merged verse, or dropped text — worth
    ruling out before treating everything else in the chapter as a heading or reference
-   problem.</li>
-<li><strong>Section headings.</strong> The marker itself is rarely the problem — most projects use
+   problem.
+5. <strong>Section headings.</strong> The marker itself is rarely the problem — most projects use
    <code>\s1</code> almost exclusively, with <code>\s2</code> only occasionally, so a wrong-level marker is
    uncommon. The real issues to check for are missing headings, or headings that don't
-   match the text they introduce.</li>
-<li><strong>Book titles.</strong> Inconsistent or incorrect book-name and book-title markup, especially
-   after a book has been renamed or reorganized mid-project.</li>
-<li><strong>References</strong> (<code>\r</code> shows parallel passages; <code>\xt</code> is the actual cross-reference
+   match the text they introduce.
+6. <strong>Book titles.</strong> Inconsistent or incorrect book-name and book-title markup, especially
+   after a book has been renamed or reorganized mid-project.
+7. <strong>References</strong> (<code>\r</code> shows parallel passages; <code>\xt</code> is the actual cross-reference
    marker) and the <strong>table of contents.</strong> Missed book-name checks, foreign-language <code>\r</code>
    abbreviations left unadjusted (a common source:
    bulk-copying <code>\r</code> lines from another NT project as a starting point, which carries over
    that project's abbreviations instead of the current project's own), and a table of
-   contents that doesn't match the book titles actually in the text.</li>
-<li><strong>Footnotes.</strong> Beyond the marker-pair check in step 2, confirm footnote content and
+   contents that doesn't match the book titles actually in the text.
+8. <strong>Footnotes.</strong> Beyond the marker-pair check in step 2, confirm footnote content and
    placement are sound — a footnote that survives the marker check can still be attached
    to the wrong verse or duplicated. Note that an unclosed <code>\f</code> footnote marker (opened
    without its matching <code>\f*</code>) has a much narrower effect than the missing-<code>\p</code> example
    above: if it's unclosed at the end of a verse, it has no effect at all; if it's
    unclosed partway through a verse, the only consequence is that the footnote text
    displays as part of the verse itself — it has no other flow-on effect, and does not
-   cascade into headings, references, or other markers elsewhere in the chapter.</li>
-</ol>
+   cascade into headings, references, or other markers elsewhere in the chapter.</p>
 <p>Diagnosing structural-first doesn't mean the team fixes things in that exact order line
 by line — it means <em>you</em> look for the highest-leverage cause first, so you're not
 sending a team to manually correct fifty symptoms of one unclosed marker.</p>
@@ -1121,6 +1158,11 @@ whether it shows up at all depends on a <strong>View menu</strong> option, <stro
 that option off, denied errors disappear from the list completely, so a check that looks
 short and clean may simply have its denied items switched out of view. Turn on
 <strong>View &gt; Denied messages</strong> to see the full picture before trusting a zero-error result.</p>
+<p><img alt="The View menu open with &quot;Denied messages&quot; highlighted." src="../L4-12a.View-Denied.png" /></p>
+<p><img alt="A denied error shown with strikethrough text: &quot;Expected continuers [&quot;] are missing OR quote not closed.&quot;" src="../L4-12b.Denied-Error-strike-through.png" />
+<em>Denied errors are struck through — but only if this view option is on.</em></p>
+<p><img alt="A Basic Checks results list with the top item reading &quot;Denied message(s) not shown.&quot;" src="../L4-12c.Denied-Error-not-shown.png" />
+<em>With the view option off, the list simply tells you denied messages exist without showing them.</em></p>
 <blockquote>
 <p><strong>WARNING — watch for a false-clean result here too:</strong> A Basic Checks run showing zero
 formatting errors can mean the project is genuinely clean — or it can mean the checks
@@ -1185,19 +1227,24 @@ instead of getting resolved during the project's own formatting review.</p>
   with it selected, the punctuation checkbox is relabelled <strong>"Punctuation (sequences)"</strong>
   and runs the sequence-level check; without it, the same checkbox stays labelled
   <strong>"Punctuation"</strong> and only checks individual characters, so the review can look
-  complete while a whole class of problems goes unseen. A flagged result under
-  "Punctuation (sequences)" reads something like <code>Invalid or unknown punctuation
-  combination: ?'"_</code> or <code>Invalid or unknown punctuation combination: !]_</code> (the
-  underscore stands for a space in Paratext's display), each tied to a specific
-  reference such as ROM 3:5 — combinations Paratext doesn't recognize as valid, often
-  quotation marks paired with other punctuation. This lesson covers punctuation
-  sequences only; quotation marks specifically are more complicated and are intentionally
-  out of scope here, deferred to a separate, future addition.</li>
-<li><strong>Review Unmatched Pairs of Punctuation directly</strong>, using its Status column to work
+  complete while a whole class of problems goes unseen.</li>
+</ul>
+<p><img alt="The Punctuation (sequences) inventory's Inventory menu, with &quot;Show sequences&quot; checked and highlighted." src="../L4-9.Punctuation-inventory-Show-Sequences.png" />
+  <em>This checkbox is what makes "Punctuation (sequences)" mean anything.</em></p>
+<p>A flagged result under "Punctuation (sequences)" looks like this — each combination
+  Paratext doesn't recognize as valid, tied to a specific reference, often quotation
+  marks paired with other punctuation:</p>
+<p><img alt="A list of flagged punctuation-sequence results, e.g. &quot;ROM 3:5 Invalid or unknown punctuation combination: ?_(&quot; and &quot;ROM 9:20 Invalid or unknown punctuation combination: ?'&quot;_&quot;." src="../L4-11.Punctuation-sequences-result.png" />
+  <em>This is what a flagged sequence actually looks like.</em></p>
+<p>This lesson covers punctuation sequences only; quotation marks specifically are more
+  complicated and are intentionally out of scope here, deferred to a separate, future
+  addition.
+- <strong>Review Unmatched Pairs of Punctuation directly</strong>, using its Status column to work
   through any single unmatched bracket/parenthesis-type character it lists. Don't treat
   "Show sequences" as covering this — it catches multi-character sequences, not the
-  single unmatched pairs this separate inventory is built to surface.</li>
-</ul>
+  single unmatched pairs this separate inventory is built to surface.</p>
+<p>![The Unmatched Pairs of Punctuation inventory, listing single-character pairs like "(", "]", ")" with counts and a Status column (blue "?", green check, red X).](images/L4-10.Unmatched-Pairs-Punctuation.png)
+  <em>A direct list of unmatched brackets and parentheses.</em></p>
 <p>That third point comes from a real case. One consultant believed their Punctuation
 Inventory review had been thorough — yet the typesetter later came back with a long list
 of unmatched punctuation pairs (mostly involving quotation marks) that had never

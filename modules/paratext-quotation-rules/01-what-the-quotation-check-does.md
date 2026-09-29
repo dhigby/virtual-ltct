@@ -12,6 +12,8 @@ first conversation.
 > [course README](README.md#the-fictional-project) for the Tamba quotation conventions and
 > [Prerequisites](README.md#prerequisites) for setup.
 
+**Watch the video:** _To be recorded at stage 8._
+
 ## Learning objectives
 
 By the end of this lesson you will be able to:

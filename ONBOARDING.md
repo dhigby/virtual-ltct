@@ -58,7 +58,7 @@ set of files a finished course has.
   | `course-designer` | Writes the design doc (stage 1) |
   | `module-author` | Drafts lessons + scenario bank + mentor guide (stage 3) |
   | `quiz-writer` | Writes the quiz (stage 3) |
-  | `video-script-writer` | Writes the video script (stage 3) |
+  | `video-script-writer` | Writes the overview video script (stage 3) |
   | `alignment-reviewer` | Checks content vs. design (stage 4) |
   | `coverage-strategist` | Recommends what to work on next |
   | `content-backfiller` | Imports legacy Cypher content (backfill) |

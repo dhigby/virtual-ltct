@@ -26,4 +26,9 @@ true/false — the way the existing example does, rather than all-recall questio
 
 ## Answer key
 
+[Keep this heading exactly as it is — an H2, spelled "Answer key". The learner view given
+to a pilot learner is built by stripping this block out, so any other marker means the
+whole quiz is withheld from them, and CI will reject it. If this file ever holds more than
+one quiz, repeat the heading and qualify it: "## Answer key (Section 1)".]
+
 1. _ | 2. _ | 3. _ | 4. _ | 5. _

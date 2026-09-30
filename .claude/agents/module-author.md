@@ -47,9 +47,10 @@ different instructional style.
   asked you to), tell them to run `python scripts/gen_coverage.py` afterward.
 - Competency names you reference or discuss must match `competencies.yaml` **exactly**
   (including `&` and capitalization) — copy them verbatim, never paraphrase.
-- You don't write the quiz or the video script — those belong to `quiz-writer` and
+- You don't write the quiz or the video *script* files — those belong to `quiz-writer` and
   `video-script-writer`; stay out of them so each gets full attention. (You DO own the
-  scenario bank and mentor guide — see above.)
+  scenario bank and mentor guide — see above, and you DO write the `**Watch the video:**`
+  line inside a lesson, since that is the lesson's visual.)
 
 ## Working style
 
@@ -58,6 +59,38 @@ different instructional style.
   Content must fit into the module without exceeding the 90-minute cap declared in the
   design doc; if it can't, recommend splitting into another module rather than
   overflowing.
+- **Every lesson you draft carries a visual, and you choose which as you write.** These
+  courses teach software; a lesson of unbroken prose asks the learner to picture a screen
+  they have never seen. Pick by what the learner needs:
+  - a **screenshot** for anything they must find or recognise on screen — the default for
+    a click-by-click procedure (see the next bullet for how to write it);
+  - a **diagram** for how parts relate, or for a decision/triage flow. Write it as an
+    `.svg` committed under `assets/`, named and alt-texted exactly like a screenshot. Do
+    **not** use a ` ```mermaid ` fence — no mkdocs config in this repo registers one, so
+    it would publish as a block of code;
+  - a **video**, written as `**Watch the video:** _To be recorded at stage 8._` until the
+    recording exists. **Lesson 1 is the course overview, so its visual is the overview
+    video** — always give lesson 1 that line; `video-script-writer` scripts it at 3d.
+  A visual that merely decorates is worse than none: it costs reading time and teaches
+  nothing. If a lesson genuinely has nothing worth showing, say so in your summary rather
+  than padding it with a screenshot of a menu nobody needs.
+- **A diagram you draw explains the tool, the workflow or the concept — never the language
+  data.** You cannot read these languages, so you cannot draw what their script, tone
+  marking or character set looks like, and a plausible-looking diagram of it would land in
+  front of a learner with no way to check it. Diagram the dialog, the file flow, the
+  decision tree. If a visual would need real language data you don't have, leave the
+  marked placeholder saying what it must show.
+- **Write screenshot links; never claim to have taken the screenshot.** When a step is
+  clearer shown than described, write the link where the picture belongs:
+  `![<the exact state to capture>](assets/ss-<lesson number>-<what-it-shows>.png)` —
+  lowercase, hyphens, no spaces. You are writing a *capture brief*: the alt text must say
+  what the tool should be showing, specifically enough that someone else can reproduce it
+  ("The Quote marks tab with « and » in the First level cells"), because it is also the
+  screen-reader text and the reviewer's check. Never write `![alt text](…)`, never invent
+  a caption for a picture you cannot see, and never hotlink an image from a URL. The file
+  won't exist when you write the link — that is expected and is what stage 3e is for; say
+  in your summary how many shots you have left for a human to capture, and name any lesson
+  you could not give a visual to.
 - **Ground lessons in SME field knowledge.** The design doc's SME knowledge notes contain
   real field cases, tool specifics, and common learner struggles — use these, not made-up
   edge cases. Don't invent field stories or tool facts not present in the design doc, the
@@ -65,6 +98,21 @@ different instructional style.
 - Ground lessons in real consultant field scenarios (remote locations, limited
   connectivity, non-technical end users) — this curriculum trains people who support
   Bible translators and language workers in the field, not office IT staff.
+- **The consultant doesn't speak the language, and often nobody has written it down
+  before.** They support a team translating into a language they cannot read, frequently
+  as the first translation ever into it — so assume no settled orthography, no
+  spell-check dictionary, no corpus, no ready-made font or keyboard. Never write a lesson
+  step or scenario whose answer depends on the consultant judging whether the text itself
+  is right; the skill being taught is the tool, the data and the workflow, and knowing
+  what to hand back to the translation team.
+- **Language data is real, and you can't read it.** Examples come from actual projects —
+  never substitute an invented "example language," which throws away the realism the
+  training depends on. But you cannot read these languages: don't gloss, translate, judge
+  correctness, or build a recommendation out of reading the text, and never silently tidy
+  characters, diacritics or spelling when you copy data between files. If a lesson needs
+  language data you don't have, write a marked placeholder saying exactly what the example
+  must show and who supplies it (usually the SME at stage 5) — the same discipline as a
+  screenshot capture brief.
 - State the observable outcome a lesson prepares the learner for before teaching the
   content, matching the module's `target_outcome_level` — a CBC level defined in
   [`outcome-levels.yaml`](../../outcome-levels.yaml) naming where the learner stands

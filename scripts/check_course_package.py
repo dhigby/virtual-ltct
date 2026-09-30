@@ -10,8 +10,11 @@ Two severities:
     * a lesson file or scenario bank missing `**Estimated time:** N minutes`, or N > 90
     * a lesson file missing one of the four Learning That Lasts phase headings
       (## Connect, ## Content, ## Challenge, ## Change), or having them out of order
-    * a quiz file present but missing a pass threshold or a pipe-separated answer key
+    * a quiz file present but missing a pass threshold, a pipe-separated answer key,
+      or a canonical '## Answer key' marker above it
     * a malformed `**Design status**` line in 00-design.md
+    * a screenshot that is remote, misplaced, missing, unlinkable or undescribed
+      (see check_images)
 
   Retro-fit / backfilled courses (a `00-design.md` whose design status is a retro-fit note)
   are faithful imports of already-delivered content and are grandfathered out of the 4Cs
@@ -29,6 +32,10 @@ Usage:
 import re
 import sys
 import pathlib
+import urllib.parse
+
+sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent))
+from disclosure import ANY_KEY_MARKER_RE, CANONICAL_KEY_RE  # noqa: E402
 
 REPO = pathlib.Path(__file__).resolve().parent.parent
 MODULES = REPO / "modules"
@@ -37,7 +44,92 @@ TIME_RE = re.compile(r"^\*\*Estimated time:\*\*\s*(\d+)\s*minutes", re.MULTILINE
 DESIGN_STATUS_RE = re.compile(r"^\|\s*\*\*Design status\*\*\s*\|(.+)\|", re.MULTILINE)
 ANSWER_KEY_RE = re.compile(r"^\s*1\.\s*\S+(\s*\\?\|\s*\d+\.\s*\S+)+", re.MULTILINE)
 THRESHOLD_RE = re.compile(r"\b\d{1,3}\s*%|\bto pass\b", re.IGNORECASE)
+
+# The answer key's MARKER, not its content, comes from scripts/disclosure.py -- the one
+# definition shared by this check, the learner-view renderer, its gate, and the Moodle
+# publisher. This script is the authoring-time end of it: it is what makes an author fix
+# a non-conforming marker here, rather than discovering at pilot time that the quiz was
+# withheld from the learner entirely.
+
 MAX_MINUTES = 90
+
+# --- screenshots ------------------------------------------------------------------------
+# Screenshots are the one part of a draft an agent cannot produce: someone has to open the
+# tool. So the author writes the link and its alt text first, as the capture brief, and a
+# human drops the file in. These rules make the handover checkable -- see
+# process/stages/03-draft.md.
+IMAGE_EXTS = (".png", ".jpg", ".jpeg", ".gif", ".webp", ".svg")
+IMAGE_LINK_RE = re.compile(r"!\[(?P<alt>[^\]]*)\]\((?P<src>[^)\s]+)\)")
+FENCE_RE = re.compile(r"^(```|~~~).*?^\1", re.MULTILINE | re.DOTALL)
+# Alt text that describes nothing. The point of alt text here is double: it is what a
+# screen reader reads out, AND it is the brief telling the human which state to capture.
+# "alt text" satisfies neither, and it is what an editor inserts by default.
+PLACEHOLDER_ALT = {"alt text", "alt-text", "alt", "image", "img", "picture",
+                   "screenshot", "figure", "fig", "todo", "tbd", "x"}
+
+
+def check_images(folder, slug):
+    """Return (errors, warnings) for one course's screenshots.
+
+    ERROR covers the things an author controls while writing: the image is committed
+    rather than hotlinked, lives in `assets/`, needs no URL-escaping, and carries real
+    alt text.
+
+    A link whose file is not there yet is a WARNING, not an error. That is the normal
+    mid-draft state and the whole point of the convention: the agent writes the link and
+    its alt text as the capture brief, and the warning list IS the author's shot list
+    until a human has opened the tool. Consistent with the completeness warnings below.
+    """
+    errors, warnings = [], []
+    assets = folder / "assets"
+
+    # An image loose in the course folder -- the "dragged a PNG in" case. Caught even if
+    # nothing links to it, because the next author will link to it where it lies.
+    for p in sorted(folder.iterdir()):
+        if p.is_file() and p.suffix.lower() in IMAGE_EXTS:
+            errors.append(f"{slug}/{p.name}: image files live in {slug}/assets/ -- "
+                          f"move it there and update the links that point at it")
+
+    for md in sorted(folder.glob("*.md")):
+        text = FENCE_RE.sub("", md.read_text(encoding="utf-8"))
+        for m in IMAGE_LINK_RE.finditer(text):
+            src, alt = m.group("src"), m.group("alt").strip()
+            where = f"{slug}/{md.name}: image {src!r}"
+
+            if src.lower().startswith(("http://", "https://")):
+                errors.append(f"{where} is hotlinked. Commit the file under "
+                              f"{slug}/assets/ instead -- a remote image rots, and takes "
+                              f"the published page's picture with it.")
+                continue
+            if not src.startswith("assets/"):
+                errors.append(f"{where} must be under assets/ (e.g. "
+                              f"assets/ss-01-<what-it-shows>.png)")
+                continue
+
+            name = urllib.parse.unquote(src)
+            if name != src:
+                errors.append(f"{where} needs URL-escaping -- rename the file to use "
+                              f"lowercase, digits and hyphens only")
+            if not (folder / name).exists():
+                warnings.append(f"{slug}/{md.name}: screenshot not captured yet -- "
+                                f"{name} ({alt[:60]}{'...' if len(alt) > 60 else ''})")
+            if alt.lower().strip(" .:-") in PLACEHOLDER_ALT or not alt:
+                errors.append(f"{where} has placeholder alt text {alt!r}. Describe the "
+                              f"exact state shown -- it is both the screen-reader text "
+                              f"and the brief for whoever captures the shot.")
+
+    if assets.is_dir():
+        linked = set()
+        for md in folder.glob("*.md"):
+            body = FENCE_RE.sub("", md.read_text(encoding="utf-8"))
+            linked |= {urllib.parse.unquote(m.group("src"))
+                       for m in IMAGE_LINK_RE.finditer(body)}
+        for p in sorted(assets.iterdir()):
+            if p.is_file() and f"assets/{p.name}" not in linked:
+                errors.append(f"{slug}/assets/{p.name} is not referenced by any lesson -- "
+                              f"link it or delete it")
+
+    return errors, warnings
 
 # The Learning That Lasts four-phase lesson structure, as H2s in this order.
 PHASES = ("Connect", "Content", "Challenge", "Change")
@@ -52,6 +144,63 @@ def is_lesson(name):
         return False
     return not name.endswith(("-scenario-bank.md", "-mentor-guide.md",
                               "-quiz.md", "-video-script.md"))
+
+
+# --- every lesson carries a visual --------------------------------------------------------
+# A course teaches a tool, and a lesson that is a wall of prose asks the learner to picture
+# software they have never seen. So every lesson carries one visual -- a screenshot, a
+# diagram, an image, or a video. Two forms count, and both can be written before the
+# artifact itself exists, which is what lets an agent finish a draft:
+#
+#   ![<what it shows>](assets/...)   an image -- check_images above owns its rules, and the
+#                                    file may legitimately not be captured yet (stage 3e)
+#   **Watch the video:** ...         a video -- the convention already documented in
+#                                    .claude/skills/training-content/references/
+#                                    markdown-styling.md, and recorded at stage 8
+#
+# Lesson 1 is the course overview, so its visual is the overview video rather than a
+# picture. That is reported separately because the fix is a different artifact.
+#
+# WARNING, not error, for the same reason a missing screenshot file is: a half-drafted
+# lesson legitimately has no visual yet, and failing CI on the normal mid-draft state would
+# break the very workflow this supports. The gate is stage 3e (scripts/course_stage.py),
+# and the alignment reviewer blocks on it at stage 4.
+WATCH_RE = re.compile(r"^\*\*Watch the video:\*\*", re.MULTILINE)
+
+
+def lesson_visuals(folder):
+    """Return (lessons_missing_a_visual, overview_lesson_missing_its_video).
+
+    Both are lists of file names, in lesson order. Structured rather than prose so that
+    course_stage.py can report the shortfall without parsing warning strings.
+    """
+    lessons = sorted((p for p in folder.glob("*.md") if is_lesson(p.name)),
+                     key=lambda p: p.name)
+    missing, overview = [], []
+    for i, p in enumerate(lessons):
+        text = FENCE_RE.sub("", p.read_text(encoding="utf-8"))
+        has_image = IMAGE_LINK_RE.search(text) is not None
+        has_video = WATCH_RE.search(text) is not None
+        if i == 0:
+            if not has_video:
+                overview.append(p.name)
+        elif not (has_image or has_video):
+            missing.append(p.name)
+    return missing, overview
+
+
+def check_visuals(folder, slug):
+    """Return (errors, warnings) for the every-lesson-has-a-visual rule. Warnings only."""
+    missing, overview = lesson_visuals(folder)
+    warnings = []
+    for name in overview:
+        warnings.append(f"{slug}/{name}: lesson 1 is the course overview -- it should carry "
+                        f"the overview video ('**Watch the video:** ...'), scripted at "
+                        f"stage 3d")
+    for name in missing:
+        warnings.append(f"{slug}/{name}: no visual yet -- every lesson needs a screenshot, "
+                        f"diagram, image or video (see process/stages/03-draft.md)")
+    return [], warnings
 
 
 def check_course(folder):
@@ -118,6 +267,27 @@ def check_course(folder):
             errors.append(f"{slug}/{quiz.name}: no pass threshold stated in the body")
         if not ANSWER_KEY_RE.search(qtext):
             errors.append(f"{slug}/{quiz.name}: no pipe-separated answer key found")
+        markers = ANY_KEY_MARKER_RE.findall(qtext)
+        if not markers:
+            errors.append(f"{slug}/{quiz.name}: the answer key is not marked -- put it "
+                          f"under a '## Answer key' heading")
+        for marker in markers:
+            if not CANONICAL_KEY_RE.match(marker.strip()):
+                errors.append(
+                    f"{slug}/{quiz.name}: answer key marked {marker.strip()!r} -- it must "
+                    f"be a '## Answer key' heading (optionally qualified, e.g. "
+                    f"'## Answer key (Section 1)'). The learner view is built by stripping "
+                    f"these blocks, so an unrecognised marker withholds the whole quiz.")
+
+    # --- screenshots ---
+    img_errors, img_warnings = check_images(folder, slug)
+    errors += img_errors
+    warnings += img_warnings
+
+    # --- every lesson carries a visual ---
+    vis_errors, vis_warnings = check_visuals(folder, slug)
+    errors += vis_errors
+    warnings += vis_warnings
 
     # --- completeness (warnings only) ---
     if not any(is_lesson(n) for n in files):

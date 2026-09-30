@@ -15,16 +15,46 @@ assumed knowledge the learner doesn't have.
 
 1. **Recruit one learner** at roughly the target audience's level — ideally a consultant
    or trainee who hasn't seen the material.
-2. Have them work through the lessons, scenario bank, and quiz as a learner would.
-3. **Capture their experience.** Ask:
+2. **Publish the course to Moodle** and send them the Moodle course URL:
+
+   ```bash
+   /publish-to-moodle <course-slug>
+   ```
+
+   Moodle is where learners take these courses, so the pilot should happen where the real
+   thing will. It is also the only way to pilot the parts a static page cannot show: the
+   quiz as an actual quiz, and the course in the **Android app**, which is how a
+   consultant in the field will meet it.
+
+   The command dry-runs first, refuses to publish anything that fails the disclosure
+   check, and creates the course **hidden** — make it visible when your learner is ready.
+   The design document, mentor guide, video scripts and every answer key are held back;
+   the correct answers reach Moodle only inside the quiz, where Moodle protects them.
+
+   > **Don't send the `/review/` URL to a pilot learner.** That one is the reviewer view
+   > and contains the answer key and the mentor guide's scoring notes.
+
+   **Fallback while Moodle is still being set up:** the learner view still works and is
+   still safe to send —
+   `https://competencies.languagetechnology.org/learn/<course-slug>/`. It holds back the
+   same material, but gives no working quiz and no app. Use it only if Moodle is not
+   available yet; it will be retired once a pilot has run cleanly on Moodle.
+
+3. Have them work through the lessons, scenario bank, and quiz as a learner would —
+   including on a phone, if that is how their colleagues will take it.
+4. **Capture their experience.** Ask:
    - Where did you get stuck or confused?
    - Did anything feel too fast, too slow, or too long?
    - Did the scenarios feel realistic?
    - Did the quiz test what the lessons taught?
    - What would have helped you most?
-4. Record the feedback as a comment on the tracker issue.
-5. The Author makes fixes; the fixes are merged.
-6. The Pilot Coordinator confirms the issues are addressed.
+   - Did anything fail to work on your device — images not loading, a page that wouldn't
+     open offline, a quiz that wouldn't submit?
+5. Record the feedback as a comment on the tracker issue.
+6. The Author makes fixes; the fixes are merged. Re-run `/publish-to-moodle <slug>` to put
+   them in front of the learner — the publish is idempotent, so it updates the course
+   rather than creating a second one.
+7. The Pilot Coordinator confirms the issues are addressed.
 
 ## Exit criteria
 

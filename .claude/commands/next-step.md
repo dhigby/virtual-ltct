@@ -62,10 +62,17 @@ Be concise. Use exactly this shape:
 
 ✅ Done: <stages complete>
 📍 Now:  Stage <N> — <name>        →  process/stages/<NN>-<name>.md
+🔗 Review: <review_url>              <- only from stage 4 on
 ▶ Next:  <the exact agent invocation or human action>
 
 ⚠ Drift: <only if a checkbox or board status disagrees with repo evidence>
 ```
+
+The **Review** line is the browsable version of the course, for anyone who shouldn't have
+to read markdown. `course_stage.py` prints it (and puts `review_url` in `--json`) from
+stage 4 on — use that value, never hand-build the URL. For a pilot learner at stage 7,
+give them the `/learn/` URL instead of `/review/`: it holds back the design doc, mentor
+guide and answer key. `/review-site <slug>` serves the same thing locally.
 
 Make the "Next" line copy-pasteable, e.g. *"Use the quiz-writer agent to write the quiz for
 modules/bloom/."*

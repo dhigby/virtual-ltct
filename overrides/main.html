@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+
+{#
+  Review-site theme override, used ONLY by mkdocs-review.yml.
+
+  noindex: course packages here are drafts. The repo is public, so this content is
+  already world-readable -- what this prevents is a draft being indexed and read as
+  though it were published curriculum. Paired with docs/robots.txt on the main site.
+#}
+
+{% block extrahead %}
+  <meta name="robots" content="noindex, nofollow">
+{% endblock %}
+
+{% block announce %}
+  <strong>Draft under review.</strong>
+  Not published material, and not part of the LT Consultant competency framework.
+  Built from <code>{{ config.extra.ltct_ref }}</code>.
+{% endblock %}

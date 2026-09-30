@@ -25,14 +25,25 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          # On a PR, check out the branch itself rather than the merge commit, so the
+          # regenerated COVERAGE.md can be committed back onto it.
+          ref: ${{ github.head_ref || github.ref_name }}
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
       - run: pip install pyyaml
       - name: Regenerate COVERAGE.md
         run: python scripts/gen_coverage.py
+      # Commit onto the PR's branch, not main. `main` is protected and the ruleset
+      # cannot grant GitHub Actions a bypass (Integration bypass actors are org-only),
+      # so a push straight to main would be rejected. Landing it here instead means
+      # main is already correct the moment the PR merges. Skipped for forks, where
+      # the token has no write access to the head branch.
       - name: Commit if changed
-        if: github.event_name == 'push'
+        if: >-
+          github.event_name == 'pull_request' &&
+          github.event.pull_request.head.repo.full_name == github.repository
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
@@ -41,4 +52,4 @@ jobs:
           fi
           git add COVERAGE.md
           git commit -m "chore: regenerate COVERAGE.md [skip ci]"
-          git push
+          git push origin HEAD:"${{ github.head_ref }}"

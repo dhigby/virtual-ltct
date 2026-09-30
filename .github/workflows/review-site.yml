@@ -1,0 +1,67 @@
+name: Course review site
+
+# Validates the review sites on a PR, before anything is published.
+#
+# pages.yml builds these too, but only on a push to main or course/**, and its job is to
+# keep the published site up whatever a draft is doing -- so a course that fails to build
+# there gets a placeholder and the deploy carries on. This is the opposite end: a course
+# that cannot be rendered cannot be reviewed, so here it blocks the merge instead.
+#
+# The check that matters most is the learner view. It is what a pilot learner is handed,
+# so it must not contain a quiz answer key. Running it on every PR that touches a course
+# means a bad answer-key marker is caught by the author who wrote it, at the moment they
+# wrote it, rather than at deploy time by whoever happens to be publishing.
+
+on:
+  pull_request:
+    paths:
+      - 'modules/**'
+      - 'mkdocs-review.yml'
+      - 'overrides/**'
+      - 'docs-review/**'
+      - 'docs/stylesheets/**'        # copied into every course build
+      - 'scripts/gen_course_site.py'
+      - 'scripts/build_review_sites.py'
+      - 'scripts/check_learner_view.py'
+      - 'docs-requirements.txt'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: review-site-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install -r docs-requirements.txt
+
+      # --local builds from this checkout rather than from origin refs: the point is to
+      # validate the content the PR proposes, not what is already on a branch.
+      - name: Build every course, both views
+        run: python scripts/build_review_sites.py --out site --local --fail-on-error
+
+      # --all is right here and only here: --local built every course from this checkout,
+      # so modules/ IS the source that produced these pages. --strict-withheld because on
+      # a PR the person who wrote the answer-key marker is right here to fix it, and a
+      # withheld quiz means the pilot learner gets no quiz.
+      - name: Verify the learner view leaks no answer key
+        run: python scripts/check_learner_view.py --built site/learn --all --strict-withheld
+
+      # Handy when a reviewer wants to read the proposed course before it merges, and the
+      # branch preview isn't published yet.
+      - name: Upload the rendered courses
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: course-review-sites
+          path: site
+          retention-days: 7
+          if-no-files-found: ignore

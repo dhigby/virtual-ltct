@@ -21,12 +21,16 @@ resources:
   - title: Dekereke Tutorials and Help Materials
     url: http://casali.canil.ca/DekerekeTutorials/tutorials.html
 source: Lang Tech Competencies.xlsx
-last_updated: 2026-07-01
+last_updated: 2026-09-03
 ---
 
 # Phonetic Tools
 
-**Category:** Technology Domain · **Workbook label:** Phonetics Tools
+**Category:** Technology Domain
+
+## Description
+
+Knowledgable about current phonetic tools.
 
 ## Why it matters
 

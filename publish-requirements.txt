@@ -1,0 +1,11 @@
+# Dependencies for publishing courses to Moodle (scripts/publish_moodle.py and friends).
+# Separate from docs-requirements.txt because the two jobs are independent: you can build
+# the competency site without ever touching Moodle, and vice versa.
+#
+# HTTP is deliberately stdlib urllib, not requests -- including the multipart upload in
+# scripts/moodle_client.py. This repo has no package manifest and no lockfile, so every
+# dependency added here is one a contributor has to install by hand on a laptop somewhere
+# with poor connectivity.
+markdown
+pymdown-extensions
+pyyaml

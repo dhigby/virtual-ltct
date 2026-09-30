@@ -34,11 +34,45 @@ MODULES = REPO / "modules"
 TIME_RE = re.compile(r"^\*\*Estimated time:\*\*\s*(\d+)\s*minutes", re.MULTILINE)
 DESIGN_STATUS_RE = re.compile(r"^\|\s*\*\*Design status\*\*\s*\|(.+)\|", re.MULTILINE)
 APPROVED_RE = re.compile(r"^Approved by (.+) on (\d{4}-\d{2}-\d{2})$")
-CYPHER_RE = re.compile(r"^\s*cypher:\s*\S+", re.MULTILINE)
+# A course is Online when its README frontmatter records where it was delivered. Two
+# keys, because the platform changed: `moodle:` for everything published from now on, and
+# `cypher:` for the ~23 legacy courses already delivered in Cypher for Business, which
+# must keep reporting stage 8 unchanged. See INTENT.md on why Cypher is winding down.
+PUBLISHED_RE = re.compile(r"^\s*(?:cypher|moodle):\s*\S+", re.MULTILINE)
+MOODLE_URL_RE = re.compile(r"^\s*moodle:\s*(\S+)", re.MULTILINE)
 
 # The package skeleton, not a course. check_course_package.py excludes it for the
 # same reason; so must anything that enumerates courses.
 NOT_A_COURSE = {"_template"}
+
+# Visuals are parsed by check_course_package, which owns the conventions (see
+# process/stages/03-draft.md): check_images for screenshot links, lesson_visuals for the
+# every-lesson-has-a-visual rule. Imported rather than re-implemented so the gate and the
+# CI check can never disagree about what counts as a missing shot or a bare lesson.
+try:
+    import check_course_package as _pkg
+except Exception:  # pragma: no cover - keep stage detection working without it
+    _pkg = None
+
+
+def pending_screenshots(folder):
+    """Alt texts of image links in a course whose file has not been captured yet."""
+    if _pkg is None:
+        return []
+    _errors, warnings = _pkg.check_images(folder, folder.name)
+    prefix = "screenshot not captured yet -- "
+    return [w.split(prefix, 1)[1] for w in warnings if prefix in w]
+
+
+def missing_visuals(folder):
+    """Return (lessons with no visual, lesson 1 if it has no overview video).
+
+    Every lesson carries a screenshot, diagram, image or video; lesson 1 is the course
+    overview, so its visual is the overview video. Both shortfalls hold a course at 3e.
+    """
+    if _pkg is None:
+        return [], []
+    return _pkg.lesson_visuals(folder)
 
 
 def branch_slug(slug):
@@ -54,6 +88,18 @@ def branch_slug(slug):
 
 def branch_for(slug):
     return "course/" + branch_slug(slug)
+
+
+# The published review site. Defined HERE, once, for the same reason stage detection is:
+# /next-step, /review-site, the process docs and the deploy driver must not each carry
+# their own copy of the URL and drift apart.
+SITE = "https://competencies.languagetechnology.org"
+
+
+def review_url(slug, view="reviewer"):
+    """Browsable URL for a course. view='learner' is the no-spoilers view for a pilot."""
+    segment = "review" if view == "reviewer" else "learn"
+    return "%s/%s/%s/" % (SITE, segment, branch_slug(slug))
 
 
 def is_lesson(name):
@@ -188,7 +234,7 @@ def stage_for(folder, use_gh=True):
             "stage_doc": "process/stages/01-design.md",
             "next_action": ("Use the course-designer agent to write modules/"
                             + slug + "/00-design.md."),
-            "done": [], "design_status": None, "published": False,
+            "done": [], "design_status": None, "published": False, "moodle_url": None,
             "notes": ["Not yet opted into the pipeline (no 00-design.md)."],
         }
     done.append("1. Design")
@@ -202,15 +248,27 @@ def stage_for(folder, use_gh=True):
                      "package (see process/backfill.md).")
 
     readme = folder / "README.md"
-    published = bool(readme.exists()
-                     and CYPHER_RE.search(readme.read_text(encoding="utf-8")))
+    readme_text = readme.read_text(encoding="utf-8") if readme.exists() else ""
+    published = bool(PUBLISHED_RE.search(readme_text))
+    # Read verbatim from frontmatter, never constructed from a base URL the way
+    # review_url() is. The Moodle host changes when the server moves, and a confidently
+    # wrong URL is worse than none.
+    moodle_match = MOODLE_URL_RE.search(readme_text)
+    moodle_url = moodle_match.group(1) if moodle_match else None
 
     def result(stage, key, name, doc, action):
         return {
             "slug": slug, "folder": "modules/" + slug, "branch": branch_for(slug),
             "stage": stage, "stage_key": key, "stage_name": name,
             "stage_doc": doc, "next_action": action, "done": done,
-            "design_status": design_status, "published": published, "notes": notes,
+            "design_status": design_status, "published": published,
+            "moodle_url": moodle_url, "notes": notes,
+            # Only once the content is drafted: before that there is nothing worth
+            # sending anyone, and a link to an empty course invites the "is it broken?"
+            # question this is meant to remove. 3e counts -- the lessons are all there by
+            # then, only the visuals are outstanding, so a review already in flight keeps
+            # its URL when a course falls back here for a missing visual.
+            "review_url": review_url(slug) if (stage >= 4 or key == "3e") else None,
         }
 
     # --- Stage 2: design approved by someone other than the author ---
@@ -246,17 +304,43 @@ def stage_for(folder, use_gh=True):
     done.append("3c. Quiz")
 
     if not any(n.endswith("-video-script.md") for n in files):
-        return result(3, "3d", "Draft -- video script", "process/stages/03-draft.md",
-                      "Use the video-script-writer agent to write the video script for "
-                      "modules/" + slug + "/.")
-    done.append("3d. Video script")
+        return result(3, "3d", "Draft -- overview video script",
+                      "process/stages/03-draft.md",
+                      "Use the video-script-writer agent to write the overview video "
+                      "script (the companion to lesson 1) for modules/" + slug + "/.")
+    done.append("3d. Overview video script")
+
+    # --- Stage 3e: the visuals -- every lesson has one, and the briefed shots exist ---
+    # Two shortfalls, both of which need a human. A lesson with no visual at all needs one
+    # chosen and written in; a briefed shot needs someone to open the tool, which is the
+    # one part of a draft an agent cannot finish. Either holds the course here rather than
+    # being discovered at review, which is what makes the stage-4 gate real.
+    bare, overview = missing_visuals(folder)
+    pending = pending_screenshots(folder)
+    if bare or overview or pending:
+        todo = []
+        if overview:
+            todo.append("lesson 1 (" + overview[0] + ") is the course overview and needs "
+                        "its overview video linked with '**Watch the video:** ...'")
+        if bare:
+            todo.append("no visual yet in " + ", ".join(bare)
+                        + " -- add a screenshot, diagram, image or video to each")
+        if pending:
+            shots = "; ".join(pending[:3]) + ("; ..." if len(pending) > 3 else "")
+            todo.append("capture " + str(len(pending)) + " screenshot(s) into its assets/ "
+                        "folder; each image link's alt text says which state to "
+                        "capture: " + shots)
+        return result(3, "3e", "Draft -- visuals", "process/stages/03-draft.md",
+                      "Finish the visuals for modules/" + slug + "/: " + "; ".join(todo))
+    done.append("3e. Visuals")
 
     # --- Stage 8: published (the only late stage with a repo signal) ---
     if published:
         done.append("4-7. Alignment, SME, internal review, pilot")
+        where = moodle_url or ("its Cypher link, recorded in modules/" + slug
+                               + "/README.md")
         return result(8, "8", "Online (published)", "process/stages/08-publish.md",
-                      "Nothing -- this course is Online. Its Cypher link is recorded in "
-                      "modules/" + slug + "/README.md.")
+                      "Nothing -- this course is Online: " + where)
 
     # --- Stages 4-7: no repo signal. PR state is the best available hint. ---
     pr = open_pr_for(branch_for(slug)) if use_gh else None
@@ -281,6 +365,8 @@ def print_one(info):
         print("  Done:   " + ", ".join(info["done"]))
     print("  Next:   " + info["next_action"])
     print("  How-to: " + info["stage_doc"])
+    if info.get("review_url"):
+        print("  Review: " + info["review_url"])
     gs = info.get("git")
     if gs:
         if gs["on_course_branch"]:

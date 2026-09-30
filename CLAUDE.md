@@ -1,8 +1,16 @@
 # CLAUDE.md
 
-Guidance for AI assistants working in this repo. This is a **content repository** for
-the Language Technology Consultant (LTC) training curriculum — markdown training modules,
-not an application. There is no build/test/run loop; the "checks" are content + coverage.
+Guidance for AI assistants working in this repo. It holds **two products**: the Language
+Technology Consultant (LTC) training **curriculum** — markdown training modules, with no
+build/test/run loop, where the "checks" are content + coverage — and the Moodle **training
+system** that delivers it (the publisher, `moodle/`, and the platform's configuration).
+Learner data lives only in Moodle, never in this public repo.
+
+**Read [`INTENT.md`](INTENT.md) before building or changing anything in this repo** — tooling,
+scripts, process, the sites. It states the problem this repo exists to solve, its hard
+constraints, and what is deliberately out of scope. This file gives you the rules; `INTENT.md`
+gives you the *why*, so you can decide the cases the rules don't cover. A proposed change that
+contradicts it should be raised, not routed around.
 
 ## How a session in this repo runs (read this first)
 
@@ -40,6 +48,37 @@ re-derive a course's stage by hand.
 **Terminology:** a **course** is one folder under `modules/<slug>/`; a **lesson** is one
 numbered file inside it (`01-*.md`, …), capped at 90 minutes. (The board field "Module
 Status" predates this terminology — read "Module" there as *course*.)
+
+## Who an LTC is — and what that changes about the content
+
+Three facts about the job shape almost every authoring decision here. They are easy to
+violate by accident, because the natural way to write a training example breaks all three.
+
+- **An LTC does not speak the languages they support.** They consult on the *technology* —
+  Paratext, keyboards, fonts, FieldWorks, Bloom, backups — for teams translating into
+  languages the consultant cannot read. So never write a lesson, scenario or quiz item
+  whose answer depends on the consultant judging whether the text itself is right. The
+  competence being taught is diagnosing the tool, the data and the workflow, and knowing
+  which questions belong back with the translation team.
+
+- **The work is often the first translation ever into that language.** Assume nothing is
+  already in place: no settled orthography, no spell-check dictionary, no existing digital
+  corpus, no font or keyboard someone else already made, no Wikipedia article to check
+  against. Examples that quietly assume any of that exists describe a world the learner
+  doesn't work in.
+
+- **AI cannot read these languages — and the examples are real.** Training here uses real
+  data from real projects, not invented languages; that realism is the point and must not
+  be swapped for a made-up example. But these are minority languages, largely absent from
+  model training data, so **never assume you can look at local language data and tell what
+  it means, whether it is correct, or what the fix is.** Don't gloss, translate, judge or
+  silently normalise it, and don't recommend a solution derived from reading it — a
+  plausible-looking answer about text you cannot actually read lands in front of a learner
+  with no way to check it. Real examples come from a human: the author, the project, or
+  the SME at stage 5. When a draft needs one you don't have, leave a marked placeholder
+  saying what the example must show rather than filling it in. The same holds for stating
+  facts about a named language's script, tone marking or character set: get it from a
+  human, or don't state it.
 
 ## Competency levels (CBC) — and the offset that trips everyone up
 
@@ -101,9 +140,35 @@ separate faithful-import workstream — see [`process/backfill.md`](process/back
    Stubs carry a banner; the goal is to replace stubs with authored content over time.
 
 5. **Don't commit large video files.** Link to Vimeo/Google Drive under `external_links:`
-   in frontmatter instead. Small images are fine in the module folder (e.g. `assets/`).
+   in frontmatter instead.
 
-6. **Lesson duration header.** Every numbered lesson file and the scenario bank opens, right
+6. **Every lesson carries a visual** — a screenshot, a diagram, an image or a video.
+   These courses teach software, and a lesson of unbroken prose asks the learner to
+   picture a screen they have never seen. The author chooses which while drafting (stage
+   **3a**); CI warns while a course is in draft and the alignment check (stage **4**)
+   blocks. **Lesson 1 is the course overview, so its visual is the overview video.**
+
+   - **Screenshots and diagrams** live in `modules/<slug>/assets/`, named
+     `ss-<lesson number>-<what-it-shows>.png` (lowercase, hyphens, no spaces), and are
+     **committed, never hotlinked** — a remote image rots and takes the published page's
+     picture with it. An agent writes the image link and its alt text where the shot
+     belongs; a human captures the file (stage **3e**). The alt text must describe the
+     exact state shown, because it is the screen-reader text *and* the brief for whoever
+     takes the shot — `![alt text](…)` is a defect. Diagrams are `.svg` files under the
+     same rules; there is no mermaid renderer configured, so a ` ```mermaid ` fence would
+     publish as a block of code.
+   - **Videos** are referenced, never committed: `**Watch the video:** [title](url)`, or
+     `**Watch the video:** _To be recorded at stage 8._` until it exists.
+   - **Video scripts** are `NN-video-script.md` for the overview video, and the optional
+     `NN-lesson-<L>-video-script.md` for a later lesson. Keep `-video-script.md` **last**
+     in the filename: five places in the tooling identify a script by that ending, and a
+     name like `09-video-script-03.md` is treated as a lesson *and* leaks into the
+     learner view.
+
+   `check_course_package.py` enforces all of this, and `/next-step` reports any lesson
+   without a visual and any shot still outstanding.
+
+7. **Lesson duration header.** Every numbered lesson file and the scenario bank opens, right
    under the H1, with `**Estimated time:** X minutes` — no lesson exceeds 90 minutes. This is
    verified by the alignment-reviewer agent and by `scripts/check_course_package.py`.
 
@@ -178,12 +243,119 @@ edit `gen_site.py` (structure) and [`docs/stylesheets/extra.css`](docs/styleshee
 descriptors.** Anything in `docs/` is published, so keep repo reference material out of it
 or add it to `exclude_docs` in `mkdocs.yml`.
 
+## Course review sites
+
+The same deploy also publishes each in-flight course as a browsable site, so reviewers and
+pilot learners never have to read a raw markdown diff. **Two views, and the difference
+matters:**
+
+| URL | View | Who | Holds back |
+|---|---|---|---|
+| `…/review/<slug>/` | reviewer | SME (stage 5), internal reviewer (stage 6) | nothing |
+| `…/learn/<slug>/` | learner | fallback for a pilot learner (stage 7) | design doc, mentor guide, video scripts, quiz answer key |
+
+**Pilot learners now go to Moodle** (see below); the `/learn/` view stays through the
+transition as a fallback and as the reference implementation of the disclosure boundary.
+The reviewer view is unaffected — reviewers should not need a Moodle account to read a
+draft.
+
+**Never send a pilot learner the `/review/` URL** — it contains the answer key. Get the URL
+from `course_stage.review_url()` (it is in `--json` and in `/next-step` from stage 4 on);
+never hand-build it, since a legacy folder like `Paratext 9 advanced support` slugs to
+`paratext-9-advanced-support`.
+
+Which git ref a course builds from is decided by **merge-base**, not by an open PR: the
+branch while it has unmerged commits, `main` once it merges. That is what makes one URL
+work across stages 5, 6 and 7, including across the stage-6 merge.
+
+- Preview one course locally: `/review-site <slug>` (or
+  `python scripts/review_site.py --slug <slug> [--view learner]`). It renders your working
+  tree, uncommitted edits included.
+- [`scripts/gen_course_site.py`](scripts/gen_course_site.py) renders a course;
+  [`mkdocs-review.yml`](mkdocs-review.yml) is its config. The docs root is a **flat mirror
+  of the course folder**, which is why the relative links authors already write just work.
+- **Quiz answer keys use one marker:** a `## Answer key` H2, optionally qualified
+  (`## Answer key (Section 1)`) and repeatable. `check_course_package.py` fails CI on any
+  other form. It is standardised precisely so the learner view never has to guess where a
+  key starts.
+- The learner view is a disclosure boundary and fails closed: a quiz whose answer key
+  can't be cleanly separated is withheld, not partially stripped — enforcement removes the
+  guessing, not the verification.
+  [`scripts/check_learner_view.py`](scripts/check_learner_view.py) is the gate; it **fails
+  the deploy** on a leak, and [`review-site.yml`](.github/workflows/review-site.yml) runs
+  it on every PR touching a course, so a bad marker is caught by its author.
+- On a PR, a course that fails to build **blocks the merge**
+  (`build_review_sites.py --local --fail-on-error`); on deploy it gets a placeholder page
+  and the publish carries on. Deliberate: a course that can't render can't be reviewed,
+  but one broken draft must not take the published site down.
+- These pages are `noindex` and unlinked from the competency site's nav, and
+  `docs/robots.txt` disallows both paths. They are *unlisted, not secret* — the repo is
+  public, so anyone with the link can read them.
+
+> **Never run `mkdocs gh-deploy` locally.** It force-pushes the whole `gh-pages` branch and
+> would delete every course review site until the next CI run. Deploying is CI's job.
+
+## Delivery: Moodle
+
+Courses are delivered from a **self-hosted Moodle**. It costs nothing per learner — the
+constraint that ruled out Cypher for Business — and its Android app lets a consultant take
+a course offline in the field. Pilots (stage 7) and publishing (stage 8) both go there;
+`/publish-to-moodle <slug>` is the command.
+
+**The repo stays the source of truth and the publish is one-way.** Content edited in Moodle
+is overwritten by the next publish — change the markdown instead. Never copy content from
+Moodle back here; that would break the source-of-truth split everything else rests on.
+
+The publisher splits at a platform-neutral payload, which is how `INTENT.md`'s portability
+constraint is honoured in practice:
+
+- [`scripts/moodle_payload.py`](scripts/moodle_payload.py) knows courses and the disclosure
+  boundary, and nothing about Moodle's API.
+- [`scripts/check_moodle_payload.py`](scripts/check_moodle_payload.py) verifies that payload
+  **before anything leaves the machine**. There is no `--force`: once a page is on a server
+  learners can reach, a disclosure failure has already happened.
+- [`scripts/moodle_client.py`](scripts/moodle_client.py) and
+  [`scripts/moodle_xml.py`](scripts/moodle_xml.py) know Moodle and nothing about pedagogy.
+
+**The answer-key rules live in one place:** [`scripts/disclosure.py`](scripts/disclosure.py),
+shared by the authoring check, the review-site renderer, its gate and the Moodle publisher.
+Change the marker there and nowhere else. Answer keys *do* reach Moodle, but only inside
+question data, where Moodle's capabilities protect them — never in page HTML.
+
+**Identity is an `idnumber`, stored in Moodle, not in a repo state file:** `ltct:<slug>` for
+a course and `ltct:<slug>:<source filename>` for a module. That is what makes republishing
+update rather than duplicate, and what makes moving to another Moodle server a re-publish
+rather than a data move.
+
+`MOODLE_URL` and `MOODLE_TOKEN` come from the environment. **The repo is public — never
+write a token into a file here.** The plugin the publisher depends on is
+[`moodle/local_ltuse/`](moodle/local_ltuse/README.md); Moodle has no core web service that
+writes a quiz, which is why it exists.
+
+A course reports stage 8 once its `README.md` frontmatter carries `external_links: moodle:`
+(or, for the legacy Cypher-delivered courses, `cypher:`). `course_stage.py` is still the only
+implementation of that, and reports the Moodle URL verbatim from frontmatter rather than
+constructing it — the host changes when the server moves.
+
 ## Maintainer scripts (`scripts/`)
 
 - `gen_coverage.py` — regenerates `COVERAGE.md` (also run by CI).
 - `check_course_package.py` — validates a course package's completeness/format (run by CI).
   Only checks courses that have opted into the pipeline (those with a `00-design.md`); all
   legacy courses are untouched. `--course <slug>` runs it for one course.
+- `review_site.py` — builds/serves one course's review site locally (`/review-site`).
+- `build_review_sites.py` — builds every in-flight course into the deploy tree (CI).
+- `gen_course_site.py` — `mkdocs-gen-files` hook for `mkdocs-review.yml`; renders one course.
+- `check_learner_view.py` — CI gate: proves the learner view leaks no answer key.
+- `disclosure.py` — the answer-key marker, the strip and the excluded-file rules, defined
+  once and imported by everything that acts on them. Not run directly.
+- `quiz_parse.py` — parses a quiz markdown file into structured questions;
+  `--check-all` is a CI gate over every quiz in `modules/`.
+- `moodle_payload.py` — renders one course into a publish payload (the platform boundary).
+- `check_moodle_payload.py` — proves that payload leaks nothing, before it is pushed.
+- `moodle_xml.py` — serialises parsed questions to Moodle XML.
+- `moodle_client.py` — thin Moodle REST client; `--whoami` checks a server and token.
+- `publish_moodle.py` — build → verify → push. `--dry-run` sends nothing.
 - `gen_site.py` — `mkdocs-gen-files` build hook; generates the site pages + nav from
   `competencies.yaml` and `competencies/*.md`. Not run by hand; invoked by `mkdocs`.
 - `check_competency_descriptors.py` — validates descriptors stay in sync with the
@@ -203,6 +375,10 @@ Change** — budgeted by the lesson's `**Estimated time:**` header (roughly 10 /
 [`.claude/skills/training-content/`](.claude/skills/training-content/SKILL.md), defines
 the methodology — prefer it when drafting or revising module content. The alignment
 reviewer (stage 4) verifies the four phases are present in each lesson.
+
+Before inventing an example, a scenario or a quiz item that involves a language, re-read
+[Who an LTC is](#who-an-ltc-is--and-what-that-changes-about-the-content) above — it
+constrains all four phases, and the Challenge phase most of all.
 
 See [README.md](README.md) and [CONTRIBUTING.md](CONTRIBUTING.md) for the human-facing
 contributor workflow (browser editing, GitHub Desktop, adding modules via issue template).

@@ -34,8 +34,13 @@ design doc. You have no design doc and you invent nothing.
   and table formatting.
 - **Keep videos and downloads as links,** not embeds. If the source embeds a Vimeo/Drive
   video, link it (and make sure the URL is also under `external_links:` in the README).
-- **Preserve images** by referencing them from an `assets/` folder if the human provides the
-  image files; otherwise leave a clearly-marked `<!-- TODO: image not supplied: … -->`.
+- **Preserve images** as committed files under the course's `assets/` folder, named
+  `ss-<lesson number>-<what-it-shows>.png`, with alt text describing what the picture
+  shows. Never carry a hotlinked image URL across from the source — a Notion, Google or
+  S3 link is usually signed and already expiring, so the picture will vanish from the
+  published course. If the human hasn't supplied the file, write the link anyway with the
+  alt text describing what the source showed there: `/next-step` will then list it as a
+  shot still to capture.
 
 ## What you never do
 

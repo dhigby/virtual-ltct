@@ -150,6 +150,6 @@ You need **80% (18/22)** to pass.
 
 ---
 
-## Answer Key
+## Answer key
 
 1. A | 2. C | 3. B | 4. B | 5. C | 6. B | 7. B | 8. C | 9. C | 10. B | 11. C | 12. A | 13. B | 14. B | 15. C | 16. A | 17. B | 18. B | 19. B | 20. A | 21. B | 22. B

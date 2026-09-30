@@ -60,6 +60,6 @@ no pass threshold, so none is stated here.]
 - C) Only change the rendering engine; encoding and fonts don't matter
 - D) Re-type the text manually because the data is lost
 
-**Answer key:**
+## Answer key
 
 1. A | 2. A | 3. A | 4. A | 5. B | 6. C,E | 7. B,C,E | 8. B | 9. A,B,D | 10. B

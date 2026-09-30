@@ -25,6 +25,27 @@ minimum needed, makes the learner apply it to a real scenario, then has them com
 action. If you find yourself writing paragraphs of "here is everything about X" with no
 Connect hook and no Challenge, stop and restructure into the 4Cs.
 
+## Three facts about the job that rule out the obvious example
+
+The paragraph above is not background colour — it forbids the most natural way to write a
+training example. All three of these are easy to break by accident.
+
+- **The consultant does not speak the language they support.** They consult on the
+  *technology* for a team translating into a language they cannot read. So no lesson,
+  scenario or **Challenge** may hinge on the consultant judging whether the text itself is
+  right. The competence is the tool, the data and the workflow — and knowing which
+  questions go back to the translation team.
+- **The project is often the first translation ever into that language.** Assume nothing
+  pre-exists: no settled orthography, no spell-check dictionary, no corpus, no font or
+  keyboard someone else already made, nothing to check the text against.
+- **You cannot read the language data — and it stays real.** Examples come from real
+  projects and must never be swapped for an invented "example language"; that realism is
+  the point. What you must not do is act as if you can read it: no glossing, translating,
+  judging correctness, or recommending a fix derived from reading it, and no silently
+  tidying characters or diacritics when you move data between files. Real data comes from
+  a human — the design doc, the SME, existing repo content. Where it's missing, leave a
+  marked placeholder saying what the example must show.
+
 ## Clarifying before writing
 
 If the request is missing any of these, ask before writing:
@@ -51,7 +72,8 @@ Sources of truth, in order:
 4. Worked examples to mirror (see **Exemplars** below).
 
 Never invent field stories, tool facts, or learner struggles not present in the design doc,
-the competency descriptor, or existing repo content.
+the competency descriptor, or existing repo content. That goes double for local-language
+data — see the three facts above; it comes from a human or it stays a marked gap.
 
 ## Output format (repo conventions)
 
@@ -82,8 +104,9 @@ lesson's `**Estimated time:**` header and make sure the phases add up to it.
   Connect`).
 - **Content** *(~25–30 min)* — deliver only the knowledge needed to *attempt* the task, then
   stop. Videos, concept explanations, worked distinctions, real-world examples. Vary modality
-  (video, demonstration, reading) — adults have diverse styles. Close with a short **Key
-  takeaways** list.
+  (video, demonstration, reading) — adults have diverse styles. **Every lesson carries at
+  least one visual** (screenshot, diagram, image or video) and it usually belongs here; see
+  `references/markdown-styling.md`. Close with a short **Key takeaways** list.
 - **Challenge** *(~15–20 min)* — the learner applies the content to a **realistic field
   scenario** and produces something a mentor can review (a diagnosis, a plan, a 2–3 sentence
   recommendation). Scenarios use named people in real contexts with real constraints (power
@@ -212,6 +235,10 @@ output.
   the first `## Connect`; Connect is reflection only.
 - Invented field stories, tool specifics, or learner struggles not grounded in the design doc,
   competency descriptor, or existing repo content.
+- A **Challenge** whose answer depends on reading the local-language text — the consultant
+  can't read it, and neither can you.
+- Invented local-language text or glosses, claims about a language's script or orthography,
+  or a real project example swapped out for a made-up "example language."
 - Office/enterprise-IT framing — this audience supports non-technical language workers in the
   field.
 - Editing `competencies:`, `target_outcome_level`, or `content_type` frontmatter, or

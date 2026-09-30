@@ -1,0 +1,7 @@
+# The review sites are drafts under review, not published curriculum. The repo is
+# public so this content is already readable on GitHub; what this prevents is a draft
+# being indexed and read as though it were finished material. Paired with the
+# <meta name="robots" content="noindex"> that overrides/main.html puts on every page.
+User-agent: *
+Disallow: /review/
+Disallow: /learn/

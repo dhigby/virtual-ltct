@@ -25,7 +25,7 @@ inside it (`01-*.md`, …), capped at 90 minutes. Every course moves through eig
 each with a one-page how-to under [`process/stages/`](process/stages/):
 
 **Design → approve → draft → alignment check → SME fact-check → internal review → pilot →
-record & publish to Cypher.**
+record & publish to Moodle.**
 
 Each course has one **Course production tracker** issue (open one from the
 [issue template](.github/ISSUE_TEMPLATE/course-production.yml)); its checkboxes are the
@@ -56,7 +56,7 @@ Every content course ends up with this set of files — copy them from
 | `NN-scenario-bank.md` | Applied practice scenarios, foundational → complex. |
 | `NN-mentor-guide.md` | Facilitator notes and answer guidance for the scenario bank. |
 | `NN-quiz.md` | Assessment questions with a pass threshold and answer key in the body. |
-| `NN-video-script.md` | Script for the video-recording step before upload to Cypher. |
+| `NN-video-script.md` | Script for the video-recording step at stage 8. |
 
 Sub-files don't carry their own frontmatter — only `README.md` does. See
 `modules/_template/README.md` for the full explanation and a frontmatter example.
@@ -69,11 +69,69 @@ exactly** one in [`competencies.yaml`](competencies.yaml), or it won't count tow
 coverage (and CI fails). Don't edit `status`/`priority` here — those live on the Project
 board.
 
+## Visuals: every lesson has one
+
+Teaching a tool means showing it. So **every lesson has at least one visual** — a
+screenshot, a diagram, an image, or a video. A lesson that is all prose asks the reader to
+picture a screen they have never seen.
+
+Which one depends on what the learner needs:
+
+| Use a… | When |
+| --- | --- |
+| **Screenshot** | They have to find or recognise something on screen. The usual choice. |
+| **Diagram** | You're showing how parts relate, or a decision: "if this, then that." |
+| **Image** | A photo of real hardware or a field setup makes the point. |
+| **Video** | You're orienting them to a whole workflow before they try it. |
+
+**Lesson 1 is the course overview, so its visual is the overview video.** While the video
+is still unrecorded, the lesson carries this line, and whoever publishes the course
+replaces it with the real link:
+
+```markdown
+**Watch the video:** _To be recorded at stage 8._
+```
+
+Don't commit the video file itself — videos live on Vimeo or Drive and are linked.
+
+`/next-step` tells you which lessons still need a visual, and the alignment check (stage 4)
+won't pass a course that has a lesson without one.
+
+### Screenshots and diagrams
+
+These are committed files. They go in the course's own `assets/`
+folder, named so the filename says what the picture is:
+
+```text
+modules/<course-slug>/assets/ss-01-run-basic-checks.png
+```
+
+`ss`, then the lesson number, then what it shows — lowercase, hyphens, no spaces. Link to
+it from the lesson with a **description of what the picture shows**, not the word "image":
+
+```markdown
+![The Run basic checks dialog with Quotations ticked and all NT books selected.](assets/ss-01-run-basic-checks.png)
+```
+
+That description does three jobs: it's what someone using a screen reader hears, it tells
+a reviewer whether the right thing was captured, and — if the picture hasn't been taken
+yet — it tells whoever takes it which state to put the tool in. So Claude will often write
+the link *before* the picture exists; `/next-step` then lists the shots still needed. CI
+rejects `![alt text](…)`.
+
+Two things to watch: **paste the file into the repo**, never link to an image on Google
+Drive, Notion or a website (those links expire and the picture silently disappears from
+the published course); and **remember the repo is public**, so check the shot for
+unpublished translation text, personal details or anything else that shouldn't be seen.
+
+A diagram works the same way — save it as an `.svg` in `assets/`, with the same naming and
+the same description. (Don't write a ` ```mermaid ` block: nothing in this repo draws
+those, so it would appear on the published page as a lump of code.)
+
 ## What not to commit
 
 - Large video files. Link to Vimeo or Google Drive instead (put the URL under
-  `external_links:` in the frontmatter). Small images are fine under the course's `assets/`
-  folder.
+  `external_links:` in the frontmatter). Screenshots and small images are fine — see above.
 - `COVERAGE.md` — it's generated automatically; don't hand-edit it.
 
 ## Backfilling legacy courses
@@ -81,6 +139,33 @@ board.
 Many older courses were delivered from Cypher for Business and imported here only as stubs
 or rough README files. Making this repo their true source of truth is the
 [backfill workstream](process/backfill.md), tracked in [`BACKFILL.md`](BACKFILL.md).
+
+## Reviewing a course without reading markdown
+
+Every course in the pipeline is published as an ordinary website, so a reviewer or a pilot
+learner never has to open a `.md` file or read a diff:
+
+| You are… | Open |
+|---|---|
+| an **SME** (stage 5) or **internal reviewer** (stage 6) | `https://competencies.languagetechnology.org/review/<course-slug>/` |
+| giving it to a **pilot learner** (stage 7) | `https://competencies.languagetechnology.org/learn/<course-slug>/` |
+
+The `/learn/` version leaves out the design document, the mentor guide and the quiz answer
+key — so **send a pilot learner that one**, not `/review/`.
+
+You don't need to install anything to read either. They rebuild a couple of minutes after
+each push, from the course's own branch until it merges and from `main` afterwards, so the
+link keeps working all the way through. Leave feedback as PR or tracker-issue comments, as
+before. `/next-step <slug>` prints the right link from stage 4 on, and `/review-site <slug>`
+serves it on your own machine if you're editing.
+
+**These links are unlisted, not private.** They aren't indexed by search engines and
+nothing links to them from the public competency site, but this repo is public, so anyone
+you give the link to can open it — no sign-in. That's fine for a draft course; just don't
+treat the URL as a password.
+
+> Don't run `mkdocs gh-deploy` yourself — it republishes the whole site and would wipe
+> every course preview until the next automatic build.
 
 ## Small fixes without Claude Code (appendix)
 

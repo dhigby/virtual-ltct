@@ -75,7 +75,7 @@ effectiveness is unconfirmed.
   the time, not because the operation ignores that setting).
 - **Opening RegEx Pal:** confirmed via a live Paratext 9.5 screenshot that RegEx Pal is a
   separate program, opened from a specific project's own menu (not Paratext's main menu) via
-  **Advanced > RegEx Pal...**. An older version of the source PowerPoint slide (`RegExPal-pp.png`)
+  **Advanced > RegEx Pal...**. An older version of the source PowerPoint slide (`assets/ss-01-regex-pal-find-pattern.png`)
   said "Tools > Advanced"; the slide has since been corrected by the SME to say
   "≡ Project > Advanced", matching the confirmed-current path used in the lesson. The
   corrected slide is the one embedded in the lesson; the outdated version was not kept.

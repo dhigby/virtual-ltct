@@ -39,7 +39,7 @@ RegEx Pal is a separate program, but the easiest way to open it is from within P
 
 Once open, RegEx Pal has its own **Find**, **Replace**, and **Count/Extract** modes, and a **User** menu of ready-made operations, shown here running a live search on a project:
 
-![RegEx Pal open on a Spanish project, with a Find pattern matching capitalised words after "rey" (king), highlighting matches for review.](RegExPal-pp.png)
+![RegEx Pal open on a Spanish project, with a Find pattern matching capitalised words after "rey" (king), highlighting matches for review.](assets/ss-01-regex-pal-find-pattern.png)
 
 **NOTE** RegEx Pal opens scoped to whichever project you opened it from. If you need to work with a different project, close RegEx Pal and reopen it from that project's menu instead.
 
@@ -114,7 +114,7 @@ This counts words written entirely in capital letters. All-cap words can appear 
 3. Click **Count all cap words**.
 4. Look at the results.
 
-![RegEx Pal showing the results of Count all cap words on a French exercise project — each distinct all-cap word listed with its occurrence count and references, plus a total row.](countAllCaps.png)
+![RegEx Pal showing the results of Count all cap words on a French exercise project — each distinct all-cap word listed with its occurrence count and references, plus a total row.](assets/ss-01-count-all-cap-words.png)
 
 **What the results look like:** each distinct all-cap word appears in the list along with how many times it occurred and its references — for example, `3: ACTES [ACT 1:0, ACT 1:0, ACT 1:0]` means "ACTES" occurred 3 times, at those three locations. A **TOTAL** row at the end sums every match.
 
@@ -143,7 +143,7 @@ Note that Paratext's own Checklist view is often more useful for detailed footno
 3. Click **Extract all footnotes**.
 4. Look through the list of results.
 
-![RegEx Pal showing the results of Extract all footnotes on a French exercise project — the Yes/No/Yes To All/Cancel buttons are greyed out, since Extract has already produced its list and doesn't need per-match confirmation.](extract%20footnotes.png)
+![RegEx Pal showing the results of Extract all footnotes on a French exercise project — the Yes/No/Yes To All/Cancel buttons are greyed out, since Extract has already produced its list and doesn't need per-match confirmation.](assets/ss-01-extract-all-footnotes.png)
 
 **NOTE** You'll see the same Yes/No/Yes To All/Cancel buttons here as in Find and Replace, but they're greyed out for Extract — the list is already complete, so there's nothing left to confirm.
 
@@ -171,13 +171,13 @@ In USFM, a verse marker must be followed by a space before the verse number: `\v
 2. Click **User** in the menu bar, then click **Replace missing space after \v**. This loads the Find pattern (`\\v(\d)`) and Replace pattern (`\\v \1`), and puts you in Replace mode.
 3. Switch to **Tools > Find** (or Ctrl+F) to run that same pattern as a Find first — this shows you every match without changing anything, so you can see the full scope before committing to anything.
 
-![RegEx Pal in Find mode, previewing the same \v(\d) pattern used by Replace missing space after \v — the match (\v8) is highlighted, and the Yes/No/Yes To All/Cancel buttons are greyed out since Find mode never changes text.](Regex-Find2.png)
+![RegEx Pal in Find mode, previewing the same \v(\d) pattern used by Replace missing space after \v — the match (\v8) is highlighted, and the Yes/No/Yes To All/Cancel buttons are greyed out since Find mode never changes text.](assets/ss-01-find-mode-preview.png)
 
 4. When you're ready, switch back to **Tools > Replace** (or Ctrl+H).
 5. RegEx Pal steps through your selected book(s) and stops at each match it finds. A dialog shows the project, the reference (e.g. GEN 1), the Find pattern it matched (`\\v(\d)`), and the Replace pattern it's about to apply (`\\v \1`).
 6. For each match, choose **Yes** to apply that one fix, **No** to skip it, **Yes To All** to apply the fix to every remaining match without further prompts, or **Cancel** to stop.
 
-![RegEx Pal's Replace confirmation dialog, showing a match for \v8 (highlighted, top panel) about to become \v 8 (highlighted, bottom panel) with the space added, alongside Yes/No/Yes To All/Cancel.](RegEx-replace.png)
+![RegEx Pal's Replace confirmation dialog, showing a match for \v8 (highlighted, top panel) about to become \v 8 (highlighted, bottom panel) with the space added, alongside Yes/No/Yes To All/Cancel.](assets/ss-01-replace-confirmation.png)
 
 **NOTE** Switching between **Tools > Find** and **Tools > Replace** keeps your loaded pattern, but clears whatever results list was showing — that's expected, not a sign you've lost your pattern. Each mode simply shows its own results.
 

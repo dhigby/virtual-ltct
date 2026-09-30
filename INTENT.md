@@ -34,11 +34,11 @@ A single repository that is the **source of truth** for two products: the **curr
 
 ### B. The training system
 
-1. **One instance serves every partner.** A single Moodle site holds every partner organisation, organised by course category, cohort and profile field — never a separate instance per organisation.
+1. **One instance serves every partner we host.** A single Moodle site — today, `ltuse.net` — holds every partner organisation whose learners we host, organised by course category, cohort and profile field. We do not stand up a separate instance for each organisation. A partner may one day choose to run its own Moodle (see **Open questions**); that is their platform, not a second one of ours.
 2. **Learning continues beyond a course.** Community spaces, peer discussion and mentor relationships persist after a course ends and are not tied to any one enrolment.
 3. **Courses add up to pathways.** Courses are strung into role- and skill-based pathways mapped to the CBC framework, so a learner can see where they are and what comes next.
 4. **It is simple on both sides.** A partner learner can log in and know what to do without orientation, and a small team can create cohorts, enrol learners and run programs without a dedicated LMS administrator.
-5. **The platform is rebuildable from the repo.** Plugins, settings, theme and roles are recorded here, so a new server can be stood up from the repo plus a data restore — the platform as portable as the content. _(assumption)_
+5. **The platform is rebuildable from the repo.** Plugins, settings, theme and roles are applied by scripts or declarative files under `moodle/`, so a new server can be stood up from the repo plus a data restore — the platform as portable as the content. A setting that exists only because someone clicked it into the admin UI is not done.
 
 ## Affected users and systems
 
@@ -106,7 +106,7 @@ Hard, in roughly descending order of "breaking this breaks the point of the repo
 - **Training evidence, not certification.** Moodle may record course completions, badges and competency evidence, and CBC assessors may consult them. But who has reached which CBC level is assessed and decided by the CBC program, not here. The training system never awards or records a CBC level, and no badge or certificate it issues says "certified".
 - **Two products, one boundary.** The training system _is_ an application: it has users, data, and an uptime and backup obligation, and somebody must operate it. The curriculum half is still not one — its scripts serve authors and CI, and that is the whole job. The publisher and [`moodle/local_ltuse/`](moodle/local_ltuse/README.md) are the bridge between them, and the only code that should know both a course's shape and Moodle's.
 - **Not a fork of Moodle, and not an LMS of our own.** We configure and extend Moodle; we do not modify its core or rebuild a feature that core or a maintained plugin already provides.
-- **Not one instance per organisation.** Partners are separated inside one site, by category, cohort and role.
+- **We don't run a Moodle instance for each organisation.** Every partner we host shares one site and is separated inside it, by category, cohort and role. A partner running its own Moodle is a different case, covered under **Open questions**.
 - **No Moodle → repo sync.** Not for content, which would break the source-of-truth split, and not for learner data, which would break the public-repo rule.
 - **Not a place to re-derive stage state by hand.** `scripts/course_stage.py` is the single implementation; a second one is a bug, not a feature.
 
@@ -119,10 +119,12 @@ Note what is deliberately **not** on this list. The published competency site is
 - **2026-09-30 — Learner records live in Moodle only.** The training system holds enrolments, completions, progress and profiles; the public repo holds none of it.
 - **2026-09-30 — Training evidence, not certification.** See **Out of scope**.
 - **2026-09-30 — Who the training system serves:** language technology consultants worldwide, partner organisations' learners, and translation teams.
+- **2026-09-30 — Production is a dedicated VPS, not the shared host.** `ltuse.net` on the shared host is for building and piloting only; learners are not taken live until Moodle has moved to a dedicated VPS that can serve many at once. Scripted configuration (below) is what makes that move a rebuild plus a data restore.
+- **2026-09-30 — Moodle configuration is code.** Every setting, plugin, role and structure the training system depends on is applied from `moodle/`, never only by hand, so rebuildability (outcome B.5) is a rule rather than an assumption. Recorded as a binding rule in [`.specify/memory/constitution.md`](.specify/memory/constitution.md), along with testing the learner- and admin-experience work with real partner users before it counts as done.
 
 ## Open questions
 
-- **Who operates the Moodle server?** Now the most important open question: the training system depends on the answer. The first instance is temporary, on Doug's hardware, for building against. The production host, who administers it, how it is monitored, and what the backup and restore story is are not yet decided. The `idnumber` scheme makes moving content a re-publish, but learner data only survives a move if it has been backed up.
+- **Who operates the Moodle server?** Now the most important open question: the training system depends on the answer. The first instance is temporary: `ltuse.net`, on a shared host on Doug's hardware that also carries about 15 other live sites, for building against. It cannot serve many learners at once, so it moves to a dedicated VPS before go-live (see **Decisions**). Which VPS, who administers it, how it is monitored, and what the backup and restore story is are not yet decided. The `idnumber` scheme makes moving content a re-publish, but learner data only survives a move if it has been backed up.
 - **Community inside Moodle, or bolted on?** A standing community course with topic forums costs nothing new to run but feels like a course. A bolt-on (Discourse, Matrix) is a better community but a second system to operate and pay for. Start inside Moodle and move only if engagement shows the need _(assumption)_.
 - **How do translated courses live in the repo?** The Moodle interface is easy to localise; course content is not. Whether a translation is a sibling course folder, a per-lesson variant, or something else touches the course layout, `course_stage.py` and the publisher, and should be designed before any is built.
 - **What is our data-protection position?** A worldwide learner base means a privacy notice, a retention rule, consent at sign-up, and an answer to "delete my data". None exists yet.
@@ -134,6 +136,7 @@ Note what is deliberately **not** on this list. The published competency site is
 - **Does the Cypher wind-down make backfill urgent?** Yes, and more so now there is somewhere to put the content. **16 of the 31 courses have no lesson files at all** — their whole body is a single run-on README paragraph imported from Notion, with hotlinked Google images that will rot. `publish_moodle.py` refuses them by design rather than shipping that under a real course name. Until they are backfilled they cannot move to Moodle, and when Cypher ends they have no home.
 - **How do ten contributors and "one course at a time" coexist?** The queue rule was written for a much smaller working group. With department staff and Seed Company collaborators both active, it may need to become one course per person or per pair rather than one course repo-wide.
 - **How do we rank the remaining 22 gap competencies?** `coverage-strategist` recommends a next course, but the ranking principle — learner demand, certification bottleneck, ease of authoring — isn't written down anywhere.
+- **What if Seed Company wants its own Moodle?** Not needed now — everything goes on `ltuse.net` — but they may want their own platform later. The content side is cheap: the platform-neutral payload and `MOODLE_URL` from the environment already let the publisher target a second server. The questions are elsewhere: whether their instance is built from the same `moodle/` configuration or their own, whether courses published there stay one-way from this repo, and what happens to learners who move between the two sites, since learner data never passes through here.
 - **What does Seed Company collaboration look like mechanically?** Reviewing is straightforward; authoring from an outside organisation raises questions about repo access, review independence, and who approves their designs.
 
 ## What delay costs

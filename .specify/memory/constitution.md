@@ -174,14 +174,65 @@ and on low bandwidth.
 becomes true for us once it is built, verified on our version and proven simple by the people
 it is for.
 
+### XI. Every Change to Moodle Survives an Upgrade
+
+- Upstream Moodle security and feature releases MUST be applicable without re-doing our work.
+  Every change we make to Moodle's behaviour MUST therefore take one of three forms, each of
+  which an upgrade carries forward:
+  1. **configuration** applied from `moodle/` (Principle II);
+  2. **a maintained third-party plugin**, pinned to a verified release;
+  3. **our own plugin**, built only on Moodle's supported extension points — a plugin type,
+     hooks and callbacks, events, web services, scheduled tasks, or a child theme's templates
+     and renderers.
+- Vendored code MUST NOT be edited: Moodle core, its bundled plugins and themes (Boost
+  included), and third-party plugins. No patch may be applied to them at install or deploy
+  time. If one needs fixing, the fix goes upstream, or we override it through an extension
+  point. A look-and-feel change is a child theme or Boost's own settings, captured as
+  configuration.
+- We MUST NOT create or maintain a fork of Moodle. The most we may do is adopt a Moodle
+  distribution someone else maintains, such as IOMAD, and only as a platform decision
+  recorded in `INTENT.md`. That distribution must track upstream security releases, be free
+  or flat-cost (Principle IX), and our configuration and plugins must still install on it
+  unchanged.
+- Our plugins MUST call Moodle's public APIs rather than write to tables owned by core or by
+  another component. A direct write, or a raw read of another component's internal schema,
+  is allowed only where no API exists, and each one MUST be listed in the plugin's README
+  with its reason, so an upgrade review knows where to look first. Reading stable core
+  tables such as `course_modules` by indexed columns is not an exception.
+- Our plugins MUST declare `$plugin->requires` (the oldest Moodle release verified) and
+  `$plugin->supported` (the branches verified). They MUST NOT hold back security releases
+  within a supported branch. `$plugin->incompatible` is set only for a branch where
+  breakage has been observed, never as a precaution; the test-instance upgrade check
+  (Principle X) is what catches the untested case.
+- Supporting a new Moodle branch means re-verifying on the test instance, with a test
+  publish, and then raising `supported` in the same change that records the result.
+- Before writing, reviewing or upgrading code against a Moodle API, look the API up; don't
+  write it from memory. Check current developer documentation first (Context7's Moodle 5.2
+  API guides, plus core's `UPGRADING.md` for what changed), then confirm the signature in
+  upstream source on the branch we run (`MOODLE_<branch>_STABLE`). The documentation alone
+  is not enough: it indexes Moodle's `main` branch, and it missed APIs that the source shows.
+  A plan's research tasks record which API was confirmed and where.
+- We run **open-source Moodle LMS, self-hosted**. Documentation and search results mix in
+  features that exist only in Moodle Workplace, MoodleCloud, or the paid Moodle app plans.
+  A feature counts as available only if it is in core source on our branch, or in a free
+  plugin from the Moodle plugins directory that has been verified on our instance. Watch
+  for shared names: Workplace's paid "Programs" is not the free `tool_muprog` plugin.
+
+*Rationale:* a public site holding people's data has to take security releases promptly, and
+our team does not maintain Moodle. Every edit to vendored code, every private fork and every
+undeclared write into Moodle's tables turns routine upgrades into a porting project, and that
+is exactly the kind of work this team cannot absorb.
+
 ## Platform & Delivery Constraints
 
 - **Moodle core first.** Reach for core Moodle, then a maintained free plugin, then our own
   code, then a bolt-on system — in that order. Every plugin is an upgrade liability; every
   bolt-on is another system to operate.
 - **Never modify Moodle core.** Configure and extend it; do not fork it or rebuild a feature
-  core or a maintained plugin already provides.
-- **Pin every plugin** to the release it was verified against, as `local_ltuse` does.
+  core or a maintained plugin already provides. Principle XI states what "extend" allows.
+- **Pin every third-party plugin** to the release it was verified against. Our own plugins
+  declare the Moodle branches they were verified on (Principle XI). A pin stops an unreviewed
+  *plugin* update; it is never a reason to hold back a Moodle security release.
 - **One instance serves every partner we host.** Today that is `ltuse.net`. Partners on it are
   separated by course category, cohort, role and profile field; no spec may stand up a
   separate instance or a bespoke role set per organisation. A partner that runs its own Moodle
@@ -224,4 +275,8 @@ it is for.
   it touches; NON-NEGOTIABLE principles (III, IV) admit no exception. Complexity or a special
   case must be justified in writing, in the spec or the PR.
 
-**Version**: 1.0.0 | **Ratified**: 2026-09-30 | **Last Amended**: 2026-09-30
+**Version**: 1.1.0 | **Ratified**: 2026-09-30 | **Last Amended**: 2026-09-30
+
+*1.1.0 — adds Principle XI (every change to Moodle survives an upgrade), following the
+2026-09-30 `INTENT.md` decision "Upgrades are never a porting project". Also narrows "Pin every
+plugin" to third-party plugins.*

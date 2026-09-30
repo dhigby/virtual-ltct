@@ -5,11 +5,15 @@ on:
     paths:
       - 'modules/**'
       - 'scripts/check_course_package.py'
+      - 'scripts/disclosure.py'
+      - 'scripts/quiz_parse.py'
   push:
     branches: [main]
     paths:
       - 'modules/**'
       - 'scripts/check_course_package.py'
+      - 'scripts/disclosure.py'
+      - 'scripts/quiz_parse.py'
 
 permissions:
   contents: read
@@ -24,3 +28,8 @@ jobs:
           python-version: '3.12'
       - name: Validate opted-in course packages
         run: python scripts/check_course_package.py
+      # Every quiz in modules/, not only the opted-in ones: the Moodle publisher
+      # reads all of them, and a quiz it cannot parse blocks that course's publish.
+      # Catching it here means the author finds out, not the publisher.
+      - name: Parse every quiz
+        run: python scripts/quiz_parse.py --check-all

@@ -10,7 +10,7 @@ read one section, read [The 30-second answer](#the-30-second-answer).
 | **Course** | One folder under `modules/<slug>/`. Addresses one or more competencies; holds the whole content package. |
 | **Lesson** | One numbered file inside a course (`01-*.md`, `02-*.md`, …), capped at **90 minutes** of learner seat time. |
 | **Package** | The full set of files a finished content course has (design, lessons, scenario bank, mentor guide, quiz, overview video script). Every lesson also carries a visual — screenshot, diagram, image or video. See [`modules/_template/`](../modules/_template/). |
-| **Online** | The course is delivered — its video(s) are recorded and uploaded to Cypher for Business. This is the *done* state. (We do **not** say "Delivered"; the board option is `Online`.) |
+| **Online** | The course is delivered — its video(s) are recorded and the course is published to Moodle. This is the *done* state. (We do **not** say "Delivered"; the board option is `Online`.) |
 
 > The GitHub Project board is titled "LTC Training Modules" and its field is called
 > "Module Status" — for historical reasons. Read "Module" there as **course**.
@@ -45,7 +45,7 @@ Every content course moves through eight stages. Each has a one-page how-to unde
 | 5 | [SME fact-check](stages/05-sme-factcheck.md) | SME | Verify tools/facts/field detail | SME Check |
 | 6 | [Internal review](stages/06-internal-review.md) | Internal Reviewer | Review PR + merge | Internal Review |
 | 7 | [Pilot](stages/07-pilot.md) | Pilot Coordinator | Run with one learner | Pilot |
-| 8 | [Record & publish](stages/08-publish.md) | Publisher | Record the video(s), upload to Cypher | Publishing → Online |
+| 8 | [Record & publish](stages/08-publish.md) | Publisher | Record the video(s), `/publish-to-moodle` | Publishing → Online |
 
 The stages are gates, not suggestions: don't start drafting before the design is
 approved, and don't publish before the pilot. `/work-on` and `/next-step` tell you which
@@ -86,7 +86,7 @@ least two humans so that review is independent.
 | **SME** | Verifies technical/field accuracy at stage 5. | May be the Author only if the Internal Reviewer is someone else. |
 | **Internal Reviewer** | Reviews the finished package for pedagogy and learner-readiness; merges the PR. | Must not be the Author. |
 | **Pilot Coordinator** | Recruits one learner, gathers pilot feedback, confirms fixes. | — |
-| **Publisher** | Records the video and uploads it to Cypher; sets the course Online. | — |
+| **Publisher** | Records the video and publishes the course to Moodle; sets the course Online. | — |
 | **Maintainer** | Board admin (fields, statuses), merge rights, label management. Currently Doug. | — |
 
 Fill in your team's actual people here:

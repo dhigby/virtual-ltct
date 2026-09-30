@@ -863,15 +863,15 @@ true/false. Everything asked here is drawn directly from the lessons — work th
 <p><strong>Question 1:</strong> Which two inputs must be configured before the Quotation check can produce
 trustworthy results?
 - A) The Characters inventory and the Markers inventory
-- B) The Quote marks tab (which characters are quote marks) and the Quotation types tab
+- B) Language Settings and the Footnotes check
+- C) The Quote marks tab (which characters are quote marks) and the Quotation types tab
   (when marks are expected)
-- C) Language Settings and the Footnotes check
 - D) The Copy quote mark settings button and the Example preview</p>
 <p><strong>Question 2:</strong> You run the Quotations check on an unconfigured project and it returns
 <strong>zero results</strong>. Does this mean the translation has no quotation errors?
-- A) Yes — zero results confirms the marks are all correctly matched
-- B) No — with nothing configured, Paratext does not know which characters to look for, so
+- A) No — with nothing configured, Paratext does not know which characters to look for, so
   it is reporting silence, not correctness
+- B) Yes — zero results confirms the marks are all correctly matched
 - C) Yes, but only for the first-level quotes
 - D) No — zero results always means the check failed to run</p>
 <p><strong>Question 3:</strong> True or False: Once you begin actively configuring quote marks and
@@ -885,11 +885,11 @@ result set.
 <p><strong>Question 4:</strong> On the Quote marks tab, what does the <strong>Quote Continuer at new paragraph</strong>
 column configure, and when should it be left blank?
 - A) The character that ends every quotation; leave blank only at Third level
-- B) The character repeated at the start of a new paragraph when one speech continues
+- B) The apostrophe used inside words; leave blank if the language has no contractions
+- C) The default straight quote character; never leave it blank
+- D) The character repeated at the start of a new paragraph when one speech continues
   across the break; leave it blank if the language closes and reopens marks at each
-  paragraph instead
-- C) The apostrophe used inside words; leave blank if the language has no contractions
-- D) The default straight quote character; never leave it blank</p>
+  paragraph instead</p>
 <p><strong>Question 5:</strong> A language uses <code>’</code> (U+2019) as both its Second level closing mark <strong>and</strong>
 as an apostrophe inside words, and the check is flagging those in-word apostrophes as
 unclosed quotations. You add <code>’</code> (U+2019) to ☰ &gt; Project settings &gt; Language Settings &gt; Other
@@ -912,19 +912,19 @@ characters before clicking OK?
 <h3 id="section-3-configuring-quotation-types-questions-7-9">Section 3: Configuring Quotation Types (Questions 7-9)<a class="headerlink" href="#section-3-configuring-quotation-types-questions-7-9" title="Permanent link">&para;</a></h3>
 <p><strong>Question 7:</strong> What does the <strong>Quotation types</strong> tab control, and how is it different from
 the Quote marks tab?
-- A) It sets which Unicode characters are used; the Quote marks tab sets the font
-- B) It controls whether Paratext <em>expects</em> marks for each category of speech (required,
+- A) It controls whether Paratext <em>expects</em> marks for each category of speech (required,
   forbidden, or optional); the Quote marks tab sets <em>which characters</em> are used
+- B) It sets which Unicode characters are used; the Quote marks tab sets the font
 - C) It is an older version of the Quote marks tab and does the same thing
 - D) It controls only Third level quotes; the Quote marks tab controls the first two levels</p>
 <p><strong>Question 8:</strong> Tamba's convention is that indirect/reported speech ("He said that the road
 was long") never carries quote marks at all — a stray mark there would be a translator error.
 Paratext's recommended default for <strong>Indirect</strong> is "Quote marks are optional." What do you do?
 - A) Leave it — optional already permits no marks, so nothing needs to change
-- B) Click <strong>Custom settings</strong> and change Indirect to <strong>Never use quote marks</strong>, so the check
-  flags any stray mark a translator introduces in reported speech
-- C) Change Indirect to <strong>Use quote marks</strong>, since reported speech still needs marking
-- D) It is not one of the seven quotation types</p>
+- B) Change Indirect to <strong>Use quote marks</strong>, since reported speech still needs marking
+- C) It is not one of the seven quotation types
+- D) Click <strong>Custom settings</strong> and change Indirect to <strong>Never use quote marks</strong>, so the check
+  flags any stray mark a translator introduces in reported speech</p>
 <p><strong>Question 9:</strong> After reviewing Tamba's text, the team confirms that a self-quote (a
 character quoting their own earlier words) <strong>must</strong> be marked exactly like normal direct
 speech. You open the Quotation types tab and find <strong>Self quote</strong> is already set to "Use
@@ -941,18 +941,18 @@ unexpected Second level closing mark, caused by a <code>’</code> (U+2019) apos
 already confirmed, on a real project, that adding <code>’</code> to Word-medial punctuation does not clear
 this. Is this a real error or a configuration problem, and what is the correct action?
 - A) Real error — delete the apostrophe from the word
-- B) Neither — verify the apostrophe is genuine, then leave the result and document it; there
+- B) Real error — replace the apostrophe with a straight quote
+- C) Neither — verify the apostrophe is genuine, then leave the result and document it; there
   is no text or configuration fix for this collision
-- C) Real error — replace the apostrophe with a straight quote
 - D) Configuration problem — set Normal to "Never use quote marks"</p>
 <p><strong>Question 11:</strong> <strong>John 3:16</strong> (inside Jesus's speech to Nicodemus) is flagged for an
 invalid Second level mark, and you find a straight <code>"</code> (U+0022) where Tamba's Second level
 opening mark should be <code>‘</code> (U+2018). How do you classify and fix this?
 - A) Configuration problem — add U+0022 to the Quote marks tab
-- B) Real error — replace the straight <code>"</code> (U+0022) in the text with <code>‘</code> (U+2018) and
-  confirm the closing <code>’</code> (U+2019) is present
-- C) Configuration problem — the Second level is misconfigured; no text edit is needed
-- D) Not an error — straight quotes are always acceptable at Second level</p>
+- B) Configuration problem — the Second level is misconfigured; no text edit is needed
+- C) Not an error — straight quotes are always acceptable at Second level
+- D) Real error — replace the straight <code>"</code> (U+0022) in the text with <code>‘</code> (U+2018) and
+  confirm the closing <code>’</code> (U+2019) is present</p>
 <p><strong>Question 12:</strong> You have cleared every genuine text error in Matthew, but 6 results
 remain and the translation reads correctly. What is the right next step?
 - A) Edit the correct text to remove the flagged marks so the count reaches zero
@@ -965,9 +965,9 @@ remain and the translation reads correctly. What is the right next step?
 <p><strong>Question 13:</strong> In the <strong>Menda</strong> project, Second level uses single guillemets in reversed
 order: <code>›</code> (U+203A) opens the embedded speech and <code>‹</code> (U+2039) closes it. You accidentally
 enter <code>‹</code> in the Opening cell and <code>›</code> in the Closing cell. What does the check report?
-- A) Nothing — the two characters are interchangeable
-- B) It fires on every Second level opening and closing mark, because the fields are
+- A) It fires on every Second level opening and closing mark, because the fields are
   reversed; swap them so <code>›</code> is Opening and <code>‹</code> is Closing, and confirm via the Example
+- B) Nothing — the two characters are interchangeable
 - C) Only Third level errors
 - D) A single warning that resolves itself on re-run</p>
 <p><strong>Question 14:</strong> In the <strong>Waku</strong> project the First level opening <strong>and</strong> closing mark is
@@ -976,10 +976,10 @@ em-dash results (parenthetical dashes, not speech) cannot be cleared by configur
 What is the correct handling for those residual results?
 - A) Delete every em dash in the affected verses
 - B) Add U+2014 to the Word-medial punctuation field
-- C) Rewrite the parenthetical verses to use different punctuation where feasible, and
+- C) Set First level to "Never use quote marks"
+- D) Rewrite the parenthetical verses to use different punctuation where feasible, and
   where it is not, add a Project Note (☰ &gt; Insert &gt; Project note...) so the consultant can
-  verify them — the results will remain but are documented
-- D) Set First level to "Never use quote marks"</p>
+  verify them — the results will remain but are documented</p>
 <p><strong>Question 15:</strong> True or False: For every language, reaching a correct configuration always
 means the Quotations check ends at zero results.
 - A) True

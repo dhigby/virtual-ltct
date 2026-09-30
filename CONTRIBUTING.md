@@ -25,7 +25,7 @@ inside it (`01-*.md`, …), capped at 90 minutes. Every course moves through eig
 each with a one-page how-to under [`process/stages/`](process/stages/):
 
 **Design → approve → draft → alignment check → SME fact-check → internal review → pilot →
-record & publish to Cypher.**
+record & publish to Moodle.**
 
 Each course has one **Course production tracker** issue (open one from the
 [issue template](.github/ISSUE_TEMPLATE/course-production.yml)); its checkboxes are the
@@ -56,7 +56,7 @@ Every content course ends up with this set of files — copy them from
 | `NN-scenario-bank.md` | Applied practice scenarios, foundational → complex. |
 | `NN-mentor-guide.md` | Facilitator notes and answer guidance for the scenario bank. |
 | `NN-quiz.md` | Assessment questions with a pass threshold and answer key in the body. |
-| `NN-video-script.md` | Script for the video-recording step before upload to Cypher. |
+| `NN-video-script.md` | Script for the video-recording step at stage 8. |
 
 Sub-files don't carry their own frontmatter — only `README.md` does. See
 `modules/_template/README.md` for the full explanation and a frontmatter example.

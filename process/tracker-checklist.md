@@ -25,5 +25,5 @@ Run `/next-step <slug>` in Claude Code any time to see where this course is and 
 - [ ] [5. SME fact-check passed](https://github.com/dhigby/virtual-ltct/blob/main/process/stages/05-sme-factcheck.md)
 - [ ] [6. Internal review passed](https://github.com/dhigby/virtual-ltct/blob/main/process/stages/06-internal-review.md)
 - [ ] [7. Piloted with one learner](https://github.com/dhigby/virtual-ltct/blob/main/process/stages/07-pilot.md)
-- [ ] [8. Recorded & published to Cypher](https://github.com/dhigby/virtual-ltct/blob/main/process/stages/08-publish.md)
+- [ ] [8. Recorded & published](https://github.com/dhigby/virtual-ltct/blob/main/process/stages/08-publish.md)
 ```

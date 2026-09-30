@@ -58,4 +58,4 @@ body:
         - label: "[5. SME fact-check passed](https://github.com/dhigby/virtual-ltct/blob/main/process/stages/05-sme-factcheck.md)"
         - label: "[6. Internal review passed](https://github.com/dhigby/virtual-ltct/blob/main/process/stages/06-internal-review.md)"
         - label: "[7. Piloted with one learner](https://github.com/dhigby/virtual-ltct/blob/main/process/stages/07-pilot.md)"
-        - label: "[8. Recorded & published to Cypher](https://github.com/dhigby/virtual-ltct/blob/main/process/stages/08-publish.md)"
+        - label: "[8. Recorded & published](https://github.com/dhigby/virtual-ltct/blob/main/process/stages/08-publish.md)"

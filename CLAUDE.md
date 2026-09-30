@@ -1,8 +1,10 @@
 # CLAUDE.md
 
-Guidance for AI assistants working in this repo. This is a **content repository** for
-the Language Technology Consultant (LTC) training curriculum — markdown training modules,
-not an application. There is no build/test/run loop; the "checks" are content + coverage.
+Guidance for AI assistants working in this repo. It holds **two products**: the Language
+Technology Consultant (LTC) training **curriculum** — markdown training modules, with no
+build/test/run loop, where the "checks" are content + coverage — and the Moodle **training
+system** that delivers it (the publisher, `moodle/`, and the platform's configuration).
+Learner data lives only in Moodle, never in this public repo.
 
 **Read [`INTENT.md`](INTENT.md) before building or changing anything in this repo** — tooling,
 scripts, process, the sites. It states the problem this repo exists to solve, its hard
@@ -250,7 +252,12 @@ matters:**
 | URL | View | Who | Holds back |
 |---|---|---|---|
 | `…/review/<slug>/` | reviewer | SME (stage 5), internal reviewer (stage 6) | nothing |
-| `…/learn/<slug>/` | learner | **pilot learner (stage 7)** | design doc, mentor guide, video scripts, quiz answer key |
+| `…/learn/<slug>/` | learner | fallback for a pilot learner (stage 7) | design doc, mentor guide, video scripts, quiz answer key |
+
+**Pilot learners now go to Moodle** (see below); the `/learn/` view stays through the
+transition as a fallback and as the reference implementation of the disclosure boundary.
+The reviewer view is unaffected — reviewers should not need a Moodle account to read a
+draft.
 
 **Never send a pilot learner the `/review/` URL** — it contains the answer key. Get the URL
 from `course_stage.review_url()` (it is in `--json` and in `/next-step` from stage 4 on);
@@ -288,6 +295,48 @@ work across stages 5, 6 and 7, including across the stage-6 merge.
 > **Never run `mkdocs gh-deploy` locally.** It force-pushes the whole `gh-pages` branch and
 > would delete every course review site until the next CI run. Deploying is CI's job.
 
+## Delivery: Moodle
+
+Courses are delivered from a **self-hosted Moodle**. It costs nothing per learner — the
+constraint that ruled out Cypher for Business — and its Android app lets a consultant take
+a course offline in the field. Pilots (stage 7) and publishing (stage 8) both go there;
+`/publish-to-moodle <slug>` is the command.
+
+**The repo stays the source of truth and the publish is one-way.** Content edited in Moodle
+is overwritten by the next publish — change the markdown instead. Never copy content from
+Moodle back here; that would break the source-of-truth split everything else rests on.
+
+The publisher splits at a platform-neutral payload, which is how `INTENT.md`'s portability
+constraint is honoured in practice:
+
+- [`scripts/moodle_payload.py`](scripts/moodle_payload.py) knows courses and the disclosure
+  boundary, and nothing about Moodle's API.
+- [`scripts/check_moodle_payload.py`](scripts/check_moodle_payload.py) verifies that payload
+  **before anything leaves the machine**. There is no `--force`: once a page is on a server
+  learners can reach, a disclosure failure has already happened.
+- [`scripts/moodle_client.py`](scripts/moodle_client.py) and
+  [`scripts/moodle_xml.py`](scripts/moodle_xml.py) know Moodle and nothing about pedagogy.
+
+**The answer-key rules live in one place:** [`scripts/disclosure.py`](scripts/disclosure.py),
+shared by the authoring check, the review-site renderer, its gate and the Moodle publisher.
+Change the marker there and nowhere else. Answer keys *do* reach Moodle, but only inside
+question data, where Moodle's capabilities protect them — never in page HTML.
+
+**Identity is an `idnumber`, stored in Moodle, not in a repo state file:** `ltct:<slug>` for
+a course and `ltct:<slug>:<source filename>` for a module. That is what makes republishing
+update rather than duplicate, and what makes moving to another Moodle server a re-publish
+rather than a data move.
+
+`MOODLE_URL` and `MOODLE_TOKEN` come from the environment. **The repo is public — never
+write a token into a file here.** The plugin the publisher depends on is
+[`moodle/local_ltuse/`](moodle/local_ltuse/README.md); Moodle has no core web service that
+writes a quiz, which is why it exists.
+
+A course reports stage 8 once its `README.md` frontmatter carries `external_links: moodle:`
+(or, for the legacy Cypher-delivered courses, `cypher:`). `course_stage.py` is still the only
+implementation of that, and reports the Moodle URL verbatim from frontmatter rather than
+constructing it — the host changes when the server moves.
+
 ## Maintainer scripts (`scripts/`)
 
 - `gen_coverage.py` — regenerates `COVERAGE.md` (also run by CI).
@@ -298,6 +347,15 @@ work across stages 5, 6 and 7, including across the stage-6 merge.
 - `build_review_sites.py` — builds every in-flight course into the deploy tree (CI).
 - `gen_course_site.py` — `mkdocs-gen-files` hook for `mkdocs-review.yml`; renders one course.
 - `check_learner_view.py` — CI gate: proves the learner view leaks no answer key.
+- `disclosure.py` — the answer-key marker, the strip and the excluded-file rules, defined
+  once and imported by everything that acts on them. Not run directly.
+- `quiz_parse.py` — parses a quiz markdown file into structured questions;
+  `--check-all` is a CI gate over every quiz in `modules/`.
+- `moodle_payload.py` — renders one course into a publish payload (the platform boundary).
+- `check_moodle_payload.py` — proves that payload leaks nothing, before it is pushed.
+- `moodle_xml.py` — serialises parsed questions to Moodle XML.
+- `moodle_client.py` — thin Moodle REST client; `--whoami` checks a server and token.
+- `publish_moodle.py` — build → verify → push. `--dry-run` sends nothing.
 - `gen_site.py` — `mkdocs-gen-files` build hook; generates the site pages + nav from
   `competencies.yaml` and `competencies/*.md`. Not run by hand; invoked by `mkdocs`.
 - `check_competency_descriptors.py` — validates descriptors stay in sync with the

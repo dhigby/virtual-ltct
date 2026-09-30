@@ -63,7 +63,20 @@ results list you can re-run any time, unlike the transient link report. Glossary
 are marked directly in the text with `\w` and `\w*` around the linked span, in the form
 `\w <surface text>|<rendering>\w*` — for example `\w angel messenja guy\w*`, or, where
 the surface form in the text differs from the glossary entry's canonical rendering,
-`\w angel guy|Angel messenja guy\w*`. Look at each Find result: if `\w...\w*` markup
+`\w angel guy|Angel messenja guy\w*`.
+
+![A Paratext Find search result for "talk fo God," showing one occurrence as plain bold text (MAT 1:22) and another wrapped in \w talk fo God|guy who talk fo God\w* markup (MAT 2:5).](images/L5-13.Find-w-markup.png)
+*This is the markup a correctly-scoped link leaves behind.*
+
+You don't have to run Find to spot this markup — it's visible directly in the text
+editor too. The rendering half of a `\w...\w*` marker displays in **light grey**, right
+in the running text, which makes linked terms easy to scan for by eye as you read through
+a passage:
+
+![A passage of running text in the Paratext editor, with two \w...\w* markers visible: "angel guy|Angel messenja guy" and "talk fo God|guy who talk fo God," the rendering half shown in light grey.](images/L5-glossary-links-shown-in-grey.png)
+*The grey text is the marker's rendering half — visible right in the text, not just in Find results.*
+
+Look at each Find result: if `\w...\w*` markup
 wraps **every single occurrence** of the term, that's over-linking; if it wraps only the
 **first occurrence per section**, the scope is correct. To fix over-linking: **unlink**
 the over-applied marks and **relink at "first occurrence in every section,"** not "all
@@ -92,6 +105,13 @@ phrase terms **before** their component single words, precisely so the single wo
 gets wrongly linked inside phrase territory. So when a hit falls inside an existing
 marker, read the rendering, not just the presence of markup: a broader phrase term there
 is expected and correct, not something to flag.
+
+> **TIP — checking every linked term at once, not one at a time:** Searching one
+> glossary term at a time doesn't scale if you want a full audit rather than checking a
+> single reported problem term. Paratext's Find supports regular expressions: prefix
+> your search with `regex:` (no space after the colon), then search for
+> `\w[^\]*\w\*` — confirmed working, returning every `\w...\w*` occurrence in one pass
+> (22 results in Matthew alone on a test search) rather than one term at a time.
 
 This is the same trap as the Project Plan checkbox from Lesson 1: the Project Plan's
 "Check and link glossary entries" task (Stage 6, Final Preparation for Publication) has
@@ -130,6 +150,9 @@ Digital and Print Publishing competency:
    Every guessed word carries a tick showing its approval status:
    - A **grey tick** means Paratext *guessed* the breaks — not yet reviewed.
    - A **green tick** means the breaks are **approved**.
+
+   ![The Wordlist's Show hyphenation view, with a Hyphenation column showing grey ticks (unreviewed) and green ticks (approved) alongside each word.](images/L5-14.Wordlist-hyphenation.png)
+   *Grey = Paratext's guess; green = a human confirmed it.*
 
    Your job is to work through the guesses:
    - **Correct guess** — click the grey tick; it turns green. Approved.
@@ -179,6 +202,18 @@ the team's last look before the typesetter. Work through it methodically, watchi
   their reference.
 - **Heading placement** — headings sitting awkwardly at a page or column break.
 - **Underfilled pages** — pages with noticeably more white space than their neighbors.
+
+![A two-page PTXprint spread where a section heading has been pushed to the top of the second column, leaving a large block of white space at the bottom of the first column.](images/L5-16.c.awkward-heading-break.png)
+*A heading held together with its paragraph pushed the whole block to the next column — leaving this underfilled gap behind it.*
+
+The read-through also turns up composition issues beyond this list — picture sizing and
+spacing, and page-margin spacing, for example:
+
+![A PTXprint spread where the left-hand page's illustration is oversized relative to the page, and the right-hand page's illustration sits with almost no gap between its caption/credit text and the picture itself.](images/L5-16.d.Picture-size.png)
+*An oversized picture, and one crowded too close to its own credit text — both are typesetting-craft issues to flag, not fix yourself.*
+
+![A page where the running header sits almost flush against the first line of body text, with no visible top margin.](images/L5-16.e.top-margin.png)
+*Not enough top-margin space between the running header and the body text below it.*
 
 This course's team workbook material was verified against **PTXprint 3.0.38**;
 PTXprint updates often, so specific menu labels may have moved by the time you're

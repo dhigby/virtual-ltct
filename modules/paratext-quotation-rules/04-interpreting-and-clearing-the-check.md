@@ -10,7 +10,7 @@
 of your work is being able to look at each one and decide, correctly and quickly, whether to
 fix the *text* or fix the *settings*. This lesson is where configuration becomes
 troubleshooting: reading results, classifying them, and clearing a book to zero without
-silencing correct Scripture.
+erasing correct Scripture.
 
 ## Learning objectives
 

@@ -44,6 +44,7 @@ import mkdocs_gen_files
 
 REPO_ROOT = pathlib.Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(REPO_ROOT / "scripts"))
+import disclosure  # noqa: E402
 from course_stage import branch_slug, is_lesson  # noqa: E402
 
 GH = "https://github.com/dhigby/virtual-ltct"
@@ -95,78 +96,30 @@ def split_frontmatter(text):
 # --------------------------------------------------------------------------------------
 # Answer-key stripping -- the learner view's disclosure boundary
 #
-# The marker is standardised: an answer key sits under a "## Answer key" H2, optionally
-# qualified ("## Answer key (Section 1)"), and may repeat within one file. That is
-# enforced at authoring time by scripts/check_course_package.py, so this code recognises
-# ONE shape rather than guessing at several.
-#
-# It still verifies its own output rather than trusting that check, and withholds the
-# whole page if anything key-shaped survives. Two reasons that is not belt-and-braces
-# paranoia: check_course_package.py only lints courses that have opted into the pipeline
-# with a 00-design.md, while this renders any course folder it is pointed at; and this is
-# a disclosure boundary, where "CI was green on the repo" is a weaker guarantee than
-# "this file parsed the way I expected". INTENT.md: never optimise this into "strip what
-# we can."
+# The marker, the strip and its self-verification live in scripts/disclosure.py, shared
+# with check_course_package.py (which enforces the marker at authoring time), with
+# check_learner_view.py (which gates this script's built output), and with the Moodle
+# publisher. strip_answer_keys returns ok=False when anything key-shaped survives, and
+# the caller below withholds the whole page rather than shipping a partial strip.
+# INTENT.md: never optimise this into "strip what we can."
 # --------------------------------------------------------------------------------------
-KEY_RE = re.compile(r"^## Answer key\b.*$", re.M)
-HEADING_RE = re.compile(r"^\s{0,3}(#{1,6})\s")
-# Anything key-shaped that ISN'T the canonical marker, plus inline per-option answer
-# marking. Finding one of these after stripping means this file is not what we assumed.
-RESIDUAL_RE = re.compile(
-    r"^[ ]{0,3}(?:#{1,6}[ \t]*answer[ \t]*key\b|\*{1,2}[ \t]*answer[ \t]*key\b)"
-    r"|\(\s*correct\s*\)"
-    r"|^[ ]{0,3}\*{1,2}[ \t]*correct answer",
-    re.I | re.M)
-
-
-def strip_answer_keys(md):
-    """Remove every answer-key block. Returns (text, ok); ok=False => withhold page."""
-    lines = md.split("\n")
-    out, i = [], 0
-    while i < len(lines):
-        line = lines[i]
-        if not KEY_RE.match(line):
-            out.append(line)
-            i += 1
-            continue
-        # Canonical marker is an H2, so the block runs to the next H1 or H2.
-        i += 1
-        while i < len(lines):
-            nxt = HEADING_RE.match(lines[i])
-            if nxt and len(nxt.group(1)) <= 2:
-                break
-            i += 1
-    text = "\n".join(out).rstrip() + "\n"
-    return text, RESIDUAL_RE.search(text) is None
+strip_answer_keys = disclosure.strip_answer_keys
 
 
 # --------------------------------------------------------------------------------------
 # Inventory
 # --------------------------------------------------------------------------------------
+# Which files a learner may not reach is the disclosure boundary, defined once in
+# scripts/disclosure.py and shared with check_learner_view.py (the gate that proves the
+# built output is clean) and the Moodle publisher. These wrappers exist only to bind the
+# module-global VIEW, which gen-files scripts carry because they take no arguments.
 def excluded_md(name):
     """Markdown a pilot learner must not be shown. (A quiz is stripped, not dropped.)"""
-    if VIEW != "learner":
-        return False
-    if name == "00-design.md":
-        return True
-    return name.endswith(("-mentor-guide.md", "-video-script.md"))
-
-
-# Non-markdown companions of the excluded files, plus the LMS export artifacts. These
-# are a real disclosure route, not a tidiness question: `09-video-script.pptx` sits
-# beside its excluded .md, and the `qti_*.zip` quiz exports carry the correct answers
-# as plain XML (<varequal>T</varequal>), so publishing them to a learner hands over the
-# answer key a download at a time.
-LMS_EXPORT_RE = re.compile(r"^(qti[_-]|cypher-)|\.imscc$", re.I)
+    return disclosure.excluded_md(name, VIEW)
 
 
 def excluded_asset(name):
-    if VIEW != "learner":
-        return False
-    stem = name.rsplit(".", 1)[0].lower()
-    if stem == "00-design" or stem.endswith(("-mentor-guide", "-video-script", "-quiz")):
-        return True
-    return bool(LMS_EXPORT_RE.search(name))
+    return disclosure.excluded_asset(name, VIEW)
 
 
 def safe_asset(name):

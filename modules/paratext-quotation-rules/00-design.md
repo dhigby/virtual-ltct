@@ -4,8 +4,8 @@
 > drafted and Cypher-delivered *before* the production pipeline existed. It exists to bring
 > the course into the pipeline (opt into CI, document objectives ⇄ assessment alignment). The
 > content already exists in the numbered lesson files; this doc records the design those
-> lessons *actually* implement. It has **not** yet been through SME fact-check (stage 5) or
-> design approval (stage 2).
+> lessons *actually* implement. Design approval (stage 2) is complete; it has **not** yet
+> been through SME fact-check (stage 5).
 
 ## Course overview
 
@@ -15,12 +15,10 @@
 | **Competencies addressed** | Translation Tools |
 | **Target outcome level** | 2 - With Assistance |
 | **SME(s) consulted** | _(pending — retro-fit; SME fact-check not yet run)_ |
-| **Design status** | Draft |
-<!-- On approval (stage 2), the Design Approver replaces the line above with:
-     | **Design status** | Approved by <name> on <YYYY-MM-DD> | -->
+| **Design status** | Approved by Jenni Beadle on 2026-09-28 |
 
 Source component: `competencies/translation-tools.md` §2.0 Translation Tools —
-*Advanced Beginner: "Can use translation tools and troubleshoot issues that arise."* The
+*1 - Has Knowledge: "Can use translation tools and troubleshoot issues that arise."* The
 course takes a learner who can navigate Paratext to the point of independently configuring
 and troubleshooting one specific check (Quotations), which is squarely `2 - With Assistance`.
 
@@ -33,7 +31,7 @@ and troubleshooting one specific check (Quotations), which is squarely `2 - With
 | 3 | Learner can configure the Quote Continuer at new paragraph **together with the Continuer required at marker list** (deriving that list from the paragraph markers the project actually uses), explain why the continuer character alone does nothing without the list, and recognize the word-medial apostrophe conflict as a confirmed limitation Language Settings cannot resolve when the character is also a quote mark. | Translation Tools §2.0 (troubleshoot) | Quiz §2; Lesson 2 exercises 2.1–2.2 (continuer + required-at list), 2.3 (apostrophe) |
 | 4 | Learner can configure each of the seven Quotation types for a given language's conventions and distinguish recommended vs. custom settings. | Translation Tools §2.0 | Quiz §3; Lesson 3 exercises 3.1–3.2 |
 | 5 | Learner can classify a check result as a real error or a configuration problem and take the correct corrective action for each. | Translation Tools §2.0 (troubleshoot) | Quiz §4; Lesson 4 exercise 4.1 |
-| 6 | Learner can work a result set to zero actionable errors, book by book, without silencing correct text. | Translation Tools §2.0 | Quiz §4; Lesson 4 exercise 4.2 |
+| 6 | Learner can work a result set to zero actionable errors, book by book, without erasing correct text. | Translation Tools §2.0 | Quiz §4; Lesson 4 exercise 4.2 |
 | 7 | Learner can apply the full inventory → rules → check → triage workflow independently to an unfamiliar language, including edge cases (guillemets, reversed nesting, em-dash). | Translation Tools §2.0 | Quiz §5; Scenario bank A/B/C |
 
 ## Module breakdown

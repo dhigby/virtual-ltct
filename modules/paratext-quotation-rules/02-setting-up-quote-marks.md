@@ -106,7 +106,7 @@ run on. Two ways to find them:
    headings (`\s1`) never carry a continuer themselves, but a paragraph that *follows* a heading
    inside a running speech may, which is what a pair like `s1/pi` expresses.
 
-![The Markers inventory window for a project, with the upper pane listing markers, their counts and style names (p 1122, pi 434, q1 117, q2 118, nb 1, among others) and the lower pane listing the verses where the selected marker p occurs.](assets/ss-02-markers-inventory.png)
+![The Markers inventory window for the TAMBA project with All books selected. The upper pane lists markers with their counts and style names, among them p 1888, pi 11, q 14, q1 209 and q2 185. The marker p is selected, and the lower pane lists the first verses where it occurs: MAT 1:0, 1:16, 1:17 and 1:19.](assets/ss-02-markers-inventory.png)
 
 Most New Testament projects end up with a list of four to six entries. A project with heavy
 poetry, lists, or indented material has a longer list, but it is built the same way. Both

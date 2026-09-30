@@ -194,7 +194,7 @@ enforce the continuer at those paragraph breaks.
 
 ### How the Quotation check fits in the Paratext checking workflow
 
-The Quotation check is one of the **Basic Checks** in Paratext 9.5 (run via **☰ > Tools > Run basic checks...**). Basic Checks are typically run and cleared before a book moves to Consultant Check (CC). A consultant reviewer will re-run the checks during review, so the goal is a configuration that genuinely models the language — not a result list silenced by editing correct text.
+The Quotation check is one of the **Basic Checks** in Paratext 9.5 (run via **☰ > Tools > Run basic checks...**). Basic Checks are typically run and cleared before a book moves to Consultant Check (CC). A consultant reviewer will re-run the checks during review, so the goal is a configuration that genuinely models the language — not a result list emptied by erasing correct text.
 
 The recommended sequence for a book heading toward CC:
 

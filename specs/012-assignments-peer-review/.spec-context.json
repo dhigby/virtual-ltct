@@ -1,0 +1,17 @@
+{
+  "workflow": "speckit",
+  "specName": "Assignments and peer review in courses",
+  "branch": "specs/moodle-requirements",
+  "currentStep": "specify",
+  "status": "specified",
+  "history": [
+    {
+      "step": "specify",
+      "substep": null,
+      "kind": "start",
+      "by": "extension",
+      "at": "2026-09-30T20:47:09.692Z"
+    }
+  ],
+  "telemetryInstanceId": "7d063714-b140-46b3-b87c-99c6b97d764f"
+}

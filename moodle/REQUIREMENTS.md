@@ -57,6 +57,28 @@ The hard parts are UX and operations, not missing features. Someone still has to
 5. **Multilingual content (L):** design how translated lessons live in the repo *before* building anything. It touches course layout, `course_stage.py` and the publisher.
 6. **Ops:** production host, backups and an owner. This is `INTENT.md`'s open question, and every "Ongoing" row depends on it.
 
+## Specs
+
+Every row still to build has a Spec Kit feature spec under [`specs/`](../specs/) (drafted 2026-09-30). A spec is not a commitment and does not change a row's status. The PR that delivers a spec updates its rows (constitution X).
+
+| Spec | Rows |
+|---|---|
+| [001 Site configuration as code](../specs/001-site-config-as-code/spec.md) | #3, #4, #16, #19, #25 (and the rebuild rule every other spec relies on) |
+| [002 Organisations, cohorts and profiles](../specs/002-org-structure-cohorts/spec.md) | #8, #15, #18 |
+| [003 Mentor role](../specs/003-mentor-role/spec.md) | #11 |
+| [004 Progress tracking and reporting](../specs/004-progress-reporting/spec.md) | #7, #16 (report exports) |
+| [005 Community space](../specs/005-community-space/spec.md) | #9, #20, #10 |
+| [006 Learning pathways](../specs/006-learning-pathways/spec.md) | #12 |
+| [007 Simple learner experience](../specs/007-learner-experience/spec.md) | #13 |
+| [008 Admin tooling](../specs/008-admin-tooling/spec.md) | #14 |
+| [009 Low-bandwidth delivery](../specs/009-low-bandwidth-delivery/spec.md) | #5 |
+| [010 Multilingual](../specs/010-multilingual/spec.md) | #6 |
+| [011 Events and calendar](../specs/011-events-calendar/spec.md) | #21 |
+| [012 Assignments and peer review](../specs/012-assignments-peer-review/spec.md) | #22, #10 (in-course discussion) |
+| [013 Completion badges and certificates](../specs/013-certificates-badges/spec.md) | #23 |
+| [014 Resource library](../specs/014-resource-library/spec.md) | #24 |
+| [015 Production hosting and operations](../specs/015-production-hosting-ops/spec.md) | #17, and the operations behind every Ongoing row |
+
 ## Items that touch the repo's own rules
 
 - Admin tooling (#14): allowed in this repo since the 2026-09-30 INTENT revision, but never writes learner data into git.

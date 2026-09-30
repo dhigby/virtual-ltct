@@ -1,0 +1,17 @@
+{
+  "workflow": "speckit",
+  "specName": "Multilingual training system",
+  "branch": "specs/moodle-requirements",
+  "currentStep": "specify",
+  "status": "specified",
+  "history": [
+    {
+      "step": "specify",
+      "substep": null,
+      "kind": "start",
+      "by": "extension",
+      "at": "2026-09-30T20:47:07.313Z"
+    }
+  ],
+  "telemetryInstanceId": "a05e6632-e86b-4353-a4ba-5e4eddbd1fbc"
+}

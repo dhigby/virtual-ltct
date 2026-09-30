@@ -1,0 +1,17 @@
+{
+  "workflow": "speckit",
+  "specName": "Site configuration as code",
+  "branch": "specs/moodle-requirements",
+  "currentStep": "specify",
+  "status": "specified",
+  "history": [
+    {
+      "step": "specify",
+      "substep": null,
+      "kind": "start",
+      "by": "extension",
+      "at": "2026-09-30T20:46:50.299Z"
+    }
+  ],
+  "telemetryInstanceId": "e7f2c66a-64c0-4184-914e-5556c1104202"
+}

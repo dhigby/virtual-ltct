@@ -1,0 +1,17 @@
+{
+  "workflow": "speckit",
+  "specName": "Low-Bandwidth and Offline Delivery",
+  "branch": "specs/moodle-requirements",
+  "currentStep": "specify",
+  "status": "specified",
+  "history": [
+    {
+      "step": "specify",
+      "substep": null,
+      "kind": "start",
+      "by": "extension",
+      "at": "2026-09-30T20:47:06.083Z"
+    }
+  ],
+  "telemetryInstanceId": "dd1295b0-0bad-42af-bb32-9cad5f730d31"
+}

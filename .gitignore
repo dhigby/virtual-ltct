@@ -4,6 +4,19 @@ __pycache__/
 .venv/
 .env
 
+# Credentials. This repo is PUBLIC (INTENT.md: "no credentials, no learner PII"), and
+# publishing to Moodle means a token now exists on contributors' machines. MOODLE_URL and
+# MOODLE_TOKEN belong in the environment, never in a file here -- these patterns are the
+# backstop for a stray key, token or .env variant that gets `git add -A`'d by accident.
+*.pem
+*.key
+*.ppk
+id_rsa*
+id_ed25519*
+.env.*
+*token*.txt
+secrets.*
+
 # OS
 Thumbs.db
 .DS_Store

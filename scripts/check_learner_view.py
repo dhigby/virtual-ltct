@@ -40,59 +40,19 @@ import re
 import sys
 
 sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent))
+from disclosure import (EXCLUDED_MD_SUFFIXES as EXCLUDED_MD, LMS_EXPORT_RE,  # noqa: E402
+                        answer_key_blocks, strip_key_blocks)
 from course_stage import branch_slug, course_folders  # noqa: E402
 
-# The canonical marker, enforced at authoring time by check_course_package.py and
-# stripped by gen_course_site.py. Deliberately kept in step with those two: if the marker
-# changes, all three change together, and this check is what makes a mismatch loud.
-KEY_RE = re.compile(r"^## Answer key\b.*$")
-HEADING_RE = re.compile(r"^\s{0,3}(#{1,6})\s")
-# The generator's withheld-quiz placeholder, as it reads once normalise() has run over
-# the rendered page. Kept in step with gen_course_site.py's warning admonition.
+# The canonical marker, the block-splitting and the excluded-file rules all come from
+# scripts/disclosure.py -- one definition shared with check_course_package.py (which
+# enforces the marker at authoring time), gen_course_site.py (which strips it), and the
+# Moodle publisher. This check is what makes a mismatch loud.
 WITHHELD_MARK = "quiz withheld from the learner view"
-EXCLUDED_MD = ("-mentor-guide.md", "-video-script.md")
-LMS_EXPORT_RE = re.compile(r"^(qti[_-]|cypher-)|\.imscc$", re.I)
 
 # An answer-key line worth asserting on: long enough to be distinctive, and not a bare
 # heading or separator that would appear innocently elsewhere.
 MIN_SIGNIFICANT = 25
-
-
-def answer_key_blocks(md):
-    """Every answer-key block in a quiz source, as a list of line lists."""
-    lines, blocks, i = md.split("\n"), [], 0
-    while i < len(lines):
-        if not KEY_RE.match(lines[i]):
-            i += 1
-            continue
-        h = HEADING_RE.match(lines[i])
-        level = len(h.group(1)) if h else None
-        block, i = [lines[i]], i + 1
-        while i < len(lines):
-            nxt = HEADING_RE.match(lines[i])
-            if nxt and (level is None or len(nxt.group(1)) <= level):
-                break
-            block.append(lines[i])
-            i += 1
-        blocks.append(block)
-    return blocks
-
-
-def strip_key_blocks(md):
-    """The source with its answer-key blocks removed -- i.e. what may legitimately ship."""
-    lines, out, i = md.split("\n"), [], 0
-    while i < len(lines):
-        if not KEY_RE.match(lines[i]):
-            out.append(lines[i])
-            i += 1
-            continue
-        i += 1
-        while i < len(lines):
-            nxt = HEADING_RE.match(lines[i])
-            if nxt and len(nxt.group(1)) <= 2:
-                break
-            i += 1
-    return "\n".join(out)
 
 
 def normalise(text):

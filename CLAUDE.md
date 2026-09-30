@@ -1,8 +1,10 @@
 # CLAUDE.md
 
-Guidance for AI assistants working in this repo. This is a **content repository** for
-the Language Technology Consultant (LTC) training curriculum — markdown training modules,
-not an application. There is no build/test/run loop; the "checks" are content + coverage.
+Guidance for AI assistants working in this repo. It holds **two products**: the Language
+Technology Consultant (LTC) training **curriculum** — markdown training modules, with no
+build/test/run loop, where the "checks" are content + coverage — and the Moodle **training
+system** that delivers it (the publisher, `moodle/`, and the platform's configuration).
+Learner data lives only in Moodle, never in this public repo.
 
 **Read [`INTENT.md`](INTENT.md) before building or changing anything in this repo** — tooling,
 scripts, process, the sites. It states the problem this repo exists to solve, its hard

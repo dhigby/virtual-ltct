@@ -9,8 +9,9 @@ someone else's.
 
 It lives in this repo rather than its own because it and the publisher are two halves of
 one contract: a change to the page shape or the quiz model touches both, and one pull
-request should carry both. See the note in [`INTENT.md`](../../INTENT.md) about the
-`Not an application` clause this deliberately amends.
+request should carry both. [`INTENT.md`](../../INTENT.md) names it, with the publisher,
+as the bridge between the repo's two products — the only code that knows both a course's
+shape and Moodle's.
 
 ## What it adds
 
@@ -116,8 +117,9 @@ and this plugin.
 - **No Moodle → repo sync.** One-way only. Editing in Moodle and syncing back would break
   the source-of-truth split the whole repo rests on. Content edited in Moodle is
   overwritten by the next publish; change the markdown instead.
-- **No enrolment, grades or learner records.** `INTENT.md`: *"Not a record of
-  certification."* Moodle holds learner data; nothing in this repo reads it.
+- **No enrolment, grades or learner records.** This plugin publishes content and touches
+  no learner data. Learner data is Moodle's alone (`INTENT.md`: *"Learner data lives in
+  Moodle, never in this repo"*); admin tooling that works with it is a separate concern.
 - **No direct table writes** for anything a Moodle API covers. Bypassing
   `add_moduleinfo()` / `update_moduleinfo()` would skip grade items, completion, events
   and the file API, and leave a course that looks right until one of those is needed.

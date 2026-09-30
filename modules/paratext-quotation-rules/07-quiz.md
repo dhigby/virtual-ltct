@@ -13,16 +13,16 @@ true/false. Everything asked here is drawn directly from the lessons — work th
 **Question 1:** Which two inputs must be configured before the Quotation check can produce
 trustworthy results?
 - A) The Characters inventory and the Markers inventory
-- B) The Quote marks tab (which characters are quote marks) and the Quotation types tab
+- B) Language Settings and the Footnotes check
+- C) The Quote marks tab (which characters are quote marks) and the Quotation types tab
   (when marks are expected)
-- C) Language Settings and the Footnotes check
 - D) The Copy quote mark settings button and the Example preview
 
 **Question 2:** You run the Quotations check on an unconfigured project and it returns
 **zero results**. Does this mean the translation has no quotation errors?
-- A) Yes — zero results confirms the marks are all correctly matched
-- B) No — with nothing configured, Paratext does not know which characters to look for, so
+- A) No — with nothing configured, Paratext does not know which characters to look for, so
   it is reporting silence, not correctness
+- B) Yes — zero results confirms the marks are all correctly matched
 - C) Yes, but only for the first-level quotes
 - D) No — zero results always means the check failed to run
 
@@ -40,11 +40,11 @@ result set.
 **Question 4:** On the Quote marks tab, what does the **Quote Continuer at new paragraph**
 column configure, and when should it be left blank?
 - A) The character that ends every quotation; leave blank only at Third level
-- B) The character repeated at the start of a new paragraph when one speech continues
+- B) The apostrophe used inside words; leave blank if the language has no contractions
+- C) The default straight quote character; never leave it blank
+- D) The character repeated at the start of a new paragraph when one speech continues
   across the break; leave it blank if the language closes and reopens marks at each
   paragraph instead
-- C) The apostrophe used inside words; leave blank if the language has no contractions
-- D) The default straight quote character; never leave it blank
 
 **Question 5:** A language uses `’` (U+2019) as both its Second level closing mark **and**
 as an apostrophe inside words, and the check is flagging those in-word apostrophes as
@@ -72,9 +72,9 @@ characters before clicking OK?
 
 **Question 7:** What does the **Quotation types** tab control, and how is it different from
 the Quote marks tab?
-- A) It sets which Unicode characters are used; the Quote marks tab sets the font
-- B) It controls whether Paratext *expects* marks for each category of speech (required,
+- A) It controls whether Paratext *expects* marks for each category of speech (required,
   forbidden, or optional); the Quote marks tab sets *which characters* are used
+- B) It sets which Unicode characters are used; the Quote marks tab sets the font
 - C) It is an older version of the Quote marks tab and does the same thing
 - D) It controls only Third level quotes; the Quote marks tab controls the first two levels
 
@@ -82,10 +82,10 @@ the Quote marks tab?
 was long") never carries quote marks at all — a stray mark there would be a translator error.
 Paratext's recommended default for **Indirect** is "Quote marks are optional." What do you do?
 - A) Leave it — optional already permits no marks, so nothing needs to change
-- B) Click **Custom settings** and change Indirect to **Never use quote marks**, so the check
+- B) Change Indirect to **Use quote marks**, since reported speech still needs marking
+- C) It is not one of the seven quotation types
+- D) Click **Custom settings** and change Indirect to **Never use quote marks**, so the check
   flags any stray mark a translator introduces in reported speech
-- C) Change Indirect to **Use quote marks**, since reported speech still needs marking
-- D) It is not one of the seven quotation types
 
 **Question 9:** After reviewing Tamba's text, the team confirms that a self-quote (a
 character quoting their own earlier words) **must** be marked exactly like normal direct
@@ -106,19 +106,19 @@ unexpected Second level closing mark, caused by a `’` (U+2019) apostrophe insi
 already confirmed, on a real project, that adding `’` to Word-medial punctuation does not clear
 this. Is this a real error or a configuration problem, and what is the correct action?
 - A) Real error — delete the apostrophe from the word
-- B) Neither — verify the apostrophe is genuine, then leave the result and document it; there
+- B) Real error — replace the apostrophe with a straight quote
+- C) Neither — verify the apostrophe is genuine, then leave the result and document it; there
   is no text or configuration fix for this collision
-- C) Real error — replace the apostrophe with a straight quote
 - D) Configuration problem — set Normal to "Never use quote marks"
 
 **Question 11:** **John 3:16** (inside Jesus's speech to Nicodemus) is flagged for an
 invalid Second level mark, and you find a straight `"` (U+0022) where Tamba's Second level
 opening mark should be `‘` (U+2018). How do you classify and fix this?
 - A) Configuration problem — add U+0022 to the Quote marks tab
-- B) Real error — replace the straight `"` (U+0022) in the text with `‘` (U+2018) and
+- B) Configuration problem — the Second level is misconfigured; no text edit is needed
+- C) Not an error — straight quotes are always acceptable at Second level
+- D) Real error — replace the straight `"` (U+0022) in the text with `‘` (U+2018) and
   confirm the closing `’` (U+2019) is present
-- C) Configuration problem — the Second level is misconfigured; no text edit is needed
-- D) Not an error — straight quotes are always acceptable at Second level
 
 **Question 12:** You have cleared every genuine text error in Matthew, but 6 results
 remain and the translation reads correctly. What is the right next step?
@@ -135,9 +135,9 @@ remain and the translation reads correctly. What is the right next step?
 **Question 13:** In the **Menda** project, Second level uses single guillemets in reversed
 order: `›` (U+203A) opens the embedded speech and `‹` (U+2039) closes it. You accidentally
 enter `‹` in the Opening cell and `›` in the Closing cell. What does the check report?
-- A) Nothing — the two characters are interchangeable
-- B) It fires on every Second level opening and closing mark, because the fields are
+- A) It fires on every Second level opening and closing mark, because the fields are
   reversed; swap them so `›` is Opening and `‹` is Closing, and confirm via the Example
+- B) Nothing — the two characters are interchangeable
 - C) Only Third level errors
 - D) A single warning that resolves itself on re-run
 
@@ -147,10 +147,10 @@ em-dash results (parenthetical dashes, not speech) cannot be cleared by configur
 What is the correct handling for those residual results?
 - A) Delete every em dash in the affected verses
 - B) Add U+2014 to the Word-medial punctuation field
-- C) Rewrite the parenthetical verses to use different punctuation where feasible, and
+- C) Set First level to "Never use quote marks"
+- D) Rewrite the parenthetical verses to use different punctuation where feasible, and
   where it is not, add a Project Note (☰ > Insert > Project note...) so the consultant can
   verify them — the results will remain but are documented
-- D) Set First level to "Never use quote marks"
 
 **Question 15:** True or False: For every language, reaching a correct configuration always
 means the Quotations check ends at zero results.
@@ -161,42 +161,42 @@ means the Quotations check ends at zero results.
 
 ## Answer key
 
-1. B | 2. B | 3. B | 4. B | 5. C | 6. C | 7. B | 8. C | 9. B | 10. B | 11. B | 12. B | 13. B | 14. C | 15. B
+1. C | 2. A | 3. B | 4. D | 5. B | 6. C | 7. A | 8. D | 9. A | 10. C | 11. D | 12. B | 13. A | 14. D | 15. B
 
 **Rationales**
 
-1. B — Lesson 1: the check needs both the Quote marks tab and the Quotation types tab.
-2. B — Lesson 1: zero results on an unconfigured project is silence, not confirmed
+1. C — Lesson 1: the check needs both the Quote marks tab and the Quotation types tab.
+2. A — Lesson 1: zero results on an unconfigured project is silence, not confirmed
    correctness; Paratext does not yet know which characters are marks.
 3. B (False) — Lesson 1 uses the whole NT once, deliberately, to show the scale of
    unconfigured noise. From Lesson 2 onward, scope to Current Book (Matthew) while actively
    configuring and triaging; expand to the full NT only after Matthew is clean (Lesson 4
    Exercise 4.2).
-4. B — Lesson 2: the Quote Continuer at new paragraph repeats the mark when one speech
+4. D — Lesson 2: the Quote Continuer at new paragraph repeats the mark when one speech
    spans paragraphs; leave it blank if the language closes and reopens at each break.
 5. B — Lesson 2 Exercise 2.3: Word-medial punctuation does not suppress this result once the
    character is also a configured quote mark, confirmed against real Paratext 9.5 behavior —
    the field exists and looks like the fix, but doesn't resolve this specific collision.
 6. C — Lesson 2: verify entered characters using the Example preview at the bottom of the
    dialog.
-7. B — Lesson 3: the Quotation types tab controls whether marks are expected; the Quote
+7. A — Lesson 3: the Quotation types tab controls whether marks are expected; the Quote
    marks tab controls which characters are used.
-8. B — Lesson 3 Exercise 3.2: the recommended default for Indirect is Quote marks are
+8. D — Lesson 3 Exercise 3.2: the recommended default for Indirect is Quote marks are
    optional; Tamba's convention that reported speech is never marked requires switching it
    to Never use quote marks so a stray mark gets caught.
 9. A — Lesson 3 Exercise 3.2: Self quote already defaults to Use quote marks, which matches
    Tamba's requirement — no change needed there. Not every recommended default is wrong;
    verify each type against your language's conventions rather than assuming all seven need
    customizing.
-10. B — Lesson 4 Exercise 4.1 item 5: a word-medial apostrophe colliding with a quote mark is
+10. C — Lesson 4 Exercise 4.1 item 5: a word-medial apostrophe colliding with a quote mark is
     the one confirmed case with no text or configuration fix — verify and document instead.
-11. B — Lesson 4 Exercise 4.1 item 3: a straight `"` (U+0022) at Second level is a real
+11. D — Lesson 4 Exercise 4.1 item 3: a straight `"` (U+0022) at Second level is a real
     error; replace it with `‘` (U+2018).
 12. B — Lesson 4 Exercise 4.2 / check-your-understanding 2: remaining results on correct
     text are configuration problems, not reasons to edit good text.
-13. B — Scenario B (Menda): reversed single-guillemet fields fire on every Second level
+13. A — Scenario B (Menda): reversed single-guillemet fields fire on every Second level
     mark; swap Opening/Closing and confirm with the Example.
-14. C — Scenario C (Waku): residual same-character em-dash results are reworded where
+14. D — Scenario C (Waku): residual same-character em-dash results are reworded where
     feasible or documented in a Project Note for the consultant.
 15. B (False) — Scenario bank summary: some languages (like Waku) always require human
     review of residual results; zero configuration errors does not always mean zero results.

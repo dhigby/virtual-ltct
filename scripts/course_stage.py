@@ -34,7 +34,12 @@ MODULES = REPO / "modules"
 TIME_RE = re.compile(r"^\*\*Estimated time:\*\*\s*(\d+)\s*minutes", re.MULTILINE)
 DESIGN_STATUS_RE = re.compile(r"^\|\s*\*\*Design status\*\*\s*\|(.+)\|", re.MULTILINE)
 APPROVED_RE = re.compile(r"^Approved by (.+) on (\d{4}-\d{2}-\d{2})$")
-CYPHER_RE = re.compile(r"^\s*cypher:\s*\S+", re.MULTILINE)
+# A course is Online when its README frontmatter records where it was delivered. Two
+# keys, because the platform changed: `moodle:` for everything published from now on, and
+# `cypher:` for the ~23 legacy courses already delivered in Cypher for Business, which
+# must keep reporting stage 8 unchanged. See INTENT.md on why Cypher is winding down.
+PUBLISHED_RE = re.compile(r"^\s*(?:cypher|moodle):\s*\S+", re.MULTILINE)
+MOODLE_URL_RE = re.compile(r"^\s*moodle:\s*(\S+)", re.MULTILINE)
 
 # The package skeleton, not a course. check_course_package.py excludes it for the
 # same reason; so must anything that enumerates courses.
@@ -229,7 +234,7 @@ def stage_for(folder, use_gh=True):
             "stage_doc": "process/stages/01-design.md",
             "next_action": ("Use the course-designer agent to write modules/"
                             + slug + "/00-design.md."),
-            "done": [], "design_status": None, "published": False,
+            "done": [], "design_status": None, "published": False, "moodle_url": None,
             "notes": ["Not yet opted into the pipeline (no 00-design.md)."],
         }
     done.append("1. Design")
@@ -243,15 +248,21 @@ def stage_for(folder, use_gh=True):
                      "package (see process/backfill.md).")
 
     readme = folder / "README.md"
-    published = bool(readme.exists()
-                     and CYPHER_RE.search(readme.read_text(encoding="utf-8")))
+    readme_text = readme.read_text(encoding="utf-8") if readme.exists() else ""
+    published = bool(PUBLISHED_RE.search(readme_text))
+    # Read verbatim from frontmatter, never constructed from a base URL the way
+    # review_url() is. The Moodle host changes when the server moves, and a confidently
+    # wrong URL is worse than none.
+    moodle_match = MOODLE_URL_RE.search(readme_text)
+    moodle_url = moodle_match.group(1) if moodle_match else None
 
     def result(stage, key, name, doc, action):
         return {
             "slug": slug, "folder": "modules/" + slug, "branch": branch_for(slug),
             "stage": stage, "stage_key": key, "stage_name": name,
             "stage_doc": doc, "next_action": action, "done": done,
-            "design_status": design_status, "published": published, "notes": notes,
+            "design_status": design_status, "published": published,
+            "moodle_url": moodle_url, "notes": notes,
             # Only once the content is drafted: before that there is nothing worth
             # sending anyone, and a link to an empty course invites the "is it broken?"
             # question this is meant to remove. 3e counts -- the lessons are all there by
@@ -326,9 +337,10 @@ def stage_for(folder, use_gh=True):
     # --- Stage 8: published (the only late stage with a repo signal) ---
     if published:
         done.append("4-7. Alignment, SME, internal review, pilot")
+        where = moodle_url or ("its Cypher link, recorded in modules/" + slug
+                               + "/README.md")
         return result(8, "8", "Online (published)", "process/stages/08-publish.md",
-                      "Nothing -- this course is Online. Its Cypher link is recorded in "
-                      "modules/" + slug + "/README.md.")
+                      "Nothing -- this course is Online: " + where)
 
     # --- Stages 4-7: no repo signal. PR state is the best available hint. ---
     pr = open_pr_for(branch_for(slug)) if use_gh else None

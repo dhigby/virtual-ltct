@@ -1,0 +1,430 @@
+#!/usr/bin/env python3
+"""Render one course into a publish payload -- the platform boundary.
+
+INTENT.md makes content portability a hard constraint:
+
+    Nothing may bind course content to one platform's format: the markdown in this repo
+    is the asset, and any renderer or LMS is replaceable. Prefer the reversible choice.
+
+So the publisher splits in two, and this is the upper half. It knows about courses,
+lessons, the disclosure boundary and the CBC package; it knows nothing about Moodle's
+API. scripts/moodle_client.py is the lower half and knows only the reverse. If Moodle is
+ever replaced, everything here survives.
+
+The payload is also what makes the disclosure check possible BEFORE anything leaves the
+machine -- scripts/check_moodle_payload.py reads it, exactly as check_learner_view.py
+reads the built review site. Nothing is pushed that has not been read back and verified.
+
+WHAT COMES OUT
+
+    <out>/<slug>/manifest.json      the structure: sections, modules, quizzes
+    <out>/<slug>/pages/<name>.html  one rendered page per included markdown file
+    <out>/<slug>/assets/<name>      every asset a published page references
+
+Two tokens survive into the HTML for the client to resolve, because neither can be known
+until the push is under way:
+
+    @@PLUGINFILE@@/<name>           an asset, once it is in the module's file area
+    @@MODULE:<idnumber>@@           a sibling module, once it has a course-module id
+
+Both are Moodle-shaped only in spelling; a different client would rewrite them its own
+way. @@PLUGINFILE@@ is what Moodle itself stores in the database, so emitting it here
+means the client hands Moodle what it already expects.
+
+WHAT IS HELD BACK (learner view)
+
+The design doc, mentor guide and video scripts never reach a learner course, and every
+quiz answer key is stripped. The rules come from scripts/disclosure.py, shared with the
+review site so the two views cannot drift. A quiz whose key cannot be cleanly separated
+is WITHHELD WHOLE, never partially stripped.
+
+Answer keys do reach Moodle, but only as the `correct` flag and feedback inside the
+question data, where Moodle's own capabilities protect them. They must never appear in
+page HTML -- that is the line check_moodle_payload.py enforces.
+
+Usage:
+  python scripts/moodle_payload.py --slug <slug> [--view learner|reviewer] --out <dir>
+"""
+import argparse
+import json
+import pathlib
+import re
+import shutil
+import sys
+from urllib.parse import unquote, urlsplit
+
+import markdown
+import yaml
+
+sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent))
+import disclosure  # noqa: E402
+from course_stage import branch_slug, is_lesson  # noqa: E402
+from quiz_parse import QuizError, parse_quiz_file  # noqa: E402
+
+REPO = pathlib.Path(__file__).resolve().parent.parent
+MODULES = REPO / "modules"
+
+if hasattr(sys.stdout, "reconfigure"):
+    sys.stdout.reconfigure(encoding="utf-8")
+
+# Kept in step with mkdocs-review.yml so a page reads the same in Moodle as on the review
+# site. The Material-specific emoji extension is dropped: it needs the theme installed and
+# emits inline SVG that Moodle's editor filters would strip anyway.
+MD_EXTENSIONS = [
+    "admonition", "attr_list", "md_in_html", "tables", "def_list", "footnotes",
+    "pymdownx.superfences", "pymdownx.highlight", "pymdownx.inlinehilite",
+    "pymdownx.details", "pymdownx.tasklist", "toc",
+]
+MD_CONFIG = {
+    "pymdownx.highlight": {"anchor_linenums": True},
+    "pymdownx.tasklist": {"custom_checkbox": True},
+}
+
+TIME_RE = re.compile(r"^\*\*Estimated time:\*\*\s*(\d+)\s*minutes", re.M)
+H1_RE = re.compile(r"^#\s+(.+)$", re.M)
+VIDEO_RE = re.compile(r"\*\*Watch the video:\*\*\s*(.*)$", re.M)
+PENDING_VIDEO_RE = re.compile(r"_To be recorded at stage \d+\._", re.I)
+SRC_RE = re.compile(r"""(?P<attr>\b(?:src|href)\s*=\s*)(?P<q>["'])(?P<url>[^"']*)(?P=q)""")
+
+# Every page is wrapped in this, so moodle/local_ltuse/styles.css can style published
+# content without reaching any other page on the Moodle site.
+PAGE_CLASS = "local-ltuse-page"
+
+WITHHELD_HTML = (
+    '<div class="admonition warning">\n'
+    '<p class="admonition-title">Quiz withheld</p>\n'
+    '<p>This quiz could not be published because its answer key could not be cleanly '
+    'separated from the questions. Ask your facilitator for a copy.</p>\n'
+    '</div>\n')
+
+
+def wrap(html):
+    """Scope a page body so the plugin stylesheet can reach it and nothing else."""
+    return '<div class="%s">\n%s\n</div>\n' % (PAGE_CLASS, html.rstrip())
+
+
+def split_frontmatter(text):
+    if text.startswith("---"):
+        end = text.find("\n---", 3)
+        if end != -1:
+            return yaml.safe_load(text[3:end]) or {}, text[end + 4:].lstrip("\n")
+    return {}, text
+
+
+def render(md_text):
+    return markdown.Markdown(extensions=MD_EXTENSIONS,
+                             extension_configs=MD_CONFIG).convert(md_text)
+
+
+def title_of(md_text, fallback):
+    m = H1_RE.search(md_text)
+    return m.group(1).strip() if m else fallback
+
+
+def minutes_of(md_text):
+    m = TIME_RE.search(md_text)
+    return int(m.group(1)) if m else None
+
+
+def idnumber(slug, name):
+    """Stable identity for one published module, and the whole idempotency story.
+
+    It lives in Moodle on the course module, not in a repo state file: nothing new to
+    keep honest, it survives someone else republishing, and it makes migrating to a
+    different Moodle server a re-publish rather than a data move.
+    """
+    return "ltct:%s:%s" % (branch_slug(slug), name)
+
+
+class Payload:
+    def __init__(self, folder, view):
+        self.folder = folder
+        self.view = view
+        self.slug = folder.name
+        self.url_slug = branch_slug(folder.name)
+        self.notes = []
+        self.withheld = []
+
+    # -- inventory ---------------------------------------------------------------------
+    def inventory(self):
+        md_files, assets = [], []
+        for p in sorted(self.folder.iterdir()):
+            if p.is_dir() or p.name.startswith("."):
+                continue
+            (md_files if p.suffix.lower() == ".md" else assets).append(p)
+        for p in sorted(self.folder.rglob("*")):
+            if (p.is_dir() or p.parent == self.folder or p.suffix.lower() == ".md"
+                    or any(part.startswith(".") for part in
+                           p.relative_to(self.folder).parts)):
+                continue
+            assets.append(p)
+
+        included = [p for p in md_files
+                    if p.name != "README.md" and not disclosure.excluded_md(p.name, self.view)]
+        assets = [p for p in assets if not disclosure.excluded_asset(p.name, self.view)]
+        return included, assets
+
+    # -- link rewriting ----------------------------------------------------------------
+    def rewrite(self, html, page_assets, module_ids):
+        """Point every intra-course reference at a token the client can resolve."""
+        def sub(m):
+            url = m.group("url")
+            split = urlsplit(url)
+            if split.scheme or split.netloc or url.startswith("#"):
+                return m.group(0)          # external, or an in-page anchor
+            target = unquote(split.path)
+            anchor = ("#" + split.fragment) if split.fragment else ""
+            name = target.rsplit("/", 1)[-1]
+
+            if target in module_ids or name in module_ids:
+                key = target if target in module_ids else name
+                return "%s%s@@MODULE:%s@@%s%s" % (m.group("attr"), m.group("q"),
+                                                  module_ids[key], anchor, m.group("q"))
+            if target in page_assets:
+                return "%s%s@@PLUGINFILE@@/%s%s" % (m.group("attr"), m.group("q"),
+                                                    page_assets[target], m.group("q"))
+            return m.group(0)
+        return SRC_RE.sub(sub, html)
+
+    # -- build -------------------------------------------------------------------------
+    def build(self):
+        included, all_assets = self.inventory()
+        asset_by_rel = {p.relative_to(self.folder).as_posix(): p for p in all_assets}
+
+        # Excluded markdown must not be linkable either: a live link to the mentor guide
+        # would hand a learner the scoring notes in one click. Rendered as plain text.
+        excluded_names = {p.name for p in sorted(self.folder.glob("*.md"))
+                          if disclosure.excluded_md(p.name, self.view)}
+
+        module_ids = {}
+        for p in included:
+            module_ids[p.name] = idnumber(self.slug, p.name)
+
+        lessons = [p for p in included if is_lesson(p.name)]
+        others = [p for p in included if not is_lesson(p.name)]
+
+        sections, pages, quizzes, used_assets = [], {}, [], {}
+        for n, p in enumerate(lessons, start=1):
+            mod, html = self._page(p, asset_by_rel, module_ids, excluded_names, used_assets)
+            raw = p.read_text(encoding="utf-8", errors="replace")
+            sections.append({
+                "number": n,
+                "name": title_of(raw, p.stem),
+                "minutes": minutes_of(raw),
+                "modules": [mod],
+            })
+            pages[mod["html_file"]] = html
+
+        n = len(lessons)
+        for p in others:
+            n += 1
+            raw = p.read_text(encoding="utf-8", errors="replace")
+            if p.name.endswith("-quiz.md"):
+                quiz_mods, quiz_pages, quiz_defs = self._quiz(p, raw, n)
+                sections.append({"number": n, "name": title_of(raw, p.stem),
+                                 "minutes": minutes_of(raw), "modules": quiz_mods})
+                pages.update(quiz_pages)
+                quizzes.extend(quiz_defs)
+                continue
+            mod, html = self._page(p, asset_by_rel, module_ids, excluded_names, used_assets)
+            sections.append({"number": n, "name": title_of(raw, p.stem),
+                             "minutes": minutes_of(raw), "modules": [mod]})
+            pages[mod["html_file"]] = html
+
+        readme = self.folder / "README.md"
+        meta, summary_md = ({}, "")
+        if readme.exists():
+            meta, body = split_frontmatter(readme.read_text(encoding="utf-8",
+                                                            errors="replace"))
+            summary_md = body.split("\n## ", 1)[0]
+            summary_md = H1_RE.sub("", summary_md, count=1).strip()
+
+        # A course with no lesson files is a backfill placeholder, not content: its whole
+        # body is a single run-on README paragraph imported from Notion, with hotlinked
+        # images that will rot. Publishing that to Moodle would ship garbage under a real
+        # course name. Refuse, and point at the workstream that fixes it -- 16 of the 31
+        # courses are in this state today. See BACKFILL.md and process/backfill.md.
+        blocked = None
+        if not lessons:
+            blocked = ("no lesson files (NN-*.md) -- this course's content is still only "
+                       "its README. Backfill it first: see BACKFILL.md")
+
+        manifest = {
+            "slug": self.url_slug,
+            "folder": self.slug,
+            "view": self.view,
+            "publishable": blocked is None,
+            "blocked_reason": blocked,
+            "idnumber": "ltct:%s" % self.url_slug,
+            "title": meta.get("title") or self.slug,
+            "summary_html": render(summary_md) if summary_md else "",
+            "target_outcome_level": meta.get("target_outcome_level"),
+            "competencies": meta.get("competencies") or [],
+            "content_type": meta.get("content_type"),
+            "sections": sections,
+            "quizzes": quizzes,
+            "withheld": self.withheld,
+            "notes": self.notes,
+        }
+        return manifest, pages, used_assets
+
+    def _page(self, path, asset_by_rel, module_ids, excluded_names, used_assets):
+        raw = path.read_text(encoding="utf-8", errors="replace")
+        _, body = split_frontmatter(raw)
+
+        # Every learner page is strip-checked, not only the quizzes. A scenario bank or a
+        # job aid can grow an answer key without anyone reclassifying the file, and the
+        # cost of checking is nil. Fails closed, the same way the learner view does.
+        if self.view == "learner":
+            body, ok = disclosure.strip_answer_keys(body)
+            if not ok:
+                self.withheld.append(path.name)
+                self.notes.append(
+                    "%s: withheld -- an answer key could not be cleanly separated"
+                    % path.name)
+                return {
+                    "kind": "page",
+                    "idnumber": idnumber(self.slug, path.name),
+                    "name": title_of(raw, path.stem),
+                    "source": path.name,
+                    "html_file": "pages/%s.html" % path.stem,
+                    "assets": [],
+                }, wrap(WITHHELD_HTML)
+
+        for m in VIDEO_RE.finditer(body):
+            if PENDING_VIDEO_RE.search(m.group(1)):
+                self.notes.append("%s: video not recorded yet" % path.name)
+
+        html = render(body)
+        page_assets = {}
+        for rel, src in asset_by_rel.items():
+            if rel in body or src.name in body:
+                page_assets[rel] = src.name
+                used_assets.setdefault(src.name, src)
+        html = self.rewrite(html, page_assets, module_ids)
+        html = self._deaden(html, excluded_names)
+
+        return {
+            "kind": "page",
+            "idnumber": idnumber(self.slug, path.name),
+            "name": title_of(raw, path.stem),
+            "source": path.name,
+            "html_file": "pages/%s.html" % path.stem,
+            "assets": sorted(page_assets.values()),
+        }, wrap(html)
+
+    def _deaden(self, html, excluded_names):
+        """A link to a view-excluded file becomes plain text, never a live link."""
+        if not excluded_names:
+            return html
+
+        def sub(m):
+            name = unquote(urlsplit(m.group("url")).path).rsplit("/", 1)[-1]
+            if name in excluded_names:
+                return "%s%s#@@WITHHELD@@%s" % (m.group("attr"), m.group("q"), m.group("q"))
+            return m.group(0)
+        return SRC_RE.sub(sub, html)
+
+    def _quiz(self, path, raw, section):
+        """A quiz becomes question data plus, for the reviewer view, a readable page."""
+        mods, pages, defs = [], {}, []
+        try:
+            parsed = parse_quiz_file(path)
+        except QuizError as e:
+            # Fail closed, exactly as the learner view does: no guessed quiz.
+            self.withheld.append(path.name)
+            self.notes.append("quiz withheld: %s" % e)
+            mods.append({"kind": "page", "idnumber": idnumber(self.slug, path.name),
+                         "name": title_of(raw, path.stem), "source": path.name,
+                         "html_file": "pages/%s.html" % path.stem, "assets": []})
+            pages["pages/%s.html" % path.stem] = wrap(WITHHELD_HTML)
+            return mods, pages, defs
+
+        for i, quiz in enumerate(parsed, start=1):
+            suffix = ("-%d" % i) if len(parsed) > 1 else ""
+            name = quiz["title"]
+            if quiz["qualifier"]:
+                name = "%s %s" % (name, quiz["qualifier"])
+            defs.append({
+                "idnumber": idnumber(self.slug, path.name + suffix),
+                "name": name,
+                "source": path.name,
+                "section": section,
+                "threshold_pct": quiz["threshold_pct"],
+                "category": "%s / %s" % (self.url_slug, path.stem + suffix),
+                "questions": [self._question(q, path.name, i, n)
+                              for n, q in enumerate(quiz["questions"], start=1)],
+            })
+            mods.append({"kind": "quiz", "idnumber": idnumber(self.slug, path.name + suffix),
+                         "name": name, "source": path.name})
+        return mods, pages, defs
+
+    def _question(self, q, source, quiz_index, ordinal):
+        return {
+            "idnumber": idnumber(self.slug, "%s:q%d.%d" % (source, quiz_index, ordinal)),
+            "name": "Q%d" % q["number"],
+            "text_html": render(q["text"]),
+            "single": q["single"],
+            "feedback_html": render(q["feedback"]) if q["feedback"] else "",
+            "section": q["section"],
+            "answers": [{"letter": o["letter"], "text_html": render(o["text"]),
+                         "correct": o["correct"]} for o in q["options"]],
+        }
+
+
+def write_payload(manifest, pages, assets, out_dir):
+    out = pathlib.Path(out_dir) / manifest["slug"]
+    if out.exists():
+        shutil.rmtree(out)
+    (out / "pages").mkdir(parents=True)
+    for rel, html in pages.items():
+        (out / rel).write_text(html, encoding="utf-8", newline="\n")
+    if assets:
+        (out / "assets").mkdir(exist_ok=True)
+        for name, src in assets.items():
+            shutil.copy2(src, out / "assets" / name)
+    (out / "manifest.json").write_text(
+        json.dumps(manifest, indent=2, ensure_ascii=False) + "\n",
+        encoding="utf-8", newline="\n")
+    return out
+
+
+def main():
+    ap = argparse.ArgumentParser(description=__doc__,
+                                 formatter_class=argparse.RawDescriptionHelpFormatter)
+    ap.add_argument("--slug", required=True, help="course folder name under modules/")
+    ap.add_argument("--view", default="learner", choices=("learner", "reviewer"),
+                    help="learner holds back the design doc, mentor guide, video "
+                         "scripts and every answer key (default)")
+    ap.add_argument("--out", required=True, help="payload directory to write")
+    args = ap.parse_args()
+
+    folder = MODULES / args.slug
+    if not folder.is_dir():
+        matches = [d for d in MODULES.iterdir()
+                   if d.is_dir() and branch_slug(d.name) == args.slug]
+        if not matches:
+            sys.exit("no such course: %s" % args.slug)
+        folder = matches[0]
+
+    manifest, pages, assets = Payload(folder, args.view).build()
+    out = write_payload(manifest, pages, assets, args.out)
+
+    n_mods = sum(len(s["modules"]) for s in manifest["sections"])
+    n_q = sum(len(q["questions"]) for q in manifest["quizzes"])
+    print("%s -> %s" % (folder.name, out))
+    print("  view      %s" % manifest["view"])
+    print("  sections  %d (%d module(s))" % (len(manifest["sections"]), n_mods))
+    print("  quizzes   %d (%d question(s))" % (len(manifest["quizzes"]), n_q))
+    print("  assets    %d" % len(assets))
+    for note in manifest["notes"]:
+        print("  note      %s" % note)
+    if manifest["withheld"]:
+        print("  WITHHELD  %s" % ", ".join(manifest["withheld"]))
+    if not manifest["publishable"]:
+        print("  NOT PUBLISHABLE: %s" % manifest["blocked_reason"])
+    return 0
+
+
+if __name__ == "__main__":
+    sys.exit(main())

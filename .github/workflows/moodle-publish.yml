@@ -1,0 +1,117 @@
+name: Publish to Moodle
+
+# Publishes a course to Moodle when its content lands on main.
+#
+# GATED OFF BY DEFAULT. The job runs only when the repository variable MOODLE_ENABLED is
+# set to 'true'. That is deliberate: the first Moodle instance is a temporary server that
+# GitHub's runners almost certainly cannot reach, and a workflow that fails on every push
+# trains people to ignore red builds. Turn it on once the production host is reachable.
+#
+# To enable:
+#   Settings > Secrets and variables > Actions
+#     Variables:  MOODLE_ENABLED = true
+#     Secrets:    MOODLE_URL, MOODLE_TOKEN
+#
+# The token belongs to the publishing account on the 'LTC curriculum publishing' service
+# and can rewrite course content, so it is a secret, never a variable, and never a file in
+# this public repo. See moodle/local_ltuse/README.md.
+#
+# Until this is on, publishing is the local `/publish-to-moodle <slug>` command, which does
+# exactly the same build-verify-push and is what stages 7 and 8 document.
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'modules/**'
+      - 'scripts/moodle_payload.py'
+      - 'scripts/moodle_client.py'
+      - 'scripts/moodle_xml.py'
+      - 'scripts/publish_moodle.py'
+      - 'scripts/quiz_parse.py'
+      - 'scripts/disclosure.py'
+  workflow_dispatch:
+    inputs:
+      slug:
+        description: 'Course slug to publish (blank = every course changed in this push)'
+        required: false
+        type: string
+      dry_run:
+        description: 'Build and verify only; send nothing'
+        required: false
+        type: boolean
+        default: true
+
+permissions:
+  contents: read
+
+concurrency:
+  group: moodle-publish
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    if: vars.MOODLE_ENABLED == 'true'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          # Needed to work out which courses this push actually touched.
+          fetch-depth: 2
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install dependencies
+        run: pip install -r publish-requirements.txt
+
+      - name: Work out which courses changed
+        id: courses
+        run: |
+          if [ -n "${{ inputs.slug }}" ]; then
+            echo "slugs=${{ inputs.slug }}" >> "$GITHUB_OUTPUT"
+          else
+            slugs=$(git diff --name-only HEAD^ HEAD -- modules/ \
+                    | cut -d/ -f2 | sort -u | tr '\n' ' ')
+            echo "slugs=$slugs" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Publish
+        env:
+          MOODLE_URL: ${{ secrets.MOODLE_URL }}
+          MOODLE_TOKEN: ${{ secrets.MOODLE_TOKEN }}
+          # A course category id on the target server. Set MOODLE_CATEGORY as a repository
+          # variable; 1 is Moodle's default 'Miscellaneous'.
+          MOODLE_CATEGORY: ${{ vars.MOODLE_CATEGORY || '1' }}
+          DRY_RUN: ${{ inputs.dry_run }}
+        run: |
+          set -euo pipefail
+          slugs="${{ steps.courses.outputs.slugs }}"
+          if [ -z "${slugs// }" ]; then
+            echo "No course content changed in this push."
+            exit 0
+          fi
+
+          failed=0
+          for slug in $slugs; do
+            [ -d "modules/$slug" ] || continue
+            echo "::group::$slug"
+            args="--slug $slug --category $MOODLE_CATEGORY"
+            if [ "${DRY_RUN:-false}" = "true" ]; then
+              args="$args --dry-run"
+            fi
+            # A course that is not ready -- a backfill placeholder, or one whose quiz was
+            # withheld -- exits non-zero on purpose. Report it and carry on, so one
+            # unready course cannot block a publish of the others. A LEAK is different:
+            # publish_moodle.py never pushes past its own gate, so nothing escapes here.
+            if ! python scripts/publish_moodle.py $args; then
+              echo "::warning title=Not published::$slug was not published; see the log."
+              failed=$((failed + 1))
+            fi
+            echo "::endgroup::"
+          done
+
+          if [ "$failed" -gt 0 ]; then
+            echo "$failed course(s) were not published."
+          fi

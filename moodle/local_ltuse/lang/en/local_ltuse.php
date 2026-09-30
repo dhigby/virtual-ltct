@@ -1,0 +1,16 @@
+<?php
+// English strings for local_ltuse.
+
+defined('MOODLE_INTERNAL') || die();
+
+$string['pluginname'] = 'LTC curriculum publishing';
+$string['ltuse:publish'] = 'Publish LTC curriculum content over the web service';
+
+$string['error:nocourse'] = 'No course with idnumber "{$a}".';
+$string['error:nosection'] = 'Course has no section number {$a}. Create it first '
+    . '(local_wsmanagesections_create_sections).';
+$string['error:badxml'] = 'The question XML could not be imported: {$a}';
+$string['error:noquestions'] = 'No questions were imported from the supplied XML.';
+$string['error:nocategory'] = 'Question category "{$a}" could not be created.';
+$string['error:modulemissing'] = 'The {$a} activity module is not installed or is '
+    . 'disabled on this site.';

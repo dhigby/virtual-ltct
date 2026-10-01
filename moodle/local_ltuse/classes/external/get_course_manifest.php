@@ -4,6 +4,7 @@ namespace local_ltuse\external;
 defined('MOODLE_INTERNAL') || die();
 
 use context_course;
+use context_module;
 use core_external\external_api;
 use core_external\external_function_parameters;
 use core_external\external_multiple_structure;
@@ -21,7 +22,13 @@ use local_ltuse\util;
  * compare against the payload, create what is new, update what changed, hide what the
  * course no longer has -- rather than a blind re-create that duplicates everything.
  *
- * Cheap: two indexed queries.
+ * FILES. Each page also lists the files in its mod_page/content area with their
+ * contenthash (the SHA-1 of the bytes). The publisher compares that with the SHA-1 of each
+ * image it is about to send, and uploads only the ones that differ (spec 009, FR-016):
+ * re-sending an unchanged image gives it a new timemodified, which makes the Moodle app
+ * download it again on a learner's metered connection.
+ *
+ * Cheap: two indexed queries, plus one file-area read per page. Read-only.
  */
 class get_course_manifest extends external_api {
 
@@ -53,8 +60,21 @@ class get_course_manifest extends external_api {
             ];
         }
 
+        $fs = get_file_storage();
         $modules = [];
         foreach (util::owned_modules((int)$course->id) as $mid => $m) {
+            $files = [];
+            if ($m['modname'] === 'page') {
+                $ctx = context_module::instance($m['cmid']);
+                foreach ($fs->get_area_files($ctx->id, 'mod_page', 'content', 0, 'filename', false)
+                         as $f) {
+                    $files[] = [
+                        'filename' => $f->get_filename(),
+                        'contenthash' => $f->get_contenthash(),
+                        'filesize' => (int)$f->get_filesize(),
+                    ];
+                }
+            }
             $modules[] = [
                 'idnumber' => $mid,
                 'cmid' => $m['cmid'],
@@ -62,6 +82,7 @@ class get_course_manifest extends external_api {
                 'section' => $m['section'],
                 'instance' => $m['instance'],
                 'visible' => $m['visible'],
+                'files' => $files,
             ];
         }
 
@@ -96,6 +117,16 @@ class get_course_manifest extends external_api {
                     'section' => new external_value(PARAM_INT, 'Section number'),
                     'instance' => new external_value(PARAM_INT, 'Activity instance id'),
                     'visible' => new external_value(PARAM_INT, 'Whether it is visible'),
+                    'files' => new external_multiple_structure(
+                        new external_single_structure([
+                            'filename' => new external_value(PARAM_FILE, 'File name'),
+                            'contenthash' => new external_value(PARAM_ALPHANUM,
+                                'SHA-1 of the file content'),
+                            'filesize' => new external_value(PARAM_INT, 'Size in bytes'),
+                        ]),
+                        'Files in the content area of a page; empty for any other module',
+                        VALUE_DEFAULT, []
+                    ),
                 ])
             ),
         ]);

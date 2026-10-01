@@ -38,7 +38,7 @@ import tempfile
 sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent))
 from course_stage import branch_slug  # noqa: E402
 from moodle_client import MoodleClient, MoodleError  # noqa: E402
-from moodle_payload import MODULES, Payload, write_payload  # noqa: E402
+from moodle_payload import MODULES, Payload, report_images, write_payload  # noqa: E402
 from moodle_xml import quiz_xml  # noqa: E402
 
 REPO = pathlib.Path(__file__).resolve().parent.parent
@@ -135,30 +135,87 @@ def publish(client, payload_dir, category_id):
                     names)
     print("  sections  %d" % len(manifest["sections"]))
 
-    # --- pass 1: every page and quiz, with sibling links still tokenised ----------------
-    cmids, page_bodies = {}, {}
+    # --- what is already on the server ---------------------------------------------------
+    # Existing course-module ids and each page's files, from one read call. This is what
+    # lets a republish send only what changed (FR-016): an unchanged page arrives
+    # byte-identical to what is stored, so the plugin writes nothing, and an unchanged
+    # image is never re-sent, so the Moodle app never re-downloads it. A dry run makes no
+    # read calls either, and behaves as a first publish.
+    server = {} if client.dry_run else {
+        m["idnumber"]: m for m in (client.manifest(manifest["idnumber"]) or {})
+        .get("modules", [])}
+    cmids = {k: m["cmid"] for k, m in server.items()}
+    this_run = {mod["idnumber"] for s in manifest["sections"] for mod in s["modules"]}
+    this_run |= {q["idnumber"] for q in manifest["quizzes"]}
+    records = manifest.get("assets") or {}
+
+    def module_url(cmid):
+        return "%s/mod/page/view.php?id=%s" % (client.url, cmid)
+
+    # --- pass 1: every page and quiz, with every link it can already resolve ----------------
+    # A sibling that already exists on the server is resolved now, so the page's first
+    # send is its final HTML. Leaving it tokenised would never match the stored, resolved
+    # HTML, and every page with a link would be rewritten twice on every publish. Only a
+    # link to a module created in this run waits for pass 2; one to a module this course
+    # no longer has is dead text now, as pass 2 would have made it.
+    def resolve_known(html):
+        def sub(m):
+            target = m.group(1)
+            if target in cmids:
+                return module_url(cmids[target])
+            return m.group(0) if target in this_run else "#"
+        return MODULE_TOKEN_RE.sub(sub, html)
+
+    page_bodies, counts = {}, {"created": 0, "updated": 0, "unchanged": 0}
+    sent = kept = sent_bytes = 0
     for section in manifest["sections"]:
         for mod in section["modules"]:
             if mod["kind"] != "page":
                 continue
             html = (payload_dir / mod["html_file"]).read_text(encoding="utf-8")
+            if not client.dry_run:
+                html = resolve_known(html)
             page_bodies[mod["idnumber"]] = (mod, section["number"], html)
 
-            itemid = 0
-            for asset in mod["assets"]:
-                itemid = client.upload(payload_dir / "assets" / asset, itemid=itemid)
+            # Split the page's images three ways against the server: unchanged (same name
+            # and hash: keep), new or changed (upload), gone from the payload (send
+            # nothing; the save drops it). With no server file list -- a new page, an
+            # older plugin, or a dry run -- every image is sent, as before.
+            on_server = server.get(mod["idnumber"], {}).get("files")
+            ours = {name: (records.get(name) or {}).get("sha1") for name in mod["assets"]}
+            if on_server is None or mod["idnumber"] not in server:
+                to_send, to_keep, removed = list(mod["assets"]), [], []
+            else:
+                theirs = {f["filename"]: f["contenthash"] for f in on_server}
+                to_keep = [n for n in mod["assets"] if ours[n] and theirs.get(n) == ours[n]]
+                to_send = [n for n in mod["assets"] if n not in to_keep]
+                removed = [n for n in theirs if n not in ours]
 
-            result = client.call(
-                "local_ltuse_create_page",
-                courseidnumber=manifest["idnumber"], idnumber=mod["idnumber"],
-                name=mod["name"], content=html, section=section["number"],
-                contentitemid=itemid)
-            if not client.dry_run:
+            itemid = 0
+            for asset in to_send:
+                itemid = client.upload(payload_dir / "assets" / asset, itemid=itemid)
+                sent_bytes += (payload_dir / "assets" / asset).stat().st_size
+            sent += len(to_send)
+            kept += len(to_keep)
+
+            params = dict(courseidnumber=manifest["idnumber"], idnumber=mod["idnumber"],
+                          name=mod["name"], content=html, section=section["number"],
+                          contentitemid=itemid)
+            # Omitting both when no file changes is also what keeps an older plugin,
+            # which knows neither parameter, working.
+            if mod["idnumber"] in server and on_server is not None and (to_send or removed):
+                params.update(syncfiles=True, keepfiles=to_keep)
+            result = client.call("local_ltuse_create_page", **params)
+
+            if client.dry_run:
+                outcome = "dry-run"
+            else:
                 cmids[mod["idnumber"]] = result["cmid"]
-            print("    page    %-46s %s" % (
-                mod["source"],
-                "dry-run" if client.dry_run
-                else ("created" if result["created"] else "updated")))
+                outcome = result.get("outcome") or \
+                    ("created" if result["created"] else "updated")
+                counts[outcome] = counts.get(outcome, 0) + 1
+            print("    page    %-46s %-9s %d sent, %d kept"
+                  % (mod["source"], outcome, len(to_send), len(to_keep)))
 
     for quiz in manifest["quizzes"]:
         xml = quiz_xml(quiz)
@@ -176,17 +233,15 @@ def publish(client, payload_dir, category_id):
             quiz["source"],
             len(quiz["questions"]) if client.dry_run else imported["count"]))
 
-    # --- pass 2: resolve sibling links, now that every module has a cmid -----------------
-    # Two passes because a lesson may link forward to one that does not exist yet. Only
-    # pages that actually carry a link are rewritten, so on a course with none this costs
-    # nothing.
+    # --- pass 2: links to modules created in this run, now that they have a cmid ---------
+    # Two passes because a lesson may link forward to one that did not exist yet. Pass 1
+    # resolved everything else, so on a republish this usually sends nothing.
     rewritten = 0
     for idnumber, (mod, sectionnum, html) in page_bodies.items():
         if "@@MODULE:" not in html:
             continue
         resolved = MODULE_TOKEN_RE.sub(
-            lambda m: ("%s/mod/page/view.php?id=%s" % (client.url, cmids[m.group(1)]))
-            if m.group(1) in cmids else "#", html)
+            lambda m: module_url(cmids[m.group(1)]) if m.group(1) in cmids else "#", html)
         if resolved == html:
             continue
         client.call("local_ltuse_create_page",
@@ -196,6 +251,14 @@ def publish(client, payload_dir, category_id):
     if rewritten:
         print("  links     %s in %d page(s)"
               % ("would be resolved" if client.dry_run else "resolved", rewritten))
+
+    if client.dry_run:
+        print("  pages: dry-run; images: %d would be sent (%d KB)"
+              % (sent, round(sent_bytes / 1024)))
+    else:
+        print("  pages: %d created, %d updated, %d unchanged; images: %d sent (%d KB), %d kept"
+              % (counts["created"], counts["updated"], counts["unchanged"],
+                 sent, round(sent_bytes / 1024), kept))
 
     return manifest, cmids
 
@@ -231,6 +294,7 @@ def main():
     payload_dir = write_payload(manifest, pages, assets, out)
     print("  payload   %d page(s), %d asset(s), %d quiz(zes)"
           % (len(pages), len(assets), len(manifest["quizzes"])))
+    report_images(manifest)
 
     if not verify(out, slug):
         return 1

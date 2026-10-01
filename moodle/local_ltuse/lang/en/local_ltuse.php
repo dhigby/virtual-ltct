@@ -16,3 +16,5 @@ $string['error:modulemissing'] = 'The {$a} activity module is not installed or i
     . 'disabled on this site.';
 $string['error:notoffline'] = 'This quiz could not be made available offline in the Moodle app, '
     . 'because these settings prevent it: {$a}. Check the quiz defaults for this site.';
+$string['error:nokeepfile'] = 'Cannot keep "{$a}": this page has no such file. Republish to '
+    . 'resend it.';

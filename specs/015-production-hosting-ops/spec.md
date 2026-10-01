@@ -109,7 +109,7 @@ The maintainer can state the yearly running cost at 100, 1,000 and 5,000 learner
 - **FR-009**: Every cost line MUST be flat-rate or tiered-flat; none may scale per learner.
 - **FR-010**: The Moodle app notification plan MUST be chosen deliberately: the free plan covers 50 active devices a month (Pro 500, Premium unlimited); active devices MUST be reviewed monthly against the plan, and email MUST remain a working notification route whatever plan is chosen.
 - **FR-011**: The server MUST be sized for the expected concurrent learners with headroom, and the sizing assumption recorded so it can be revisited.
-- **FR-012**: Production operations MUST be carried by [NEEDS CLARIFICATION: who operates the production Moodle server — the department (which person, with what backup cover), a partner such as Seed Company, a managed Moodle host at a flat rate, or someone else? INTENT names this the most important open question; until it is answered, no spec may claim its operations are covered.]
+- **FR-012**: Production operations MUST be carried by Doug Higby (maintainer) as operator on a self-managed VPS, with a second person named in the operations register as backup operator before any learner goes live, able to run a restore from the runbook alone. *(Decided 2026-10-01.)*
 - **FR-013**: Operations records that name learners (support tickets, restore logs listing accounts) MUST be kept outside the public repo.
 
 ### Key Entities
@@ -157,11 +157,11 @@ On delivery, the same PR updates these rows' status in moodle/REQUIREMENTS.md (c
 - **III. Public repo, private people (NON-NEGOTIABLE)**: backups, dumps, exports and credentials never enter the repo (FR-005, FR-013); drills use a separate server and test verification uses test accounts.
 - **VI. No LMS orientation**: learners see none of this; the runbook is for the operator.
 - **IX. Flat cost, field-ready**: every line flat-rate (FR-009); app plan chosen deliberately with email as fallback (FR-010).
-- **X. Traceable and verified**: cites rows #17, #16, #14, #9/#20. Names every recurring burden and requires an owner (FR-008), but because the operator is undecided (FR-012) this spec does **not** claim operations are covered. Upgrades are verified on a test instance before production (FR-007).
+- **X. Traceable and verified**: cites rows #17, #16, #14, #9/#20. Names every recurring burden and requires an owner (FR-008), the operator is Doug (FR-012, decided 2026-10-01); operations count as covered only once the backup operator is named in the register. Upgrades are verified on a test instance before production (FR-007).
 - **Platform & Delivery**: one production instance for all hosted partners; pinned plugins reviewed at each upgrade; server from `MOODLE_URL`; never `mkdocs gh-deploy` locally.
 
 ## Dependencies
 
 - **001-site-config-as-code**: the declarative configuration production is rebuilt from.
 - **005-community-space** and **014-resource-library**: add operations burdens only if they adopt a bolt-on or search service.
-- **All other specs (002–014)**: depend on this one for the live system they run on; none can be operated in production until FR-012 is answered.
+- **All other specs (002–014)**: depend on this one for the live system they run on; none can be operated in production until the backup operator in FR-012 is named.

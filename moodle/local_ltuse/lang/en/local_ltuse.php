@@ -14,3 +14,5 @@ $string['error:noquestions'] = 'No questions were imported from the supplied XML
 $string['error:nocategory'] = 'Question category "{$a}" could not be created.';
 $string['error:modulemissing'] = 'The {$a} activity module is not installed or is '
     . 'disabled on this site.';
+$string['error:notoffline'] = 'This quiz could not be made available offline in the Moodle app, '
+    . 'because these settings prevent it: {$a}. Check the quiz defaults for this site.';

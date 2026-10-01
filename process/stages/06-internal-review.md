@@ -30,6 +30,12 @@ Read as if you were the learner:
 - Is anything confusing, out of order, or assuming knowledge a learner at this outcome
   level won't have?
 - Are the scenario bank and mentor guide usable by a real facilitator?
+- **Can every screenshot still be read as learners will get it?** The review site shows the
+  full-size originals, but learners get a lighter copy. Ask the author (or a maintainer) to
+  run `python scripts/moodle_payload.py --slug <slug> --out <a folder outside the repo>`
+  and open its `assets/` folder. Check every label, menu and field the lesson text names.
+  If one is unreadable, the fix is to rename that file to `<name>.full.png` and update its
+  link (see stage 3e), not to recapture it.
 
 Leave comments; when it's ready, **approve and merge the PR**. That merge is the exit
 signal for this stage.

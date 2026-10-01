@@ -12,7 +12,7 @@ Checking the payload rather than Moodle afterwards is the point: once a page is 
 server that learners can reach, a leak has already happened. There is no equivalent of
 "rebuild the site" for disclosure.
 
-Four checks, all fail-closed:
+Five checks, all fail-closed:
 
   1. Excluded sources  -- no page derives from the design doc, a mentor guide or a video
                           script, and no asset derives from one either.
@@ -29,6 +29,13 @@ Four checks, all fail-closed:
   4. Withheld pages    -- anything the builder withheld must be the placeholder and
                           nothing else, and is reported, because a withheld quiz leaves a
                           learner with no assessment at all.
+  5. Asset provenance  -- every delivered image traces to a committed, non-excluded source.
+                          The payload carries the LIGHTER copy scripts/image_reduce.py
+                          makes, not the committed file, so "it was copied from the repo"
+                          no longer proves anything. Each file has a record and each record
+                          a file; both sides are re-hashed against the record; nothing is
+                          heavier than its source; and a file delivered unreduced must be
+                          byte-identical to what is committed.
 
 Usage:
   python scripts/check_moodle_payload.py --payload <dir> --slug <slug>
@@ -37,6 +44,7 @@ Usage:
 Exit 1 on any leak, naming the file and the leaked text. Exit 2 on misuse.
 """
 import argparse
+import hashlib
 import html
 import json
 import pathlib
@@ -159,10 +167,59 @@ def check(payload_dir):
         warnings.append("%s: %s was WITHHELD -- learners get no assessment from it"
                         % (slug, name))
 
+    # --- 5. asset provenance --------------------------------------------------------------
+    problems += check_assets(slug, folder, payload_dir, manifest)
+
     if not manifest["publishable"]:
         warnings.append("%s: not publishable -- %s" % (slug, manifest["blocked_reason"]))
 
     return problems, warnings
+
+
+# Delivered as the committed bytes, so they must BE the committed bytes.
+UNREDUCED = ("full", "unchanged", "vector", "passthrough")
+
+
+def check_assets(slug, folder, payload_dir, manifest):
+    """Check 5. Every byte in assets/ traces to a committed file a learner may see."""
+    problems = []
+    records = manifest.get("assets") or {}
+    assets_dir = payload_dir / "assets"
+    files = {a.name: a for a in assets_dir.iterdir()} if assets_dir.is_dir() else {}
+
+    for name in sorted(set(files) - set(records)):
+        problems.append("%s: assets/%s has no record in manifest.json -- its origin cannot "
+                        "be traced" % (slug, name))
+    for name in sorted(set(records) - set(files)):
+        problems.append("%s: manifest.json records assets/%s but the file is missing"
+                        % (slug, name))
+
+    root = folder.resolve()
+    for name in sorted(set(records) & set(files)):
+        rec = records[name]
+        where = "%s: assets/%s" % (slug, name)
+        source = (folder / rec.get("source", "")).resolve()
+        if not source.is_relative_to(root) or not source.is_file():
+            problems.append("%s: source %r is not a file in the course folder"
+                            % (where, rec.get("source")))
+            continue
+        for n in {source.name, name}:
+            if disclosure.excluded_asset(n, "learner"):
+                problems.append("%s: derives from excluded asset %s" % (where, n))
+
+        committed = source.read_bytes()
+        data = files[name].read_bytes()
+        if hashlib.sha256(committed).hexdigest() != rec.get("source_sha256"):
+            problems.append("%s: committed source %s has changed since the payload was "
+                            "built -- rebuild it" % (where, rec["source"]))
+        if hashlib.sha256(data).hexdigest() != rec.get("sha256")                 or len(data) != rec.get("bytes"):
+            problems.append("%s: delivered file does not match its record" % where)
+        if not isinstance(rec.get("bytes"), int)                 or rec["bytes"] > rec.get("source_bytes", -1):
+            problems.append("%s: delivered copy is heavier than its source" % where)
+        if rec.get("treatment") in UNREDUCED and data != committed:
+            problems.append("%s: treatment %r must deliver the committed bytes unchanged"
+                            % (where, rec["treatment"]))
+    return problems
 
 
 def main():

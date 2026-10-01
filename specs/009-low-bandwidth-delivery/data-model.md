@@ -33,6 +33,11 @@ stem before it must contain no further `.`. So `x.ful.png` and `x.full.small.png
 errors. The payload builder treats an unrecognised suffix as `standard` and adds a note, so
 a legacy course that was never package-checked still publishes.
 
+The suffix is read only for files under `assets/`. A legacy folder such as
+`supporting-pre-publishing-checks/images/` predates the convention and has names like
+`L2-1.Blank-BT-Row.png`; its dots mean nothing, so those files get `standard` and no note
+(found while implementing).
+
 ## Reduction profile
 
 A named set of parameters, defined once as a constant in `scripts/image_reduce.py`.
@@ -43,7 +48,7 @@ A named set of parameters, defined once as a constant in `scripts/image_reduce.p
 | `colours` | 256 | 64 |
 | resample | Lanczos | Lanczos |
 | quantiser | median cut (opaque) / fast octree (alpha) | same |
-| dither | Floyd–Steinberg | same |
+| dither | none (research.md R1, "Dithering") | same |
 | output | PNG, `optimize=True`, no text or time chunks | same |
 
 Height scales with width. An image is never enlarged. Changing a value changes every

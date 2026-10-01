@@ -13,7 +13,7 @@ instance**. Under Constitution X, every "to verify" item is a task, not an assum
 ## R1. How to make images lighter
 
 **Decision.** Fit each image to a maximum width, then save it as a 256-colour (palette)
-PNG with Floyd–Steinberg dithering and `optimize=True`. The `standard` profile uses 1280 px
+PNG with `optimize=True`, without dithering (see "Dithering" below). The `standard` profile uses 1280 px
 and 256 colours. `.small` uses 800 px and 64 colours. The format stays PNG and the file name
 stays the same. Use Pillow, pinned to an exact version.
 
@@ -42,6 +42,12 @@ original):
   Pillow 12.3.0. Pillow writes no time chunk to a PNG. A Pillow upgrade may change the bytes,
   which costs one re-upload of each changed image and nothing else. So the version is
   pinned in `publish-requirements.txt` and changed deliberately.
+- **Dithering** (found while implementing). Pillow's `quantize()` dithers only when it
+  maps onto a fixed palette, so the measurements above were undithered. A median-cut palette
+  re-applied with Floyd–Steinberg gave 58.8% against 64.4% undithered with Pillow 12.3.0
+  (the table's 67.1% came from the research script's slightly different mode handling), by
+  speckling flat UI backgrounds. The legibility review was made on undithered output, so
+  that is what ships.
 - **Transparency.** RGBA sources are quantised with fast octree, which keeps alpha. Opaque
   sources use median cut.
 

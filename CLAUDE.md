@@ -156,7 +156,9 @@ separate faithful-import workstream — see [`process/backfill.md`](process/back
      exact state shown, because it is the screen-reader text *and* the brief for whoever
      takes the shot — `![alt text](…)` is a defect. Diagrams are `.svg` files under the
      same rules; there is no mermaid renderer configured, so a ` ```mermaid ` fence would
-     publish as a block of code.
+     publish as a block of code. The publisher sends learners a lighter copy of every
+     screenshot; name a file `<name>.full.png` to send it unchanged, or `<name>.small.png`
+     to reduce it further, and put no other `.` in an asset's name.
    - **Videos** are referenced, never committed: `**Watch the video:** [title](url)`, or
      `**Watch the video:** _To be recorded at stage 8._` until it exists.
    - **Video scripts** are `NN-video-script.md` for the overview video, and the optional

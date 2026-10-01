@@ -120,6 +120,13 @@ Note the tool version you captured against in the design doc's SME notes. Screen
 when the tool ships a new release, and the next person needs to know what they're looking
 at.
 
+Commit the full-size capture. The publisher sends learners a lighter copy of each
+screenshot, and reviewers check at stage 6 that it is still readable. If one isn't (fine
+text in a dense dialog is the usual case), rename the file to `<name>.full.png` and change
+its link in the lesson in the same commit, and it is sent unchanged. `<name>.small.png`
+does the opposite, for a shot that only needs to show roughly where something is. No other
+`.` is allowed in an asset's name; the package check rejects a typo like `.ful.png`.
+
 If a lesson is listed as having **no visual at all**, that is a drafting gap, not a capture
 one: decide what it needs and send it back through `module-author` to write the link,
 diagram or video line in. ✅ Tick **"3e. Visuals in place"**.

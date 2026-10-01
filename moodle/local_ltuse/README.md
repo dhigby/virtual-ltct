@@ -32,6 +32,44 @@ not idempotent without it: `core_course_get_contents` does not reliably return a
 idnumber, so there is otherwise no way to ask Moodle which modules a previous publish
 created. With it, republishing is a diff rather than a blind re-create.
 
+## Republishing touches only what changed (spec 009)
+
+Saving a page bumps its `revision`, which Moodle puts in every image URL on it, and
+re-uploading an image gives it a new `timemodified`. Either makes the Moodle app download
+that page's images again, on a learner's metered connection. So a republish writes only
+what differs:
+
+- **`get_course_manifest`** also returns, per page, the files in its `mod_page/content`
+  area with their `contenthash` (SHA-1), read with `file_storage::get_area_files()`. Still
+  read-only, same capability. The publisher compares those hashes with the images it is
+  about to send.
+- **`create_page`** returns `outcome`: `created`, `updated` or `unchanged`. When name,
+  section, visibility, intro and content all match what is stored and no files are to
+  change, it writes **nothing**: no `update_moduleinfo()`, no event, no revision bump.
+- **`create_page` with `syncfiles`** makes the page's file area exactly the uploaded draft
+  plus `keepfiles`. Kept files are copied from the page's own area into the draft with
+  `file_storage::create_file_from_storedfile()`, which keeps their stored `timemodified`,
+  and given the same "original" source record core's `file_prepare_draft_area()` writes.
+  That record is what makes `file_save_draft_area_files()` keep the existing file rather
+  than delete and re-create it with a new time. When nothing was uploaded (a page that
+  only lost an image), the draft comes from `file_get_unused_draft_itemid()`. A stored file
+  in neither list is deleted by the save, as before.
+
+A publisher that sends neither new parameter gets the old behaviour, so an older
+publisher keeps working against this plugin, and the new publisher omits them whenever no
+file changes, which keeps it working against an older plugin.
+
+## Offline quizzes (spec 009)
+
+`create_quiz` sets `allowofflineattempts = 1` on create and on update. Without it the
+Moodle app will not download a quiz, and a consultant without a connection cannot take it.
+The setting has no admin default (it belongs to `quizaccess_offlineattempts`, which has no
+settings page), so there is nothing to declare in `moodle/site/`; the plugin sets it per
+quiz. That rule's four conditions (no time limit, no subnet, non-sequential navigation,
+deferred feedback or deferred CBM) are checked only by its form validation, which
+`add_moduleinfo()` never runs, so `create_quiz` checks them itself and refuses a quiz that
+could not go offline, naming the setting at fault.
+
 ## Identity, and why republishing does not duplicate
 
 Every object the publisher creates carries an idnumber:
@@ -143,3 +181,5 @@ and this plugin.
 - **No direct table writes** for anything a Moodle API covers. Bypassing
   `add_moduleinfo()` / `update_moduleinfo()` would skip grade items, completion, events
   and the file API, and leave a course that looks right until one of those is needed.
+  Spec 009 adds none: files go through `file_storage` and pages through
+  `update_moduleinfo()`.

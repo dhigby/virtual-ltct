@@ -1,0 +1,26 @@
+# Row #4: the Moodle app, its stylesheet and offline download.
+
+rows: [4]
+purpose: >-
+  Moodle app access. Web services and the mobile service are on so the Android app can sign
+  in; the app loads local_ltuse's stylesheet so published callouts look as they do in the
+  browser; and no app feature is disabled, which keeps course download and offline use on.
+settings:
+  - name: enablewebservices
+    value: 1
+    why: The mobile service is a web service; with web services off the app cannot sign in.
+  - name: enablemobilewebservice
+    value: 1
+    why: Without it the app is refused at sign-in, and a consultant in the field has no offline course.
+  - name: mobilecssurl
+    value: env:MOODLE_URL/local/ltuse/styles.css
+    why: >-
+      Published pages use callout classes that only local_ltuse's stylesheet styles. Without
+      it the app shows them as plain text. Built from MOODLE_URL so every server points at
+      its own copy.
+  - name: tool_mobile/disabledfeatures
+    value: ""
+    why: >-
+      Empty keeps NoDelegate_CoreCourseDownload, NoDelegate_CoreOffline and
+      NoDelegate_H5POffline enabled. Disabling any of them removes offline course download,
+      which is why the app was chosen (FR-013).

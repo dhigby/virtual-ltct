@@ -1,0 +1,40 @@
+# The Moodle release and the plugins the training system depends on.
+# Settings live in settings/, roles in roles.yaml. See README.md for how to change any of it.
+
+moodle:
+  # $CFG->version of the release this declaration was verified against.
+  # apply refuses a server older than this.
+  requires: 2026042003.03
+  release: "5.2.3+ (Build: 20260928)"
+
+plugins:
+  - component: local_ltuse
+    version: 2026100100
+    source:
+      path: moodle/local_ltuse
+    why: The publish endpoint and this applier. Pinned to the version.php stamp in this repo.
+
+  # Row #3: SCORM 1.2, H5P and embedded video.
+  - component: mod_scorm
+    enabled: 1
+    why: "#3 SCORM 1.2 packages."
+  - component: mod_h5pactivity
+    enabled: 1
+    why: "#3 H5P items as activities."
+  - component: filter_displayh5p
+    enabled: "on"
+    why: "#3 H5P embedded in pages."
+  - component: filter_mediaplugin
+    enabled: "on"
+    why: "#3 turns a Vimeo link into an embedded player."
+  - component: media_vimeo
+    enabled: 1
+    why: "#3 Vimeo is a trusted embed source."
+  - component: media_videojs
+    enabled: 1
+    why: "#3 plays linked video files."
+
+  # Row #25: push is off until spec 015 decides the app plan. Email is the default channel.
+  - component: message_airnotifier
+    enabled: 0
+    why: "#25 no mobile push until the app plan is decided (spec 015)."

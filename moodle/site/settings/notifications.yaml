@@ -1,0 +1,16 @@
+# Row #25: notification defaults. Push (message_airnotifier) is disabled in site.yaml until
+# spec 015 decides the app plan. Message-provider defaults stay at core defaults and are not
+# declared (research R9): they live outside the admin tree, and forum email already follows
+# each learner's maildigest preference.
+
+rows: [25]
+purpose: >-
+  Notification defaults. A new account gets forum email as one daily digest instead of one
+  email per post. It is only a default: every learner can change it, and every other
+  notification preference, from their own profile.
+settings:
+  - name: defaultpreference_maildigest
+    value: 1   # 0 no digest, 1 complete digest, 2 subjects only
+    why: >-
+      Core's default is one email per forum post, which floods a learner on a slow or
+      metered connection (FR-016).

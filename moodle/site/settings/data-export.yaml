@@ -1,0 +1,24 @@
+# Row #16: a learner's data export and deletion on request. Course backup is core default
+# (manager has moodle/backup:backupcourse); scheduled backup is spec 015's.
+#
+# tool_dataprivacy/dporoles is deliberately not declared (research R9): it enters the admin
+# tree only once some role holds tool/dataprivacy:managedatarequests, so declaring it would
+# block the first apply. Site admins are always treated as DPO (api::is_site_dpo()).
+
+rows: [16]
+purpose: >-
+  Learner data requests. Learners can contact the privacy officer to ask for an export or a
+  deletion of their data, and every request waits for a site admin to approve it rather than
+  running on its own.
+settings:
+  - name: tool_dataprivacy/contactdataprotectionofficer
+    value: 1
+    why: Without it a learner has no way to request an export or a deletion from their profile (FR-014).
+  - name: tool_dataprivacy/automaticdataexportapproval
+    value: 0
+    why: >-
+      A person checks who is asking before a learner's full data leaves the site. Automatic
+      approval would hand an export to anyone who can file a request in that learner's name.
+  - name: tool_dataprivacy/automaticdatadeletionapproval
+    value: 0
+    why: Deletion cannot be undone, so a person approves it rather than it running unreviewed.

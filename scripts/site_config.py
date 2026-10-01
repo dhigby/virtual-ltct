@@ -1,0 +1,835 @@
+#!/usr/bin/env python3
+"""Site configuration as code: the repo's half of `moodle/site/` (spec 001).
+
+Every setting, plugin and role the training system depends on is declared in YAML under
+`moodle/site/`. This command is the only thing that reads that YAML. The server never
+does: it receives the declaration as JSON on stdin, so it needs no YAML extension and no
+repo checkout.
+
+    site_config.py validate [--json]   check the declaration offline (CI runs this)
+    site_config.py render   [--mode=apply|drift]
+                                       print the JSON payload, every env: value unresolved
+    site_config.py apply    [--json]   bring the server to the declaration
+    site_config.py drift    [--json]   compare the server with the declaration; change nothing
+
+Contracts: specs/001-site-config-as-code/contracts/ (declaration.md, site-config-cli.md,
+output.md); every validation rule is in data-model.md.
+
+ENVIRONMENT (never a file; the repo is public)
+
+    MOODLE_URL   the target site; must equal the server's $CFG->wwwroot (apply, drift)
+    MOODLE_DIR   the Moodle code directory on the server (apply, drift)
+    MOODLE_SSH   optional ssh destination; unset runs the PHP script locally, which is
+                 what an on-server schedule uses
+    any NAME     named by an `env:NAME` setting value
+
+SECRETS. A setting value written `env:NAME` is resolved here, in memory, and travels only
+inside the stdin stream. It never goes into argv, onto disk or into a log. `drift` never
+resolves a secret (a secret is compared only as set or empty), and `render` resolves
+nothing. A non-secret reference may carry a path after the name, `env:MOODLE_URL/local/...`,
+which is how a URL is built from the target without hard-coding a host (FR-005).
+
+EXIT CODES: 0 valid / applied / no differences; 1 invalid / a step failed / drift found;
+2 usage or configuration error (including an invalid declaration at apply or drift time).
+"""
+import argparse
+import decimal
+import json
+import os
+import pathlib
+import re
+import shlex
+import subprocess
+import sys
+import urllib.parse
+
+try:
+    import yaml
+except ImportError:
+    sys.exit("pyyaml required: pip install pyyaml")
+
+REPO = pathlib.Path(__file__).resolve().parent.parent
+SITE_DIR = REPO / "moodle" / "site"
+REQUIREMENTS = REPO / "moodle" / "REQUIREMENTS.md"
+LTUSE_VERSION = REPO / "moodle" / "local_ltuse" / "version.php"
+CLI_PATH = "public/local/ltuse/cli/site_config.php"   # under $MOODLE_DIR (research R1)
+
+SECRET_TEXT = "<secret>"
+
+# Moodle's standard plugins, from lib/plugins.json on MOODLE_502_STABLE (read 2026-10-01;
+# core_plugin_manager::standard_plugins_list() reads the same file). A core plugin takes no
+# `version` or `source` pin; anything else must carry both. Refresh this when moodle.requires
+# moves to a new branch.
+_STANDARD_PLUGINS = {
+    'aiplacement': 'courseassist editor',
+    'aiprovider': 'awsbedrock azureai deepseek gemini ollama openai',
+    'antivirus': 'clamav',
+    'assignfeedback': 'comments editpdf file offline',
+    'assignsubmission': 'comments file onlinetext',
+    'auth': 'db email ldap lti manual nologin none oauth2 shibboleth webservice',
+    'availability': 'completion date grade group grouping profile',
+    'block': (
+        'accessreview activity_results admin_bookmarks badges blog_menu blog_recent '
+        'blog_tags calendar_month calendar_upcoming comments completionstatus course_list '
+        'course_summary feedback globalsearch glossary_random html login lp mentees '
+        'myoverview myprofile navigation news_items online_users private_files '
+        'recent_activity recentlyaccessedcourses recentlyaccesseditems rss_client '
+        'search_forums selfcompletion settings site_main_menu social_activities '
+        'starredcourses tag_flickr tag_youtube tags timeline'
+    ),
+    'booktool': 'exportimscp importhtml print',
+    'cachelock': 'file',
+    'cachestore': 'apcu file redis session static',
+    'calendartype': 'gregorian',
+    'communication': 'customlink matrix',
+    'contenttype': 'h5p',
+    'coursereport': '',
+    'customfield': 'checkbox date number select text textarea',
+    'datafield': (
+        'checkbox date file latlong menu multimenu number picture radiobutton text '
+        'textarea url'
+    ),
+    'dataformat': 'csv excel html json ods pdf',
+    'datapreset': 'imagegallery journal proposals resources',
+    'editor': 'textarea tiny',
+    'enrol': (
+        'category cohort database fee flatfile guest imsenterprise ldap lti manual meta '
+        'paypal self'
+    ),
+    'factor': (
+        'admin auth capability cohort email grace iprange nosetup role sms token totp '
+        'webauthn'
+    ),
+    'fileconverter': 'googledrive unoconv',
+    'filter': (
+        'activitynames algebra codehighlighter data displayh5p emailprotect emoticon '
+        'glossary mathjaxloader mediaplugin multilang tex urltolink'
+    ),
+    'format': 'singleactivity social topics weeks',
+    'forumreport': 'summary',
+    'gradeexport': 'ods txt xls xml',
+    'gradeimport': 'csv direct xml',
+    'gradepenalty': 'duedate',
+    'gradereport': 'grader history outcomes overview singleview summary user',
+    'gradingform': 'guide rubric',
+    'h5plib': 'v128',
+    'local': '',
+    'logstore': 'database standard',
+    'ltiservice': 'basicoutcomes gradebookservices memberships profile toolproxy toolsettings',
+    'media': 'html5audio html5video videojs vimeo youtube',
+    'message': 'airnotifier email popup sms',
+    'mlbackend': 'php python',
+    'mnetservice': '',
+    'mod': (
+        'assign bigbluebuttonbn book choice data feedback folder forum glossary '
+        'h5pactivity imscp label lesson lti page qbank quiz resource scorm subsection url '
+        'wiki workshop'
+    ),
+    'paygw': 'paypal',
+    'plagiarism': '',
+    'portfolio': 'download flickr googledocs',
+    'profilefield': 'checkbox datetime menu social text textarea',
+    'qbank': (
+        'bulkmove columnsortorder comment customfields deletequestion editquestion '
+        'exportquestions exporttoxml history importquestions managecategories '
+        'previewquestion statistics tagquestion usage viewcreator viewquestionname '
+        'viewquestiontext viewquestiontype'
+    ),
+    'qbehaviour': (
+        'adaptive adaptivenopenalty deferredcbm deferredfeedback immediatecbm '
+        'immediatefeedback informationitem interactive interactivecountback manualgraded '
+        'missing'
+    ),
+    'qformat': 'aiken blackboard_six gift missingword multianswer xhtml xml',
+    'qtype': (
+        'calculated calculatedmulti calculatedsimple ddimageortext ddmarker ddwtos '
+        'description essay gapselect match missingtype multianswer multichoice numerical '
+        'ordering randomsamatch shortanswer truefalse'
+    ),
+    'quiz': 'grading overview responses statistics',
+    'quizaccess': (
+        'delaybetweenattempts ipaddress numattempts offlineattempts openclosedate '
+        'password seb securewindow timelimit'
+    ),
+    'report': (
+        'backups competency completion configlog courseoverview eventlist infectedfiles '
+        'insights log loglive outline participation performance progress '
+        'questioninstances security stats status themeusage usersessions'
+    ),
+    'repository': (
+        'areafiles contentbank coursefiles dropbox equella filesystem flickr '
+        'flickr_public googledocs local merlot nextcloud onedrive recent s3 upload url '
+        'user webdav wikimedia youtube'
+    ),
+    'scormreport': 'basic graphs interactions objectives',
+    'search': 'simpledb solr',
+    'smsgateway': 'aws modica',
+    'theme': 'boost classic',
+    'tiny': (
+        'accessibilitychecker aiplacement autosave equation h5p html link media '
+        'noautolink premium recordrtc'
+    ),
+    'tool': (
+        'admin_presets analytics availabilityconditions behat brickfield capability '
+        'cohortroles componentlibrary customlang dataprivacy dbtransfer filetypes '
+        'generator httpsreplace installaddon langimport licensemanager log lp lpimportcsv '
+        'lpmigrate messageinbound mfa mobile monitor multilangupgrade oauth2 phpunit '
+        'policy profiling recyclebin replace spamcleaner task templatelibrary unsuproles '
+        'uploadcourse uploaduser usertours xmldb'
+    ),
+    'webservice': 'rest soap',
+    'workshopallocation': 'manual random scheduled',
+    'workshopeval': 'best',
+    'workshopform': 'accumulative comments numerrors rubric',
+}
+STANDARD = {t: frozenset(names.split()) for t, names in _STANDARD_PLUGINS.items()}
+
+CORE_ROLES = frozenset(
+    "manager coursecreator editingteacher teacher student guest user frontpage".split())
+ARCHETYPES = CORE_ROLES | {""}
+CONTEXT_LEVELS = ("system", "coursecat", "course", "module", "user", "block")
+PERMISSIONS = ("allow", "prevent", "prohibit", "inherit")
+
+# Settings whose value is a list of role shortnames, checked against roles.yaml + core.
+ROLE_SETTINGS = frozenset({"tool_dataprivacy/dporoles"})
+
+# A setting whose name looks like this must be a secret env: reference (FR-006, SC-004)...
+SECRET_NAME = re.compile(r"pass|secret|token|key", re.I)   # pass: smtppass, proxypassword
+# ... unless it is one of these, which are policy switches, not secrets. Add to this list
+# only in review, with the setting confirmed in Moodle source.
+NON_SECRET_NAMES = frozenset({
+    "passwordpolicy", "minpasswordlength", "minpassworddigits", "minpasswordlower",
+    "minpasswordupper", "minpasswordnonalphanum", "passwordreuselimit",
+    "passwordchangelogout", "passwordchangetokendeletion", "recaptchapublickey",
+    "groupenrolmentkeypolicy",
+})
+# A literal that looks like a credential: long, unbroken, mixing letters and digits.
+SECRET_VALUE = re.compile(r"^(?=.*[0-9])(?=.*[A-Za-z])[A-Za-z0-9+/=_\-]{32,}$")
+
+SETTING_KEY = re.compile(r"^(?:([a-z][a-z0-9_]*)/)?([A-Za-z0-9_]+)$")
+ENV_REF = re.compile(r"^env:([A-Z][A-Z0-9_]*)(/\S*)?$")
+COMPONENT = re.compile(r"^([a-z][a-z0-9]*)_([a-z0-9_]+)$")
+CAPABILITY = re.compile(r"^[a-z0-9_]+/[a-z0-9_]+:[a-z0-9_]+$")
+VERSION_STAMP = re.compile(r"^\d{10}(\.\d{1,2})?$")
+SETTINGS_FILE = re.compile(r"^[a-z0-9]+(-[a-z0-9]+)*\.yaml$")
+SHA256 = re.compile(r"^[0-9a-f]{64}$")
+
+TOP_FILES = {
+    "site.yaml": ({"moodle"}, {"plugins"}),
+    "ignore.yaml": ({"ignore"}, set()),
+    "roles.yaml": ({"roles"}, set()),
+}
+
+
+# ---------------------------------------------------------------------------------------
+# A strict YAML loader. YAML 1.1 turns an unquoted `off` into False, which a reviewer
+# reading the diff would never see, so booleans are kept with their spelling and each
+# field decides what it accepts. Floats are kept exact. Duplicate keys are errors.
+
+class Flag:
+    """A YAML 1.1 boolean, remembered with the text it was written as."""
+    __slots__ = ("value", "text")
+
+    def __init__(self, value, text):
+        self.value, self.text = value, text
+
+    def __repr__(self):
+        return self.text
+
+
+class _Loader(yaml.SafeLoader):
+    def construct_mapping(self, node, deep=False):
+        seen = set()
+        self.flatten_mapping(node)
+        for key_node, _ in node.value:
+            key = self.construct_object(key_node, deep=deep)
+            text = key.text if isinstance(key, Flag) else key
+            if text in seen:
+                raise yaml.constructor.ConstructorError(
+                    None, None, "duplicate key %r" % (text,), key_node.start_mark)
+            seen.add(text)
+        return super().construct_mapping(node, deep)
+
+
+_Loader.add_constructor(
+    "tag:yaml.org,2002:bool",
+    lambda loader, node: Flag(loader.construct_yaml_bool(node), node.value))
+_Loader.add_constructor(
+    "tag:yaml.org,2002:float",
+    lambda loader, node: decimal.Decimal(node.value.replace("_", "")))
+
+
+def _is_int(v):
+    return isinstance(v, int) and not isinstance(v, bool)
+
+
+def _text(v):
+    return isinstance(v, str) and v.strip() != ""
+
+
+# ---------------------------------------------------------------------------------------
+# Validation. Every rule in data-model.md that can be checked offline.
+
+class Problems:
+    def __init__(self):
+        self.items = []
+
+    def add(self, where, message):
+        self.items.append("%s: %s" % (where, message))
+
+    def __bool__(self):
+        return bool(self.items)
+
+
+def _rel(path):
+    try:
+        return path.resolve().relative_to(REPO).as_posix()
+    except ValueError:
+        return path.as_posix()
+
+
+def _load(path, problems):
+    try:
+        with open(path, encoding="utf-8") as fh:
+            return yaml.load(fh, Loader=_Loader)
+    except yaml.YAMLError as exc:
+        problems.add(_rel(path), "not valid YAML: %s" % exc)
+    except OSError as exc:
+        problems.add(_rel(path), "cannot read: %s" % exc)
+    return None
+
+
+def _check_keys(where, data, required, optional, problems):
+    if not isinstance(data, dict):
+        problems.add(where, "must be a mapping")
+        return False
+    for key in data:
+        if key not in required and key not in optional:
+            problems.add(where, "unknown key %r" % (key,))
+    for key in sorted(required):
+        if key not in data:
+            problems.add(where, "missing required key %r" % key)
+    return True
+
+
+def _requirement_rows():
+    rows = set()
+    try:
+        for line in REQUIREMENTS.read_text(encoding="utf-8").splitlines():
+            m = re.match(r"^\|\s*(\d+)\s*\|", line)
+            if m:
+                rows.add(int(m.group(1)))
+    except OSError:
+        pass
+    return rows
+
+
+def _php_stamp(path, field):
+    try:
+        text = path.read_text(encoding="utf-8")
+    except OSError:
+        return None
+    m = re.search(r"\$plugin->%s\s*=\s*'?([0-9A-Za-z_.]+)'?\s*;" % field, text)
+    return m.group(1) if m else None
+
+
+def _walk_strings(node, path):
+    if isinstance(node, str):
+        yield path, node
+    elif isinstance(node, dict):
+        for k, v in node.items():
+            yield from _walk_strings(v, path + (str(k),))
+    elif isinstance(node, list):
+        for i, v in enumerate(node):
+            yield from _walk_strings(v, path + (str(i),))
+
+
+def _check_hosts(where, data, problems, allowed=()):
+    """No hard-coded host: an absolute URL is an error unless its path is allowed."""
+    for path, value in _walk_strings(data, ()):
+        if any(len(path) == len(a) and all(x in ("*", p) for x, p in zip(a, path))
+               for a in allowed):
+            continue
+        parsed = urllib.parse.urlparse(value.strip())
+        if parsed.netloc and (parsed.scheme or value.strip().startswith("//")):
+            problems.add(where, "%s is a hard-coded host (%s); build it from env:MOODLE_URL"
+                         % (".".join(path) or "value", value.strip()))
+
+
+def _check_value(where, key, value, secret, problems):
+    """Check one setting value; return the env: reference name, or None."""
+    if isinstance(value, Flag):
+        problems.add(where, "%s: YAML boolean %r; write 1 or 0" % (key, value.text))
+        return None
+    if isinstance(value, decimal.Decimal):
+        problems.add(where, "%s: %s is a float; quote it or use an integer" % (key, value))
+        return None
+    if value is None:
+        problems.add(where, "%s: no value; write \"\" for an empty setting" % key)
+        return None
+    if isinstance(value, str) and value.startswith("env:"):
+        m = ENV_REF.match(value)
+        if not m:
+            problems.add(where, "%s: malformed environment reference %r (env:NAME, NAME is "
+                         "[A-Z][A-Z0-9_]*)" % (key, value))
+            return None
+        if secret and m.group(2):
+            problems.add(where, "%s: a secret reference is env:NAME alone" % key)
+        return m.group(1)
+    if secret:
+        problems.add(where, "%s: secret: true needs an env: value; a secret is never a "
+                     "literal (FR-006)" % key)
+        return None
+    items = value if isinstance(value, list) else [value]
+    for item in items:
+        if isinstance(item, (Flag, decimal.Decimal, list, dict)) or item is None or not (
+                isinstance(item, str) or _is_int(item)):
+            problems.add(where, "%s: values are strings, integers or a list of them" % key)
+            return None
+        if isinstance(item, str) and item.startswith("env:"):
+            problems.add(where, "%s: an env: reference cannot sit inside a list" % key)
+            return None
+        if isinstance(item, str) and not item.startswith("/") and SECRET_VALUE.match(item):
+            problems.add(where, "%s: value looks like a literal secret; use env:NAME with "
+                         "secret: true" % key)
+    return None
+
+
+def validate(site_dir=SITE_DIR):
+    """Load and check the declaration. Returns (declaration, Problems)."""
+    problems = Problems()
+    site_dir = pathlib.Path(site_dir)
+    decl = {"moodle": None, "plugins": [], "ignore": [], "roles": [], "settings": []}
+    if not site_dir.is_dir():
+        problems.add(_rel(site_dir), "declaration directory not found")
+        return decl, problems
+
+    for path in sorted(site_dir.iterdir()):
+        if path.is_file() and path.suffix in (".yaml", ".yml") and path.name not in TOP_FILES:
+            problems.add(_rel(path), "unexpected file; the declaration is site.yaml, "
+                         "ignore.yaml, roles.yaml and settings/*.yaml")
+
+    loaded = {}
+    for name, (required, optional) in TOP_FILES.items():
+        path = site_dir / name
+        if not path.exists():
+            if name == "site.yaml":
+                problems.add(_rel(path), "missing; it declares the minimum Moodle release")
+            continue
+        before = len(problems.items)
+        data = _load(path, problems)
+        if data is None and len(problems.items) == before:
+            problems.add(_rel(path), "empty")
+        if data is not None and _check_keys(_rel(path), data, required, optional, problems):
+            loaded[name] = (path, data)
+
+    # site.yaml: the minimum release and the plugins.
+    if "site.yaml" in loaded:
+        path, data = loaded["site.yaml"]
+        where = _rel(path)
+        _check_hosts(where, data, problems, allowed=[("plugins", "*", "source", "url")])
+        moodle = data.get("moodle")
+        if _check_keys(where + " moodle", moodle, {"requires", "release"}, set(), problems):
+            requires = moodle.get("requires")
+            if not (_is_int(requires) or isinstance(requires, decimal.Decimal)) or \
+                    not VERSION_STAMP.match(str(requires)):
+                problems.add(where, "moodle.requires must be a YYYYMMDDXX.XX version stamp")
+            else:
+                own = _php_stamp(LTUSE_VERSION, "requires")
+                if own and decimal.Decimal(str(requires)) < decimal.Decimal(own):
+                    problems.add(where, "moodle.requires %s is lower than local_ltuse's own "
+                                 "$plugin->requires %s" % (requires, own))
+                if not _text(moodle.get("release")):
+                    problems.add(where, "moodle.release must be text, e.g. \"5.2.3+ (Build: "
+                                 "20260928)\"")
+                decl["moodle"] = {"requires": requires, "release": moodle.get("release")}
+        plugins = data.get("plugins") or []
+        if not isinstance(plugins, list):
+            problems.add(where, "plugins must be a list")
+            plugins = []
+        seen = set()
+        for i, plugin in enumerate(plugins):
+            pwhere = "%s plugins[%d]" % (where, i)
+            if not _check_keys(pwhere, plugin, {"component", "why"},
+                               {"enabled", "version", "source"}, problems):
+                continue
+            component = plugin.get("component")
+            m = COMPONENT.match(component) if isinstance(component, str) else None
+            if not m:
+                problems.add(pwhere, "component %r is not a frankenstyle name" % (component,))
+                continue
+            pwhere = "%s %s" % (where, component)
+            if component in seen:
+                problems.add(pwhere, "declared twice")
+            seen.add(component)
+            if not _text(plugin.get("why")):
+                problems.add(pwhere, "why must say which row or spec needs it")
+            ptype, pname = m.groups()
+            standard = pname in STANDARD.get(ptype, ())
+            out = {"component": component}
+            if "enabled" in plugin:
+                enabled = plugin["enabled"]
+                if ptype == "filter":
+                    text = enabled.text.lower() if isinstance(enabled, Flag) else enabled
+                    if text not in ("on", "off", "disabled"):
+                        problems.add(pwhere, "a filter's enabled is on, off or disabled")
+                    else:
+                        out["enabled"] = text
+                elif isinstance(enabled, Flag) and enabled.text.lower() in ("true", "false"):
+                    out["enabled"] = int(enabled.value)
+                elif _is_int(enabled) and enabled in (0, 1):
+                    out["enabled"] = enabled
+                else:
+                    problems.add(pwhere, "enabled is 1 or 0 (on/off/disabled are for "
+                                 "filter_* only)")
+            if standard:
+                for key in ("version", "source"):
+                    if key in plugin:
+                        problems.add(pwhere, "a core plugin takes no %s; its version is the "
+                                     "Moodle release" % key)
+            else:
+                version, source = plugin.get("version"), plugin.get("source")
+                if not (_is_int(version) and version > 0) or source is None:
+                    problems.add(pwhere, "not a standard plugin, so it needs a version pin "
+                                 "and a source")
+                else:
+                    out["version"] = version
+                    _check_source(pwhere, component, version, source, problems)
+            decl["plugins"].append(out)
+
+    # ignore.yaml
+    if "ignore.yaml" in loaded:
+        path, data = loaded["ignore.yaml"]
+        where = _rel(path)
+        _check_hosts(where, data, problems)
+        entries = data.get("ignore") or []
+        if not isinstance(entries, list):
+            problems.add(where, "ignore must be a list")
+            entries = []
+        for i, entry in enumerate(entries):
+            ewhere = "%s ignore[%d]" % (where, i)
+            if not _check_keys(ewhere, entry, {"setting", "reason"}, set(), problems):
+                continue
+            key = entry.get("setting")
+            if not (isinstance(key, str) and SETTING_KEY.match(key)):
+                problems.add(ewhere, "setting %r is not a setting key" % (key,))
+                continue
+            if not _text(entry.get("reason")):
+                problems.add(ewhere, "%s: an ignore entry needs a reason" % key)
+            decl["ignore"].append({"setting": key, "reason": entry.get("reason")})
+
+    # roles.yaml
+    role_names = set(CORE_ROLES)
+    if "roles.yaml" in loaded:
+        path, data = loaded["roles.yaml"]
+        where = _rel(path)
+        _check_hosts(where, data, problems)
+        roles = data.get("roles") or []
+        if not isinstance(roles, list):
+            problems.add(where, "roles must be a list")
+            roles = []
+        seen = set()
+        for i, role in enumerate(roles):
+            rwhere = "%s roles[%d]" % (where, i)
+            if not _check_keys(rwhere, role, {"shortname", "why"},
+                               {"name", "description", "archetype", "contextlevels",
+                                "capabilities"}, problems):
+                continue
+            short = role.get("shortname")
+            if not (isinstance(short, str) and re.match(r"^[a-z0-9_]+$", short)):
+                problems.add(rwhere, "shortname %r is not a role shortname" % (short,))
+                continue
+            rwhere = "%s %s" % (where, short)
+            if short in seen:
+                problems.add(rwhere, "declared twice")
+            seen.add(short)
+            role_names.add(short)
+            out = {"shortname": short}
+            if not _text(role.get("why")):
+                problems.add(rwhere, "why must say which row or spec needs it")
+            for key in ("name", "description"):
+                if key in role:
+                    if not isinstance(role[key], str):
+                        problems.add(rwhere, "%s must be text" % key)
+                    else:
+                        out[key] = role[key]
+            if "archetype" in role:
+                arch = role["archetype"] if role["archetype"] is not None else ""
+                if arch not in ARCHETYPES:
+                    problems.add(rwhere, "archetype %r is not a Moodle archetype" % (arch,))
+                out["archetype"] = arch
+            if "contextlevels" in role:
+                levels = role["contextlevels"]
+                if not isinstance(levels, list) or any(lv not in CONTEXT_LEVELS
+                                                       for lv in levels) \
+                        or len(set(levels)) != len(levels):
+                    problems.add(rwhere, "contextlevels is a list drawn from %s"
+                                 % ", ".join(CONTEXT_LEVELS))
+                else:
+                    out["contextlevels"] = levels
+            caps = role.get("capabilities") or {}
+            if not isinstance(caps, dict):
+                problems.add(rwhere, "capabilities must map capability -> permission")
+                caps = {}
+            for cap, perm in caps.items():
+                if not (isinstance(cap, str) and CAPABILITY.match(cap)):
+                    problems.add(rwhere, "%r is not a capability name" % (cap,))
+                if perm not in PERMISSIONS:
+                    problems.add(rwhere, "%s: permission %r is not one of %s"
+                                 % (cap, perm, ", ".join(PERMISSIONS)))
+            out["capabilities"] = dict(caps)
+            decl["roles"].append(out)
+
+    # settings/*.yaml
+    settings_dir = site_dir / "settings"
+    declared = {}
+    rows = _requirement_rows()
+    if settings_dir.is_dir():
+        for path in sorted(settings_dir.iterdir()):
+            where = _rel(path)
+            if path.is_dir() or not SETTINGS_FILE.match(path.name):
+                problems.add(where, "settings files are lowercase-hyphenated .yaml, one "
+                             "topic per file")
+                continue
+            before = len(problems.items)
+            data = _load(path, problems)
+            if data is None:
+                if len(problems.items) == before:
+                    problems.add(where, "empty")
+                continue
+            if not _check_keys(where, data, {"rows", "purpose", "settings"}, set(), problems):
+                continue
+            _check_hosts(where, data, problems)
+            cited = data.get("rows")
+            if not isinstance(cited, list) or not all(_is_int(r) for r in cited):
+                problems.add(where, "rows must be a list of moodle/REQUIREMENTS.md row numbers")
+            else:
+                for r in cited:
+                    if r not in rows:
+                        problems.add(where, "row %d is not in moodle/REQUIREMENTS.md" % r)
+            if not _text(data.get("purpose")):
+                problems.add(where, "purpose must say what this file is for")
+            entries = data.get("settings")
+            if not isinstance(entries, list):
+                problems.add(where, "settings must be a list")
+                continue
+            for i, entry in enumerate(entries):
+                swhere = "%s settings[%d]" % (where, i)
+                if not _check_keys(swhere, entry, {"name", "value", "why"},
+                                   {"secret", "verify"}, problems):
+                    continue
+                key = entry.get("name")
+                m = SETTING_KEY.match(key) if isinstance(key, str) else None
+                if not m:
+                    problems.add(swhere, "name %r is not a setting key (name or plugin/name)"
+                                 % (key,))
+                    continue
+                if key in declared:
+                    problems.add(where, "%s is already declared in %s; a setting has one "
+                                 "home (FR-011)" % (key, declared[key]))
+                    continue
+                declared[key] = where
+                plugin, name = m.groups()
+                secret = entry.get("secret", Flag(False, "false"))
+                if not (isinstance(secret, Flag) and secret.text.lower() in ("true", "false")):
+                    problems.add(where, "%s: secret is true or false" % key)
+                    secret = False
+                else:
+                    secret = secret.value
+                value = entry.get("value")
+                env = _check_value(where, key, value, secret, problems)
+                if SECRET_NAME.search(name) and name.lower() not in NON_SECRET_NAMES \
+                        and not (env and secret):
+                    problems.add(where, "%s looks like a secret, so its value must be env:NAME "
+                                 "with secret: true (FR-006)" % key)
+                if not _text(entry.get("why")):
+                    problems.add(where, "%s: why must say what breaks without it" % key)
+                if "verify" in entry and not isinstance(entry["verify"], str):
+                    problems.add(where, "%s: verify must be text" % key)
+                if plugin:
+                    pm = COMPONENT.match(plugin)
+                    if pm and pm.group(1) in STANDARD and \
+                            pm.group(2) not in STANDARD[pm.group(1)] and \
+                            plugin not in {p["component"] for p in decl["plugins"]}:
+                        problems.add(where, "%s belongs to %s, which is neither core nor "
+                                     "declared in site.yaml" % (key, plugin))
+                decl["settings"].append({"name": key, "plugin": plugin, "setting": name,
+                                         "value": value, "secret": bool(secret),
+                                         "env": env, "file": where})
+
+    for entry in decl["ignore"]:
+        if entry["setting"] in declared:
+            problems.add("ignore.yaml", "%s is declared in %s, so it cannot also be ignored"
+                         % (entry["setting"], declared[entry["setting"]]))
+    for s in decl["settings"]:
+        if s["name"] in ROLE_SETTINGS and isinstance(s["value"], list):
+            for short in s["value"]:
+                if short not in role_names:
+                    problems.add(s["file"], "%s names role %r, which is neither core nor in "
+                                 "roles.yaml" % (s["name"], short))
+    return decl, problems
+
+
+def _check_source(where, component, version, source, problems):
+    if not isinstance(source, dict):
+        problems.add(where, "source is {url, sha256} or {path}")
+        return
+    keys = set(source)
+    if keys == {"url", "sha256"}:
+        url = urllib.parse.urlparse(str(source["url"]))
+        if url.scheme != "https" or not url.netloc:
+            problems.add(where, "source.url must be an https release archive")
+        if not (isinstance(source["sha256"], str) and SHA256.match(source["sha256"])):
+            problems.add(where, "source.sha256 must be 64 lowercase hex characters, in quotes "
+                                "(YAML reads an all-digit checksum as a number)")
+    elif keys == {"path"}:
+        rel = source["path"]
+        plugin_dir = (REPO / str(rel)).resolve()
+        if not isinstance(rel, str) or pathlib.PurePosixPath(rel).is_absolute() or \
+                REPO not in plugin_dir.parents:
+            problems.add(where, "source.path must be a path inside this repo")
+            return
+        stamp = _php_stamp(plugin_dir / "version.php", "version")
+        if stamp is None:
+            problems.add(where, "source.path %s has no version.php with $plugin->version" % rel)
+        elif stamp != str(version):
+            problems.add(where, "pinned to %s but %s/version.php says %s; the pin cannot "
+                         "drift from the code" % (version, rel, stamp))
+        own = _php_stamp(plugin_dir / "version.php", "component")
+        if own and own != component:
+            problems.add(where, "%s/version.php is %s, not %s" % (rel, own, component))
+    else:
+        problems.add(where, "source is either {url, sha256} or {path}")
+
+
+# ---------------------------------------------------------------------------------------
+# The payload: the declaration as the JSON site_config.php reads (data-model "Rendered
+# payload"). Built in memory; the resolved form is only ever written to the child's stdin.
+
+def _literal(value):
+    if isinstance(value, list):
+        return [str(v) for v in value]
+    return str(value)
+
+
+def build_payload(decl, mode, environ, redact=False):
+    """mode is apply or drift. redact=True resolves nothing (render)."""
+    target = environ.get("MOODLE_URL") or ""
+    payload = {
+        "mode": mode,
+        "target_url": target if target else ("env:MOODLE_URL" if redact else ""),
+        "moodle": {"requires": float(decl["moodle"]["requires"]),
+                   "release": decl["moodle"]["release"]},
+        "plugins": decl["plugins"],
+        "ignore": decl["ignore"],
+        "roles": decl["roles"],
+        "settings": [],
+        "failed_env": [],
+    }
+    for s in decl["settings"]:
+        out = {"name": s["name"], "plugin": s["plugin"], "setting": s["setting"],
+               "secret": s["secret"]}
+        if not s["env"]:
+            out["value"] = _literal(s["value"])
+        elif redact:
+            out["value"] = SECRET_TEXT if s["secret"] else s["value"]
+        elif s["secret"] and mode == "drift":
+            pass   # drift compares a secret only as set or empty; it never sees the value
+        else:
+            name, suffix = ENV_REF.match(s["value"]).groups()
+            resolved = environ.get(name)
+            if resolved is None or resolved == "":
+                # Never write an empty value over a working one: the server reports it
+                # [fail] env-missing in its place in the run, and writes nothing.
+                out["env_missing"] = name
+                payload["failed_env"].append({"name": s["name"], "env": name})
+            else:
+                out["value"] = (resolved.rstrip("/") + suffix) if suffix else resolved
+        payload["settings"].append(out)
+    return payload
+
+
+# ---------------------------------------------------------------------------------------
+# Transport: ssh to the server (or run locally), JSON on stdin, output relayed untouched.
+
+def remote_command(mode, environ, as_json=False):
+    script = environ["MOODLE_DIR"].rstrip("/") + "/" + CLI_PATH
+    args = ["--mode=" + mode] + (["--json"] if as_json else [])
+    ssh = environ.get("MOODLE_SSH")
+    if ssh:
+        return ["ssh", ssh, " ".join(["php", shlex.quote(script)] + args)]
+    return ["php", script] + args
+
+
+def run_remote(mode, decl, environ, as_json=False, runner=subprocess.run):
+    for name in ("MOODLE_URL", "MOODLE_DIR"):
+        if not environ.get(name):
+            print("[fail] %s is not set" % name, file=sys.stderr)
+            return 2
+    payload = build_payload(decl, mode, environ)
+    env_failed = bool(payload["failed_env"])
+    data = json.dumps(payload).encode("utf-8")
+    del payload
+    cmd = remote_command(mode, environ, as_json)
+    try:
+        # stdout and stderr are inherited: the report goes straight to the operator and
+        # is never captured, stored or logged here.
+        rc = runner(cmd, input=data, check=False).returncode
+    except FileNotFoundError:
+        print("[fail] cannot run %s; is it installed and on PATH?" % cmd[0], file=sys.stderr)
+        return 2
+    finally:
+        del data
+    if rc not in (0, 1, 2):
+        print("[fail] %s exited %d before a report (connection or PHP error)" % (cmd[0], rc),
+              file=sys.stderr)
+        return 2
+    if rc == 0 and env_failed:
+        return 1   # a skipped setting is a failed step even if the server forgot to say so
+    return rc
+
+
+# ---------------------------------------------------------------------------------------
+
+def _summary(decl):
+    files = len({s["file"] for s in decl["settings"]})
+    return ("%d settings in %d files, %d plugins, %d roles, %d ignore entries"
+            % (len(decl["settings"]), files, len(decl["plugins"]), len(decl["roles"]),
+               len(decl["ignore"])))
+
+
+def main(argv=None, environ=None):
+    environ = os.environ if environ is None else environ
+    parser = argparse.ArgumentParser(description=__doc__.split("\n")[0])
+    parser.add_argument("command", choices=["validate", "render", "apply", "drift"])
+    parser.add_argument("--json", action="store_true", help="report as JSON")
+    parser.add_argument("--mode", choices=["apply", "drift"], default="apply",
+                        help="render only: which payload to show (default apply)")
+    parser.add_argument("--site-dir", default=str(SITE_DIR), help=argparse.SUPPRESS)
+    args = parser.parse_args(argv)
+
+    decl, problems = validate(args.site_dir)
+    if args.command == "validate":
+        if args.json:
+            print(json.dumps({"valid": not problems, "errors": problems.items}, indent=2))
+        else:
+            for item in problems.items:
+                print("[fail] " + item)
+            print(("[fail] declaration invalid: %d problems" % len(problems.items))
+                  if problems else "[ok] declaration valid: " + _summary(decl))
+        return 1 if problems else 0
+
+    if problems:
+        for item in problems.items:
+            print("[fail] " + item, file=sys.stderr)
+        print("[fail] declaration invalid; run site_config.py validate", file=sys.stderr)
+        return 2
+
+    if args.command == "render":
+        print(json.dumps(build_payload(decl, args.mode, environ, redact=True), indent=2))
+        return 0
+    return run_remote(args.command, decl, environ, as_json=args.json)
+
+
+if __name__ == "__main__":
+    sys.exit(main())

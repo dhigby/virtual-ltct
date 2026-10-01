@@ -49,27 +49,47 @@ to a different Moodle server is a re-publish rather than a data move.
 
 ```bash
 # On the Moodle server, from the Moodle root:
-cp -r /path/to/virtual-ltct/moodle/local_ltuse local/ltuse
-php admin/cli/upgrade.php
+cp -r /path/to/virtual-ltct/moodle/local_ltuse public/local/ltuse
+php -d max_input_vars=5000 admin/cli/upgrade.php --non-interactive
 ```
 
-Then, in Site administration:
+The `-d max_input_vars=5000` is there because the upgrade's environment check reads the
+CLI's `php.ini`, which on the build host is set lower than the web server's.
 
-1. **Plugins → Web services → Overview** — enable web services and the REST protocol.
-2. **Users → Permissions → Define roles** — create a role with `local/ltuse:publish`
-   (and `moodle/question:add`, `moodle/course:manageactivities`) and assign it to the
-   publishing account. The capability is deliberately in no archetype: this token
-   rewrites course content wholesale.
-3. **Plugins → Web services → External services** — the service *LTC curriculum
-   publishing* is declared by the plugin. It is `restrictedusers`, so add the publishing
-   account under **Authorised users**.
-4. **Plugins → Web services → Manage tokens** — create a token for that account on that
-   service. That is `MOODLE_TOKEN`.
-5. **Appearance → Themes → Mobile appearance** — set `mobilecssurl` to
-   `/local/ltuse/styles.css` so published callouts and screenshots render correctly in
-   the Android app.
+Then, from your own machine, apply the site declaration and create the publishing account:
+
+```powershell
+python scripts/site_config.py apply      # settings, plugin states and roles from moodle/site/
+```
+
+```bash
+# On the server again:
+php public/local/ltuse/cli/setup_publishing.php --token-file=/home/ltuse/.ltuse-token --email=ADDRESS
+```
+
+`apply` turns on web services and the mobile app service, sets `mobilecssurl` so published
+callouts render in the Android app, and creates the `ltcpublisher` role with exactly the
+capabilities the publisher uses. `local/ltuse:publish` is deliberately in no archetype,
+because this token rewrites course content wholesale. `setup_publishing.php` then creates
+the account, authorises it on the restricted *LTC curriculum publishing* service, and writes
+the token to a mode-600 file. It never prints the token. That token is `MOODLE_TOKEN`.
 
 The repo is public, so the token goes in the environment and never in a file here.
+
+## Site configuration: `cli/site_config.php`
+
+The applier and drift check behind `scripts/site_config.py`. It reads the declaration as JSON
+on stdin and is never run by hand. See [`moodle/site/README.md`](../site/README.md). The code
+is in `classes/siteconfig/`. `inspector` reads and compares, and writes nothing. `applier` and
+`drift` act on its results, and `report` prints them, redacting secrets.
+
+It uses Moodle's public APIs: `admin_setting::write_setting()`, plugininfo `enable_plugin()`,
+`create_role()`, `set_role_contextlevels()`, `assign_capability()` and
+`unassign_capability()`. It makes one raw read:
+
+| Table | Read by | Why there is no API |
+|---|---|---|
+| `role_capabilities` | `roleid`, `contextid` (system) | Drift compares a role's own system-context permissions. `role_context_capabilities()` merges parent contexts, which is not that comparison. |
 
 ## Verified against Moodle 5.2.3+ (2026-09-29)
 

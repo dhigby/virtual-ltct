@@ -1,15 +1,15 @@
 <?php
 /**
- * One-command setup of the publishing account, role, service authorisation and token.
+ * One-command setup of the publishing account, service authorisation and token.
  *
- * Doing this through the Moodle web UI takes four screens and is easy to get subtly
- * wrong -- particularly the role's context levels, and the `webservice/rest:use`
- * capability, whose absence produces an "access control exception" that looks like a
+ * The 'ltcpublisher' role it assigns is declared in moodle/site/roles.yaml and created by
+ * `scripts/site_config.py apply`, which must run first. That is where `webservice/rest:use`
+ * lives: without it every call fails as an "access control exception" that looks like a
  * token problem rather than a permissions one. This script is also the reason the
  * production server will be a repeat of a known-good setup rather than a second
  * ten-minute clickthrough.
  *
- * IDEMPOTENT. Run it as often as you like: an existing role, user or token is reused,
+ * IDEMPOTENT. Run it as often as you like: an existing user or token is reused,
  * never duplicated.
  *
  * THE TOKEN IS NEVER PRINTED. It is written to --token-file with mode 600, because a
@@ -55,68 +55,16 @@ $serviceshortname = 'ltuse_publish';
 $roleshortname = 'ltcpublisher';
 $username = clean_param($options['username'], PARAM_USERNAME);
 
-// The capabilities the publisher actually exercises. Kept explicit rather than cloning an
-// archetype: this account should be able to do exactly this job and nothing else.
-//
-//   webservice/rest:use          -- without it EVERY call fails as an access control
-//                                   exception that reads like a bad token. The single
-//                                   most common cause of a "working" token that doesn't.
-//   moodle/course:create/update  -- publish_moodle.py creates a course on first publish.
-//   moodle/course:manageactivities, activityvisibility
-//                                -- create_page and create_quiz add and hide modules.
-//   moodle/question:*            -- import_questions writes into the course question bank.
-//   moodle/course:viewhiddencourses
-//                                -- courses are created hidden, and the publisher has to
-//                                   be able to see its own work to update it.
-$capabilities = [
-    'local/ltuse:publish',
-    'webservice/rest:use',
-    'moodle/course:create',
-    'moodle/course:update',
-    'moodle/course:view',
-    'moodle/course:viewhiddencourses',
-    'moodle/course:visibility',
-    'moodle/course:manageactivities',
-    'moodle/course:activityvisibility',
-    'moodle/course:managefiles',
-    'moodle/course:changesummary',
-    'moodle/question:add',
-    'moodle/question:editall',
-    'moodle/question:managecategory',
-    'moodle/question:viewall',
-];
-
 $syscontext = context_system::instance();
 
 // --- role ---------------------------------------------------------------------------
+// The role and its capabilities are declared in moodle/site/roles.yaml and created by
+// scripts/site_config.py apply. One definition, so this script cannot drift from it.
 $role = $DB->get_record('role', ['shortname' => $roleshortname]);
 if (!$role) {
-    $roleid = create_role(
-        'LTC curriculum publisher',
-        $roleshortname,
-        'Publishes courses from the LTC curriculum repository over the web service. '
-            . 'Created by local_ltuse/cli/setup_publishing.php -- edit that script rather '
-            . 'than this role, so the production server gets the same thing.'
-    );
-    $role = $DB->get_record('role', ['id' => $roleid], '*', MUST_EXIST);
-    cli_writeln("  role       created '{$roleshortname}' (id {$role->id})");
-} else {
-    cli_writeln("  role       reusing '{$roleshortname}' (id {$role->id})");
+    cli_error("Role '{$roleshortname}' does not exist: run site_config.py apply first.");
 }
-
-// Assignable at system level so one assignment covers every course it will create.
-set_role_contextlevels($role->id, [CONTEXT_SYSTEM, CONTEXT_COURSECAT, CONTEXT_COURSE]);
-
-$granted = 0;
-foreach ($capabilities as $cap) {
-    if (!get_capability_info($cap)) {
-        cli_problem("  WARNING    capability does not exist on this site: {$cap}");
-        continue;
-    }
-    assign_capability($cap, CAP_ALLOW, $role->id, $syscontext->id, true);
-    $granted++;
-}
-cli_writeln("  caps       {$granted} of " . count($capabilities) . " granted at system context");
+cli_writeln("  role       using '{$roleshortname}' (id {$role->id})");
 
 // --- user ---------------------------------------------------------------------------
 $user = $DB->get_record('user', ['username' => $username, 'deleted' => 0]);

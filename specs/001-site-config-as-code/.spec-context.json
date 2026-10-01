@@ -1,9 +1,9 @@
 {
-  "workflow": "speckit",
+  "workflow": "companion",
   "specName": "Site configuration as code",
   "branch": "specs/moodle-requirements",
-  "currentStep": "specify",
-  "status": "specified",
+  "currentStep": "implement",
+  "status": "implementing",
   "history": [
     {
       "step": "specify",
@@ -11,7 +11,769 @@
       "kind": "start",
       "by": "extension",
       "at": "2026-09-30T20:46:50.299Z"
+    },
+    {
+      "step": "plan",
+      "substep": null,
+      "kind": "start",
+      "by": "extension",
+      "at": "2026-10-01T13:59:43.980Z"
+    },
+    {
+      "step": "plan",
+      "substep": "research",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-01T14:06:31.781Z"
+    },
+    {
+      "step": "plan",
+      "substep": "design",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-01T14:10:13.833Z"
+    },
+    {
+      "step": "plan",
+      "substep": null,
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-01T14:10:20.670Z"
+    },
+    {
+      "step": "tasks",
+      "substep": null,
+      "kind": "start",
+      "by": "extension",
+      "at": "2026-10-01T14:20:17.010Z"
+    },
+    {
+      "step": "tasks",
+      "substep": "generate",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-01T14:23:09.272Z"
+    },
+    {
+      "step": "tasks",
+      "substep": null,
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-01T14:23:13.464Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "kind": "start",
+      "by": "extension",
+      "at": "2026-10-01T14:57:42.190Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T001",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-01T14:59:44.135Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T003",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-01T15:02:40.003Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T002",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-01T15:05:59.131Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T004",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-01T15:07:03.989Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T005",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-01T15:08:08.163Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T006",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-01T15:11:40.454Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T007",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-01T15:14:12.391Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T008",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-01T15:15:02.297Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T009",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-01T15:15:04.025Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T010",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-01T15:18:00.609Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T019",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-01T15:18:01.205Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T020",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-01T15:18:02.583Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T021",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-01T15:18:04.146Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T022",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-01T15:18:05.991Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T023",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-01T15:18:07.724Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T011",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-01T15:18:18.958Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T013",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-01T15:27:51.054Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T014",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-01T15:27:52.022Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T015",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-01T15:27:53.520Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T012",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-01T15:30:00.141Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T016",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-01T15:30:53.177Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T017",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-01T15:31:33.355Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T018",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-01T15:32:41.366Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T024",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-01T15:32:42.436Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T030",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-01T15:33:23.076Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T031",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-01T15:33:42.676Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T032",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-01T15:34:03.375Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T034",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-01T15:36:10.015Z"
     }
   ],
-  "telemetryInstanceId": "e7f2c66a-64c0-4184-914e-5556c1104202"
+  "telemetryInstanceId": "e7f2c66a-64c0-4184-914e-5556c1104202",
+  "decisions": [
+    {
+      "decision": "Applier is a PHP CLI in local_ltuse reading JSON on stdin, driven over ssh by scripts/site_config.py",
+      "why": "No core web service writes site config; local_ltuse is already on every target",
+      "rejected": "A local_ltuse web-service config writer, or core admin/cli/cfg.php"
+    },
+    {
+      "decision": "Declaration is YAML under moodle/site/, parsed only by Python",
+      "why": "Repo data is YAML, comments needed for review, PHP needs no YAML extension",
+      "rejected": "JSON, INI or PHP-array declarations"
+    },
+    {
+      "decision": "Secrets resolved on the operator machine and sent only in the stdin stream; drift checks secrets as set or empty only",
+      "why": "Never on disk or argv; drift runs unattended with no secrets",
+      "rejected": "Server-side resolution from /etc/ltct/ops.env, or hashed comparison"
+    },
+    {
+      "decision": "Settings written through admin_setting::write_setting() from the full admin tree",
+      "why": "Moodle validation, update callbacks and config_log",
+      "rejected": "Raw set_config() for everything"
+    },
+    {
+      "decision": "Roles declared as archetype defaults plus system-context overrides; ltcpublisher role moves out of setup_publishing.php",
+      "why": "Drift can compute expected permissions; one definition per role",
+      "rejected": "Full capability dumps, or keeping the role in setup_publishing.php"
+    },
+    {
+      "decision": "Applier verifies plugin pins but never installs code; installing at the pinned release is provisioning (spec 015)",
+      "why": "An apply run can never upgrade or downgrade (FR-003)",
+      "rejected": "Apply downloading and installing plugins"
+    },
+    {
+      "decision": "Push (message_airnotifier) stays disabled in the baseline",
+      "why": "App plan undecided (spec 015); email is the default channel",
+      "rejected": "Enabling airnotifier on the free plan now"
+    },
+    {
+      "decision": "A role with an archetype is managed only on the capabilities it declares; a role with archetype '' is managed exactly",
+      "why": "get_default_capabilities() omits capabilities granted at install via clonepermissionsfrom, so archetype-plus-overrides would strip legitimate permissions",
+      "rejected": "Comparing archetype roles against their full archetype defaults"
+    },
+    {
+      "decision": "Report redacts by setting name (pass|secret|token|key|salt) as well as by password class",
+      "why": "The first drift run printed airnotifieraccesskey and calendar_exportsalt, which are plain text settings",
+      "rejected": "Class-only redaction"
+    },
+    {
+      "decision": "debug, debugdisplay and tool_dataprivacy/dporoles are not declared",
+      "why": "debug is set in config.php (provisioning owns it); dporoles only enters the admin tree after a role holds managedatarequests, and site admins are always DPO",
+      "rejected": "Declaring them as env: values or adding a two-pass apply"
+    },
+    {
+      "decision": "Drift skips settings whose get_setting() is true and treats an empty checkbox as 0",
+      "why": "Widget settings store no value, and checkbox defaults of empty string mean unchecked; both were false unmanaged reports",
+      "rejected": "Listing them all in ignore.yaml"
+    }
+  ],
+  "concerns": [
+    {
+      "note": "Google Drive embeds and message-provider default key names are unverified; resolved on the instance as research tasks"
+    },
+    {
+      "note": "First drift run on ltuse.net must seed the ignore list of install-time settings"
+    },
+    {
+      "note": "T025-T029 (learner-facing checks with test accounts and the Moodle Android app) and the Google Drive embed question are not run: they need a person and a device",
+      "step": "implement"
+    },
+    {
+      "note": "T033 SC-001 (rebuild a fresh 5.2.3+ server from the repo in under an hour) is not verified: no throwaway instance exists yet",
+      "step": "implement"
+    },
+    {
+      "note": "The 45 site_config.py unit tests and the report.php harness live in the session scratchpad, not the repo, because the repo has no Python test convention; they will be lost unless committed",
+      "step": "implement"
+    },
+    {
+      "note": "The build host's CLI php.ini has max_input_vars below 5000, so admin/cli/upgrade.php needs -d max_input_vars=5000; and a moodledata cache temp dir is owned by another user (permission denied on purge)",
+      "step": "implement"
+    },
+    {
+      "note": "The first drift run printed the airnotifier access key and calendar export salt into this session's terminal before redaction was fixed; nothing reached the repo",
+      "step": "implement"
+    }
+  ],
+  "step_summaries": {
+    "plan": {
+      "summary": "Plan, research, data model and three contracts for declaring, applying and drift-checking Moodle site config",
+      "key_finding": "No core API writes config remotely, so the applier runs server-side over ssh with JSON on stdin and every write goes through the admin settings tree"
+    },
+    "tasks": {
+      "summary": "34 tasks in 7 phases: setup probe, foundational declaration and server plumbing, US1 apply (MVP), US2 drift, US3 docs, US4 baseline with per-row instance verification, polish"
+    },
+    "implement": {
+      "summary": "Site config as code built and applied to ltuse.net: YAML declaration, site_config.py, local_ltuse applier/drift; 28 of 34 tasks done, learner-device checks and fresh-server rebuild pending"
+    }
+  },
+  "approach": "YAML declaration under moodle/site/ is validated and rendered by scripts/site_config.py, then streamed over ssh to local_ltuse/cli/site_config.php, which compares it with the live site through admin-settings, plugin-manager and access APIs. Apply blocks on any preflight problem before writing; drift writes nothing and exits non-zero on any difference.",
+  "coverage": {
+    "FR-001": {
+      "title": "Complete declaration of settings, plugins, releases, roles and permissions under moodle/",
+      "tasks": [
+        "T003",
+        "T007",
+        "T015",
+        "T019",
+        "T020",
+        "T021",
+        "T022",
+        "T023"
+      ]
+    },
+    "FR-002": {
+      "title": "Declaration names minimum Moodle release; older server refused",
+      "tasks": [
+        "T001",
+        "T007",
+        "T010",
+        "T012"
+      ]
+    },
+    "FR-003": {
+      "title": "Plugins pinned; mismatch refused rather than upgraded",
+      "tasks": [
+        "T005",
+        "T007",
+        "T010",
+        "T012"
+      ]
+    },
+    "FR-004": {
+      "title": "Apply is repeatable; second run changes nothing",
+      "tasks": [
+        "T010",
+        "T012"
+      ]
+    },
+    "FR-005": {
+      "title": "Targets only MOODLE_URL, announced first, no hard-coded host",
+      "tasks": [
+        "T006",
+        "T008",
+        "T012"
+      ]
+    },
+    "FR-006": {
+      "title": "Secrets come from the environment; declaration never holds values",
+      "tasks": [
+        "T006",
+        "T018"
+      ]
+    },
+    "FR-007": {
+      "title": "Drift compares, changes nothing, reports every difference kind",
+      "tasks": [
+        "T005",
+        "T013",
+        "T016"
+      ]
+    },
+    "FR-008": {
+      "title": "Drift returns pass/fail for unattended schedules",
+      "tasks": [
+        "T004",
+        "T013",
+        "T016"
+      ]
+    },
+    "FR-009": {
+      "title": "No learner data or secrets in apply or drift output",
+      "tasks": [
+        "T004",
+        "T034"
+      ]
+    },
+    "FR-010": {
+      "title": "Each apply ends with a human-readable change summary",
+      "tasks": [
+        "T004",
+        "T010"
+      ]
+    },
+    "FR-011": {
+      "title": "A setting is not done until declared; other specs add theirs here",
+      "tasks": [
+        "T017",
+        "T031"
+      ]
+    },
+    "FR-012": {
+      "title": "SCORM 1.2, H5P, trusted embeds; arbitrary embedding restricted",
+      "tasks": [
+        "T003",
+        "T007",
+        "T019",
+        "T025"
+      ]
+    },
+    "FR-013": {
+      "title": "App access, offline download and mobile stylesheet",
+      "tasks": [
+        "T020",
+        "T026"
+      ]
+    },
+    "FR-014": {
+      "title": "Per-learner data export, deletion requests and course backup",
+      "tasks": [
+        "T021",
+        "T027"
+      ]
+    },
+    "FR-015": {
+      "title": "1:1 and group messaging with learner contact controls",
+      "tasks": [
+        "T022",
+        "T028"
+      ]
+    },
+    "FR-016": {
+      "title": "Notification defaults avoid floods; push within current app plan",
+      "tasks": [
+        "T001",
+        "T007",
+        "T023",
+        "T029"
+      ]
+    },
+    "FR-017": {
+      "title": "Every baseline setting verified on the 5.2.3+ instance",
+      "tasks": [
+        "T024",
+        "T025",
+        "T026",
+        "T027",
+        "T028",
+        "T029",
+        "T032"
+      ]
+    }
+  },
+  "currentTask": "T034",
+  "task_summaries": {
+    "T001": {
+      "status": "DONE",
+      "did": "Read version 2026042003.03, config.php-forced keys (debug, debugdisplay) and message-provider storage; dropped raw and debug from the declaration",
+      "files": [
+        "specs/001-site-config-as-code/research.md",
+        "specs/001-site-config-as-code/contracts/declaration.md",
+        "specs/001-site-config-as-code/data-model.md",
+        "specs/001-site-config-as-code/tasks.md"
+      ]
+    },
+    "T003": {
+      "status": "DONE",
+      "did": "Declared ltcpublisher (no archetype, 15 publishing caps + trustcontent, system/coursecat/course), manager trustcontent allow, editingteacher trustcontent inherit",
+      "files": [
+        "moodle/site/roles.yaml"
+      ]
+    },
+    "T002": {
+      "status": "DONE",
+      "did": "Bumped local_ltuse version to 2026100100 and added $plugin->supported = [502, 502] (constitution XI)",
+      "files": [
+        "moodle/local_ltuse/version.php"
+      ]
+    },
+    "T004": {
+      "status": "DONE",
+      "did": "Report class: streamed line output or --json per contracts/output.md, <secret> redaction for secret:true and password-class settings (incl. messages), exit codes 0/1/2",
+      "files": [
+        "moodle/local_ltuse/classes/siteconfig/report.php"
+      ]
+    },
+    "T005": {
+      "status": "DONE",
+      "did": "Read-only inspector: admin tree as admin, plugin/role/setting comparison with ok/changed/missing/unknown/forced/wrong-release/pending-upgrade results; linted and smoke-tested read-only on ltuse.net",
+      "files": [
+        "moodle/local_ltuse/classes/siteconfig/inspector.php"
+      ]
+    },
+    "T006": {
+      "status": "DONE",
+      "did": "Wrote site_config.py: validate (every offline data-model rule incl. literal-secret and hard-coded-host checks), render (env: unresolved/redacted), apply and drift (env resolved in memory, JSON on stdin over ssh or local php, exit codes relayed)",
+      "files": [
+        "scripts/site_config.py"
+      ]
+    },
+    "T007": {
+      "status": "DONE",
+      "did": "Declared moodle.requires 2026042003.03, local_ltuse pin 2026100100 and the #3/#25 plugin states; validate passes",
+      "files": [
+        "moodle/site/site.yaml"
+      ]
+    },
+    "T008": {
+      "status": "DONE",
+      "did": "CLI entry: parses --mode/--json, reads stdin JSON, refuses mode or MOODLE_URL mismatch with exit 2, announces target, dispatches to applier or drift",
+      "files": [
+        "moodle/local_ltuse/cli/site_config.php"
+      ]
+    },
+    "T009": {
+      "status": "DONE",
+      "did": "CI workflow runs site_config.py validate on declaration, version.php, REQUIREMENTS.md and script changes",
+      "files": [
+        ".github/workflows/site-config.yml"
+      ]
+    },
+    "T010": {
+      "status": "DONE",
+      "did": "Applier: blocking preflight writes nothing; then write_setting+post_write_settings, enable_plugin, create_role/contextlevels/assign/unassign, re-checking each write",
+      "files": [
+        "moodle/local_ltuse/classes/siteconfig/applier.php",
+        "moodle/local_ltuse/classes/siteconfig/report.php",
+        "moodle/local_ltuse/classes/siteconfig/inspector.php"
+      ]
+    },
+    "T019": {
+      "status": "DONE",
+      "did": "Declared row #3 settings: scorm/scormstandard 0 (standards mode off), enabletrusttext 1",
+      "files": [
+        "moodle/site/settings/content-embeds.yaml"
+      ]
+    },
+    "T020": {
+      "status": "DONE",
+      "did": "Declared row #4 settings: web services and mobile service on, mobilecssurl from env:MOODLE_URL, no disabled app features",
+      "files": [
+        "moodle/site/settings/mobile.yaml"
+      ]
+    },
+    "T021": {
+      "status": "DONE",
+      "did": "Declared row #16 settings: DPO contact on, manual export and deletion approval; dporoles deliberately undeclared (R9)",
+      "files": [
+        "moodle/site/settings/data-export.yaml"
+      ]
+    },
+    "T022": {
+      "status": "DONE",
+      "did": "Declared row #19 settings: messaging 1, messagingallusers 0",
+      "files": [
+        "moodle/site/settings/messaging.yaml"
+      ]
+    },
+    "T023": {
+      "status": "DONE",
+      "did": "Declared row #25 setting: defaultpreference_maildigest 1; provider defaults left at core (R9)",
+      "files": [
+        "moodle/site/settings/notifications.yaml"
+      ]
+    },
+    "T011": {
+      "status": "DONE",
+      "did": "setup_publishing no longer defines the role or grants capabilities; fails with 'run site_config.py apply first' if ltcpublisher is missing",
+      "files": [
+        "moodle/local_ltuse/cli/setup_publishing.php"
+      ]
+    },
+    "T013": {
+      "status": "DONE",
+      "did": "Drift class: declared items, extra plugins, unmanaged settings (skips config.php-forced and value-less widgets); first run on ltuse.net found and drove fixes for archetype-role scope, empty lists, checkbox defaults and name-based secret redaction",
+      "files": [
+        "moodle/local_ltuse/classes/siteconfig/drift.php",
+        "moodle/local_ltuse/classes/siteconfig/inspector.php",
+        "moodle/local_ltuse/classes/siteconfig/report.php"
+      ]
+    },
+    "T014": {
+      "status": "DONE",
+      "did": "Seeded ignore.yaml with the 8 per-site values from the first drift runs, each with a reason; drift now reports only the 8 baseline differences",
+      "files": [
+        "moodle/site/ignore.yaml"
+      ]
+    },
+    "T015": {
+      "status": "DONE",
+      "did": "No per-server value surfaced (debug and wwwroot are config.php's); server.yaml not created, docs say it is added when first needed",
+      "files": [
+        "specs/001-site-config-as-code/plan.md",
+        "specs/001-site-config-as-code/contracts/declaration.md"
+      ]
+    },
+    "T012": {
+      "status": "DONE",
+      "did": "Deployed local_ltuse 2026100100 to ltuse.net; apply changed the 8 baseline items, second apply changed nothing, drift clean; wrong pin, raised requires and wrong MOODLE_URL all refused with nothing written; setup_publishing reuses the declared role",
+      "files": [
+        "scripts/site_config.py"
+      ]
+    },
+    "T016": {
+      "status": "DONE",
+      "did": "SC-003 on ltuse.net: 3 declared + 2 undeclared hand changes all reported, labelled changed/unmanaged, exit 1; restored by apply and cfg.php; drift clean"
+    },
+    "T017": {
+      "status": "DONE",
+      "did": "Maintainer guide: files, commands, how to add settings/plugins/roles, env: secrets, config.php settings, drift kinds",
+      "files": [
+        "moodle/site/README.md"
+      ]
+    },
+    "T018": {
+      "status": "DONE",
+      "did": "US3 on ltuse.net: added setting applied alone, drift clean, removed then reported unmanaged and reverted; validate rejects literal password; render redacts env secret; missing var skips that setting and exits 1"
+    },
+    "T024": {
+      "status": "DONE",
+      "did": "Baseline applied to ltuse.net (8 changes); second apply changed nothing; drift clean"
+    },
+    "T030": {
+      "status": "DONE",
+      "did": "Install section now runs upgrade then site_config.py apply then setup_publishing; documented cli/site_config.php and the role_capabilities raw read",
+      "files": [
+        "moodle/local_ltuse/README.md"
+      ]
+    },
+    "T031": {
+      "status": "DONE",
+      "did": "CLAUDE.md: site_config.py in maintainer scripts; Delivery section names moodle/site/ as where every Moodle setting lives",
+      "files": [
+        "CLAUDE.md"
+      ]
+    },
+    "T032": {
+      "status": "DONE",
+      "did": "Rows 3, 4, 16, 19, 25 marked Configured (spec 001), with the learner-facing test-account and Android checks named as still to run",
+      "files": [
+        "moodle/REQUIREMENTS.md"
+      ]
+    },
+    "T034": {
+      "status": "DONE",
+      "did": "validate, php -l on 7 PHP files, existing CI checks and SC-004 secret search run; fixed .gitignore that hid moodle/site/; course-package errors are pre-existing in modules/",
+      "files": [
+        ".gitignore"
+      ]
+    }
+  },
+  "verified": [
+    {
+      "what": "declaration validates",
+      "command": "python scripts/site_config.py validate",
+      "source": "derived",
+      "exitCode": 0,
+      "durationSeconds": 0.5,
+      "result": "[ok] declaration valid: 12 settings in 5 files, 8 plugins, 3 roles, 8 ignore entries"
+    },
+    {
+      "what": "site_config.py unit tests (scratchpad harness)",
+      "command": "python -m pytest -q C:/Users/higby/AppData/Local/Temp/claude/C--projects-virtual-ltct/ca234940-f884-4e24-ace0-84f843fae8c1/scratchpad/test_site_config.py",
+      "source": "derived",
+      "exitCode": 0,
+      "durationSeconds": 5.9,
+      "result": ".............................................                            [100%] · 45 passed in 3.92s"
+    },
+    {
+      "what": "live drift on ltuse.net is clean",
+      "command": "python scripts/site_config.py drift",
+      "source": "derived",
+      "exitCode": 0,
+      "durationSeconds": 2.7,
+      "result": "[ok] tool_mobile/disabledfeatures: declared '[]', live '[]' · [ok] defaultpreference_maildigest: declared '1', live '1' · No differences."
+    },
+    {
+      "what": "quiz gate",
+      "command": "python scripts/quiz_parse.py --check-all",
+      "source": "derived",
+      "exitCode": 0,
+      "durationSeconds": 0.5,
+      "result": "  software-support-and-troubleshooting-for-translation-teams/04-quiz.md 12 questions, pass 80% ·   supporting-pre-publishing-checks/08-quiz.md              20 questions, pass 80% · 12 quiz(zes) in 11 file(s): 0 failed."
+    },
+    {
+      "what": "descriptor sync",
+      "command": "python scripts/check_competency_descriptors.py",
+      "source": "derived",
+      "exitCode": 0,
+      "durationSeconds": 0.4,
+      "result": "framework: 43 competencies (1 exempt) Â· descriptors: 42 Â· covered: 42 · OK â€” descriptors and framework are in sync."
+    }
+  ],
+  "last_action": "T034 validation run; 6 tasks left for a human: T025-T029, T033"
 }

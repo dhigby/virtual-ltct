@@ -1,12 +1,21 @@
 # Feature Specification: Low-Bandwidth and Offline Delivery
 
-**Feature Branch**: `specs/moodle-requirements`
+**Feature Branch**: `009-low-bandwidth-delivery`
 
 **Created**: 2026-09-30
 
 **Status**: Draft
 
 **Input**: User description: "Deliver REQUIREMENTS.md row #5, Low bandwidth (Must, S–M): courses must reach consultants on Android devices, often offline and on slow or metered connections. The content is already light (text and screenshots, video linked). To add: the publisher sends lighter copies of lesson images while the committed screenshots stay the source of truth and the payload stays platform-neutral; server-side caching is switched on through configuration; and a published course is confirmed to download and work offline in the Moodle app."
+
+## Clarifications
+
+### Session 2026-10-01
+
+- Q: How should an author mark one screenshot to be delivered differently from the default lighter copy? → A: A file-name suffix before the extension, so the mark travels with the file and needs no separate list: `.full` (e.g. `ss-03-dense-dialog.full.png`) delivers the committed original unchanged; `.small` applies a stronger reduction; no suffix gets the standard reduction.
+- Q: Live checks (temporary instance, Android device) can't run from a development checkout — what status does row #5 get when this spec merges? → A: Merge as **built**; the caching/offline-settings check and the Android offline check are recorded as pending verification tasks, and row #5 moves to **verified** only when they have been run and their results recorded.
+- Q: What happens if the payload output folder (`--out`) is inside the repository? → A: Refuse — the publish (and the payload builder) stops before writing anything and says the output must be outside the repository.
+- Q: Moodle bumps a page's revision (and so every image URL on it) on every update, even when nothing changed — should a republish update unchanged pages? → A: No. A page whose content and files are unchanged, and its files, MUST NOT be touched by a republish, so its revision and image URLs stay the same and learners re-download nothing. Idempotent wherever possible; most churn is expected before participants start.
 
 ## User Scenarios & Testing *(mandatory)*
 
@@ -61,38 +70,41 @@ Learners returning to the site, and many learners opening the same course, are s
 
 - An image already smaller than any reduction would make it: the original is delivered unchanged.
 - A diagram committed as SVG: delivered unchanged, since it is already small and scales without loss.
-- A screenshot with fine text that becomes illegible at the default reduction: the author can mark it to be delivered at higher fidelity, and the publish reports which images were exempted.
+- A screenshot with fine text that becomes illegible at the default reduction: the author renames it with the `.full` suffix (updating its links), and the publish reports it as delivered unchanged.
+- An image name carrying an unrecognised or doubled suffix (e.g. `.ful.png`, `.full.small.png`): the package check flags it rather than silently applying the default.
 - An image with transparency: transparency is preserved.
 - A corrupt or unreadable committed image: the publish stops and names the file, rather than sending a broken image.
-- A republish with no changed images: the delivered copies are identical to last time, so nothing is re-sent and the course is left exactly as it was (republishing already changes nothing today).
+- A republish with no changed images: the delivered copies are identical to last time, so nothing is re-sent and the course is left exactly as it was. (Today every republish re-uploads every image and updates every page, which bumps the page revision and changes every image URL; FR-016 removes that.)
+- A republish where one page changed: only that page is updated; its images get new URLs (Moodle's page revision is per page), and every other page is untouched.
 - An image referenced only by a withheld page or an excluded file (design doc, mentor guide, video script): not delivered at all, exactly as today.
-- An author keeping the payload for inspection inside the repository folder: the lighter copies must not land in the working tree, where auto-commit would push them as large binaries.
+- An author asking for the payload to be written inside the repository folder (e.g. to inspect it): refused before anything is written, with a message saying to choose a folder outside the repository, so the lighter copies can never land in the working tree where auto-commit would push them.
 
 ## Requirements *(mandatory)*
 
 ### Functional Requirements
 
 - **FR-001**: Publishing MUST deliver a lighter copy of each raster image a learner page uses, reduced in dimensions to a sensible maximum display width and in file size, while keeping every element the lesson refers to legible.
-- **FR-002**: The committed screenshots and diagrams MUST remain the source of truth: publishing MUST NOT modify, replace or add to anything under a course's folder, and the lighter copies MUST NOT be committed or written into the repository working tree.
+- **FR-002**: The committed screenshots and diagrams MUST remain the source of truth: publishing MUST NOT modify, replace or add to anything under a course's folder, and the lighter copies MUST NOT be committed or written into the repository working tree. A payload output location inside the repository MUST be refused before anything is written.
 - **FR-003**: A delivered image MUST never be larger than its committed original; where reduction does not help, the original is delivered.
 - **FR-004**: Vector diagrams MUST be delivered unchanged.
 - **FR-005**: Image reduction MUST be part of building the platform-neutral publish payload and MUST NOT depend on anything specific to Moodle, so that any other delivery target would receive the same lighter images.
 - **FR-006**: Reduction MUST be deterministic: the same committed image and settings MUST always produce the same delivered copy, so an unchanged republish sends nothing new.
-- **FR-007**: An author MUST be able to exempt a specific image from reduction, or deliver it at higher fidelity, by a marking visible in the course's own markdown or folder, without any tool; the exemption is reported at publish time.
+- **FR-007**: An author MUST be able to choose how a specific image is delivered by a suffix in its file name, immediately before the extension: `.full` delivers the committed original unchanged; `.small` applies a stronger reduction than the default; no suffix applies the default reduction. No other list or tool is needed. Every `.full` or `.small` image is reported at publish time.
 - **FR-008**: Each delivered image MUST remain traceable to the committed file it came from, so the pre-publish disclosure check still verifies that no delivered asset derives from an excluded source.
 - **FR-009**: The pre-publish disclosure check MUST still run on the payload with the lighter images and MUST pass before anything is sent; image reduction MUST NOT change which assets are included or withheld.
-- **FR-010**: A publish MUST report, per course, the total image weight before and after reduction and any image exempted or delivered unchanged.
+- **FR-010**: A publish MUST report, per course, the total image weight before and after reduction and every image delivered with a `.full` or `.small` suffix or delivered unchanged because reduction did not help.
 - **FR-011**: Alt text MUST be delivered unchanged with every image.
 - **FR-012**: Server-side caching and the settings that let the Moodle app download courses for offline use MUST be applied from the repo's training-system configuration, using core Moodle capability where it exists, and MUST be rebuildable on a new server with no manual steps.
 - **FR-013**: A republished course with changed images MUST reach learners without stale cached copies.
 - **FR-014**: A published course MUST be usable offline in the Moodle Android app: all lessons with their images, and the quiz with answers synchronised on reconnection.
 - **FR-015**: No lesson MAY depend on video to convey its content; a linked video that cannot load offline MUST leave the lesson usable.
+- **FR-016**: A republish MUST leave untouched every page whose name, content and files are unchanged: no files re-sent, no update made, so its image URLs stay the same and learners (in the browser or the app) download nothing again. A page that did change is updated as today.
 
 ### Key Entities
 
 - **Committed image**: a screenshot or diagram under `modules/<slug>/assets/`; the source of truth, never altered by publishing.
 - **Delivered image**: the lighter copy that travels in the publish payload, derived from one committed image and traceable to it; never stored in the repository.
-- **Reduction exemption**: an author's marking that one image is delivered at higher fidelity or unchanged.
+- **Delivery suffix**: the `.full` or `.small` marker in a committed image's file name that overrides the default reduction for that one image.
 - **Weight report**: the per-course before-and-after image totals printed at publish time.
 
 ## Success Criteria *(mandatory)*
@@ -105,15 +117,15 @@ Learners returning to the site, and many learners opening the same course, are s
 - **SC-004**: A reviewer comparing delivered with committed screenshots finds zero cases where a label or field the lesson names is illegible.
 - **SC-005**: After any publish, the repository working tree shows zero changed or added files.
 - **SC-006**: A course downloaded in the app is completed offline on an Android device — every lesson and the quiz — with zero failures, and the quiz attempt appears in Moodle after reconnecting.
-- **SC-007**: An unchanged republish re-sends zero images.
+- **SC-007**: An unchanged republish re-sends zero images and updates zero pages; every image URL a learner saw before it is the same after it.
 
 ## Assumptions
 
 - Committed screenshots are PNG captures of software screens and diagrams are SVG, as the course package rules require; photographs are rare.
 - A maximum display width suited to phone and tablet screens, with a moderate quality setting, is legible for software screenshots; the exact values are chosen and verified in planning against real screenshots.
 - Offline download and quiz synchronisation are provided by the Moodle app itself; this spec configures and verifies them rather than building them.
-- Caching settings are applied and verified on the temporary instance; how much they help at scale depends on the production host (015).
-- The payload continues to be written to a temporary location outside the repository by default.
+- Caching settings are applied and verified on the temporary instance; how much they help at scale depends on the production host (015). Development may happen in a checkout with no access to that instance or to a device, so live checks are separate tasks that can complete after merge (see Requirements Traceability).
+- The payload continues to be written to a temporary location outside the repository by default, and an explicit location inside the repository is refused (FR-002).
 
 ## Requirements Traceability
 
@@ -121,12 +133,12 @@ Learners returning to the site, and many learners opening the same course, are s
 |---|---|---|---|
 | 5 | Low bandwidth | Must | Lighter images in the publisher with committed originals untouched; server caching and offline-download settings as configuration; verified offline use in the Android app. |
 
-On delivery, the same PR updates these rows' status in moodle/REQUIREMENTS.md (constitution X).
+On delivery, the same PR updates these rows' status in moodle/REQUIREMENTS.md (constitution X): row #5 is marked **built** when the code merges, with SC-003, SC-006 and the caching checks behind FR-012/FR-013 listed as pending live verification. It becomes **verified** in a later change that records the temporary-instance and Android-device results. No success criterion that needs the live instance or a device is claimed as met before then.
 
 ## Constitution Check
 
 - **I. Source of truth**: Committed screenshots are never altered by publishing (FR-002); delivered copies are generated artefacts, never hand-edited or stored. Publishing stays one-way.
-- **II. Portability / config-as-code**: Reduction lives in the platform-neutral payload, knowing nothing of Moodle (FR-005); caching and offline settings are applied from `moodle/` (FR-012). Markdown stays readable raw; an exemption is a visible marking needing no tool (FR-007).
+- **II. Portability / config-as-code**: Reduction lives in the platform-neutral payload, knowing nothing of Moodle (FR-005); caching and offline settings are applied from `moodle/` (FR-012). Markdown stays readable raw; a delivery override is a file-name suffix needing no tool or separate list (FR-007).
 - **III. Public repo, private people**: No learner data involved; offline verification uses test accounts only.
 - **IV. Disclosure boundary**: Reduction runs before the pre-publish check, keeps each asset traceable, and never changes what is included or withheld (FR-008, FR-009).
 - **VI. No LMS orientation**: Offline download is verified as part of 007's learner experience; nothing extra to learn.

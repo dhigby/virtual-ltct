@@ -76,6 +76,8 @@ Learners returning to the site, and many learners opening the same course, are s
 - A corrupt or unreadable committed image: the publish stops and names the file, rather than sending a broken image.
 - A republish with no changed images: the delivered copies are identical to last time, so nothing is re-sent and the course is left exactly as it was. (Today every republish re-uploads every image and updates every page, which bumps the page revision and changes every image URL; FR-016 removes that.)
 - A republish where one page changed: only that page is updated; its images get new URLs (Moodle's page revision is per page), and every other page is untouched.
+- A republish while a learner holds an offline quiz attempt: today every publish re-imports the quiz's questions and rebuilds its slots, which can break an attempt that has not yet synchronised. This spec handles it by policy, not code: a quiz is not republished while a pilot or delivery cohort is working through it, and the device check (quickstart V7) records what happens if it is. Skipping unchanged or attempted quizzes is left to a later spec.
+- A page that only loses an image (no image added or changed): the image is removed from the page's files, with nothing uploaded.
 - An image referenced only by a withheld page or an excluded file (design doc, mentor guide, video script): not delivered at all, exactly as today.
 - An author asking for the payload to be written inside the repository folder (e.g. to inspect it): refused before anything is written, with a message saying to choose a folder outside the repository, so the lighter copies can never land in the working tree where auto-commit would push them.
 

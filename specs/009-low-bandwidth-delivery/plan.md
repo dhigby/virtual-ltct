@@ -88,7 +88,7 @@ V1–V8.
 | VII. One shape, gated stages | **PASS.** No content-model change. `check_course_package.py` gains one naming check. |
 | VIII. Language data | **PASS.** Images are reduced by pixels, never interpreted. The legibility review is human (SC-004). |
 | IX. Flat cost, field-ready | **PASS.** This is the principle's purpose. No paid service. No binaries committed. Video is never the only route (R6). |
-| X. Traceable and verified | **PASS, with live checks pending.** Cites row #5. Every Moodle and app claim is confirmed in `MOODLE_502_STABLE` or moodleapp source (research.md). The two server behaviours not yet observed (R2, R4) are tasks. Row #5 goes to **built** at merge and **verified** after quickstart V1–V8. No new recurring operations; `filelifetime`, compression and cache stores belong to 015. |
+| X. Traceable and verified | **PASS, with live checks pending.** Cites row #5. Every Moodle and app claim is confirmed in `MOODLE_502_STABLE` or moodleapp source (research.md). The two server behaviours not yet observed (R2, R4) are tasks. If R2's timestamp behaviour does not hold, FR-016 degrades to today's behaviour for changed pages only (one re-download of their kept files); unchanged pages are never saved, so there is no regression. Row #5 goes to **built** at merge and **verified** after quickstart V1–V8. No new recurring operations; `filelifetime`, compression and cache stores belong to 015. |
 | XI. Survives an upgrade | **PASS.** Only public APIs: `file_storage::get_area_files`, `create_file_from_storedfile`, `update_moduleinfo`, and quiz fields through `add_moduleinfo`. No direct table writes. Plugin `version` bumped, and the pin moved in `site.yaml`. |
 | Platform: core first | **PASS.** No new plugin. Everything is core settings or our own plugin. |
 
@@ -127,7 +127,7 @@ scripts/
 moodle/
 ├── local_ltuse/
 │   ├── classes/external/get_course_manifest.php   # files[] per page
-│   ├── classes/external/create_page.php           # keepfiles, outcome, unchanged short-circuit
+│   ├── classes/external/create_page.php           # syncfiles, keepfiles, outcome, unchanged short-circuit
 │   ├── classes/external/create_quiz.php           # allowofflineattempts + constraint asserts
 │   ├── version.php                                # bumped
 │   └── README.md                                  # files API use recorded
@@ -139,7 +139,8 @@ moodle/
 └── REQUIREMENTS.md                                # row #5 -> built (verified after V1–V8)
 tests/
 ├── test_image_reduce.py        # NEW
-└── test_payload_assets.py      # NEW: records, gate check 5, output guard, suffix check
+├── test_payload_assets.py      # NEW: records, gate check 5, output guard, suffix check
+└── test_publish_moodle.py      # NEW: per-page file diff, syncfiles/keepfiles, pass-1 links (fake client)
 publish-requirements.txt        # + pillow==12.3.0
 .github/workflows/
 └── publisher-tests.yml         # NEW: pytest on scripts/{image_reduce,moodle_*,check_*,disclosure}.py and tests/

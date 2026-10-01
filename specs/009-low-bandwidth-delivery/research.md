@@ -105,14 +105,16 @@ workflow). `check_course_package.py` and the review-site build do not import it.
 
 1. **An unchanged page is not saved.** `local_ltuse_create_page` compares the incoming
    name, section, visibility and content with the stored page. When there are no files to
-   change and all of those match, it returns `changed: false` without calling
+   change and all of those match, it returns `outcome: unchanged` without calling
    `update_moduleinfo()`. Revision, `timemodified` and every image URL stay as they were.
 2. **Unchanged files are never re-sent.** `local_ltuse_get_course_manifest` returns each
    page's files with their `contenthash` (SHA-1). The publisher compares those with the SHA-1
    of each delivered image.
-   - If the sets match, it uploads nothing and passes `contentitemid=0`.
-   - If they differ, it uploads only the new or changed files, and passes the names of the
-     unchanged ones as `keepfiles`. The plugin copies those stored files into the same draft
+   - If the sets match, it uploads nothing and passes `contentitemid=0`, `syncfiles=false`.
+   - If they differ, it uploads only the new or changed files, and passes `syncfiles=true`
+     with the names of the unchanged ones as `keepfiles`. When nothing needs uploading (a
+     page that only lost an image) the plugin takes its own empty draft with
+     `file_get_unused_draft_itemid()` (`public/lib/filelib.php:331`). The plugin copies those stored files into the same draft
      (`file_storage::create_file_from_storedfile()`, which keeps the source record's
      `timemodified`) before saving. So only the changed images get a new time.
    - Removed images are absent from the draft, and `file_save_draft_area_files()` deletes
@@ -128,6 +130,13 @@ workflow). `check_course_package.py` and the review-site build do not import it.
   `file_save_draft_area_files()` (so a kept file's time is unchanged).
 - An unchanged republish leaves `page.revision`, `page.timemodified` and each file's
   `timemodified` unchanged.
+- A save from a draft holding only the kept files deletes the dropped file and leaves the
+  kept ones' `timemodified` alone.
+
+**If a timestamp is not kept.** FR-016 degrades safely. Kept files on a *changed* page would
+get a new time and be re-downloaded once, which is today's behaviour. Unchanged pages are
+never saved at all (decision 1), so they are unaffected either way. There is no regression
+from today.
 
 **Alternatives considered.**
 - **Images hosted outside the page** (raw GitHub, the gh-pages review site, a server folder,

@@ -25,7 +25,8 @@ New optional parameters:
 
 | Param | Type | Default | Meaning |
 |---|---|---|---|
-| `keepfiles` | list of `PARAM_FILE` | `[]` | existing files in this page's `content` area to carry into the draft `contentitemid` unchanged |
+| `syncfiles` | `PARAM_BOOL` | `false` | the page's file area is to become exactly `keepfiles` plus the draft's contents; set whenever any file is new, changed or removed |
+| `keepfiles` | list of `PARAM_FILE` | `[]` | existing files in this page's `content` area to carry into the draft unchanged; read only when `syncfiles` is true |
 
 New return field:
 
@@ -38,17 +39,24 @@ New return field:
 Behaviour, in order:
 
 1. **No module with this idnumber.** Behaviour is unchanged → `created`.
-2. **`contentitemid == 0`, and name, section number, visibility and `page.content` are all
+2. **`syncfiles` is false, and name, section number, visibility and `page.content` are all
    byte-equal to the stored page.** Return `unchanged`. Write nothing: no
    `update_moduleinfo()`, no event, no cache rebuild.
-3. **`contentitemid != 0` and `keepfiles` is not empty.** For each name, copy the stored file
-   into the draft with `$fs->create_file_from_storedfile(['contextid' => usercontext,
-   'component' => 'user', 'filearea' => 'draft', 'itemid' => contentitemid], $stored)`. A
-   name not present in the area is an error, naming the file, and nothing is written.
-4. **Otherwise.** `update_moduleinfo()` as today → `updated`.
+3. **`syncfiles` is true.** If `contentitemid == 0` (nothing was uploaded, e.g. a page that
+   only lost an image), take an empty draft with `file_get_unused_draft_itemid()`
+   (`public/lib/filelib.php:331`) and use it as `contentitemid`. Then for each name in
+   `keepfiles`, copy the stored file into the draft with
+   `$fs->create_file_from_storedfile(['contextid' => usercontext, 'component' => 'user',
+   'filearea' => 'draft', 'itemid' => contentitemid], $stored)`. A name not present in the
+   area is an error, naming the file, and nothing is written. Then `update_moduleinfo()` →
+   `updated`: `file_save_draft_area_files()` deletes every stored file absent from the
+   draft, so an empty `keepfiles` with nothing uploaded removes every file.
+4. **Otherwise** (`syncfiles` false, something differs). `update_moduleinfo()` with
+   `contentitemid` as sent (0 leaves the file area untouched) → `updated`.
 
-The publisher never sends `contentitemid != 0` for a page whose files are unchanged, so
-rule 2 is the whole unchanged path.
+The publisher sends `syncfiles=false` for a page whose files are unchanged, so rule 2 is the
+whole unchanged path. A caller that sends `contentitemid != 0` without `syncfiles` (an older
+publisher) gets today's behaviour: the draft replaces the area.
 
 ## `local_ltuse_create_quiz`
 

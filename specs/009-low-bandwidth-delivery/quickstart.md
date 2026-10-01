@@ -128,6 +128,10 @@ and first screenshot must be visible within 15 seconds.
 6. Reconnect and sync (by hand if Wi-Fi-only sync is on). The attempt must appear in Moodle.
 7. Also try syncing on mobile data, and record the result, because of the
    `SYNC_ONLY_ON_WIFI` question in research.md R4.
+8. Republish while an attempt is open: start a second offline attempt, republish the course
+   while the device is still offline, then reconnect and sync. Record whether the attempt
+   survives. This spec handles the case by policy (don't republish a quiz mid-cohort), and
+   this result tells a later spec whether code is needed.
 
 ### V8. Record
 

@@ -134,9 +134,11 @@ splits it three ways:
 | new or changed | uploaded to the draft area |
 | on the server but no longer in the payload | nothing; the draft omits it, so the save removes it |
 
-If nothing is new, changed or removed, `contentitemid=0` and the file area is not touched.
-Otherwise the plugin copies the `keepfiles` into the draft, keeping their `timemodified`,
-before saving. Only changed files get a new time (FR-016, research.md R2).
+If nothing is new, changed or removed, `syncfiles=false`, `contentitemid=0`, and the file
+area is not touched. Otherwise `syncfiles=true`: the plugin copies the `keepfiles` into the
+draft (taking an empty one itself if nothing was uploaded), keeping their `timemodified`,
+before saving. Only changed files get a new time, and removed ones are deleted (FR-016,
+research.md R2).
 
 ## Page publish outcome
 

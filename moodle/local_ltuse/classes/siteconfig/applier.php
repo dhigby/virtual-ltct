@@ -19,7 +19,8 @@ defined('MOODLE_INTERNAL') || die();
  *
  *   settings  admin_setting::write_setting(), then post_write_settings() as admin_write_settings() does
  *   plugins   the plugininfo class's enable_plugin()
- *   roles     create_role(), set_role_contextlevels(), assign_capability(), unassign_capability()
+ *   roles     create_role(), set_role_contextlevels(), assign_capability(), unassign_capability(),
+ *             then core_role_set_assign_allowed() for each declared allow-assign pair (spec 003)
  *   discussions  ensure_discussion::apply_groupmode(), the publisher's own path (spec 012)
  *
  * After settings come spec 002's four arrays, each handed to its own class, in the order the
@@ -30,7 +31,9 @@ defined('MOODLE_INTERNAL') || die();
  *   profile_fields  profilefields::apply(): the field category first, then the fields
  *   cohort_rules    cohortrules::apply(), last, because a rule needs its cohort and its field
  *
- * Then each ltct: course's discussion forum (spec 012).
+ * Then each ltct: course's discussion forum (spec 012), then each ltct: course's "Show
+ * activity reports", turned off again through update_course() where someone turned it on
+ * (spec 003).
  *
  * It never installs, upgrades or downgrades plugin code, never resets or deletes a role,
  * never deletes a category, cohort, field or rule (FR-004), and never creates a course's
@@ -76,12 +79,49 @@ class applier {
         foreach ($this->declaration['roles'] ?? [] as $role) {
             $this->apply_role($role);
         }
+        // After every role exists, so a pair naming a role created in this run can be added.
+        foreach ($this->declaration['roles'] ?? [] as $role) {
+            $this->apply_allowassign($role);
+        }
         foreach ($this->declaration['settings'] ?? [] as $setting) {
             $this->apply_setting($setting);
         }
         $this->apply_structure();
         foreach ($this->inspector->discussion_targets() as $target) {
             $this->apply_discussion($target);
+        }
+        $this->apply_course_reports();
+    }
+
+    /**
+     * Turn activity reports off again in each ltct: course where someone turned them on
+     * (spec 003, research R2), through core's update_course(), as the course settings form does.
+     */
+    protected function apply_course_reports(): void {
+        global $CFG;
+        $items = $this->inspector->check_course_reports();
+        if (!$items) {
+            return;
+        }
+        require_once($CFG->dirroot . '/course/lib.php');
+        foreach ($items as $item) {
+            try {
+                update_course((object)['id' => $item['courseid'], 'showreports' => 0]);
+            } catch (\Throwable $e) {
+                $this->report->add_result($item, 'fail', 'Moodle refused the change: ' . $e->getMessage());
+                continue;
+            }
+            $still = false;
+            foreach ($this->inspector->check_course_reports() as $recheck) {
+                if ($recheck['item'] === $item['item']) {
+                    $still = true;
+                }
+            }
+            if ($still) {
+                $this->report->add_result($item, 'fail', 'written, but the server still differs');
+            } else {
+                $this->report->add_result($item, 'changed');
+            }
         }
     }
 
@@ -196,6 +236,31 @@ class applier {
                 }
             }
             $this->report->add_result($item, 'changed');
+        }
+    }
+
+    /**
+     * Add each declared allow-assign pair that is missing (spec 003, R6). Never removes one.
+     *
+     * @param array $role the role declaration
+     */
+    protected function apply_allowassign(array $role): void {
+        global $DB;
+        foreach ($this->inspector->check_allowassign($role) as $item) {
+            if ($item['result'] !== inspector::RESULT_CHANGED) {
+                $this->report->add_result($item);
+                continue;
+            }
+            [, $from, , $to] = explode(':', $item['item'], 4);
+            core_role_set_assign_allowed($DB->get_field('role', 'id', ['shortname' => $from], MUST_EXIST),
+                $DB->get_field('role', 'id', ['shortname' => $to], MUST_EXIST));
+            $after = null;
+            foreach ($this->inspector->check_allowassign($role) as $recheck) {
+                if ($recheck['item'] === $item['item']) {
+                    $after = $recheck;
+                }
+            }
+            $this->report_write($after ?? $item, $item);
         }
     }
 

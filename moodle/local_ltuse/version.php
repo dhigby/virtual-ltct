@@ -9,8 +9,9 @@
 defined('MOODLE_INTERNAL') || die();
 
 $plugin->component = 'local_ltuse';
-$plugin->version   = 2026100203;   // ensure_discussion (spec 012), after hide_modules retired a
-                                   // module into a hidden Retired section. moodle/site/site.yaml
+$plugin->version   = 2026100204;   // Mentor relationship (spec 003): the viewmenteeprogress
+                                   // capability, the Mentoring page and app handler, message
+                                   // contacts for mentor and learner. moodle/site/site.yaml
                                    // pins local_ltuse to this stamp; validate fails if they differ.
 
 // PIN THIS DELIBERATELY. Moodle 5.0 moved the question bank out of course context and
@@ -30,7 +31,7 @@ $plugin->requires  = 2026042000;   // Moodle 5.2 -- the release this was
 $plugin->supported = [502, 502];
 
 $plugin->maturity  = MATURITY_ALPHA;
-$plugin->release   = '0.6.0';
+$plugin->release   = '0.7.0';
 
 // No third-party dependencies, deliberately. Sections were originally going to be
 // local_wsmanagesections' job, but it could not be installed here, so local_ltuse grew an

@@ -51,10 +51,13 @@ roles:
 
   - shortname: manager
     archetype: manager
+    allowassign: [mentor]   # spec 003 (R6): the site team assigns mentors in a learner's profile
     capabilities:
       moodle/site:trustcontent: allow
     why: >-
-      #3 (FR-012): managers keep trusted content, so their edits keep iframe embeds.
+      #3 (FR-012): managers keep trusted content, so their edits keep iframe embeds. #11
+      (spec 003): a manager may assign the mentor role, which is what offers "Mentor" on a
+      learner's "Assign roles relative to this user" page. Admins need no pair.
 
   - shortname: editingteacher
     archetype: editingteacher
@@ -107,3 +110,26 @@ roles:
       their organisation's groups (#10). A role with an archetype has only its listed
       capabilities managed, so accessallgroups is declared explicitly (as the archetype
       default, inherit) for drift to catch it being granted by hand.
+
+  - shortname: mentor
+    name: Mentor
+    description: >-
+      Follows the learners assigned to them, across every course they take, for as long as
+      the relationship lasts. Changes nothing. Assigned in a learner's own profile
+      (Preferences > Assign roles relative to this user), never in a course. Declared in
+      moodle/site/roles.yaml and applied by scripts/site_config.py -- edit that file rather
+      than this role.
+    archetype: ""            # every capability is managed, so one granted by hand shows as drift
+    contextlevels: [user]    # a relationship is with a learner, not an enrolment (FR-002)
+    capabilities:
+      moodle/user:viewdetails: allow                 # open the learner's profile
+      moodle/user:viewuseractivitiesreport: allow    # core Grades overview, read only
+      local/ltuse:viewmenteeprogress: allow          # the Mentoring page (research R3)
+    why: >-
+      #11 (spec 003): one mentor role for every partner (FR-001). Every capability is checked
+      in the learner's own user context, so it reaches only the learners someone is assigned
+      to (FR-005), and every course they join later (FR-004). It holds nothing that writes
+      (FR-006), rates a competency or records a level (FR-013); site_config.py validate keeps
+      it to this allowlist (research R2). Left out on purpose: moodle/user:viewalldetails
+      (hidden profile fields), readuserposts, editprofile. Course feedback is the Course
+      mentor role's (teacher, spec 012), not this one's (research R8).

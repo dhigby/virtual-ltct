@@ -103,6 +103,12 @@ GROUPMODE_SEPARATE = 1
 # has. Sent on update too, since the site default only applies to new courses.
 HIDE_SECTIONS_COMPLETELY = [{"name": "hiddensections", "value": "1"}]
 
+# "Show activity reports" off. With it on, a mentor (spec 003, research R2) would see every
+# assignment submission and the learner's logs through core's reports. The site default
+# (moodle/site/settings/mentoring.yaml) covers only new courses and any editing teacher can
+# turn a course's own setting on, so every publish resets it.
+SHOW_REPORTS_OFF = 0
+
 
 def ensure_course(client, manifest, category_id):
     """Find the course by idnumber, or create it. Returns the course id."""
@@ -114,6 +120,7 @@ def ensure_course(client, manifest, category_id):
             "summary": manifest["summary_html"],
             "summaryformat": 1,
             "groupmode": GROUPMODE_SEPARATE,
+            "showreports": SHOW_REPORTS_OFF,
             "courseformatoptions": HIDE_SECTIONS_COMPLETELY,
         }])
         return int(existing["id"]), False
@@ -130,6 +137,7 @@ def ensure_course(client, manifest, category_id):
         "numsections": max(len(manifest["sections"]), 1),
         "visible": 0,          # created hidden; a human decides when learners see it
         "groupmode": GROUPMODE_SEPARATE,
+        "showreports": SHOW_REPORTS_OFF,
         "courseformatoptions": HIDE_SECTIONS_COMPLETELY,
     }])
     if client.dry_run:

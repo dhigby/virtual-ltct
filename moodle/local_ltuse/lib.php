@@ -1,9 +1,10 @@
 <?php
 // This file is part of local_ltuse. Core finds the callbacks here by name.
 //
-// It holds one: local_ltuse_control_view_profile(), the profile hook of spec 002 (research
-// R9). It only gathers inputs. The decision is local_ltuse\profile_access::decide(), a pure
-// function tested without Moodle by tests/profile_access_harness.php.
+// It holds local_ltuse_control_view_profile(), the profile hook of spec 002 (research R9).
+// It only gathers inputs. The decision is local_ltuse\profile_access::decide(), a pure
+// function tested without Moodle by tests/profile_access_harness.php. And, from spec 003,
+// local_ltuse_myprofile_navigation(), which links the Mentoring page from profiles.
 
 defined('MOODLE_INTERNAL') || die();
 
@@ -49,17 +50,19 @@ function local_ltuse_control_view_profile($user, $course = null, $usercontext = 
     $viewedisstaff = has_coursecontact_role((int)$user->id)
         || has_capability('moodle/user:viewalldetails', $system, (int)$user->id);
 
-    // The site team, and a spec 003 mentor in that user's context, are never refused. A
+    // The site team, and the viewed person's mentor (spec 003, R9), are never refused. A
     // user context can be missing only in a broken state; the system context then stands
-    // in, which still finds the site team.
+    // in, which still finds the site team and finds no mentor.
     $context = $usercontext ?? context_user::instance((int)$user->id, IGNORE_MISSING);
     if (!$context) {
         $context = $system;
     }
     $viewerhasviewalldetails = has_capability('moodle/user:viewalldetails', $context);
+    $viewerismentor = $context->contextlevel == CONTEXT_USER
+        && has_capability('local/ltuse:viewmenteeprogress', $context, null, false);
 
     return \local_ltuse\profile_access::decide($isself, $managedkeys, $viewedorg,
-        $viewedisstaff, $viewerhasviewalldetails);
+        $viewedisstaff, $viewerhasviewalldetails, $viewerismentor);
 }
 
 /**
@@ -109,4 +112,37 @@ function local_ltuse_managed_organisation_keys(int $userid): array {
     $keys = array_values(array_unique($keys));
     $cache[$userid] = $keys;
     return $keys;
+}
+
+/**
+ * Link the Mentoring page from profiles (spec 003, research R3; FR-010).
+ *
+ * On your own profile, when you have a mentor or a learner. On a learner's profile, for their
+ * mentor only, straight to that learner's entry. It adds links and grants nothing: the page
+ * checks local/ltuse:viewmenteeprogress itself.
+ *
+ * @param \core_user\output\myprofile\tree $tree
+ * @param stdClass $user the profile's owner
+ * @param bool $iscurrentuser
+ * @param stdClass|null $course
+ */
+function local_ltuse_myprofile_navigation(\core_user\output\myprofile\tree $tree, $user, $iscurrentuser, $course) {
+    global $USER;
+    if (!isloggedin() || isguestuser() || !empty($course)) {
+        return;
+    }
+    $url = new moodle_url('/local/ltuse/mentoring.php');
+    if ($iscurrentuser) {
+        if (\local_ltuse\mentoring::has_relationship((int)$USER->id)) {
+            $tree->add_node(new \core_user\output\myprofile\node('miscellaneous', 'local_ltuse_mentoring',
+                get_string('mentoring', 'local_ltuse'), null, $url));
+        }
+        return;
+    }
+    $context = context_user::instance((int)$user->id, IGNORE_MISSING);
+    if ($context && has_capability('local/ltuse:viewmenteeprogress', $context, null, false)) {
+        $url->set_anchor('learner-' . (int)$user->id);
+        $tree->add_node(new \core_user\output\myprofile\node('miscellaneous', 'local_ltuse_mentoring_learner',
+            get_string('mentoring:thislearner', 'local_ltuse'), null, $url));
+    }
 }

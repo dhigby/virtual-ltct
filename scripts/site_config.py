@@ -266,6 +266,20 @@ ORGMANAGER_DENY = frozenset({"moodle/site:accessallgroups", "moodle/user:viewall
 ORGMANAGER_DENY_PREFIXES = ("moodle/cohort:", "moodle/role:", "enrol/")
 ORGMANAGER_DENY_USER = re.compile(r"create|update|delete|edit|manage|loginas")
 
+MENTOR = "mentor"
+# Everything the user-context mentor role may hold (spec 003 research R2), as an allowlist:
+# a mentor follows a learner and changes nothing (FR-006), and nothing here rates or
+# reviews a competency (FR-013). Widening it is a reviewed change to this line. Spec 006
+# may add moodle/competency:planview, read only, and never planreview, planmanage or
+# usercompetencyrate (research R11).
+MENTOR_ALLOW = frozenset({"moodle/user:viewdetails", "moodle/user:viewuseractivitiesreport",
+                          "local/ltuse:viewmenteeprogress"})
+# The local_ltuse version that adds local/ltuse:viewmenteeprogress; from it on, roles.yaml
+# must declare the mentor role (FR-001).
+MENTOR_SINCE = 2026100204
+# Roles that must not let anyone assign roles: the follow-only roles (spec 003 contract).
+NO_ALLOWASSIGN = frozenset({ORGMANAGER, MENTOR})
+
 
 # ---------------------------------------------------------------------------------------
 # A strict YAML loader. YAML 1.1 turns an unquoted `off` into False, which a reviewer
@@ -585,7 +599,7 @@ def validate(site_dir=SITE_DIR, modules_dir=None):
             rwhere = "%s roles[%d]" % (where, i)
             if not _check_keys(rwhere, role, {"shortname", "why"},
                                {"name", "description", "archetype", "contextlevels",
-                                "capabilities"}, problems):
+                                "capabilities", "allowassign"}, problems):
                 continue
             short = role.get("shortname")
             if not (isinstance(short, str) and re.match(r"^[a-z0-9_]+$", short)):
@@ -630,7 +644,25 @@ def validate(site_dir=SITE_DIR, modules_dir=None):
                     problems.add(rwhere, "%s: permission %r is not one of %s"
                                  % (cap, perm, ", ".join(PERMISSIONS)))
             out["capabilities"] = dict(caps)
+            # Spec 003 (research R6): roles this one may assign. Additive: apply adds a
+            # missing pair, drift reports one, and pairs not declared are left alone.
+            assign = role.get("allowassign", [])
+            if not isinstance(assign, list) or not all(isinstance(a, str) for a in assign):
+                problems.add(rwhere, "allowassign is a list of role shortnames")
+                assign = []
+            elif len(set(assign)) != len(assign):
+                problems.add(rwhere, "allowassign names a role twice")
+            if assign and short in NO_ALLOWASSIGN:
+                problems.add(rwhere, "%s assigns no roles; it follows people and changes "
+                             "nothing" % short)
+            out["allowassign"] = list(assign)
             decl["roles"].append(out)
+        for out in decl["roles"]:
+            for target in out["allowassign"]:
+                if target not in role_names:
+                    problems.add("%s %s" % (where, out["shortname"]),
+                                 "allowassign names role %r, which is neither core nor in "
+                                 "roles.yaml" % target)
 
     # settings/*.yaml
     settings_dir = site_dir / "settings"
@@ -742,6 +774,15 @@ def validate(site_dir=SITE_DIR, modules_dir=None):
     for role in decl["roles"]:
         if role["shortname"] == ORGMANAGER:
             _check_orgmanager(role, problems)
+        elif role["shortname"] == MENTOR:
+            _check_mentor(role, problems)
+    # FR-001 (spec 003): once local_ltuse defines the mentor capability, the role that holds
+    # it must be declared, or the Mentoring page has nobody to show.
+    ltuse = next((p for p in decl["plugins"] if p.get("component") == "local_ltuse"), None)
+    if ltuse and _is_int(ltuse.get("version")) and ltuse["version"] >= MENTOR_SINCE and \
+            MENTOR not in {r["shortname"] for r in decl["roles"]}:
+        problems.add("roles.yaml", "the mentor role is missing, but local_ltuse %d defines "
+                     "local/ltuse:viewmenteeprogress (FR-001)" % ltuse["version"])
     # course-discussions.yaml (spec 012)
     shared, discussion_problems = load_discussions(site_dir, modules_dir)
     problems.items.extend(discussion_problems.items)
@@ -1066,6 +1107,24 @@ def _check_orgmanager(role, problems):
         if isinstance(cap, str) and _orgmanager_denied(cap):
             problems.add(where, "%s is on orgmanager's deny list: a manager follows their "
                          "people and changes nothing (FR-007, FR-013)" % cap)
+
+
+def _check_mentor(role, problems):
+    """The user-context mentor role (spec 003: FR-002, FR-006, FR-013; research R2)."""
+    where = "roles.yaml %s" % MENTOR
+    if role.get("contextlevels") != ["user"]:
+        problems.add(where, "contextlevels must be exactly [user]; a mentor relationship is "
+                     "with a learner, not an enrolment (FR-002)")
+    if role.get("archetype") != "":
+        problems.add(where, 'archetype must be "", so every capability is managed and one '
+                     "granted by hand shows as drift")
+    for cap, perm in role.get("capabilities", {}).items():
+        if perm == "prohibit":
+            problems.add(where, "%s: mentor uses no prohibit, so a mentor who is also a "
+                         "manager keeps both roles" % cap)
+        if cap not in MENTOR_ALLOW:
+            problems.add(where, "%s is not on the mentor allowlist: a mentor follows "
+                         "progress and changes nothing (FR-006, FR-013)" % cap)
 
 
 def _expand(decl, orgs, fields):

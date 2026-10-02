@@ -1,0 +1,15 @@
+# Row #11: what a mentor may see stays bounded (spec 003, research R2).
+
+rows: [11]
+purpose: >-
+  A mentor follows their learners through the Mentoring page and core's Grades overview.
+  Core would also open its per-course activity reports to a mentor, but only in a course
+  that allows reports, and those same reports show every assignment submission and the
+  learner's logs. So courses keep reports off by default.
+settings:
+  - name: moodlecourse/showreports
+    value: 0
+    why: >-
+      The course default for "Show activity reports". With 1, a mentor holding
+      moodle/user:viewuseractivitiesreport sees the Complete report (assignment submissions
+      in full, with feedback) and the logs, IP addresses included (spec 003 research R2).

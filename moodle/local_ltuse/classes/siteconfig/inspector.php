@@ -29,7 +29,8 @@ use core_plugin_manager;
  *
  *   moodle     {requires, release}
  *   plugins    [{component, enabled?, version?}]
- *   roles      [{shortname, name?, description?, archetype?, contextlevels?, capabilities?}]
+ *   roles      [{shortname, name?, description?, archetype?, contextlevels?, capabilities?,
+ *                allowassign?}]   allowassign: spec 003, the roles this one may assign
  *   settings   [{name, value?, secret?}]   value is absent for a secret in drift mode
  *   failed_env [{name, env}, ...]         settings whose env: variable was not set (each also carries env_missing)
  *   discussions {shared: [slug, ...]}     spec 012: courses whose discussion is shared across
@@ -61,8 +62,9 @@ use core_plugin_manager;
  * APIs used, all confirmed on MOODLE_502_STABLE (research.md R4, R6, R7, R8):
  * admin_get_root(), admin_setting::get_setting()/is_readonly(), core_plugin_manager,
  * plugininfo::get_enabled_plugin(), get_default_capabilities(), get_capability_info(),
- * get_role_contextlevels(). The one raw read is role_capabilities by roleid and
- * contextid, which is listed in the plugin README (constitution XI).
+ * get_role_contextlevels(). The raw reads are role_capabilities by roleid and contextid,
+ * and role_allow_assign by its unique (roleid, allowassign) key (spec 003; core offers no
+ * reader for one pair), both listed in the plugin README (constitution XI).
  *
  * Course discussions (spec 012, R5): groups_get_activity_groupmode()'s rule (lib/grouplib.php:
  * a course's groupmodeforce overrides the activity), and mod_forum's discussion_list vault
@@ -304,6 +306,9 @@ class inspector {
         }
         foreach ($this->declaration['roles'] ?? [] as $role) {
             $items = array_merge($items, $this->check_role($role));
+        }
+        foreach ($this->declaration['roles'] ?? [] as $role) {
+            $items = array_merge($items, $this->check_allowassign($role));
         }
         foreach ($this->declaration['settings'] ?? [] as $setting) {
             $items[] = $this->check_setting($setting);
@@ -583,6 +588,37 @@ class inspector {
             $result = ($want === $have) ? self::RESULT_OK : self::RESULT_CHANGED;
             $items[] = self::result('role', "{$shortname}:{$cap}", $result,
                 self::permission_text($want), self::permission_text($have));
+        }
+        return $items;
+    }
+
+    /**
+     * Compare a role's declared allow-assign pairs with role_allow_assign (spec 003, R6).
+     *
+     * Additive: one item per declared pair, `ok` when the row exists and `changed` when apply
+     * would add it. Pairs nobody declared are never reported, because the archetypes carry
+     * default pairs this repo does not manage. A pair whose role does not exist yet is
+     * `missing` but not blocking: apply creates roles first, then adds the pair.
+     *
+     * @param array $role the role declaration
+     * @return array[] item results, keyed 'role:<from>:allowassign:<to>'
+     */
+    public function check_allowassign(array $role): array {
+        global $DB;
+        $from = (string)($role['shortname'] ?? '');
+        $items = [];
+        foreach ($role['allowassign'] ?? [] as $to) {
+            $item = "role:{$from}:allowassign:{$to}";
+            $fromid = $DB->get_field('role', 'id', ['shortname' => $from]);
+            $toid = $DB->get_field('role', 'id', ['shortname' => (string)$to]);
+            if (!$fromid || !$toid) {
+                $items[] = self::result('role', $item, self::RESULT_MISSING, 'allowed', null,
+                    'a role in this pair is not on the server yet; apply adds the pair after creating it');
+                continue;
+            }
+            $exists = $DB->record_exists('role_allow_assign', ['roleid' => $fromid, 'allowassign' => $toid]);
+            $items[] = self::result('role', $item, $exists ? self::RESULT_OK : self::RESULT_CHANGED,
+                'allowed', $exists ? 'allowed' : null);
         }
         return $items;
     }
@@ -921,6 +957,38 @@ class inspector {
             ];
         }
         return $targets;
+    }
+
+    /**
+     * Every ltct: course whose own "Show activity reports" is on (spec 003, research R2).
+     *
+     * With reports on, a mentor sees the learner's assignment submissions and logs through
+     * core's reports. moodle/site/settings/mentoring.yaml turns the course default off, and
+     * the publisher resets each course on publish, but any editing teacher can turn a course's
+     * own setting on in between. One `changed` item per such course; apply turns it off again.
+     * Courses with reports off produce no item. Read only.
+     *
+     * @return array[] item results, keyed 'course:<idnumber>:showreports'; none is blocking
+     */
+    public function check_course_reports(): array {
+        global $DB;
+        $prefix = \local_ltuse\util::IDNUMBER_PREFIX;
+        $courses = $DB->get_records_select('course',
+            $DB->sql_like('idnumber', ':prefix') . ' AND showreports <> 0',
+            ['prefix' => $DB->sql_like_escape($prefix) . '%'], 'idnumber', 'id, idnumber, showreports');
+        $items = [];
+        foreach ($courses as $course) {
+            $slug = substr($course->idnumber, strlen($prefix));
+            if ($slug === '' || strpos($slug, ':') !== false) {
+                continue; // Not a course identity (ltct:<slug>).
+            }
+            $item = self::result('course', "course:{$course->idnumber}:showreports", self::RESULT_CHANGED,
+                '0', (string)$course->showreports,
+                'activity reports are on, so a mentor would see submissions and logs');
+            $item['courseid'] = (int)$course->id;
+            $items[] = $item;
+        }
+        return $items;
     }
 
     /**

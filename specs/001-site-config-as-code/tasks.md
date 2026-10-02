@@ -30,7 +30,7 @@ No user-story work starts until this phase is done.
 
 **Wave 2, independent (different files):**
 
-- [x] **T007** [P] Declare `moodle.requires` and `moodle.release` from T001 (FR-002). Declare plugins: `local_ltuse` pinned to T002's version, `mod_scorm`, `mod_h5pactivity`, `filter_displayh5p`, `filter_mediaplugin`, `media_vimeo` and `media_videojs` enabled, and `message_airnotifier` disabled (FR-003, FR-012, FR-016) · moodle/site/site.yaml
+- [x] **T007** [P] Declare `moodle.requires` and `moodle.release` from T001 (FR-002). Declare plugins: `local_ltuse` pinned to T002's version, `mod_scorm`, `mod_h5pactivity`, `filter_displayh5p`, `filter_mediaplugin`, `media_vimeo` and `media_videojs` enabled, and `message_airnotifier` disabled, changed to enabled on 2026-10-02 with the Premium app plan (FR-003, FR-012, FR-016) · moodle/site/site.yaml
 - [x] **T008** [P] Write the CLI entry point. It defines `CLI_SCRIPT`, parses `--mode=apply|drift` (anything else exits 2) and reads JSON from stdin. It refuses with exit 2 when the payload's target does not equal `$CFG->wwwroot`, and prints the target and release before anything else (FR-005). It dispatches to `\local_ltuse\siteconfig\applier` or `\local_ltuse\siteconfig\drift`, which US1 and US2 create · moodle/local_ltuse/cli/site_config.php
 - [x] **T009** [P] Add a CI workflow that runs `python scripts/site_config.py validate` on changes to `moodle/site/**` and `scripts/site_config.py`, matching the shape of `competency-descriptors.yml` · .github/workflows/site-config.yml
 
@@ -116,7 +116,7 @@ Files: `moodle/site/settings/content-embeds.yaml`, `moodle/site/settings/mobile.
 - [x] **T026** [P] [US4] #4 with test accounts. A learner signs in through the Android app, sees callouts styled by the mobile stylesheet, and downloads a course for offline use (US4 scenario 3). No files
 - [ ] **T027** [P] [US4] #16 with test accounts. An administrator completes a full data export for one test learner and acts on a deletion request. A manager backs up a course (US4 scenario 4). No files
 - [ ] **T028** [P] [US4] #19 with test accounts. 1:1 and group conversations work in the browser and the app, and a learner restricts who may message them (US4 scenario 5). No files
-- [ ] **T029** [P] [US4] #25 with a new test account. Forum digest is the default, and the learner can change their preferences. Push stays off (US4 scenario 6). No files
+- [ ] **T029** [P] [US4] #25 with a new test account. Forum digest is the default, and the learner can change their preferences. A forum post reaches the learner's Android app as a push notification, and turning Mobile off for forum posts stops it (US4 scenario 6). No files
 
 **Checkpoint**: US4 is complete, and SC-005 passes on the instance (FR-017).
 

@@ -52,7 +52,7 @@ The hard parts are UX and operations, not missing features. Someone still has to
 | 22 | Assignments + peer review | Pref | Core Assignment (feedback, rubrics) and **Workshop** (structured peer assessment). | Built in | S |
 | 23 | Certificates / badges | Pref | Core Open Badges (course/site/competency criteria). Certificates via `mod_customcert` (free). **Caution:** keep this "training completed", never "CBC certified". `INTENT.md` says the platform is not the certification record. | Built in + plugin | S–M |
 | 24 | Searchable resource library | Pref | Core Global search (use Solr for decent results) plus a "Library" course (Database activity/folders). **Alternative:** the GitHub Pages competency site already has search, so resources could live there and be linked. | Built in + config | M |
-| 25 | Manageable notifications | Pref | **Configured (spec 001), 2026-10-01.** Declared in [`site/`](site/README.md) and applied to the build host; the learner-facing checks with test accounts and the Android app are still to run. Core per-user notification preferences, admin defaults, forum digests, email. Mobile push is subject to the app-plan limit in #17. | Built in | S |
+| 25 | Manageable notifications | Pref | **Configured (spec 001), 2026-10-01.** Declared in [`site/`](site/README.md) and applied to the build host; the learner-facing checks with test accounts and the Android app are still to run. Core per-user notification preferences, admin defaults, forum digests, email. Mobile push is on (2026-10-02), under the Premium app plan in #17. | Built in | S |
 
 ## Recommended sequence (if this becomes work)
 

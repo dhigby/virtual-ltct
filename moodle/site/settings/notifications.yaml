@@ -1,5 +1,5 @@
-# Row #25: notification defaults. Push (message_airnotifier) is disabled in site.yaml until
-# spec 015 decides the app plan. Message-provider defaults stay at core defaults and are not
+# Row #25: notification defaults. Push (message_airnotifier) is enabled in site.yaml; core's
+# message-provider defaults send forum posts and contact requests to it. Those defaults stay at core defaults and are not
 # declared (research R9): they live outside the admin tree, and forum email already follows
 # each learner's maildigest preference.
 

@@ -357,6 +357,11 @@
       "decision": "Drift skips settings whose get_setting() is true and treats an empty checkbox as 0",
       "why": "Widget settings store no value, and checkbox defaults of empty string mean unchecked; both were false unmanaged reports",
       "rejected": "Listing them all in ignore.yaml"
+    },
+    {
+      "decision": "Push (message_airnotifier) is enabled in the baseline; supersedes \"Push stays disabled\"",
+      "why": "ltuse.net moved to the Premium app plan on 2026-10-02: unlimited push devices at a flat rate, so constitution IX holds",
+      "rejected": "keeping push off until spec 015"
     }
   ],
   "concerns": [

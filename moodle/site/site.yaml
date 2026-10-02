@@ -34,10 +34,11 @@ plugins:
     enabled: 1
     why: "#3 plays linked video files."
 
-  # Row #25: push is off until spec 015 decides the app plan. Email is the default channel.
+  # Row #25: push through the Moodle app, beside email. The Premium app plan allows
+  # unlimited devices at a flat rate, so push stays within constitution IX.
   - component: message_airnotifier
-    enabled: 0
-    why: "#25 no mobile push until the app plan is decided (spec 015)."
+    enabled: 1
+    why: "#25 push notifications to the Moodle app; each learner can turn them off per notification."
 
   # Row #8: partner organisations, their cohorts and cohort sync (spec 002).
   - component: tool_dynamic_cohorts

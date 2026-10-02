@@ -72,7 +72,7 @@ Every name below appears in a `MOODLE_502_STABLE` settings file. "Verify" means 
 | #16 | course backup | core default; `backup/backup_auto_active` left to spec 015 | `admin/settings/courses.php` | manager backs up a course |
 | #19 | `messaging`, `messagingallusers` | 1, 0 (contacts and course members only) | `admin/settings/messaging.php` | 1:1 and group messages work in browser and app; a learner restricts contact |
 | #25 | `defaultpreference_maildigest` | 1 (complete digest) | `admin/settings/users.php` | a new account defaults to digest |
-| #25 | `message_airnotifier` | disabled | plugins | push off until spec 015 decides the app plan |
+| #25 | `message_airnotifier` | enabled | plugins | push on since 2026-10-02: the Premium app plan is flat-rate with unlimited devices. Core message-provider defaults already route forum posts and contact requests to it |
 | #25 | message-provider defaults | core defaults, undeclared | n/a | Verified 2026-10-01: they are stored as `message/message_provider_<component>_<name>_enabled`, outside the admin tree. Forum post emails already follow each learner's `maildigest` preference, so `defaultpreference_maildigest` is enough for #25. No `raw` escape is needed. |
 
 ## R10. Minimum release

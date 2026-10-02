@@ -3,12 +3,21 @@ namespace local_ltuse\external;
 
 defined('MOODLE_INTERNAL') || die();
 
+global $CFG;
+require_once($CFG->libdir . '/filelib.php');
+
 use context_course;
+use context_module;
+use context_user;
 use core_external\external_api;
 use core_external\external_function_parameters;
+use core_external\external_multiple_structure;
 use core_external\external_single_structure;
 use core_external\external_value;
+use file_storage;
 use local_ltuse\util;
+use moodle_exception;
+use stdClass;
 
 /**
  * Create or update one mod_page, addressed by its course-module idnumber.
@@ -23,6 +32,22 @@ use local_ltuse\util;
  * draft area into the module's file area, which is what makes @@PLUGINFILE@@ links in
  * the HTML resolve -- and what makes images render offline in the Moodle Android app.
  * Hotlinking them instead would look identical in a browser and be blank in the field.
+ *
+ * REPUBLISHING TOUCHES ONLY WHAT CHANGED (spec 009, FR-016). Saving a page bumps its
+ * revision, which is in every image URL on it, and re-uploading an image gives it a new
+ * timemodified. Either one makes the Moodle app download that page's images again on a
+ * learner's metered connection. So:
+ *
+ *   - If nothing differs (name, section, visibility, intro, content) and no files are to
+ *     change, nothing is written at all, and the outcome is `unchanged`.
+ *   - With `syncfiles`, the page's file area becomes exactly the uploaded draft plus the
+ *     `keepfiles`. Kept files are copied into the draft from the page's own area, carrying
+ *     the same "original" source record core's file_prepare_draft_area() writes. That is
+ *     what makes file_save_draft_area_files() keep their stored record and timemodified
+ *     instead of deleting and re-creating them (lib/filelib.php, MOODLE_502_STABLE).
+ *     A stored file left out of both is deleted by the save.
+ *
+ * A caller that sends neither new parameter (an older publisher) gets the old behaviour.
  */
 class create_page extends external_api {
 
@@ -37,12 +62,19 @@ class create_page extends external_api {
                 'Draft area itemid holding this page\'s files, or 0', VALUE_DEFAULT, 0),
             'visible' => new external_value(PARAM_INT, 'Visible', VALUE_DEFAULT, 1),
             'intro' => new external_value(PARAM_RAW, 'Summary HTML', VALUE_DEFAULT, ''),
+            'syncfiles' => new external_value(PARAM_BOOL,
+                'Make the file area exactly the draft plus keepfiles', VALUE_DEFAULT, false),
+            'keepfiles' => new external_multiple_structure(
+                new external_value(PARAM_FILE, 'File name'),
+                'Files already in this page to keep unchanged (read only with syncfiles)',
+                VALUE_DEFAULT, []),
         ]);
     }
 
     public static function execute(string $courseidnumber, string $idnumber, string $name,
                                    string $content, int $section = 0, int $contentitemid = 0,
-                                   int $visible = 1, string $intro = ''): array {
+                                   int $visible = 1, string $intro = '',
+                                   bool $syncfiles = false, array $keepfiles = []): array {
         $params = self::validate_parameters(self::execute_parameters(), [
             'courseidnumber' => $courseidnumber,
             'idnumber' => $idnumber,
@@ -52,12 +84,40 @@ class create_page extends external_api {
             'contentitemid' => $contentitemid,
             'visible' => $visible,
             'intro' => $intro,
+            'syncfiles' => $syncfiles,
+            'keepfiles' => $keepfiles,
         ]);
 
         $course = util::course_by_idnumber($params['courseidnumber']);
         $context = context_course::instance($course->id);
         self::validate_context($context);
         require_capability('local/ltuse:publish', $context);
+
+        $existing = util::cm_by_idnumber((int)$course->id, $params['idnumber']);
+
+        // Nothing to write. Not even update_moduleinfo(): it would bump the revision and
+        // with it every image URL on the page. A caller that sent files (contentitemid)
+        // without syncfiles is an older publisher replacing the area, never "unchanged".
+        if ($existing && $existing->modname === 'page' && !$params['syncfiles']
+                && !$params['contentitemid'] && self::is_unchanged($existing, $params)) {
+            return [
+                'cmid' => (int)$existing->id,
+                'instance' => (int)$existing->instance,
+                'created' => false,
+                'outcome' => 'unchanged',
+                'idnumber' => $params['idnumber'],
+            ];
+        }
+
+        $contentitemid = $params['contentitemid'];
+        if ($params['syncfiles'] && $existing) {
+            $contentitemid = self::draft_with_kept_files($existing, $contentitemid,
+                $params['keepfiles']);
+        } else if ($params['keepfiles'] && !$existing) {
+            // A new page has no files to keep; asking for one is a publisher bug.
+            throw new moodle_exception('error:nokeepfile', 'local_ltuse', '',
+                reset($params['keepfiles']));
+        }
 
         $result = util::upsert_module($course, 'page', $params['idnumber'],
             $params['section'], [
@@ -72,8 +132,8 @@ class create_page extends external_api {
                 'page' => [
                     'text' => $params['content'],
                     'format' => FORMAT_HTML,
-                    // Zero means "no files for this page"; mod_page handles that fine.
-                    'itemid' => $params['contentitemid'],
+                    // Zero means "leave the file area alone"; mod_page handles that fine.
+                    'itemid' => $contentitemid,
                 ],
                 // Match what the web UI's own defaults produce, so a page created here is
                 // indistinguishable from one a person made.
@@ -87,8 +147,93 @@ class create_page extends external_api {
             'cmid' => $result['cmid'],
             'instance' => $result['instance'],
             'created' => $result['created'],
+            'outcome' => $result['created'] ? 'created' : 'updated',
             'idnumber' => $params['idnumber'],
         ];
+    }
+
+    /**
+     * True if saving these values would change nothing a learner or the app can see.
+     *
+     * Compares against what is stored. The publisher resolves sibling links before its
+     * first send, so an unchanged lesson arrives byte-identical to the stored content.
+     *
+     * @param stdClass $cm course_modules record with modname
+     * @param array $params validated parameters
+     * @return bool
+     */
+    private static function is_unchanged(stdClass $cm, array $params): bool {
+        global $DB;
+        $page = $DB->get_record('page', ['id' => $cm->instance], 'id, name, intro, content',
+            MUST_EXIST);
+        $sectionnum = (int)$DB->get_field('course_sections', 'section', ['id' => $cm->section],
+            MUST_EXIST);
+        return $page->name === $params['name']
+            && (string)$page->intro === $params['intro']
+            && (string)$page->content === $params['content']
+            && (int)$cm->visible === (int)$params['visible']
+            && $sectionnum === (int)$params['section'];
+    }
+
+    /**
+     * Copy the files to keep from the page's own area into the draft the save will use.
+     *
+     * Every name is checked before anything is copied, so a bad name writes nothing.
+     *
+     * @param stdClass $cm the page's course_modules record
+     * @param int $draftitemid the draft holding uploaded files, or 0 to take a new one
+     * @param string[] $keepfiles names to keep
+     * @return int the draft itemid to save from
+     */
+    private static function draft_with_kept_files(stdClass $cm, int $draftitemid,
+                                                  array $keepfiles): int {
+        global $USER;
+        $fs = get_file_storage();
+        $cmcontext = context_module::instance($cm->id);
+
+        $stored = [];
+        foreach ($fs->get_area_files($cmcontext->id, 'mod_page', 'content', 0, 'filename', false)
+                 as $file) {
+            $stored[$file->get_filename()] = $file;
+        }
+        foreach ($keepfiles as $name) {
+            if (!isset($stored[$name])) {
+                throw new moodle_exception('error:nokeepfile', 'local_ltuse', '', $name);
+            }
+        }
+
+        // A page that only lost an image has nothing uploaded. The save still needs a
+        // draft, and an empty one deletes every stored file not copied into it.
+        if (!$draftitemid) {
+            $draftitemid = file_get_unused_draft_itemid();
+        }
+
+        $usercontext = context_user::instance($USER->id);
+        foreach ($keepfiles as $name) {
+            $file = $stored[$name];
+            // No timemodified in the record: create_file_from_storedfile() copies the
+            // stored one, which is the point.
+            $draft = $fs->create_file_from_storedfile([
+                'contextid' => $usercontext->id,
+                'component' => 'user',
+                'filearea' => 'draft',
+                'itemid' => $draftitemid,
+            ], $file);
+            // Exactly what file_prepare_draft_area() records. Without an "original", the
+            // save treats the file as deleted and re-uploaded, and gives it a new time.
+            $source = new stdClass();
+            $source->source = $file->get_source();
+            $original = new stdClass();
+            $original->contextid = $cmcontext->id;
+            $original->component = 'mod_page';
+            $original->filearea = 'content';
+            $original->itemid = 0;
+            $original->filename = $file->get_filename();
+            $original->filepath = $file->get_filepath();
+            $source->original = file_storage::pack_reference($original);
+            $draft->set_source(serialize($source));
+        }
+        return $draftitemid;
     }
 
     public static function execute_returns(): external_single_structure {
@@ -96,6 +241,7 @@ class create_page extends external_api {
             'cmid' => new external_value(PARAM_INT, 'Course-module id'),
             'instance' => new external_value(PARAM_INT, 'Page instance id'),
             'created' => new external_value(PARAM_BOOL, 'True if created, false if updated'),
+            'outcome' => new external_value(PARAM_ALPHA, 'created, updated or unchanged'),
             'idnumber' => new external_value(PARAM_RAW, 'Course-module idnumber'),
         ]);
     }

@@ -127,6 +127,7 @@ A learner who has completed a course sees, from the same landing page, where the
 - Interface translation is delivered by 010; this spec only requires its own text to be translatable.
 - The experience is built and piloted on the temporary instance; production learners wait for the dedicated VPS (015).
 - Mentor, pathway and community destinations may not exist when this ships; FR-008 degrades to showing only those that do.
+- Offline quizzes (from spec 009, research.md R4): in the Moodle app a learner must open the quiz once while still online, because downloading it is what starts the attempt. Learner help must say so, and must say how to sync by hand, since the app's per-user Wi-Fi-only sync setting can hold a finished attempt until the learner is on Wi-Fi or syncs manually. The live device check in 009 (quickstart V7) confirms the exact wording needed.
 
 ## Requirements Traceability
 

@@ -30,6 +30,13 @@ use moodle_exception;
  * is where the replacement lives. The pin in version.php exists to make that failure
  * loud at install time rather than silent at publish time.
  *
+ * OFFLINE. Every quiz is created with allowofflineattempts = 1, or the Moodle app will not
+ * download it and a consultant in the field cannot take it (spec 009, research.md R4). The
+ * field has no admin default -- it belongs to quizaccess_offlineattempts, which has no
+ * settings page -- and its four constraints are enforced only by that rule's form
+ * validation, which add_moduleinfo() never runs. So they are asserted here instead: a quiz
+ * that cannot go offline is refused, never silently created.
+ *
  * GRADING. The repo's quizzes carry a pass threshold in prose ("80% (22/27) to pass"),
  * which scripts/quiz_parse.py extracts. It is applied as the activity's gradepass, so the
  * Moodle gradebook agrees with what the quiz text tells the learner.
@@ -90,8 +97,7 @@ class create_quiz extends external_api {
             ? round($count * $params['thresholdpct'] / 100, 2)
             : 0;
 
-        $result = util::upsert_module($course, 'quiz', $params['idnumber'],
-            $params['section'], self::quiz_defaults([
+        $settings = self::quiz_defaults([
                 'name' => $params['name'],
                 'visible' => $params['visible'],
                 'introeditor' => [
@@ -109,7 +115,12 @@ class create_quiz extends external_api {
                 'attempts' => 0,          // unlimited; this is formative training
                 'grademethod' => 1,       // QUIZ_GRADEHIGHEST
                 'preferredbehaviour' => 'deferredfeedback',
-            ]));
+                'allowofflineattempts' => 1,
+            ]);
+        self::assert_offline_capable($settings);
+
+        $result = util::upsert_module($course, 'quiz', $params['idnumber'],
+            $params['section'], $settings);
 
         $quiz = $DB->get_record('quiz', ['id' => $result['instance']], '*', MUST_EXIST);
         $quiz->cmid = $result['cmid'];
@@ -187,6 +198,36 @@ class create_quiz extends external_api {
             $merged['quizpassword'] = $merged['password'] ?? '';
         }
         return $merged;
+    }
+
+    /**
+     * Refuse settings that would stop the Moodle app taking this quiz offline.
+     *
+     * The same four conditions quizaccess_offlineattempts::validate_settings_form_fields()
+     * checks (mod/quiz/accessrule/offlineattempts/rule.php). A site admin default -- a
+     * quiz/timelimit, say -- reaches these settings through quiz_defaults(), and is the
+     * likely way one fails.
+     *
+     * @param array $settings the merged quiz settings about to be saved
+     */
+    private static function assert_offline_capable(array $settings): void {
+        $broken = [];
+        if (!empty($settings['timelimit'])) {
+            $broken[] = 'timelimit (' . $settings['timelimit'] . ', must be 0)';
+        }
+        if (($settings['subnet'] ?? '') !== '') {
+            $broken[] = 'subnet (must be empty)';
+        }
+        if (($settings['navmethod'] ?? 'free') === 'sequential') {
+            $broken[] = 'navmethod (sequential; must be free)';
+        }
+        if (!in_array($settings['preferredbehaviour'] ?? '', ['deferredfeedback', 'deferredcbm'], true)) {
+            $broken[] = 'preferredbehaviour (' . ($settings['preferredbehaviour'] ?? '') .
+                '; must be deferredfeedback or deferredcbm)';
+        }
+        if ($broken) {
+            throw new moodle_exception('error:notoffline', 'local_ltuse', '', implode(', ', $broken));
+        }
     }
 
     /**

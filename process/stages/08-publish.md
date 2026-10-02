@@ -39,7 +39,9 @@ itself is automated: the markdown here is the source, and Moodle is a render of 
    The publish is idempotent — every page and quiz is addressed by an identifier derived
    from its source filename — so re-running it after a correction updates the course
    rather than creating a second one. Fixing a typo is: edit the markdown, merge,
-   re-publish.
+   re-publish. Once learners are enrolled, don't republish in the middle of a cohort:
+   a republish rebuilds the quiz, and an offline attempt that hasn't synced yet may not
+   survive it.
 
 5. **Link it back.** Add the published Moodle course URL to the module's `README.md`
    frontmatter under `external_links:` — this is the one frontmatter edit the pipeline

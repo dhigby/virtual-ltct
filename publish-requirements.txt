@@ -9,3 +9,9 @@
 markdown
 pymdown-extensions
 pyyaml
+# Pillow makes the lighter copy of each screenshot that goes into the payload
+# (scripts/image_reduce.py). Needed only where a payload is built: the package check and
+# the review-site build never import it. Pinned EXACTLY because a Pillow upgrade can change
+# the delivered bytes, which costs one re-upload of every image -- so it moves only by a
+# deliberate change here (specs/009-low-bandwidth-delivery/research.md R1).
+pillow==12.3.0

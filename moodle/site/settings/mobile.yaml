@@ -1,10 +1,12 @@
-# Row #4: the Moodle app, its stylesheet and offline download.
+# Rows #4 and #5: the Moodle app, its stylesheet, offline download and offline sign-in.
 
-rows: [4]
+rows: [4, 5]
 purpose: >-
   Moodle app access. Web services and the mobile service are on so the Android app can sign
   in; the app loads local_ltuse's stylesheet so published callouts look as they do in the
   browser; and no app feature is disabled, which keeps course download and offline use on.
+  The app never signs a learner out on its own, so an attempt answered offline is still
+  there to sync when the connection comes back.
 settings:
   - name: enablewebservices
     value: 1
@@ -24,3 +26,9 @@ settings:
       Empty keeps NoDelegate_CoreCourseDownload, NoDelegate_CoreOffline and
       NoDelegate_H5POffline enabled. Disabling any of them removes offline course download,
       which is why the app was chosen (FR-013).
+  - name: tool_mobile/autologout
+    value: 0
+    why: An offline learner is never logged out holding an unsynced quiz attempt.
+  - name: tool_mobile/forcelogout
+    value: 0
+    why: Same reason as autologout. Never sign out a learner with unsynced offline work.

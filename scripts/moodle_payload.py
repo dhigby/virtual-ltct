@@ -19,7 +19,14 @@ WHAT COMES OUT
 
     <out>/<slug>/manifest.json      the structure: sections, modules, quizzes
     <out>/<slug>/pages/<name>.html  one rendered page per included markdown file
-    <out>/<slug>/assets/<name>      every asset a published page references
+    <out>/<slug>/assets/<name>      every asset a published page references, as the
+                                    LIGHTER copy scripts/image_reduce.py makes of it --
+                                    same name as the committed file, recorded in
+                                    manifest["assets"] with both hashes so the gate can
+                                    trace every delivered byte back to its source
+
+The committed files are only read. A payload directory inside the repository is refused,
+so a build can never leave reduced copies in the working tree (FR-002).
 
 Two tokens survive into the HTML for the client to resolve, because neither can be known
 until the push is under way:
@@ -46,6 +53,7 @@ Usage:
   python scripts/moodle_payload.py --slug <slug> [--view learner|reviewer] --out <dir>
 """
 import argparse
+import hashlib
 import json
 import pathlib
 import re
@@ -58,6 +66,7 @@ import yaml
 
 sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent))
 import disclosure  # noqa: E402
+import image_reduce  # noqa: E402
 from course_stage import branch_slug, is_lesson  # noqa: E402
 from quiz_parse import QuizError, parse_quiz_file  # noqa: E402
 
@@ -89,6 +98,10 @@ SRC_RE = re.compile(r"""(?P<attr>\b(?:src|href)\s*=\s*)(?P<q>["'])(?P<url>[^"']*
 # Every page is wrapped in this, so moodle/local_ltuse/styles.css can style published
 # content without reaching any other page on the Moodle site.
 PAGE_CLASS = "local-ltuse-page"
+
+# SC-002: a lesson, its HTML plus every image on it, should load in one sitting on a slow
+# link. Over this the build says so; it does not refuse.
+PAGE_BUDGET = 1024 * 1024
 
 WITHHELD_HTML = (
     '<div class="admonition warning">\n'
@@ -249,6 +262,14 @@ class Payload:
             blocked = ("no lesson files (NN-*.md) -- this course's content is still only "
                        "its README. Backfill it first: see BACKFILL.md")
 
+        delivered, records = self._deliver(used_assets)
+        weight = {"source_bytes": sum(r["source_bytes"] for r in records.values()),
+                  "delivered_bytes": sum(r["bytes"] for r in records.values()),
+                  "by_treatment": {}}
+        for r in records.values():
+            weight["by_treatment"][r["treatment"]] =                 weight["by_treatment"].get(r["treatment"], 0) + 1
+        self._page_budget(sections, pages, records)
+
         manifest = {
             "slug": self.url_slug,
             "folder": self.slug,
@@ -265,8 +286,53 @@ class Payload:
             "quizzes": quizzes,
             "withheld": self.withheld,
             "notes": self.notes,
+            "assets": records,
+            "image_weight": weight,
         }
-        return manifest, pages, used_assets
+        return manifest, pages, delivered
+
+    def _deliver(self, used_assets):
+        """The lighter copy of every used asset, and the record that traces it.
+
+        Runs only on the set the inventory already selected, so reduction can never change
+        what is published or withheld (FR-009). Every image is decoded before anything is
+        written: a corrupt one stops the build here, naming the file.
+        """
+        delivered, records = {}, {}
+        for name, src in sorted(used_assets.items()):
+            committed = src.read_bytes()
+            rel = src.relative_to(self.folder)
+            try:
+                d = image_reduce.deliver(src, suffixes=rel.parts[0] == "assets")
+            except image_reduce.ImageError as e:
+                raise SystemExit("cannot read image %s/%s: %s"
+                                 % (self.slug, rel.as_posix(), e.reason))
+            if d.note:
+                self.notes.append(d.note)
+            delivered[name] = d.data
+            records[name] = {
+                "source": rel.as_posix(),
+                "source_sha256": hashlib.sha256(committed).hexdigest(),
+                "source_bytes": len(committed),
+                "sha256": hashlib.sha256(d.data).hexdigest(),
+                # Equal to Moodle's contenthash, which is what lets a republish skip an
+                # unchanged image. Plain data here: nothing else about it is Moodle's.
+                "sha1": hashlib.sha1(d.data).hexdigest(),
+                "bytes": len(d.data),
+                "treatment": d.treatment,
+            }
+        return delivered, records
+
+    def _page_budget(self, sections, pages, records):
+        for section in sections:
+            for mod in section["modules"]:
+                if mod["kind"] != "page":
+                    continue
+                total = len(pages[mod["html_file"]].encode("utf-8")) + sum(
+                    records[a]["bytes"] for a in mod["assets"] if a in records)
+                if total > PAGE_BUDGET:
+                    self.notes.append("%s: %d KB with images exceeds the 1 MB page budget"
+                                      % (mod["source"], round(total / 1024)))
 
     def _page(self, path, asset_by_rel, module_ids, excluded_names, used_assets):
         raw = path.read_text(encoding="utf-8", errors="replace")
@@ -372,7 +438,23 @@ class Payload:
         }
 
 
+def refuse_inside_repo(out_dir):
+    """Exit 2 if `out_dir` resolves inside the repository, before anything is written.
+
+    Covers `--out` here and `--keep-payload` in publish_moodle.py, which both come through
+    write_payload(). resolve() handles `..`, symlinks and a drive-letter case mismatch.
+    """
+    resolved = pathlib.Path(out_dir).resolve()
+    if resolved.is_relative_to(REPO.resolve()):
+        print("refusing to write the payload inside the repository (%s); choose a folder "
+              "outside it, or omit --keep-payload to use a temp folder" % resolved,
+              file=sys.stderr)
+        raise SystemExit(2)
+
+
 def write_payload(manifest, pages, assets, out_dir):
+    """Write the payload. `assets` maps each delivered name to its delivered bytes."""
+    refuse_inside_repo(out_dir)
     out = pathlib.Path(out_dir) / manifest["slug"]
     if out.exists():
         shutil.rmtree(out)
@@ -381,12 +463,29 @@ def write_payload(manifest, pages, assets, out_dir):
         (out / rel).write_text(html, encoding="utf-8", newline="\n")
     if assets:
         (out / "assets").mkdir(exist_ok=True)
-        for name, src in assets.items():
-            shutil.copy2(src, out / "assets" / name)
+        for name, data in assets.items():
+            (out / "assets" / name).write_bytes(data)
     (out / "manifest.json").write_text(
         json.dumps(manifest, indent=2, ensure_ascii=False) + "\n",
         encoding="utf-8", newline="\n")
     return out
+
+
+def report_images(manifest):
+    """The weight report (FR-010): totals, then every image not given the standard cut."""
+    w = manifest.get("image_weight")
+    if not w or not manifest.get("assets"):
+        return
+    src_kb, out_kb = round(w["source_bytes"] / 1024), round(w["delivered_bytes"] / 1024)
+    saved = 100 - round(100 * w["delivered_bytes"] / w["source_bytes"])         if w["source_bytes"] else 0
+    print("  images    %d: %d KB -> %d KB (%d%% lighter)"
+          % (len(manifest["assets"]), src_kb, out_kb, saved))
+    for name, rec in sorted(manifest["assets"].items()):
+        if rec["treatment"] in ("full", "small", "unchanged"):
+            print("            %-10s %s%s" % (
+                rec["treatment"], name,
+                " (already smaller than any reduction)"
+                if rec["treatment"] == "unchanged" else ""))
 
 
 def main():
@@ -417,6 +516,7 @@ def main():
     print("  sections  %d (%d module(s))" % (len(manifest["sections"]), n_mods))
     print("  quizzes   %d (%d question(s))" % (len(manifest["quizzes"]), n_q))
     print("  assets    %d" % len(assets))
+    report_images(manifest)
     for note in manifest["notes"]:
         print("  note      %s" % note)
     if manifest["withheld"]:

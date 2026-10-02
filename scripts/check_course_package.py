@@ -15,6 +15,7 @@ Two severities:
     * a malformed `**Design status**` line in 00-design.md
     * a screenshot that is remote, misplaced, missing, unlinkable or undescribed
       (see check_images)
+    * an asset whose name carries an unrecognised delivery suffix (see check_asset_names)
 
   Retro-fit / backfilled courses (a `00-design.md` whose design status is a retro-fit note)
   are faithful imports of already-delivered content and are grandfathered out of the 4Cs
@@ -36,6 +37,7 @@ import urllib.parse
 
 sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent))
 from disclosure import ANY_KEY_MARKER_RE, CANONICAL_KEY_RE  # noqa: E402
+from image_reduce import treatment_for  # noqa: E402  (no Pillow needed for this)
 
 REPO = pathlib.Path(__file__).resolve().parent.parent
 MODULES = REPO / "modules"
@@ -130,6 +132,27 @@ def check_images(folder, slug):
                               f"link it or delete it")
 
     return errors, warnings
+
+def check_asset_names(folder, slug):
+    """Return errors for asset names whose delivery suffix the publisher won't recognise.
+
+    An author asks for a screenshot to be sent unreduced by naming it `<stem>.full.png`,
+    or reduced further with `<stem>.small.png` (scripts/image_reduce.py). A typo there
+    must fail here: the publisher would quietly give `x.ful.png` the standard reduction,
+    and the dense dialog the author meant to protect would ship blurred.
+    """
+    errors = []
+    assets = folder / "assets"
+    if not assets.is_dir():
+        return errors
+    for p in sorted(assets.iterdir()):
+        if p.is_file() and treatment_for(p.name) is None:
+            stem = p.name.split(".", 1)[0]
+            errors.append(f"{slug}/assets/{p.name}: unrecognised delivery suffix -- use "
+                          f"{stem}.full{p.suffix} (send the original) or "
+                          f"{stem}.small{p.suffix} (smaller), or no suffix")
+    return errors
+
 
 # The Learning That Lasts four-phase lesson structure, as H2s in this order.
 PHASES = ("Connect", "Content", "Challenge", "Change")
@@ -283,6 +306,7 @@ def check_course(folder):
     img_errors, img_warnings = check_images(folder, slug)
     errors += img_errors
     warnings += img_warnings
+    errors += check_asset_names(folder, slug)
 
     # --- every lesson carries a visual ---
     vis_errors, vis_warnings = check_visuals(folder, slug)

@@ -86,7 +86,10 @@ def excluded_asset(name, view):
     """Non-markdown a pilot learner must not reach."""
     if view != "learner":
         return False
-    stem = name.rsplit(".", 1)[0].lower()
+    # Everything before the FIRST dot, not the last: an asset may carry a delivery suffix
+    # (`ss-09-quiz.full.png`, scripts/image_reduce.py), and taking the last dot would
+    # leave `ss-09-quiz.full`, which ends in no excluded suffix and would slip through.
+    stem = name.split(".", 1)[0].lower()
     if stem == "00-design" or stem.endswith(EXCLUDED_STEM_SUFFIXES):
         return True
     return bool(LMS_EXPORT_RE.search(name))

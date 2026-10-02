@@ -5,6 +5,11 @@ defined('MOODLE_INTERNAL') || die();
 
 global $CFG;
 require_once($CFG->libdir . '/filelib.php');
+// page_update_instance() calls page_get_editor_options() whenever it saves a draft, but
+// mod/page/lib.php never loads the file that defines it: the edit form does. Called from a
+// web service there is no form, so without this every page update carrying files dies with
+// "Call to undefined function" (MOODLE_502_STABLE, mod/page/lib.php:168).
+require_once($CFG->dirroot . '/mod/page/locallib.php');
 
 use context_course;
 use context_module;
@@ -22,8 +27,8 @@ use stdClass;
 /**
  * Create or update one mod_page, addressed by its course-module idnumber.
  *
- * Idempotent by construction: the idnumber is derived from the source filename in the
- * repo, so republishing a course updates the pages that exist and creates only the ones
+ * Idempotent by construction: the idnumber is derived from the source file's number in
+ * the repo, so republishing a course updates the pages that exist and creates only the ones
  * that do not. Nothing is duplicated and no state is kept outside Moodle.
  *
  * FILES. Screenshots are uploaded to the caller's draft area first (via
@@ -119,29 +124,40 @@ class create_page extends external_api {
                 reset($params['keepfiles']));
         }
 
+        $fields = [
+            'name' => $params['name'],
+            'visible' => $params['visible'],
+            'introeditor' => [
+                'text' => $params['intro'],
+                'format' => FORMAT_HTML,
+                'itemid' => 0,
+            ],
+            'showdescription' => 0,
+            'page' => [
+                'text' => $params['content'],
+                'format' => FORMAT_HTML,
+                // Zero means "leave the file area alone"; mod_page handles that fine.
+                'itemid' => $contentitemid,
+            ],
+            // Match what the web UI's own defaults produce, so a page created here is
+            // indistinguishable from one a person made.
+            'display' => 5,              // RESOURCELIB_DISPLAY_OPEN
+            'printheading' => 1,
+            'printintro' => 0,
+            'printlastmodified' => 1,
+        ];
         $result = util::upsert_module($course, 'page', $params['idnumber'],
-            $params['section'], [
-                'name' => $params['name'],
-                'visible' => $params['visible'],
-                'introeditor' => [
-                    'text' => $params['intro'],
-                    'format' => FORMAT_HTML,
-                    'itemid' => 0,
-                ],
-                'showdescription' => 0,
-                'page' => [
-                    'text' => $params['content'],
-                    'format' => FORMAT_HTML,
-                    // Zero means "leave the file area alone"; mod_page handles that fine.
-                    'itemid' => $contentitemid,
-                ],
-                // Match what the web UI's own defaults produce, so a page created here is
-                // indistinguishable from one a person made.
-                'display' => 5,              // RESOURCELIB_DISPLAY_OPEN
-                'printheading' => 1,
-                'printintro' => 0,
-                'printlastmodified' => 1,
-            ]);
+            $params['section'], $fields);
+        if ($result['created']) {
+            // page_add_instance() takes the content and moves the draft's files only when
+            // it is handed the edit form ("if ($mform)", mod/page/lib.php:112 and :123), and
+            // add_moduleinfo() from a web service has none. So a new page is stored with no
+            // content and no files. page_update_instance() reads both from the data with
+            // no form, so a second, update save completes the page. The draft is untouched
+            // until then.
+            util::upsert_module($course, 'page', $params['idnumber'], $params['section'],
+                $fields);
+        }
 
         return [
             'cmid' => $result['cmid'],

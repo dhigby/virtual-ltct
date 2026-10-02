@@ -11,8 +11,8 @@ Step 2 is not a formality. Once a page is on a server learners can reach, a disc
 failure has already happened; there is no equivalent of "rebuild the site". So this
 refuses to push a payload that has not passed, and --force does not exist.
 
-IDEMPOTENT. Every module carries an idnumber derived from its source filename
-("ltct:<slug>:01-lesson.md"), so a republish updates what exists and creates only what is
+IDEMPOTENT. Every module carries an idnumber derived from its source file's number
+("ltct:<slug>:01" for 01-lesson.md), so a republish updates what exists and creates only what is
 new. The identity lives in Moodle, not in a repo state file -- see
 moodle/local_ltuse/README.md. Running this twice must leave the course exactly as running
 it once did, and the end-to-end check for that is simply to run it twice.

@@ -93,6 +93,8 @@ TIME_RE = re.compile(r"^\*\*Estimated time:\*\*\s*(\d+)\s*minutes", re.M)
 H1_RE = re.compile(r"^#\s+(.+)$", re.M)
 VIDEO_RE = re.compile(r"\*\*Watch the video:\*\*\s*(.*)$", re.M)
 PENDING_VIDEO_RE = re.compile(r"_To be recorded at stage \d+\._", re.I)
+MODULE_NUMBER_RE = re.compile(r"^(\d+[a-z]?)-")
+IDNUMBER_MAX = 100   # VARCHAR(100) in course, course_modules and question
 SRC_RE = re.compile(r"""(?P<attr>\b(?:src|href)\s*=\s*)(?P<q>["'])(?P<url>[^"']*)(?P=q)""")
 
 # Every page is wrapped in this, so moodle/local_ltuse/styles.css can style published
@@ -139,14 +141,28 @@ def minutes_of(md_text):
     return int(m.group(1)) if m else None
 
 
-def idnumber(slug, name):
+def module_key(filename):
+    """The part of a module's identity that comes from its file: its number.
+
+    `03-checking-the-wordlist.md` is `03`, `01a-quiz.md` is `01a`; a file with no number
+    keeps its stem. Not the whole filename, because Moodle stores an idnumber in a
+    100-character column and a long course slug plus a long filename overflows it (a
+    publish then fails outright). A course's file numbers are unique by convention;
+    `Payload.build()` refuses a course where two published files share one.
+    """
+    m = MODULE_NUMBER_RE.match(filename)
+    return m.group(1) if m else filename.rsplit(".", 1)[0]
+
+
+def idnumber(slug, key):
     """Stable identity for one published module, and the whole idempotency story.
 
     It lives in Moodle on the course module, not in a repo state file: nothing new to
     keep honest, it survives someone else republishing, and it makes migrating to a
-    different Moodle server a re-publish rather than a data move.
+    different Moodle server a re-publish rather than a data move. `key` is
+    `module_key()` of the source file, plus a suffix for a quiz split or a question.
     """
-    return "ltct:%s:%s" % (branch_slug(slug), name)
+    return "ltct:%s:%s" % (branch_slug(slug), key)
 
 
 class Payload:
@@ -209,9 +225,16 @@ class Payload:
         excluded_names = {p.name for p in sorted(self.folder.glob("*.md"))
                           if disclosure.excluded_md(p.name, self.view)}
 
-        module_ids = {}
+        module_ids, owners = {}, {}
         for p in included:
-            module_ids[p.name] = idnumber(self.slug, p.name)
+            key = module_key(p.name)
+            if key in owners:
+                raise SystemExit(
+                    "%s: %s and %s would share the Moodle identity %s -- give one of "
+                    "them its own number" % (self.slug, owners[key], p.name,
+                                             idnumber(self.slug, key)))
+            owners[key] = p.name
+            module_ids[p.name] = idnumber(self.slug, key)
 
         lessons = [p for p in included if is_lesson(p.name)]
         others = [p for p in included if not is_lesson(p.name)]
@@ -269,6 +292,7 @@ class Payload:
         for r in records.values():
             weight["by_treatment"][r["treatment"]] =                 weight["by_treatment"].get(r["treatment"], 0) + 1
         self._page_budget(sections, pages, records)
+        self._check_identities(sections, quizzes)
 
         manifest = {
             "slug": self.url_slug,
@@ -290,6 +314,21 @@ class Payload:
             "image_weight": weight,
         }
         return manifest, pages, delivered
+
+    def _check_identities(self, sections, quizzes):
+        """Every idnumber must fit the column Moodle stores it in.
+
+        course, course_modules and question all hold idnumber in a VARCHAR(100). An
+        overlong one is not truncated: the insert fails, part-way through a publish. Refuse
+        here instead, before anything is sent.
+        """
+        ids = ["ltct:%s" % self.url_slug]
+        ids += [m["idnumber"] for s in sections for m in s["modules"]]
+        ids += [q["idnumber"] for quiz in quizzes for q in quiz["questions"]]
+        for i in ids:
+            if len(i) > IDNUMBER_MAX:
+                raise SystemExit("%s: Moodle identity %s is %d characters; Moodle stores at "
+                                 "most %d" % (self.slug, i, len(i), IDNUMBER_MAX))
 
     def _deliver(self, used_assets):
         """The lighter copy of every used asset, and the record that traces it.
@@ -350,7 +389,7 @@ class Payload:
                     % path.name)
                 return {
                     "kind": "page",
-                    "idnumber": idnumber(self.slug, path.name),
+                    "idnumber": idnumber(self.slug, module_key(path.name)),
                     "name": title_of(raw, path.stem),
                     "source": path.name,
                     "html_file": "pages/%s.html" % path.stem,
@@ -372,7 +411,7 @@ class Payload:
 
         return {
             "kind": "page",
-            "idnumber": idnumber(self.slug, path.name),
+            "idnumber": idnumber(self.slug, module_key(path.name)),
             "name": title_of(raw, path.stem),
             "source": path.name,
             "html_file": "pages/%s.html" % path.stem,
@@ -400,7 +439,7 @@ class Payload:
             # Fail closed, exactly as the learner view does: no guessed quiz.
             self.withheld.append(path.name)
             self.notes.append("quiz withheld: %s" % e)
-            mods.append({"kind": "page", "idnumber": idnumber(self.slug, path.name),
+            mods.append({"kind": "page", "idnumber": idnumber(self.slug, module_key(path.name)),
                          "name": title_of(raw, path.stem), "source": path.name,
                          "html_file": "pages/%s.html" % path.stem, "assets": []})
             pages["pages/%s.html" % path.stem] = wrap(WITHHELD_HTML)
@@ -412,7 +451,7 @@ class Payload:
             if quiz["qualifier"]:
                 name = "%s %s" % (name, quiz["qualifier"])
             defs.append({
-                "idnumber": idnumber(self.slug, path.name + suffix),
+                "idnumber": idnumber(self.slug, module_key(path.name) + suffix),
                 "name": name,
                 "source": path.name,
                 "section": section,
@@ -421,13 +460,15 @@ class Payload:
                 "questions": [self._question(q, path.name, i, n)
                               for n, q in enumerate(quiz["questions"], start=1)],
             })
-            mods.append({"kind": "quiz", "idnumber": idnumber(self.slug, path.name + suffix),
+            mods.append({"kind": "quiz",
+                         "idnumber": idnumber(self.slug, module_key(path.name) + suffix),
                          "name": name, "source": path.name})
         return mods, pages, defs
 
     def _question(self, q, source, quiz_index, ordinal):
         return {
-            "idnumber": idnumber(self.slug, "%s:q%d.%d" % (source, quiz_index, ordinal)),
+            "idnumber": idnumber(self.slug,
+                                 "%s:q%d.%d" % (module_key(source), quiz_index, ordinal)),
             "name": "Q%d" % q["number"],
             "text_html": render(q["text"]),
             "single": q["single"],

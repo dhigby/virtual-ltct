@@ -61,6 +61,7 @@ The hard parts are UX and operations, not missing features. Someone still has to
 | 23 | Certificates / badges | Pref | **Built ([spec 013](../specs/013-certificates-badges/spec.md)), 2026-10-02; not yet verified on the instance.** One core course badge per delivered course, issued automatically from course completion and made by `local_ltuse` (`set_course_recognition`); a pilot issues none. A certificate of training completed from `mod_customcert` 5.2.9, unlocked on course completion by `availability_coursecompleted` v5.5.3, with an anonymous verification code. The badge and certificate templates are declared in [`site/badges.yaml`](site/README.md) and `site/certificate/`, and `apply` rewords every badge in place. One wording rule, `scripts/cbc_wording.py`, refuses "certified" and any CBC level as held before apply and before publish. **Pending:** instance checks V1-V14 (quickstart), PHPUnit, SC-003 with 2-3 real partner learners, and the maintainer's design, logo and issuer name (plan, decision 4). `INTENT.md` says the platform is not the certification record. | Built in + plugin | S–M |
 | 24 | Searchable resource library | Pref | Core Global search (use Solr for decent results) plus a "Library" course (Database activity/folders). **Alternative:** the GitHub Pages competency site already has search, so resources could live there and be linked. | Built in + config | M |
 | 25 | Manageable notifications | Pref | **Configured (spec 001), 2026-10-01.** Declared in [`site/`](site/README.md) and applied to the build host; the learner-facing checks with test accounts and the Android app are still to run. Core per-user notification preferences, admin defaults, forum digests, email. Mobile push is subject to the app-plan limit in #17. | Built in | S |
+| 26 | Identity protection for at-risk users | Must | **Added 2026-10-02 ([spec 016](../specs/016-identity-protection/spec.md)); not yet analysed against 5.2.** Some consultants work where being identifiable puts them at risk. Courses are open by default since 2026-10-02, so a user or a whole organisation needs a protection level (email hidden, first name only, or pseudonym) applied in every view, notification, search and export, without limiting what they can do. Core has parts of it: per-user email display, full-name format settings, alternate name fields, hidden user fields, identity fields for staff. Whether these cover every view, or a plugin is needed, is spec 016's research. | Built in + custom (to confirm) | M–L |
 
 ## Recommended sequence (if this becomes work)
 
@@ -92,6 +93,7 @@ Every row still to build has a Spec Kit feature spec under [`specs/`](../specs/)
 | [013 Completion badges and certificates](../specs/013-certificates-badges/spec.md) | #23 |
 | [014 Resource library](../specs/014-resource-library/spec.md) | #24 |
 | [015 Production hosting and operations](../specs/015-production-hosting-ops/spec.md) | #17, and the operations behind every Ongoing row |
+| [016 Identity protection](../specs/016-identity-protection/spec.md) | #26 |
 
 ## Items that touch the repo's own rules
 

@@ -1,0 +1,16 @@
+{
+  "workflow": "speckit",
+  "specName": "Identity protection for at-risk users",
+  "branch": "016-identity-protection",
+  "currentStep": "specify",
+  "status": "specified",
+  "history": [
+    {
+      "step": "specify",
+      "substep": null,
+      "kind": "start",
+      "by": "extension",
+      "at": "2026-10-02T21:19:25.129Z"
+    }
+  ]
+}

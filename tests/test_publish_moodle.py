@@ -454,6 +454,16 @@ class EnsureCourseGroupMode(unittest.TestCase):
         self.assertEqual(course["categoryid"], 3)
         self.assertNotIn("core_course_update_courses", [n for n, _ in client.calls])
 
+    def test_activity_reports_off_on_create_and_update(self):
+        # Spec 003 (R2): reports on would show a mentor submissions and logs, and the site
+        # default covers new courses only, so every publish resets each course's own setting.
+        for existing, function in (({"id": 5}, "core_course_update_courses"),
+                                   (None, "core_course_create_courses")):
+            with self.subTest(function=function):
+                client = StubClient(existing)
+                pm.ensure_course(client, MANIFEST, 3)
+                self.assertEqual(course_payload(client, function)["showreports"], 0)
+
     def test_groupmode_is_not_forced(self):
         # Not forced, so a forum can still run across organisations (spec 005, R3).
         for existing in ({"id": 5}, None):

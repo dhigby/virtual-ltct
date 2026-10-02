@@ -1,6 +1,6 @@
 # Feature Specification: Mentor relationship and visibility
 
-**Feature Branch**: `specs/moodle-requirements`
+**Feature Branch**: `003-mentor-role`
 
 **Created**: 2026-09-30
 
@@ -93,8 +93,8 @@ Where a course asks the learner for work a mentor should respond to — an assig
 - **FR-003**: A mentor MUST be able to see, for each assigned learner, their course enrolments, activity and course completion, and profile details permitted to mentors, across all courses on the site.
 - **FR-004**: The mentor's view MUST include courses the learner enrols in after assignment, and completed courses, for as long as the relationship lasts.
 - **FR-005**: A mentor MUST NOT see progress or restricted profile details of any learner not assigned to them.
-- **FR-006**: The mentor role MUST NOT be able to change a learner's grades, completion, enrolments or profile. This covers the learner-level mentor role only. Assessing a course assignment is done through the course-level "Course mentor" role (Moodle's non-editing teacher), which may grade the work of its own groups in that course and never awards a CBC level (spec 012, research R3). Enrolling a learner's mentor as Course mentor in the courses they take is deferred to this spec's plan or spec 008.
-- **FR-007**: An assigned mentor and learner MUST be able to message each other in the browser and the Moodle app regardless of shared enrolment or the learner's contact restrictions.
+- **FR-006**: The mentor role MUST NOT be able to change a learner's grades, completion, enrolments or profile. This covers the learner-level mentor role only. Assessing a course assignment is done through the course-level "Course mentor" role (Moodle's non-editing teacher), which may grade the work of its own groups in that course and never awards a CBC level (spec 012, research R3). Enrolling a learner's mentor as Course mentor in the courses they take is deferred to spec 008 (plan research R8).
+- **FR-007**: An assigned mentor and learner MUST be able to message each other in the browser and the Moodle app regardless of shared enrolment or the learner's messaging privacy preference. A learner's block of one named person still applies (plan research R5).
 - **FR-008**: A site administrator and the learner's organisation manager MUST be able to assign, reassign and end a mentor relationship, using core Moodle capability where it exists; an organisation manager only for their own organisation's learners.
 - **FR-009**: Ending a relationship MUST remove the mentor's view at once and leave the learner's records intact.
 - **FR-010**: A learner MUST be able to see who their mentors are.

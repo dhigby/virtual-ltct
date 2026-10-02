@@ -179,3 +179,34 @@ These steps change learner data, not configuration, so they are done in Moodle a
 4. **After moving a learner to another organisation,** change their organisation field. Their cohorts follow, and their old enrolment is suspended with its history kept. Then, in each course **both** organisations are enrolled in, unenrol the learner's old, suspended cohort-sync enrolment (Participants > the learner's enrolment > Unenrol). Without this, the old organisation's manager still sees them on that course's participants list. Their grades and completion stay, because they are still enrolled through the new organisation.
 
 An organisation manager only follows their own people. They cannot create accounts, enrol anyone or change anyone's organisation (spec 002).
+
+## Mentors: assigning and ending a relationship
+
+A mentor follows the learners assigned to them across every course those learners take, for as long as the relationship lasts (spec 003). The relationship is the `mentor` role, held by the mentor **in the learner's own profile**, never in a course. Who mentors whom is learner data, so it lives only in Moodle and is never written in this repo.
+
+**To assign a mentor** (site team, or an admin):
+
+1. Open the learner's profile.
+2. Go to **Preferences**.
+3. Under **Roles**, choose **Assign roles relative to this user**.
+4. Choose **Mentor**.
+5. Search for the mentor, select them and click **Add**.
+
+The mentor sees the learner on their **Mentoring** page at once, in the browser and in the Moodle app, with every course the learner takes now or later. The two also become message contacts, so they can message each other with no course in common.
+
+**To end a relationship**, go to the same page, select the mentor on the right and click **Remove**. The mentor loses the view on their next page load, the plugin's message contact goes, and the learner's enrolments, completions and grades are untouched. **To reassign**, remove one mentor and add the other.
+
+**Rules.**
+- A mentor may be from any organisation. The assignment, not the organisation, is what grants the view.
+- A learner may have more than one mentor. Each sees only their own learners.
+- `roles.yaml` lets `manager` assign `mentor` (`allowassign`). That is what offers Mentor on the page above.
+
+**When a mentor leaves the program**, end all their relationships at once on the server:
+
+```bash
+php public/local/ltuse/cli/mentor_contacts.php --end-all --mentor=<username>
+```
+
+It asks first, prints counts only, and leaves every learner's records as they are. After the upgrade that adds mentor contacts, run `php public/local/ltuse/cli/mentor_contacts.php --sync` once, so mentors assigned earlier get their contacts too.
+
+**Feedback on a learner's work** is not this role's job. Where a course asks for work, enrol the mentor as **Course mentor** (`teacher`) with the organisation's group, as in step 2 above (spec 012). Assigning many mentors at once, and enrolling mentors into their learners' courses automatically, are spec 008's.

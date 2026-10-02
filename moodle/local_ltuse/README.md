@@ -189,15 +189,19 @@ run in one delegated transaction, and the stored set is read back after the comm
 
 ### The plugin's own tables
 
-`db/install.xml` (and the matching steps in `db/upgrade.php`) adds three tables, none holding
-user data, so `classes/privacy/provider.php` is a `null_provider`. The first two arrive at
-version `2026100204`; `local_ltuse_course_badge` arrives at `2026100300` and is described under
-[Badges and certificates](#badges-and-certificates-spec-013):
+`db/install.xml` (and the matching steps in `db/upgrade.php`) adds four tables. The first two
+arrive at version `2026100204`; `local_ltuse_course_badge` arrives at `2026100300` and is
+described under [Badges and certificates](#badges-and-certificates-spec-013);
+`local_ltuse_mentor_contact` arrives at `2026100301` and is described under
+[Mentors](#mentors-spec-003). Only the last holds user data, and `classes/privacy/provider.php`
+declares, exports and deletes it:
 
 | Table | Holds | Written by |
 |---|---|---|
 | `local_ltuse_competency` | `name` (unique), `category`, `sortorder`, `retired` | `site_config.py apply`, from `competencies.yaml` (the `Meta` category left out). Rows are retired, never deleted. |
 | `local_ltuse_course_comp` | `courseid`, `competencyid` (unique together) | `set_course_competencies` |
+| `local_ltuse_course_badge` | `courseid` (unique), `badgeid` (unique), `imagehash` | `set_course_recognition` |
+| `local_ltuse_mentor_contact` | `mentorid`, `learnerid` (unique together), `contactid` | the `role_assigned` observer and `cli/mentor_contacts.php` |
 
 ### The per-competency datasource
 
@@ -289,7 +293,7 @@ through the classes above, plus one join to find the activities: `course_modules
 A badge has no idnumber, and a restore or a course copy duplicates its name, so this table is
 its identity: `courseid` (unique), `badgeid` (unique), `imagehash` (the sha256 of the template
 image the badge's image was made from, because core resizes it) and `timecreated`. It holds no
-user data, so the privacy provider stays a `null_provider`. A badge in an `ltct:` course that
+user data, so the privacy provider does not declare it. A badge in an `ltct:` course that
 the map does not name is reported `extra` and never adopted.
 
 ## What the plugin relies on, and why (Principle XI)
@@ -460,7 +464,8 @@ None of them writes another component's table.
 **The profile hook.** `lib.php` defines `local_ltuse_control_view_profile()`, the callback core's `user_can_view_profile()` calls through `user_process_profile_callbacks()`. It refuses an organisation manager the profile of anyone outside the organisations they manage (spec 002, research R9). It never allows anything core would refuse. It reads:
 - `profile_user_record()` for the viewed user's `ltct_org`;
 - `has_coursecontact_role()` and `has_capability('moodle/user:viewalldetails')` at system context, to recognise staff;
-- `has_capability('moodle/user:viewalldetails')` in the viewed user's context, to exempt the site team and mentors.
+- `has_capability('moodle/user:viewalldetails')` in the viewed user's context, to exempt the site team;
+- `has_capability('local/ltuse:viewmenteeprogress')` in the viewed user's context, to exempt their mentor, even one who manages another organisation (spec 003, research R9).
 
 It runs only while `forceloginforprofiles` is on (declared in `moodle/site/settings/groups.yaml`).
 
@@ -512,6 +517,33 @@ each `ltct:<slug>:certificate` activity whose pages differ. `drift` reports a te
 differs, a badge whose text or image differs from its rendering, a mapped badge that is gone
 (`missing`) and an unmapped badge in an `ltct:` course (`extra`). It never judges whether a
 badge should be active: only the publisher knows a course's stage.
+
+## Mentors (spec 003)
+
+A mentor relationship is the declared `mentor` role (`moodle/site/roles.yaml`) held by the
+mentor in a learner's user context. Core gives that role a profile and the Grades overview,
+but no cross-course completion and nothing in the Moodle app, and core's messaging ignores it.
+This plugin fills those three gaps and nothing else.
+
+| Piece | Where | Does |
+|---|---|---|
+| `local/ltuse:viewmenteeprogress` | `db/access.php` | Read, `CONTEXT_USER`, `RISK_PERSONAL`, no archetype. Granted only by the `mentor` role, so it reaches only assigned learners. |
+| Mentoring page | `mentoring.php`, `templates/mentoring.mustache` | The learners you mentor, each with their courses and completion (in progress N%, not started, completed on a date, not tracked), and your own mentors. Links to profile, core Grades overview and Message. Never shows quiz attempts, submissions, logs or hidden profile fields. |
+| Data | `classes/mentoring.php` | `for_user()` feeds both the page and the app, so they cannot differ. Every learner is rechecked with the capability on every call. `progress_status()` and `sort_courses()` are pure, tested by `tests/mentoring_harness.php`. |
+| Navigation | `db/hooks.php`, `classes/hook_callbacks.php`, `lib.php` | A "Mentoring" primary-navigation item (`\core\hook\navigation\primary_extend`) and profile links (`local_ltuse_myprofile_navigation()`), only for someone with a mentor or a learner. |
+| App | `db/mobile.php`, `classes/output/mobile.php`, `templates/mobile_mentoring.mustache` | A `CoreMainMenuDelegate` handler under the app's More menu. Its `init` returns `disabled` for anyone with no relationship. |
+| Message contacts | `db/events.php`, `classes/observer.php`, table `local_ltuse_mentor_contact` | On `role_assigned` of `mentor` in a user context, `\core_message\api::add_contact()` unless the two are already contacts, recorded in the table. On `role_unassigned`, once no mentor assignment links the pair, `remove_contact()`, only while the pair's contact is still the one the plugin made (the table keeps its `message_contacts` id), so a contact the two make again themselves is never removed. On `user_deleted`, the user's rows and those contacts go. A learner's block is never touched, so it still wins. |
+| CLI | `cli/mentor_contacts.php` | `--sync` makes missing contacts for existing assignments (run once after upgrading). `--end-all --mentor=<username>` ends every relationship one mentor holds, through `role_unassign_all()`. Prints counts, never names. |
+| Privacy | `classes/privacy/provider.php` | Declares, exports and deletes `local_ltuse_mentor_contact` rows in each person's user context, and declares the link to `core_message`. The role assignment and the contact are core's. |
+| Course reports | `classes/siteconfig/inspector.php`, `drift.php`, `applier.php` | Drift reports each `ltct:` course whose own "Show activity reports" is on (a mentor would see submissions and logs); apply turns it off with `update_course()`. The publisher also sends `showreports: 0` on every publish. |
+
+**Raw reads added by spec 003.** None is a write; the only table written is this plugin's own.
+
+| Table | Read by | Indexed? | Why there is no API |
+|---|---|---|---|
+| `role_assignments` joined to `context` | `ra.userid`, `ra.roleid`, `ctx.contextlevel = CONTEXT_USER` | `role_assignments.userid` is | Core has no "contexts where this user holds this role" function. `block_mentees` reads the same join. The result only finds candidates; the capability decides. |
+| `course_completions` | `userid`, `timecompleted IS NOT NULL` | `userid` is | Lists a course the learner completed after their enrolment was deleted, which `enrol_get_all_users_courses()` no longer returns (FR-004). |
+| `role_allow_assign` | `(roleid, allowassign)` | unique key | The applier and drift check one declared allow-assign pair. `get_assignable_roles()` answers for a user in a context, not for a pair. |
 
 ## Verified against Moodle 5.2.3+ (2026-09-29)
 

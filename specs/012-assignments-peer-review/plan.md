@@ -146,7 +146,7 @@ CLAUDE.md                                              # Phase B: assignment fil
 
 ## Cross-spec effects
 
-- **Spec 003 (conflict, needs the maintainer)**: 003 FR-006 forbids a mentor changing grades, but assessing with a marking guide writes a grade. Recommendation (R3): restrict 003 FR-006 to the user-context mentor role; assignment feedback is given through the course-level Course mentor role, which can never award a CBC level. Syncing a learner's 003 mentor into the courses they take as Course mentor is deferred to spec 003's or 008's plan. Until then the organisation manager enrols the mentor with the cohort.
+- **Spec 003 (conflict, needs the maintainer)**: 003 FR-006 forbids a mentor changing grades, but assessing with a marking guide writes a grade. Recommendation (R3): restrict 003 FR-006 to the user-context mentor role; assignment feedback is given through the course-level Course mentor role, which can never award a CBC level. Syncing a learner's 003 mentor into the courses they take as Course mentor is deferred to spec 003's or 008's plan. Until then the site team enrols the mentor as Course mentor with the organisation's group (spec 002 decision 2026-10-01; spec 003 research R8).
 - **Spec 002**: this plan depends on two things from it: the invariant that **every course group is within exactly one organisation**, and group idnumbers `ltct:org:<key>` and `ltct:cohort:<key>`. 002's plan must adopt both or tell this spec.
 - **Spec 004**: assignment grades and "awaiting feedback" appear in organisation reports. The grade items carry `ltct:` idnumbers (synced from `cmidnumber`, R2), which reports can key on.
 - **Spec 009**: the free app plan allows 2 offline courses per device per site (R6, DOC).

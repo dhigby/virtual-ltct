@@ -79,6 +79,10 @@ class drift {
         $this->report_extra_owned($declaration);
         $this->report_extra_reporting();
         $this->report_discussions();
+        // Pass 6 (spec 003, R2): a published course with activity reports turned on.
+        foreach ($this->inspector->check_course_reports() as $item) {
+            $this->report->add_result($item);
+        }
     }
 
     /**

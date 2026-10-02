@@ -124,6 +124,12 @@ COMPLETION_ENABLED = 1
 # has. Sent on update too, since the site default only applies to new courses.
 HIDE_SECTIONS_COMPLETELY = [{"name": "hiddensections", "value": "1"}]
 
+# "Show activity reports" off. With it on, a mentor (spec 003, research R2) would see every
+# assignment submission and the learner's logs through core's reports. The site default
+# (moodle/site/settings/mentoring.yaml) covers only new courses and any editing teacher can
+# turn a course's own setting on, so every publish resets it.
+SHOW_REPORTS_OFF = 0
+
 # The two course custom fields declared in moodle/site/course-fields.yaml (spec 004, R11).
 FIELD_COMPETENCIES = "ltct_competencies"
 FIELD_TARGET_LEVEL = "ltct_target_level"
@@ -181,6 +187,7 @@ def ensure_course(client, manifest, category_id, problems=None):
             "summary": manifest["summary_html"],
             "summaryformat": 1,
             "groupmode": GROUPMODE_SEPARATE,
+            "showreports": SHOW_REPORTS_OFF,
             "enablecompletion": COMPLETION_ENABLED,
             "customfields": customfields,
             "courseformatoptions": HIDE_SECTIONS_COMPLETELY,
@@ -206,6 +213,7 @@ def ensure_course(client, manifest, category_id, problems=None):
             "numsections": max(len(manifest["sections"]), 1),
             "visible": 0,          # created hidden; a human decides when learners see it
             "groupmode": GROUPMODE_SEPARATE,
+            "showreports": SHOW_REPORTS_OFF,
             "enablecompletion": COMPLETION_ENABLED,
             "courseformatoptions": HIDE_SECTIONS_COMPLETELY,
             "customfields": customfields,

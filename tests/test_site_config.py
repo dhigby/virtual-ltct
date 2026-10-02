@@ -535,13 +535,29 @@ class ProfileFields(Base):
         self.assertRejected()
 
 
+# The mentor role. Every roles.yaml must declare it once local_ltuse defines its capability
+# (spec 003 FR-001), so the self-contained role fixtures carry it too.
+MENTOR_ENTRY = """\
+  - shortname: mentor
+    name: Mentor
+    description: fixture
+    archetype: ""
+    contextlevels: [user]
+    capabilities:
+      moodle/user:viewdetails: allow
+      moodle/user:viewuseractivitiesreport: allow
+      local/ltuse:viewmenteeprogress: allow
+    why: fixture
+"""
+
+
 class OrgManager(Base):
     """The orgmanager role's deny list and the one-role-for-every-partner rule (SC-005)."""
     LAST_CAP = "      moodle/site:viewuseridentity: allow\n"
 
     def setUp(self):
         super().setUp()
-        self.write("roles.yaml", ORGMANAGER_ROLES)
+        self.write("roles.yaml", ORGMANAGER_ROLES + MENTOR_ENTRY)
 
     def test_allowed_capabilities(self):
         self.assertAccepted()
@@ -564,10 +580,108 @@ class OrgManager(Base):
         self.assertRejected()
 
     def test_role_named_for_an_organisation(self):
-        self.write("roles.yaml", ORGMANAGER_ROLES + "  - shortname: independent_viewer\n"
+        self.write("roles.yaml", ORGMANAGER_ROLES + MENTOR_ENTRY + "  - shortname: independent_viewer\n"
                    "    name: Independent viewer\n    archetype: \"\"\n    contextlevels: [course]\n"
                    "    why: fixture\n")
         self.assertRejected()
+
+
+# A self-contained roles.yaml for the mentor and allowassign cases (spec 003).
+MENTOR_ROLES = """\
+roles:
+  - shortname: manager
+    archetype: manager
+    allowassign: [mentor]
+    why: fixture
+""" + MENTOR_ENTRY
+
+
+class Mentor(Base):
+    """The mentor role's allowlist (spec 003 research R2) and the allowassign key (R6)."""
+    LAST_CAP = "      local/ltuse:viewmenteeprogress: allow\n"
+
+    def setUp(self):
+        super().setUp()
+        self.write("roles.yaml", MENTOR_ROLES)
+
+    def test_allowed(self):
+        self.assertAccepted()
+
+    def test_tracked_declaration_is_valid(self):
+        self.assertEqual(sc.validate()[1].items, [])
+
+    def test_capability_outside_allowlist(self):
+        for cap in ("moodle/user:editprofile", "moodle/user:viewalldetails",
+                    "moodle/competency:usercompetencyrate", "moodle/grade:viewall",
+                    "moodle/user:readuserposts"):
+            with self.subTest(capability=cap):
+                self.reset()
+                self.edit("roles.yaml", self.LAST_CAP, self.LAST_CAP + "      %s: allow\n" % cap)
+                self.assertRejected()
+
+    def test_prohibit(self):
+        self.edit("roles.yaml", "moodle/user:viewdetails: allow", "moodle/user:viewdetails: prohibit")
+        self.assertRejected()
+
+    def test_contextlevels_user_only(self):
+        for levels in ("[course, user]", "[system]", "[]"):
+            with self.subTest(contextlevels=levels):
+                self.reset()
+                self.edit("roles.yaml", "contextlevels: [user]", "contextlevels: %s" % levels)
+                self.assertRejected()
+
+    def test_archetype_must_be_empty(self):
+        self.edit("roles.yaml", '    archetype: ""\n    contextlevels: [user]',
+                  "    archetype: teacher\n    contextlevels: [user]")
+        self.assertRejected()
+
+    def test_archetype_must_be_declared(self):
+        self.edit("roles.yaml", '    archetype: ""\n    contextlevels: [user]',
+                  "    contextlevels: [user]")
+        self.assertRejected()
+
+    def test_allowassign_unknown_role(self):
+        self.edit("roles.yaml", "allowassign: [mentor]", "allowassign: [nosuchrole]")
+        self.assertRejected()
+
+    def test_allowassign_core_role(self):
+        self.edit("roles.yaml", "allowassign: [mentor]", "allowassign: [mentor, teacher]")
+        self.assertAccepted()
+
+    def test_allowassign_duplicate(self):
+        self.edit("roles.yaml", "allowassign: [mentor]", "allowassign: [mentor, mentor]")
+        self.assertRejected()
+
+    def test_allowassign_not_a_list(self):
+        self.edit("roles.yaml", "allowassign: [mentor]", "allowassign: mentor")
+        self.assertRejected()
+
+    def test_allowassign_denied_on_orgmanager_and_mentor(self):
+        # Asserted by message, so neither passes only because of some other error.
+        self.write("roles.yaml", MENTOR_ROLES.replace(
+            "    contextlevels: [user]\n", "    contextlevels: [user]\n    allowassign: [mentor]\n"))
+        self.assertInvalid("mentor assigns no roles")
+        self.write("roles.yaml", ORGMANAGER_ROLES.replace(
+            "    contextlevels: [course]\n", "    contextlevels: [course]\n    allowassign: [teacher]\n")
+            + MENTOR_ENTRY)
+        self.assertInvalid("orgmanager assigns no roles")
+
+    def test_mentor_role_required_once_the_capability_exists(self):
+        # FR-001: local_ltuse at this pin defines local/ltuse:viewmenteeprogress.
+        self.write("roles.yaml", ORGMANAGER_ROLES)
+        self.assertInvalid("the mentor role is missing")
+
+    def test_allowassign_rendered(self):
+        rc, out, err = self.run_main("render")
+        self.assertEqual(rc, 0, err)
+        roles = {r["shortname"]: r for r in json.loads(out)["roles"]}
+        self.assertEqual(roles["manager"]["allowassign"], ["mentor"])
+        self.assertEqual(roles["mentor"]["allowassign"], [])
+
+    def test_mentoring_settings_file(self):
+        self.write("settings/mentoring.yaml",
+                   (REPO / "moodle" / "site" / "settings" / "mentoring.yaml").read_text())
+        self.assertAccepted()
 
 
 class Expansion(Base):

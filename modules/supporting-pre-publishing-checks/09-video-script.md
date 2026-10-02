@@ -93,7 +93,7 @@ spotting it yourself."
 | --- | --- |
 | Live recording (or `assets/ss-05-find-with-markup.png`) of a Paratext Find search for a glossary term, showing one plain occurrence and one wrapped in `\w...\w*` markup. | "Glossary over-linking — every occurrence marked instead of just the first per section — doesn't leave a durable report to check later; the linking operation's own report is transient. Use Find instead: search the term, and read the markup on each result. If every occurrence is wrapped, that's over-linked; if only the first per section is, the scope is right." |
 | Slide: "Layout follows reader expectation, not word length." | "A team may assume single-column layout because their language has long words — but if the community's existing Bibles, in a language of wider communication, are conventionally printed in two columns, that reader expectation is the baseline to match, not the word-length problem." |
-| Live recording (or `assets/ss-05-wordlist-hyphenation.png`) of the Wordlist's Show hyphenation view — a grey tick, a click, the tick turning green; then a shift-click batch-approval. | "Hyphenation isn't hand-built — Paratext's Wordlist auto-generates it. Turn on Show hyphenation in its View menu, and each word carries a tick: grey means guessed, unreviewed; green means approved. Click a correct guess to approve it, edit a wrong one's break marks to fix it, or select a run of words and batch-approve them all at once. Do this before the files go to print — PTXprint's draft PDF will use unapproved guesses too." |
+| Live recording (or `assets/ss-05-wordlist-hyphenation.png`) of the Wordlist's Show hyphenation view — a grey tick, a click, the tick turning green; then a shift-click batch-approval. | "Hyphenation isn't hand-built — Paratext's Wordlist auto-generates it. Turn on Show hyphenation in its View menu, and each word carries a tick: grey means guessed, unreviewed; green means approved. But where a word may break is the team's call, not yours. Draft breaks from the syllable rules in their orthography statement — or, if there isn't one, enter the breaks they propose — have the team confirm each break, then approve the confirmed ones, singly or in a batch. Do this before the files go to print — PTXprint's draft PDF will use unapproved guesses too." |
 | Live recording (or the module's PTXprint spread images) of a draft-PDF spread showing an awkward heading break and an underfilled column. | "Last stop: the draft-PDF read-through in PTXprint. Watch for spreads, orphan words, footnote shifts, awkward heading placement, and underfilled pages — and triage what you find. Some of it's yours to fix, some is the team's call, and true typesetting composition belongs to the typesetter, not you." |
 
 ### Segment 6 — Where this goes next (companion to the scenario bank)
@@ -139,7 +139,8 @@ escalate, and submit your answers to your mentor for review."
     Confirm which is easier to stage reliably on camera; both are field-confirmed in the
     lessons, but this script does not commit to one.
   - Segment 2's "down arrow stepping through occurrences" and Segment 5's grey-tick →
-    green-tick approval and batch-approval are described generically here based on the
+    green-tick approval and batch-approval (of breaks the team has already confirmed —
+    the team confirms before anything is approved) are described generically here based on the
     lesson text; confirm the exact live sequence (which project, which term/word) before
     recording so the demo doesn't require last-minute UI hunting on camera.
   - Numbers/measures (Segment 3) is explicitly in flux — the new consolidated check was

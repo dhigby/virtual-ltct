@@ -78,6 +78,7 @@ symptoms of a single cause higher up. Work in this order instead:
 
 ![The Markers Inventory dialog listing markers, their counts, and style names (Chapter Number, Footnote, End Marker, and others).](assets/ss-04-markers-inventory.png)
 *This is where you check that every paired marker actually closes.*
+
 3. **Ghost markers.** Look for markers left behind with no content attached — often the
    debris of a deleted footnote or cross-reference where the marker itself wasn't
    removed. These can silently corrupt export and typesetting even when nothing visibly

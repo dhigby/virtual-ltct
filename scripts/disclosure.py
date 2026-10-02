@@ -38,6 +38,12 @@ import re
 # --------------------------------------------------------------------------------------
 CANONICAL_KEY_RE = re.compile(r"^## Answer key\b.*$")
 
+# Mentor-only material (spec 012, design D3): an assignment's grading notes and model
+# answer, or a mentor aside in any lesson. Same shape as the answer key: an H2, optionally
+# qualified ("## Mentor only: grading notes"), repeatable, running to the next H1 or H2.
+MENTOR_ONLY_RE = re.compile(r"^## Mentor only\b.*$")
+RESTRICTED_RE = re.compile(rf"{CANONICAL_KEY_RE.pattern}|{MENTOR_ONLY_RE.pattern}")
+
 # Anything that merely LOOKS like a key marker. check_course_package.py reports a
 # non-conforming marker rather than letting it pass silently because a conforming one
 # exists elsewhere in the same file.
@@ -54,6 +60,13 @@ RESIDUAL_RE = re.compile(
     r"^[ ]{0,3}(?:#{1,6}[ \t]*answer[ \t]*key\b|\*{1,2}[ \t]*answer[ \t]*key\b)"
     r"|\(\s*correct\s*\)"
     r"|^[ ]{0,3}\*{1,2}[ \t]*correct answer",
+    re.I | re.M)
+
+# What a mentor-only block holds, or a mis-levelled marker, found OUTSIDE a block. An
+# author who writes "## Model answer" without the marker has published it; withhold.
+RESTRICTED_RESIDUAL_RE = re.compile(
+    r"^[ ]{0,3}#{1,6}[ \t]*(?:grading notes|model answer|marking notes|mentor notes"
+    r"|mentor only)\b",
     re.I | re.M)
 
 # --------------------------------------------------------------------------------------
@@ -98,14 +111,14 @@ def excluded_asset(name, view):
 # --------------------------------------------------------------------------------------
 # Stripping
 # --------------------------------------------------------------------------------------
-def strip_key_blocks(md):
-    """The source with its answer-key blocks removed -- what may legitimately ship.
+def strip_key_blocks(md, marker=CANONICAL_KEY_RE):
+    """The source with its `marker` blocks removed -- what may legitimately ship.
 
-    The canonical marker is an H2, so a block runs to the next H1 or H2.
+    Both markers are H2s, so a block runs to the next H1 or H2.
     """
     lines, out, i = md.split("\n"), [], 0
     while i < len(lines):
-        if not CANONICAL_KEY_RE.match(lines[i]):
+        if not marker.match(lines[i]):
             out.append(lines[i])
             i += 1
             continue
@@ -131,7 +144,19 @@ def strip_answer_keys(md):
     return text, RESIDUAL_RE.search(text) is None
 
 
-def answer_key_blocks(md):
+def strip_restricted(md):
+    """Remove every answer-key AND mentor-only block. Returns (text, ok); ok=False =>
+    withhold the page whole.
+
+    Every learner page goes through this, not only assignments: a lesson that grows a
+    mentor aside is then safe at no cost. Like strip_answer_keys, it re-reads its output.
+    """
+    text = strip_key_blocks(md, RESTRICTED_RE).rstrip() + "\n"
+    ok = RESIDUAL_RE.search(text) is None and RESTRICTED_RESIDUAL_RE.search(text) is None
+    return text, ok
+
+
+def answer_key_blocks(md, marker=CANONICAL_KEY_RE):
     """Every answer-key block in a quiz source, as a list of line lists.
 
     Used by the gates to assert, positively, that each key's own text is absent from
@@ -141,7 +166,7 @@ def answer_key_blocks(md):
     """
     lines, blocks, i = md.split("\n"), [], 0
     while i < len(lines):
-        if not CANONICAL_KEY_RE.match(lines[i]):
+        if not marker.match(lines[i]):
             i += 1
             continue
         h = HEADING_RE.match(lines[i])
@@ -155,3 +180,8 @@ def answer_key_blocks(md):
             i += 1
         blocks.append(block)
     return blocks
+
+
+def restricted_blocks(md):
+    """Every answer-key and mentor-only block, in document order, for the positive checks."""
+    return answer_key_blocks(md, RESTRICTED_RE)

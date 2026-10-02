@@ -32,6 +32,9 @@ roles:
       moodle/question:viewall: allow
       moodle/site:trustcontent: allow          # #3: published pages carry iframe embeds that trusted text keeps
       moodle/course:changelockedcustomfields: allow   # #7: writes ltct_competencies, ltct_target_level (R11)
+      moodle/grade:managegradingforms: allow   # spec 012 (R1): upsert_assignment writes the marking guide
+      moodle/role:safeoverride: allow          # spec 012: create_page prohibits mod/page:view for student on mentor notes
+      moodle/course:managegroups: allow        # spec 012: read-only use; drift reads group ids, no group is written
     why: >-
       The publisher's web-service account (scripts/publish_moodle.py, local_ltuse). The 15
       capabilities are the ones setup_publishing.php used to hard-code; that script now only
@@ -39,6 +42,16 @@ roles:
       moodle/course:changelockedcustomfields is #7 (spec 004, R11): both course fields are
       locked, and the course web services silently drop a locked field the caller may not
       change.
+      Spec 012 (#22, #10) adds three, each reviewed against least privilege: all three are
+      course-context capabilities that the editingteacher or manager archetype already holds,
+      and the account only reaches the hidden courses it creates. managegradingforms
+      (RISK_PERSONAL|XSS) is the only way to write a marking guide. role:safeoverride
+      (RISK_SPAM) is the second lock on mentor notes beside visible = 0 (plan, Complexity
+      Tracking). It covers only capabilities with no risk bit, which mod/page:view is, so the
+      wider role:override (RISK_SPAM|PERSONAL|XSS) is not granted; create_page checks
+      safeoverride and refuses a capability with a risk bit. managegroups (RISK_XSS) is a
+      write capability granted for a read-only use; it must not be relied on to write groups
+      without revisiting this entry.
 
   - shortname: manager
     archetype: manager
@@ -81,3 +94,24 @@ roles:
       whose profiles a manager can open (R9). report/progress:view and report/completion:view
       are #7 (spec 004, R8): both reports honour separate groups, so without
       moodle/site:accessallgroups a manager sees only their own group's learners there too.
+
+  - shortname: student
+    archetype: student
+    capabilities:
+      mod/workshop:viewauthornames: inherit   # FR-012a: peers never see who wrote what (R4)
+    why: >-
+      #22 (spec 012): peer review is anonymous between learners. The student archetype allows
+      mod/workshop:viewauthornames by default; removing it at system context hides author
+      names in every workshop. Inert until a course has a workshop.
+
+  - shortname: teacher          # "Non-editing teacher"; called "Course mentor" in our docs, not renamed in Moodle
+    archetype: teacher
+    capabilities:
+      moodle/site:accessallgroups: inherit    # already absent from the teacher archetype (R3); listed so drift manages it
+    why: >-
+      #22 (spec 012): the course-level role that assesses work. Its archetype defaults are what
+      FR-010/FR-013 need (assign:grade, workshop allocate/switchphase/overridegrades,
+      viewhiddenactivities). Lacking moodle/site:accessallgroups is what keeps a mentor inside
+      their organisation's groups (#10). A role with an archetype has only its listed
+      capabilities managed, so accessallgroups is declared explicitly (as the archetype
+      default, inherit) for drift to catch it being granted by hand.

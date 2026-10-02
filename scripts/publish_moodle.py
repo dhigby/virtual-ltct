@@ -113,6 +113,11 @@ GROUPMODE_SEPARATE = 1
 # switch is declared in moodle/site/settings/completion.yaml.
 COMPLETION_ENABLED = 1
 
+# Hidden sections "Hide completely" (1), not "Show section names only" (0), so a learner
+# never sees even the name of the Retired section that holds modules the repo no longer
+# has. Sent on update too, since the site default only applies to new courses.
+HIDE_SECTIONS_COMPLETELY = [{"name": "hiddensections", "value": "1"}]
+
 # The two course custom fields declared in moodle/site/course-fields.yaml (spec 004, R11).
 FIELD_COMPETENCIES = "ltct_competencies"
 FIELD_TARGET_LEVEL = "ltct_target_level"
@@ -172,6 +177,7 @@ def ensure_course(client, manifest, category_id, problems=None):
             "groupmode": GROUPMODE_SEPARATE,
             "enablecompletion": COMPLETION_ENABLED,
             "customfields": customfields,
+            "courseformatoptions": HIDE_SECTIONS_COMPLETELY,
         }])
         # Unlike create, update has no transaction: a course it could not change comes
         # back as a warning, and the call itself "succeeds".
@@ -195,6 +201,7 @@ def ensure_course(client, manifest, category_id, problems=None):
             "visible": 0,          # created hidden; a human decides when learners see it
             "groupmode": GROUPMODE_SEPARATE,
             "enablecompletion": COMPLETION_ENABLED,
+            "courseformatoptions": HIDE_SECTIONS_COMPLETELY,
             "customfields": customfields,
         }])
         if client.dry_run:
@@ -397,24 +404,47 @@ def publish(client, payload_dir, category_id):
         print("  links     %s in %d page(s)"
               % ("would be resolved" if client.dry_run else "resolved", rewritten))
 
-    # --- last: hide what the course no longer has ----------------------------------------
+    # --- the course discussion (spec 012, FR-015) -----------------------------------------
+    # Created if absent; otherwise only its group mode is set, so a hand change is undone
+    # on every publish. Its posts are never written. Its idnumber starts ltct:<slug>: like
+    # a module's, so the retire step below must be told it belongs to this run.
+    discussion = manifest["discussion"]
+    result = client.call(
+        "local_ltuse_ensure_discussion",
+        courseidnumber=manifest["idnumber"], idnumber=discussion["idnumber"],
+        name=discussion["name"], intro=discussion["intro_html"],
+        shared=discussion["shared"])
+    scope = ("shared across organisations" if discussion["shared"]
+             else "separated by organisation")
+    print("    forum   %-46s %s (%s)" % (
+        discussion["idnumber"],
+        "dry-run" if client.dry_run else ("created" if result["created"] else "updated"),
+        scope))
+    if not client.dry_run and result.get("courseforced"):
+        print("    WARNING the course forces its own group mode, which overrides the "
+              "discussion's.\n            Turn off Course settings > Groups > Force "
+              "group mode, or organisations\n            may see each other's posts.")
+
+    # --- last: retire what the course no longer has -------------------------------------
     # A lesson renamed, renumbered or removed in the repo leaves its old module in Moodle
-    # under an idnumber this run did not produce. Hidden, never deleted: a learner's
-    # attempt and grade live on it, and a mistaken publish must stay recoverable. Done
-    # after everything else, so a publish that fails part-way never hides the old version
+    # under an idnumber this run did not produce. Retired, never deleted: hidden and moved
+    # into one hidden "Retired" section at the end, because a learner's attempt and grade
+    # live on it and a mistaken publish must stay recoverable, and because hidden in place
+    # it would sit between lessons for anyone walking the course as a teacher. Done after
+    # everything else, so a publish that fails part-way never retires the old version
     # before its replacement exists. Only this course's modules (the "ltct:<slug>:"
-    # prefix); the question bank and anything made by hand in Moodle are left alone.
+    # prefix); the question bank and anything made by hand in Moodle are left alone. One
+    # retired by an earlier publish is not sent again.
     prefix = manifest["idnumber"] + ":"     # every module is ltct:<slug>:<key>
-    stale = [k for k in server if k.startswith(prefix) and k not in this_run]
-    hidden = 0
-    if stale:
+    produced = this_run | {discussion["idnumber"]}
+    stale = [k for k in server if k.startswith(prefix) and k not in produced]
+    to_retire = [k for k in stale
+                 if not (server[k].get("retired") and not server[k].get("visible", 1))]
+    if to_retire:
         result = client.call("local_ltuse_hide_modules",
-                             courseidnumber=manifest["idnumber"], idnumbers=stale)
+                             courseidnumber=manifest["idnumber"], idnumbers=to_retire)
         for r in result["modules"]:
-            was = "hidden" if r["outcome"] == "hidden" else "already hidden"
-            print("  hide      %-46s %s (%s)"
-                  % (r["idnumber"], was, server[r["idnumber"]]["modname"]))
-            hidden += r["outcome"] == "hidden"
+            print("  retire    %-46s %s" % (r["idnumber"], server[r["idnumber"]]["modname"]))
 
     # --- then: the course's completion criteria, one per visible module ---------------------
     # After hiding, so a module the course no longer has is never left as a criterion. The
@@ -453,9 +483,9 @@ def publish(client, payload_dir, category_id):
         print("  pages: %d created, %d updated, %d unchanged; images: %d sent (%d KB), %d kept"
               % (counts["created"], counts["updated"], counts["unchanged"],
                  sent, round(sent_bytes / 1024), kept))
-        if stale:
-            print("  removed from the repo: %d module(s) hidden, %d already hidden"
-                  % (hidden, len(stale) - hidden))
+        if to_retire:
+            print("  retired: %d module(s) no longer in the repo, moved to the hidden "
+                  "Retired section" % len(to_retire))
 
     return manifest, cmids, problems
 

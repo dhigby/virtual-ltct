@@ -51,9 +51,9 @@ whole cluster of downstream-looking symptoms: an oversized or wrong-looking head
 verse numbers that appear to have vanished from the normal flow, and references that
 miscount because the checker is reading swallowed verse content as part of the heading.
 
-![A section heading with a \p marker correctly in place before verse 21, so verses 19-22 render as normal body text below the heading.](images/L4-7a.Before.png)
+![A section heading with a \p marker correctly in place before verse 21, so verses 19-22 render as normal body text below the heading.](assets/ss-04-p-marker-in-place.png)
 
-![The same passage with the \p marker missing: verses 19 and 20 have been swallowed into the \s1 heading style, rendered in bold as if they were part of the heading title.](images/L4-7b.After.png)
+![The same passage with the \p marker missing: verses 19 and 20 have been swallowed into the \s1 heading style, rendered in bold as if they were part of the heading title.](assets/ss-04-p-marker-missing.png)
 *One missing paragraph marker, and the verse numbers disappear into the heading.*
 
 If you start by fixing the errors at the bottom of a long list, you may be fixing
@@ -65,7 +65,7 @@ symptoms of a single cause higher up. Work in this order instead:
    results by quoting a chapter and verse location, and those locations can't be trusted
    if the chapter/verse numbering itself has errors (such as a duplicate verse).
 
-![The Run Basic Checks dialog with Chapter/verse numbers checked, and the book-selection and OK controls numbered 1 through 4.](images/L4-6.BasicCheck-Chap-verse.png)
+![The Run Basic Checks dialog with Chapter/verse numbers checked, and the book-selection and OK controls numbered 1 through 4.](assets/ss-04-basic-checks-chapter-verse.png)
 *Confirm this one first — everything else on this list depends on it.*
 
 2. **Marker-pair census.** Paratext markers come in two kinds: **paragraph markers**
@@ -76,7 +76,7 @@ symptoms of a single cause higher up. Work in this order instead:
    closes. An unclosed pair is often the single cause behind a cluster of
    downstream-looking errors.
 
-![The Markers Inventory dialog listing markers, their counts, and style names (Chapter Number, Footnote, End Marker, and others).](images/L4-8.MarkersInventory.png)
+![The Markers Inventory dialog listing markers, their counts, and style names (Chapter Number, Footnote, End Marker, and others).](assets/ss-04-markers-inventory.png)
 *This is where you check that every paired marker actually closes.*
 3. **Ghost markers.** Look for markers left behind with no content attached — often the
    debris of a deleted footnote or cross-reference where the marker itself wasn't
@@ -123,12 +123,12 @@ that option off, denied errors disappear from the list completely, so a check th
 short and clean may simply have its denied items switched out of view. Turn on
 **View > Denied messages** to see the full picture before trusting a zero-error result.
 
-![The View menu open with "Denied messages" highlighted.](images/L4-12a.View-Denied.png)
+![The View menu open with "Denied messages" highlighted.](assets/ss-04-view-denied.png)
 
-![A denied error shown with strikethrough text: "Expected continuers ["] are missing OR quote not closed."](images/L4-12b.Denied-Error-strike-through.png)
+![A denied error shown with strikethrough text: "Expected continuers &#91;"&#93; are missing OR quote not closed."](assets/ss-04-denied-error-strikethrough.png)
 *Denied errors are struck through — but only if this view option is on.*
 
-![A Basic Checks results list with the top item reading "Denied message(s) not shown."](images/L4-12c.Denied-Error-not-shown.png)
+![A Basic Checks results list with the top item reading "Denied message(s) not shown."](assets/ss-04-denied-error-not-shown.png)
 *With the view option off, the list simply tells you denied messages exist without showing them.*
 
 > **WARNING — watch for a false-clean result here too:** A Basic Checks run showing zero
@@ -201,14 +201,14 @@ Four things to do with these inventories:
   **"Punctuation"** and only checks individual characters, so the review can look
   complete while a whole class of problems goes unseen.
 
-  ![The Punctuation (sequences) inventory's Inventory menu, with "Show sequences" checked and highlighted.](images/L4-9.Punctuation-inventory-Show-Sequences.png)
+  ![The Punctuation (sequences) inventory's Inventory menu, with "Show sequences" checked and highlighted.](assets/ss-04-punctuation-inventory-show-sequences.png)
   *This checkbox is what makes "Punctuation (sequences)" mean anything.*
 
   A flagged result under "Punctuation (sequences)" looks like this — each combination
   Paratext doesn't recognize as valid, tied to a specific reference, often quotation
   marks paired with other punctuation:
 
-  ![A list of flagged punctuation-sequence results, e.g. "ROM 3:5 Invalid or unknown punctuation combination: ?_(" and "ROM 9:20 Invalid or unknown punctuation combination: ?'"_".](images/L4-11.Punctuation-sequences-result.png)
+  ![A list of flagged punctuation-sequence results, e.g. "ROM 3:5 Invalid or unknown punctuation combination: ?_(" and "ROM 9:20 Invalid or unknown punctuation combination: ?'"_".](assets/ss-04-punctuation-sequences-result.png)
   *This is what a flagged sequence actually looks like.*
 
   This lesson covers punctuation sequences only; quotation marks specifically are more
@@ -219,7 +219,7 @@ Four things to do with these inventories:
   "Show sequences" as covering this — it catches multi-character sequences, not the
   single unmatched pairs this separate inventory is built to surface.
 
-  ![The Unmatched Pairs of Punctuation inventory, listing single-character pairs like "(", "]", ")" with counts and a Status column (blue "?", green check, red X).](images/L4-10.Unmatched-Pairs-Punctuation.png)
+  ![The Unmatched Pairs of Punctuation inventory, listing single-character pairs like "(", "&#93;", ")" with counts and a Status column (blue "?", green check, red X).](assets/ss-04-unmatched-pairs-punctuation.png)
   *A direct list of unmatched brackets and parentheses.*
 
 That third point comes from a real case. One consultant believed their Punctuation

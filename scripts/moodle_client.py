@@ -217,7 +217,7 @@ def main():
                   "local_ltuse_update_sections",
                   "local_ltuse_import_questions", "local_ltuse_create_quiz",
                   "local_ltuse_hide_modules", "local_ltuse_set_course_completion",
-                  "local_ltuse_set_course_competencies",
+                  "local_ltuse_set_course_competencies", "local_ltuse_ensure_discussion",
                   "core_course_create_courses", "core_course_update_courses",
                   "core_course_get_courses_by_field"]
         print("\nfunctions this token can call:")

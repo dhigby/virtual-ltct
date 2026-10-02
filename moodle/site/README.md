@@ -11,6 +11,7 @@ the pull request that adds a setting is the record of why it exists.
 | `site.yaml` | The minimum Moodle release, and each plugin with its pinned version and enabled state. |
 | `roles.yaml` | Roles and their system-context permissions. |
 | `settings/*.yaml` | Settings, one file per topic. Each cites the rows of [`../REQUIREMENTS.md`](../REQUIREMENTS.md) it serves. |
+| `course-discussions.yaml` | Which courses' discussion forums are shared across organisations. Every published course has one, separated by organisation unless listed here (spec 012). |
 | `ignore.yaml` | Undeclared settings that are allowed to differ from Moodle's default, each with its reason. |
 | `organisations.yaml` | The partner organisations we host, and the shared course categories. Each organisation gets a category, a learner cohort and a managers cohort. |
 | `profile-fields.yaml` | The profile fields every learner has: organisation, role in the work and areas of expertise. |

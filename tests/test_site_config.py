@@ -618,6 +618,98 @@ class Expansion(Base):
         self.assertRejected()
 
 
+DISCUSSIONS = """\
+# test declaration
+rows: [10]
+shared:
+  - slug: coretech-computer-hardware
+    why: generic hardware Q&A, partners asked to pool answers
+"""
+
+
+class Discussions(Base):
+    """moodle/site/course-discussions.yaml (spec 012, FR-015, contracts/site-declaration.md)."""
+
+    def setUp(self):
+        super().setUp()
+        self.write("course-discussions.yaml", DISCUSSIONS)
+
+    def test_valid(self):
+        self.assertEqual(self.errors(), [])
+        rc, out, _ = self.run_main("validate")
+        self.assertEqual(rc, 0, out)
+
+    def test_absent_file_is_valid(self):
+        (self.dir / "course-discussions.yaml").unlink()
+        self.assertEqual(self.errors(), [])
+        shared, problems = sc.load_discussions(self.dir)
+        self.assertEqual(shared, [])
+        self.assertFalse(problems)
+
+    def test_empty_list_valid(self):
+        self.write("course-discussions.yaml", "rows: [10]\nshared: []\n")
+        self.assertEqual(self.errors(), [])
+        self.write("course-discussions.yaml", "rows: [10]\nshared:\n")
+        self.assertEqual(self.errors(), [])
+        self.assertEqual(sc.load_discussions(self.dir)[0], [])
+
+    def test_unknown_slug(self):
+        self.edit("course-discussions.yaml", "slug: coretech-computer-hardware", "slug: no-such-course")
+        self.assertInvalid("no-such-course is not a course under modules/")
+
+    def test_slug_uses_branch_slug(self):
+        # A legacy folder with spaces is declared by its branch_slug() form, never its folder name.
+        self.edit("course-discussions.yaml", "slug: coretech-computer-hardware", "slug: paratext-9-advanced-support")
+        self.assertEqual(self.errors(), [])
+        self.edit("course-discussions.yaml", "slug: paratext-9-advanced-support", "slug: Paratext 9 advanced support")
+        self.assertInvalid("write it as paratext-9-advanced-support")
+
+    def test_template_is_not_a_course(self):
+        self.edit("course-discussions.yaml", "slug: coretech-computer-hardware", "slug: template")
+        self.assertInvalid("is not a course")
+
+    def test_missing_why(self):
+        self.edit("course-discussions.yaml", "    why: generic hardware Q&A, partners asked to pool answers\n", "")
+        self.assertInvalid("missing required key 'why'")
+
+    def test_blank_why(self):
+        self.edit("course-discussions.yaml", "why: generic hardware Q&A, partners asked to pool answers", "why: ''")
+        self.assertInvalid("why must say")
+
+    def test_duplicate_slug(self):
+        self.write("course-discussions.yaml", DISCUSSIONS + "  - slug: coretech-computer-hardware\n    why: again\n")
+        self.assertInvalid("coretech-computer-hardware is declared twice")
+
+    def test_unknown_key(self):
+        self.edit("course-discussions.yaml", "    why:", "    shared: true\n    why:")
+        self.assertInvalid("unknown key 'shared'")
+
+    def test_unknown_row(self):
+        self.edit("course-discussions.yaml", "rows: [10]", "rows: [999]")
+        self.assertInvalid("row 999")
+
+    def test_missing_shared(self):
+        self.write("course-discussions.yaml", "rows: [10]\n")
+        self.assertInvalid("missing required key 'shared'")
+
+    def test_load_returns_entries(self):
+        shared, problems = sc.load_discussions(self.dir)
+        self.assertFalse(problems)
+        self.assertEqual([e["slug"] for e in shared], ["coretech-computer-hardware"])
+
+    def test_payload_carries_slugs_not_reasons(self):
+        rc, out, _ = self.run_main("render", "--mode", "drift", environ={"MOODLE_URL": "https://m.example"})
+        self.assertEqual(rc, 0)
+        p = json.loads(out)
+        self.assertEqual(p["discussions"], {"shared": ["coretech-computer-hardware"]})
+        self.assertNotIn("pool answers", out)
+
+    def test_payload_empty_when_absent(self):
+        (self.dir / "course-discussions.yaml").unlink()
+        rc, out, _ = self.run_main("render")
+        self.assertEqual(json.loads(out)["discussions"], {"shared": []})
+
+
 class Render(Base):
     def test_redacts(self):
         env = {"SMTP_PASS": "s3cr3t-value", "MOODLE_NOREPLY": "noreply@x", "MOODLE_URL": "https://m.example"}

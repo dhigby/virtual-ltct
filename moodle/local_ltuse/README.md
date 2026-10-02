@@ -21,9 +21,17 @@ shape and Moodle's.
 | `local_ltuse_create_page` | write | Creates or updates one `mod_page`, addressed by course-module idnumber. |
 | `local_ltuse_import_questions` | write | Imports Moodle XML into a category in the course question bank, creating the `mod_qbank` instance and category if needed. |
 | `local_ltuse_create_quiz` | write | Creates or updates a `mod_quiz` and rebuilds its slots as references into that category. |
-| `local_ltuse_hide_modules` | write | Hides modules the course no longer has, by course-module idnumber. Never deletes. |
+| `local_ltuse_hide_modules` | write | Retires modules the course no longer has, by course-module idnumber: hides them and moves them into the hidden Retired section. Never deletes. |
+| `local_ltuse_ensure_discussion` | write | Spec 012, row #10. Creates the course's one `general` forum, `ltct:<slug>:discussion`, in section 0 if it is absent; its name and intro are set only then. On every call it sets only the forum's group mode: separate groups, or visible groups when [`moodle/site/course-discussions.yaml`](../site/course-discussions.yaml) lists the course as shared, always with no grouping. It never writes a discussion or post. Returns `{cmid, created, groupmode, courseforced}`; `courseforced` means the course's own forced group mode overrides the forum's. |
 | `local_ltuse_set_course_completion` | write | Makes a course's activity completion criteria exactly its visible, tracked `ltct:` modules, one criterion at a time. Never clears a learner's course completion (spec 004). |
 | `local_ltuse_set_course_competencies` | write | Replaces the competencies a published course aims at, by name, in the plugin's own map table. Fails closed on a name the site does not have (spec 004). |
+
+**The discussion forum and organisations.** Separate groups hides a group's discussions from
+anyone without `moodle/site:accessallgroups`, and every group in a course belongs to one
+organisation (spec 002), so with no grouping no organisation reads another's posts. The one
+way round it is a discussion posted to "All participants", which only a user with
+`accessallgroups` can do (editing teachers and managers, never the Course mentor or a learner).
+`site_config.py drift` reports such discussions as `allparticipants`, as a count only.
 
 Course create/update stays on core (`core_course_create_courses`,
 `core_course_update_courses`, `core_course_get_courses_by_field`) and section handling on
@@ -35,21 +43,40 @@ not idempotent without it: `core_course_get_contents` does not reliably return a
 idnumber, so there is otherwise no way to ask Moodle which modules a previous publish
 created. With it, republishing is a diff rather than a blind re-create.
 
-## A module the repo no longer has is hidden, never deleted
+## A module the repo no longer has is retired, never deleted
 
 Rename, renumber or remove a lesson in the repo, and its old module is still in Moodle
 under an idnumber the publisher no longer produces. At the end of every publish, once
 everything new exists, the publisher compares the server's `ltct:<slug>:` modules with
-the payload and sends the leftovers to `hide_modules`. That function checks every
-idnumber before it changes anything, refuses the course question bank, and does exactly
-what core's own hide action does (`core_course_external::edit_module`, `'hide'`):
-`set_coursemodule_visible()`, then the `course_module_updated` event.
+the payload and sends the leftovers to `hide_modules`, skipping any an earlier publish
+already retired. That function checks every idnumber before it changes anything, refuses
+the course question bank, then:
 
-Hidden, not deleted, because a learner's attempt and grade live on the module: deleting
-it would take them away, and a mistaken publish could not be undone. A teacher can still
-open it. If the file comes back, the next publish finds the module by its idnumber and
-`update_moduleinfo()` shows it again (`course/modlib.php:772`, MOODLE_502_STABLE).
-Modules without an `ltct:` idnumber, the ones a person made by hand, are never touched.
+- moves each module into **"Retired: no longer in the course"**, a hidden section kept
+  after every lesson section, created on first need (`cmactions::move_end_section()`,
+  core's 5.2 replacement for the deprecated `moveto_module()`);
+- hides it, as core's own hide action does (`core_course_external::edit_module`,
+  `'hide'`): `set_coursemodule_visible()`, then the `course_module_updated` event.
+
+**Why a section, not just hidden.** *Next activity* offers whatever the viewer can open,
+hidden or not (`core_renderer::activity_navigation()`). Hidden in place, an old copy sat
+between lessons for every admin, teacher or mentor walking the course; learners never
+saw it. In the Retired section it comes only after the last real activity. The publisher
+sets each course's *Hidden sections* to **Hide completely**, so learners never see even
+the section's name.
+
+**Why not deleted.** A learner's attempt and grade live on the module: deleting it would
+take them away, and a mistaken publish could not be undone. A teacher can still open it.
+If the file comes back, the next publish finds the module by its idnumber,
+`util::upsert_module()` moves it home, and `update_moduleinfo()` shows it again
+(`course/modlib.php:772`, MOODLE_502_STABLE). Modules without an `ltct:` idnumber, the
+ones a person made by hand, are never touched.
+
+**Keeping the section last.** Lesson N lives in section N, so a course that gains a
+lesson may need the Retired section's number. `update_sections` moves the Retired section
+past the lessons first (`util::keep_retired_last()`), so it is never named as one. It is
+found by its exact name, which is plain text rather than a lang string so no translation
+can hide it from the publisher.
 
 ## Republishing touches only what changed (spec 009)
 
@@ -161,7 +188,7 @@ run in one delegated transaction, and the stored set is read back after the comm
 
 ### The plugin's own tables
 
-`db/install.xml` (and the matching step in `db/upgrade.php`, at version `2026100202`) adds two
+`db/install.xml` (and the matching step in `db/upgrade.php`, at version `2026100204`) adds two
 tables, neither holding user data, so `classes/privacy/provider.php` is a `null_provider`:
 
 | Table | Holds | Written by |
@@ -278,6 +305,7 @@ Every object the publisher creates carries an idnumber:
 course         ltct:<slug>
 course module  ltct:<slug>:<file number>          e.g. ltct:bloom:01 for 01-what-bloom-is.md
 question       ltct:<slug>:<file number>:q<quiz>.<n>
+discussion     ltct:<slug>:discussion             the course's one forum (spec 012)
 ```
 
 The file's number, not its whole name, because Moodle stores every idnumber in a
@@ -375,6 +403,25 @@ calls and reads is listed under [What the plugin relies on](#what-the-plugin-rel
 | `user_info_field` | `shortname` | No (unique only by validation) | `profile_get_custom_field_data_by_shortname()` exists. The class reads the row directly so it can compare every column. |
 | `cohort` joined to `cohort_members` | `cm.userid`, `c.contextid`, `c.idnumber LIKE 'ltct:org:%:managers'` | `cohort_members.userid` is | `cohort_get_user_cohorts()` returns only visible cohorts, and every managers cohort is hidden. One query per request, cached. |
 | `course_categories`, `cohort`, `user_info_field` | `idnumber` or `shortname` prefix (`ltct:`, `ltct_`) | as above | Drift's scan for undeclared items. There is no core listing by prefix. |
+
+### Course discussions (spec 012)
+
+Spec 012 adds course discussions. Drift lists every course whose idnumber starts `ltct:` (a
+lookup by that column, as `util::course_by_idnumber()` does) and compares its
+`ltct:<slug>:discussion` forum with `course-discussions.yaml`: `differs`, `missing`, and the
+warnings `forced` (the course forces a group mode) and `allparticipants`. The last is a
+count through mod_forum's `discussion_list_vault::get_total_discussion_count_from_forum_id_and_group_id()`,
+which runs `SELECT COUNT(1)`: no subject, post or author is read. `apply` corrects `differs`
+through `ensure_discussion::apply_groupmode()`, the publisher's own path, and never creates a
+missing forum. Warnings print as `[skip]`.
+
+`ensure_discussion` writes no table directly. Group mode goes through
+`\core_courseformat\formatactions::cm()->set_groupmode()`, the 5.2 replacement for the
+deprecated `set_coursemodule_groupmode()`. Clearing a hand-set grouping goes through
+`update_moduleinfo()`, core's only setter for `groupingid`. That path calls
+`forum_update_instance()`, which re-reads the forum's ratings to recalculate grades: a
+deliberate trade for using the public API, and it only runs after someone set a grouping by
+hand.
 
 ## Verified against Moodle 5.2.3+ (2026-09-29)
 

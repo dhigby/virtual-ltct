@@ -49,8 +49,7 @@ Moodle even when it leaks nothing (spec 004):
                           in Moodle's per-competency table.
   8. Recognition       -- spec 013: the course's rendered badge name and description pass
                           cbc_wording.check_recognition(), since a title is free text and
-                          reaches the badge; no future start date, which stops every award;
-                          and the certificate's idnumber fits Moodle's column and is no
+                          reaches the badge; and the certificate's idnumber fits Moodle's column and is no
                           lesson's.
 
 Usage:
@@ -66,7 +65,6 @@ import json
 import pathlib
 import re
 import sys
-import time
 
 import yaml
 
@@ -268,11 +266,6 @@ def check_recognition(slug, manifest, site=SITE):
     recognition = manifest.get("recognition")
     if not isinstance(recognition, dict) or not isinstance(recognition.get("delivery"), bool):
         return ["%s: recognition must say whether this publish is a delivery" % slug]
-    start = manifest.get("startdate")
-    if start is not None and (not isinstance(start, int) or start > time.time()):
-        problems.append("%s: start date %r is in the future; core awards no badge until the "
-                        "course has started (spec 013 R3)" % (slug, start))
-
     template = badge_template(site)
     if template is not None:
         values = {"course": str(manifest.get("title") or ""),

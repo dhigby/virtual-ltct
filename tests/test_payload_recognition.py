@@ -8,7 +8,6 @@ manifests and a throwaway site directory.
 """
 import pathlib
 import sys
-import time
 
 import pytest
 
@@ -78,12 +77,6 @@ def test_recognition_block_is_required(site):
 def test_a_title_that_says_certification_is_refused(site):
     problems = cmp.check_recognition(SLUG, manifest(title="Certification prep"), site)
     assert any("badge name" in p and "certified" in p for p in problems)
-
-
-def test_a_future_start_date_is_refused(site):
-    future = int(time.time()) + 86400
-    assert cmp.check_recognition(SLUG, manifest(startdate=future), site)
-    assert cmp.check_recognition(SLUG, manifest(startdate=int(time.time()) - 60), site) == []
 
 
 def test_delivery_without_a_certificate_and_pilot_with_one_are_refused(site):

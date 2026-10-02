@@ -32,6 +32,8 @@ use core_plugin_manager;
  *   roles      [{shortname, name?, description?, archetype?, contextlevels?, capabilities?}]
  *   settings   [{name, value?, secret?}]   value is absent for a secret in drift mode
  *   failed_env [{name, env}, ...]         settings whose env: variable was not set (each also carries env_missing)
+ *   discussions {shared: [slug, ...]}     spec 012: courses whose discussion is shared across
+ *                                         organisations; every other ltct: course is separated
  *
  * and, from spec 002 (specs/002-org-structure-cohorts/data-model.md "Rendered payload"), four
  * arrays that are handed to their own classes for checking:
@@ -72,12 +74,18 @@ use core_plugin_manager;
  *   message   extra detail for a human, or ''
  *   secret    true when declared and live must be shown as <secret>
  *   blocking  true when apply must write nothing at all (data-model "Run report")
+ *   warning   (discussion items only) true for something to look at that apply cannot fix
  *
  * APIs used, all confirmed on MOODLE_502_STABLE (research.md R4, R6, R7, R8):
  * admin_get_root(), admin_setting::get_setting()/is_readonly(), core_plugin_manager,
  * plugininfo::get_enabled_plugin(), get_default_capabilities(), get_capability_info(),
  * get_role_contextlevels(). The one raw read is role_capabilities by roleid and
  * contextid, which is listed in the plugin README (constitution XI).
+ *
+ * Course discussions (spec 012, R5): groups_get_activity_groupmode()'s rule (lib/grouplib.php:
+ * a course's groupmodeforce overrides the activity), and mod_forum's discussion_list vault
+ * for the all-participants COUNT. Courses and their forum are looked up by idnumber, as
+ * local_ltuse\util does. No discussion, post or user is ever read.
  */
 class inspector {
 
@@ -99,6 +107,13 @@ class inspector {
     const RESULT_ENV_MISSING = 'env-missing';
     /** The server's Moodle is older than the declaration's minimum release. */
     const RESULT_BELOW_MINIMUM = 'below-minimum';
+    /** A course discussion's live group mode is not what course-discussions.yaml implies. */
+    const RESULT_DIFFERS = 'differs';
+    /** A separated discussion holds discussions posted to "All participants" (a warning). */
+    const RESULT_ALLPARTICIPANTS = 'allparticipants';
+
+    /** Course-module idnumber suffix of a course's discussion forum (spec 012, R7). */
+    const DISCUSSION_SUFFIX = ':discussion';
 
     /** Shown in place of every secret value. */
     const SECRET = '<secret>';
@@ -1001,5 +1016,141 @@ class inspector {
             return '[' . implode(', ', array_map('strval', $value)) . ']';
         }
         return (string)$value;
+    }
+
+    // --- course discussions (spec 012, R5) -------------------------------------------------
+
+    /**
+     * Every publisher-owned course, with its discussion forum and the group mode the
+     * declaration implies for it.
+     *
+     * A course is publisher-owned when its idnumber is ltct:<slug> (util::IDNUMBER_PREFIX).
+     * The course read is a lookup by that indexed column, as util::course_by_idnumber()
+     * does; the forum is found by its course-module idnumber through util::cm_by_idnumber().
+     *
+     * @return array[] each {slug, course (id, idnumber, groupmode, groupmodeforce), cm|null,
+     *     shared, groupmode}
+     */
+    public function discussion_targets(): array {
+        global $DB;
+        $shared = array_flip(array_map('strval', $this->declaration['discussions']['shared'] ?? []));
+        $prefix = \local_ltuse\util::IDNUMBER_PREFIX;
+        $courses = $DB->get_records_select('course', $DB->sql_like('idnumber', ':prefix'),
+            ['prefix' => $DB->sql_like_escape($prefix) . '%'], 'idnumber',
+            'id, idnumber, groupmode, groupmodeforce');
+        $targets = [];
+        foreach ($courses as $course) {
+            $slug = substr($course->idnumber, strlen($prefix));
+            if ($slug === '' || strpos($slug, ':') !== false) {
+                continue; // Not a course identity (ltct:<slug>), so not ours to judge.
+            }
+            $isshared = isset($shared[$slug]);
+            $targets[] = [
+                'slug' => $slug,
+                'course' => $course,
+                'cm' => \local_ltuse\util::cm_by_idnumber((int)$course->id,
+                    $course->idnumber . self::DISCUSSION_SUFFIX),
+                'shared' => $isshared,
+                'groupmode' => \local_ltuse\external\ensure_discussion::wanted_groupmode($isshared),
+            ];
+        }
+        return $targets;
+    }
+
+    /**
+     * Compare one course's discussion forum with the declaration (contracts/site-declaration.md).
+     *
+     * Kinds: differs (apply corrects it), missing (the publisher creates it, apply never
+     * does), forced (warning: the course overrides the forum's group mode), allparticipants
+     * (warning: a separated forum holds discussions every group can read). Nothing here
+     * reads a discussion's subject, a post or an author: the all-participants check is a
+     * COUNT through mod_forum's own discussion_list vault (constitution III).
+     *
+     * @param array $target one entry of discussion_targets()
+     * @return array[] item results; none is blocking
+     */
+    public function check_discussion(array $target): array {
+        $course = $target['course'];
+        // Subjects are idnumbers: the forum's for its group mode, the course's when the course
+        // forces one, and the forum's plus :allparticipants for the count (quickstart A5).
+        $item = $course->idnumber . self::DISCUSSION_SUFFIX;
+        $cm = $target['cm'];
+        $want = self::groupmode_text((int)$target['groupmode'], 0);
+
+        if ($cm === null) {
+            return [self::result('discussion', $item, self::RESULT_MISSING, $want, null,
+                'the course has no discussion forum; republish it to create one (apply never does)')];
+        }
+        if ($cm->modname !== 'forum') {
+            return [self::result('discussion', $item, self::RESULT_UNKNOWN, $want, $cm->modname,
+                $course->idnumber . self::DISCUSSION_SUFFIX . ' is a ' . $cm->modname
+                    . ', not a forum; remove it in Moodle and republish')];
+        }
+
+        $items = [];
+        if (!empty($course->groupmodeforce)) {
+            $items[] = self::warning(self::result('discussion', $course->idnumber, self::RESULT_FORCED,
+                $want, 'course forces ' . self::groupmode_text((int)$course->groupmode, null),
+                'the course forces its own group mode over the forum (Course settings > Groups > Force); '
+                    . 'turn the force off'));
+        }
+
+        $have = self::groupmode_text((int)$cm->groupmode, (int)$cm->groupingid);
+        $same = (int)$cm->groupmode === (int)$target['groupmode'] && (int)$cm->groupingid === 0;
+        $items[] = self::result('discussion', $item, $same ? self::RESULT_OK : self::RESULT_DIFFERS,
+            $want, $have, $same ? '' : 'changed by hand in Moodle; apply or the next publish restores it');
+
+        if ((int)$target['groupmode'] === SEPARATEGROUPS) {
+            $count = self::count_allparticipants((int)$cm->instance);
+            if ($count > 0) {
+                $items[] = self::warning(self::result('discussion', $item . ':allparticipants',
+                    self::RESULT_ALLPARTICIPANTS, '0', (string)$count,
+                    'discussions posted to "All participants" are readable by every organisation in '
+                        . 'the course; only the count is reported. A teacher with accessallgroups posted them.'));
+            }
+        }
+        return $items;
+    }
+
+    /**
+     * How many discussions in a forum are posted to all groups (groupid = -1). A count only.
+     *
+     * discussion_list_vault::get_total_discussion_count_from_forum_id_and_group_id() with no
+     * group ids counts exactly groupid = -1 (mod/forum/classes/local/vaults/discussion_list.php
+     * on MOODLE_502_STABLE). It runs SELECT COUNT(1) and returns no row.
+     *
+     * @param int $forumid
+     * @return int
+     */
+    public static function count_allparticipants(int $forumid): int {
+        $vault = \mod_forum\local\container::get_vault_factory()->get_discussions_in_forum_vault();
+        return (int)$vault->get_total_discussion_count_from_forum_id_and_group_id($forumid, [], true, null);
+    }
+
+    /**
+     * Mark an item as a warning: reported, never written, and never a failure of apply.
+     *
+     * @param array $result
+     * @return array
+     */
+    protected static function warning(array $result): array {
+        $result['warning'] = true;
+        return $result;
+    }
+
+    /**
+     * A group mode, and optionally a grouping, as display text.
+     *
+     * @param int $groupmode NOGROUPS, SEPARATEGROUPS or VISIBLEGROUPS
+     * @param int|null $groupingid null to leave the grouping out
+     * @return string
+     */
+    public static function groupmode_text(int $groupmode, ?int $groupingid): string {
+        $names = [NOGROUPS => 'no groups', SEPARATEGROUPS => 'separate groups', VISIBLEGROUPS => 'visible groups'];
+        $text = $names[$groupmode] ?? (string)$groupmode;
+        if ($groupingid !== null) {
+            $text .= $groupingid === 0 ? ', no grouping' : ", grouping {$groupingid}";
+        }
+        return $text;
     }
 }

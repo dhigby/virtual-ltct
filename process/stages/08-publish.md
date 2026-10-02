@@ -39,9 +39,9 @@ itself is automated: the markdown here is the source, and Moodle is a render of 
    The publish is idempotent — every page and quiz is addressed by an identifier derived
    from its source file's number — so re-running it after a correction updates the course
    rather than creating a second one. Fixing a typo is: edit the markdown, merge,
-   re-publish. A lesson you rename, renumber or remove is **hidden** in Moodle on the next
-   publish, never deleted, so a learner's past attempt stays readable; the publish lists
-   each one it hides. Once learners are enrolled, don't republish in the middle of a cohort:
+   re-publish. A lesson you rename, renumber or remove is **retired** on the next publish:
+   hidden and moved to a hidden "Retired" section at the end of the course, never
+   deleted, so a learner's past attempt stays readable. The publish lists each one. Once learners are enrolled, don't republish in the middle of a cohort:
    a republish rebuilds the quiz, and an offline attempt that hasn't synced yet may not
    survive it.
 
@@ -64,7 +64,9 @@ itself is automated: the markdown here is the source, and Moodle is a render of 
    learner who later joins through their organisation is enrolled again by cohort, and gets
    the badge then, from the completion they already have.
 
-7. **Publish again, as the delivery.** With the Moodle link in the README, the course is at
+7. **Make the course visible, then publish again, as the delivery.** Moodle's badge check
+   skips a hidden course, so the publish reports `course-hidden` and exits 1 until it is
+   visible. With the Moodle link in the README, the course is at
    stage 8, and `/publish-to-moodle <course-slug>` now switches the course's **completion
    badge** on and adds its **certificate** activity. A pilot publish never does either: a
    pilot issues no badge and has no certificate. The publish says which it did:

@@ -78,9 +78,10 @@ The publish is **idempotent** — every module is addressed by an idnumber deriv
 source file's number, so running it again updates rather than duplicates. Re-running after a
 content fix is the normal way to work, not something to avoid.
 
-A module the repo no longer has (a lesson renamed, renumbered or removed) is **hidden** at
-the end of the publish, never deleted, and listed under `hide`. Report those lines to the
-user: a hide they didn't expect usually means a file was renamed by accident.
+A module the repo no longer has (a lesson renamed, renumbered or removed) is **retired** at
+the end of the publish: hidden and moved into a hidden "Retired" section, never deleted,
+and listed under `retire`. Report those lines to the user: one they didn't expect usually
+means a file was renamed by accident.
 
 The course is created **hidden**. A human makes it visible when they are ready for
 learners.
@@ -106,6 +107,13 @@ At **stage 8**, remind the user to record the published course URL in the module
 `README.md` frontmatter under `external_links: moodle:`. That key is what
 `course_stage.py` reads to report the course as Online, so without it the pipeline still
 thinks the course is unpublished.
+
+That key is also what turns the course's **completion badge** on and adds its
+**certificate** (spec 013): a pilot publish issues neither. So at stage 8 walk the user
+through [`process/stages/08-publish.md`](../../process/stages/08-publish.md) steps 5-7 in
+order: record the `moodle:` link, suspend the pilot learners' **manual** enrolments, make
+the course visible, then run this command again as the delivery and check for the line
+`recognition  badge ..., activated; certificate created`.
 
 ## Rules
 

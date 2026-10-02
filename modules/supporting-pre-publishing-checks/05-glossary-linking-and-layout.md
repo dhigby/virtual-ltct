@@ -65,7 +65,7 @@ are marked directly in the text with `\w` and `\w*` around the linked span, in t
 the surface form in the text differs from the glossary entry's canonical rendering,
 `\w angel guy|Angel messenja guy\w*`.
 
-![A Paratext Find search result for "talk fo God," showing one occurrence as plain bold text (MAT 1:22) and another wrapped in \w talk fo God|guy who talk fo God\w* markup (MAT 2:5).](images/L5-13.Find-w-markup.png)
+![A Paratext Find search result for "talk fo God," showing one occurrence as plain bold text (MAT 1:22) and another wrapped in \w talk fo God|guy who talk fo God\w* markup (MAT 2:5).](assets/ss-05-find-with-markup.png)
 *This is the markup a correctly-scoped link leaves behind.*
 
 You don't have to run Find to spot this markup — it's visible directly in the text
@@ -73,7 +73,7 @@ editor too. The rendering half of a `\w...\w*` marker displays in **light grey**
 in the running text, which makes linked terms easy to scan for by eye as you read through
 a passage:
 
-![A passage of running text in the Paratext editor, with two \w...\w* markers visible: "angel guy|Angel messenja guy" and "talk fo God|guy who talk fo God," the rendering half shown in light grey.](images/L5-glossary-links-shown-in-grey.png)
+![A passage of running text in the Paratext editor, with two \w...\w* markers visible: "angel guy|Angel messenja guy" and "talk fo God|guy who talk fo God," the rendering half shown in light grey.](assets/ss-05-glossary-links-shown-in-grey.png)
 *The grey text is the marker's rendering half — visible right in the text, not just in Find results.*
 
 Look at each Find result: if `\w...\w*` markup
@@ -151,7 +151,7 @@ Digital and Print Publishing competency:
    - A **grey tick** means Paratext *guessed* the breaks — not yet reviewed.
    - A **green tick** means the breaks are **approved**.
 
-   ![The Wordlist's Show hyphenation view, with a Hyphenation column showing grey ticks (unreviewed) and green ticks (approved) alongside each word.](images/L5-14.Wordlist-hyphenation.png)
+   ![The Wordlist's Show hyphenation view, with a Hyphenation column showing grey ticks (unreviewed) and green ticks (approved) alongside each word.](assets/ss-05-wordlist-hyphenation.png)
    *Grey = Paratext's guess; green = a human confirmed it.*
 
    Your job is to work through the guesses:
@@ -203,16 +203,16 @@ the team's last look before the typesetter. Work through it methodically, watchi
 - **Heading placement** — headings sitting awkwardly at a page or column break.
 - **Underfilled pages** — pages with noticeably more white space than their neighbors.
 
-![A two-page PTXprint spread where a section heading has been pushed to the top of the second column, leaving a large block of white space at the bottom of the first column.](images/L5-16.c.awkward-heading-break.png)
+![A two-page PTXprint spread where a section heading has been pushed to the top of the second column, leaving a large block of white space at the bottom of the first column.](assets/ss-05-awkward-heading-break.png)
 *A heading held together with its paragraph pushed the whole block to the next column — leaving this underfilled gap behind it.*
 
 The read-through also turns up composition issues beyond this list — picture sizing and
 spacing, and page-margin spacing, for example:
 
-![A PTXprint spread where the left-hand page's illustration is oversized relative to the page, and the right-hand page's illustration sits with almost no gap between its caption/credit text and the picture itself.](images/L5-16.d.Picture-size.png)
+![A PTXprint spread where the left-hand page's illustration is oversized relative to the page, and the right-hand page's illustration sits with almost no gap between its caption/credit text and the picture itself.](assets/ss-05-picture-size.png)
 *An oversized picture, and one crowded too close to its own credit text — both are typesetting-craft issues to flag, not fix yourself.*
 
-![A page where the running header sits almost flush against the first line of body text, with no visible top margin.](images/L5-16.e.top-margin.png)
+![A page where the running header sits almost flush against the first line of body text, with no visible top margin.](assets/ss-05-top-margin.png)
 *Not enough top-margin space between the running header and the body text below it.*
 
 This course's team workbook material was verified against **PTXprint 3.0.38**;

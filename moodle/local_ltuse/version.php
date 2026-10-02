@@ -10,7 +10,9 @@ defined('MOODLE_INTERNAL') || die();
 
 $plugin->component = 'local_ltuse';
 $plugin->version   = 2026100300;   // Badges and certificates (spec 013), bumped once for the
-                                   // whole feature; db/upgrade.php saves its savepoint at this stamp.
+                                   // whole feature, after progress reporting (spec 004,
+                                   // 2026100204) and ensure_discussion (spec 012, 2026100203).
+                                   // db/upgrade.php saves its savepoint at this stamp.
                                    // moodle/site/site.yaml pins local_ltuse to this stamp, and
                                    // validate fails if they differ.
 

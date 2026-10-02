@@ -96,6 +96,7 @@ There is one per delivered course. It is created by `local_ltuse`, through `core
 | `id` | int | |
 | `courseid` | int, unique | The `ltct:` course. |
 | `badgeid` | int, unique | Its badge. |
+| `imagehash` | char(64) | The sha256 of the template image the badge's image was made from. Core resizes the image, so the stored files cannot be compared. |
 | `timecreated` | int | |
 
 The table holds no user data, so the privacy provider stays `null_provider`. A badge in an `ltct:` course that is not in the map is `extra`, reported and never adopted. A map row whose badge is gone is `missing`, and the next publish creates the badge again.
@@ -115,7 +116,7 @@ There is one per delivered course: a `customcert` course module, created by `loc
 | `requiredtime` | `0` |
 | cm `availability` | `{"op":"&","c":[{"type":"coursecompleted","id":"1"}],"showc":[true]}` (R8) |
 | cm `completion` | `0`. Never a course criterion (R8). |
-| section | The last section of the course. |
+| section | The last lesson section of the course, never the hidden Retired section that holds modules the repo dropped. |
 | pages and elements | A copy of the site template, made with `template_load_service::replace()` (R7). |
 
 **Lifecycle**: created on the first stage-8 publish, then re-copied from the site template whenever it differs. **Never deleted**, because deleting it deletes every issued code (R14).
@@ -135,8 +136,9 @@ These are core's `badge_issued` and `mod_customcert`'s `customcert_issues`. They
 
 - `delivery` is `course_stage.stage_for(folder)` reporting stage 8 or later. The payload never works the stage out itself (Principle I, R4).
 - `certificate` is present only when `delivery` is true.
-- `check_moodle_payload.py` asserts these four things:
-  - the course start date is not in the future (R3);
+- `check_moodle_payload.py` asserts these three things:
   - the course title passes `check_recognition()` once rendered into the badge name (R15);
   - the certificate's idnumber fits in 100 characters;
   - no module in `sections` uses the certificate's idnumber.
+- The payload carries no start date, and the publisher never sets one. The plugin's
+  `startdate-future` warning is the guard against a start date set by hand (R3).

@@ -23,7 +23,7 @@ use stdClass;
  *                 already completed the course (R8)
  *   completion    0, never a course completion criterion, or the course could never complete;
  *                 set_course_completion leaves this idnumber out of its wanted set
- *   section       the course's last section, when the activity is created
+ *   section       the course's last lesson section, never the hidden Retired section
  *   pages         copied from the site template whenever they differ (certtemplate::copy_into())
  *
  * NEVER DELETED. Deleting the activity deletes every issued certificate code (R14). The
@@ -55,17 +55,24 @@ class certificate {
         $cm = util::cm_by_idnumber((int)$course->id, $idnumber);
         $outcome = 'unchanged';
         if ($cm === null) {
-            $section = (int)$DB->get_field('course_sections', 'MAX(section)', ['course' => $course->id]);
-            util::upsert_module($course, 'customcert', $idnumber, $section, $fields);
+            util::upsert_module($course, 'customcert', $idnumber, self::last_lesson_section($course), $fields);
             $cm = util::cm_by_idnumber((int)$course->id, $idnumber);
             $outcome = 'created';
         } else if ($cm->modname !== 'customcert') {
             throw new moodle_exception('Module ' . $idnumber . ' exists as a ' . $cm->modname
                 . ', not a certificate. Rename its idnumber in Moodle and republish.');
-        } else if (self::differs($cm, $fields)) {
+        } else {
+            // Hidden, or sitting in the Retired section (moved there by hand, or hidden by an
+            // older publisher), the certificate is out of a learner's reach: bring it back
+            // even when every setting already matches. upsert_module() makes it visible.
             $section = (int)$DB->get_field('course_sections', 'section', ['id' => $cm->section]);
-            util::upsert_module($course, 'customcert', $idnumber, $section, $fields);
-            $outcome = 'updated';
+            $retired = util::retired_section($course);
+            $inretired = $retired && (int)$retired->section === $section;
+            if ($inretired || empty($cm->visible) || self::differs($cm, $fields)) {
+                $target = $inretired ? self::last_lesson_section($course) : $section;
+                util::upsert_module($course, 'customcert', $idnumber, $target, $fields);
+                $outcome = 'updated';
+            }
         }
 
         $templateid = (int)$DB->get_field('customcert', 'templateid', ['id' => $cm->instance], MUST_EXIST);
@@ -73,6 +80,25 @@ class certificate {
             $outcome = 'updated';
         }
         return $outcome;
+    }
+
+    /**
+     * The course's last lesson section: the highest numbered ordinary section, never the
+     * hidden Retired section the publisher moves dropped modules into (util::RETIRED_SECTION_NAME),
+     * and never a delegated section.
+     *
+     * @param stdClass $course
+     * @return int the section number
+     */
+    protected static function last_lesson_section(stdClass $course): int {
+        $retired = util::retired_section($course);
+        $last = 0;
+        foreach (get_fast_modinfo($course)->get_section_info_all() as $section) {
+            if (empty($section->component) && (!$retired || $section->id != $retired->id)) {
+                $last = max($last, (int)$section->section);
+            }
+        }
+        return $last;
     }
 
     /**
@@ -113,6 +139,8 @@ class certificate {
             // create_page and create_quiz also allow for.
             'introeditor' => ['text' => self::intro($stored), 'format' => FORMAT_HTML, 'itemid' => 0],
             'showdescription' => 1,                 // beside the restriction on the course page
+            'visible' => 1,                         // on update too: a hidden certificate is unreachable
+            'visibleoncoursepage' => 1,
             'verifyany' => 1,
             'requiredtime' => 0,
             'deliveryoption' => \mod_customcert\service\pdf_generation_service::DELIVERY_OPTION_INLINE,

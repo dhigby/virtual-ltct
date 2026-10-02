@@ -21,7 +21,7 @@ function xmldb_local_ltuse_upgrade($oldversion) {
     // Progress reporting (spec 004): the competency framework and the course-to-competency
     // map that the per-competency report reads. Neither holds user data; both stay empty
     // until the site declaration and the publisher fill them.
-    if ($oldversion < 2026100202) {
+    if ($oldversion < 2026100204) {
         $table = new xmldb_table('local_ltuse_competency');
         $table->add_field('id', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, XMLDB_SEQUENCE, null);
         $table->add_field('name', XMLDB_TYPE_CHAR, '255', null, XMLDB_NOTNULL, null, null);
@@ -48,7 +48,7 @@ function xmldb_local_ltuse_upgrade($oldversion) {
             $dbman->create_table($table);
         }
 
-        upgrade_plugin_savepoint(true, 2026100202, 'local', 'ltuse');
+        upgrade_plugin_savepoint(true, 2026100204, 'local', 'ltuse');
     }
 
     // Completion badges and certificates (spec 013): the map from a course to its badge. A

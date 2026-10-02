@@ -39,11 +39,13 @@ $functions = [
     ],
     'local_ltuse_hide_modules' => [
         'classname'    => 'local_ltuse\external\hide_modules',
-        'description'  => 'Hide modules a course no longer has, identified by their '
-                        . 'course-module idnumbers. Never deletes.',
+        'description'  => 'Retire modules a course no longer has, identified by their '
+                        . 'course-module idnumbers: hide them and move them into a hidden '
+                        . 'Retired section at the end. Never deletes.',
         'type'         => 'write',
         'ajax'         => false,
-        'capabilities' => 'local/ltuse:publish, moodle/course:activityvisibility',
+        'capabilities' => 'local/ltuse:publish, moodle/course:activityvisibility, '
+                        . 'moodle/course:manageactivities, moodle/course:update',
     ],
     'local_ltuse_create_quiz' => [
         'classname'    => 'local_ltuse\external\create_quiz',
@@ -69,6 +71,15 @@ $functions = [
         'type'         => 'write',
         'ajax'         => false,
         'capabilities' => 'local/ltuse:publish',
+    ],
+    'local_ltuse_ensure_discussion' => [
+        'classname'    => 'local_ltuse\external\ensure_discussion',
+        'description'  => 'Create the discussion forum of a course if it is absent, and set only its '
+                        . 'group mode (separate or visible groups, no grouping). Never writes '
+                        . 'a discussion or post.',
+        'type'         => 'write',
+        'ajax'         => false,
+        'capabilities' => 'local/ltuse:publish, moodle/course:manageactivities',
     ],
     'local_ltuse_set_course_recognition' => [
         'classname'    => 'local_ltuse\external\set_course_recognition',
@@ -99,6 +110,7 @@ $services = [
             'local_ltuse_hide_modules',
             'local_ltuse_set_course_completion',
             'local_ltuse_set_course_competencies',
+            'local_ltuse_ensure_discussion',
             'local_ltuse_set_course_recognition',
             // Core functions the publisher also needs. Listed here so one token covers
             // the whole publish rather than the operator wiring up several services.

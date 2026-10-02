@@ -4,7 +4,7 @@ These are the changes to the payload, to `local_ltuse`'s publish functions and t
 
 ## Payload
 
-The `recognition` block is described in [data-model.md](../data-model.md) under "Payload additions". `check_moodle_payload.py` adds the four assertions listed there. Each one is a hard failure and has no `--force`.
+The `recognition` block is described in [data-model.md](../data-model.md) under "Payload additions". `check_moodle_payload.py` adds the three assertions listed there. Each one is a hard failure and has no `--force`.
 
 ## `local_ltuse_set_course_recognition` (new)
 

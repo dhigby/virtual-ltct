@@ -89,8 +89,14 @@ symptoms of a single cause higher up. Work in this order instead:
    problem.
 5. **Section headings.** The marker itself is rarely the problem — most projects use
    `\s1` almost exclusively, with `\s2` only occasionally, so a wrong-level marker is
-   uncommon. The real issues to check for are missing headings, or headings that don't
-   match the text they introduce.
+   uncommon. What you check is structure, not wording:
+   - Each heading is present, uses a heading marker, and hasn't swallowed verse text —
+     the missing-`\p` cascade above.
+   - Each heading falls where the headings in the LWC (Language of Wider Communication)
+     Bible or a back translation fall, so a missing or misplaced heading shows up
+     without your reading the language.
+   - Whether a heading's wording fits its passage is the team's call — route that
+     question to them.
 6. **Book titles.** Inconsistent or incorrect book-name and book-title markup, especially
    after a book has been renamed or reorganized mid-project.
 7. **References** (`\r` shows parallel passages; `\xt` is the actual cross-reference

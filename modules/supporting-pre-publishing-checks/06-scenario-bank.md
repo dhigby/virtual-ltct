@@ -235,8 +235,11 @@ unrelated, minor asks.
 3. **Escalate:** Which of these three, if any, would need to go beyond you and the team,
    and which are entirely within your own coaching and technical-setup role (remember:
    this course's Digital and Print Publishing claim rests on you both advising *and*
-   doing hands-on setup, such as enabling Show hyphenation in the Wordlist and
-   reviewing/correcting the auto-generated hyphenation breaks)?
+   doing hands-on setup — enabling Show hyphenation in the Wordlist, drafting breaks
+   from the team's orthography statement if they can provide one (or entering the
+   breaks the team proposes if they can't), setting up batch approval, and confirming
+   hyphenation is approved before print)? For the hyphenation part, also say who
+   decides whether each break is right, and how you'd get that decision from them.
 
 ---
 

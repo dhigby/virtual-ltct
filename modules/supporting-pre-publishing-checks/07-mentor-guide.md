@@ -325,10 +325,23 @@ LWC, and those LWC Bibles are conventionally two-column, so word length alone sh
 drive a switch to single-column. This is marker **(f)**: advising the surfaced decision
 based on the right
 criterion. Because this course's Digital and Print Publishing claim rests on hands-on setup
-as well as advising, a strong answer also describes actually enabling Show hyphenation in
-the Wordlist's View menu and reviewing/correcting the auto-generated hyphenation breaks so
-long words break correctly in two-column layout — not just recommending that someone else
-do it.
+as well as advising, a strong answer also describes the learner doing the tool work
+themselves: enabling Show hyphenation in the Wordlist's View menu; drafting breaks from
+the syllable structure in the team's orthography statement if the team can provide one,
+or entering the breaks the team proposes if there is none (common on a first
+translation); approving confirmed words individually and in batches (Edit > Approve word
+hyphenation); and confirming hyphenation is approved before print. Where a word may break
+is a judgment about the language, which the learner doesn't speak — so a strong answer
+also routes **each break decision to the team** (a speaker) to review and confirm,
+including any breaks the learner drafted (editing a word turns its tick green, so drafted
+words look approved before anyone has confirmed them).
+
+- **Full credit:** the learner does the technical setup and drafting **and** sends each
+  break to the team for confirmation.
+- **Mark down** if the learner either decides breaks on their own judgment of the
+  language (approving or correcting Paratext's guesses because they "look right"), or
+  only recommends that someone else handle hyphenation without doing any of the tool
+  work themselves.
 
 **Escalation, across all three:** none of these three should need to leave the learner and
 the team — all three are within the learner's own coaching-plus-technical-setup role (per
@@ -339,4 +352,6 @@ outward has likely misjudged the scope of their own role at this level.
 **Common wrong turn:** treating the three items as unrelated instead of applying the same
 diagnose-before-fix, coach-don't-do discipline to each; explaining the Send/Receive cause
 vaguely ("it's just slow because the list is big") instead of naming the project-vs-view
-distinction; recommending single-column based on word length alone.
+distinction; recommending single-column based on word length alone; approving or
+correcting hyphenation breaks on the learner's own judgment instead of having the team
+confirm them.

@@ -15,9 +15,17 @@ the pull request that adds a setting is the record of why it exists.
 | `ignore.yaml` | Undeclared settings that are allowed to differ from Moodle's default, each with its reason. |
 | `organisations.yaml` | The partner organisations we host, and the shared course categories. Each organisation gets a category, a learner cohort and a managers cohort. |
 | `profile-fields.yaml` | The profile fields every learner has: organisation, role in the work and areas of expertise. |
+| `course-fields.yaml` | The two course fields the publisher fills from each course's frontmatter: the competencies it aims at and the level it aims at. Both are locked, so only the publisher and the site team can change them. |
+| `reports.yaml` | The report builder reports: one learner-progress report per organisation, for its managers, with a weekly email; and three for the site team (completions per course, the competencies published courses aim at, and the pilots). |
+| `settings/completion.yaml` | Completion switched on for the site and for new courses, with each lesson's completion conditions shown on the course page. |
 
 The shapes are specified in
-[`specs/001-site-config-as-code/contracts/declaration.md`](../../specs/001-site-config-as-code/contracts/declaration.md).
+[`specs/001-site-config-as-code/contracts/declaration.md`](../../specs/001-site-config-as-code/contracts/declaration.md),
+with spec 004's additions in
+[`specs/004-progress-reporting/contracts/declaration.md`](../../specs/004-progress-reporting/contracts/declaration.md).
+Apply also copies the competency list from the repo-root [`competencies.yaml`](../../competencies.yaml)
+into the plugin, for the competencies report. A competency removed from that file is retired
+there, never deleted.
 
 ## The three commands
 
@@ -89,12 +97,12 @@ Drift skips them, and apply refuses to write them. They belong to whoever writes
 | Kind | Means | What to do |
 |---|---|---|
 | `changed` | A declared value differs on the server. | Run `apply`, or change the declaration if the server is right. |
-| `missing` | A declared plugin or role is not on the server. | Install the plugin at its pin. Apply creates a missing role. |
+| `missing` | A declared plugin, role, course field, report or competency is not on the server. | Install the plugin at its pin. Apply creates the others. |
 | `wrong-release` | A plugin is not at its pinned version. | Install the pinned release, or raise the pin in a reviewed change. |
 | `pending-upgrade` | Plugin code is newer than the database. | Run `admin/cli/upgrade.php`. |
 | `unknown` | A declared setting or capability does not exist on the server. | Its plugin is missing, or an upgrade renamed it. Fix the declaration. |
 | `forced` | A declared setting is set in `config.php`. | Remove it from the declaration. |
-| `extra` | A plugin is installed but not declared, or an `ltct:` category, cohort or rule, an `ltct_` field, or a menu option is no longer declared. | Declare it again, or retire it by hand. Apply never deletes it. |
+| `extra` | A plugin is installed but not declared, or an `ltct:` category, cohort or rule, an `ltct_` field, a menu option, a report of ours or a competency is no longer declared. | Declare it again, or retire it by hand. Apply never deletes it. (A competency no longer declared is retired by apply, and leaves the competencies report.) |
 | `adopted` | Apply gave an existing category its `ltct:` idnumber instead of creating a duplicate. | Nothing. |
 | `ambiguous`, `wrong-context`, `wrong-datatype` | Two candidates match one declared item, a cohort sits outside system context, or a field has another type. Apply stops before writing anything. | Fix it by hand on the server, then run `apply` again. |
 | `unmanaged` | An undeclared setting differs from Moodle's default. | Someone changed it by hand. Declare it, revert it, or add it to `ignore.yaml` with a reason. |
@@ -119,7 +127,37 @@ The `key` is what a learner's organisation field holds, so never change it. Rena
 
 Removing an entry deletes nothing. Drift then reports the organisation's items as `extra`. Retire them by hand once its learners' records are dealt with.
 
-The profile field category, "About your work", is found by its name, because Moodle gives it no other identity. To rename it, rename it once by hand in Moodle and change `profile-fields.yaml` in the same pull request.
+The profile field category, "About your work", is found by its name, because Moodle gives it no other identity. To rename it, rename it once by hand in Moodle and change `profile-fields.yaml` in the same pull request. The same holds for the course field category in `course-fields.yaml`.
+
+Each organisation also gets its own learner-progress report and weekly schedule, made from the `per: organisation` entry in `reports.yaml`. Its managers cohort is the report's only audience, and the report shows only that organisation's learners. Apply sets back a report that was edited by hand. It never runs a report, so its output holds no learner names or row counts.
+
+## Badges and the certificate
+
+Row #23 (spec 013). These are training evidence only. Every text says "training completed",
+never "certified", and never puts a learner at a CBC level. `validate` checks every text with
+`scripts/cbc_wording.py`, rendered against every course title in `modules/`, so it fails before
+anything is applied.
+
+- **`badges.yaml`** is the one badge template. Every course delivered at stage 8 gets a badge made from it, with its image at `badges/completion.png`. Changing the wording and running `apply` rewords every badge already issued, in place, without a republish. A badge is never switched off.
+- **`certificate/template.yaml`** is the one certificate design, with its images beside it. `apply` builds it as a `mod_customcert` site template and copies it into every course's certificate activity.
+- **`settings/badges.yaml`** names the issuing programme once, for both. The issuer contact comes from `MOODLE_BADGE_CONTACT`, so no address is committed.
+
+The badge design, the logo, the issuer's name and the certificate layout are placeholders until
+the maintainer supplies them (spec 013 plan, decision 4).
+
+**Who sees a learner's badges.** Not other learners: `roles.yaml` takes
+`moodle/badges:viewotherbadges` from the authenticated-user role. The site team keeps it.
+**Spec 003's mentor role must grant `moodle/badges:viewotherbadges`, assigned in the learner's
+user context**, so a mentor sees their own assigned learners' badges and nobody else's.
+Organisation managers follow completion through their reports, not through badges.
+
+**Retire a course by hiding it, never by deleting it.** Deleting a course archives its badges,
+which breaks verification for everyone who holds one, and deleting its certificate activity
+deletes every certificate code already issued. A hidden course keeps both working.
+
+## Report downloads and emailed reports
+
+Reports hold real people. So does the weekly email's attachment. Save every report download and every emailed attachment **outside this repository folder**, as you would the upload CSV below, and delete it once you are done with it. GitDoc pushes anything left in this folder to the public repo. `.gitignore` refuses `*.csv`, `*.xlsx`, `*.xls` and `*.ods` only as a backstop.
 
 ## The site team's four steps
 

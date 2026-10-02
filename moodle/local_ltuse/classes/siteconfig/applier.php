@@ -35,9 +35,26 @@ defined('MOODLE_INTERNAL') || die();
  * activity reports", turned off again through update_course() where someone turned it on
  * (spec 003).
  *
+ * Then spec 004's, last, in the order its contract fixes (specs/004-progress-reporting/contracts/
+ * declaration.md "Output additions"):
+ *
+ *   course_field_category, course_fields  coursefields::apply(): the category, then the fields
+ *   competencies                          competencies::apply(): retires, never deletes
+ *   reports                               reports::apply(), last, because a report's columns and
+ *                                         audiences need the fields and cohorts made above
+ *
+ * Then spec 013's, after reports (specs/013-certificates-badges/contracts/declaration.md):
+ *
+ *   badge_template        badgetemplate::apply(): store it, then reword every mapped badge
+ *   certificate_template  certtemplate::apply(): the site template, then every activity's copy
+ *
+ * The preflight stops on a run-wide block only (report::has_blocking()). A report-scoped
+ * block, such as an audience cohort that does not exist, leaves just that report unwritten:
+ * reports::apply() checks each report again and skips the blocked one.
+ *
  * It never installs, upgrades or downgrades plugin code, never resets or deletes a role,
- * never deletes a category, cohort, field or rule (FR-004), and never creates a course's
- * discussion forum or writes a post.
+ * never deletes a category, cohort, field, rule, competency or report (FR-004), and never
+ * creates a course's discussion forum or writes a post.
  */
 class applier {
 
@@ -65,7 +82,7 @@ class applier {
      */
     public function run(): void {
         $preflight = $this->inspector->inspect();
-        if (inspector::has_blocking($preflight)) {
+        if (report::has_blocking($preflight)) {
             foreach ($preflight as $item) {
                 $this->report->add_result($item);
             }
@@ -91,6 +108,8 @@ class applier {
             $this->apply_discussion($target);
         }
         $this->apply_course_reports();
+        $this->apply_reporting();
+        $this->apply_recognition();
     }
 
     /**
@@ -126,6 +145,20 @@ class applier {
     }
 
     /**
+     * Apply spec 013's two templates, after reports: store the badge template and reword every
+     * published badge from it, then build the certificate site template and copy it into every
+     * certificate activity. Never deactivates a badge or deletes an activity or a template.
+     */
+    protected function apply_recognition(): void {
+        if ($this->inspector->badgetemplate()) {
+            $this->inspector->badgetemplate()->apply($this->report);
+        }
+        if ($this->inspector->certtemplate()) {
+            $this->inspector->certtemplate()->apply($this->report);
+        }
+    }
+
+    /**
      * Apply spec 002's four arrays, in the contract's order. One instance of each class serves
      * the whole run, so a category parent created or adopted here is known to its children.
      * The preflight has already passed, so nothing here blocks; each class still reports a
@@ -150,6 +183,22 @@ class applier {
         foreach ($this->declaration['cohort_rules'] ?? [] as $rule) {
             cohortrules::apply((array)$rule, $this->report);
         }
+    }
+
+    /**
+     * Apply spec 004's arrays, after spec 002's: the course field category and course fields,
+     * the competency list, then reports. Each is skipped when the payload does not declare it,
+     * by the same gates the preflight used (inspector::declares_*()), so apply never writes
+     * what the preflight did not check.
+     */
+    protected function apply_reporting(): void {
+        if ($this->inspector->declares_course_fields()) {
+            $this->inspector->coursefields()->apply($this->report);
+        }
+        if ($this->inspector->declares_competencies()) {
+            $this->inspector->competencies()->apply($this->report);
+        }
+        $this->inspector->reports()->apply($this->report);
     }
 
     /**

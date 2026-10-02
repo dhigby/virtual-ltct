@@ -6,6 +6,9 @@ defined('MOODLE_INTERNAL') || die();
 global $CFG;
 require_once($CFG->dirroot . '/course/modlib.php');
 require_once($CFG->dirroot . '/lib/questionlib.php');
+// completion_info and the COMPLETION_* constants. completionlib require_once()s
+// completion/criteria/completion_criteria.php, which defines COMPLETION_CRITERIA_TYPE_ACTIVITY.
+require_once($CFG->libdir . '/completionlib.php');
 
 use context_course;
 use context_module;
@@ -156,14 +159,28 @@ class util {
      * @param string $idnumber the ltct: identity
      * @param int $sectionnum
      * @param array $fields module-specific moduleinfo fields
-     * @return array ['cmid' => int, 'instance' => int, 'created' => bool]
+     * @param string $completion the payload rule (view, submit or pass), or '' to leave
+     *                           completion alone, which is what an older publisher sends
+     * @return array ['cmid' => int, 'instance' => int, 'created' => bool,
+     *                'completion' => 'set'|'unchanged'|'differs'|'']
      */
     public static function upsert_module(stdClass $course, string $modname, string $idnumber,
-                                         int $sectionnum, array $fields): array {
+                                         int $sectionnum, array $fields,
+                                         string $completion = ''): array {
         $moduleid = self::module_id($modname);
         $target = self::require_section($course, $sectionnum);
 
         $existing = self::cm_by_idnumber((int)$course->id, $idnumber);
+        // Decided before anything is written, so a refusal (completion off, unknown rule)
+        // leaves the module as it was. Only 'set' writes completion fields; on an existing
+        // module that takes completionunlocked, which update_moduleinfo() requires.
+        $outcome = self::completion_outcome($course, $existing, $completion);
+        if ($outcome === 'set') {
+            $fields = array_merge($fields, self::completion_fields($completion));
+            if ($existing) {
+                $fields['completionunlocked'] = 1;
+            }
+        }
 
         $moduleinfo = (object)array_merge([
             'modulename'        => $modname,
@@ -181,9 +198,8 @@ class util {
             'cmidnumber'        => $idnumber,
             'groupmode'         => 0,
             'groupingid'        => 0,
-            'completion'        => 0,
-            'completionview'    => 0,
-            'completionexpected' => 0,
+            // No completion defaults: set_moduleinfo_defaults() supplies "not tracked" when
+            // the caller sends no rule, and a rule arrives through $fields above.
         ], $fields);
 
         if ($existing) {
@@ -213,12 +229,94 @@ class util {
             $data->cmidnumber = $idnumber;
             $moduleinfo = update_moduleinfo($cm, $data, $course)[1];
             return ['cmid' => (int)$existing->id, 'instance' => (int)$moduleinfo->instance,
-                    'created' => false];
+                    'created' => false, 'completion' => $outcome];
         }
 
         $moduleinfo = add_moduleinfo($moduleinfo, $course);
         return ['cmid' => (int)$moduleinfo->coursemodule,
-                'instance' => (int)$moduleinfo->instance, 'created' => true];
+                'instance' => (int)$moduleinfo->instance, 'created' => true,
+                'completion' => $outcome];
+    }
+
+    /**
+     * What upsert_module() will do about completion for this module (spec 004, R2).
+     *
+     * Read-only. The table is data-model.md "Completion state per module":
+     *
+     *   - no rule sent: '' -- completion is not touched;
+     *   - new module: 'set' -- add_moduleinfo() writes the rule;
+     *   - already carries the rule: 'unchanged';
+     *   - not tracked, and not a course completion criterion: 'set' -- the update unlocks
+     *     completion and writes the rule;
+     *   - anything else: 'differs', and nothing about completion is written.
+     *
+     * WHY THE CRITERION TEST. Writing completion on an existing module goes through
+     * update_moduleinfo()'s `completionunlocked`, which calls reset_all_state(). That
+     * deletes the module's learner state and, if the module is an activity criterion of
+     * its course, every course_completions row in the course, completed ones included
+     * (delete_all_state(), lib/completionlib.php, MOODLE_502_STABLE). An untracked module
+     * has no learner state, so the reset costs nothing -- unless someone turned tracking
+     * off by hand while it was still a criterion. That case is reported, never unlocked.
+     *
+     * COMPLETION OFF. Core writes cm completion fields only when completion is enabled for
+     * the site and the course (completion_info::is_enabled(), checked by both
+     * add_moduleinfo() and update_moduleinfo()), and drops them silently otherwise. So a
+     * rule sent while it is off is refused: reporting 'set' would claim a write that never
+     * happened.
+     *
+     * @param stdClass $course a course record read after the publisher's course update
+     * @param stdClass|null $cm the existing course_modules record, or null for a new module
+     * @param string $rule view, submit, pass or ''
+     * @return string 'set', 'unchanged', 'differs' or ''
+     * @throws moodle_exception error:completionoff
+     */
+    public static function completion_outcome(stdClass $course, ?stdClass $cm,
+                                              string $rule): string {
+        global $DB;
+        if ($rule === '') {
+            return '';
+        }
+        completion_rule::fields($rule);
+        if (!(new \completion_info($course))->is_enabled()) {
+            throw new moodle_exception('error:completionoff', 'local_ltuse', '',
+                $course->idnumber);
+        }
+        if (!$cm) {
+            return 'set';
+        }
+        if (completion_rule::matches($cm, $rule)) {
+            return 'unchanged';
+        }
+        if ((int)$cm->completion === COMPLETION_TRACKING_NONE
+                && !$DB->record_exists('course_completion_criteria', [
+                    'course' => $course->id,
+                    'criteriatype' => COMPLETION_CRITERIA_TYPE_ACTIVITY,
+                    'moduleinstance' => $cm->id,
+                ])) {
+            return 'set';
+        }
+        return 'differs';
+    }
+
+    /**
+     * The moduleinfo fields that write a rule, over a neutral base.
+     *
+     * The base matters on an update: get_moduleinfo_data() pre-fills completionusegrade and
+     * completiongradeitemnumber from the stored row, so a leftover grade item number on an
+     * untracked module would otherwise ride along into a `view` rule. With the base,
+     * set_moduleinfo_defaults() derives the grade item number from completionusegrade
+     * alone: 0 for submit and pass, null for view (course/modlib.php).
+     *
+     * @param string $rule view, submit or pass
+     * @return array
+     */
+    private static function completion_fields(string $rule): array {
+        return array_merge([
+            'completionview' => 0,
+            'completionusegrade' => 0,
+            'completionpassgrade' => 0,
+            'completiongradeitemnumber' => null,
+        ], completion_rule::fields($rule));
     }
 
     /**

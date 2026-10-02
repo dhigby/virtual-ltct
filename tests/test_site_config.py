@@ -1,5 +1,6 @@
-"""Unit tests for scripts/site_config.py (specs 001 and 002). Run: python -m pytest tests/"""
+"""Unit tests for scripts/site_config.py (specs 001, 002, 004 and 013). Run: python -m pytest tests/"""
 import contextlib, io, json, pathlib, shutil, sys, tempfile, textwrap, unittest
+from unittest import mock
 import yaml
 REPO = pathlib.Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(REPO / "scripts"))
@@ -940,5 +941,844 @@ class Apply(Base):
         self.assertEqual(rc, 2)
 
 
+class AimLabel(unittest.TestCase):
+    """Spec 004 FR-010: a label never shows a learner at a CBC level (T007)."""
+
+    def refused(self, label, strict=False):
+        problems = sc.Problems()
+        sc._check_aim_label("fixture", label, problems, strict=strict)
+        return bool(problems)
+
+    def assertPasses(self, *labels, strict=False):
+        for label in labels:
+            self.assertFalse(self.refused(label, strict), label)
+
+    def assertRefused(self, *labels, strict=False):
+        for label in labels:
+            self.assertTrue(self.refused(label, strict), label)
+
+    def test_plain_labels_pass(self):
+        self.assertPasses("Learner", "{org}: learner progress", "Course aims at",
+                          "fixture-north: completions", "Target level (aim)")
+        self.assertPasses("Learner", "{org}: learner progress", "Course aims at", strict=True)
+
+    def test_certif_any_case(self):
+        self.assertPasses("Completed courses")
+        self.assertRefused("Certified", "CERTIFICATE", "Pre-certification", "uncertifiable")
+
+    def test_retired_vocabulary_as_a_word(self):
+        self.assertPasses("Beginner course", "Advanced settings", "Practice quiz")
+        self.assertRefused("Advanced Beginner", "advanced  beginner progress",
+                           "Practitioner", "fixture-north practitioner count",
+                           "Trainer", "Proficient learners")
+
+    def test_learner_near_level(self):
+        self.assertPasses("Learner", "Learner progress by course with target level aims")
+        self.assertRefused("Learner level", "Level of learner", "learner at CBC level",
+                           "Learner: aimed level", "Learners by level", "Learner levels")
+
+    def test_reached_near_level(self):
+        self.assertPasses("Reached the end of the course", "Lessons achieved",
+                          "Attained by, course aims at level")
+        self.assertRefused("Level reached", "Achieved level", "attained CBC target level",
+                           "reached: level 2", "Levels reached")
+
+    def test_strict_only(self):
+        for label in ("Reached the end of the course", "Lessons achieved", "Competent users"):
+            self.assertFalse(self.refused(label), label)
+            self.assertTrue(self.refused(label, strict=True), label)
+        self.assertPasses("Competency coverage", "Competencies aimed at", strict=True)
+        self.assertRefused("attained", "COMPETENT", strict=True)
+
+    def test_appends_to_problems(self):
+        problems = sc.Problems()
+        sc._check_aim_label("fixture", "Learner level", problems)
+        sc._check_aim_label("fixture", "Certified", problems)
+        self.assertEqual(len(problems.items), 2)
+        self.assertTrue(all(i.startswith("fixture: ") for i in problems.items))
+
+
+# Spec 004 fixtures. Organisation keys are fixture-*, never instance-test or real keys.
+COURSE_FIELDS = """\
+rows: [7]
+category: LTC curriculum
+fields:
+  - shortname: ltct_competencies
+    name: Competencies this course aims at
+    type: text
+    locked: 1
+    visibility: everyone
+    why: fixture
+  - shortname: ltct_target_level
+    name: Level this course aims at
+    type: text
+    locked: 1
+    visibility: everyone
+    why: fixture
+"""
+PROGRESS = """\
+  - key: progress
+    per: organisation
+    name: "{org}: learner progress"
+    source: core_course\\reportbuilder\\datasource\\participants
+    uniquerows: 1
+    columns:
+      - {column: user:fullnamewithlink, heading: Learner}
+      - {column: user:profilefield_ltct_org, heading: Organisation}
+      - {column: course:coursefullnamewithlink, heading: Course}
+      - {column: completion:progresspercent, heading: Progress}
+      - {column: completion:timecompleted, heading: Completed}
+    conditions:
+      - {condition: user:profilefield_ltct_org, values: {operator: equal, value: "{org}"}}
+      - {condition: role:name, values: {operator: equal, value: student}}
+      - {condition: enrol:plugin, values: {operator: equal, value: cohort}}
+    filters: [course:fullname, user:fullname]
+    audiences:
+      - {type: cohortmember, cohort: "ltct:org:{org}:managers"}
+    schedule:
+      recurrence: weekly
+      format: excel
+      viewas: recipient
+      send_when_empty: 0
+      start: "monday 07:00"
+      subject: "{org}: weekly learner progress"
+      message: "Your organisation's learner progress this week."
+    why: fixture
+"""
+PROGRAMME = """\
+  - key: programme
+    name: "Programme: completions per course"
+    source: core_course\\reportbuilder\\datasource\\participants
+    uniquerows: 1
+    columns:
+      - {column: course:coursefullnamewithlink, heading: Course}
+      - {column: course:customfield_ltct_competencies, heading: Competencies this course aims at}
+      - {column: course:customfield_ltct_target_level, heading: Level this course aims at}
+      - {column: user:username, heading: Enrolled, aggregation: countdistinct}
+      - {column: completion:timecompleted, heading: Completed, aggregation: count}
+    conditions:
+      - {condition: role:name, values: {operator: equal, value: student}}
+      - {condition: enrol:plugin, values: {operator: equal, value: cohort}}
+    filters: [user:profilefield_ltct_org, completion:timecompleted]
+    audiences:
+      - {type: systemrole, role: manager}
+    why: fixture
+"""
+COVERAGE = """\
+  - key: competency-coverage
+    name: "Competencies published courses aim at: courses and delivery use"
+    source: local_ltuse\\reportbuilder\\datasource\\competency_coverage
+    uniquerows: 0
+    columns:
+      - {column: competency:category, heading: Category}
+      - {column: competency:name, heading: Competency courses aim at}
+      - {column: coverage:courses, heading: Courses that aim at it}
+      - {column: coverage:learners, heading: Delivery learners}
+    sorting:
+      - {column: competency:name, direction: asc}
+    conditions: []
+    filters: [competency:category, competency:name]
+    audiences:
+      - {type: systemrole, role: manager}
+    why: fixture
+"""
+PILOTS = """\
+  - key: pilots
+    name: "Pilots: learner progress"
+    source: core_course\\reportbuilder\\datasource\\participants
+    uniquerows: 1
+    columns:
+      - {column: user:fullnamewithlink, heading: Learner}
+      - {column: course:coursefullnamewithlink, heading: Course}
+      - {column: completion:progresspercent, heading: Progress}
+    conditions:
+      - {condition: role:name, values: {operator: equal, value: student}}
+      - {condition: enrol:plugin, values: {operator: equal, value: manual}}
+    filters: [course:fullname]
+    audiences:
+      - {type: systemrole, role: manager}
+    why: fixture
+"""
+REPORTS_HEAD = "rows: [7, 16]\npurpose: fixture reports\nreports:\n"
+REPORTS = REPORTS_HEAD + PROGRESS + PROGRAMME + COVERAGE + PILOTS
+TWO_ORGS = ORGS.replace("  - key: fixture-north\n    name: Fixture North\n",
+                        "  - key: fixture-a\n    name: Fixture A\n"
+                        "  - key: fixture-b\n    name: Fixture B\n")
+SCHEDULE = PROGRESS[PROGRESS.index("    schedule:"):PROGRESS.index("    why:")]
+
+
+class ReportsBase(Base):
+    def setUp(self):
+        super().setUp()
+        self.write("organisations.yaml", TWO_ORGS)
+        self.write("course-fields.yaml", COURSE_FIELDS)
+        self.write("reports.yaml", REPORTS)
+
+    def payload(self):
+        rc, out, err = self.run_main("render")
+        self.assertEqual(rc, 0, err + out)
+        return json.loads(out)
+
+    def reports(self):
+        return {r["area"]: r for r in self.payload()["reports"]}
+
+    def only(self, *blocks):
+        self.write("reports.yaml", REPORTS_HEAD + "".join(blocks))
+
+
+class Reports(ReportsBase):
+    """reports.yaml (spec 004 data-model "Report", contracts/declaration.md): T032."""
+
+    def test_baseline_valid(self):
+        self.assertAccepted()
+
+    def test_reports_file_optional(self):
+        (self.dir / "reports.yaml").unlink()
+        self.assertAccepted()
+        self.assertEqual(self.payload()["reports"], [])
+
+    def test_expansion_one_per_organisation(self):
+        reports = self.reports()
+        for key, name in (("fixture-a", "Fixture A"), ("fixture-b", "Fixture B")):
+            with self.subTest(organisation=key):
+                r = reports["org_%s_progress" % key.replace("-", "_")]
+                self.assertEqual(r["name"], "%s: learner progress" % name)
+                conds = {c["condition"]: c["values"] for c in r["conditions"]}
+                self.assertEqual(conds["user:profilefield_ltct_org"],
+                                 {"operator": "equal", "value": key})
+                self.assertEqual(r["audiences"], [{"type": "cohortmember",
+                                                   "cohort": "ltct:org:%s:managers" % key}])
+        progress = sorted(a for a in reports if a.startswith("org_"))
+        self.assertEqual(progress, ["org_fixture_a_progress", "org_fixture_b_progress",
+                                    "org_independent_progress"])
+        self.assertIn("competency_coverage", reports)
+        self.assertIn("programme", reports)
+
+    def test_no_placeholder_left(self):
+        self.assertNotIn("{org}", json.dumps(self.payload()["reports"]))
+
+    def test_scope_conditions_required(self):
+        for line in ('      - {condition: user:profilefield_ltct_org, values: {operator: equal, '
+                     'value: "{org}"}}\n',
+                     "      - {condition: role:name, values: {operator: equal, value: student}}\n",
+                     "      - {condition: enrol:plugin, values: {operator: equal, value: cohort}}\n"):
+            with self.subTest(removed=line.strip()):
+                self.assertIn(line, PROGRESS)
+                self.only(PROGRESS.replace(line, ""))
+                self.assertRejected()
+
+    def test_scope_condition_values_verbatim(self):
+        for old, new in (('value: "{org}"}}', "value: fixture-a}}"),
+                         ("value: student}}", "value: editingteacher}}"),
+                         ("value: cohort}}", "value: manual}}"),
+                         ("{operator: equal, value: student}", "{operator: notequal, value: student}"),
+                         ("{operator: equal, value: cohort}", "{value: cohort}")):
+            with self.subTest(old=old, new=new):
+                self.assertIn(old, PROGRESS)
+                self.only(PROGRESS.replace(old, new, 1))
+                self.assertRejected()
+
+    def test_condition_values_shape(self):
+        for old, new in (("{operator: equal, value: student}", "{operator: 1, value: student}"),
+                         ("{operator: equal, value: cohort}", "{operator: equal, value: cohort, x: 1}"),
+                         ("{operator: equal, value: cohort}", "cohort")):
+            with self.subTest(new=new):
+                self.only(PROGRAMME.replace(old, new))
+                self.assertRejected()
+
+    def test_condition_role_unknown(self):
+        self.only(PROGRAMME.replace("value: student}}", "value: fixture-nobody}}"))
+        self.assertRejected()
+
+    def test_second_audience(self):
+        line = '      - {type: cohortmember, cohort: "ltct:org:{org}:managers"}\n'
+        self.only(PROGRESS.replace(line, line + "      - {type: systemrole, role: manager}\n"))
+        self.assertRejected()
+
+    def test_wrong_cohort(self):
+        self.only(PROGRESS.replace("ltct:org:{org}:managers", "ltct:org:{org}"))
+        self.assertRejected()
+
+    def test_allusers_audience(self):
+        line = "      - {type: systemrole, role: manager}\n"
+        for block in (PROGRESS.replace('{type: cohortmember, cohort: "ltct:org:{org}:managers"}',
+                                       "{type: allusers}"),
+                      PROGRAMME.replace("{type: systemrole, role: manager}", "{type: allusers}"),
+                      PROGRAMME.replace(line, line + "      - {type: allusers}\n")):
+            with self.subTest():
+                self.only(block)
+                self.assertRejected()
+
+    def test_unknown_role_audience(self):
+        self.only(PROGRAMME.replace("role: manager", "role: fixture-nobody"))
+        self.assertRejected()
+
+    def test_area_over_100(self):
+        self.only(PROGRAMME.replace("key: programme", "key: p" + "a" * 100))
+        self.assertRejected()
+
+    def test_area_of_100(self):
+        self.only(PROGRAMME.replace("key: programme", "key: p" + "a" * 99))
+        self.assertAccepted()
+
+    def test_per_org_area_too_long(self):
+        # org_ + a 30-character key + _ + a 66-character template key is 101 once encoded.
+        self.write("organisations.yaml",
+                   TWO_ORGS.replace("key: fixture-a", "key: fixture-" + "a" * 22))
+        self.only(PROGRESS.replace("key: progress", "key: p" + "r" * 65))
+        self.assertRejected()
+
+    def test_duplicate_key(self):
+        self.only(PROGRAMME, PROGRAMME)
+        self.assertRejected()
+
+    def test_duplicate_area_after_encoding(self):
+        # org fixture-b-c with template d, and org fixture-b with template c-d: both
+        # encode to org_fixture_b_c_d.
+        self.write("organisations.yaml", TWO_ORGS.replace(
+            "  - key: fixture-b\n    name: Fixture B\n",
+            "  - key: fixture-b\n    name: Fixture B\n  - key: fixture-b-c\n    name: Fixture BC\n"))
+        self.only(PROGRESS.replace("key: progress", "key: d"),
+                  PROGRESS.replace("key: progress", "key: c-d"))
+        self.assertRejected()
+
+    def test_key_pattern(self):
+        for bad in ("Programme", "programme_x", "1programme", "pro gramme", "programme-",
+                    "pro--gramme"):
+            with self.subTest(key=bad):
+                self.only(PROGRAMME.replace("key: programme", "key: %s" % json.dumps(bad)))
+                self.assertRejected()
+
+    def test_missing_why(self):
+        self.only(PROGRAMME.replace("    why: fixture\n", ""))
+        self.assertRejected()
+
+    def test_missing_source(self):
+        line = "    source: core_course\\reportbuilder\\datasource\\participants\n"
+        self.assertIn(line, PROGRAMME)
+        self.only(PROGRAMME.replace(line, ""))
+        self.assertRejected()
+
+    def test_unknown_key(self):
+        self.only(PROGRAMME.replace("    why: fixture\n", "    why: fixture\n    colour: blue\n"))
+        self.assertRejected()
+
+    def test_label_name(self):
+        self.only(PROGRAMME.replace('"Programme: completions per course"',
+                                    '"Programme: certified learners"'))
+        self.assertRejected()
+
+    def test_label_heading(self):
+        self.only(PROGRAMME.replace("heading: Completed,", "heading: Level reached,"))
+        self.assertRejected()
+
+    def test_label_expanded_name(self):
+        self.write("organisations.yaml", TWO_ORGS.replace("name: Fixture A", "name: Fixture Trainers"))
+        self.assertAccepted()   # "Trainers" is not the retired word "Trainer"
+        self.write("organisations.yaml", TWO_ORGS.replace("name: Fixture A", "name: Fixture Trainer"))
+        self.assertRejected()
+
+    def test_aggregation_unknown(self):
+        self.only(PROGRAMME.replace("aggregation: countdistinct", "aggregation: median"))
+        self.assertRejected()
+
+    def test_aggregation_column_allows(self):
+        # contracts/declaration.md "Aggregation": groupconcatdistinct takes no timestamp,
+        # sum no text, and our coverage columns disable every aggregation.
+        for old, new in (("heading: Completed, aggregation: count",
+                          "heading: Completed, aggregation: groupconcatdistinct"),
+                         ("heading: Enrolled, aggregation: countdistinct",
+                          "heading: Enrolled, aggregation: sum"),
+                         ("heading: Completed, aggregation: count",
+                          "heading: Completed, aggregation: avg")):
+            with self.subTest(new=new):
+                self.only(PROGRAMME.replace(old, new))
+                self.assertRejected()
+        for old, new in (("heading: Completed, aggregation: count",
+                          "heading: Completed, aggregation: max"),
+                         ("heading: Enrolled, aggregation: countdistinct",
+                          "heading: Enrolled, aggregation: groupconcatdistinct")):
+            with self.subTest(new=new):
+                self.only(PROGRAMME.replace(old, new))
+                self.assertAccepted()
+
+    def test_aggregation_column_type_unrecorded(self):
+        # An aggregation on a column whose type validate does not know is refused, not
+        # passed to the server to fail the whole apply.
+        self.only(PROGRAMME.replace("{column: course:coursefullnamewithlink, heading: Course}",
+                                    "{column: course:shortname, heading: Course, "
+                                    "aggregation: count}"))
+        self.assertRejected()
+
+    def test_identifier_shape(self):
+        self.only(PROGRAMME.replace("column: user:username", "column: username"))
+        self.assertRejected()
+
+    def test_duplicate_column(self):
+        line = "      - {column: course:coursefullnamewithlink, heading: Course}\n"
+        self.only(PROGRAMME.replace(line, line + line))
+        self.assertRejected()
+
+    def test_customfield_column_needs_course_field(self):
+        (self.dir / "course-fields.yaml").unlink()
+        self.only(PROGRAMME)
+        self.assertRejected()
+
+    def test_per_unknown(self):
+        self.only(PROGRAMME.replace('    name: "Programme', '    per: country\n    name: "Programme'))
+        self.assertRejected()
+
+    def test_org_placeholder_without_per(self):
+        self.only(PROGRAMME.replace('"Programme: completions per course"', '"{org}: completions"'))
+        self.assertRejected()
+
+    def test_uniquerows(self):
+        self.only(PROGRAMME.replace("uniquerows: 1", "uniquerows: 2"))
+        self.assertRejected()
+
+    def test_per_organisation_without_organisations(self):
+        self.write("organisations.yaml", TWO_ORGS.replace(
+            "  - key: fixture-a\n    name: Fixture A\n  - key: fixture-b\n    name: Fixture B\n", ""))
+        self.assertAccepted()   # independent remains, so the template still expands once
+        self.assertEqual(sorted(a for a in self.reports() if a.startswith("org_")),
+                         ["org_independent_progress"])
+
+    def test_payload_shape(self):
+        reports = self.reports()
+        r = reports["org_fixture_a_progress"]
+        self.assertEqual(set(r), {"area", "name", "source", "uniquerows", "columns", "conditions",
+                                  "filters", "sorting", "audiences", "schedule"})
+        self.assertEqual(r["source"], "core_course\\reportbuilder\\datasource\\participants")
+        self.assertEqual(r["uniquerows"], 1)
+        self.assertEqual(r["columns"][0], {"column": "user:fullnamewithlink", "heading": "Learner",
+                                           "aggregation": None})
+        self.assertEqual([c["condition"] for c in r["conditions"]],
+                         ["user:profilefield_ltct_org", "role:name", "enrol:plugin"])
+        self.assertEqual(r["conditions"][1], {"condition": "role:name",
+                                              "values": {"operator": "equal", "value": "student"}})
+        self.assertEqual(r["filters"], ["course:fullname", "user:fullname"])
+        self.assertEqual(r["sorting"], [])
+        prog = reports["programme"]
+        self.assertIsNone(prog["schedule"])
+        self.assertEqual(prog["audiences"], [{"type": "systemrole", "role": "manager"}])
+        self.assertEqual(prog["columns"][3]["aggregation"], "countdistinct")
+        # Spec 004's arrays in apply order, then spec 013's two after reports.
+        self.assertEqual(list(self.payload())[-6:],
+                         ["course_field_category", "course_fields", "competencies", "reports",
+                          "badge_template", "certificate_template"])
+
+    def test_summary_counts_reports(self):
+        rc, out, _ = self.run_main("validate")
+        self.assertEqual(rc, 0, out)
+        self.assertIn("6 reports", out)
+
+
+class Schedules(ReportsBase):
+    """A report's schedule (spec 004 US4): T040."""
+
+    def schedule(self):
+        return self.reports()["org_fixture_a_progress"]["schedule"]
+
+    def test_render(self):
+        s = self.schedule()
+        self.assertEqual(set(s), {"name", "recurrence", "format", "userviewas", "start",
+                                  "configdata"})
+        self.assertEqual(s["recurrence"], 3)
+        self.assertEqual(s["format"], "excel")
+        self.assertEqual(s["userviewas"], -1)
+        self.assertEqual(s["start"], "monday 07:00")
+        self.assertEqual(s["name"], "Fixture A: weekly learner progress")
+        self.assertEqual(s["configdata"], {
+            "subject": "Fixture A: weekly learner progress",
+            "message": {"text": "Your organisation's learner progress this week.", "format": 1},
+            "reportempty": 2})
+
+    def test_viewas_creator(self):
+        self.only(PROGRESS.replace("viewas: recipient", "viewas: creator"))
+        self.assertRejected()
+
+    def test_send_when_empty(self):
+        for bad in ("yes", "1", "2"):
+            with self.subTest(value=bad):
+                self.only(PROGRESS.replace("send_when_empty: 0", "send_when_empty: %s" % bad))
+                self.assertRejected()
+
+    def test_missing_subject(self):
+        self.only(PROGRESS.replace('      subject: "{org}: weekly learner progress"\n', ""))
+        self.assertRejected()
+
+    def test_subject_label(self):
+        self.only(PROGRESS.replace('"{org}: weekly learner progress"',
+                                   '"{org}: weekly certificates"'))
+        self.assertRejected()
+
+    def test_missing_message(self):
+        self.only(PROGRESS.replace("      message: \"Your organisation's learner progress this week.\"\n",
+                                   ""))
+        self.assertRejected()
+
+    def test_missing_start(self):
+        self.only(PROGRESS.replace('      start: "monday 07:00"\n', ""))
+        self.assertRejected()
+
+    def test_bad_start(self):
+        for bad in ("monday", "07:00", "funday 07:00", "monday 25:00", "monday 7:00"):
+            with self.subTest(start=bad):
+                self.only(PROGRESS.replace('"monday 07:00"', json.dumps(bad)))
+                self.assertRejected()
+
+    def test_bad_recurrence_and_format(self):
+        for old, new in (("recurrence: weekly", "recurrence: fortnightly"),
+                         ("format: excel", "format: docx")):
+            with self.subTest(new=new):
+                self.only(PROGRESS.replace(old, new))
+                self.assertRejected()
+
+    def test_unknown_schedule_key(self):
+        self.only(PROGRESS.replace("      format: excel\n", "      format: excel\n      owner: admin\n"))
+        self.assertRejected()
+
+    def test_schedule_without_audience(self):
+        self.only(PROGRAMME.replace("    audiences:\n      - {type: systemrole, role: manager}\n",
+                                    "    audiences: []\n" + SCHEDULE.replace("{org}: ", "")))
+        self.assertRejected()
+
+    def test_schedule_message_label(self):
+        # FR-010 covers the weekly email's body as well as its subject.
+        for bad in ("Learners who reached level 2 this week.",
+                    "Your organisation's practitioner progress this week."):
+            with self.subTest(bad=bad):
+                self.only(PROGRESS.replace("Your organisation's learner progress this week.",
+                                           bad))
+                self.assertRejected()
+
+    def test_schedule_on_systemrole_report(self):
+        self.only(PROGRAMME.replace("    why: fixture\n",
+                                    SCHEDULE.replace("{org}: ", "") + "    why: fixture\n"))
+        self.assertAccepted()
+
+
+class CourseFields(ReportsBase):
+    """course-fields.yaml (spec 004 data-model "Course fields"): T047."""
+    LAST = "    visibility: everyone\n    why: fixture\n"
+
+    def test_render(self):
+        p = self.payload()
+        self.assertEqual(p["course_field_category"], "LTC curriculum")
+        self.assertEqual(p["course_fields"], [
+            {"shortname": "ltct_competencies", "name": "Competencies this course aims at",
+             "type": "text", "locked": 1, "visibility": 2},
+            {"shortname": "ltct_target_level", "name": "Level this course aims at",
+             "type": "text", "locked": 1, "visibility": 2}])
+
+    def test_visibility_values(self):
+        head = COURSE_FIELDS[:COURSE_FIELDS.rindex(self.LAST)]
+        self.only(PROGRESS)   # no report column reads ltct_target_level
+        for word, value in (("everyone", 2), ("teachers", 1), ("nobody", 0)):
+            with self.subTest(visibility=word):
+                self.write("course-fields.yaml",
+                           head + "    visibility: %s\n    why: fixture\n" % word)
+                fields = {f["shortname"]: f for f in self.payload()["course_fields"]}
+                self.assertEqual(fields["ltct_target_level"]["visibility"], value)
+
+    def test_hidden_field_in_a_report_column(self):
+        head = COURSE_FIELDS[:COURSE_FIELDS.rindex(self.LAST)]
+        self.write("course-fields.yaml", head + "    visibility: nobody\n    why: fixture\n")
+        self.assertRejected()   # programme reads course:customfield_ltct_target_level
+
+    def test_bad_shortname(self):
+        for bad in ("competencies", "ltct-competencies", "LTCT_X", "ltct_"):
+            with self.subTest(shortname=bad):
+                self.write("course-fields.yaml", COURSE_FIELDS + "  - shortname: %s\n    name: X\n"
+                           "    type: text\n    locked: 1\n    visibility: everyone\n    why: w\n"
+                           % json.dumps(bad))
+                self.assertRejected()
+
+    def test_bad_type(self):
+        self.write("course-fields.yaml", COURSE_FIELDS.replace("type: text", "type: textarea", 1))
+        self.assertRejected()
+
+    def test_bad_visibility(self):
+        self.write("course-fields.yaml", COURSE_FIELDS.replace("visibility: everyone",
+                                                               "visibility: all", 1))
+        self.assertRejected()
+
+    def test_required_fields(self):
+        self.only(PROGRESS)
+        for short in ("ltct_competencies", "ltct_target_level"):
+            with self.subTest(missing=short):
+                start = COURSE_FIELDS.index("  - shortname: " + short)
+                end = COURSE_FIELDS.find("  - shortname:", start + 1)
+                self.write("course-fields.yaml",
+                           COURSE_FIELDS[:start] + (COURSE_FIELDS[end:] if end > 0 else ""))
+                self.assertRejected()
+
+    def test_name_label(self):
+        self.write("course-fields.yaml", COURSE_FIELDS.replace("Level this course aims at",
+                                                               "Level the learner reached"))
+        self.assertRejected()
+
+    def test_unknown_key_and_missing_why(self):
+        for new in ("    why: fixture\n    default: x\n", ""):
+            with self.subTest(new=new):
+                self.write("course-fields.yaml", COURSE_FIELDS.replace("    why: fixture\n", new, 1))
+                self.assertRejected()
+
+    def test_duplicate_shortname(self):
+        self.write("course-fields.yaml", COURSE_FIELDS.replace("shortname: ltct_target_level",
+                                                               "shortname: ltct_competencies"))
+        self.assertRejected()
+
+    def test_locked_boolean(self):
+        self.write("course-fields.yaml", COURSE_FIELDS.replace("locked: 1", "locked: true", 1))
+        self.assertRejected()
+
+    def test_file_optional(self):
+        (self.dir / "course-fields.yaml").unlink()
+        self.only(PROGRESS)
+        self.assertAccepted()
+        p = self.payload()
+        self.assertIsNone(p["course_field_category"])
+        self.assertEqual(p["course_fields"], [])
+
+
+class CompetencyList(ReportsBase):
+    """The competency list rendered from competencies.yaml (data-model "Competency list"): T047."""
+
+    def synthetic(self, mutate):
+        with open(REPO / "competencies.yaml", encoding="utf-8") as fh:
+            data = yaml.safe_load(fh)
+        mutate(data)
+        # A subdirectory, so the declaration directory holds no unexpected file.
+        (self.dir / "fixture-repo").mkdir(exist_ok=True)
+        path = self.dir / "fixture-repo" / "competencies.yaml"
+        path.write_text(yaml.safe_dump(data, allow_unicode=True, sort_keys=False),
+                        encoding="utf-8")
+        return mock.patch.object(sc, "COMPETENCIES", path)
+
+    def test_real_file(self):
+        comps = self.payload()["competencies"]
+        self.assertEqual(len(comps), 42)
+        self.assertNotIn("Meta", {c["category"] for c in comps})
+        self.assertNotIn("Uncategorized", {c["name"] for c in comps})
+        self.assertEqual([c["sortorder"] for c in comps], list(range(1, 43)))
+        with open(REPO / "competencies.yaml", encoding="utf-8") as fh:
+            data = yaml.safe_load(fh)
+        expected = [(cat, n) for cat, names in data.items() if cat != "Meta" for n in names]
+        self.assertEqual([(c["category"], c["name"]) for c in comps], expected)
+        self.assertEqual(set(comps[0]), {"name", "category", "sortorder"})
+        self.assertIn("Fonts & Encoding", {c["name"] for c in comps})
+
+    def test_duplicate_name(self):
+        with self.synthetic(lambda d: d["Core"].append(d["Core Technical"][0])):
+            self.assertRejected()
+
+    def test_long_name(self):
+        with self.synthetic(lambda d: d["Core"].append("A" * 256)):
+            self.assertRejected()
+
+    def test_brackets_and_control(self):
+        for bad in ("Fixture [one]", "Fixture ]", "Fixture\ttab", "Fixture\x07bell"):
+            with self.subTest(name=bad):
+                with self.synthetic(lambda d: d["Core"].append(bad)):
+                    self.assertRejected()
+
+    def test_label(self):
+        with self.synthetic(lambda d: d["Core"].append("Certified Fixture")):
+            self.assertRejected()
+
+    def test_synthetic_valid(self):
+        with self.synthetic(lambda d: d["Core"].append("Fixture Extra")):
+            self.assertAccepted()
+            comps = self.payload()["competencies"]
+        self.assertEqual(len(comps), 43)
+        self.assertEqual([c["sortorder"] for c in comps], list(range(1, 44)))
+
+    def test_rendered_without_reports(self):
+        (self.dir / "reports.yaml").unlink()
+        self.assertEqual(len(self.payload()["competencies"]), 42)
+
+
+class CompetencyCoverage(ReportsBase):
+    """competency-coverage's own rules (contracts/declaration.md): T047."""
+
+    def test_condition_refused(self):
+        self.only(COVERAGE.replace("    conditions: []\n", "    conditions:\n"
+                                   "      - {condition: competency:category, values: "
+                                   "{operator: equal, value: Core}}\n"))
+        self.assertRejected()
+
+    def test_audiences(self):
+        line = "      - {type: systemrole, role: manager}\n"
+        for new in ('      - {type: cohortmember, cohort: "ltct:org:fixture-a:managers"}\n',
+                    "      - {type: systemrole, role: editingteacher}\n",
+                    "      - {type: allusers}\n",
+                    line + "      - {type: systemrole, role: coursecreator}\n"):
+            with self.subTest(audience=new.strip()):
+                self.only(COVERAGE.replace(line, new))
+                self.assertRejected()
+
+    def test_column_entity(self):
+        self.only(COVERAGE.replace("{column: coverage:learners, heading: Delivery learners}",
+                                   "{column: user:fullname, heading: Delivery learners}"))
+        self.assertRejected()
+
+    def test_strict_labels(self):
+        for old, new in (("heading: Delivery learners", "heading: Learners who achieved it"),
+                         ("heading: Category", "heading: Competent users"),
+                         ('"Competencies published courses aim at: courses and delivery use"',
+                          '"Competencies reached"')):
+            with self.subTest(new=new):
+                self.only(COVERAGE.replace(old, new))
+                self.assertRejected()
+
+    def test_strict_only_here(self):
+        self.only(PROGRAMME.replace("heading: Completed,", "heading: Reached the end,"))
+        self.assertAccepted()
+
+    def test_competency_heading_says_aim_at(self):
+        self.only(COVERAGE.replace("heading: Competency courses aim at", "heading: Competency"))
+        self.assertRejected()
+
+    def test_per_refused(self):
+        self.only(COVERAGE.replace('    name: "Competencies', '    per: organisation\n    name: "Competencies'))
+        self.assertRejected()
+
+    def test_render(self):
+        r = self.reports()["competency_coverage"]
+        self.assertEqual(r["sorting"], [{"column": "competency:name", "direction": "asc"}])
+        self.assertEqual(r["conditions"], [])
+        self.assertEqual(r["uniquerows"], 0)
+        self.assertEqual(r["source"], "local_ltuse\\reportbuilder\\datasource\\competency_coverage")
+
+
+class Sorting(ReportsBase):
+    """sorting on any report (data-model "Report"): T047."""
+
+    def test_column_not_in_columns(self):
+        self.only(COVERAGE.replace("{column: competency:name, direction: asc}",
+                                   "{column: coverage:enrolments, direction: asc}"))
+        self.assertRejected()
+
+    def test_direction(self):
+        for bad in ("up", "ASC", "ascending"):
+            with self.subTest(direction=bad):
+                self.only(COVERAGE.replace("direction: asc", "direction: %s" % bad))
+                self.assertRejected()
+
+    def test_desc_and_precedence(self):
+        line = "      - {column: competency:name, direction: asc}\n"
+        self.only(COVERAGE.replace(line, "      - {column: coverage:courses, direction: desc}\n"
+                                   + line))
+        self.assertEqual(self.reports()["competency_coverage"]["sorting"],
+                         [{"column": "coverage:courses", "direction": "desc"},
+                          {"column": "competency:name", "direction": "asc"}])
+
+    def test_duplicate_sort_column(self):
+        line = "      - {column: competency:name, direction: asc}\n"
+        self.only(COVERAGE.replace(line, line + "      - {column: competency:name, direction: desc}\n"))
+        self.assertRejected()
+
+    def test_other_templates_validate(self):
+        for block in (PROGRAMME, PILOTS):
+            with self.subTest():
+                self.only(block)
+                self.assertAccepted()
+
+
 if __name__ == "__main__":
     unittest.main()
+
+
+RECOGNITION_PINS = """\
+  - component: mod_customcert
+    version: 2026042014
+    source: {url: "https://example.org/customcert.zip", sha256: "%s"}
+    why: "#23"
+  - component: availability_coursecompleted
+    version: 2026070100
+    source: {url: "https://example.org/coursecompleted.zip", sha256: "%s"}
+    why: "#23"
+""" % ("b" * 64, "c" * 64)
+
+
+class Recognition(Base):
+    """badges.yaml and certificate/template.yaml (spec 013 data-model, contracts/declaration.md)."""
+
+    def setUp(self):
+        super().setUp()
+        self.write("site.yaml", SITE.format(ver=VER, sha="a" * 64) + RECOGNITION_PINS)
+        site = REPO / "moodle" / "site"
+        shutil.copytree(site / "badges", self.dir / "badges")
+        shutil.copytree(site / "certificate", self.dir / "certificate")
+        for rel in ("badges.yaml", "settings/badges.yaml"):
+            self.write(rel, (site / rel).read_text(encoding="utf-8"))
+
+    def test_the_tracked_declaration_is_accepted_and_rendered(self):
+        self.assertAccepted()
+        decl = sc.validate(self.dir)[0]
+        badge = decl["badge_template"]
+        self.assertEqual(badge["name"], "{course}: training completed")
+        self.assertIn("LTC training programme", badge["description"])   # {programme} filled
+        cert = decl["certificate_template"]
+        date = [e for e in cert["pages"][0]["elements"] if e["type"] == "date"][0]
+        self.assertEqual(date["dateitem"], -2)   # completion, never the issue date
+        payload = sc.build_payload(decl, "apply", {})
+        self.assertTrue(payload["badge_template"]["image"]["content"])
+        self.assertEqual(len(payload["badge_template"]["deny"]), len(sc.cbc_wording.DENY_PATTERNS))
+        self.assertNotIn("path", payload["badge_template"]["image"])
+
+    def test_certified_in_the_badge_name_is_refused(self):
+        self.edit("badges.yaml", 'name: "{course}: training completed"', 'name: "Certified: {course}"')
+        self.assertInvalid("says certified")
+
+    def test_a_level_held_in_the_description_is_refused(self):
+        self.edit("badges.yaml", "records training completed.",
+                  "records training completed. Level 3 - Independent achieved.")
+        self.assertInvalid("level")
+
+    def test_a_course_title_reaches_the_check(self):
+        with mock.patch.object(sc, "_courses", return_value=[("Certification prep", "", "")]):
+            self.assertInvalid("Certification prep")
+
+    def test_unknown_placeholder_and_misplaced_target_level(self):
+        self.edit("badges.yaml", "imagecaption: Completion badge for an LTC training course",
+                  'imagecaption: "{learner} badge for an LTC training course"')
+        self.assertInvalid("uses {learner}")
+        self.reset(); self.setUp()
+        self.edit("badges.yaml", 'name: "{course}: training completed"',
+                  'name: "{course} {target_level}: training completed"')
+        self.assertInvalid("{target_level} other than")
+
+    def test_badge_image_rules(self):
+        (self.dir / "badges" / "completion.png").write_bytes(
+            (REPO / "moodle" / "site" / "certificate" / "logo.png").read_bytes())   # 200x80
+        self.assertInvalid("must be square")
+
+    def test_certificate_needs_one_of_each_identity_element(self):
+        self.edit("certificate/template.yaml", "      - {type: code, x: 148, y: 185, size: 9, align: C}\n", "")
+        self.assertInvalid("exactly one code")
+
+    def test_certificate_date_must_be_completion(self):
+        self.edit("certificate/template.yaml", "date: completion", "date: issue")
+        self.assertInvalid("date must be completion")
+
+    def test_certificate_font_must_embed(self):
+        self.edit("certificate/template.yaml", "font: freesans", "font: times")
+        self.assertInvalid("font must be one of")
+
+    def test_certificate_wording(self):
+        self.edit("certificate/template.yaml", '"Training completed"', '"Certified"')
+        self.assertInvalid("says certified")
+
+    def test_the_plugins_and_settings_are_required(self):
+        self.write("site.yaml", SITE.format(ver=VER, sha="a" * 64))
+        self.assertInvalid("mod_customcert must be pinned")
+        self.reset(); self.setUp()
+        self.edit("settings/badges.yaml", "  - name: badges_allowexternalbackpack\n", "  - name: x_unused\n")
+        self.assertInvalid("badges_allowexternalbackpack must be declared")
+
+    def test_the_salt_is_never_declared(self):
+        self.write("settings/salt.yaml", "rows: [23]\npurpose: x\nsettings:\n"
+                   "  - name: badges_badgesalt\n    value: abc\n    why: x\n")
+        self.assertInvalid("badges_badgesalt is per site")

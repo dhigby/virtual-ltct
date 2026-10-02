@@ -20,6 +20,11 @@ use core_privacy\local\request\writer;
  * mentor-learner message contacts it made. Each row belongs to both people, so it is reported
  * in each one's user context. The mentor relationship itself (core role_assignments) and the
  * message contact (core message_contacts) are core's to export and delete.
+ *
+ * Its other tables hold nothing about a person: the competency framework, which courses aim
+ * at which competency (spec 004), and which badge is each course's (spec 013). The
+ * per-competency report counts enrolments and completions from core's tables at query time
+ * and stores none of it.
  */
 class provider implements
         \core_privacy\local\metadata\provider,

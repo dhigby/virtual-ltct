@@ -49,15 +49,31 @@ class report {
 
     /**
      * Kinds that are only ever reported with one status. `adopted` is a category given its
-     * idnumber by apply (R6), so it is a change. The other three are blocking problems the
+     * idnumber by apply (R6), so it is a change. `unknown` is something the declaration names
+     * that this server does not have: a setting, a capability, or from spec 004 a report
+     * builder column, condition or filter. The other three are blocking problems the
      * inspector marks `blocking`, so apply writes nothing while any is present.
+     *
+     * `missing` is not here: a missing role or profile field that apply creates is reported
+     * `changed`. A report audience whose cohort is missing is `fail`, scoped to that report
+     * (BLOCKS_REPORT).
      */
     const KIND_STATUS = [
         'adopted' => 'changed',
+        'unknown' => 'fail',
         'ambiguous' => 'fail',
         'wrong-context' => 'fail',
         'wrong-datatype' => 'fail',
     ];
+
+    /**
+     * How far an inspector result's `blocking` reaches (spec 004, contracts/declaration.md
+     * "Output additions"). `true` or BLOCKS_RUN: apply writes nothing at all, as in specs 001
+     * and 002. BLOCKS_REPORT: only the report the item belongs to is left unwritten, as for an
+     * audience cohort that does not exist yet; the rest of the run goes ahead.
+     */
+    const BLOCKS_RUN = 'run';
+    const BLOCKS_REPORT = 'report';
 
     /** Kinds that carry no declared value. */
     const NO_DECLARED = ['extra', 'unmanaged'];
@@ -306,6 +322,70 @@ class report {
         foreach ($this->items as $item) {
             if ($item['status'] === 'fail') {
                 return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * How far one inspector result blocks: BLOCKS_RUN, BLOCKS_REPORT or null for not at all.
+     *
+     * Specs 001 and 002 set `blocking` to a bool, so `true` stays a run-wide block. Anything
+     * else that is not empty is read as run-wide too: an unrecognised scope fails closed.
+     *
+     * @param array $result an item result from inspector
+     * @return string|null
+     */
+    public static function blocking_scope(array $result): ?string {
+        $blocking = $result['blocking'] ?? false;
+        if (empty($blocking)) {
+            return null;
+        }
+        return $blocking === self::BLOCKS_REPORT ? self::BLOCKS_REPORT : self::BLOCKS_RUN;
+    }
+
+    /**
+     * The report a report-scoped result belongs to: its `report` key, which is the report's
+     * area, or failing that the area in its subject, `report <area>` or
+     * `report <area>: <detail>`.
+     *
+     * @param array $result an item result from inspector
+     * @return string|null
+     */
+    public static function blocked_report(array $result): ?string {
+        if (isset($result['report']) && (string)$result['report'] !== '') {
+            return (string)$result['report'];
+        }
+        if (preg_match('/^report ([^:]+)(?::|$)/', (string)($result['item'] ?? ''), $m)) {
+            return trim($m[1]);
+        }
+        return null;
+    }
+
+    /**
+     * Whether any inspector result blocks.
+     *
+     * With no report named, it answers for the run: only a run-wide block counts, so an
+     * audience cohort that is missing does not stop the settings, roles or other reports
+     * being applied. With a report's area, it answers for that report: a run-wide block, or
+     * a report-scoped one for that report. A report-scoped result whose report cannot be
+     * told blocks every report, failing closed.
+     *
+     * @param array[] $results
+     * @param string|null $report a report's area, or null for the run
+     * @return bool
+     */
+    public static function has_blocking(array $results, ?string $report = null): bool {
+        foreach ($results as $result) {
+            $scope = self::blocking_scope((array)$result);
+            if ($scope === self::BLOCKS_RUN) {
+                return true;
+            }
+            if ($scope === self::BLOCKS_REPORT && $report !== null) {
+                $owner = self::blocked_report((array)$result);
+                if ($owner === null || $owner === $report) {
+                    return true;
+                }
             }
         }
         return false;

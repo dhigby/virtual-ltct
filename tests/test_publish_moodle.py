@@ -1,9 +1,9 @@
 """Unit tests for scripts/publish_moodle.py. Run: python -m pytest tests/
 
-Two groups: course creation (spec 002) and the per-page diff against the server (spec 009, US3).
-No network: fake clients record every call; the diff tests answer
-local_ltuse_get_course_manifest from a canned server state, with the payload written by hand
-into a temp dir.
+Groups: course creation (spec 002), the per-page diff against the server (spec 009, US3),
+completion (spec 004, US1) and course competencies (spec 004, US5). No network: fake
+clients record every call; the diff tests answer local_ltuse_get_course_manifest from a
+canned server state, with the payload written by hand into a temp dir.
 """
 import contextlib, hashlib, io, json, pathlib, sys, tempfile, unittest
 REPO = pathlib.Path(__file__).resolve().parents[1]
@@ -26,6 +26,17 @@ class FakeClient:
         self.uploads = []
         self.server = {m["idnumber"]: m for m in server_modules}
         self.next_cmid = 900
+        # What the course's custom fields read back as. `drop` names fields the server
+        # silently ignores, as Moodle does for an unknown or locked one.
+        self.customfields, self.drop = {}, set()
+        self.update_warnings = []
+        # The plugin's completion answer per module idnumber; by default 'set' on create.
+        self.completion = {}
+        self.course_completion = {"added": [], "removed": [], "aggregation": "unchanged",
+                                  "reaggregated": 0, "othercriteria": False}
+        self.competencies_back = None     # None: the server stores what it was sent
+        self.recognition = {"badge": "unchanged", "status": "inactive", "certificate": "none",
+                            "warnings": []}
 
     def manifest(self, idnumber):
         return self.call("local_ltuse_get_course_manifest", idnumber=idnumber)
@@ -45,7 +56,24 @@ class FakeClient:
         if self.dry_run:
             return {"dry_run": True}
         if function == "core_course_get_courses_by_field":
-            return {"id": 7}
+            return {"id": 7, "customfields": [
+                {"shortname": k, "value": v, "valueraw": v, "type": "text", "name": k}
+                for k, v in self.customfields.items()]}
+        if function in ("core_course_update_courses", "core_course_create_courses"):
+            for f in params["courses"][0].get("customfields", []):
+                if f["shortname"] not in self.drop:
+                    self.customfields[f["shortname"]] = f["value"]
+            if function == "core_course_create_courses":
+                return [{"id": 7, "shortname": params["courses"][0]["shortname"]}]
+            return {"warnings": self.update_warnings}
+        if function == "local_ltuse_set_course_completion":
+            return dict(self.course_completion)
+        if function == "local_ltuse_set_course_recognition":
+            return dict(self.recognition)
+        if function == "local_ltuse_set_course_competencies":
+            sent = list(params["competencies"])
+            back = sent if self.competencies_back is None else self.competencies_back
+            return {"added": sent, "removed": [], "competencies": back}
         if function == "local_ltuse_get_course_manifest":
             return {"modules": list(self.server.values())}
         if function == "local_ltuse_create_page":
@@ -55,12 +83,14 @@ class FakeClient:
                 self.server[params["idnumber"]] = m = {
                     "idnumber": params["idnumber"], "cmid": self.next_cmid,
                     "modname": "page", "files": []}
-                return {"cmid": m["cmid"], "created": True, "outcome": "created"}
+                return {"cmid": m["cmid"], "created": True, "outcome": "created",
+                        "completion": self.completion.get(params["idnumber"], "set")}
             sends_files = params.get("syncfiles") or params.get("contentitemid")
             same = m.get("content") == params["content"] and not sends_files
             m["content"] = params["content"]
             return {"cmid": m["cmid"], "created": False,
-                    "outcome": "unchanged" if same else "updated"}
+                    "outcome": "unchanged" if same else "updated",
+                    "completion": self.completion.get(params["idnumber"], "unchanged")}
         if function == "local_ltuse_hide_modules":
             out = []
             for idn in params["idnumbers"]:
@@ -80,7 +110,8 @@ class FakeClient:
         if function == "local_ltuse_create_quiz":
             m = self.server.setdefault(params["idnumber"], {
                 "idnumber": params["idnumber"], "cmid": 950, "modname": "quiz", "files": []})
-            return {"cmid": m["cmid"]}
+            return {"cmid": m["cmid"],
+                    "completion": self.completion.get(params["idnumber"], "set")}
         return {}
 
     def page_calls(self):
@@ -89,8 +120,17 @@ class FakeClient:
     def hide_calls(self):
         return [p for f, p in self.calls if f == "local_ltuse_hide_modules"]
 
+    def calls_to(self, function):
+        return [p for f, p in self.calls if f == function]
 
-class Publish(unittest.TestCase):
+    def writes(self):
+        return [f for f, _ in self.calls
+                if f.startswith("local_ltuse_") and f != "local_ltuse_get_course_manifest"]
+
+
+class PublishBase(unittest.TestCase):
+    """A two-page payload written by hand into a temp dir, and the helpers to publish it."""
+
     def setUp(self):
         self._tmp = tempfile.TemporaryDirectory()
         self.dir = pathlib.Path(self._tmp.name)
@@ -110,20 +150,30 @@ class Publish(unittest.TestCase):
     def tearDown(self):
         self._tmp.cleanup()
 
-    def write_manifest(self, quizzes=()):
+    def write_manifest(self, quizzes=(), competencies=("Translation Tools",),
+                       level="2 - With Assistance", delivery=False):
         sections = []
         for n, (source, (html, assets)) in enumerate(sorted(self.pages.items()), start=1):
             stem = source[:-3]
             (self.dir / "pages" / ("%s.html" % stem)).write_text(html, encoding="utf-8")
             sections.append({"number": n, "name": stem, "modules": [{
                 "kind": "page", "idnumber": mid(source), "name": stem, "source": source,
-                "html_file": "pages/%s.html" % stem, "assets": assets}]})
+                "html_file": "pages/%s.html" % stem, "assets": assets,
+                "completion": "view"}]})
+        for q in quizzes:
+            sections.append({"number": len(sections) + 1, "name": q["name"], "modules": [{
+                "kind": "quiz", "idnumber": q["idnumber"], "name": q["name"],
+                "source": q["source"], "completion": q["completion"]}]})
         manifest = {
             "slug": "demo", "idnumber": COURSE, "title": "Demo", "summary_html": "",
             "publishable": True, "blocked_reason": None, "sections": sections,
             "quizzes": list(quizzes), "withheld": [], "notes": [],
+            "completion": "all", "competencies": list(competencies),
+            "target_outcome_level": level,
             "discussion": {"idnumber": COURSE + ":discussion", "name": "Course discussion",
                            "intro_html": "", "shared": False},
+            "recognition": {"delivery": delivery, **(
+                {"certificate": {"idnumber": "%s:certificate" % COURSE}} if delivery else {})},
             "assets": {n: {"sha1": hashlib.sha1(d).hexdigest(), "bytes": len(d)}
                        for n, d in self.images.items()},
         }
@@ -153,6 +203,8 @@ class Publish(unittest.TestCase):
             pm.publish(client, self.dir, 1)
         return out.getvalue()
 
+
+class Publish(PublishBase):
     # (a)
     def test_unchanged_republish_sends_nothing(self):
         client = FakeClient(self.server_as_published())
@@ -249,10 +301,12 @@ class Publish(unittest.TestCase):
                          [mid("01-one-old-name.md"), mid("09-quiz.md")])
         self.assertEqual(calls[0]["courseidnumber"], COURSE)
         self.assertIn("retired: 2 module(s)", out)
-        # Retiring is the last write: nothing is retired before its replacement exists.
-        writes = [f for f, _ in client.calls if f.startswith("local_ltuse_")
-                  and f != "local_ltuse_get_course_manifest"]
-        self.assertEqual(writes[-1], "local_ltuse_hide_modules")
+        # Retiring follows every content write: nothing is retired before its replacement
+        # exists. Only the course completion criteria (spec 004) and then the badge (spec
+        # 013) come after it.
+        self.assertEqual(client.writes()[-3:], ["local_ltuse_hide_modules",
+                                                "local_ltuse_set_course_completion",
+                                                "local_ltuse_set_course_recognition"])
 
     def test_already_retired_module_is_not_sent_again(self):
         mods = self.server_as_published()
@@ -326,22 +380,40 @@ MANIFEST = {
 
 
 class StubClient:
-    """Records every call. dry_run is False, so ensure_course reaches the update path."""
+    """Records every call. dry_run is False, so ensure_course reaches the update path.
+
+    The course's custom fields read back as what was sent, less any named in `drop`
+    (Moodle drops an unknown or locked field silently). `warnings` is what
+    core_course_update_courses answers.
+    """
     dry_run = False
 
-    def __init__(self, existing):
+    def __init__(self, existing, warnings=(), drop=()):
         self.existing = existing
         self.calls = []
+        self.warnings = list(warnings)
+        self.drop = set(drop)
+        self.fields = {}
 
     def course_by_idnumber(self, idnumber):
         self.calls.append(("course_by_idnumber", {"idnumber": idnumber}))
-        return self.existing
+        created = any(n == "core_course_create_courses" for n, _ in self.calls)
+        if self.existing is None and not created:
+            return None
+        course = dict(self.existing or {"id": 9})
+        course["customfields"] = [{"shortname": k, "value": v, "valueraw": v}
+                                  for k, v in self.fields.items()]
+        return course
 
     def call(self, function, **params):
         self.calls.append((function, params))
+        for course in params.get("courses", []):
+            for f in course.get("customfields", []):
+                if f["shortname"] not in self.drop:
+                    self.fields[f["shortname"]] = f["value"]
         if function == "core_course_create_courses":
             return [{"id": 9, "shortname": params["courses"][0]["shortname"]}]
-        return {"warnings": []}
+        return {"warnings": self.warnings}
 
 
 def course_payload(client, function):
@@ -400,6 +472,304 @@ class EnsureCourseGroupMode(unittest.TestCase):
             for name, params in client.calls:
                 for course in params.get("courses", []):
                     self.assertNotIn("groupmodeforce", course)
+
+
+# --- spec 004 ------------------------------------------------------------------------------
+
+QUIZ = {"idnumber": mid("03"), "name": "Quiz", "source": "03-quiz.md", "section": 3,
+        "category": "demo / 03-quiz", "threshold_pct": 80, "completion": "pass",
+        "questions": [{"idnumber": mid("03:q1.1"), "name": "Q1", "text_html": "<p>Q</p>",
+                       "single": True, "feedback_html": "", "section": None,
+                       "answers": [{"letter": "A", "text_html": "A", "correct": True},
+                                   {"letter": "B", "text_html": "B", "correct": False}]}]}
+
+
+class FakePayload:
+    """Stands in for moodle_payload.Payload: the manifest is the one already on disk."""
+    dir = None
+
+    def __init__(self, folder, view):
+        pass
+
+    def build(self):
+        manifest = json.loads((self.dir / "manifest.json").read_text(encoding="utf-8"))
+        return manifest, {}, {}
+
+
+class Main(PublishBase):
+    """Drives main() end to end, with the build, the gate and the client replaced."""
+
+    def run_main(self, client, *argv):
+        FakePayload.dir = self.dir
+        saved = {n: getattr(pm, n) for n in
+                 ("resolve_folder", "Payload", "write_payload", "verify",
+                  "report_images", "MoodleClient")}
+        pm.resolve_folder = lambda slug: self.dir
+        pm.Payload = FakePayload
+        pm.write_payload = lambda manifest, pages, assets, out: self.dir
+        pm.verify = lambda out, slug: True
+        pm.report_images = lambda manifest: None
+        pm.MoodleClient = lambda dry_run=False: client
+        old_argv = sys.argv
+        sys.argv = ["publish_moodle.py", "--slug", "demo",
+                    "--keep-payload", str(self.dir), *argv]
+        out = io.StringIO()
+        try:
+            with contextlib.redirect_stdout(out), contextlib.redirect_stderr(out):
+                rc = pm.main()
+        finally:
+            sys.argv = old_argv
+            for n, v in saved.items():
+                setattr(pm, n, v)
+        return rc, out.getvalue()
+
+
+class Completion(Main):
+    """US1: the one completion rule reaches every module and the course criteria."""
+
+    def test_ensure_course_switches_completion_on(self):
+        for existing in ({"id": 5}, None):
+            client = StubClient(existing)
+            pm.ensure_course(client, MANIFEST, 3)
+            fn = "core_course_update_courses" if existing else "core_course_create_courses"
+            self.assertEqual(course_payload(client, fn)["enablecompletion"], 1)
+
+    def test_every_module_call_carries_its_completion(self):
+        self.write_manifest(quizzes=[QUIZ])
+        client = FakeClient([])
+        self.publish(client)
+        pages = client.page_calls()
+        self.assertEqual(len(pages), 3, "pass 1 twice, pass 2 once")
+        for p in pages:
+            self.assertEqual(p["completion"], "view")
+        quiz = client.calls_to("local_ltuse_create_quiz")
+        self.assertEqual([q["completion"] for q in quiz], ["pass"])
+
+    def test_course_completion_is_set_once_after_hiding_and_last(self):
+        mods = self.server_as_published()
+        mods.append({"idnumber": mid("09"), "cmid": 121, "modname": "quiz", "files": []})
+        client = FakeClient(mods)
+        self.publish(client)
+        calls = client.calls_to("local_ltuse_set_course_completion")
+        self.assertEqual(calls, [{"courseidnumber": COURSE}])
+        writes = client.writes()
+        self.assertEqual(writes[-2:], ["local_ltuse_set_course_completion",
+                                       "local_ltuse_set_course_recognition"])
+        self.assertLess(writes.index("local_ltuse_hide_modules"),
+                        writes.index("local_ltuse_set_course_completion"))
+
+    def test_course_completion_is_last_with_nothing_to_hide(self):
+        # Last but for the badge, which must see the final criteria (spec 013).
+        client = FakeClient(self.server_as_published())
+        self.publish(client)
+        self.assertEqual(client.writes()[-2:], ["local_ltuse_set_course_completion",
+                                                "local_ltuse_set_course_recognition"])
+
+    def test_output_counts_added_and_removed_criteria(self):
+        client = FakeClient(self.server_as_published())
+        client.course_completion.update(added=[101, 102], removed=[120], reaggregated=3)
+        out = self.publish(client)
+        self.assertIn("completion  2 added, 1 removed", out)
+
+    def test_differs_names_the_module_and_exits_1_after_the_summary(self):
+        client = FakeClient(self.server_as_published())
+        client.completion[mid("02-two.md")] = "differs"
+        rc, out = self.run_main(client)
+        self.assertEqual(rc, 1)
+        self.assertIn(mid("02-two.md"), out.split("published. Course URL")[-1])
+        self.assertIn("differs", out)
+        # The publish itself completed: the criteria were still written.
+        self.assertEqual(len(client.calls_to("local_ltuse_set_course_completion")), 1)
+        self.assertLess(out.index("pages:"), out.rindex(mid("02-two.md")))
+
+    def test_no_differs_exits_0(self):
+        rc, out = self.run_main(FakeClient(self.server_as_published()))
+        self.assertEqual(rc, 0, out)
+
+    def test_dry_run_lists_course_completion_and_sends_nothing(self):
+        import urllib.request
+        client = pm.MoodleClient(dry_run=True)
+
+        def refuse(*a, **k):
+            raise AssertionError("a dry run must send nothing")
+        saved, urllib.request.urlopen = urllib.request.urlopen, refuse
+        try:
+            rc, out = self.run_main(client, "--dry-run")
+        finally:
+            urllib.request.urlopen = saved
+        self.assertEqual(rc, 0, out)
+        names = [f for f, _ in client.calls]
+        self.assertIn("local_ltuse_set_course_completion", names)
+        self.assertIn("local_ltuse_set_course_competencies", names)
+        self.assertIn("nothing was sent", out)
+        self.assertIn("completion view", out)
+        self.assertNotIn("not applied", out)
+
+    def test_a_module_completion_not_applied_is_said(self):
+        # '' is the plugin's answer when completion is off for the site or the course.
+        client = FakeClient(self.server_as_published())
+        client.completion[mid("01-one.md")] = ""
+        out = self.publish(client)
+        self.assertIn("not applied to 1 module(s)", out)
+
+
+class Recognition(Main):
+    """Spec 013: the badge after completion, the certificate on delivery only."""
+
+    def test_pilot_sends_no_certificate_and_says_so(self):
+        client = FakeClient(self.server_as_published())
+        out = self.publish(client)
+        self.assertEqual(client.calls_to("local_ltuse_set_course_recognition"),
+                         [{"courseidnumber": COURSE, "delivery": False}])
+        self.assertIn("recognition  badge unchanged, inactive (pilot: no badge is issued "
+                      "until stage 8)", out)
+
+    def test_delivery_sends_the_certificate_idnumber(self):
+        self.write_manifest(delivery=True)
+        client = FakeClient(self.server_as_published())
+        client.recognition.update(badge="updated", status="active", certificate="unchanged")
+        out = self.publish(client)
+        self.assertEqual(client.calls_to("local_ltuse_set_course_recognition"),
+                         [{"courseidnumber": COURSE, "delivery": True,
+                           "certificateidnumber": COURSE + ":certificate"}])
+        self.assertIn("recognition  badge updated, active; certificate unchanged", out)
+        self.assertNotIn("pilot", out)
+
+    def test_the_certificate_is_never_retired(self):
+        # On the server, not a module of the payload, on a delivery or a pilot publish (R14).
+        for delivery in (True, False):
+            self.write_manifest(delivery=delivery)
+            mods = self.server_as_published()
+            mods.append({"idnumber": COURSE + ":certificate", "cmid": 140,
+                         "modname": "customcert", "files": []})
+            client = FakeClient(mods)
+            self.publish(client)
+            self.assertEqual(client.hide_calls(), [], delivery)
+
+    def test_a_warning_is_a_problem_and_exits_1(self):
+        client = FakeClient(self.server_as_published())
+        client.recognition["warnings"] = [{"code": "active-not-delivery",
+                                           "message": "left active"}]
+        rc, out = self.run_main(client)
+        self.assertEqual(rc, 1)
+        tail = out.split("NEEDS A DECISION")[-1]
+        self.assertIn("recognition active-not-delivery: left active", tail)
+
+    def test_a_refusal_stops_the_publish(self):
+        client = FakeClient(self.server_as_published())
+
+        def refuse(function, **params):
+            if function == "local_ltuse_set_course_recognition":
+                raise pm.MoodleError(function, {"message": "recognition-not-applied"})
+            return FakeClient.call(client, function, **params)
+        client.call = refuse
+        rc, out = self.run_main(client)
+        self.assertEqual(rc, 1)
+        self.assertIn("recognition-not-applied", out)
+
+    def test_dry_run_names_the_call_and_sends_nothing(self):
+        client = FakeClient(self.server_as_published(), dry_run=True)
+        out = self.publish(client)
+        self.assertIn("local_ltuse_set_course_recognition", [f for f, _ in client.calls])
+        self.assertIn("recognition  dry-run: badge (pilot", out)
+
+
+class Competencies(Main):
+    """US5: the course's competencies and target level reach Moodle, and read back."""
+
+    def test_course_fields_on_update_and_create(self):
+        manifest = dict(MANIFEST, competencies=["Translation Tools", "Fonts & Encoding"],
+                        target_outcome_level="2 - With Assistance")
+        for existing in ({"id": 5}, None):
+            client = StubClient(existing)
+            problems = []
+            pm.ensure_course(client, manifest, 3, problems=problems)
+            fn = "core_course_update_courses" if existing else "core_course_create_courses"
+            fields = {f["shortname"]: f["value"]
+                      for f in course_payload(client, fn)["customfields"]}
+            self.assertEqual(fields, {
+                "ltct_competencies": "[Translation Tools] [Fonts & Encoding]",
+                "ltct_target_level": "2 - With Assistance"})
+            self.assertEqual(problems, [])
+
+    def test_absent_level_is_sent_empty(self):
+        client = StubClient({"id": 5})
+        pm.ensure_course(client, dict(MANIFEST, target_outcome_level=None), 3)
+        fields = {f["shortname"]: f["value"]
+                  for f in course_payload(client, "core_course_update_courses")["customfields"]}
+        self.assertEqual(fields["ltct_target_level"], "")
+        self.assertEqual(fields["ltct_competencies"], "")
+
+    def test_update_warnings_fail_the_publish(self):
+        client = StubClient({"id": 5}, warnings=[{"item": "course", "itemid": 5,
+                                                   "warningcode": "1", "message": "nope"}])
+        with self.assertRaises(pm.MoodleError) as e:
+            pm.ensure_course(client, MANIFEST, 3)
+        self.assertIn("nope", str(e.exception))
+
+    def test_a_silently_dropped_field_is_a_problem(self):
+        client = StubClient({"id": 5}, drop={"ltct_target_level"})
+        problems = []
+        pm.ensure_course(client, dict(MANIFEST, target_outcome_level="3 - Independent"), 3,
+                         problems=problems)
+        self.assertEqual(len(problems), 1)
+        self.assertIn("ltct_target_level", problems[0])
+
+    def test_meta_is_dropped_and_said(self):
+        self.write_manifest(competencies=["Translation Tools", "Uncategorized"])
+        client = FakeClient(self.server_as_published())
+        out = self.publish(client)
+        self.assertIn("competencies  skipped Meta: Uncategorized", out)
+        calls = client.calls_to("local_ltuse_set_course_competencies")
+        self.assertEqual(calls, [{"courseid": 7, "competencies": ["Translation Tools"]}])
+        update = client.calls_to("core_course_update_courses")[0]["courses"][0]
+        fields = {f["shortname"]: f["value"] for f in update["customfields"]}
+        # The field mirrors the frontmatter (data-model R11); only the per-competency
+        # table drops Meta names (contracts/publish.md step 2).
+        self.assertEqual(fields["ltct_competencies"], "[Translation Tools] [Uncategorized]")
+
+    def test_duplicate_competency_is_sent_once_and_not_a_difference(self):
+        self.write_manifest(competencies=["Translation Tools", "Keyboards",
+                                          "Translation Tools"])
+        client = FakeClient(self.server_as_published())
+        # The plugin keeps each name once (array_unique), as the real one does.
+        client.competencies_back = ["Translation Tools", "Keyboards"]
+        rc, out = self.run_main(client)
+        self.assertEqual(rc, 0, out)
+        calls = client.calls_to("local_ltuse_set_course_competencies")
+        self.assertEqual(calls[0]["competencies"], ["Translation Tools", "Keyboards"])
+        update = client.calls_to("core_course_update_courses")[0]["courses"][0]
+        fields = {f["shortname"]: f["value"] for f in update["customfields"]}
+        self.assertEqual(fields["ltct_competencies"], "[Translation Tools] [Keyboards]")
+
+    def test_competencies_follow_ensure_course_and_precede_content(self):
+        client = FakeClient(self.server_as_published())
+        out = self.publish(client)
+        names = [f for f, _ in client.calls]
+        self.assertLess(names.index("core_course_update_courses"),
+                        names.index("local_ltuse_set_course_competencies"))
+        self.assertLess(names.index("local_ltuse_set_course_competencies"),
+                        names.index("local_ltuse_create_page"))
+        self.assertIn("competencies  1 added, 0 removed", out)
+        self.assertNotIn("skipped Meta", out)
+
+    def test_read_back_that_differs_prints_both_and_exits_1(self):
+        client = FakeClient(self.server_as_published())
+        client.competencies_back = ["Keyboards"]
+        rc, out = self.run_main(client)
+        self.assertEqual(rc, 1)
+        tail = out.split("published. Course URL")[-1]
+        self.assertIn("Translation Tools", tail)
+        self.assertIn("Keyboards", tail)
+        # Still a complete publish: the content and the criteria were written.
+        self.assertEqual(len(client.calls_to("local_ltuse_set_course_completion")), 1)
+
+    def test_read_back_in_another_order_is_not_a_difference(self):
+        self.write_manifest(competencies=["Translation Tools", "Keyboards"])
+        client = FakeClient(self.server_as_published())
+        client.competencies_back = ["Keyboards", "Translation Tools"]
+        rc, out = self.run_main(client)
+        self.assertEqual(rc, 0, out)
 
 
 if __name__ == "__main__":

@@ -44,6 +44,24 @@ use core_plugin_manager;
  *   profile_fields [{category, shortname, name, datatype, ...}] profilefields
  *   cohort_rules   [{cohort_idnumber, name, condition, ...}]    cohortrules
  *
+ * and, from spec 004 (specs/004-progress-reporting/contracts/declaration.md "Output additions"),
+ * four more, checked after spec 002's in the same apply order:
+ *
+ *   course_field_category  "<name>"                                  coursefields
+ *   course_fields          [{shortname, name, type, locked, visibility}] coursefields
+ *   competencies           [{name, category, sortorder}]             competencies
+ *   reports                [{area, name, source, columns, ...}]      reports
+ *
+ * and, from spec 013 (specs/013-certificates-badges/contracts/declaration.md "Payload arrays"),
+ * two templates, checked after reports:
+ *
+ *   badge_template         {name, description, ..., image, deny}       badgetemplate
+ *   certificate_template   {name, activity_name, intro, font, pages}   certtemplate
+ *
+ * A spec 004 result may carry `blocking` => report::BLOCKS_REPORT, which leaves only its own
+ * report unwritten; has_blocking() delegates to report::has_blocking() so such a result does
+ * not stop the run.
+ *
  * Each check returns item results of this shape, which the report class renders:
  *
  *   type      'release' | 'plugin' | 'role' | 'setting', or a spec 002 type: 'category',
@@ -145,6 +163,21 @@ class inspector {
     /** @var profilefields|null checks the payload's profile field category and fields */
     protected $profilefields = null;
 
+    /** @var coursefields|null checks the payload's course field category and course fields */
+    protected $coursefields = null;
+
+    /** @var competencies|null checks the payload's competency list */
+    protected $competencies = null;
+
+    /** @var reports|null checks the payload's custom reports */
+    protected $reports = null;
+
+    /** @var badgetemplate|null checks the payload's badge template (spec 013) */
+    protected $badgetemplate = null;
+
+    /** @var certtemplate|null checks the payload's certificate template (spec 013) */
+    protected $certtemplate = null;
+
     /**
      * @param array $declaration the decoded JSON payload (associative arrays throughout)
      */
@@ -193,6 +226,92 @@ class inspector {
             $this->profilefields = new profilefields(self::entries($this->declaration['profile_fields'] ?? []));
         }
         return $this->profilefields;
+    }
+
+    // --- spec 004 checkers -----------------------------------------------------------------
+
+    /**
+     * Whether the payload declares course fields at all. An empty category with fields is
+     * still a declaration, so coursefields reports the missing category as blocking.
+     *
+     * @return bool
+     */
+    public function declares_course_fields(): bool {
+        return trim((string)($this->declaration['course_field_category'] ?? '')) !== ''
+            || self::entries($this->declaration['course_fields'] ?? []);
+    }
+
+    /**
+     * @return coursefields the checker for `course_field_category` and `course_fields`
+     */
+    public function coursefields(): coursefields {
+        if ($this->coursefields === null) {
+            $this->coursefields = new coursefields((string)($this->declaration['course_field_category'] ?? ''),
+                self::entries($this->declaration['course_fields'] ?? []));
+        }
+        return $this->coursefields;
+    }
+
+    /**
+     * Whether the payload declares a competency list. Only a non-empty list is managed:
+     * apply retires every live row a list leaves out, so an absent or empty list (a payload
+     * from before spec 004) must never be read as "retire them all". Check, apply and drift
+     * all use this one gate, so drift never reports what apply would not do.
+     *
+     * @return bool
+     */
+    public function declares_competencies(): bool {
+        return (bool)self::entries($this->declaration['competencies'] ?? []);
+    }
+
+    /**
+     * @return competencies the checker for the payload's `competencies`
+     */
+    public function competencies(): competencies {
+        if ($this->competencies === null) {
+            $this->competencies = new competencies(self::entries($this->declaration['competencies'] ?? []));
+        }
+        return $this->competencies;
+    }
+
+    /**
+     * The reports checker. Always present: with no `reports`, it checks nothing, and every
+     * `local_ltuse` report is undeclared, which is what drift should say.
+     *
+     * @return reports the checker for the payload's `reports`
+     */
+    public function reports(): reports {
+        if ($this->reports === null) {
+            $this->reports = new reports(self::entries($this->declaration['reports'] ?? []));
+        }
+        return $this->reports;
+    }
+
+    // --- spec 013 checkers -----------------------------------------------------------------
+
+    /**
+     * The badge template checker, or null when the payload declares none (a payload from
+     * before spec 013, or a site with no badges.yaml).
+     *
+     * @return badgetemplate|null
+     */
+    public function badgetemplate(): ?badgetemplate {
+        if ($this->badgetemplate === null && is_array($this->declaration['badge_template'] ?? null)) {
+            $this->badgetemplate = new badgetemplate($this->declaration['badge_template']);
+        }
+        return $this->badgetemplate;
+    }
+
+    /**
+     * The certificate template checker, or null when the payload declares none.
+     *
+     * @return certtemplate|null
+     */
+    public function certtemplate(): ?certtemplate {
+        if ($this->certtemplate === null && is_array($this->declaration['certificate_template'] ?? null)) {
+            $this->certtemplate = new certtemplate($this->declaration['certificate_template']);
+        }
+        return $this->certtemplate;
     }
 
     /**
@@ -317,13 +436,15 @@ class inspector {
     }
 
     /**
-     * Spec 002's item results, in apply order: categories (parents first), cohorts, the
-     * profile field category and fields, then cohort rules. WRITES NOTHING.
+     * Spec 002's and spec 004's item results, in apply order: categories (parents first),
+     * cohorts, the profile field category and fields, cohort rules, then the course field
+     * category and course fields, the competency list, and reports last. WRITES NOTHING.
      *
      * The order matters because a later check reads what an earlier one resolved: a category
      * whose parent does not exist yet is plain `missing`, and a rule whose cohort does not
      * exist yet is a non-blocking `missing`, since apply creates the parent and the cohort
-     * first.
+     * first. A report reads custom fields, profile fields and cohorts, so it comes last, and a
+     * column on a field this run will create blocks only that report.
      *
      * @return array[] item results
      */
@@ -337,6 +458,20 @@ class inspector {
         foreach (self::entries($this->declaration['cohort_rules'] ?? []) as $rule) {
             $items[] = cohortrules::check($rule);
         }
+        if ($this->declares_course_fields()) {
+            $items = array_merge($items, $this->coursefields()->check());
+        }
+        if ($this->declares_competencies()) {
+            $items = array_merge($items, $this->competencies()->check());
+        }
+        $items = array_merge($items, $this->reports()->check());
+        // Spec 013, after reports (contracts/declaration.md "Payload arrays").
+        if ($this->badgetemplate()) {
+            $items = array_merge($items, $this->badgetemplate()->check());
+        }
+        if ($this->certtemplate()) {
+            $items = array_merge($items, $this->certtemplate()->check());
+        }
         return $items;
     }
 
@@ -348,16 +483,15 @@ class inspector {
      * missing plugin, a forced setting, an `ambiguous` category, a `wrong-context` cohort, a
      * `wrong-datatype` profile field or an unreadable cohort rule.
      *
+     * A report-scoped result (`blocking` => report::BLOCKS_REPORT, spec 004) does not count
+     * here: it leaves only its own report unwritten, and reports::apply() enforces that. The
+     * rule lives once, in report::has_blocking().
+     *
      * @param array[] $items
      * @return bool
      */
     public static function has_blocking(array $items): bool {
-        foreach ($items as $item) {
-            if (!empty($item['blocking'])) {
-                return true;
-            }
-        }
-        return false;
+        return report::has_blocking($items);
     }
 
     /**

@@ -31,6 +31,10 @@ assumed knowledge the learner doesn't have.
    The design document, mentor guide, video scripts and every answer key are held back;
    the correct answers reach Moodle only inside the quiz, where Moodle protects them.
 
+   **Enrol the pilot learner with the course's manual enrolment method, never through a
+   cohort**: how a learner was enrolled is what keeps pilot results out of the delivery
+   reports.
+
    > **Don't send the `/review/` URL to a pilot learner.** That one is the reviewer view
    > and contains the answer key and the mentor guide's scoring notes.
 

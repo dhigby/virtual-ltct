@@ -17,7 +17,9 @@ reads the built review site. Nothing is pushed that has not been read back and v
 
 WHAT COMES OUT
 
-    <out>/<slug>/manifest.json      the structure: sections, modules, quizzes
+    <out>/<slug>/manifest.json      the structure: sections, modules, quizzes, and the
+                                    course discussion (spec 012; sharing from
+                                    moodle/site/course-discussions.yaml)
     <out>/<slug>/pages/<name>.html  one rendered page per included markdown file
     <out>/<slug>/assets/<name>      every asset a published page references, as the
                                     LIGHTER copy scripts/image_reduce.py makes of it --
@@ -67,6 +69,7 @@ import yaml
 sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent))
 import disclosure  # noqa: E402
 import image_reduce  # noqa: E402
+import site_config  # noqa: E402
 from course_stage import branch_slug, is_lesson  # noqa: E402
 from quiz_parse import QuizError, parse_quiz_file  # noqa: E402
 
@@ -111,6 +114,17 @@ WITHHELD_HTML = (
     '<p>This quiz could not be published because its answer key could not be cleanly '
     'separated from the questions. Ask your facilitator for a copy.</p>\n'
     '</div>\n')
+
+# The course discussion (spec 012, FR-015). One forum per course, named and introduced
+# here and set on creation only, so a mentor's later edits survive a republish. The intro
+# stays true whether the course is separated by organisation or declared shared, because
+# sharing can change after the forum exists.
+DISCUSSION_NAME = "Course discussion"
+DISCUSSION_INTRO_MD = (
+    "Ask questions about this course here, and help each other with the answers. "
+    "Your mentor reads this forum too.\n\n"
+    "Keep a translation team's files and anything a partner has not agreed to share out "
+    "of your posts: describe the problem instead.")
 
 
 def wrap(html):
@@ -166,9 +180,10 @@ def idnumber(slug, key):
 
 
 class Payload:
-    def __init__(self, folder, view):
+    def __init__(self, folder, view, site_dir=None):
         self.folder = folder
         self.view = view
+        self.site_dir = site_dir     # moodle/site/ unless a test points elsewhere
         self.slug = folder.name
         self.url_slug = branch_slug(folder.name)
         self.notes = []
@@ -308,6 +323,7 @@ class Payload:
             "content_type": meta.get("content_type"),
             "sections": sections,
             "quizzes": quizzes,
+            "discussion": self._discussion(),
             "withheld": self.withheld,
             "notes": self.notes,
             "assets": records,
@@ -372,6 +388,27 @@ class Payload:
                 if total > PAGE_BUDGET:
                     self.notes.append("%s: %d KB with images exceeds the 1 MB page budget"
                                       % (mod["source"], round(total / 1024)))
+
+    def _discussion(self):
+        """Every course gets one, backfilled courses included (FR-015, contracts/payload.md).
+
+        `shared` comes from moodle/site/course-discussions.yaml through
+        site_config.load_discussions(), the loader drift uses, so the two cannot disagree.
+        An invalid declaration stops the build rather than guessing: separated is the safe
+        default, but a typo that silently un-shares (or a future one that shares) a course
+        is a decision nobody made.
+        """
+        shared, problems = site_config.load_discussions(self.site_dir)
+        if problems:
+            raise SystemExit("moodle/site/%s is invalid; run scripts/site_config.py "
+                             "validate:\n  %s" % (site_config.DISCUSSIONS_FILE,
+                                                  "\n  ".join(problems.items)))
+        return {
+            "idnumber": idnumber(self.slug, "discussion"),
+            "name": DISCUSSION_NAME,
+            "intro_html": render(DISCUSSION_INTRO_MD),
+            "shared": self.url_slug in {e["slug"] for e in shared},
+        }
 
     def _page(self, path, asset_by_rel, module_ids, excluded_names, used_assets):
         raw = path.read_text(encoding="utf-8", errors="replace")
@@ -558,6 +595,10 @@ def main():
     print("  quizzes   %d (%d question(s))" % (len(manifest["quizzes"]), n_q))
     print("  assets    %d" % len(assets))
     report_images(manifest)
+    print("  discussion %s (%s)" % (manifest["discussion"]["idnumber"],
+                                    "shared across organisations"
+                                    if manifest["discussion"]["shared"]
+                                    else "separated by organisation"))
     for note in manifest["notes"]:
         print("  note      %s" % note)
     if manifest["withheld"]:

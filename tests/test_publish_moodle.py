@@ -70,6 +70,11 @@ class FakeClient:
                             "outcome": "alreadyretired" if done else "retired"})
                 m["visible"], m["retired"] = 0, True
             return {"modules": out}
+        if function == "local_ltuse_ensure_discussion":
+            created = params["idnumber"] not in self.server
+            m = self.server.setdefault(params["idnumber"], {
+                "idnumber": params["idnumber"], "cmid": 960, "modname": "forum", "files": []})
+            return {"cmid": m["cmid"], "created": created, "groupmode": 1, "courseforced": False}
         if function == "local_ltuse_import_questions":
             return {"count": 1}
         if function == "local_ltuse_create_quiz":
@@ -117,6 +122,8 @@ class Publish(unittest.TestCase):
             "slug": "demo", "idnumber": COURSE, "title": "Demo", "summary_html": "",
             "publishable": True, "blocked_reason": None, "sections": sections,
             "quizzes": list(quizzes), "withheld": [], "notes": [],
+            "discussion": {"idnumber": COURSE + ":discussion", "name": "Course discussion",
+                           "intro_html": "", "shared": False},
             "assets": {n: {"sha1": hashlib.sha1(d).hexdigest(), "bytes": len(d)}
                        for n, d in self.images.items()},
         }
@@ -278,6 +285,16 @@ class Publish(unittest.TestCase):
         out = self.publish(client)
         self.assertEqual(client.hide_calls(), [])
         self.assertNotIn("retire", out)
+
+    def test_discussion_forum_is_never_hidden(self):
+        # Spec 012: the forum's idnumber starts ltct:<slug>: like a module's, but no file
+        # produces it, so the hide step must still count it as this run's.
+        mods = self.server_as_published()
+        mods.append({"idnumber": COURSE + ":discussion", "cmid": 960, "modname": "forum",
+                     "files": []})
+        client = FakeClient(mods)
+        self.publish(client)
+        self.assertEqual(client.hide_calls(), [])
 
     def test_dry_run_hides_nothing(self):
         mods = self.server_as_published()

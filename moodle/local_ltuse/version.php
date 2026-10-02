@@ -9,8 +9,8 @@
 defined('MOODLE_INTERNAL') || die();
 
 $plugin->component = 'local_ltuse';
-$plugin->version   = 2026100202;   // hide_modules retires a module: hidden, moved to a Retired
-                                   // section kept last, never deleted. moodle/site/site.yaml
+$plugin->version   = 2026100203;   // ensure_discussion (spec 012), after hide_modules retired a
+                                   // module into a hidden Retired section. moodle/site/site.yaml
                                    // pins local_ltuse to this stamp; validate fails if they differ.
 
 // PIN THIS DELIBERATELY. Moodle 5.0 moved the question bank out of course context and

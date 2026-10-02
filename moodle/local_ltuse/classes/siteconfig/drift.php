@@ -17,9 +17,13 @@ defined('MOODLE_INTERNAL') || die();
  *      does not list (unmanaged, research R5);
  *   4. items this site owns that are no longer declared (extra, spec 002): an `ltct:`
  *      category or cohort, an `ltct_` profile field, and an `ltct: `-named cohort rule.
+ *   5. the discussion forum of every ltct: course against course-discussions.yaml (spec 012):
+ *      differs, missing, and the warnings forced and allparticipants. allparticipants is a
+ *      count only, never a subject, a post or a name (constitution III).
  *
  * A setting forced in config.php is skipped in pass 3: config.php belongs to provisioning,
- * not to this declaration (R6). Any difference makes the run exit 1 (FR-008).
+ * not to this declaration (R6). Any difference makes the run exit 1 (FR-008); a warning is
+ * printed as [skip] and counts as a difference too, because someone should look at it.
  *
  * Pass 4 only reports. Nothing undeclared is ever deleted (FR-004), and none of its items
  * blocks apply. A cohort is reported by idnumber and name only: no member is read, listed or
@@ -62,6 +66,18 @@ class drift {
         $this->report_extra_plugins($declaration);
         $this->report_unmanaged_settings($declaration);
         $this->report_extra_owned($declaration);
+        $this->report_discussions();
+    }
+
+    /**
+     * Pass 5: each published course's discussion forum (spec 012, R5).
+     */
+    protected function report_discussions(): void {
+        foreach ($this->inspector->discussion_targets() as $target) {
+            foreach ($this->inspector->check_discussion($target) as $item) {
+                $this->report->add_result($item);
+            }
+        }
     }
 
     /**

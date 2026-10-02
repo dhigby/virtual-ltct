@@ -348,7 +348,13 @@ def main():
         print(f"modules/{only} has no 00-design.md — not opted into the pipeline; nothing to check.")
         return
 
-    all_errors, all_warnings = [], []
+    # The design gate (spec 012, FR-001). Checked across every course, opted in or not:
+    # an assignment file is a new kind of package file with mentor-only content, and
+    # nothing yet knows how to keep that content from a learner.
+    all_errors = [f"{p.relative_to(MODULES).as_posix()}: assignments wait on the spec 012 "
+                  f"design approval -- remove this file until it is recorded"
+                  for p in sorted(MODULES.rglob("*-assignment.md"))]
+    all_warnings = []
     for f in folders:
         e, w = check_course(f)
         all_errors += e

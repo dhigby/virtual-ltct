@@ -22,7 +22,9 @@ defined('MOODLE_INTERNAL') || die();
  * No item may name a user. Subjects are setting keys, plugin components and
  * role:capability pairs only (FR-009), and from spec 002 category:, cohort:,
  * profilecategory:, profilefield: and cohortrule: items. A cohort is reported by idnumber
- * and name only: never its members, never a member count.
+ * and name only: never its members, never a member count. From spec 012, ltct: course and
+ * discussion idnumbers, whose values are group modes and counts, never a post or a name
+ * (constitution III).
  *
  * Exit codes (FR-010, research R11): 0 clean or applied, 1 drift found or a step failed,
  * 2 usage or configuration error.
@@ -41,7 +43,9 @@ class report {
      */
     const KINDS = ['', 'changed', 'missing', 'extra', 'unmanaged', 'wrong-release',
         'pending-upgrade', 'forced', 'unknown', 'env-missing', 'below-minimum',
-        'adopted', 'ambiguous', 'wrong-context', 'wrong-datatype'];
+        'adopted', 'ambiguous', 'wrong-context', 'wrong-datatype',
+        // Spec 012 course discussions (contracts/site-declaration.md).
+        'differs', 'allparticipants'];
 
     /**
      * Kinds that are only ever reported with one status. `adopted` is a category given its
@@ -259,8 +263,9 @@ class report {
     }
 
     /**
-     * Add one inspector result. An ok result is `[ok]`; anything else is `[fail]` with the
-     * result as its kind, unless the caller passes the status it ended in (an apply write).
+     * Add one inspector result. An ok result is `[ok]`; a result marked `warning` is `[skip]`
+     * (something to look at that no write can fix, spec 012); anything else is `[fail]` with
+     * the result as its kind, unless the caller passes the status it ended in (an apply write).
      *
      * @param array $result an item result from inspector
      * @param string|null $status override, e.g. 'changed' after a successful write
@@ -272,7 +277,8 @@ class report {
             $this->mark_secret($result['item']);
         }
         $ok = $result['result'] === 'ok';
-        $this->add($status ?? ($ok ? 'ok' : 'fail'), $ok ? '' : $result['result'], $result['item'],
+        $default = $ok ? 'ok' : (!empty($result['warning']) ? 'skip' : 'fail');
+        $this->add($status ?? $default, $ok ? '' : $result['result'], $result['item'],
             $result['declared'], $result['live'], $message ?? (string)$result['message']);
     }
 

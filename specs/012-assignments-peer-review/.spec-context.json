@@ -1,9 +1,9 @@
 {
-  "workflow": "speckit",
+  "workflow": "companion",
   "specName": "Assignments and peer review in courses",
   "branch": "specs/moodle-requirements",
-  "currentStep": "specify",
-  "status": "specified",
+  "currentStep": "implement",
+  "status": "implementing",
   "history": [
     {
       "step": "specify",
@@ -11,7 +11,684 @@
       "kind": "start",
       "by": "extension",
       "at": "2026-09-30T20:47:09.692Z"
+    },
+    {
+      "step": "plan",
+      "substep": null,
+      "kind": "complete",
+      "by": "extension",
+      "at": "2026-10-01T21:48:00.977Z"
+    },
+    {
+      "step": "tasks",
+      "substep": null,
+      "kind": "start",
+      "by": "extension",
+      "at": "2026-10-01T21:48:55.349Z"
+    },
+    {
+      "step": "tasks",
+      "substep": "generate",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-01T21:53:17.588Z"
+    },
+    {
+      "step": "tasks",
+      "substep": null,
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-01T21:53:18.773Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "kind": "start",
+      "by": "extension",
+      "at": "2026-10-01T21:56:20.452Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T001",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-01T21:56:55.663Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T002",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-01T21:57:08.033Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T011",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-01T21:58:06.231Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T012",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-01T21:58:06.481Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T005",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-01T21:58:55.700Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T003",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-01T21:59:00.107Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T004",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-01T21:59:12.010Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T007",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-01T22:00:14.879Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T008",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-01T22:00:31.039Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T010",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-01T22:00:49.778Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T056",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-01T22:01:13.536Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T017",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-01T22:04:49.628Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T018",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-01T22:04:49.738Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T019",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-01T22:04:49.848Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T015",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-01T22:05:19.072Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T020",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-01T22:05:19.187Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T021",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-01T22:05:34.381Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T022",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-01T22:06:00.812Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T016",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-01T22:06:20.707Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T023",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-01T22:06:20.824Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T024",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-01T22:06:38.858Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T026",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-01T22:06:44.470Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T013",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-02T14:29:52.495Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "kind": "complete",
+      "by": "extension",
+      "at": "2026-10-02T14:35:04.579Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "kind": "complete",
+      "by": "extension",
+      "at": "2026-10-02T14:35:07.039Z"
     }
   ],
-  "telemetryInstanceId": "7d063714-b140-46b3-b87c-99c6b97d764f"
+  "telemetryInstanceId": "7d063714-b140-46b3-b87c-99c6b97d764f",
+  "coverage": {
+    "FR-001": {
+      "title": "Approved design before any assignment file or build",
+      "tasks": [
+        "T001",
+        "T012",
+        "T014"
+      ]
+    },
+    "FR-002": {
+      "title": "Brief, criteria, notes and model answer as raw-readable markdown",
+      "tasks": [
+        "T011",
+        "T030"
+      ]
+    },
+    "FR-003": {
+      "title": "Name learner-visible vs mentor-only parts",
+      "tasks": [
+        "T011",
+        "T007",
+        "T030"
+      ]
+    },
+    "FR-004": {
+      "title": "Disclosure rules in the one definition, fail closed",
+      "tasks": [
+        "T003",
+        "T007",
+        "T039",
+        "T040"
+      ]
+    },
+    "FR-005": {
+      "title": "Assignments pass through the production stages",
+      "tasks": [
+        "T011",
+        "T031",
+        "T034",
+        "T035",
+        "T036",
+        "T038"
+      ]
+    },
+    "FR-006": {
+      "title": "Moodle identity so republish updates, not duplicates",
+      "tasks": [
+        "T011",
+        "T032",
+        "T045"
+      ]
+    },
+    "FR-007": {
+      "title": "Reviewer and learner views of assignments",
+      "tasks": [
+        "T011",
+        "T040",
+        "T044"
+      ]
+    },
+    "FR-008": {
+      "title": "Republish never overwrites learner work",
+      "tasks": [
+        "T004",
+        "T010",
+        "T018",
+        "T032",
+        "T046"
+      ]
+    },
+    "FR-008a": {
+      "title": "Author declares optional or required, default optional",
+      "tasks": [
+        "T011",
+        "T028",
+        "T030",
+        "T038"
+      ]
+    },
+    "FR-009": {
+      "title": "Read brief and submit from web and app",
+      "tasks": [
+        "T032",
+        "T045",
+        "T046"
+      ]
+    },
+    "FR-010": {
+      "title": "Mentor assesses against rubric with notes visible",
+      "tasks": [
+        "T005",
+        "T032",
+        "T033",
+        "T045",
+        "T046"
+      ]
+    },
+    "FR-011": {
+      "title": "Peer allocation cohort first, organisation fallback, never across",
+      "tasks": [
+        "T047",
+        "T049",
+        "T053"
+      ]
+    },
+    "FR-012": {
+      "title": "Peer reviewers see only learner-visible criteria",
+      "tasks": [
+        "T039",
+        "T048",
+        "T053"
+      ]
+    },
+    "FR-012a": {
+      "title": "Peer review anonymous both ways; mentor sees both",
+      "tasks": [
+        "T005",
+        "T039",
+        "T052",
+        "T053"
+      ]
+    },
+    "FR-013": {
+      "title": "Mentor reviews when allocation gives no reviewers",
+      "tasks": [
+        "T047",
+        "T053"
+      ]
+    },
+    "FR-014": {
+      "title": "No task judges minority-language text",
+      "tasks": [
+        "T034",
+        "T035"
+      ]
+    },
+    "FR-015": {
+      "title": "One in-course discussion per published course, org-separated",
+      "tasks": [
+        "T016",
+        "T017",
+        "T018",
+        "T020",
+        "T023",
+        "T024",
+        "T025"
+      ]
+    },
+    "FR-016": {
+      "title": "Pre-publish check fails on mentor-only leak, no override",
+      "tasks": [
+        "T029",
+        "T043"
+      ]
+    },
+    "FR-017": {
+      "title": "Assignment and discussion settings applied from repo",
+      "tasks": [
+        "T005",
+        "T009",
+        "T019",
+        "T021",
+        "T032",
+        "T048",
+        "T051"
+      ]
+    },
+    "FR-018": {
+      "title": "Learner data stays in Moodle and exportable",
+      "tasks": [
+        "T006",
+        "T055"
+      ]
+    },
+    "FR-019": {
+      "title": "Optional never affects completion; required completes on feedback",
+      "tasks": [
+        "T032",
+        "T046",
+        "T048"
+      ]
+    }
+  },
+  "step_summaries": {
+    "tasks": {
+      "summary": "57 tasks in 7 phases: Setup, Foundational, US1 gate, US4 discussion (ungated), US2 mentor-assessed, US3 peer review, Polish; story phases sequential by the design gate"
+    }
+  },
+  "currentTask": "T013",
+  "task_summaries": {
+    "T001": {
+      "status": "DONE",
+      "did": "Design-gate guard: any *-assignment.md under modules/ fails the package check",
+      "files": [
+        "scripts/check_course_package.py"
+      ]
+    },
+    "T002": {
+      "status": "DONE",
+      "did": "CI runs pytest over tests/ (site-config tests excluded, they run in site-config.yml)",
+      "files": [
+        ".github/workflows/course-package.yml"
+      ]
+    },
+    "T011": {
+      "status": "DONE",
+      "did": "design-gate checklist: FR-001..FR-008a and US1-1..4 traced to design.md; change list gap fixed",
+      "files": [
+        "specs/012-assignments-peer-review/checklists/design-gate.md",
+        "specs/012-assignments-peer-review/design.md"
+      ]
+    },
+    "T012": {
+      "status": "DONE",
+      "did": "quickstart A1: temp 09-x-assignment.md made check_course_package exit 1 with the gate message; file removed, nothing committed"
+    },
+    "T005": {
+      "status": "DONE",
+      "did": "Declared student (viewauthornames inherit), teacher (accessallgroups inherit, explicit so drift manages it) and three ltcpublisher caps with least-privilege review in why; caps verified in MOODLE_502_STABLE; validate + 45 tests pass",
+      "files": [
+        "moodle/site/roles.yaml"
+      ]
+    },
+    "T003": {
+      "status": "DONE",
+      "did": "Failing-first tests for MENTOR_ONLY_RE/strip_restricted/restricted_blocks plus strip_answer_keys regression; 12 fail on AttributeError, 4 pass",
+      "files": [
+        "tests/test_disclosure_mentor_only.py",
+        "tests/fixtures/mentor-only/assignment.md",
+        "tests/fixtures/mentor-only/lesson-mixed.md"
+      ]
+    },
+    "T004": {
+      "status": "DONE",
+      "did": "Added local_ltuse_hide_orphans external function: hides (never deletes) this course's ltct:<slug>: modules not in keep via set_coursemodule_visible + course_module_updated event, returns hidden idnumbers",
+      "files": [
+        "moodle/local_ltuse/classes/external/hide_orphans.php"
+      ]
+    },
+    "T007": {
+      "status": "DONE",
+      "did": "MENTOR_ONLY_RE, strip_restricted(), restricted_blocks() beside the answer-key rules; T003 passes (16/16)",
+      "files": [
+        "scripts/disclosure.py"
+      ]
+    },
+    "T008": {
+      "status": "DONE",
+      "did": "Registered local_ltuse_hide_orphans in ltuse_publish, version 2026100101 (site.yaml pin bumped), README row",
+      "files": [
+        "moodle/local_ltuse/db/services.php",
+        "moodle/local_ltuse/version.php",
+        "moodle/local_ltuse/README.md",
+        "moodle/site/site.yaml"
+      ]
+    },
+    "T010": {
+      "status": "DONE",
+      "did": "publish calls local_ltuse_hide_orphans last with every manifest module idnumber as keep, prints what it hid; --whoami needs it (dry-run checked; live run pending instance)",
+      "files": [
+        "scripts/publish_moodle.py",
+        "scripts/moodle_client.py"
+      ]
+    },
+    "T056": {
+      "status": "DONE",
+      "did": "Raised 012's cross-spec effects in specs 002 (one-org groups, ltct:org/cohort idnumbers) and 009 (2-offline-courses app limit)",
+      "files": [
+        "specs/002-org-structure-cohorts/spec.md",
+        "specs/009-low-bandwidth-delivery/spec.md"
+      ]
+    },
+    "T017": {
+      "status": "DONE",
+      "did": "Created course-discussions.yaml: header comment, rows [10], empty shared list (FR-015)",
+      "files": [
+        "moodle/site/course-discussions.yaml"
+      ]
+    },
+    "T018": {
+      "status": "DONE",
+      "did": "Added local_ltuse_ensure_discussion: creates general forum in section 0 via upsert_module (name/intro on create only); existing forum gets only group mode via formatactions set_groupmode + groupingid 0; reports courseforced; never reads posts",
+      "files": [
+        "moodle/local_ltuse/classes/external/ensure_discussion.php"
+      ]
+    },
+    "T019": {
+      "status": "DONE",
+      "did": "Discussion drift for every ltct: course: differs, missing, forced and allparticipants (count via discussion_list vault only); warnings print as [skip]",
+      "files": [
+        "moodle/local_ltuse/classes/siteconfig/inspector.php",
+        "moodle/local_ltuse/classes/siteconfig/drift.php",
+        "moodle/local_ltuse/classes/siteconfig/report.php"
+      ]
+    },
+    "T015": {
+      "status": "DONE",
+      "did": "Tests for course-discussions.yaml validation: unknown slug, missing/blank why, duplicate, empty list, branch_slug form, rows, payload carries slugs only (15 tests)",
+      "files": [
+        "tests/test_site_config.py"
+      ]
+    },
+    "T020": {
+      "status": "DONE",
+      "did": "load_discussions() with validation (branch_slug slugs, why required, no duplicates, rows cited); declaration carried into drift/apply payload as discussions.shared; T015 passes",
+      "files": [
+        "scripts/site_config.py"
+      ]
+    },
+    "T021": {
+      "status": "DONE",
+      "did": "apply corrects discussion differs via ensure_discussion::apply_groupmode and re-checks; missing forum and warnings reported as skip, never created",
+      "files": [
+        "moodle/local_ltuse/classes/siteconfig/applier.php",
+        "moodle/local_ltuse/classes/external/ensure_discussion.php"
+      ]
+    },
+    "T022": {
+      "status": "DONE",
+      "did": "Registered local_ltuse_ensure_discussion in services.php and the publishing service, bumped version to 2026100102 (site.yaml pin kept equal), documented function, identity and the one raw write in README",
+      "files": [
+        "moodle/local_ltuse/db/services.php",
+        "moodle/local_ltuse/version.php",
+        "moodle/site/site.yaml",
+        "moodle/local_ltuse/README.md"
+      ]
+    },
+    "T016": {
+      "status": "DONE",
+      "did": "Tests that every course payload (designed, backfilled, legacy-named, all 31 folders) carries discussion ltct:<slug>:discussion and shared follows the declaration; invalid declaration refuses (9 tests)",
+      "files": [
+        "tests/test_moodle_payload_discussion.py"
+      ]
+    },
+    "T023": {
+      "status": "DONE",
+      "did": "Payload writes a discussion block for every course from site_config.load_discussions(); invalid declaration stops the build; T016 passes",
+      "files": [
+        "scripts/moodle_payload.py"
+      ]
+    },
+    "T024": {
+      "status": "DONE",
+      "did": "publish calls local_ltuse_ensure_discussion before hide_orphans, adds ltct:<slug>:discussion to keep, prints created/updated and a courseforced warning; added to --whoami needed list",
+      "files": [
+        "scripts/publish_moodle.py",
+        "scripts/moodle_client.py"
+      ]
+    },
+    "T026": {
+      "status": "DONE",
+      "did": "Row #10 records the in-course discussion as built (spec 012) and awaiting instance verification (quickstart A3-A5); not claimed verified",
+      "files": [
+        "moodle/REQUIREMENTS.md"
+      ]
+    },
+    "T013": {
+      "status": "DONE",
+      "did": "Maintainer-delegated decision (user chose recommended): spec 003 FR-006 narrowed to the learner-level mentor role; assignment grading via course-level Course mentor",
+      "files": [
+        "specs/003-mentor-role/spec.md"
+      ]
+    }
+  },
+  "verified": [
+    {
+      "what": "pytest over tests/",
+      "command": "python -m pytest -q tests",
+      "source": "derived",
+      "exitCode": 0,
+      "durationSeconds": 2.6,
+      "result": "......................................... [ 48%] · ............................................                             [100%] · 85 passed, 31 subtests passed in 2.15s"
+    },
+    {
+      "what": "site declaration validate",
+      "command": "python scripts/site_config.py validate",
+      "source": "derived",
+      "exitCode": 0,
+      "durationSeconds": 0.1,
+      "result": "[ok] declaration valid: 12 settings in 5 files, 8 plugins, 5 roles, 8 ignore entries, 0 shared course discussions"
+    },
+    {
+      "what": "publish dry run incl. payload gate",
+      "command": "python scripts/publish_moodle.py --slug coretech-computer-hardware --dry-run",
+      "source": "derived",
+      "exitCode": 0,
+      "durationSeconds": 0.4,
+      "result": "  links     would be resolved in 5 page(s) ·     forum   ltct:coretech-computer-hardware:discussion     dry-run (separated by organisation) · DRY RUN -- 18 call(s) would have been made, nothing was sent."
+    },
+    {
+      "what": "quiz parse gate",
+      "command": "python scripts/quiz_parse.py --check-all",
+      "source": "derived",
+      "exitCode": 0,
+      "durationSeconds": 0.1,
+      "result": "  software-support-and-troubleshooting-for-translation-teams/04-quiz.md 12 questions, pass 80% ·   supporting-pre-publishing-checks/08-quiz.md              20 questions, pass 80% · 12 quiz(zes) in 11 file(s): 0 failed."
+    }
+  ],
+  "decisions": [
+    {
+      "decision": "hide_orphans only considers ltct:<slug>: idnumbers",
+      "why": "keeps shared ltct:qbank from being hidden",
+      "rejected": "every ltct: module, with qbank always in keep"
+    },
+    {
+      "decision": "teacher role lists accessallgroups: inherit",
+      "why": "drift only manages listed capabilities on archetype roles",
+      "rejected": "capabilities: {} (drift-blind)"
+    },
+    {
+      "decision": "Spec 003 FR-006 narrowed to the learner-level mentor role; assignment grading via course-level Course mentor (teacher)",
+      "why": "user chose the R3 recommendation",
+      "rejected": "feedback-only assignments; deferring to the maintainer"
+    },
+    {
+      "decision": "ensure_discussion clears a hand-set grouping through update_moduleinfo(), not a raw DB write",
+      "why": "user chose the public API over the no-rating-reads rule; update_moduleinfo triggers course_module_updated itself (modlib.php L810)",
+      "rejected": "raw set_field; report-only drift"
+    },
+    {
+      "decision": "ltcpublisher gets moodle/role:safeoverride, not moodle/role:override; T033 must require safeoverride and check is_safe_capability()",
+      "why": "mod/page:view has no risk bit (MOODLE_502_STABLE mod/page/db/access.php), so the narrower capability suffices",
+      "rejected": "role:override (RISK_SPAM|PERSONAL|XSS)"
+    }
+  ],
+  "concerns": [
+    {
+      "note": "ensure_discussion writes course_modules.groupingid directly (one DB->set_field + cache rebuild, mirroring core cmactions::set_groupmode) because update_moduleinfo would make forum_update_instance read every rating; plan Principle XI says no direct table writes. Maintainer to accept or reject.",
+      "step": "implement"
+    },
+    {
+      "note": "No PHP linted: php not on PATH. All PHP (hide_orphans, ensure_discussion, siteconfig changes, services.php) unverified until the instance run.",
+      "step": "implement"
+    },
+    {
+      "note": "Instance-only tasks open: T006, T009 apply/drift, T025, T055. Maintainer tasks open: T013, T014; US2/US3 (T027-T054) gated on T014.",
+      "step": "implement"
+    },
+    {
+      "note": "check_course_package.py already exits 1 on this branch: 20 errors from existing course content, unrelated to this spec.",
+      "step": "implement"
+    }
+  ],
+  "last_action": "Resolved T013, raw-write and capability questions; T014 awaits the maintainer"
 }

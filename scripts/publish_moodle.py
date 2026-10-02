@@ -269,6 +269,27 @@ def publish(client, payload_dir, category_id):
         print("  links     %s in %d page(s)"
               % ("would be resolved" if client.dry_run else "resolved", rewritten))
 
+    # --- the course discussion (spec 012, FR-015) -----------------------------------------
+    # Created if absent; otherwise only its group mode is set, so a hand change is undone
+    # on every publish. Its posts are never written. Its idnumber starts ltct:<slug>: like
+    # a module's, so the retire step below must be told it belongs to this run.
+    discussion = manifest["discussion"]
+    result = client.call(
+        "local_ltuse_ensure_discussion",
+        courseidnumber=manifest["idnumber"], idnumber=discussion["idnumber"],
+        name=discussion["name"], intro=discussion["intro_html"],
+        shared=discussion["shared"])
+    scope = ("shared across organisations" if discussion["shared"]
+             else "separated by organisation")
+    print("    forum   %-46s %s (%s)" % (
+        discussion["idnumber"],
+        "dry-run" if client.dry_run else ("created" if result["created"] else "updated"),
+        scope))
+    if not client.dry_run and result.get("courseforced"):
+        print("    WARNING the course forces its own group mode, which overrides the "
+              "discussion's.\n            Turn off Course settings > Groups > Force "
+              "group mode, or organisations\n            may see each other's posts.")
+
     # --- last: retire what the course no longer has -------------------------------------
     # A lesson renamed, renumbered or removed in the repo leaves its old module in Moodle
     # under an idnumber this run did not produce. Retired, never deleted: hidden and moved
@@ -280,7 +301,8 @@ def publish(client, payload_dir, category_id):
     # prefix); the question bank and anything made by hand in Moodle are left alone. One
     # retired by an earlier publish is not sent again.
     prefix = manifest["idnumber"] + ":"     # every module is ltct:<slug>:<key>
-    stale = [k for k in server if k.startswith(prefix) and k not in this_run]
+    produced = this_run | {discussion["idnumber"]}
+    stale = [k for k in server if k.startswith(prefix) and k not in produced]
     to_retire = [k for k in stale
                  if not (server[k].get("retired") and not server[k].get("visible", 1))]
     if to_retire:

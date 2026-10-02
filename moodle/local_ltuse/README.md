@@ -21,7 +21,7 @@ shape and Moodle's.
 | `local_ltuse_create_page` | write | Creates or updates one `mod_page`, addressed by course-module idnumber. |
 | `local_ltuse_import_questions` | write | Imports Moodle XML into a category in the course question bank, creating the `mod_qbank` instance and category if needed. |
 | `local_ltuse_create_quiz` | write | Creates or updates a `mod_quiz` and rebuilds its slots as references into that category. |
-| `local_ltuse_hide_modules` | write | Hides modules the course no longer has, by course-module idnumber. Never deletes. |
+| `local_ltuse_hide_modules` | write | Retires modules the course no longer has, by course-module idnumber: hides them and moves them into the hidden Retired section. Never deletes. |
 | `local_ltuse_ensure_discussion` | write | Spec 012, row #10. Creates the course's one `general` forum, `ltct:<slug>:discussion`, in section 0 if it is absent; its name and intro are set only then. On every call it sets only the forum's group mode: separate groups, or visible groups when [`moodle/site/course-discussions.yaml`](../site/course-discussions.yaml) lists the course as shared, always with no grouping. It never writes a discussion or post. Returns `{cmid, created, groupmode, courseforced}`; `courseforced` means the course's own forced group mode overrides the forum's. |
 
 **The discussion forum and organisations.** Separate groups hides a group's discussions from
@@ -41,21 +41,40 @@ not idempotent without it: `core_course_get_contents` does not reliably return a
 idnumber, so there is otherwise no way to ask Moodle which modules a previous publish
 created. With it, republishing is a diff rather than a blind re-create.
 
-## A module the repo no longer has is hidden, never deleted
+## A module the repo no longer has is retired, never deleted
 
 Rename, renumber or remove a lesson in the repo, and its old module is still in Moodle
 under an idnumber the publisher no longer produces. At the end of every publish, once
 everything new exists, the publisher compares the server's `ltct:<slug>:` modules with
-the payload and sends the leftovers to `hide_modules`. That function checks every
-idnumber before it changes anything, refuses the course question bank, and does exactly
-what core's own hide action does (`core_course_external::edit_module`, `'hide'`):
-`set_coursemodule_visible()`, then the `course_module_updated` event.
+the payload and sends the leftovers to `hide_modules`, skipping any an earlier publish
+already retired. That function checks every idnumber before it changes anything, refuses
+the course question bank, then:
 
-Hidden, not deleted, because a learner's attempt and grade live on the module: deleting
-it would take them away, and a mistaken publish could not be undone. A teacher can still
-open it. If the file comes back, the next publish finds the module by its idnumber and
-`update_moduleinfo()` shows it again (`course/modlib.php:772`, MOODLE_502_STABLE).
-Modules without an `ltct:` idnumber, the ones a person made by hand, are never touched.
+- moves each module into **"Retired: no longer in the course"**, a hidden section kept
+  after every lesson section, created on first need (`cmactions::move_end_section()`,
+  core's 5.2 replacement for the deprecated `moveto_module()`);
+- hides it, as core's own hide action does (`core_course_external::edit_module`,
+  `'hide'`): `set_coursemodule_visible()`, then the `course_module_updated` event.
+
+**Why a section, not just hidden.** *Next activity* offers whatever the viewer can open,
+hidden or not (`core_renderer::activity_navigation()`). Hidden in place, an old copy sat
+between lessons for every admin, teacher or mentor walking the course; learners never
+saw it. In the Retired section it comes only after the last real activity. The publisher
+sets each course's *Hidden sections* to **Hide completely**, so learners never see even
+the section's name.
+
+**Why not deleted.** A learner's attempt and grade live on the module: deleting it would
+take them away, and a mistaken publish could not be undone. A teacher can still open it.
+If the file comes back, the next publish finds the module by its idnumber,
+`util::upsert_module()` moves it home, and `update_moduleinfo()` shows it again
+(`course/modlib.php:772`, MOODLE_502_STABLE). Modules without an `ltct:` idnumber, the
+ones a person made by hand, are never touched.
+
+**Keeping the section last.** Lesson N lives in section N, so a course that gains a
+lesson may need the Retired section's number. `update_sections` moves the Retired section
+past the lessons first (`util::keep_retired_last()`), so it is never named as one. It is
+found by its exact name, which is plain text rather than a lang string so no translation
+can hide it from the publisher.
 
 ## Republishing touches only what changed (spec 009)
 

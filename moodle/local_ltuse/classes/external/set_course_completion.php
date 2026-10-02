@@ -95,11 +95,15 @@ class set_course_completion extends external_api {
         // Wanted: every visible module of this course's own. Hidden ones are what the
         // publisher hid because the repo dropped them; core has no visibility test in
         // completion, so a hidden criterion would stay required and nobody could finish.
-        // The question bank ("ltct:qbank") is plumbing, and never matches the prefix.
+        // The question bank ("ltct:qbank") is plumbing, and never matches the prefix. The
+        // certificate ("ltct:<slug>:certificate", spec 013 R8) unlocks on course completion, so
+        // as a criterion it would stop the course from ever completing.
         $prefix = $course->idnumber . ':';
+        $certificate = $course->idnumber . \local_ltuse\siteconfig\certtemplate::IDNUMBER_SUFFIX;
         $modnames = [];
         foreach (util::owned_modules((int)$course->id) as $idnumber => $m) {
-            if (strpos($idnumber, $prefix) === 0 && $m['visible'] && $m['modname'] !== 'qbank') {
+            if (strpos($idnumber, $prefix) === 0 && $m['visible'] && $m['modname'] !== 'qbank'
+                    && $idnumber !== $certificate) {
                 $modnames[$m['cmid']] = $m['modname'];
             }
         }

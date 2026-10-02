@@ -9,10 +9,14 @@ on:
       - 'scripts/check_course_package.py'
       - 'scripts/publish_moodle.py'
       - 'scripts/disclosure.py'
+      - 'scripts/cbc_wording.py'
+      - 'moodle/site/badges.yaml'
+      - 'moodle/site/settings/badges.yaml'
       - 'publish-requirements.txt'
       - 'tests/test_image_reduce.py'
       - 'tests/test_payload_assets.py'
       - 'tests/test_payload_completion.py'
+      - 'tests/test_payload_recognition.py'
       - 'competencies.yaml'
       - 'tests/test_publish_moodle.py'
       # Spec 012: the mentor-only marker and the course discussion in the payload.
@@ -30,10 +34,14 @@ on:
       - 'scripts/check_course_package.py'
       - 'scripts/publish_moodle.py'
       - 'scripts/disclosure.py'
+      - 'scripts/cbc_wording.py'
+      - 'moodle/site/badges.yaml'
+      - 'moodle/site/settings/badges.yaml'
       - 'publish-requirements.txt'
       - 'tests/test_image_reduce.py'
       - 'tests/test_payload_assets.py'
       - 'tests/test_payload_completion.py'
+      - 'tests/test_payload_recognition.py'
       - 'competencies.yaml'
       - 'tests/test_publish_moodle.py'
       # Spec 012: the mentor-only marker and the course discussion in the payload.
@@ -56,5 +64,6 @@ jobs:
       - name: Unit tests for the publisher
         run: >-
           python -m pytest -q tests/test_image_reduce.py tests/test_payload_assets.py
-          tests/test_payload_completion.py tests/test_publish_moodle.py
+          tests/test_payload_completion.py tests/test_payload_recognition.py
+          tests/test_publish_moodle.py
           tests/test_disclosure_mentor_only.py tests/test_moodle_payload_discussion.py

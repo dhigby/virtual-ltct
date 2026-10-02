@@ -47,6 +47,10 @@ Moodle even when it leaks nothing (spec 004):
   7. Competencies      -- every manifest competency is a name in competencies.yaml,
                           verbatim. A near-miss would put the course against no competency
                           in Moodle's per-competency table.
+  8. Recognition       -- spec 013: the course's rendered badge name and description pass
+                          cbc_wording.check_recognition(), since a title is free text and
+                          reaches the badge; and the certificate's idnumber fits Moodle's column and is no
+                          lesson's.
 
 Usage:
   python scripts/check_moodle_payload.py --payload <dir> --slug <slug>
@@ -65,6 +69,7 @@ import sys
 import yaml
 
 sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent))
+import cbc_wording  # noqa: E402
 import disclosure  # noqa: E402
 from course_stage import branch_slug  # noqa: E402
 
@@ -83,6 +88,9 @@ WITHHELD_MARK = "quiz withheld"
 COMPETENCIES = REPO / "competencies.yaml"
 MODULE_COMPLETION = ("view", "submit", "pass")     # moodle_payload.completion_for()
 COURSE_COMPLETION = "all"
+SITE = REPO / "moodle" / "site"
+IDNUMBER_MAX = 100                                 # course_modules.idnumber
+PLACEHOLDER = re.compile(r"\{([^{}]*)\}")
 
 
 def normalise(text):
@@ -112,6 +120,7 @@ def check(payload_dir):
     # --- 6 and 7. structural, on every view ----------------------------------------------
     problems += check_completion(slug, manifest)
     problems += check_competencies(slug, manifest)
+    problems += check_recognition(slug, manifest)
 
     if manifest["view"] != "learner":
         warnings.append("%s: payload is the '%s' view -- this check only certifies the "
@@ -232,6 +241,66 @@ def check_competencies(slug, manifest):
 
 # Delivered as the committed bytes, so they must BE the committed bytes.
 UNREDUCED = ("full", "unchanged", "vector", "passthrough")
+
+
+def badge_template(site=SITE):
+    """The declared badge name and description with {programme} filled, or None."""
+    path = site / "badges.yaml"
+    if not path.exists():
+        return None
+    data = yaml.safe_load(path.read_text(encoding="utf-8")) or {}
+    programme = ""
+    settings = site / "settings" / "badges.yaml"
+    if settings.exists():
+        for entry in (yaml.safe_load(settings.read_text(encoding="utf-8")) or {}).get(
+                "settings") or []:
+            if entry.get("name") == "badges_defaultissuername":
+                programme = str(entry.get("value") or "")
+    return {k: str(data.get(k) or "").replace("{programme}", programme)
+            for k in ("name", "description")}
+
+
+def check_recognition(slug, manifest, site=SITE):
+    """Check 8. The badge text this course would get, and the certificate's identity."""
+    problems = []
+    recognition = manifest.get("recognition")
+    if not isinstance(recognition, dict) or not isinstance(recognition.get("delivery"), bool):
+        return ["%s: recognition must say whether this publish is a delivery" % slug]
+    template = badge_template(site)
+    if template is not None:
+        values = {"course": str(manifest.get("title") or ""),
+                  "competencies": ", ".join(manifest.get("competencies") or []),
+                  "target_level": str(manifest.get("target_outcome_level") or "")}
+        aims = "{target_level}" in template["description"]
+        labels = cbc_wording.cbc_labels()
+        if aims and recognition["delivery"] and values["target_level"] not in labels:
+            problems.append("%s: target_outcome_level %r is not a CBC label, and the badge "
+                            "prints it (FR-005)" % (slug, values["target_level"]))
+        for key, text in template.items():
+            rendered = PLACEHOLDER.sub(lambda m: values.get(m.group(1), m.group(0)), text)
+            for message in cbc_wording.check_recognition(rendered,
+                                                         require_completed=(key == "name")):
+                problems.append("%s: badge %s: %s" % (slug, key, message))
+
+    certificate = recognition.get("certificate")
+    if certificate is not None and not recognition["delivery"]:
+        problems.append("%s: a pilot publish carries no certificate" % slug)
+    if certificate is not None:
+        cid = str(certificate.get("idnumber") or "")
+        if cid != "ltct:%s:certificate" % slug:
+            problems.append("%s: certificate idnumber %r is not ltct:%s:certificate"
+                            % (slug, cid, slug))
+        if len(cid) > IDNUMBER_MAX:
+            problems.append("%s: certificate idnumber %s is %d characters; Moodle stores at "
+                            "most %d" % (slug, cid, len(cid), IDNUMBER_MAX))
+        for section in manifest.get("sections") or []:
+            for module in section.get("modules") or []:
+                if module.get("idnumber") == cid:
+                    problems.append("%s: module %s uses the certificate's idnumber %s"
+                                    % (slug, module.get("source"), cid))
+    elif recognition["delivery"]:
+        problems.append("%s: a delivery publish must carry the certificate's idnumber" % slug)
+    return problems
 
 
 def check_assets(slug, folder, payload_dir, manifest):

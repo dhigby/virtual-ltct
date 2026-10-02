@@ -1,0 +1,27 @@
+# The one certificate design (row #23, spec 013): a mod_customcert site template, copied into
+# every delivered course's certificate activity. A certificate of training completed, never
+# a certification. validate checks every text with scripts/cbc_wording.py.
+#
+# The positions and the logo are PLACEHOLDERS until the maintainer supplies the real design
+# (plan, decision 4). Units are millimetres; A4 landscape is 297 x 210.
+
+rows: [23]
+name: LTC training completed          # the site template's exact name: its identity (R7)
+activity_name: Certificate of training completed
+intro: Available once you have completed this course.
+font: freesans                        # embedded subset, so names in any script print (R11)
+pages:
+  - width: 297
+    height: 210
+    margins: {left: 15, right: 15}
+    elements:
+      - {type: image, file: logo.png, x: 20, y: 15, width: 40}
+      - {type: text, text: "Training completed", x: 148, y: 50, size: 28, align: C}
+      - {type: studentname, x: 148, y: 80, size: 24, align: C}
+      - {type: text, text: "has completed the course", x: 148, y: 98, size: 14, align: C}
+      - {type: coursename, x: 148, y: 112, size: 18, align: C}
+      - {type: date, date: completion, format: strftimedate, x: 148, y: 130, size: 12, align: C}
+      - {type: text, text: "{programme}", x: 148, y: 150, size: 12, align: C}
+      - {type: code, x: 148, y: 185, size: 9, align: C}
+      - {type: qrcode, x: 260, y: 165, width: 25}
+why: "#23 a learner who completed a course can download a certificate of training completed, with a code a third party can verify (FR-003, FR-009)."

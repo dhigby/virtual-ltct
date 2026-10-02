@@ -70,7 +70,7 @@ sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent))
 import disclosure  # noqa: E402
 import image_reduce  # noqa: E402
 import site_config  # noqa: E402
-from course_stage import branch_slug, is_lesson  # noqa: E402
+from course_stage import branch_slug, is_lesson, stage_for  # noqa: E402
 from quiz_parse import QuizError, parse_quiz_file  # noqa: E402
 
 REPO = pathlib.Path(__file__).resolve().parent.parent
@@ -98,6 +98,7 @@ VIDEO_RE = re.compile(r"\*\*Watch the video:\*\*\s*(.*)$", re.M)
 PENDING_VIDEO_RE = re.compile(r"_To be recorded at stage \d+\._", re.I)
 MODULE_NUMBER_RE = re.compile(r"^(\d+[a-z]?)-")
 IDNUMBER_MAX = 100   # VARCHAR(100) in course, course_modules and question
+CERTIFICATE_KEY = "certificate"   # ltct:<slug>:certificate, the certificate activity (spec 013)
 SRC_RE = re.compile(r"""(?P<attr>\b(?:src|href)\s*=\s*)(?P<q>["'])(?P<url>[^"']*)(?P=q)""")
 
 # Every page is wrapped in this, so moodle/local_ltuse/styles.css can style published
@@ -143,6 +144,22 @@ def completion_for(kind, threshold_pct):
             and threshold_pct > 0
         return "pass" if positive else "submit"
     return "view"
+
+
+DELIVERY_STAGE = 8
+
+
+def recognition_for(folder, url_slug):
+    """The payload's recognition block (spec 013, data-model "Payload additions").
+
+    `delivery` is course_stage reporting stage 8: the README records the course's Moodle
+    link. `certificate` is present only then, because a pilot gets no certificate.
+    """
+    delivery = stage_for(folder, use_gh=False)["stage"] >= DELIVERY_STAGE
+    out = {"delivery": delivery}
+    if delivery:
+        out["certificate"] = {"idnumber": idnumber(url_slug, CERTIFICATE_KEY)}
+    return out
 
 
 def wrap(html):
@@ -344,6 +361,10 @@ class Payload:
             "competencies": list(meta.get("competencies") or []),
             # The course is complete when every module is (completion_for()).
             "completion": "all",
+            # Spec 013: whether this publish is a delivery, which is what turns the badge on
+            # and makes the certificate. course_stage.py decides; the payload never works out
+            # a stage itself (R4). It says nothing about badges or customcert (Principle II).
+            "recognition": recognition_for(self.folder, self.url_slug),
             "content_type": meta.get("content_type"),
             "sections": sections,
             "quizzes": quizzes,

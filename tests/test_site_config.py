@@ -1,4 +1,4 @@
-"""Unit tests for scripts/site_config.py (specs 001, 002 and 004). Run: python -m pytest tests/"""
+"""Unit tests for scripts/site_config.py (specs 001, 002, 004 and 013). Run: python -m pytest tests/"""
 import contextlib, io, json, pathlib, shutil, sys, tempfile, textwrap, unittest
 from unittest import mock
 import yaml
@@ -1248,8 +1248,10 @@ class Reports(ReportsBase):
         self.assertIsNone(prog["schedule"])
         self.assertEqual(prog["audiences"], [{"type": "systemrole", "role": "manager"}])
         self.assertEqual(prog["columns"][3]["aggregation"], "countdistinct")
-        self.assertEqual(list(self.payload())[-4:],
-                         ["course_field_category", "course_fields", "competencies", "reports"])
+        # Spec 004's arrays in apply order, then spec 013's two after reports.
+        self.assertEqual(list(self.payload())[-6:],
+                         ["course_field_category", "course_fields", "competencies", "reports",
+                          "badge_template", "certificate_template"])
 
     def test_summary_counts_reports(self):
         rc, out, _ = self.run_main("validate")
@@ -1572,3 +1574,97 @@ class Sorting(ReportsBase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+RECOGNITION_PINS = """\
+  - component: mod_customcert
+    version: 2026042014
+    source: {url: "https://example.org/customcert.zip", sha256: "%s"}
+    why: "#23"
+  - component: availability_coursecompleted
+    version: 2026070100
+    source: {url: "https://example.org/coursecompleted.zip", sha256: "%s"}
+    why: "#23"
+""" % ("b" * 64, "c" * 64)
+
+
+class Recognition(Base):
+    """badges.yaml and certificate/template.yaml (spec 013 data-model, contracts/declaration.md)."""
+
+    def setUp(self):
+        super().setUp()
+        self.write("site.yaml", SITE.format(ver=VER, sha="a" * 64) + RECOGNITION_PINS)
+        site = REPO / "moodle" / "site"
+        shutil.copytree(site / "badges", self.dir / "badges")
+        shutil.copytree(site / "certificate", self.dir / "certificate")
+        for rel in ("badges.yaml", "settings/badges.yaml"):
+            self.write(rel, (site / rel).read_text(encoding="utf-8"))
+
+    def test_the_tracked_declaration_is_accepted_and_rendered(self):
+        self.assertAccepted()
+        decl = sc.validate(self.dir)[0]
+        badge = decl["badge_template"]
+        self.assertEqual(badge["name"], "{course}: training completed")
+        self.assertIn("LTC training programme", badge["description"])   # {programme} filled
+        cert = decl["certificate_template"]
+        date = [e for e in cert["pages"][0]["elements"] if e["type"] == "date"][0]
+        self.assertEqual(date["dateitem"], -2)   # completion, never the issue date
+        payload = sc.build_payload(decl, "apply", {})
+        self.assertTrue(payload["badge_template"]["image"]["content"])
+        self.assertEqual(len(payload["badge_template"]["deny"]), len(sc.cbc_wording.DENY_PATTERNS))
+        self.assertNotIn("path", payload["badge_template"]["image"])
+
+    def test_certified_in_the_badge_name_is_refused(self):
+        self.edit("badges.yaml", 'name: "{course}: training completed"', 'name: "Certified: {course}"')
+        self.assertInvalid("says certified")
+
+    def test_a_level_held_in_the_description_is_refused(self):
+        self.edit("badges.yaml", "records training completed.",
+                  "records training completed. Level 3 - Independent achieved.")
+        self.assertInvalid("level")
+
+    def test_a_course_title_reaches_the_check(self):
+        with mock.patch.object(sc, "_courses", return_value=[("Certification prep", "", "")]):
+            self.assertInvalid("Certification prep")
+
+    def test_unknown_placeholder_and_misplaced_target_level(self):
+        self.edit("badges.yaml", "imagecaption: Completion badge for an LTC training course",
+                  'imagecaption: "{learner} badge for an LTC training course"')
+        self.assertInvalid("uses {learner}")
+        self.reset(); self.setUp()
+        self.edit("badges.yaml", 'name: "{course}: training completed"',
+                  'name: "{course} {target_level}: training completed"')
+        self.assertInvalid("{target_level} other than")
+
+    def test_badge_image_rules(self):
+        (self.dir / "badges" / "completion.png").write_bytes(
+            (REPO / "moodle" / "site" / "certificate" / "logo.png").read_bytes())   # 200x80
+        self.assertInvalid("must be square")
+
+    def test_certificate_needs_one_of_each_identity_element(self):
+        self.edit("certificate/template.yaml", "      - {type: code, x: 148, y: 185, size: 9, align: C}\n", "")
+        self.assertInvalid("exactly one code")
+
+    def test_certificate_date_must_be_completion(self):
+        self.edit("certificate/template.yaml", "date: completion", "date: issue")
+        self.assertInvalid("date must be completion")
+
+    def test_certificate_font_must_embed(self):
+        self.edit("certificate/template.yaml", "font: freesans", "font: times")
+        self.assertInvalid("font must be one of")
+
+    def test_certificate_wording(self):
+        self.edit("certificate/template.yaml", '"Training completed"', '"Certified"')
+        self.assertInvalid("says certified")
+
+    def test_the_plugins_and_settings_are_required(self):
+        self.write("site.yaml", SITE.format(ver=VER, sha="a" * 64))
+        self.assertInvalid("mod_customcert must be pinned")
+        self.reset(); self.setUp()
+        self.edit("settings/badges.yaml", "  - name: badges_allowexternalbackpack\n", "  - name: x_unused\n")
+        self.assertInvalid("badges_allowexternalbackpack must be declared")
+
+    def test_the_salt_is_never_declared(self):
+        self.write("settings/salt.yaml", "rows: [23]\npurpose: x\nsettings:\n"
+                   "  - name: badges_badgesalt\n    value: abc\n    why: x\n")
+        self.assertInvalid("badges_badgesalt is per site")

@@ -51,5 +51,25 @@ function xmldb_local_ltuse_upgrade($oldversion) {
         upgrade_plugin_savepoint(true, 2026100204, 'local', 'ltuse');
     }
 
+    // Completion badges and certificates (spec 013): the map from a course to its badge. A
+    // badge has no idnumber, and a restore or a course copy duplicates names, so this table
+    // is the badge's identity (research R1). It holds no user data.
+    if ($oldversion < 2026100300) {
+        $table = new xmldb_table('local_ltuse_course_badge');
+        $table->add_field('id', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, XMLDB_SEQUENCE, null);
+        $table->add_field('courseid', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, null);
+        $table->add_field('badgeid', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, null);
+        $table->add_field('imagehash', XMLDB_TYPE_CHAR, '64', null, XMLDB_NOTNULL, null, '');
+        $table->add_field('timecreated', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, '0');
+        $table->add_key('primary', XMLDB_KEY_PRIMARY, ['id']);
+        $table->add_key('courseid', XMLDB_KEY_FOREIGN_UNIQUE, ['courseid'], 'course', ['id']);
+        $table->add_key('badgeid', XMLDB_KEY_FOREIGN_UNIQUE, ['badgeid'], 'badge', ['id']);
+        if (!$dbman->table_exists($table)) {
+            $dbman->create_table($table);
+        }
+
+        upgrade_plugin_savepoint(true, 2026100300, 'local', 'ltuse');
+    }
+
     return true;
 }

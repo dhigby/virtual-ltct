@@ -38,7 +38,10 @@ defined('MOODLE_INTERNAL') || die();
  * reads here: coursefields (an `ltct_` course field, never its course values), competencies
  * (a live row the list leaves out, only when a list is declared, so drift says only what apply
  * would do; never the course map) and reports (a `local_ltuse` report by area and name; no
- * report is ever run, and no row or count is read).
+ * report is ever run, and no row or count is read), and from spec 013 an unmapped badge in an
+ * `ltct:` course (badgetemplate::extras(), by course idnumber and badge id; never an award).
+ * A second certificate site template with the declared name is reported by the inspector as
+ * `ambiguous`, which also blocks apply.
  */
 class drift {
 
@@ -92,6 +95,13 @@ class drift {
         }
         foreach ($this->inspector->reports()->extra() as $item) {
             $this->report->add_result($item);
+        }
+        // Spec 013: a badge in an ltct: course that is not the published one. Drift never
+        // judges whether a badge should be active; only the publisher knows a course's stage.
+        if ($this->inspector->badgetemplate()) {
+            foreach (badgetemplate::extras() as $item) {
+                $this->report->add_result($item);
+            }
         }
     }
 

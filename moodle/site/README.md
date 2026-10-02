@@ -131,6 +131,30 @@ The profile field category, "About your work", is found by its name, because Moo
 
 Each organisation also gets its own learner-progress report and weekly schedule, made from the `per: organisation` entry in `reports.yaml`. Its managers cohort is the report's only audience, and the report shows only that organisation's learners. Apply sets back a report that was edited by hand. It never runs a report, so its output holds no learner names or row counts.
 
+## Badges and the certificate
+
+Row #23 (spec 013). These are training evidence only. Every text says "training completed",
+never "certified", and never puts a learner at a CBC level. `validate` checks every text with
+`scripts/cbc_wording.py`, rendered against every course title in `modules/`, so it fails before
+anything is applied.
+
+- **`badges.yaml`** is the one badge template. Every course delivered at stage 8 gets a badge made from it, with its image at `badges/completion.png`. Changing the wording and running `apply` rewords every badge already issued, in place, without a republish. A badge is never switched off.
+- **`certificate/template.yaml`** is the one certificate design, with its images beside it. `apply` builds it as a `mod_customcert` site template and copies it into every course's certificate activity.
+- **`settings/badges.yaml`** names the issuing programme once, for both. The issuer contact comes from `MOODLE_BADGE_CONTACT`, so no address is committed.
+
+The badge design, the logo, the issuer's name and the certificate layout are placeholders until
+the maintainer supplies them (spec 013 plan, decision 4).
+
+**Who sees a learner's badges.** Not other learners: `roles.yaml` takes
+`moodle/badges:viewotherbadges` from the authenticated-user role. The site team keeps it.
+**Spec 003's mentor role must grant `moodle/badges:viewotherbadges`, assigned in the learner's
+user context**, so a mentor sees their own assigned learners' badges and nobody else's.
+Organisation managers follow completion through their reports, not through badges.
+
+**Retire a course by hiding it, never by deleting it.** Deleting a course archives its badges,
+which breaks verification for everyone who holds one, and deleting its certificate activity
+deletes every certificate code already issued. A hidden course keeps both working.
+
 ## Report downloads and emailed reports
 
 Reports hold real people. So does the weekly email's attachment. Save every report download and every emailed attachment **outside this repository folder**, as you would the upload CSV below, and delete it once you are done with it. GitDoc pushes anything left in this folder to the public repo. `.gitignore` refuses `*.csv`, `*.xlsx`, `*.xls` and `*.ods` only as a backstop.

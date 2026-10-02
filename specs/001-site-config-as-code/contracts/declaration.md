@@ -13,6 +13,7 @@ The declaration is YAML under `moodle/site/`, read only by `scripts/site_config.
 | `moodle/site/README.md` | How to add a setting and what each kind means. Not read by the tool. |
 | `moodle/site/organisations.yaml`, `moodle/site/profile-fields.yaml` | Added by spec 002. Partner organisations, shared categories and profile fields. See below. |
 | `moodle/site/reports.yaml`, `moodle/site/course-fields.yaml`, `moodle/site/settings/completion.yaml` | Added by spec 004. Custom report templates with their audiences and schedules, the course custom fields, and the completion switches. See below. |
+| `moodle/site/badges.yaml`, `moodle/site/badges/`, `moodle/site/certificate/`, `moodle/site/settings/badges.yaml` | Added by spec 013. The completion badge template and its image, the certificate site template and its images, and the badge and certificate settings. See below. |
 
 **Spec 002 extends this contract.** [Its declaration contract](../../002-org-structure-cohorts/contracts/declaration.md) adds three things:
 - `organisations.yaml` and `profile-fields.yaml`;
@@ -28,6 +29,14 @@ The declaration is YAML under `moodle/site/`, read only by `scripts/site_config.
 - a second blocking scope. A report-scoped problem, such as an audience cohort that does not exist yet, leaves only that report unwritten; the rest of the run still applies. An `entity:name` the datasource does not offer still blocks the whole run, as an unknown setting does, except where this run can still create it (a course or profile custom field applied first, or a column of the `local_ltuse` datasource, whose plugin upgrade comes first); those block only their report.
 
 Apply still never deletes: a competency no longer declared is kept and marked retired, and an undeclared report or course field is reported `extra` and kept. A creation is reported as spec 002 reports one: status `changed`, kind `missing`, message `created`. Spec 004 also changes `roles.yaml` (`report/progress:view` and `report/completion:view` on `orgmanager`, `moodle/course:changelockedcustomfields` on `ltcpublisher`) and re-pins `local_ltuse` in `site.yaml`.
+
+**Spec 013 extends it again.** [Its declaration contract](../../013-certificates-badges/contracts/declaration.md) adds:
+- `badges.yaml` (one badge template) and `certificate/template.yaml` (one `mod_customcert` site template), each checked by `validate` with `scripts/cbc_wording.py`, rendered against every course in `modules/`;
+- `settings/badges.yaml`, an ordinary settings file, and two plugin pins, `mod_customcert` and `availability_coursecompleted`;
+- two payload items the applier handles after `reports`: `badge_template` (stored, then every mapped badge reworded in place) and `certificate_template` (the site template, then each activity's copy). Images travel as base64. A second site template with the declared name is `ambiguous` and blocks the run;
+- `badges_badgesalt` in `ignore.yaml`, never declared, because changing it breaks every issued badge.
+
+Apply never deactivates, archives or deletes a badge, and never deletes a certificate activity or a site template.
 
 Everything in this contract still holds for them.
 

@@ -21,11 +21,22 @@ $string['error:notoffline'] = 'This quiz could not be made available offline in 
 $string['error:nokeepfile'] = 'Cannot keep "{$a}": this page has no such file. Republish to '
     . 'resend it.';
 $string['error:nomodule'] = 'Cannot hide "{$a}": this course has no module with that idnumber.';
+$string['error:nohidecertificate'] = 'Cannot retire "{$a}": it is the course certificate, '
+    . 'and retiring or deleting it would lose every issued certificate code.';
 $string['error:nohideqbank'] = 'Cannot hide "{$a}": it is the course question bank, which the '
     . 'publisher manages itself.';
 $string['error:completionoff'] = 'Completion tracking is off for the site or for course "{$a}". '
     . 'Turn it on with site_config.py apply and republish.';
 $string['error:passnograde'] = 'Quiz "{$a}" asks for a pass rule but has no pass mark.';
+$string['error:availabilityoff'] = 'Restricted access (enableavailability) is off, so the '
+    . 'certificate could not be locked until the course is completed. Run site_config.py apply.';
+$string['error:badgewording'] = 'The badge text breaks the CBC wording rule, so nothing was '
+    . 'written for it: {$a}';
+$string['error:badimage'] = 'Image "{$a}" in the payload does not match its checksum.';
+$string['error:nogd'] = 'The GD image library is not available, so the badge image could not '
+    . 'be made. Install the PHP gd extension.';
+$string['error:recognitionnotapplied'] = 'recognition-not-applied: the badge template or the '
+    . 'certificate template is not on this site. Run site_config.py apply.';
 $string['error:notltctcourse'] = 'Course "{$a}" is not a publisher-owned (ltct:) course.';
 
 // Per-competency report (spec 004 R15, FR-013). Worded as aims: a course aims at a

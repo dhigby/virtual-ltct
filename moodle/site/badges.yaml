@@ -1,0 +1,26 @@
+# The one completion badge template (row #23, spec 013). Every delivered course gets a badge
+# rendered from it, and site_config.py apply rewords every badge already issued when it
+# changes. Training evidence only: "training completed", never "certified", and never a
+# CBC level as held. validate checks every text with scripts/cbc_wording.py.
+#
+# Placeholders, filled in on the server from the course and spec 004's course fields:
+#   {course}        the course's full name
+#   {competencies}  the competencies it addresses, "A, B"
+#   {target_level}  its target, a CBC label; only after "designed to support progress towards"
+#   {programme}     the issuing programme, badges_defaultissuername in settings/badges.yaml
+
+rows: [23]
+image: badges/completion.png      # PLACEHOLDER design until the maintainer supplies one (plan, decision 4)
+name: "{course}: training completed"
+description: >-
+  Awarded for completing the course {course} in the {programme}. The course addresses
+  {competencies}, and is designed to support progress towards {target_level}. This badge
+  records training completed.
+imagecaption: Completion badge for an LTC training course
+message_subject: "Training completed: %badgename%"
+message: >-
+  Hello %username%, you have completed the course and earned the badge %badgename%.
+  You can view it, and share it if you wish, here: %badgelink%
+version: "1"
+language: en
+why: "#23 learners get visible recognition for finishing a course, issued automatically from course completion (FR-001, FR-002)."

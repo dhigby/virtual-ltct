@@ -141,9 +141,9 @@ On delivery, the same PR updates these rows' status in moodle/REQUIREMENTS.md (c
 - **V. CBC fidelity**: the heart of this spec — "training completed", never "certified"; no CBC level awarded or recorded (FR-004, FR-005, FR-006); CBC vocabulary only.
 - **VI. No LMS orientation**: badges arrive automatically and the certificate is found without instructions (SC-003).
 - **VII. One shape**: one badge per course, one certificate design for all partners (FR-012).
-- **IX. Flat cost, field-ready**: core badges plus a free plugin; works in the app and on low bandwidth (FR-010, SC-005).
+- **IX. Flat cost, field-ready**: core badges plus two free plugins (a certificate plugin and a course-completion availability condition); works in the app and on low bandwidth (FR-010, SC-005).
 - **X. Traceable and verified**: cites row #23; badge behaviour and any certificate plugin are verified on the temporary 5.2.3+ instance before the plan depends on them. Because SC-003 is a "simple" criterion, 2–3 real partner learners must use it (e.g. at a stage-7 pilot) before it is marked done.
-- **Platform & Delivery**: core badges first; one plugin at most, pinned; one instance, no per-partner design; server from `MOODLE_URL`.
+- **Platform & Delivery**: core badges first; at most two plugins, each pinned: one for certificates, and one availability condition that unlocks the certificate on course completion (decided 2026-10-02, plan decision 1); one instance, no per-partner design; server from `MOODLE_URL`.
 
 ## Dependencies
 

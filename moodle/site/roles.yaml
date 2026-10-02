@@ -35,6 +35,12 @@ roles:
       moodle/grade:managegradingforms: allow   # spec 012 (R1): upsert_assignment writes the marking guide
       moodle/role:safeoverride: allow          # spec 012: create_page prohibits mod/page:view for student on mentor notes
       moodle/course:managegroups: allow        # spec 012: read-only use; drift reads group ids, no group is written
+      moodle/badges:createbadge: allow         # #23: set_course_recognition creates the course badge (spec 013 R1)
+      moodle/badges:configuredetails: allow    # ... rewords it in place (R5)
+      moodle/badges:configurecriteria: allow   # ... sets its course-completion criterion and activates it
+      moodle/badges:configuremessages: allow   # ... sets its award message
+      mod/customcert:addinstance: allow        # #23: creates the certificate activity (R7)
+      mod/customcert:manage: allow             # ... and copies the site template into it
     why: >-
       The publisher's web-service account (scripts/publish_moodle.py, local_ltuse). The 15
       capabilities are the ones setup_publishing.php used to hard-code; that script now only
@@ -52,6 +58,18 @@ roles:
       safeoverride and refuses a capability with a risk bit. managegroups (RISK_XSS) is a
       write capability granted for a read-only use; it must not be relied on to write groups
       without revisiting this entry.
+      The badge and customcert capabilities are #23 (spec 013): the publisher makes
+      each delivered course's badge and certificate activity.
+
+  - shortname: user
+    archetype: user
+    capabilities:
+      moodle/badges:viewotherbadges: inherit
+    why: >-
+      #23 (spec 013 R10, FR-011): a learner's badges are not shown to other learners. The
+      capability is granted to the mentor role in the learner's user context (spec 003), and
+      managers keep it through their archetype, so the evidence stays visible to those who
+      need it.
 
   - shortname: manager
     archetype: manager

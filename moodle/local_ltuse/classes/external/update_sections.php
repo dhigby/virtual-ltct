@@ -69,6 +69,10 @@ class update_sections extends external_api {
             "SELECT COALESCE(MAX(section), 0) FROM {course_sections} WHERE course = ?",
             [$course->id]);
 
+        // A course that gained a lesson may now need the Retired section's number: move
+        // that section past the lessons first, so it is never named as one.
+        util::keep_retired_last($course, $params['numsections']);
+
         // Section 0 is the course's General area and always exists; range() from 0 keeps
         // the numbering aligned with the payload, where lesson N is section N.
         if ($params['numsections'] > $before) {

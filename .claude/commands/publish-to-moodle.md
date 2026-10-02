@@ -78,9 +78,10 @@ The publish is **idempotent** — every module is addressed by an idnumber deriv
 source file's number, so running it again updates rather than duplicates. Re-running after a
 content fix is the normal way to work, not something to avoid.
 
-A module the repo no longer has (a lesson renamed, renumbered or removed) is **hidden** at
-the end of the publish, never deleted, and listed under `hide`. Report those lines to the
-user: a hide they didn't expect usually means a file was renamed by accident.
+A module the repo no longer has (a lesson renamed, renumbered or removed) is **retired** at
+the end of the publish: hidden and moved into a hidden "Retired" section, never deleted,
+and listed under `retire`. Report those lines to the user: one they didn't expect usually
+means a file was renamed by accident.
 
 The course is created **hidden**. A human makes it visible when they are ready for
 learners.

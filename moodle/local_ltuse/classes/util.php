@@ -9,6 +9,8 @@ require_once($CFG->dirroot . '/lib/questionlib.php');
 
 use context_course;
 use context_module;
+use core_course\section_info;
+use core_courseformat\formatactions;
 use moodle_exception;
 use stdClass;
 
@@ -31,6 +33,15 @@ class util {
 
     /** Prefix that marks a course or module as owned by the publisher. */
     const IDNUMBER_PREFIX = 'ltct:';
+
+    /**
+     * The hidden section, always last, that holds modules the repo no longer has.
+     *
+     * Found by this exact name, because a section has no idnumber. It is plain text, not a
+     * lang string, so a language pack or a translation can never stop the publisher from
+     * recognising it. Rename it in Moodle and the next retirement starts a new one.
+     */
+    const RETIRED_SECTION_NAME = 'Retired: no longer in the course';
 
     /**
      * Look up a course by its idnumber.
@@ -150,7 +161,7 @@ class util {
     public static function upsert_module(stdClass $course, string $modname, string $idnumber,
                                          int $sectionnum, array $fields): array {
         $moduleid = self::module_id($modname);
-        self::require_section($course, $sectionnum);
+        $target = self::require_section($course, $sectionnum);
 
         $existing = self::cm_by_idnumber((int)$course->id, $idnumber);
 
@@ -181,6 +192,14 @@ class util {
                     'Module ' . $idnumber . ' exists as a ' . $existing->modname .
                     ', not a ' . $modname . '. Remove it in Moodle and republish.');
             }
+            // update_moduleinfo() never moves a module between sections. A module whose
+            // file came back from retirement sits in the Retired section; move it home
+            // first, before its settings are read, so the save below sees it in its
+            // lesson section and makes it visible again.
+            if ((int)$existing->section !== (int)$target->id) {
+                formatactions::cm($course)->move_end_section((int)$existing->id,
+                    (int)$target->id);
+            }
             // get_moduleinfo_data() returns FIVE values -- [$cm, $context, $module,
             // $data, $cw] -- and it is $data that carries the editable module settings.
             // Destructuring only the first two silently hands back the context object
@@ -200,6 +219,65 @@ class util {
         $moduleinfo = add_moduleinfo($moduleinfo, $course);
         return ['cmid' => (int)$moduleinfo->coursemodule,
                 'instance' => (int)$moduleinfo->instance, 'created' => true];
+    }
+
+    /**
+     * The course's Retired section, or null if it has none yet.
+     *
+     * @param stdClass $course
+     * @return section_info|null
+     */
+    public static function retired_section(stdClass $course): ?section_info {
+        foreach (get_fast_modinfo($course)->get_section_info_all() as $section) {
+            if ($section->section != 0 && empty($section->component)
+                    && $section->name === self::RETIRED_SECTION_NAME) {
+                return $section;
+            }
+        }
+        return null;
+    }
+
+    /**
+     * The Retired section, created hidden at the end of the course if it is missing.
+     *
+     * @param stdClass $course
+     * @return section_info
+     */
+    public static function ensure_retired_section(stdClass $course): section_info {
+        if ($section = self::retired_section($course)) {
+            return $section;
+        }
+        $record = formatactions::section($course)->create();   // 0: at the end
+        $section = get_fast_modinfo($course)->get_section_info_by_id($record->id, MUST_EXIST);
+        formatactions::section($course)->update($section,
+            ['name' => self::RETIRED_SECTION_NAME, 'visible' => 0]);
+        return get_fast_modinfo($course)->get_section_info_by_id($record->id, MUST_EXIST);
+    }
+
+    /**
+     * Keep the Retired section after every lesson section.
+     *
+     * Lesson N lives in section N. When a course gains a lesson, the next number may be
+     * the Retired section's, and naming it would turn the retired modules into a lesson.
+     * So before sections are created or named, a Retired section inside the lesson range
+     * is moved to a new last position. Its modules move with it.
+     *
+     * @param stdClass $course
+     * @param int $numsections the number of lesson sections the publish needs
+     */
+    public static function keep_retired_last(stdClass $course, int $numsections): void {
+        $retired = self::retired_section($course);
+        if (!$retired || $retired->section > $numsections) {
+            return;
+        }
+        $actions = formatactions::section($course);
+        $actions->create_if_missing(range(1, $numsections + 1));
+        $last = max(array_keys(get_fast_modinfo($course)->get_section_info_all()));
+        if ($retired->section != $last) {
+            $actions->move_at(
+                get_fast_modinfo($course)->get_section_info_by_id($retired->id, MUST_EXIST),
+                $last);
+        }
     }
 
     /**

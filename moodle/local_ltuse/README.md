@@ -129,6 +129,37 @@ It uses Moodle's public APIs: `admin_setting::write_setting()`, plugininfo `enab
 |---|---|---|
 | `role_capabilities` | `roleid`, `contextid` (system) | Drift compares a role's own system-context permissions. `role_context_capabilities()` merges parent contexts, which is not that comparison. |
 
+### Organisations, cohorts and profile fields (spec 002)
+
+The applier also handles four item types after settings. They are applied in this order:
+
+| Class | Writes through | Reads |
+|---|---|---|
+| `categories` | `core_course_category::create()`, `->update()` | `course_categories` by `idnumber`, then by `parent` and `name` to find a category to adopt |
+| `cohorts` | `cohort_add_cohort()`, `cohort_update_cohort()` | `cohort` by `idnumber`, in any context |
+| `profilefields` | `profile_save_category()`, `profile_save_field()` | `user_info_category` by `name`, `user_info_field` by `shortname` |
+| `cohortrules` | `tool_dynamic_cohorts` API: `rule_manager::process_form()`, then the `rule` persistent's `set('enabled', 1)` and `save()`, as the plugin's own `toggle_status` does; `rule_manager::delete_rule()` is never called by apply | rules through the `rule` persistent's `get_records()`, conditions through `get_condition_records()` |
+
+None of them writes another component's table.
+
+**The profile hook.** `lib.php` defines `local_ltuse_control_view_profile()`, the callback core's `user_can_view_profile()` calls through `user_process_profile_callbacks()`. It refuses an organisation manager the profile of anyone outside the organisations they manage (spec 002, research R9). It never allows anything core would refuse. It reads:
+- `profile_user_record()` for the viewed user's `ltct_org`;
+- `has_coursecontact_role()` and `has_capability('moodle/user:viewalldetails')` at system context, to recognise staff;
+- `has_capability('moodle/user:viewalldetails')` in the viewed user's context, to exempt the site team and mentors.
+
+It runs only while `forceloginforprofiles` is on (declared in `moodle/site/settings/groups.yaml`).
+
+**Raw reads added by spec 002.** All are reads of core tables; none is a write.
+
+| Table | Read by | Indexed? | Why there is no API |
+|---|---|---|---|
+| `course_categories` | `idnumber`; `parent` and `name` | `parent` is; `idnumber` is not | No core function finds a category by `idnumber`, or lists the candidates for adoption. |
+| `cohort` | `idnumber` | No: core indexes only `contextid` | `cohort_get_cohort()` takes an id. Finding a cohort by `idnumber` in any context is needed to report one in the wrong context instead of duplicating it. |
+| `user_info_category` | `name` | No | A profile field category has no `idnumber`. Its name is its identity. |
+| `user_info_field` | `shortname` | No (unique only by validation) | `profile_get_custom_field_data_by_shortname()` exists. The class reads the row directly so it can compare every column. |
+| `cohort` joined to `cohort_members` | `cm.userid`, `c.contextid`, `c.idnumber LIKE 'ltct:org:%:managers'` | `cohort_members.userid` is | `cohort_get_user_cohorts()` returns only visible cohorts, and every managers cohort is hidden. One query per request, cached. |
+| `course_categories`, `cohort`, `user_info_field` | `idnumber` or `shortname` prefix (`ltct:`, `ltct_`) | as above | Drift's scan for undeclared items. There is no core listing by prefix. |
+
 ## Verified against Moodle 5.2.3+ (2026-09-29)
 
 Installed and exercised end to end on Moodle 5.2.3+ (Build 20260928), PHP 8.3, PostgreSQL

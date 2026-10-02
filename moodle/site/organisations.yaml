@@ -1,0 +1,45 @@
+# Rows #8 and #15: the partner organisations we host, and the course categories they share.
+#
+# Read only by scripts/site_config.py (contract: specs/002-org-structure-cohorts/contracts/declaration.md).
+# Each organisation entry becomes exactly four items on the server: a course category
+# ltct:org:<key> inside the organisations category, a hidden system cohort ltct:org:<key>, a
+# hidden managers cohort ltct:org:<key>:managers, and a cohort rule that fills the first from
+# the ltct_org profile field. Its key is also the ltct_org menu option, so it never changes once
+# applied; the name may change, and only display names follow it.
+#
+# Who belongs to an organisation and who manages one live only in Moodle, never here
+# (constitution III). Apply never deletes: an organisation removed from this list is reported
+# as extra and kept.
+
+rows: [8, 15]
+purpose: >-
+  One site hosts every partner organisation. This file lists the shared course categories
+  (the published curriculum, the pilots, and the parent that holds every organisation's own
+  category) and the partner organisations themselves. Each organisation gets the same shape,
+  generated from its key and name, so its learners are grouped by a cohort that fills itself
+  from their profile, and its managers are a cohort the site team fills by hand.
+categories:
+  - key: published
+    name: LTC Published
+    why: >-
+      The published curriculum, shared by every organisation (FR-003). Adopted from the
+      existing category by name, so its id and the publisher's --category do not change (R6).
+  - key: pilots
+    name: LTC Pilots
+    why: >-
+      Stage-7 pilot courses, shared by every organisation. Adopted from the existing category
+      by name, as published is (R6).
+  - key: organisations
+    name: LTC Organisations
+    why: >-
+      The parent of every organisation's own category, so the category list stays short
+      however many partners are added (#15, R6).
+organisations:
+  - key: sil
+    name: SIL
+  - key: sil-partner      # one organisation for every SIL partner, so its managers follow all of them (R6)
+    name: SIL Partner
+  - key: seed-company
+    name: Seed Company
+  - key: independent
+    name: Independent

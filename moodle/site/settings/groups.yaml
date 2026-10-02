@@ -1,0 +1,42 @@
+# Rows #8 and #15: separate groups by organisation inside a shared course, cohort sync that
+# keeps history, and the settings the organisation manager's profile hook depends on.
+
+rows: [8, 15]
+purpose: >-
+  How partner organisations stay apart inside a course they share (spec 002, research R3, R7
+  and R9). Each organisation is a group, and courses default to separate groups, so an
+  organisation manager sees only their own people. Cohort sync suspends someone who leaves a
+  cohort rather than unenrolling them, so their grades and completion are kept. Profiles need
+  a login, which is what makes local_ltuse's profile hook run, and core user fields such as
+  country stay visible to everyone.
+settings:
+  - name: moodlecourse/groupmode
+    value: 1
+    why: >-
+      New courses default to separate groups, so with no moodle/site:accessallgroups a manager
+      sees only their own organisation's group (R3). scripts/publish_moodle.py also sends
+      groupmode 1 on every publish, for courses created before this setting.
+  - name: moodlecourse/groupmodeforce
+    value: 0
+    why: >-
+      Not forced, so a discussion forum can still run without groups and spec 005's
+      community across organisations is not blocked (R3).
+  - name: enrol_cohort/unenrolaction
+    value: 3
+    why: >-
+      3 is ENROL_EXT_REMOVED_SUSPENDNOROLES. Someone who leaves a cohort is suspended, not
+      unenrolled, so their grades and completion are kept (US3-2), and they lose the cohort's
+      role, so a manager removed from a managers cohort loses orgmanager (R7). At 0 history
+      is lost; at 2 a removed manager keeps the role.
+  - name: forceloginforprofiles
+    value: 1
+    why: >-
+      user_can_view_profile() returns before any plugin callback when this is off, so the
+      profile hook that refuses a manager anyone outside their organisations would never run
+      (R9, FR-007).
+  - name: hiddenuserfields
+    value: ""
+    why: >-
+      Empty, so country and every other core user field stays visible to everyone (FR-008,
+      R5). A field listed here is hidden from anyone without
+      moodle/course:viewhiddenuserfields.

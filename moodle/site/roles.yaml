@@ -50,3 +50,26 @@ roles:
     why: >-
       #3 (FR-012): editing teachers lose trusted content at system context, so content they
       edit in Moodle is cleaned of iframes. Only the publisher and managers keep an iframe.
+
+  - shortname: orgmanager
+    name: Organisation manager
+    description: >-
+      Follows one partner organisation's learners in the courses that organisation is enrolled
+      in: the participants page, their profiles and their identity fields, for their own group
+      only. Changes nothing. Comes only through the organisation's managers cohort, by cohort
+      sync. Declared in moodle/site/roles.yaml and applied by scripts/site_config.py -- edit
+      that file rather than this role.
+    archetype: ""   # every capability is managed, so a capability granted by hand shows as drift
+    contextlevels: [course]   # assigned only by cohort sync in a course, never per person (R2, FR-012)
+    capabilities:
+      moodle/course:viewparticipants: allow   # the participants page, filtered to their group (R3)
+      moodle/user:viewdetails: allow          # open one of their people's profiles
+      moodle/site:viewuseridentity: allow     # the identity fields the site shows, such as email
+    why: >-
+      #8 and #15 (FR-005 to FR-007): one follow-only role for every partner organisation, so
+      every manager holds the same permissions (SC-005). It holds no
+      moodle/site:accessallgroups, so separate groups keep each organisation apart, and no
+      moodle/user:viewalldetails, which reaches every learner site-wide and would show
+      teachers-visibility fields such as ltct_role (R2, R5). Nothing is prohibit, so a manager
+      who is also a mentor keeps that role's permissions. local_ltuse's profile hook limits
+      whose profiles a manager can open (R9).

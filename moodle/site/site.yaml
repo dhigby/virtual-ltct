@@ -9,7 +9,7 @@ moodle:
 
 plugins:
   - component: local_ltuse
-    version: 2026100101
+    version: 2026100103
     source:
       path: moodle/local_ltuse
     why: The publish endpoint and this applier. Pinned to the version.php stamp in this repo.
@@ -38,3 +38,14 @@ plugins:
   - component: message_airnotifier
     enabled: 0
     why: "#25 no mobile push until the app plan is decided (spec 015)."
+
+  # Row #8: partner organisations, their cohorts and cohort sync (spec 002).
+  - component: tool_dynamic_cohorts
+    version: 2026031300
+    source:
+      url: https://marketplace.moodle.com/api/plugins/tool_dynamic_cohorts/versions/2026031300/download
+      sha256: "c959d01def5d88b074a189ba8c423b054f7e4e97f2293d127a4ac901d76444b2"
+    why: "#8 fills organisation cohorts from the organisation field. Verified on 5.2 by hand checks (spec 002 research R4); its own version.php still says supported = [404, 501]."
+  - component: enrol_cohort
+    enabled: 1
+    why: "#8 #15 cohort sync enrols an organisation, and its managers, into a course with its group."

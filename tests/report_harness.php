@@ -76,5 +76,25 @@ try { new report('bogus'); check(false, 'bad mode rejected'); } catch (coding_ex
 try { $r->add('nope', '', 'x'); check(false, 'bad status rejected'); } catch (coding_exception $e) { check(true, 'bad status rejected'); }
 try { $r->add('fail', '', 'x'); check(false, 'fail without kind rejected'); } catch (coding_exception $e) { check(true, 'fail without kind rejected'); }
 
+// Spec 002 kinds: adopted is a change, the other three are failures.
+$buf = ''; $r = new report('apply', false, function($t) use (&$buf) { $buf .= $t; });
+$r->start('u', 'r');
+$r->add('changed', 'adopted', 'category:ltct:published', 'LTC Published', null, 'adopted');
+check(strpos($buf, '[changed] category:ltct:published (adopted)') !== false, 'adopted reported as changed');
+check($r->finish() === 0, 'apply with an adoption exits 0');
+$r = new report('drift', false, function($t) {});
+$r->add_result(['item' => 'cohort:ltct:org:fixture-a', 'result' => 'wrong-context', 'declared' => 'system',
+    'live' => 'category 5', 'message' => '', 'secret' => false, 'blocking' => true]);
+$r->add_result(['item' => 'category:ltct:pilots', 'result' => 'ambiguous', 'declared' => 'LTC Pilots',
+    'live' => null, 'message' => 'candidates 2, 7', 'secret' => false, 'blocking' => true]);
+$r->add_result(['item' => 'profilefield:ltct_org', 'result' => 'wrong-datatype', 'declared' => 'menu',
+    'live' => 'text', 'message' => '', 'secret' => false, 'blocking' => true]);
+check($r->has_failures() && $r->summary()['failed'] === 3, 'new blocking kinds are failures');
+check($r->finish() === 1, 'drift with a new blocking kind exits 1');
+try { $r->add('fail', 'adopted', 'category:x'); check(false, 'adopted as fail rejected'); }
+catch (coding_exception $e) { check(true, 'adopted as fail rejected'); }
+try { $r->add('changed', 'ambiguous', 'category:x'); check(false, 'ambiguous as changed rejected'); }
+catch (coding_exception $e) { check(true, 'ambiguous as changed rejected'); }
+
 echo $fails ? "FAILURES: $fails\n" : "ALL PASSED\n";
 exit($fails ? 1 : 0);

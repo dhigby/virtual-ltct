@@ -91,6 +91,13 @@ def ensure_sections(client, courseidnumber, count, names):
                   for n in sorted(names) if names.get(n)])
 
 
+# Separate groups: each partner organisation is a group in a shared course, so a manager
+# sees only their own people (spec 002, R3). Sent on update too, so a course published
+# before spec 002 changes on its next publish. Not forced (groupmodeforce stays 0), so a
+# forum can still run across organisations.
+GROUPMODE_SEPARATE = 1
+
+
 def ensure_course(client, manifest, category_id):
     """Find the course by idnumber, or create it. Returns the course id."""
     existing = client.course_by_idnumber(manifest["idnumber"])
@@ -100,6 +107,7 @@ def ensure_course(client, manifest, category_id):
             "fullname": manifest["title"],
             "summary": manifest["summary_html"],
             "summaryformat": 1,
+            "groupmode": GROUPMODE_SEPARATE,
         }])
         return int(existing["id"]), False
 
@@ -114,6 +122,7 @@ def ensure_course(client, manifest, category_id):
         "format": "topics",
         "numsections": max(len(manifest["sections"]), 1),
         "visible": 0,          # created hidden; a human decides when learners see it
+        "groupmode": GROUPMODE_SEPARATE,
     }])
     if client.dry_run:
         return 0, True

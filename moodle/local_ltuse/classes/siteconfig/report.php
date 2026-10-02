@@ -20,7 +20,9 @@ defined('MOODLE_INTERNAL') || die();
  * the admin setting they came from, and the report decides what may be shown.
  *
  * No item may name a user. Subjects are setting keys, plugin components and
- * role:capability pairs only (FR-009).
+ * role:capability pairs only (FR-009), and from spec 002 category:, cohort:,
+ * profilecategory:, profilefield: and cohortrule: items. A cohort is reported by idnumber
+ * and name only: never its members, never a member count.
  *
  * Exit codes (FR-010, research R11): 0 clean or applied, 1 drift found or a step failed,
  * 2 usage or configuration error.
@@ -33,9 +35,25 @@ class report {
     /** Item statuses, printed as [ok], [changed], [fail], [skip]. */
     const STATUSES = ['ok', 'changed', 'fail', 'skip'];
 
-    /** Item kinds (data-model.md "Item result"). Empty means none, for an ok item. */
+    /**
+     * Item kinds (data-model.md "Item result"). Empty means none, for an ok item. The last
+     * four are spec 002's (specs/002-org-structure-cohorts/data-model.md "Item result").
+     */
     const KINDS = ['', 'changed', 'missing', 'extra', 'unmanaged', 'wrong-release',
-        'pending-upgrade', 'forced', 'unknown', 'env-missing', 'below-minimum'];
+        'pending-upgrade', 'forced', 'unknown', 'env-missing', 'below-minimum',
+        'adopted', 'ambiguous', 'wrong-context', 'wrong-datatype'];
+
+    /**
+     * Kinds that are only ever reported with one status. `adopted` is a category given its
+     * idnumber by apply (R6), so it is a change. The other three are blocking problems the
+     * inspector marks `blocking`, so apply writes nothing while any is present.
+     */
+    const KIND_STATUS = [
+        'adopted' => 'changed',
+        'ambiguous' => 'fail',
+        'wrong-context' => 'fail',
+        'wrong-datatype' => 'fail',
+    ];
 
     /** Kinds that carry no declared value. */
     const NO_DECLARED = ['extra', 'unmanaged'];
@@ -198,6 +216,10 @@ class report {
         }
         if ($status !== 'ok' && $kind === '' && $status !== 'skip') {
             throw new \coding_exception("a '{$status}' item needs a kind: {$subject}");
+        }
+        if (isset(self::KIND_STATUS[$kind]) && self::KIND_STATUS[$kind] !== $status) {
+            throw new \coding_exception("a '{$kind}' item is always '" . self::KIND_STATUS[$kind]
+                . "', not '{$status}': {$subject}");
         }
         if (in_array($kind, self::NO_DECLARED, true)) {
             $declared = null;

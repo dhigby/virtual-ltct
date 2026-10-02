@@ -123,6 +123,12 @@ Note what is deliberately **not** on this list. The published competency site is
 - **2026-09-30 — Production is a dedicated VPS, not the shared host.** `ltuse.net` on the shared host is for building and piloting only; learners are not taken live until Moodle has moved to a dedicated VPS that can serve many at once. Scripted configuration (below) is what makes that move a rebuild plus a data restore.
 - **2026-09-30 — Moodle configuration is code.** Every setting, plugin, role and structure the training system depends on is applied from `moodle/`, never only by hand, so rebuildability (outcome B.5) is a rule rather than an assumption. Recorded as a binding rule in [`.specify/memory/constitution.md`](.specify/memory/constitution.md), along with testing the learner- and admin-experience work with real partner users before it counts as done.
 - **2026-09-30 — Upgrades are never a porting project.** Every change to Moodle's behaviour must carry forward through upstream security and feature upgrades: configuration, maintained plugins, or our own plugins on supported extension points, with no edits to vendored code. A fork is out; the furthest we could go is a distribution someone else maintains, adopted as a recorded decision. Recorded as Principle XI of the constitution.
+- **2026-10-01 — How partner organisations are onboarded.** Each partner is one entry in `moodle/site/organisations.yaml`, which gives it a category, a learner cohort and a managers cohort, the same shape for everyone (spec 002).
+  - **Site team.** The site team creates accounts, sets each learner's organisation, and enrols an organisation into a course with one group per organisation.
+  - **Managers.** An organisation manager follows their own people inside those courses and does nothing else. Core Moodle cannot limit enrolling or account creation to one organisation.
+  - **People who leave.** A small `local_ltuse` profile hook keeps someone who leaves an organisation out of their old manager's view. In a course both organisations share, the site team also removes the old enrolment by hand.
+  - **What stays public.** Category pages and course names, because they hold no personal data.
+  - **Country cohorts.** None are created in advance.
 
 ## Open questions
 
@@ -130,7 +136,7 @@ Note what is deliberately **not** on this list. The published competency site is
 - **Community inside Moodle, or bolted on?** A standing community course with topic forums costs nothing new to run but feels like a course. A bolt-on (Discourse, Matrix) is a better community but a second system to operate and pay for. Start inside Moodle and move only if engagement shows the need _(assumption)_.
 - **How do translated courses live in the repo?** The Moodle interface is easy to localise; course content is not. Whether a translation is a sibling course folder, a per-lesson variant, or something else touches the course layout, `course_stage.py` and the publisher, and should be designed before any is built.
 - **What is our data-protection position?** A worldwide learner base means a privacy notice, a retention rule, consent at sign-up, and an answer to "delete my data". None exists yet.
-- **How are partner organisations onboarded?** Who creates their category and cohorts, what an organisation manager may see and do, and whether a partner can enrol its own learners without us.
+- **Should partner managers enrol their own learners?** Onboarding was decided on 2026-10-01 (see **Decisions**): the site team enrols, and managers follow. Self-service would need our own code, and it is reconsidered once 2–3 real organisation managers have used the follow-only version (spec 002, SC-004).
 - **Where does admin tooling go?** Scripted cohort creation and bulk enrolment would make "a small team can run it" true, but they handle learner data. They belong in the training-system half, run against Moodle, and must never write learner data into git.
 - **Which Moodle app plan, if any?** The free plan's 50-device push limit will be outgrown; whether push notifications are worth a flat-rate plan, or email is enough, is undecided.
 - **Which pathway mechanism?** Core competency learning plans, or the free Programs plugin (`tool_muprog`) — whose listed releases stop at Moodle 5.1, so 5.2 support needs confirming first.

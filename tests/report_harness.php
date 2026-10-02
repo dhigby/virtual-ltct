@@ -96,5 +96,38 @@ catch (coding_exception $e) { check(true, 'adopted as fail rejected'); }
 try { $r->add('changed', 'ambiguous', 'category:x'); check(false, 'ambiguous as changed rejected'); }
 catch (coding_exception $e) { check(true, 'ambiguous as changed rejected'); }
 
+// Spec 004 kinds: unknown is always a failure that blocks the run; a missing audience cohort is
+// a failure that blocks only its report.
+$r = new report('apply', false, function($t) {});
+$r->add_result(['item' => 'report progress: user:fixture_column', 'result' => 'unknown', 'declared' => 'user:fixture_column',
+    'live' => null, 'message' => 'the datasource has no such column', 'secret' => false, 'blocking' => true]);
+$r->add_result(['item' => 'report progress: audience cohort ltct:org:fixture-a:managers', 'result' => 'missing',
+    'declared' => 'ltct:org:fixture-a:managers', 'live' => null, 'message' => 'the cohort does not exist yet',
+    'secret' => false, 'blocking' => report::BLOCKS_REPORT, 'report' => 'progress']);
+check($r->summary()['failed'] === 2 && $r->finish() === 1, 'unknown and missing audience are failures, exit 1');
+try { $r->add('changed', 'unknown', 'mod_x'); check(false, 'unknown as changed rejected'); }
+catch (coding_exception $e) { check(true, 'unknown as changed rejected'); }
+$r = new report('apply', false, function($t) {});
+$r->add('changed', 'missing', 'role:orgmanager', 'orgmanager', null, 'created');
+check($r->exit_code() === 0, 'missing still reported as changed when apply creates it');
+
+$unknown = ['item' => 'report progress: user:fixture_column', 'result' => 'unknown', 'blocking' => true];
+$cohort = ['item' => 'report progress: audience cohort ltct:org:fixture-a:managers', 'result' => 'missing',
+    'blocking' => report::BLOCKS_REPORT, 'report' => 'progress'];
+$bysubject = ['item' => 'report pilot: audience cohort ltct:org:fixture-b:managers', 'result' => 'missing',
+    'blocking' => report::BLOCKS_REPORT];
+$nowhere = ['item' => 'cohort:ltct:org:fixture-c', 'result' => 'missing', 'blocking' => report::BLOCKS_REPORT];
+$ok = ['item' => 'debug', 'result' => 'ok', 'blocking' => false];
+check(report::blocking_scope($unknown) === report::BLOCKS_RUN && report::blocking_scope($ok) === null
+    && report::blocking_scope(['item' => 'x']) === null, 'blocking_scope: true is run-wide, false or absent is none');
+check(report::blocking_scope(['item' => 'x', 'blocking' => 'bogus']) === report::BLOCKS_RUN, 'unrecognised scope fails closed to run-wide');
+check(report::has_blocking([$ok, $unknown]) && report::has_blocking([$unknown], 'other'), 'unknown blocks the run and every report');
+check(!report::has_blocking([$ok, $cohort]), 'missing audience cohort does not block the run');
+check(report::has_blocking([$cohort], 'progress') && !report::has_blocking([$cohort], 'pilot'), 'missing audience cohort blocks only its report');
+check(report::has_blocking([$bysubject], 'pilot') && !report::has_blocking([$bysubject], 'progress'), 'report taken from the subject when no report key');
+check(report::has_blocking([$nowhere], 'progress') && report::has_blocking([$nowhere], 'pilot') && !report::has_blocking([$nowhere]),
+    'report-scoped block with no report blocks every report, not the run');
+check(!report::has_blocking([]) && !report::has_blocking([$ok], 'progress'), 'nothing blocking');
+
 echo $fails ? "FAILURES: $fails\n" : "ALL PASSED\n";
 exit($fails ? 1 : 0);

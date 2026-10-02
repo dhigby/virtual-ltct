@@ -80,6 +80,11 @@ class hide_modules extends external_api {
             if ($owned[$idnumber]['modname'] === 'qbank') {
                 throw new moodle_exception('error:nohideqbank', 'local_ltuse', '', $idnumber);
             }
+            // The certificate is never retired: retiring is a step towards deleting it, and
+            // deleting it deletes every issued code (spec 013 R14).
+            if ($idnumber === $course->idnumber . \local_ltuse\siteconfig\certtemplate::IDNUMBER_SUFFIX) {
+                throw new moodle_exception('error:nohidecertificate', 'local_ltuse', '', $idnumber);
+            }
         }
 
         $results = [];

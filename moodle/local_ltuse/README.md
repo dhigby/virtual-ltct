@@ -23,6 +23,9 @@ shape and Moodle's.
 | `local_ltuse_create_quiz` | write | Creates or updates a `mod_quiz` and rebuilds its slots as references into that category. |
 | `local_ltuse_hide_modules` | write | Retires modules the course no longer has, by course-module idnumber: hides them and moves them into the hidden Retired section. Never deletes. |
 | `local_ltuse_ensure_discussion` | write | Spec 012, row #10. Creates the course's one `general` forum, `ltct:<slug>:discussion`, in section 0 if it is absent; its name and intro are set only then. On every call it sets only the forum's group mode: separate groups, or visible groups when [`moodle/site/course-discussions.yaml`](../site/course-discussions.yaml) lists the course as shared, always with no grouping. It never writes a discussion or post. Returns `{cmid, created, groupmode, courseforced}`; `courseforced` means the course's own forced group mode overrides the forum's. |
+| `local_ltuse_set_course_completion` | write | Makes a course's activity completion criteria exactly its visible, tracked `ltct:` modules, one criterion at a time. Never clears a learner's course completion (spec 004). |
+| `local_ltuse_set_course_competencies` | write | Replaces the competencies a published course aims at, by name, in the plugin's own map table. Fails closed on a name the site does not have (spec 004). |
+| `local_ltuse_set_course_recognition` | write | Creates or rewords a published course's completion badge, activates it on a delivery publish, and on delivery makes its certificate activity. Never deactivates a badge or deletes a certificate (spec 013). |
 
 **The discussion forum and organisations.** Separate groups hides a group's discussions from
 anyone without `moodle/site:accessallgroups`, and every group in a course belongs to one
@@ -114,6 +117,270 @@ deferred feedback or deferred CBM) are checked only by its form validation, whic
 `add_moduleinfo()` never runs, so `create_quiz` checks them itself and refuses a quiz that
 could not go offline, naming the setting at fault.
 
+## Progress reporting (spec 004)
+
+Built 2026-10-02 and **not yet verified on the instance** (constitution X). Everything below
+describes the code; none of it has been exercised on a live Moodle yet. The pure parts are
+checked by `tests/criteria_harness.php` with a bare PHP CLI, and the per-competency
+datasource by the PHPUnit test `tests/competency_coverage_test.php`, on synthetic data.
+
+### Completion rules on pages and quizzes
+
+`create_page` and `create_quiz` take an optional `completion`: `view`, `submit` or `pass`.
+`completion_rule` is the one place those words become moduleinfo fields
+(`completion = 2` with `completionview`, or with `completionusegrade` and
+`completionpassgrade`). An unknown word is refused, never mapped to a default. Both
+functions return `completion`: `set`, `unchanged`, `differs`, or empty when no rule was sent.
+
+`util::completion_outcome()` decides, before anything is written:
+
+- no rule sent: empty, and completion is not touched, which is what an older publisher gets;
+- **completion off for the site or the course** (`completion_info::is_enabled()`): refused
+  with `error:completionoff`. Core silently drops completion fields when it is off, so
+  reporting `set` would claim a write that never happened;
+- a new module: `set`;
+- the stored row already carries the rule: `unchanged`;
+- the module is untracked and is not an activity criterion of its course: `set`. The update
+  passes `completionunlocked = 1`, which `update_moduleinfo()` needs;
+- anything else: `differs`, and nothing about completion is written. The publisher stops on it.
+
+The criterion test is there because `completionunlocked` calls `reset_all_state()`, which for
+an activity criterion deletes every `course_completions` row in the course, completed ones
+included (`delete_all_state()`, `lib/completionlib.php`). An untracked module has no learner
+state to lose, unless someone turned tracking off by hand while it was still a criterion, and
+that case is reported, never unlocked.
+
+`create_page` still writes nothing for an unchanged page, except when the outcome is `set`: a
+page published before this spec must be saved once to become tracked. `create_quiz` refuses
+`pass` when the stored pass mark would be 0 (`error:passnograde`), because core checks
+"passing grade" only in its form, and with `gradepass` 0 any grade completes the quiz.
+
+### Course completion criteria: `set_course_completion`
+
+Moodle has no API for changing course completion criteria. Its only route, the course
+completion form (`course/completion.php`), starts by clearing every criterion, which deletes
+every learner's course completion in the course. This function never takes that route, and
+`tests/criteria_harness.php` fails if its source names `clear_criteria` or
+`delete_course_completion_data`. Instead, for a course whose idnumber starts `ltct:` and has
+completion on, it:
+
+1. computes **wanted**, the visible, tracked modules carrying `<course idnumber>:` (never the
+   question bank), and **present**, the cmids of the course's activity criteria, and their
+   difference (`criteria_diff`, which de-duplicates, because the table allows duplicate rows);
+2. inserts each added criterion and deletes every row for each removed one through
+   `completion_criteria_activity`, the data object the form writes (`module` is the module
+   name, `moduleinstance` the cmid);
+3. sets overall and activity aggregation to ALL through `completion_aggregation`;
+4. if a criterion was removed, flags each **incomplete** course completion for re-aggregation
+   through `completion_completion` (`reaggregate`, then `mark_enrolled()`), as
+   `completion_daily_task` does. A completed row is never touched;
+5. fires `course_completion_updated` if anything changed, as the form does.
+
+Criteria of other types (date, role, self, grade) are left alone and reported as
+`othercriteria`. The function returns cmids and a count, never a user.
+
+### Competencies a course aims at: `set_course_competencies`
+
+The per-competency report cannot join on a text custom field, so the publisher also writes a
+course's frontmatter `competencies:` into `local_ltuse_course_comp`. Every name is resolved,
+compared exactly in PHP, against the non-retired rows of `local_ltuse_competency` before
+anything is written; one unknown name fails the call and leaves the map as it was. The writes
+run in one delegated transaction, and the stored set is read back after the commit.
+
+### The plugin's own tables
+
+`db/install.xml` (and the matching steps in `db/upgrade.php`) adds four tables. The first two
+arrive at version `2026100204`; `local_ltuse_course_badge` arrives at `2026100300` and is
+described under [Badges and certificates](#badges-and-certificates-spec-013);
+`local_ltuse_mentor_contact` arrives at `2026100301` and is described under
+[Mentors](#mentors-spec-003). Only the last holds user data, and `classes/privacy/provider.php`
+declares, exports and deletes it:
+
+| Table | Holds | Written by |
+|---|---|---|
+| `local_ltuse_competency` | `name` (unique), `category`, `sortorder`, `retired` | `site_config.py apply`, from `competencies.yaml` (the `Meta` category left out). Rows are retired, never deleted. |
+| `local_ltuse_course_comp` | `courseid`, `competencyid` (unique together) | `set_course_competencies` |
+| `local_ltuse_course_badge` | `courseid` (unique), `badgeid` (unique), `imagehash` | `set_course_recognition` |
+| `local_ltuse_mentor_contact` | `mentorid`, `learnerid` (unique together), `contactid` | the `role_assigned` observer and `cli/mentor_contacts.php` |
+
+### The per-competency datasource
+
+`reportbuilder/datasource/competency_coverage` is a report builder datasource, a supported
+extension point core finds by namespace. Its main table is `local_ltuse_competency`, with
+retired rows removed by a base condition, so a competency no course aims at is still a row
+with 0 in every count. It has two entities and nothing else: `competency` (name, sorted in
+framework order, and category) and `coverage` (five counts, each a correlated subquery). There
+is no user, course or enrolment entity, so a report on this source cannot name a person or a
+course, and no column shows a level.
+
+What counts as delivery is fixed in the entity's SQL, not in a report condition, so editing
+the report cannot widen it: a course counts only if its idnumber starts `ltct:`; delivery is an
+enabled `cohort` enrol instance whose role has shortname `student` (looked up by shortname,
+never by id), which leaves out each organisation's managers cohort and every manual (pilot)
+enrolment.
+
+## Badges and certificates (spec 013)
+
+Training evidence only: "training completed", never "certified", and never a CBC level held.
+The wording rule is `scripts/cbc_wording.py`. `site_config.py apply` sends its deny patterns
+with the badge template, and `classes/recognition/wording.php` re-checks each course's
+rendered text against them before anything is written. The plugin holds no copy of the rule.
+
+### The badge: `classes/recognition/badges.php`
+
+One core **course badge** per published course, awarded by core's own observer the moment the
+learner's course completion is recorded. Core has no web service that creates or updates a
+badge, so the plugin calls the classes the badge pages use:
+
+| Call | For |
+|---|---|
+| `\core_badges\badge::create_badge($data, $courseid)` | A new badge. It sets the status to inactive and a default message, which the plugin then rewrites. |
+| `award_criteria::build([...])->save([...])` | The overall criterion (`agg` ALL), then the course criterion `course_<id>`. Nothing else: a competency criterion would read as a competency awarded. |
+| `$badge->save()` | Rewording in place, active or not. The details form freezes an active badge, but that is a UI rule only. |
+| `$badge->set_status()` | Activation, on a delivery publish only. Never a deactivation: an inactive-locked or archived badge makes the BadgeClass JSON return 410 to everyone who already holds it. |
+| `badges_process_badge_image($badge, $tmp)` | The image. It deletes the file it is given, so it gets a temporary copy, and it does nothing without GD, so the plugin refuses loudly instead. |
+| `course_handler::create()->get_instance_data($courseid, true)` | The raw values of `ltct_competencies` and `ltct_target_level`, which fill `{competencies}` and `{target_level}`. |
+
+**The pilot learner at delivery.** A pilot and the published course are one Moodle course, so
+a pilot learner's completion is still there when the badge is activated, and the badge cron
+would award them. Stage 8 suspends their manual enrolment first (`process/stages/08-publish.md`).
+
+**Who sees a learner's badges.** `roles.yaml` sets `moodle/badges:viewotherbadges` to
+`inherit` for the authenticated-user role, so learners cannot see each other's badges.
+**Spec 003's mentor role must grant `moodle/badges:viewotherbadges`, assigned in the learner's
+user context**, so a mentor sees exactly their assigned learners' badges. Managers keep it
+through their archetype. Organisation managers follow completion through spec 004's reports
+instead: a course-context role cannot reach a user-context capability.
+
+### The certificate: `classes/recognition/certificate.php`, `classes/siteconfig/certtemplate.php`
+
+A `mod_customcert` activity per delivered course, made through `util::upsert_module()` with
+course-module idnumber `ltct:<slug>:certificate`, `verifyany` 1, completion off, and the
+availability `{"op":"&","c":[{"type":"coursecompleted","id":"1"}],"showc":[true]}` from
+`availability_coursecompleted`. The call refuses while `enableavailability` is off, because
+`add_moduleinfo()` would drop the condition and leave the certificate open.
+`set_course_completion` leaves the certificate's idnumber out of its wanted set. The activity
+is **never deleted**: deleting it deletes every issued code. A course is retired by hiding it.
+
+**Calls into `mod_customcert`'s own classes (Principle XI).** These are not a published API,
+and they were refactored heavily during 5.2.x. Re-run quickstart V6 on every `mod_customcert`
+re-pin.
+
+| Class | Method | For |
+|---|---|---|
+| `mod_customcert\template` | `create()`, `from_record()` | The site template, found by its exact name at system context. |
+| `mod_customcert\service\template_repository` | `list_by_context()` | Finding it. Two with the declared name is `ambiguous` and blocks the run. |
+| `mod_customcert\service\template_service` | `create()`, `delete_page()` | Replacing the site template's pages when the declaration changes. |
+| `mod_customcert\service\page_repository` | `create()`, `list_by_template()` | Its pages. |
+| `mod_customcert\service\element_factory` | `build_with_defaults()`, `create()` | Its elements, from records whose `data` mirrors each element's `normalise_data()`. |
+| `mod_customcert\service\element_repository` | `create()`, `list_by_page()` | Writing and reading elements. |
+| `mod_customcert\service\element_layout` | `from_record()` | An element's position, reference point and alignment. |
+| `mod_customcert\service\template_load_service` | `create()`, `replace()` | Copying the site template into an activity whose pages differ. |
+| `mod_customcert\element_helper` | `CUSTOMCERT_REF_POINT_*` | The reference point for each alignment. |
+
+Images go into `mod_customcert`'s own `image` file area at system context, through the file
+API, which is where its image element looks for a site template's files. Each is stored under
+its content hash and its name, because the image element reuses a course's copy of a file with
+the same name and never refreshes it, so a new logo must have a new name to reach courses
+already copied. Copying into a course moves the file to the course's context, so templates are
+compared by what they show (element type, name, position and data, and an image by its stored
+name and size), never by where the file is. The plugin writes none of `mod_customcert`'s tables with SQL. It reads them only
+through the classes above, plus one join to find the activities: `course_modules` and
+`customcert`, by `cm.idnumber LIKE 'ltct:%:certificate'`.
+
+### The badge map: `local_ltuse_course_badge`
+
+A badge has no idnumber, and a restore or a course copy duplicates its name, so this table is
+its identity: `courseid` (unique), `badgeid` (unique), `imagehash` (the sha256 of the template
+image the badge's image was made from, because core resizes it) and `timecreated`. It holds no
+user data, so the privacy provider does not declare it. A badge in an `ltct:` course that
+the map does not name is reported `extra` and never adopted.
+
+## What the plugin relies on, and why (Principle XI)
+
+Spec 004 adds these dependencies on Moodle. Each was confirmed in `MOODLE_502_STABLE` source.
+
+**Completion data objects** (`lib/completionlib.php` and `completion/`), written through,
+never by raw SQL:
+
+- `completion_info::is_enabled()`, to refuse a rule while completion is off;
+- `completion_criteria_activity` `insert()` and `delete()`. Its file is not autoloaded and
+  `completionlib.php` does not include it, so `set_course_completion` requires it itself, as
+  `course/completion.php` does;
+- `completion_aggregation` `setMethod()` and `save()`;
+- `completion_completion` `mark_enrolled()`, after setting `reaggregate`;
+- `add_moduleinfo()` and `update_moduleinfo()` with `completionunlocked`, which write the
+  module's rule; `set_moduleinfo_defaults()` turns `completionusegrade` into
+  `completiongradeitemnumber`;
+- the `\core\event\course_completion_updated` event.
+
+**Raw reads by the publish functions**, all read-only:
+
+| Table | Read by | Why there is no API |
+|---|---|---|
+| `course_completion_criteria` | `course` (the table's index), with `criteriatype` and, in `completion_outcome()`, `moduleinstance` | `completion_info::get_criteria()` drops rows whose module is gone, so they would never be removed, and `completion_criteria_activity::fetch()` throws on the duplicate rows the table allows. |
+| `course_modules` | `id` list, column `completion` | `set_course_completion` leaves untracked modules out of the criteria. The module records `util` already reads carry no tracking value. |
+| `course_completions` | `course`, `timecompleted IS NULL` (`id`, `userid`) | To find the incomplete rows to flag after a criterion is removed. Each is then loaded and saved through `completion_completion`. |
+
+**Report builder** (`reportbuilder/classes/`), used by `siteconfig\reports`:
+
+- `local\helpers\report`: `create_report($data, false)`, and add, delete and reorder for
+  columns, conditions and filters, plus column sorting;
+- `local\audiences\base::create()` and `update_configdata()`, and `local\helpers\audience`
+  `get_base_records()` and `delete_report_audience()`;
+- `local\schedules\base::create()` through `reportbuilder\schedule\message`, not the
+  deprecated `helpers\schedule::create_schedule()` (MDL-86066); `helpers\schedule`
+  `update_schedule()` and `toggle_schedule()`;
+- the `report`, `column`, `filter` and `schedule` persistents, read directly. A report is
+  **found by `component = local_ltuse` and `area`**, never by id or name. `area` is
+  `PARAM_AREA`, so it is `org_<org key>_<key>` or `<key>`, with every `-` turned into `_`.
+  Nothing makes the pair unique, so more than one match is `ambiguous` and left alone;
+- each declared condition is built on the server and must give SQL from `get_sql_filter()`,
+  because a select filter silently drops a value not among its options (MDL-84213) and the
+  report would then show everyone. A `role:name` condition is declared by shortname and stored
+  as the role's id.
+
+Its raw reads are `role` by `shortname` or `id` and `cohort` by `idnumber` or `id`, to resolve
+and display audiences and the role condition; neither table has a lookup by those keys in the
+report builder API.
+
+**Course custom fields**, used by `siteconfig\coursefields`: writes only through
+`core_course\customfield\course_handler` `create_category()`, `move_field()` and
+`save_field_configuration()`, so core's events and caches stay right. Its raw reads:
+
+| Table | Read by | Why there is no API |
+|---|---|---|
+| `customfield_category` | `component = core_course`, `area = course`, `itemid = 0`, **`name`** | A custom field category has no idnumber; its name is its identity. The handler also returns enabled shared categories, and a shared one of the same name must never be adopted. |
+| `customfield_field` joined to `customfield_category` | `shortname`, across course and shared fields; and the `ltct_` prefix, for drift | `save_field_configuration()` does no uniqueness check, so the lookup is what stops a second apply creating a duplicate. |
+
+Course values (`customfield_data`) are never read or written here; the publisher sets them
+through `core_course_update_courses`.
+
+**The datasource's raw reads**, all read-only, aggregate-only, and in the same join shapes as
+core's participants datasource:
+
+| Table | Columns used | For |
+|---|---|---|
+| `{course}` | `id`, `idnumber` | Only courses whose idnumber starts `ltct:` count. |
+| `{enrol}` | `id`, `courseid`, `enrol`, `status`, `roleid` | An enabled `cohort` instance with the student role is delivery. |
+| `{user_enrolments}` | `enrolid`, `userid`, `status` | Active enrolments on those instances; learners are the same rows by distinct `userid`. |
+| `{user}` | `id`, `deleted` | Deleted users are not counted. |
+| `{role}` | `id`, `shortname` | The student role, by shortname, never by id. |
+| `{course_completions}` | `course`, `userid`, `timecompleted` | Completed rows, for a user with a cohort/student enrolment in that course. |
+
+It writes nothing.
+
+**Frozen once released.** The column identifiers `competency:name`, `competency:category`,
+`coverage:courses`, `coverage:indelivery`, `coverage:enrolments`, `coverage:learners` and
+`coverage:completions` are stored in every saved report and in `moodle/site/reports.yaml`.
+Renaming one breaks those reports. Add a new one instead.
+
+**Re-checked on every Moodle branch.** The datasource extends `core_reportbuilder\datasource`
+and the entities `core_reportbuilder\local\entities\base`. Before raising `requires` or
+`supported`, read `reportbuilder/UPGRADING.md` for the new branch and check both classes
+against it. Moodle 5.0 to 5.2 changed default entity initialisation, entity order, the
+abstract `get_default_tables()`, custom sort fields and select-filter values (research R15).
+
 ## Identity, and why republishing does not duplicate
 
 Every object the publisher creates carries an idnumber:
@@ -197,9 +464,19 @@ None of them writes another component's table.
 **The profile hook.** `lib.php` defines `local_ltuse_control_view_profile()`, the callback core's `user_can_view_profile()` calls through `user_process_profile_callbacks()`. It refuses an organisation manager the profile of anyone outside the organisations they manage (spec 002, research R9). It never allows anything core would refuse. It reads:
 - `profile_user_record()` for the viewed user's `ltct_org`;
 - `has_coursecontact_role()` and `has_capability('moodle/user:viewalldetails')` at system context, to recognise staff;
-- `has_capability('moodle/user:viewalldetails')` in the viewed user's context, to exempt the site team and mentors.
+- `has_capability('moodle/user:viewalldetails')` in the viewed user's context, to exempt the site team;
+- `has_capability('local/ltuse:viewmenteeprogress')` in the viewed user's context, to exempt their mentor, even one who manages another organisation (spec 003, research R9).
 
 It runs only while `forceloginforprofiles` is on (declared in `moodle/site/settings/groups.yaml`).
+
+### Course fields, competencies and reports (spec 004)
+
+After spec 002's items, `apply` runs three more classes in this order: `coursefields` (the
+course field category, then its fields), `competencies` (the competency list, retiring rows a
+list leaves out, never deleting) and `reports` (last, because a report's columns and audiences
+need the fields and cohorts made before it). A block that belongs to one report, such as an
+audience cohort that does not exist yet, leaves only that report unwritten. What each class
+calls and reads is listed under [What the plugin relies on](#what-the-plugin-relies-on-and-why-principle-xi).
 
 **Raw reads added by spec 002.** All are reads of core tables; none is a write.
 
@@ -231,12 +508,50 @@ deprecated `set_coursemodule_groupmode()`. Clearing a hand-set grouping goes thr
 deliberate trade for using the public API, and it only runs after someone set a grouping by
 hand.
 
+### Badge and certificate templates (spec 013)
+
+After reports, `apply` stores the badge template (config `local_ltuse/badge_template` and the
+plugin's `badgetemplate` file area) and rewords every mapped badge from it, reporting each as
+`badge <course idnumber>`. It then builds the certificate site template and copies it into
+each `ltct:<slug>:certificate` activity whose pages differ. `drift` reports a template that
+differs, a badge whose text or image differs from its rendering, a mapped badge that is gone
+(`missing`) and an unmapped badge in an `ltct:` course (`extra`). It never judges whether a
+badge should be active: only the publisher knows a course's stage.
+
+## Mentors (spec 003)
+
+A mentor relationship is the declared `mentor` role (`moodle/site/roles.yaml`) held by the
+mentor in a learner's user context. Core gives that role a profile and the Grades overview,
+but no cross-course completion and nothing in the Moodle app, and core's messaging ignores it.
+This plugin fills those three gaps and nothing else.
+
+| Piece | Where | Does |
+|---|---|---|
+| `local/ltuse:viewmenteeprogress` | `db/access.php` | Read, `CONTEXT_USER`, `RISK_PERSONAL`, no archetype. Granted only by the `mentor` role, so it reaches only assigned learners. |
+| Mentoring page | `mentoring.php`, `templates/mentoring.mustache` | The learners you mentor, each with their courses and completion (in progress N%, not started, completed on a date, not tracked), and your own mentors. Links to profile, core Grades overview and Message. Never shows quiz attempts, submissions, logs or hidden profile fields. |
+| Data | `classes/mentoring.php` | `for_user()` feeds both the page and the app, so they cannot differ. Every learner is rechecked with the capability on every call. `progress_status()` and `sort_courses()` are pure, tested by `tests/mentoring_harness.php`. |
+| Navigation | `db/hooks.php`, `classes/hook_callbacks.php`, `lib.php` | A "Mentoring" primary-navigation item (`\core\hook\navigation\primary_extend`) and profile links (`local_ltuse_myprofile_navigation()`), only for someone with a mentor or a learner. |
+| App | `db/mobile.php`, `classes/output/mobile.php`, `templates/mobile_mentoring.mustache` | A `CoreMainMenuDelegate` handler under the app's More menu. Its `init` returns `disabled` for anyone with no relationship. |
+| Message contacts | `db/events.php`, `classes/observer.php`, table `local_ltuse_mentor_contact` | On `role_assigned` of `mentor` in a user context, `\core_message\api::add_contact()` unless the two are already contacts, recorded in the table. On `role_unassigned`, once no mentor assignment links the pair, `remove_contact()`, only while the pair's contact is still the one the plugin made (the table keeps its `message_contacts` id), so a contact the two make again themselves is never removed. On `user_deleted`, the user's rows and those contacts go. A learner's block is never touched, so it still wins. |
+| CLI | `cli/mentor_contacts.php` | `--sync` makes missing contacts for existing assignments (run once after upgrading). `--end-all --mentor=<username>` ends every relationship one mentor holds, through `role_unassign_all()`. Prints counts, never names. |
+| Privacy | `classes/privacy/provider.php` | Declares, exports and deletes `local_ltuse_mentor_contact` rows in each person's user context, and declares the link to `core_message`. The role assignment and the contact are core's. |
+| Course reports | `classes/siteconfig/inspector.php`, `drift.php`, `applier.php` | Drift reports each `ltct:` course whose own "Show activity reports" is on (a mentor would see submissions and logs); apply turns it off with `update_course()`. The publisher also sends `showreports: 0` on every publish. |
+
+**Raw reads added by spec 003.** None is a write; the only table written is this plugin's own.
+
+| Table | Read by | Indexed? | Why there is no API |
+|---|---|---|---|
+| `role_assignments` joined to `context` | `ra.userid`, `ra.roleid`, `ctx.contextlevel = CONTEXT_USER` | `role_assignments.userid` is | Core has no "contexts where this user holds this role" function. `block_mentees` reads the same join. The result only finds candidates; the capability decides. |
+| `course_completions` | `userid`, `timecompleted IS NOT NULL` | `userid` is | Lists a course the learner completed after their enrolment was deleted, which `enrol_get_all_users_courses()` no longer returns (FR-004). |
+| `role_allow_assign` | `(roleid, allowassign)` | unique key | The applier and drift check one declared allow-assign pair. `get_assignable_roles()` answers for a user in a context, not for a pair. |
+
 ## Verified against Moodle 5.2.3+ (2026-09-29)
 
 Installed and exercised end to end on Moodle 5.2.3+ (Build 20260928), PHP 8.3, PostgreSQL
 16. A full publish of `coretech-computer-hardware` creates 6 pages, 7 sections and a
 27-question quiz, and republishing changes nothing. The four things the first draft asked
-you to verify have now been settled, three of them by failing:
+you to verify have now been settled, three of them by failing. (This section predates spec 004;
+its completion, criteria, competency and report code has not been run on the instance yet.)
 
 1. **`mod_qbank`** works as assumed. `util::ensure_qbank()` creates the instance in
    section 0 and `qformat_xml` imports into a category inside its context.
@@ -277,11 +592,17 @@ and this plugin.
 - **No Moodle → repo sync.** One-way only. Editing in Moodle and syncing back would break
   the source-of-truth split the whole repo rests on. Content edited in Moodle is
   overwritten by the next publish; change the markdown instead.
-- **No enrolment, grades or learner records.** This plugin publishes content and touches
-  no learner data. Learner data is Moodle's alone (`INTENT.md`: *"Learner data lives in
+- **No enrolment, grades or learner records.** This plugin publishes content and creates no
+  learner data. Learner data is Moodle's alone (`INTENT.md`: *"Learner data lives in
   Moodle, never in this repo"*); admin tooling that works with it is a separate concern.
+  Spec 004 comes closest, and stops here: `set_course_completion` flags incomplete course
+  completions for Moodle to re-check, through core's own data object, and never alters or
+  deletes a completion; the per-competency datasource counts enrolments and completions at
+  query time and stores none of them; nothing returns a user.
 - **No direct table writes** for anything a Moodle API covers. Bypassing
   `add_moduleinfo()` / `update_moduleinfo()` would skip grade items, completion, events
   and the file API, and leave a course that looks right until one of those is needed.
   Spec 009 adds none: files go through `file_storage` and pages through
-  `update_moduleinfo()`.
+  `update_moduleinfo()`. Spec 004 writes `$DB` only to the plugin's own two tables; criteria,
+  aggregation and completions go through the completion data objects, reports through report
+  builder's helpers, and custom fields through `course_handler`.

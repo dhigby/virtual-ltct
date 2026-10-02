@@ -24,6 +24,16 @@ secrets.*
 # ever needs to be.
 *.csv
 
+# Report downloads. Report builder exports (spec 004, research R14) are the new way a file
+# of real learners can land in this folder, and constitution III keeps learner data out of
+# this public repo. Save downloads outside the repository folder; GitDoc pushes anything
+# left here, so these patterns are the backstop. The one tracked spreadsheet is the
+# competency seed (no learner data), excepted below.
+*.xlsx
+*.xls
+*.ods
+!import-seeds/Lang Tech Competencies.xlsx
+
 # OS
 Thumbs.db
 .DS_Store

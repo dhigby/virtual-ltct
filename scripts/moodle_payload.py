@@ -70,7 +70,7 @@ sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent))
 import disclosure  # noqa: E402
 import image_reduce  # noqa: E402
 import site_config  # noqa: E402
-from course_stage import branch_slug, is_lesson  # noqa: E402
+from course_stage import branch_slug, is_lesson, stage_for  # noqa: E402
 from quiz_parse import QuizError, parse_quiz_file  # noqa: E402
 
 REPO = pathlib.Path(__file__).resolve().parent.parent
@@ -98,6 +98,7 @@ VIDEO_RE = re.compile(r"\*\*Watch the video:\*\*\s*(.*)$", re.M)
 PENDING_VIDEO_RE = re.compile(r"_To be recorded at stage \d+\._", re.I)
 MODULE_NUMBER_RE = re.compile(r"^(\d+[a-z]?)-")
 IDNUMBER_MAX = 100   # VARCHAR(100) in course, course_modules and question
+CERTIFICATE_KEY = "certificate"   # ltct:<slug>:certificate, the certificate activity (spec 013)
 SRC_RE = re.compile(r"""(?P<attr>\b(?:src|href)\s*=\s*)(?P<q>["'])(?P<url>[^"']*)(?P=q)""")
 
 # Every page is wrapped in this, so moodle/local_ltuse/styles.css can style published
@@ -125,6 +126,40 @@ DISCUSSION_INTRO_MD = (
     "Your mentor reads this forum too.\n\n"
     "Keep a translation team's files and anything a partner has not agreed to share out "
     "of your posts: describe the problem instead.")
+
+
+def completion_for(kind, threshold_pct):
+    """What a learner must do for a module to count as complete: the one rule (spec 004, R1).
+
+    Every page, the withheld-quiz placeholder included, is complete once it is viewed. A
+    quiz with a pass mark is complete once it is passed; one without is complete once it
+    is submitted, because a quiz that has nothing to pass cannot demand a pass. The course
+    is complete when ALL of its modules are (the manifest's "completion": "all").
+
+    Plain words, not Moodle fields (Principle II): only local_ltuse's completion_rule
+    class gives them a meaning in Moodle.
+    """
+    if kind == "quiz":
+        positive = isinstance(threshold_pct, int) and not isinstance(threshold_pct, bool) \
+            and threshold_pct > 0
+        return "pass" if positive else "submit"
+    return "view"
+
+
+DELIVERY_STAGE = 8
+
+
+def recognition_for(folder, url_slug):
+    """The payload's recognition block (spec 013, data-model "Payload additions").
+
+    `delivery` is course_stage reporting stage 8: the README records the course's Moodle
+    link. `certificate` is present only then, because a pilot gets no certificate.
+    """
+    delivery = stage_for(folder, use_gh=False)["stage"] >= DELIVERY_STAGE
+    out = {"delivery": delivery}
+    if delivery:
+        out["certificate"] = {"idnumber": idnumber(url_slug, CERTIFICATE_KEY)}
+    return out
 
 
 def wrap(html):
@@ -318,8 +353,18 @@ class Payload:
             "idnumber": "ltct:%s" % self.url_slug,
             "title": meta.get("title") or self.slug,
             "summary_html": render(summary_md) if summary_md else "",
+            # Course metadata, verbatim from the README frontmatter (spec 004, R11): the
+            # publisher writes both to course fields and the competencies to the
+            # per-competency table. check_moodle_payload.py refuses a name that is not in
+            # competencies.yaml.
             "target_outcome_level": meta.get("target_outcome_level"),
-            "competencies": meta.get("competencies") or [],
+            "competencies": list(meta.get("competencies") or []),
+            # The course is complete when every module is (completion_for()).
+            "completion": "all",
+            # Spec 013: whether this publish is a delivery, which is what turns the badge on
+            # and makes the certificate. course_stage.py decides; the payload never works out
+            # a stage itself (R4). It says nothing about badges or customcert (Principle II).
+            "recognition": recognition_for(self.folder, self.url_slug),
             "content_type": meta.get("content_type"),
             "sections": sections,
             "quizzes": quizzes,
@@ -431,6 +476,7 @@ class Payload:
                     "source": path.name,
                     "html_file": "pages/%s.html" % path.stem,
                     "assets": [],
+                    "completion": completion_for("page", None),
                 }, wrap(WITHHELD_HTML)
 
         for m in VIDEO_RE.finditer(body):
@@ -453,6 +499,7 @@ class Payload:
             "source": path.name,
             "html_file": "pages/%s.html" % path.stem,
             "assets": sorted(page_assets.values()),
+            "completion": completion_for("page", None),
         }, wrap(html)
 
     def _deaden(self, html, excluded_names):
@@ -478,7 +525,8 @@ class Payload:
             self.notes.append("quiz withheld: %s" % e)
             mods.append({"kind": "page", "idnumber": idnumber(self.slug, module_key(path.name)),
                          "name": title_of(raw, path.stem), "source": path.name,
-                         "html_file": "pages/%s.html" % path.stem, "assets": []})
+                         "html_file": "pages/%s.html" % path.stem, "assets": [],
+                         "completion": completion_for("page", None)})
             pages["pages/%s.html" % path.stem] = wrap(WITHHELD_HTML)
             return mods, pages, defs
 
@@ -487,19 +535,21 @@ class Payload:
             name = quiz["title"]
             if quiz["qualifier"]:
                 name = "%s %s" % (name, quiz["qualifier"])
+            completion = completion_for("quiz", quiz["threshold_pct"])
             defs.append({
                 "idnumber": idnumber(self.slug, module_key(path.name) + suffix),
                 "name": name,
                 "source": path.name,
                 "section": section,
                 "threshold_pct": quiz["threshold_pct"],
+                "completion": completion,
                 "category": "%s / %s" % (self.url_slug, path.stem + suffix),
                 "questions": [self._question(q, path.name, i, n)
                               for n, q in enumerate(quiz["questions"], start=1)],
             })
             mods.append({"kind": "quiz",
                          "idnumber": idnumber(self.slug, module_key(path.name) + suffix),
-                         "name": name, "source": path.name})
+                         "name": name, "source": path.name, "completion": completion})
         return mods, pages, defs
 
     def _question(self, q, source, quiz_index, ordinal):

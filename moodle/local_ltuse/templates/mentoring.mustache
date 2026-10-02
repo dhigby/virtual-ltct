@@ -1,0 +1,69 @@
+{{!
+    @template local_ltuse/mentoring
+
+    The Mentoring page (spec 003, research R3). Phone-width first: lists, no wide tables.
+    Course completion only; never a quiz answer, a submission or a CBC level (FR-013).
+
+    Context variables required for this template:
+    * haslearners, learners: [{id, fullname, profileurl, gradesurl, messageurl, hascourses,
+        courses: [{fullname (format_string, so unescaped), statustext, completed, inprogress, notstarted, nottracked,
+                   hidden, notactive, enrolmenttext}]}]
+    * hasmentors, mentors: [{fullname, messageurl}]
+    * empty
+
+    Example context (json):
+    {
+        "haslearners": true,
+        "learners": [{"fullname": "Learner One", "profileurl": "#", "gradesurl": "#",
+            "messageurl": "#", "hascourses": true,
+            "courses": [{"fullname": "Course A", "statustext": "In progress, 40%",
+                "inprogress": true, "hidden": false, "notactive": false, "enrolmenttext": ""}]}],
+        "hasmentors": true,
+        "mentors": [{"fullname": "Mentor One", "messageurl": "#"}],
+        "empty": false
+    }
+}}
+<div class="local-ltuse-mentoring">
+{{#empty}}
+    <p>{{#str}}mentoring:empty, local_ltuse{{/str}}</p>
+{{/empty}}
+{{#haslearners}}
+    <h3>{{#str}}mentoring:learners, local_ltuse{{/str}}</h3>
+    {{#learners}}
+    <section class="card mb-3" id="learner-{{id}}">
+        <div class="card-body">
+            <h4 class="card-title h5">{{fullname}}</h4>
+            <p class="mb-2">
+                <a href="{{profileurl}}">{{#str}}mentoring:profile, local_ltuse{{/str}}</a> ·
+                <a href="{{gradesurl}}">{{#str}}mentoring:grades, local_ltuse{{/str}}</a> ·
+                <a href="{{messageurl}}">{{#str}}mentoring:message, local_ltuse{{/str}}</a>
+            </p>
+            {{#hascourses}}
+            <ul class="list-unstyled mb-0">
+                {{#courses}}
+                <li class="py-1 border-top">
+                    <span class="font-weight-bold">{{{fullname}}}</span>
+                    {{#hidden}}<span class="badge bg-secondary">{{#str}}mentoring:hidden, local_ltuse{{/str}}</span>{{/hidden}}
+                    <br>
+                    <span class="{{#completed}}text-success{{/completed}}">{{statustext}}</span>
+                    {{#notactive}}<span class="text-muted"> ({{enrolmenttext}})</span>{{/notactive}}
+                </li>
+                {{/courses}}
+            </ul>
+            {{/hascourses}}
+            {{^hascourses}}
+            <p class="text-muted mb-0">{{#str}}mentoring:nocourses, local_ltuse{{/str}}</p>
+            {{/hascourses}}
+        </div>
+    </section>
+    {{/learners}}
+{{/haslearners}}
+{{#hasmentors}}
+    <h3>{{#str}}mentoring:mentors, local_ltuse{{/str}}</h3>
+    <ul class="list-unstyled">
+        {{#mentors}}
+        <li class="py-1">{{fullname}} · <a href="{{messageurl}}">{{#str}}mentoring:message, local_ltuse{{/str}}</a></li>
+        {{/mentors}}
+    </ul>
+{{/hasmentors}}
+</div>

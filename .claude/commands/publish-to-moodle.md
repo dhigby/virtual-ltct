@@ -108,6 +108,13 @@ At **stage 8**, remind the user to record the published course URL in the module
 `course_stage.py` reads to report the course as Online, so without it the pipeline still
 thinks the course is unpublished.
 
+That key is also what turns the course's **completion badge** on and adds its
+**certificate** (spec 013): a pilot publish issues neither. So at stage 8 walk the user
+through [`process/stages/08-publish.md`](../../process/stages/08-publish.md) steps 5-7 in
+order: record the `moodle:` link, suspend the pilot learners' **manual** enrolments, make
+the course visible, then run this command again as the delivery and check for the line
+`recognition  badge ..., activated; certificate created`.
+
 ## Rules
 
 - **Verify, then push.** Never publish a payload that has not passed

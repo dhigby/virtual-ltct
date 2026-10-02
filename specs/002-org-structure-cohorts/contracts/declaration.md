@@ -52,6 +52,15 @@ Every organisation entry produces exactly these four items, and nothing else dif
 
 No country cohorts are declared or created (spec Clarifications 2026-10-01). Country is only Moodle's core profile field.
 
+**Added by spec 004.** Each organisation entry now also produces one custom report and one schedule on it. They are declared once, as the `per: organisation` template `progress` in `moodle/site/reports.yaml`, and `scripts/site_config.py` expands that template for every entry here, so nothing about them differs between organisations either. See [spec 004's declaration contract](../../004-progress-reporting/contracts/declaration.md), "What one `per: organisation` template becomes".
+
+| Item | Identity | Name | Properties |
+|---|---|---|---|
+| Custom report | `component` `local_ltuse`, `area` `org_<key>_progress`, every `-` in the key as `_` | `<name>: learner progress` | Participants datasource. Scoped by three conditions: `ltct_org` equals `<key>`, role is `student` (stored as the role's id), enrolment method is `cohort`. Its one audience is cohort members of `ltct:org:<key>:managers`. |
+| Schedule | the report's first `message` schedule | — | Weekly, Excel, viewed as each recipient, not sent when empty (`reportempty` `2`), to the report's audience. Subject `<name>: weekly learner progress`. |
+
+An organisation key must therefore also encode to a valid report `area`: a key containing `--` or ending in `-` fails `validate`. A report is shown as `report org_<key>_progress` in drift and apply output. Its audience is `missing` until the managers cohort exists. That blocks the report, not the run, and the same apply creates the cohort first.
+
 Cohorts are created with `cohort_add_cohort()` and renamed with `cohort_update_cohort()`. Rules are created through `tool_dynamic_cohorts`' `rule` and `condition` persistent classes and its `rule_manager`. No table is written directly (constitution XI), unless R4's fallback is used, as the next section says.
 
 ### Condition config (recorded at R4 Verify, 2026-10-01)
@@ -132,6 +141,7 @@ Country is Moodle's own `country` field and is not declared here. The CSV upload
 - There is exactly one organisation manager role, used for every partner (FR-005, SC-005).
 - It holds no `moodle/site:accessallgroups`, no `moodle/user:viewalldetails`, no `moodle/user:create`, no `moodle/user:update`, and no enrolment, cohort or role-assignment capability (FR-007, FR-013). `validate` fails if any of these appears on `orgmanager`. Without `moodle/user:viewalldetails`, managers do not see `teachers`-visibility fields (R5).
 - Nothing is `prohibit`, so a person who also holds spec 003's mentor role keeps its permissions.
+- **Added by spec 004.** `orgmanager` also holds `report/progress:view: allow` and `report/completion:view: allow`, so a manager can open a course's activity completion and course completion reports. Both reports honour separate groups. Since the role still holds no `moodle/site:accessallgroups`, a manager sees only their own group's learners there. The deny check above is unchanged and still applies. See [spec 004's declaration contract](../../004-progress-reporting/contracts/declaration.md), "`roles.yaml` changes".
 
 ## `settings/groups.yaml`
 

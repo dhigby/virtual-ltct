@@ -75,7 +75,7 @@ A manager downloads their scoped report as a spreadsheet file, or has it emailed
 
 ### User Story 5 - The maintainer sees programme-wide totals (Priority: P3)
 
-The maintainer (or a department lead with site-wide reporting rights) sees totals across all organisations: enrolments, completions per course and per competency, and activity over time — the evidence for which courses are used and where effort should go next.
+The maintainer (or another member of the site team with the system manager role) sees totals across all organisations: enrolments, completions per course and per competency, and activity over time — the evidence for which courses are used and where effort should go next.
 
 **Why this priority**: Informs prioritisation alongside `COVERAGE.md`, but no learner or partner depends on it.
 
@@ -83,7 +83,7 @@ The maintainer (or a department lead with site-wide reporting rights) sees total
 
 **Acceptance Scenarios**:
 
-1. **Given** site-wide reporting rights, **When** the maintainer opens the programme report, **Then** it shows completion counts per course and per competency the courses declare.
+1. **Given** the system manager role, **When** the maintainer opens the programme report, **Then** it shows completion counts per course and per competency the courses declare.
 
 ### Edge Cases
 
@@ -104,14 +104,14 @@ The maintainer (or a department lead with site-wide reporting rights) sees total
 - **FR-003**: Completion MUST be recorded when a learner uses the course in the Moodle app, including offline, once the app syncs.
 - **FR-004**: A learner MUST be able to see their own per-course progress and their next incomplete lesson from their landing page without navigation training.
 - **FR-005**: Organisation and cohort managers MUST see progress only for learners within their own scope (as defined by 002), in the on-screen report, in filters and in every export.
-- **FR-006**: The provided reports MUST show at least: learner, organisation/cohort, course, enrolment date, started or not, lessons completed of total, quiz result, course completion date, and last activity.
+- **FR-006**: The organisation report MUST show at least: learner, organisation, cohort or group, course, enrolment date, started or not, progress through the course as a percentage, quiz result, course completion date and last activity. Per-lesson completion (lessons done of total) MUST be available to the same manager in the course's own completion reports.
 - **FR-007**: Managers MUST be able to export their scoped report as a spreadsheet file and subscribe to a scheduled emailed copy.
 - **FR-008**: Report definitions, their audiences and their scoping MUST be defined under `moodle/` and applied by script, so a rebuilt server gets the same reports.
 - **FR-009**: No report export, sample or fixture containing learner data MUST ever be written into the repository — including test runs, which use test accounts only.
 - **FR-010**: Reports MUST NOT present any learner as having reached a CBC level. Where a report shows a course's declared competencies or `target_outcome_level`, it MUST label them as what the course aims at, in CBC vocabulary only.
 - **FR-011**: A republish MUST NOT reset or delete recorded completions.
 - **FR-012**: Pilot enrolments MUST be distinguishable from delivery enrolments in every report.
-- **FR-013**: A site-wide report MUST give per-course and per-declared-competency completion counts across all organisations, visible only to site-wide reporting roles.
+- **FR-013**: A site-wide report MUST give per-course and per-declared-competency completion counts across all organisations, visible only to the system manager role.
 - **FR-014**: Any learner's full progress record MUST be exportable from Moodle on request, so leaving the platform does not lose learner history (row #16).
 
 ### Key Entities

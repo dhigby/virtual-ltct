@@ -14,7 +14,7 @@ use core_user;
  * ltct:org:<key>:managers cohort is refused the profile of anyone whose ltct_org is not one
  * of the organisations they manage.
  *
- * This is the decision only. It is a pure function of its five inputs, so
+ * This is the decision only. It is a pure function of its six inputs, so
  * tests/profile_access_harness.php can test it without Moodle. lib.php gathers the inputs
  * (local_ltuse_control_view_profile). The outcome only ever takes access away: it is
  * VIEWPROFILE_PREVENT or VIEWPROFILE_DO_NOT_PREVENT, never VIEWPROFILE_FORCE_ALLOW, so
@@ -31,13 +31,16 @@ class profile_access {
      * @param bool $viewedisstaff the viewed person is a course contact or the site team
      * @param bool $viewerhasviewalldetails the viewer has moodle/user:viewalldetails in the
      *        viewed person's context
+     * @param bool $viewerismentor the viewer is the viewed person's mentor: they hold
+     *        local/ltuse:viewmenteeprogress in that person's user context (spec 003, R9). A
+     *        mentor who also manages another organisation must still reach their learner.
      * @return int core_user::VIEWPROFILE_PREVENT or core_user::VIEWPROFILE_DO_NOT_PREVENT
      */
     public static function decide(bool $isself, array $managedkeys, string $viewedorg,
-            bool $viewedisstaff, bool $viewerhasviewalldetails): int {
-        // Not a manager, viewing yourself, or the site team (or a spec 003 mentor): this
+            bool $viewedisstaff, bool $viewerhasviewalldetails, bool $viewerismentor = false): int {
+        // Not a manager, viewing yourself, the site team, or the viewed person's mentor: this
         // hook has nothing to say.
-        if ($isself || !$managedkeys || $viewerhasviewalldetails) {
+        if ($isself || !$managedkeys || $viewerhasviewalldetails || $viewerismentor) {
             return core_user::VIEWPROFILE_DO_NOT_PREVENT;
         }
         $viewedorg = trim($viewedorg);

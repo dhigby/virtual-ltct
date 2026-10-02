@@ -20,6 +20,7 @@ use core_external\external_multiple_structure;
 use core_external\external_single_structure;
 use core_external\external_value;
 use file_storage;
+use local_ltuse\completion_rule;
 use local_ltuse\util;
 use moodle_exception;
 use stdClass;
@@ -53,6 +54,13 @@ use stdClass;
  *     A stored file left out of both is deleted by the save.
  *
  * A caller that sends neither new parameter (an older publisher) gets the old behaviour.
+ *
+ * COMPLETION (spec 004, R2). `completion` is the payload's rule for this page, normally
+ * `view`. util::upsert_module() decides what to do with it and reports `set`, `unchanged`
+ * or `differs`; empty leaves completion alone and reports ''. The no-write short-circuit
+ * above still applies, except when the rule would be `set`: an untracked page with
+ * unchanged content must still be saved once, or a course published before this spec
+ * would never become tracked.
  */
 class create_page extends external_api {
 
@@ -73,13 +81,17 @@ class create_page extends external_api {
                 new external_value(PARAM_FILE, 'File name'),
                 'Files already in this page to keep unchanged (read only with syncfiles)',
                 VALUE_DEFAULT, []),
+            'completion' => new external_value(PARAM_ALPHA,
+                'Completion rule: view, submit or pass; empty leaves completion untouched',
+                VALUE_DEFAULT, ''),
         ]);
     }
 
     public static function execute(string $courseidnumber, string $idnumber, string $name,
                                    string $content, int $section = 0, int $contentitemid = 0,
                                    int $visible = 1, string $intro = '',
-                                   bool $syncfiles = false, array $keepfiles = []): array {
+                                   bool $syncfiles = false, array $keepfiles = [],
+                                   string $completion = ''): array {
         $params = self::validate_parameters(self::execute_parameters(), [
             'courseidnumber' => $courseidnumber,
             'idnumber' => $idnumber,
@@ -91,6 +103,7 @@ class create_page extends external_api {
             'intro' => $intro,
             'syncfiles' => $syncfiles,
             'keepfiles' => $keepfiles,
+            'completion' => $completion,
         ]);
 
         $course = util::course_by_idnumber($params['courseidnumber']);
@@ -98,19 +111,29 @@ class create_page extends external_api {
         self::validate_context($context);
         require_capability('local/ltuse:publish', $context);
 
+        // An unknown rule is refused before anything is read or written.
+        if ($params['completion'] !== '') {
+            completion_rule::fields($params['completion']);
+        }
+
         $existing = util::cm_by_idnumber((int)$course->id, $params['idnumber']);
+        $completionoutcome = ($existing && $existing->modname === 'page')
+            ? util::completion_outcome($course, $existing, $params['completion'])
+            : '';
 
         // Nothing to write. Not even update_moduleinfo(): it would bump the revision and
         // with it every image URL on the page. A caller that sent files (contentitemid)
         // without syncfiles is an older publisher replacing the area, never "unchanged".
         if ($existing && $existing->modname === 'page' && !$params['syncfiles']
-                && !$params['contentitemid'] && self::is_unchanged($existing, $params)) {
+                && !$params['contentitemid'] && $completionoutcome !== 'set'
+                && self::is_unchanged($existing, $params)) {
             return [
                 'cmid' => (int)$existing->id,
                 'instance' => (int)$existing->instance,
                 'created' => false,
                 'outcome' => 'unchanged',
                 'idnumber' => $params['idnumber'],
+                'completion' => $completionoutcome,
             ];
         }
 
@@ -147,16 +170,18 @@ class create_page extends external_api {
             'printlastmodified' => 1,
         ];
         $result = util::upsert_module($course, 'page', $params['idnumber'],
-            $params['section'], $fields);
+            $params['section'], $fields, $params['completion']);
         if ($result['created']) {
             // page_add_instance() takes the content and moves the draft's files only when
             // it is handed the edit form ("if ($mform)", mod/page/lib.php:112 and :123), and
             // add_moduleinfo() from a web service has none. So a new page is stored with no
             // content and no files. page_update_instance() reads both from the data with
             // no form, so a second, update save completes the page. The draft is untouched
-            // until then.
+            // until then. The rule goes again too, so the second save cannot read as a
+            // change: the page now carries it, and the call reports 'unchanged'. The result
+            // returned is the first call's, which is the one that set it.
             util::upsert_module($course, 'page', $params['idnumber'], $params['section'],
-                $fields);
+                $fields, $params['completion']);
         }
 
         return [
@@ -165,6 +190,7 @@ class create_page extends external_api {
             'created' => $result['created'],
             'outcome' => $result['created'] ? 'created' : 'updated',
             'idnumber' => $params['idnumber'],
+            'completion' => $result['completion'],
         ];
     }
 
@@ -259,6 +285,8 @@ class create_page extends external_api {
             'created' => new external_value(PARAM_BOOL, 'True if created, false if updated'),
             'outcome' => new external_value(PARAM_ALPHA, 'created, updated or unchanged'),
             'idnumber' => new external_value(PARAM_RAW, 'Course-module idnumber'),
+            'completion' => new external_value(PARAM_ALPHA,
+                'set, unchanged or differs; empty if no completion rule was sent'),
         ]);
     }
 }

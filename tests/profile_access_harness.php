@@ -34,7 +34,7 @@ use local_ltuse\profile_access;
 const PREVENT = core_user::VIEWPROFILE_PREVENT;
 const ALLOW = core_user::VIEWPROFILE_DO_NOT_PREVENT;
 // decide(bool $isself, array $managedkeys, string $viewedorg, bool $viewedisstaff,
-//        bool $viewerhasviewalldetails): int
+//        bool $viewerhasviewalldetails, bool $viewerismentor = false): int
 $a = ['fixture-a'];
 $ab = ['fixture-a', 'fixture-b'];
 
@@ -81,6 +81,15 @@ check(profile_access::decide(false, $a, 'fixture-b', false, true) === ALLOW,
 check(profile_access::decide(false, $a, '', false, true) === ALLOW,
     'viewalldetails, empty organisation');
 
+// Spec 003 (R9): a mentor of the viewed learner is never prevented, even when the mentor
+// also manages a different organisation. Without the mentor flag the same view is prevented.
+check(profile_access::decide(false, $a, 'fixture-b', false, false, true) === ALLOW,
+    'manager of A, mentor of a learner in B');
+check(profile_access::decide(false, $a, 'fixture-b', false, false, false) === PREVENT,
+    'manager of A, not a mentor, learner in B');
+check(profile_access::decide(false, $a, '', false, false, true) === ALLOW,
+    'manager of A, mentor of a learner with no organisation');
+
 // The outcome is never VIEWPROFILE_FORCE_ALLOW, for any combination of inputs.
 $seen = [];
 foreach ([true, false] as $isself) {
@@ -88,10 +97,12 @@ foreach ([true, false] as $isself) {
         foreach (['', 'fixture-a', 'fixture-b', 'fixture-c'] as $org) {
             foreach ([true, false] as $staff) {
                 foreach ([true, false] as $all) {
-                    $r = profile_access::decide($isself, $keys, $org, $staff, $all);
-                    $seen[var_export($r, true)] = true;
-                    if (!is_int($r) || !in_array($r, [PREVENT, ALLOW], true)) {
-                        check(false, 'outcome ' . var_export($r, true) . ' is not PREVENT or DO_NOT_PREVENT');
+                    foreach ([true, false] as $mentor) {
+                        $r = profile_access::decide($isself, $keys, $org, $staff, $all, $mentor);
+                        $seen[var_export($r, true)] = true;
+                        if (!is_int($r) || !in_array($r, [PREVENT, ALLOW], true)) {
+                            check(false, 'outcome ' . var_export($r, true) . ' is not PREVENT or DO_NOT_PREVENT');
+                        }
                     }
                 }
             }

@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<XMLDB PATH="local/ltuse/db" VERSION="20261003" COMMENT="XMLDB file for Moodle local/ltuse"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="../../../lib/xmldb/xmldb.xsd"
+>
+  <TABLES>
+    <TABLE NAME="local_ltuse_competency" COMMENT="The LTC competency framework, as declared in moodle/site/. Holds no user data. Rows are retired, never deleted.">
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
+        <FIELD NAME="name" TYPE="char" LENGTH="255" NOTNULL="true" SEQUENCE="false" COMMENT="Competency name, verbatim from competencies.yaml"/>
+        <FIELD NAME="category" TYPE="char" LENGTH="255" NOTNULL="true" SEQUENCE="false" COMMENT="Category key, verbatim from competencies.yaml"/>
+        <FIELD NAME="sortorder" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="1-based position across the whole framework"/>
+        <FIELD NAME="retired" TYPE="int" LENGTH="1" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="1 once the competency is no longer declared"/>
+        <FIELD NAME="timemodified" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false"/>
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+      </KEYS>
+      <INDEXES>
+        <INDEX NAME="name" UNIQUE="true" FIELDS="name"/>
+      </INDEXES>
+    </TABLE>
+    <TABLE NAME="local_ltuse_course_comp" COMMENT="Which competencies each published course aims at, written by local_ltuse_set_course_competencies. Holds no user data.">
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
+        <FIELD NAME="courseid" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false"/>
+        <FIELD NAME="competencyid" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false"/>
+        <FIELD NAME="timemodified" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false"/>
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+        <KEY NAME="courseid" TYPE="foreign" FIELDS="courseid" REFTABLE="course" REFFIELDS="id"/>
+        <KEY NAME="competencyid" TYPE="foreign" FIELDS="competencyid" REFTABLE="local_ltuse_competency" REFFIELDS="id"/>
+      </KEYS>
+      <INDEXES>
+        <INDEX NAME="courseid-competencyid" UNIQUE="true" FIELDS="courseid, competencyid"/>
+      </INDEXES>
+    </TABLE>
+    <TABLE NAME="local_ltuse_course_badge" COMMENT="Which badge is each published course's completion badge, written by local_ltuse_set_course_recognition (spec 013, R1). A badge has no idnumber, so this map is its identity. Holds no user data.">
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
+        <FIELD NAME="courseid" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false"/>
+        <FIELD NAME="badgeid" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false"/>
+        <FIELD NAME="imagehash" TYPE="char" LENGTH="64" NOTNULL="true" DEFAULT="" SEQUENCE="false" COMMENT="sha256 of the template image the badge's image was made from; core resizes it, so the stored files cannot be compared"/>
+        <FIELD NAME="timecreated" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false"/>
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+        <KEY NAME="courseid" TYPE="foreign-unique" FIELDS="courseid" REFTABLE="course" REFFIELDS="id"/>
+        <KEY NAME="badgeid" TYPE="foreign-unique" FIELDS="badgeid" REFTABLE="badge" REFFIELDS="id"/>
+      </KEYS>
+    </TABLE>
+    <TABLE NAME="local_ltuse_mentor_contact" COMMENT="Message contacts local_ltuse made between a mentor and their learner (spec 003, research R5), so ending the relationship removes only those.">
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
+        <FIELD NAME="mentorid" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false" COMMENT="user.id of the mentor"/>
+        <FIELD NAME="learnerid" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false" COMMENT="user.id of the learner"/>
+        <FIELD NAME="contactid" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="message_contacts.id of the contact this plugin made, so only that one is ever removed"/>
+        <FIELD NAME="timecreated" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false"/>
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+        <KEY NAME="mentorid" TYPE="foreign" FIELDS="mentorid" REFTABLE="user" REFFIELDS="id"/>
+        <KEY NAME="learnerid" TYPE="foreign" FIELDS="learnerid" REFTABLE="user" REFFIELDS="id"/>
+      </KEYS>
+      <INDEXES>
+        <INDEX NAME="mentorlearner" UNIQUE="true" FIELDS="mentorid, learnerid"/>
+      </INDEXES>
+    </TABLE>
+  </TABLES>
+</XMLDB>

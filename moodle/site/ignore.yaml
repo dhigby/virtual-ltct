@@ -11,10 +11,8 @@ ignore:
     reason: A random salt Moodle generates at install for calendar export URLs. Unique per site, and secret.
   - setting: airnotifieraccesskey
     reason: The Moodle app push key, issued per site when it registers with the app service. Secret, and tied to the site's URL. A new server needs it requested once (Site administration > Messaging > Mobile > Request access key) before push works; that is provisioning (spec 015).
-  - setting: badges_defaultissuername
-    reason: Its default is computed from the site name, so it differs per site. Badges are specified by spec 013, which will declare the issuer if it needs one.
-  - setting: badges_defaultissuercontact
-    reason: Its default is computed from the admin's email, so it differs per site. Badges are specified by spec 013.
+  - setting: badges_badgesalt
+    reason: A per-site salt Moodle derives from the site's creation time; every issued badge's recipient hash uses it. Changing it would break verification of every badge already issued (spec 013 R9), so it is never declared.
   - setting: enrol_flatfile/map_9
     reason: A role-mapping field keyed by role id (9 is ltcpublisher here). Role ids differ per site, and flat-file enrolment is not used.
   - setting: enrol_flatfile/map_10

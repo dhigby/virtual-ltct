@@ -9,6 +9,13 @@ on:
       - 'competencies.yaml'
       - 'scripts/site_config.py'
       - 'tests/test_site_config.py'
+      - 'moodle/local_ltuse/classes/**'
+      - 'tests/criteria_harness.php'
+      - 'scripts/cbc_wording.py'
+      - 'outcome-levels.yaml'
+      - 'modules/*/README.md'
+      - 'tests/test_cbc_wording.py'
+      - 'tests/recognition_harness.php'
   pull_request:
     paths:
       - 'moodle/site/**'
@@ -17,6 +24,13 @@ on:
       - 'competencies.yaml'
       - 'scripts/site_config.py'
       - 'tests/test_site_config.py'
+      - 'moodle/local_ltuse/classes/**'
+      - 'tests/criteria_harness.php'
+      - 'scripts/cbc_wording.py'
+      - 'outcome-levels.yaml'
+      - 'modules/*/README.md'
+      - 'tests/test_cbc_wording.py'
+      - 'tests/recognition_harness.php'
 
 jobs:
   validate:
@@ -29,5 +43,14 @@ jobs:
       - run: pip install pyyaml pytest
       - name: Validate the Moodle site declaration
         run: python scripts/site_config.py validate
-      - name: Unit tests for site_config.py
-        run: python -m pytest -q tests/test_site_config.py
+      - name: Unit tests for site_config.py and the CBC wording rule
+        run: python -m pytest -q tests/test_site_config.py tests/test_cbc_wording.py
+      # local_ltuse's pure completion classes, and the guard that set_course_completion
+      # never names core's wipe functions. Needs no Moodle; the runner image ships PHP.
+      - name: Completion rule and criteria diff harness
+        run: php tests/criteria_harness.php
+      # Spec 013: local_ltuse's badge renderer, its wording backstop against cbc_wording.py's
+      # own deny patterns (read through Python, so PHP never holds a copy), and the
+      # certificate's availability. Runs after setup-python, which the harness calls.
+      - name: Recognition harness
+        run: php tests/recognition_harness.php

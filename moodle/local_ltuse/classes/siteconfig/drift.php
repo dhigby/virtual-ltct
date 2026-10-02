@@ -16,7 +16,9 @@ defined('MOODLE_INTERNAL') || die();
  *   3. undeclared settings whose value differs from Moodle's default and that ignore.yaml
  *      does not list (unmanaged, research R5);
  *   4. items this site owns that are no longer declared (extra, spec 002): an `ltct:`
- *      category or cohort, an `ltct_` profile field, and an `ltct: `-named cohort rule.
+ *      category or cohort, an `ltct_` profile field, and an `ltct: `-named cohort rule;
+ *      and, from spec 004, an `ltct_` course field, a live competency row, and a
+ *      `local_ltuse` custom report.
  *   5. the discussion forum of every ltct: course against course-discussions.yaml (spec 012):
  *      differs, missing, and the warnings forced and allparticipants. allparticipants is a
  *      count only, never a subject, a post or a name (constitution III).
@@ -31,6 +33,15 @@ defined('MOODLE_INTERNAL') || die();
  * `course_categories.idnumber`, `cohort.idnumber` and `user_info_field.shortname`. Rules are
  * read only through cohortrules::owned_rules(), which uses the plugin's own persistent class
  * and returns nothing when tool_dynamic_cohorts is not installed, so that scan is skipped.
+ *
+ * Spec 004's undeclared items come from their own classes' extras()/extra(), not from raw
+ * reads here: coursefields (an `ltct_` course field, never its course values), competencies
+ * (a live row the list leaves out, only when a list is declared, so drift says only what apply
+ * would do; never the course map) and reports (a `local_ltuse` report by area and name; no
+ * report is ever run, and no row or count is read), and from spec 013 an unmapped badge in an
+ * `ltct:` course (badgetemplate::extras(), by course idnumber and badge id; never an award).
+ * A second certificate site template with the declared name is reported by the inspector as
+ * `ambiguous`, which also blocks apply.
  */
 class drift {
 
@@ -66,7 +77,36 @@ class drift {
         $this->report_extra_plugins($declaration);
         $this->report_unmanaged_settings($declaration);
         $this->report_extra_owned($declaration);
+        $this->report_extra_reporting();
         $this->report_discussions();
+        // Pass 6 (spec 003, R2): a published course with activity reports turned on.
+        foreach ($this->inspector->check_course_reports() as $item) {
+            $this->report->add_result($item);
+        }
+    }
+
+    /**
+     * Pass 4, spec 004: undeclared course fields, competencies and reports, as `extra`.
+     */
+    protected function report_extra_reporting(): void {
+        foreach ($this->inspector->coursefields()->extras() as $item) {
+            $this->report->add_result($item);
+        }
+        if ($this->inspector->declares_competencies()) {
+            foreach ($this->inspector->competencies()->extras() as $item) {
+                $this->report->add_result($item);
+            }
+        }
+        foreach ($this->inspector->reports()->extra() as $item) {
+            $this->report->add_result($item);
+        }
+        // Spec 013: a badge in an ltct: course that is not the published one. Drift never
+        // judges whether a badge should be active; only the publisher knows a course's stage.
+        if ($this->inspector->badgetemplate()) {
+            foreach (badgetemplate::extras() as $item) {
+                $this->report->add_result($item);
+            }
+        }
     }
 
     /**

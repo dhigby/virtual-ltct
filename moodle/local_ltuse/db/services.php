@@ -55,6 +55,23 @@ $functions = [
         'ajax'         => false,
         'capabilities' => 'local/ltuse:publish',
     ],
+    'local_ltuse_set_course_completion' => [
+        'classname'    => 'local_ltuse\external\set_course_completion',
+        'description'  => 'Make a course\'s activity completion criteria exactly its visible '
+                        . 'published modules, one criterion at a time. Never clears '
+                        . 'learners\' course completions. Idempotent.',
+        'type'         => 'write',
+        'ajax'         => false,
+        'capabilities' => 'local/ltuse:publish, moodle/course:update',
+    ],
+    'local_ltuse_set_course_competencies' => [
+        'classname'    => 'local_ltuse\external\set_course_competencies',
+        'description'  => 'Replace the competencies a published course aims at, by name. '
+                        . 'Fails closed on an unknown name. Idempotent.',
+        'type'         => 'write',
+        'ajax'         => false,
+        'capabilities' => 'local/ltuse:publish',
+    ],
     'local_ltuse_ensure_discussion' => [
         'classname'    => 'local_ltuse\external\ensure_discussion',
         'description'  => 'Create the discussion forum of a course if it is absent, and set only its '
@@ -63,6 +80,17 @@ $functions = [
         'type'         => 'write',
         'ajax'         => false,
         'capabilities' => 'local/ltuse:publish, moodle/course:manageactivities',
+    ],
+    'local_ltuse_set_course_recognition' => [
+        'classname'    => 'local_ltuse\external\set_course_recognition',
+        'description'  => 'Create or reword a published course\'s completion badge, activate it '
+                        . 'on a delivery publish, and on delivery make its certificate activity. '
+                        . 'Never deactivates a badge or deletes a certificate. Idempotent.',
+        'type'         => 'write',
+        'ajax'         => false,
+        'capabilities' => 'local/ltuse:publish, moodle/badges:createbadge, '
+                        . 'moodle/badges:configurecriteria, moodle/badges:configuredetails, '
+                        . 'moodle/badges:configuremessages, mod/customcert:addinstance',
     ],
 ];
 
@@ -80,7 +108,10 @@ $services = [
             'local_ltuse_import_questions',
             'local_ltuse_create_quiz',
             'local_ltuse_hide_modules',
+            'local_ltuse_set_course_completion',
+            'local_ltuse_set_course_competencies',
             'local_ltuse_ensure_discussion',
+            'local_ltuse_set_course_recognition',
             // Core functions the publisher also needs. Listed here so one token covers
             // the whole publish rather than the operator wiring up several services.
             'core_course_create_courses',

@@ -972,35 +972,37 @@ symptoms of a single cause higher up. Work in this order instead:</p>
    downstream-looking errors.</li>
 </ol>
 <p><img alt="The Markers Inventory dialog listing markers, their counts, and style names (Chapter Number, Footnote, End Marker, and others)." src="../ss-04-markers-inventory.png" />
-<em>This is where you check that every paired marker actually closes.</em>
-3. <strong>Ghost markers.</strong> Look for markers left behind with no content attached — often the
+<em>This is where you check that every paired marker actually closes.</em></p>
+<ol>
+<li><strong>Ghost markers.</strong> Look for markers left behind with no content attached — often the
    debris of a deleted footnote or cross-reference where the marker itself wasn't
    removed. These can silently corrupt export and typesetting even when nothing visibly
-   looks wrong on screen.
-4. <strong>Long/short verses.</strong> Verses that run unexpectedly long or short compared to the
+   looks wrong on screen.</li>
+<li><strong>Long/short verses.</strong> Verses that run unexpectedly long or short compared to the
    source can indicate a misplaced verse marker, a merged verse, or dropped text — worth
    ruling out before treating everything else in the chapter as a heading or reference
-   problem.
-5. <strong>Section headings.</strong> The marker itself is rarely the problem — most projects use
+   problem.</li>
+<li><strong>Section headings.</strong> The marker itself is rarely the problem — most projects use
    <code>\s1</code> almost exclusively, with <code>\s2</code> only occasionally, so a wrong-level marker is
    uncommon. The real issues to check for are missing headings, or headings that don't
-   match the text they introduce.
-6. <strong>Book titles.</strong> Inconsistent or incorrect book-name and book-title markup, especially
-   after a book has been renamed or reorganized mid-project.
-7. <strong>References</strong> (<code>\r</code> shows parallel passages; <code>\xt</code> is the actual cross-reference
+   match the text they introduce.</li>
+<li><strong>Book titles.</strong> Inconsistent or incorrect book-name and book-title markup, especially
+   after a book has been renamed or reorganized mid-project.</li>
+<li><strong>References</strong> (<code>\r</code> shows parallel passages; <code>\xt</code> is the actual cross-reference
    marker) and the <strong>table of contents.</strong> Missed book-name checks, foreign-language <code>\r</code>
    abbreviations left unadjusted (a common source:
    bulk-copying <code>\r</code> lines from another NT project as a starting point, which carries over
    that project's abbreviations instead of the current project's own), and a table of
-   contents that doesn't match the book titles actually in the text.
-8. <strong>Footnotes.</strong> Beyond the marker-pair check in step 2, confirm footnote content and
+   contents that doesn't match the book titles actually in the text.</li>
+<li><strong>Footnotes.</strong> Beyond the marker-pair check in step 2, confirm footnote content and
    placement are sound — a footnote that survives the marker check can still be attached
    to the wrong verse or duplicated. Note that an unclosed <code>\f</code> footnote marker (opened
    without its matching <code>\f*</code>) has a much narrower effect than the missing-<code>\p</code> example
    above: if it's unclosed at the end of a verse, it has no effect at all; if it's
    unclosed partway through a verse, the only consequence is that the footnote text
    displays as part of the verse itself — it has no other flow-on effect, and does not
-   cascade into headings, references, or other markers elsewhere in the chapter.</p>
+   cascade into headings, references, or other markers elsewhere in the chapter.</li>
+</ol>
 <p>Diagnosing structural-first doesn't mean the team fixes things in that exact order line
 by line — it means <em>you</em> look for the highest-leverage cause first, so you're not
 sending a team to manually correct fifty symptoms of one unclosed marker.</p>

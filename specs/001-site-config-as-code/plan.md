@@ -50,7 +50,7 @@ scripts/
 | VI. No git, no LMS orientation | PASS. Only the maintainer runs this. Baseline defaults (digests, app access, offline) mean learners have less to set up. |
 | VII. One shape, gated stages | PASS. No course content touched. |
 | VIII. Language data | PASS. Not applicable to configuration. |
-| IX. Flat cost, field-ready | PASS. Core only, no paid plugin. App and offline download stay on. Push (`message_airnotifier`) stays disabled until spec 015 decides the app plan. |
+| IX. Flat cost, field-ready | PASS. Core only, no paid plugin. App and offline download stay on. Push (`message_airnotifier`) is on: the Premium app plan allows unlimited devices at a flat rate (changed 2026-10-02). |
 | X. Traceable and verified | PASS. Each settings file cites its rows. Every setting name is confirmed in `MOODLE_502_STABLE` source (research.md) and verified on the 5.2.3+ instance before delivery (FR-017). Scheduled drift is a recurring operation owned by spec 015. This spec does not claim it is covered. |
 | XI. Survives an upgrade | PASS. Uses only public APIs: `admin_setting::write_setting()`, `core_plugin_manager`, plugininfo `enable_plugin()`, `create_role()`, `assign_capability()` and `unassign_capability()`. No vendored code edited. One raw read, `role_capabilities` by `roleid` and `contextid`, is a stable core table read by indexed columns. It is still listed in the plugin README. |
 | Platform: core first, pin plugins | PASS. Third-party plugins are pinned by version and sha256. The applier verifies them and never installs or upgrades. |

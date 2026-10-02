@@ -291,6 +291,14 @@
       "kind": "complete",
       "by": "ai",
       "at": "2026-10-01T15:36:10.015Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T026",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-02T20:57:59.994Z"
     }
   ],
   "telemetryInstanceId": "e7f2c66a-64c0-4184-914e-5556c1104202",
@@ -349,6 +357,11 @@
       "decision": "Drift skips settings whose get_setting() is true and treats an empty checkbox as 0",
       "why": "Widget settings store no value, and checkbox defaults of empty string mean unchecked; both were false unmanaged reports",
       "rejected": "Listing them all in ignore.yaml"
+    },
+    {
+      "decision": "Push (message_airnotifier) is enabled in the baseline; supersedes \"Push stays disabled\"",
+      "why": "ltuse.net moved to the Premium app plan on 2026-10-02: unlimited push devices at a flat rate, so constitution IX holds",
+      "rejected": "keeping push off until spec 015"
     }
   ],
   "concerns": [
@@ -535,7 +548,7 @@
       ]
     }
   },
-  "currentTask": "T034",
+  "currentTask": "T026",
   "task_summaries": {
     "T001": {
       "status": "DONE",
@@ -730,6 +743,15 @@
       "did": "validate, php -l on 7 PHP files, existing CI checks and SC-004 secret search run; fixed .gitignore that hid moodle/site/; course-package errors are pre-existing in modules/",
       "files": [
         ".gitignore"
+      ]
+    },
+    "T026": {
+      "status": "DONE",
+      "did": "Android sign-in and offline download verified under spec 009 V7 (2026-10-02, app 5.2.1, S24+); callouts verified styled in the app after enabling the Premium app plan, removing the prefers-color-scheme rule and versioning mobilecssurl (?v=2)",
+      "files": [
+        "moodle/local_ltuse/styles.css",
+        "moodle/site/settings/mobile.yaml",
+        "moodle/REQUIREMENTS.md"
       ]
     }
   },

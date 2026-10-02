@@ -128,6 +128,6 @@ The full validation rules are in [data-model.md](../data-model.md).
 | #16 | `tool_dataprivacy/automaticdataexportapproval`, `tool_dataprivacy/automaticdatadeletionapproval` | `0`, `0` |
 | #19 | `messaging`, `messagingallusers` | `1`, `0` |
 | #25 | `defaultpreference_maildigest` | `1` |
-| #25 | `message_airnotifier` (plugin) | disabled |
+| #25 | `message_airnotifier` (plugin) | enabled |
 
 `moodle.requires` is `2026042003.03` (R10). Settings that `config.php` sets, such as `wwwroot` and `debug`, are never declared (R6). Google Drive embeds (R9) are settled at T025.

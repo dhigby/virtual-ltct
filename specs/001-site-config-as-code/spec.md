@@ -74,7 +74,7 @@ A learner on an Android phone opens a published course in the Moodle app, views 
 3. **Given** the baseline, **When** a learner signs in through the Moodle app, **Then** app access is enabled, published pages use the mobile stylesheet, and courses can be downloaded for offline use. (#4)
 4. **Given** the baseline, **When** an administrator is asked for one learner's data, **Then** they can produce a full export for that learner and act on a deletion request using core Moodle capability. (#16)
 5. **Given** the baseline, **When** two learners on the site message each other, **Then** one-to-one and group conversations work in the browser and the app, and a learner can restrict who may message them. (#19)
-6. **Given** the baseline, **When** a learner opens their notification preferences, **Then** sensible site defaults are already set (forum digests rather than one email per post) and the learner can change them. (#25)
+6. **Given** the baseline, **When** a learner opens their notification preferences, **Then** sensible site defaults are already set (forum digests rather than one email per post), notifications also reach the learner's Moodle app as push, and the learner can change any of it. (#25)
 
 ---
 
@@ -108,7 +108,7 @@ A learner on an Android phone opens a published course in the Moodle app, views 
 - **FR-013**: The baseline MUST enable Moodle app access and offline course download, and MUST set the mobile stylesheet that published pages rely on. (#4)
 - **FR-014**: The baseline MUST enable core per-learner data export and data-deletion requests, and course backup, so that a learner's data and a course's structure can be exported on request. (#16)
 - **FR-015**: The baseline MUST enable one-to-one and group messaging, in the browser and the app, with learners able to restrict who may contact them. (#19)
-- **FR-016**: The baseline MUST set site-wide notification defaults that avoid email floods (forum digests on) and leave every learner able to change their own preferences. Mobile push MUST stay within the current app plan until that plan is decided. (#25)
+- **FR-016**: The baseline MUST set site-wide notification defaults that avoid email floods (forum digests on) and leave every learner able to change their own preferences. Mobile push through the Moodle app MUST be on, as a channel each learner can turn off per notification. (#25)
 - **FR-017**: Each baseline setting MUST be verified on the temporary 5.2.3+ instance before this spec is marked delivered.
 
 ### Key Entities
@@ -135,7 +135,7 @@ A learner on an Android phone opens a published course in the Moodle app, views 
 - Undeclared settings left at Moodle's default are treated as intentional; only non-default undeclared settings are flagged.
 - SCORM 2004 packages may run, but sequencing is only partly supported in core, so no course is designed to rely on it; SCORM 1.2 is the supported standard.
 - Trusted embed sources start as the video hosts the curriculum already links (Vimeo, Google Drive); adding one is a reviewed change.
-- Push notifications use Moodle HQ's free app plan (50 active devices a month) until spec 015 decides otherwise; email is the default channel.
+- Push notifications run through Moodle HQ's Premium app plan, which allows unlimited devices at a flat rate (ltuse.net since 2026-10-02). Email stays on beside it. Spec 015 confirms the plan for production.
 - The theme, dashboard and course-format choices are declared through this mechanism but specified by spec 007.
 
 ## Requirements Traceability
@@ -146,7 +146,7 @@ A learner on an Android phone opens a published course in the Moodle app, views 
 | 4 | Mobile-friendly | Must | App access, offline download and the mobile stylesheet, declared and verified |
 | 16 | Data export / ownership | Must | Per-learner export and deletion requests, course backup enabled; configuration needs no backup to rebuild (report exports are spec 004; backup operations are spec 015) |
 | 19 | Direct messaging | Pref | One-to-one and group messaging, browser and app, with learner contact controls |
-| 25 | Manageable notifications | Pref | Site notification defaults and per-learner control; push held within the current app plan |
+| 25 | Manageable notifications | Pref | Site notification defaults and per-learner control; push on through the app |
 
 Supports every other row: it is the mechanism by which their configuration is applied (constitution II).
 
@@ -160,7 +160,7 @@ On delivery, the same PR updates these rows' status in moodle/REQUIREMENTS.md (c
 - **IV. Disclosure boundary**: untouched; restricting arbitrary embeds reduces the ways content reaches learner pages unreviewed.
 - **V. CBC fidelity**: no levels, badges or competency settings introduced here.
 - **VI. No git, no LMS orientation**: run by the maintainer, not contributors or learners; baseline defaults (digests, app access) reduce what a learner must learn.
-- **IX. Flat cost, field-ready**: no paid plugin or service; app and offline enabled; push stays within the free plan pending spec 015.
+- **IX. Flat cost, field-ready**: no paid plugin or service; app and offline enabled; push uses the Premium app plan, which is flat-rate (unlimited devices), so it stays within IX.
 - **X. Traceable and verified**: cites rows #3, #4, #16, #19, #25; every setting verified on the temporary 5.2.3+ instance (FR-017). Scheduled drift checks are a recurring operation: who runs and answers them is the undecided Moodle operator, so this spec does not claim that operation is covered.
 - **Platform & Delivery**: core settings only; plugins pinned (FR-003); one declaration for every partner; the server comes from `MOODLE_URL`, never a hard-coded host.
 

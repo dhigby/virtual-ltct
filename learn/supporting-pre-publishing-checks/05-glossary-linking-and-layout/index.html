@@ -95,7 +95,7 @@
             
   <strong>Draft under review.</strong>
   Not published material, and not part of the LT Consultant competency framework.
-  Built from <code>main</code>.
+  Built from <code>course/supporting-pre-publishing-checks</code>.
 
           </div>
           
@@ -917,7 +917,7 @@
 
 
   
-    <a href="https://github.com/dhigby/virtual-ltct/edit/main/modules/supporting-pre-publishing-checks/05-glossary-linking-and-layout.md" title="Edit this page" class="md-content__button md-icon" rel="edit">
+    <a href="https://github.com/dhigby/virtual-ltct/edit/course/supporting-pre-publishing-checks/modules/supporting-pre-publishing-checks/05-glossary-linking-and-layout.md" title="Edit this page" class="md-content__button md-icon" rel="edit">
       
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M10 20H6V4h7v5h5v3.1l2-2V8l-6-6H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h4zm10.2-7c.1 0 .3.1.4.2l1.3 1.3c.2.2.2.6 0 .8l-1 1-2.1-2.1 1-1c.1-.1.2-.2.4-.2m0 3.9L14.1 23H12v-2.1l6.1-6.1z"/></svg>
     </a>
@@ -983,13 +983,13 @@ are marked directly in the text with <code>\w</code> and <code>\w*</code> around
 <code>\w &lt;surface text&gt;|&lt;rendering&gt;\w*</code> — for example <code>\w angel messenja guy\w*</code>, or, where
 the surface form in the text differs from the glossary entry's canonical rendering,
 <code>\w angel guy|Angel messenja guy\w*</code>.</p>
-<p><img alt="A Paratext Find search result for &quot;talk fo God,&quot; showing one occurrence as plain bold text (MAT 1:22) and another wrapped in \w talk fo God|guy who talk fo God\w* markup (MAT 2:5)." src="../L5-13.Find-w-markup.png" />
+<p><img alt="A Paratext Find search result for &quot;talk fo God,&quot; showing one occurrence as plain bold text (MAT 1:22) and another wrapped in \w talk fo God|guy who talk fo God\w* markup (MAT 2:5)." src="../ss-05-find-with-markup.png" />
 <em>This is the markup a correctly-scoped link leaves behind.</em></p>
 <p>You don't have to run Find to spot this markup — it's visible directly in the text
 editor too. The rendering half of a <code>\w...\w*</code> marker displays in <strong>light grey</strong>, right
 in the running text, which makes linked terms easy to scan for by eye as you read through
 a passage:</p>
-<p><img alt="A passage of running text in the Paratext editor, with two \w...\w* markers visible: &quot;angel guy|Angel messenja guy&quot; and &quot;talk fo God|guy who talk fo God,&quot; the rendering half shown in light grey." src="../L5-glossary-links-shown-in-grey.png" />
+<p><img alt="A passage of running text in the Paratext editor, with two \w...\w* markers visible: &quot;angel guy|Angel messenja guy&quot; and &quot;talk fo God|guy who talk fo God,&quot; the rendering half shown in light grey." src="../ss-05-glossary-links-shown-in-grey.png" />
 <em>The grey text is the marker's rendering half — visible right in the text, not just in Find results.</em></p>
 <p>Look at each Find result: if <code>\w...\w*</code> markup
 wraps <strong>every single occurrence</strong> of the term, that's over-linking; if it wraps only the
@@ -1062,7 +1062,7 @@ Digital and Print Publishing competency:</p>
 <p>Every guessed word carries a tick showing its approval status:
    - A <strong>grey tick</strong> means Paratext <em>guessed</em> the breaks — not yet reviewed.
    - A <strong>green tick</strong> means the breaks are <strong>approved</strong>.</p>
-<p><img alt="The Wordlist's Show hyphenation view, with a Hyphenation column showing grey ticks (unreviewed) and green ticks (approved) alongside each word." src="../L5-14.Wordlist-hyphenation.png" />
+<p><img alt="The Wordlist's Show hyphenation view, with a Hyphenation column showing grey ticks (unreviewed) and green ticks (approved) alongside each word." src="../ss-05-wordlist-hyphenation.png" />
    <em>Grey = Paratext's guess; green = a human confirmed it.</em></p>
 <p>Your job is to work through the guesses:
    - <strong>Correct guess</strong> — click the grey tick; it turns green. Approved.
@@ -1109,13 +1109,13 @@ the team's last look before the typesetter. Work through it methodically, watchi
 <li><strong>Heading placement</strong> — headings sitting awkwardly at a page or column break.</li>
 <li><strong>Underfilled pages</strong> — pages with noticeably more white space than their neighbors.</li>
 </ul>
-<p><img alt="A two-page PTXprint spread where a section heading has been pushed to the top of the second column, leaving a large block of white space at the bottom of the first column." src="../L5-16.c.awkward-heading-break.png" />
+<p><img alt="A two-page PTXprint spread where a section heading has been pushed to the top of the second column, leaving a large block of white space at the bottom of the first column." src="../ss-05-awkward-heading-break.png" />
 <em>A heading held together with its paragraph pushed the whole block to the next column — leaving this underfilled gap behind it.</em></p>
 <p>The read-through also turns up composition issues beyond this list — picture sizing and
 spacing, and page-margin spacing, for example:</p>
-<p><img alt="A PTXprint spread where the left-hand page's illustration is oversized relative to the page, and the right-hand page's illustration sits with almost no gap between its caption/credit text and the picture itself." src="../L5-16.d.Picture-size.png" />
+<p><img alt="A PTXprint spread where the left-hand page's illustration is oversized relative to the page, and the right-hand page's illustration sits with almost no gap between its caption/credit text and the picture itself." src="../ss-05-picture-size.png" />
 <em>An oversized picture, and one crowded too close to its own credit text — both are typesetting-craft issues to flag, not fix yourself.</em></p>
-<p><img alt="A page where the running header sits almost flush against the first line of body text, with no visible top margin." src="../L5-16.e.top-margin.png" />
+<p><img alt="A page where the running header sits almost flush against the first line of body text, with no visible top margin." src="../ss-05-top-margin.png" />
 <em>Not enough top-margin space between the running header and the body text below it.</em></p>
 <p>This course's team workbook material was verified against <strong>PTXprint 3.0.38</strong>;
 PTXprint updates often, so specific menu labels may have moved by the time you're

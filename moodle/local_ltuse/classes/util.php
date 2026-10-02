@@ -22,7 +22,7 @@ use stdClass;
  * of those.
  *
  * IDENTITY. Every module the publisher creates carries a course-module idnumber of the
- * form "ltct:<slug>:<source filename>", and every course an idnumber of "ltct:<slug>".
+ * form "ltct:<slug>:<file number>", and every course an idnumber of "ltct:<slug>".
  * That is the whole idempotency story: republishing looks a module up by idnumber and
  * updates it rather than creating a second one. The state lives in Moodle, so there is no
  * repo file to keep honest and it survives someone else republishing.

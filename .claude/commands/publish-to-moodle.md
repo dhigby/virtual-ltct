@@ -75,7 +75,7 @@ python scripts/publish_moodle.py --slug <slug> --category <id>
 published one at stage 8; ask the user which if you don't know, and don't assume.
 
 The publish is **idempotent** — every module is addressed by an idnumber derived from its
-source filename, so running it again updates rather than duplicates. Re-running after a
+source file's number, so running it again updates rather than duplicates. Re-running after a
 content fix is the normal way to work, not something to avoid.
 
 The course is created **hidden**. A human makes it visible when they are ready for

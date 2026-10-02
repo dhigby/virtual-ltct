@@ -76,8 +76,15 @@ Every object the publisher creates carries an idnumber:
 
 ```
 course         ltct:<slug>
-course module  ltct:<slug>:<source filename>      e.g. ltct:bloom:01-what-bloom-is.md
+course module  ltct:<slug>:<file number>          e.g. ltct:bloom:01 for 01-what-bloom-is.md
+question       ltct:<slug>:<file number>:q<quiz>.<n>
 ```
+
+The file's number, not its whole name, because Moodle stores every idnumber in a
+`VARCHAR(100)` (`course`, `course_modules`, `question`) and does not truncate: an overlong
+one fails the insert part-way through a publish. A long course slug plus a long lesson
+filename overflowed it. A file with no number keeps its stem. `moodle_payload.py` refuses a
+course where two published files share a number, or any idnumber exceeds 100 characters.
 
 That is the whole idempotency story, and it lives **in Moodle**, not in a state file in
 the repo. Nothing new to keep honest, it survives someone else republishing, and moving

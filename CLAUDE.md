@@ -325,9 +325,12 @@ Change the marker there and nowhere else. Answer keys *do* reach Moodle, but onl
 question data, where Moodle's capabilities protect them — never in page HTML.
 
 **Identity is an `idnumber`, stored in Moodle, not in a repo state file:** `ltct:<slug>` for
-a course and `ltct:<slug>:<source filename>` for a module. That is what makes republishing
-update rather than duplicate, and what makes moving to another Moodle server a re-publish
-rather than a data move.
+a course and `ltct:<slug>:<file number>` for a module (`03-…md` is `ltct:<slug>:03`; a file
+with no number keeps its stem). That is what makes republishing update rather than
+duplicate, and what makes moving to another Moodle server a re-publish rather than a data
+move. It is the number, not the whole filename, because Moodle stores an idnumber in 100
+characters; the publisher refuses one that won't fit, and two published files sharing a
+number.
 
 **Look up every Moodle API before using it; don't write it from memory.** Query Context7
 first (`/websites/moodledev_io_5_2_apis` for the API guides; `/moodle/moodle` for core's

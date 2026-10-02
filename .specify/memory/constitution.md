@@ -33,7 +33,7 @@ output is hand-edited becomes a liar.
   platform-neutral payload: `moodle_payload.py` knows courses and nothing of Moodle's API;
   `moodle_client.py`, `moodle_xml.py` and `moodle/local_ltuse/` know Moodle and nothing of
   pedagogy. Only the publisher and `local_ltuse` may know both.
-- Moodle identity MUST use `idnumber` (`ltct:<slug>`, `ltct:<slug>:<source filename>`) stored
+- Moodle identity MUST use `idnumber` (`ltct:<slug>`, `ltct:<slug>:<file number>`) stored
   in Moodle, never a repo state file, so that republishing updates rather than duplicates.
 - Moodle configuration — plugins and their pinned versions, site settings, theme, roles and
   capabilities, course categories, cohort definitions, custom profile fields, badges and

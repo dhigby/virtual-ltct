@@ -216,6 +216,7 @@ def main():
         needed = ["local_ltuse_get_course_manifest", "local_ltuse_create_page",
                   "local_ltuse_update_sections",
                   "local_ltuse_import_questions", "local_ltuse_create_quiz",
+                  "local_ltuse_hide_modules",
                   "core_course_create_courses", "core_course_update_courses",
                   "core_course_get_courses_by_field"]
         print("\nfunctions this token can call:")

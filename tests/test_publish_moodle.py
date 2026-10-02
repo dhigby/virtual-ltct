@@ -61,6 +61,14 @@ class FakeClient:
             m["content"] = params["content"]
             return {"cmid": m["cmid"], "created": False,
                     "outcome": "unchanged" if same else "updated"}
+        if function == "local_ltuse_hide_modules":
+            out = []
+            for idn in params["idnumbers"]:
+                m = self.server[idn]
+                out.append({"idnumber": idn, "cmid": m["cmid"],
+                            "outcome": "hidden" if m.get("visible", 1) else "alreadyhidden"})
+                m["visible"] = 0
+            return {"modules": out}
         if function == "local_ltuse_import_questions":
             return {"count": 1}
         if function == "local_ltuse_create_quiz":
@@ -71,6 +79,9 @@ class FakeClient:
 
     def page_calls(self):
         return [p for f, p in self.calls if f == "local_ltuse_create_page"]
+
+    def hide_calls(self):
+        return [p for f, p in self.calls if f == "local_ltuse_hide_modules"]
 
 
 class Publish(unittest.TestCase):
@@ -209,6 +220,52 @@ class Publish(unittest.TestCase):
         out = self.publish(client)
         self.assertNotIn("local_ltuse_get_course_manifest", [f for f, _ in client.calls])
         self.assertIn("dry-run", out)
+
+    # Modules the repo no longer has (spec 009 follow-up): hidden, never deleted.
+    def test_module_the_repo_no_longer_has_is_hidden(self):
+        mods = self.server_as_published()
+        mods += [
+            # The old filename identity of a lesson, as the pre-2026-10-02 scheme wrote it.
+            {"idnumber": mid("01-one-old-name.md"), "cmid": 120, "modname": "page",
+             "files": []},
+            {"idnumber": mid("09-quiz.md"), "cmid": 121, "modname": "quiz", "files": []},
+            # Not this course's content: the shared question bank, and another prefix.
+            {"idnumber": "ltct:qbank", "cmid": 130, "modname": "qbank", "files": []},
+            {"idnumber": "ltct:demo-two:01", "cmid": 131, "modname": "page", "files": []},
+        ]
+        client = FakeClient(mods)
+        out = self.publish(client)
+        calls = client.hide_calls()
+        self.assertEqual(len(calls), 1)
+        self.assertEqual(sorted(calls[0]["idnumbers"]),
+                         [mid("01-one-old-name.md"), mid("09-quiz.md")])
+        self.assertEqual(calls[0]["courseidnumber"], COURSE)
+        self.assertIn("2 module(s) hidden, 0 already hidden", out)
+        # Hiding is the last write: nothing is hidden before its replacement exists.
+        writes = [f for f, _ in client.calls if f.startswith("local_ltuse_")
+                  and f != "local_ltuse_get_course_manifest"]
+        self.assertEqual(writes[-1], "local_ltuse_hide_modules")
+
+    def test_already_hidden_module_is_reported_not_rehidden(self):
+        mods = self.server_as_published()
+        mods.append({"idnumber": mid("03-gone.md"), "cmid": 120, "modname": "page",
+                     "visible": 0, "files": []})
+        out = self.publish(FakeClient(mods))
+        self.assertIn("0 module(s) hidden, 1 already hidden", out)
+
+    def test_nothing_removed_means_no_hide_call(self):
+        client = FakeClient(self.server_as_published())
+        out = self.publish(client)
+        self.assertEqual(client.hide_calls(), [])
+        self.assertNotIn("removed from the repo", out)
+
+    def test_dry_run_hides_nothing(self):
+        mods = self.server_as_published()
+        mods.append({"idnumber": mid("03-gone.md"), "cmid": 120, "modname": "page",
+                     "files": []})
+        client = FakeClient(mods, dry_run=True)
+        self.publish(client)
+        self.assertEqual(client.hide_calls(), [])
 
     def test_older_plugin_without_file_lists(self):
         mods = self.server_as_published()

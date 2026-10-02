@@ -1,7 +1,7 @@
 # `local_ltuse` — the publish endpoint
 
 A small Moodle local plugin exposing the few web service functions the LTC curriculum
-publisher needs. Moodle has no core web service that writes a quiz; these four functions
+publisher needs. Moodle has no core web service that writes a quiz; these functions
 close that gap, each a thin wrapper over the same internal APIs the web UI calls. After
 installing it, [`scripts/publish_moodle.py`](../../scripts/publish_moodle.py) talks plain
 REST, and the contract is defined around our content model rather than bent to fit
@@ -21,6 +21,7 @@ shape and Moodle's.
 | `local_ltuse_create_page` | write | Creates or updates one `mod_page`, addressed by course-module idnumber. |
 | `local_ltuse_import_questions` | write | Imports Moodle XML into a category in the course question bank, creating the `mod_qbank` instance and category if needed. |
 | `local_ltuse_create_quiz` | write | Creates or updates a `mod_quiz` and rebuilds its slots as references into that category. |
+| `local_ltuse_hide_modules` | write | Hides modules the course no longer has, by course-module idnumber. Never deletes. |
 
 Course create/update stays on core (`core_course_create_courses`,
 `core_course_update_courses`, `core_course_get_courses_by_field`) and section handling on
@@ -31,6 +32,22 @@ duplicated here.
 not idempotent without it: `core_course_get_contents` does not reliably return a module's
 idnumber, so there is otherwise no way to ask Moodle which modules a previous publish
 created. With it, republishing is a diff rather than a blind re-create.
+
+## A module the repo no longer has is hidden, never deleted
+
+Rename, renumber or remove a lesson in the repo, and its old module is still in Moodle
+under an idnumber the publisher no longer produces. At the end of every publish, once
+everything new exists, the publisher compares the server's `ltct:<slug>:` modules with
+the payload and sends the leftovers to `hide_modules`. That function checks every
+idnumber before it changes anything, refuses the course question bank, and does exactly
+what core's own hide action does (`core_course_external::edit_module`, `'hide'`):
+`set_coursemodule_visible()`, then the `course_module_updated` event.
+
+Hidden, not deleted, because a learner's attempt and grade live on the module: deleting
+it would take them away, and a mistaken publish could not be undone. A teacher can still
+open it. If the file comes back, the next publish finds the module by its idnumber and
+`update_moduleinfo()` shows it again (`course/modlib.php:772`, MOODLE_502_STABLE).
+Modules without an `ltct:` idnumber, the ones a person made by hand, are never touched.
 
 ## Republishing touches only what changed (spec 009)
 

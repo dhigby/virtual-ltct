@@ -15,7 +15,7 @@
 **Wave 1 — independent (different files):**
 
 - [x] **T001** [P] Add the design-gate guard: fail on any `*-assignment.md` under `modules/` with "assignments wait on the spec 012 design approval" (R8, FR-001, SC-001). This is the first commit of the spec. · scripts/check_course_package.py
-- [x] **T002** [P] Add a `python -m pytest -q tests --ignore=tests/test_site_config.py` step (with `pytest` installed and `tests/**` in the trigger paths), so the new tests run in CI · .github/workflows/course-package.yml
+- [x] **T002** [P] Add a `python -m pytest -q tests --ignore=tests/test_site_config.py` step (with `pytest` installed and `tests/**` in the trigger paths), so the new tests run in CI. Moved on rebase to main's `publisher-tests.yml`, which has its own job, so a failing course check no longer stops them · .github/workflows/publisher-tests.yml
 
 ---
 
@@ -159,7 +159,7 @@ Files: scripts/assignment_parse.py, scripts/course_stage.py, scripts/check_cours
 - [ ] **T039** [P] [US2] Emit `assignments` per contracts/payload.md with mentor pages under `mentor/`; strip every learner page with `strip_restricted()`; placeholder and `withheld` entry on parse failure or `ok = False`; peer review appends the FR-012a line and routes grading notes to the mentor page. T029's shape tests pass · scripts/moodle_payload.py
 - [ ] **T040** [P] [US2] Render assignment pages: reviewer view puts each mentor-only block in a "Mentor only" admonition; learner view uses `strip_restricted()` and withholds on `ok = False` (design D7) · scripts/gen_course_site.py
 - [ ] **T041** [P] [US2] Register `local_ltuse_upsert_assignment` and the new `create_page` parameter, bump the version, document both · moodle/local_ltuse/db/services.php, moodle/local_ltuse/version.php, moodle/local_ltuse/README.md
-- [ ] **T042** [P] [US2] Add `python scripts/assignment_parse.py --check-all` to the gates · .github/workflows/course-package.yml
+- [ ] **T042** [P] [US2] Add `python scripts/assignment_parse.py --check-all` to the gates, and `tests/test_assignment_parse.py` and `tests/test_moodle_payload_assignments.py` to `publisher-tests.yml` · .github/workflows/course-package.yml, .github/workflows/publisher-tests.yml
 
 **⟶ Wait for Wave 2 to finish, then:**
 

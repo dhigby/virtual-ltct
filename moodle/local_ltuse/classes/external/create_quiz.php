@@ -12,6 +12,7 @@ use core_external\external_api;
 use core_external\external_function_parameters;
 use core_external\external_single_structure;
 use core_external\external_value;
+use local_ltuse\completion_rule;
 use local_ltuse\util;
 use moodle_exception;
 
@@ -40,6 +41,13 @@ use moodle_exception;
  * GRADING. The repo's quizzes carry a pass threshold in prose ("80% (22/27) to pass"),
  * which scripts/quiz_parse.py extracts. It is applied as the activity's gradepass, so the
  * Moodle gradebook agrees with what the quiz text tells the learner.
+ *
+ * COMPLETION (spec 004, R2). `completion` is the payload's rule: `pass` for a quiz with a
+ * threshold, `submit` without one. util::upsert_module() applies it and reports `set`,
+ * `unchanged` or `differs`. `pass` is refused when the pass mark would be 0: core's
+ * "passing grade" check is form-only, and with gradepass 0 any grade counts as complete
+ * (internal_get_grade_state(), lib/completionlib.php), so the quiz would claim a pass rule
+ * it cannot enforce.
  */
 class create_quiz extends external_api {
 
@@ -57,13 +65,16 @@ class create_quiz extends external_api {
             'shufflequestions' => new external_value(PARAM_BOOL,
                 'Shuffle question order', VALUE_DEFAULT, false),
             'visible' => new external_value(PARAM_INT, 'Visible', VALUE_DEFAULT, 1),
+            'completion' => new external_value(PARAM_ALPHA,
+                'Completion rule: view, submit or pass; empty leaves completion untouched',
+                VALUE_DEFAULT, ''),
         ]);
     }
 
     public static function execute(string $courseidnumber, string $idnumber, string $name,
                                    string $category, int $section = 0, string $intro = '',
                                    int $thresholdpct = 0, bool $shufflequestions = false,
-                                   int $visible = 1): array {
+                                   int $visible = 1, string $completion = ''): array {
         global $DB;
 
         $params = self::validate_parameters(self::execute_parameters(), [
@@ -76,12 +87,22 @@ class create_quiz extends external_api {
             'thresholdpct' => $thresholdpct,
             'shufflequestions' => $shufflequestions,
             'visible' => $visible,
+            'completion' => $completion,
         ]);
 
         $course = util::course_by_idnumber($params['courseidnumber']);
         $context = context_course::instance($course->id);
         self::validate_context($context);
         require_capability('local/ltuse:publish', $context);
+
+        // Refused before anything is written: an unknown rule, and `pass` with no pass mark.
+        if ($params['completion'] !== '') {
+            completion_rule::fields($params['completion']);
+        }
+        if ($params['completion'] === 'pass' && $params['thresholdpct'] <= 0) {
+            throw new moodle_exception('error:passnograde', 'local_ltuse', '',
+                $params['idnumber']);
+        }
 
         $bank = util::ensure_qbank($course);
         $qcategory = util::ensure_category($bank['context'], $params['category']);
@@ -96,6 +117,12 @@ class create_quiz extends external_api {
         $gradepass = $params['thresholdpct']
             ? round($count * $params['thresholdpct'] / 100, 2)
             : 0;
+        // The threshold check above makes this unreachable today. It stays because it is
+        // the condition that matters: the stored pass mark, not the percentage sent.
+        if ($params['completion'] === 'pass' && $gradepass <= 0) {
+            throw new moodle_exception('error:passnograde', 'local_ltuse', '',
+                $params['idnumber']);
+        }
 
         $settings = self::quiz_defaults([
                 'name' => $params['name'],
@@ -120,7 +147,7 @@ class create_quiz extends external_api {
         self::assert_offline_capable($settings);
 
         $result = util::upsert_module($course, 'quiz', $params['idnumber'],
-            $params['section'], $settings);
+            $params['section'], $settings, $params['completion']);
 
         $quiz = $DB->get_record('quiz', ['id' => $result['instance']], '*', MUST_EXIST);
         $quiz->cmid = $result['cmid'];
@@ -150,6 +177,7 @@ class create_quiz extends external_api {
             'slots' => count($questionids),
             'slotsremoved' => $removed,
             'gradepass' => (float)$gradepass,
+            'completion' => $result['completion'],
         ];
     }
 
@@ -270,6 +298,8 @@ class create_quiz extends external_api {
             'slots' => new external_value(PARAM_INT, 'Questions now in the quiz'),
             'slotsremoved' => new external_value(PARAM_INT, 'Slots cleared before rebuilding'),
             'gradepass' => new external_value(PARAM_FLOAT, 'Pass mark in raw marks'),
+            'completion' => new external_value(PARAM_ALPHA,
+                'set, unchanged or differs; empty if no completion rule was sent'),
         ]);
     }
 }

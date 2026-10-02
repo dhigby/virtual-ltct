@@ -9,6 +9,8 @@ on:
       - 'competencies.yaml'
       - 'scripts/site_config.py'
       - 'tests/test_site_config.py'
+      - 'moodle/local_ltuse/classes/**'
+      - 'tests/criteria_harness.php'
   pull_request:
     paths:
       - 'moodle/site/**'
@@ -17,6 +19,8 @@ on:
       - 'competencies.yaml'
       - 'scripts/site_config.py'
       - 'tests/test_site_config.py'
+      - 'moodle/local_ltuse/classes/**'
+      - 'tests/criteria_harness.php'
 
 jobs:
   validate:
@@ -31,3 +35,7 @@ jobs:
         run: python scripts/site_config.py validate
       - name: Unit tests for site_config.py
         run: python -m pytest -q tests/test_site_config.py
+      # local_ltuse's pure completion classes, and the guard that set_course_completion
+      # never names core's wipe functions. Needs no Moodle; the runner image ships PHP.
+      - name: Completion rule and criteria diff harness
+        run: php tests/criteria_harness.php

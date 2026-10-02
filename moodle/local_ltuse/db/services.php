@@ -53,6 +53,23 @@ $functions = [
         'ajax'         => false,
         'capabilities' => 'local/ltuse:publish',
     ],
+    'local_ltuse_set_course_completion' => [
+        'classname'    => 'local_ltuse\external\set_course_completion',
+        'description'  => 'Make a course\'s activity completion criteria exactly its visible '
+                        . 'published modules, one criterion at a time. Never clears '
+                        . 'learners\' course completions. Idempotent.',
+        'type'         => 'write',
+        'ajax'         => false,
+        'capabilities' => 'local/ltuse:publish, moodle/course:update',
+    ],
+    'local_ltuse_set_course_competencies' => [
+        'classname'    => 'local_ltuse\external\set_course_competencies',
+        'description'  => 'Replace the competencies a published course aims at, by name. '
+                        . 'Fails closed on an unknown name. Idempotent.',
+        'type'         => 'write',
+        'ajax'         => false,
+        'capabilities' => 'local/ltuse:publish',
+    ],
 ];
 
 // One service, so a single token grants exactly these functions and nothing else.
@@ -69,6 +86,8 @@ $services = [
             'local_ltuse_import_questions',
             'local_ltuse_create_quiz',
             'local_ltuse_hide_modules',
+            'local_ltuse_set_course_completion',
+            'local_ltuse_set_course_competencies',
             // Core functions the publisher also needs. Listed here so one token covers
             // the whole publish rather than the operator wiring up several services.
             'core_course_create_courses',

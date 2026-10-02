@@ -16,7 +16,9 @@ defined('MOODLE_INTERNAL') || die();
  *   3. undeclared settings whose value differs from Moodle's default and that ignore.yaml
  *      does not list (unmanaged, research R5);
  *   4. items this site owns that are no longer declared (extra, spec 002): an `ltct:`
- *      category or cohort, an `ltct_` profile field, and an `ltct: `-named cohort rule.
+ *      category or cohort, an `ltct_` profile field, and an `ltct: `-named cohort rule;
+ *      and, from spec 004, an `ltct_` course field, a live competency row, and a
+ *      `local_ltuse` custom report.
  *
  * A setting forced in config.php is skipped in pass 3: config.php belongs to provisioning,
  * not to this declaration (R6). Any difference makes the run exit 1 (FR-008).
@@ -27,6 +29,12 @@ defined('MOODLE_INTERNAL') || die();
  * `course_categories.idnumber`, `cohort.idnumber` and `user_info_field.shortname`. Rules are
  * read only through cohortrules::owned_rules(), which uses the plugin's own persistent class
  * and returns nothing when tool_dynamic_cohorts is not installed, so that scan is skipped.
+ *
+ * Spec 004's undeclared items come from their own classes' extras()/extra(), not from raw
+ * reads here: coursefields (an `ltct_` course field, never its course values), competencies
+ * (a live row the list leaves out, only when a list is declared, so drift says only what apply
+ * would do; never the course map) and reports (a `local_ltuse` report by area and name; no
+ * report is ever run, and no row or count is read).
  */
 class drift {
 
@@ -62,6 +70,24 @@ class drift {
         $this->report_extra_plugins($declaration);
         $this->report_unmanaged_settings($declaration);
         $this->report_extra_owned($declaration);
+        $this->report_extra_reporting();
+    }
+
+    /**
+     * Pass 4, spec 004: undeclared course fields, competencies and reports, as `extra`.
+     */
+    protected function report_extra_reporting(): void {
+        foreach ($this->inspector->coursefields()->extras() as $item) {
+            $this->report->add_result($item);
+        }
+        if ($this->inspector->declares_competencies()) {
+            foreach ($this->inspector->competencies()->extras() as $item) {
+                $this->report->add_result($item);
+            }
+        }
+        foreach ($this->inspector->reports()->extra() as $item) {
+            $this->report->add_result($item);
+        }
     }
 
     /**

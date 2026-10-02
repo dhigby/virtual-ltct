@@ -31,10 +31,14 @@ roles:
       moodle/question:managecategory: allow
       moodle/question:viewall: allow
       moodle/site:trustcontent: allow          # #3: published pages carry iframe embeds that trusted text keeps
+      moodle/course:changelockedcustomfields: allow   # #7: writes ltct_competencies, ltct_target_level (R11)
     why: >-
       The publisher's web-service account (scripts/publish_moodle.py, local_ltuse). The 15
       capabilities are the ones setup_publishing.php used to hard-code; that script now only
       creates the account, service authorisation and token. moodle/site:trustcontent is #3.
+      moodle/course:changelockedcustomfields is #7 (spec 004, R11): both course fields are
+      locked, and the course web services silently drop a locked field the caller may not
+      change.
 
   - shortname: manager
     archetype: manager
@@ -55,8 +59,8 @@ roles:
     name: Organisation manager
     description: >-
       Follows one partner organisation's learners in the courses that organisation is enrolled
-      in: the participants page, their profiles and their identity fields, for their own group
-      only. Changes nothing. Comes only through the organisation's managers cohort, by cohort
+      in: the participants page, their profiles and their identity fields, and the course's
+      activity and course completion reports, for their own group only. Changes nothing. Comes only through the organisation's managers cohort, by cohort
       sync. Declared in moodle/site/roles.yaml and applied by scripts/site_config.py -- edit
       that file rather than this role.
     archetype: ""   # every capability is managed, so a capability granted by hand shows as drift
@@ -65,6 +69,8 @@ roles:
       moodle/course:viewparticipants: allow   # the participants page, filtered to their group (R3)
       moodle/user:viewdetails: allow          # open one of their people's profiles
       moodle/site:viewuseridentity: allow     # the identity fields the site shows, such as email
+      report/progress:view: allow             # per-lesson ticks for their own group (R8)
+      report/completion:view: allow           # course completion for their own group (R8)
     why: >-
       #8 and #15 (FR-005 to FR-007): one follow-only role for every partner organisation, so
       every manager holds the same permissions (SC-005). It holds no
@@ -72,4 +78,6 @@ roles:
       moodle/user:viewalldetails, which reaches every learner site-wide and would show
       teachers-visibility fields such as ltct_role (R2, R5). Nothing is prohibit, so a manager
       who is also a mentor keeps that role's permissions. local_ltuse's profile hook limits
-      whose profiles a manager can open (R9).
+      whose profiles a manager can open (R9). report/progress:view and report/completion:view
+      are #7 (spec 004, R8): both reports honour separate groups, so without
+      moodle/site:accessallgroups a manager sees only their own group's learners there too.

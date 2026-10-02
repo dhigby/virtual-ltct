@@ -1,0 +1,18 @@
+{
+  "workflow": "companion",
+  "specName": "014-resource-library",
+  "branch": "014-resource-library",
+  "selectedAt": "2026-09-30T20:47:13.041Z",
+  "currentStep": "specify",
+  "status": "specified",
+  "history": [
+    {
+      "step": "specify",
+      "substep": null,
+      "kind": "start",
+      "by": "extension",
+      "at": "2026-09-30T20:47:13.878Z"
+    }
+  ],
+  "telemetryInstanceId": "a9a1d1ef-ef2a-493d-b496-03006e524547"
+}

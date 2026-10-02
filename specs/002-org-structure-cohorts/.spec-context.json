@@ -1,0 +1,967 @@
+{
+  "workflow": "companion",
+  "specName": "Partner organisations, cohorts and profiles",
+  "branch": "specs/moodle-requirements",
+  "currentStep": "implement",
+  "status": "completed",
+  "history": [
+    {
+      "step": "specify",
+      "substep": null,
+      "kind": "start",
+      "by": "extension",
+      "at": "2026-09-30T20:46:53.378Z"
+    },
+    {
+      "step": "plan",
+      "substep": null,
+      "kind": "start",
+      "by": "extension",
+      "at": "2026-10-01T18:07:34.868Z"
+    },
+    {
+      "step": "plan",
+      "substep": "research",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-01T18:40:11.989Z"
+    },
+    {
+      "step": "plan",
+      "substep": "design",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-01T18:45:10.861Z"
+    },
+    {
+      "step": "plan",
+      "substep": null,
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-01T18:45:15.126Z"
+    },
+    {
+      "step": "tasks",
+      "substep": null,
+      "kind": "start",
+      "by": "extension",
+      "at": "2026-10-01T18:58:48.270Z"
+    },
+    {
+      "step": "tasks",
+      "substep": "generate",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-01T19:04:29.409Z"
+    },
+    {
+      "step": "tasks",
+      "substep": null,
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-01T21:47:57.596Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "kind": "start",
+      "by": "extension",
+      "at": "2026-10-01T22:45:54.460Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T001",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-01T22:48:53.532Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T002",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-01T22:49:09.701Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T003",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-01T22:49:42.018Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T007",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-01T22:53:50.123Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T004",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-01T22:55:16.657Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T009",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-01T22:55:47.201Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T006",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-01T22:55:59.356Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T010",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-01T22:56:00.075Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T012",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-01T22:56:01.215Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T011",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-01T22:56:45.108Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T008",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-01T22:57:57.211Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T005",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-01T22:58:17.160Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T016",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-01T23:01:43.103Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T017",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-01T23:02:29.899Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T014",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-01T23:04:01.184Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T018",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-01T23:04:01.866Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T015",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-01T23:04:07.705Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T013",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-01T23:04:24.601Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T019",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-01T23:05:14.414Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T020",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-01T23:07:35.813Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T021",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-01T23:09:06.847Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T022",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-01T23:12:16.240Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T027",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-01T23:12:16.639Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T023",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-01T23:12:48.576Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T026",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-01T23:12:49.313Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T024",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-01T23:14:14.620Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T025",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-01T23:14:15.154Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T028",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-01T23:15:17.117Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T029",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-01T23:19:18.579Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T030",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-01T23:19:57.612Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T031",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-01T23:21:21.514Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T037",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-01T23:21:51.196Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T036",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-01T23:22:15.646Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T035",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-01T23:22:32.597Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T034",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-01T23:22:51.063Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T033",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-01T23:23:17.276Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T032",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-01T23:24:06.046Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T038",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-01T23:26:11.461Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-01T23:26:11.674Z"
+    }
+  ],
+  "telemetryInstanceId": "8cef185e-f537-4bf0-90e3-61f5872f3f00",
+  "decisions": [
+    {
+      "decision": "Organisation managers are follow-only; the site team creates accounts, sets the organisation field and enrols organisations",
+      "why": "User decision 2026-10-01: core cannot scope cohort assignment, manual enrolment, locked-field edits or account creation to one organisation",
+      "rejected": "Manager self-service through our own local_ltuse page and web service"
+    },
+    {
+      "decision": "Organisation, managers and country cohorts are system-level and hidden",
+      "why": "cohort_get_available_cohorts offers a course only cohorts from its parent contexts; hidden system cohorts are visible only with system cohort:view",
+      "rejected": "Category cohorts per organisation, which cannot reach shared curriculum courses"
+    },
+    {
+      "decision": "Separation inside shared courses is separate groups (default, not forced), with one group per organisation via cohort sync",
+      "why": "Core separates people within a course by group; not forcing keeps cross-organisation forums possible",
+      "rejected": "Forced separate groups, or separate course copies per organisation"
+    },
+    {
+      "decision": "orgmanager role assigned through a managers-cohort sync instance, course context only, no prohibits",
+      "why": "One step makes someone a manager everywhere their organisation is enrolled; no prohibit keeps mentor permissions intact",
+      "rejected": "Role assignment at the organisation category"
+    },
+    {
+      "decision": "tool_dynamic_cohorts fills cohorts, via its persistent-class API, gated on 5.2 verification",
+      "why": "Maintained, free, rules creatable without direct table writes",
+      "rejected": "local_profilecohort (official 5.2 support but no rule API; kept as fallback) and our own observer"
+    },
+    {
+      "decision": "The organisation profile field stores the stable key; expertise is one checkbox per competencies.yaml category; country is the core field",
+      "why": "Renames change no learner data; core has no multi-select; core country already exists",
+      "rejected": "Display name as stored value; a custom country menu"
+    },
+    {
+      "decision": "A local_ltuse control_view_profile hook refuses org managers the profile of anyone outside their organisations; cohort sync uses unenrolaction 3",
+      "why": "User decision 2026-10-01: core keeps a suspended enrolment and its group, so groups cannot tell former members from current ones",
+      "rejected": "Unenrol on leaving (loses history); accepting the gap"
+    },
+    {
+      "decision": "Category pages and course names stay public; separation covers people only",
+      "why": "User decision 2026-10-01: course names hold no personal data and come from the public repo",
+      "rejected": "A per-category viewcourselist override"
+    },
+    {
+      "decision": "A moved learner on a shared-course participants list is a documented known limit, closed by a manual site-team unenrol of the stale suspended enrolment",
+      "why": "User decision 2026-10-01: no more own code; unenrolling a non-last enrolment keeps history",
+      "rejected": "An observer that unenrols the stale enrolment automatically"
+    },
+    {
+      "decision": "Category adoption also takes a same-name category whose idnumber is not ltct:",
+      "why": "The build host's LTC Pilots and LTC Published carried hand-set idnumbers; the empty-only rule would have created duplicates",
+      "rejected": "Clearing the idnumbers by hand"
+    },
+    {
+      "decision": "orgmanager deny list adds moodle/course:managegroups and moodle/course:viewsuspendedusers",
+      "why": "Either would let a manager reach another organisation's people or moved learners",
+      "rejected": "Relying on review alone"
+    },
+    {
+      "decision": "tool_dynamic_cohorts/releasemembers pinned to 0 and realtime to 1 in settings/cohorts.yaml",
+      "why": "At 1, unmanaging a cohort deletes all members without events",
+      "rejected": "Leaving plugin defaults undeclared"
+    },
+    {
+      "decision": "local_ltuse bumped to 2026100102 with the new lib.php",
+      "why": "The callback then arrives through a normal upgrade, not only a cache purge",
+      "rejected": "Relying on purge_caches"
+    },
+    {
+      "decision": "enrol_flatfile/map_10 added to ignore.yaml",
+      "why": "Creating orgmanager (role id 10) surfaced it, exactly like map_9 for ltcpublisher",
+      "rejected": "A pattern-based ignore, which would change spec 001's contract"
+    }
+  ],
+  "step_summaries": {
+    "plan": {
+      "summary": "Plan, research, data model and declaration contract for organisations, cohorts, profile fields and the orgmanager role",
+      "key_finding": "Moodle categories separate courses, not people: org separation must come from hidden system cohorts plus separate groups, and manager self-service needs own code"
+    },
+    "tasks": {
+      "summary": "37 tasks: Setup 3, Foundational 16, US1 1, US2 9 including the profile hook, US3 1, US4 1, Polish 7; three adversarial review rounds applied",
+      "key_finding": "Core keeps suspended enrolments and their groups, so people who leave an organisation stay visible to its manager unless a profile hook and a manual unenrol close the gap"
+    },
+    "implement": {
+      "summary": "Spec 002 built and verified on ltuse.net: 4 organisations with categories, cohorts and auto-fill rules; profile fields; orgmanager role; profile hook; all 38 tasks done"
+    }
+  },
+  "approach": "Declare organisations and profile fields under moodle/site/ and extend spec 001's applier with categories, cohorts, profile fields and tool_dynamic_cohorts rules. Separate organisations by hidden system cohorts and per-organisation groups in separate-groups courses, with a follow-only orgmanager role arriving through a managers-cohort sync.",
+  "coverage": {
+    "FR-001": {
+      "title": "The repo declares the partner organisations, each with a stable key and display name, applied through spec 001",
+      "tasks": [
+        "T003",
+        "T004",
+        "T005",
+        "T018",
+        "T019",
+        "T020"
+      ],
+      "tests": [
+        "tests/test_site_config.py::Organisations"
+      ]
+    },
+    "FR-002": {
+      "title": "Each organisation gets one course category, one organisation cohort and one managers cohort, created only if absent",
+      "tasks": [
+        "T004",
+        "T008",
+        "T009",
+        "T013",
+        "T014",
+        "T019",
+        "T020"
+      ],
+      "tests": [
+        "tests/test_site_config.py::Expansion"
+      ]
+    },
+    "FR-003": {
+      "title": "The published curriculum lives in a shared category; organisation categories hold organisation-specific courses",
+      "tasks": [
+        "T008",
+        "T018",
+        "T020"
+      ]
+    },
+    "FR-004": {
+      "title": "Removing an organisation deletes nothing; drift reports it",
+      "tasks": [
+        "T008",
+        "T015",
+        "T020"
+      ]
+    },
+    "FR-005": {
+      "title": "Exactly one organisation manager role, declared in the repo, for every partner",
+      "tasks": [
+        "T004",
+        "T023",
+        "T028"
+      ],
+      "tests": [
+        "tests/test_site_config.py::OrgManager"
+      ]
+    },
+    "FR-006": {
+      "title": "A manager sees and opens their own learners in every course their organisation is enrolled in; the site team enrols",
+      "tasks": [
+        "T023",
+        "T028"
+      ]
+    },
+    "FR-007": {
+      "title": "A manager cannot view, find, enrol or edit another organisation's learners or cohorts, including people who left",
+      "tasks": [
+        "T021",
+        "T024",
+        "T026",
+        "T027",
+        "T028",
+        "T029"
+      ],
+      "tests": [
+        "tests/profile_access_harness.php"
+      ]
+    },
+    "FR-008": {
+      "title": "Profile fields for organisation, country, role in the work and expertise, each with a declared visibility",
+      "tasks": [
+        "T004",
+        "T010",
+        "T017",
+        "T024",
+        "T030"
+      ],
+      "tests": [
+        "tests/test_site_config.py::ProfileFields"
+      ]
+    },
+    "FR-009": {
+      "title": "The organisation field is editable only by the site team",
+      "tasks": [
+        "T004",
+        "T010",
+        "T017",
+        "T029"
+      ],
+      "tests": [
+        "tests/test_site_config.py::ProfileFields"
+      ]
+    },
+    "FR-010": {
+      "title": "Learners join and leave organisation and country cohorts automatically from profile fields",
+      "tasks": [
+        "T001",
+        "T002",
+        "T011",
+        "T016",
+        "T029"
+      ]
+    },
+    "FR-011": {
+      "title": "Courses support groups, so an organisation can be worked with separately in a shared course",
+      "tasks": [
+        "T022",
+        "T024",
+        "T025",
+        "T028"
+      ],
+      "tests": [
+        "tests/test_publish_moodle.py"
+      ]
+    },
+    "FR-012": {
+      "title": "Manager assignment happens in Moodle, never by recording the person in the repo",
+      "tasks": [
+        "T028",
+        "T031"
+      ]
+    },
+    "FR-013": {
+      "title": "Only the site team creates learner accounts",
+      "tasks": [
+        "T004",
+        "T023",
+        "T031"
+      ]
+    }
+  },
+  "currentTask": "T038",
+  "task_summaries": {
+    "T001": {
+      "status": "DONE",
+      "did": "tool_dynamic_cohorts 2026031300 installed on 5.2.3+; 13/13 hand checks passed; probe items removed; pin recorded in R4",
+      "files": [
+        "specs/002-org-structure-cohorts/research.md"
+      ]
+    },
+    "T002": {
+      "status": "DONE",
+      "did": "Condition config table filled: user_custom_profile keys, operator 3, enable-after-create",
+      "files": [
+        "specs/002-org-structure-cohorts/contracts/declaration.md"
+      ]
+    },
+    "T003": {
+      "status": "DONE",
+      "did": "Recorded maintainer lists: ltct_role options and four organisations (sil, sil-partner, seed-company, independent)",
+      "files": [
+        "specs/002-org-structure-cohorts/research.md"
+      ]
+    },
+    "T007": {
+      "status": "DONE",
+      "did": "Bumped local_ltuse to 2026100101 (release 0.3.0) for spec 002's new item classes; site.yaml pin follows in T016",
+      "files": [
+        "moodle/local_ltuse/version.php"
+      ]
+    },
+    "T004": {
+      "status": "DONE",
+      "did": "site_config.py validates organisations.yaml and profile-fields.yaml (keys, required entries, options_from, areas vs competencies.yaml, orgmanager deny list, org-key role names) and expands them into the categories, cohorts, profile_fields and cohort_rules payload arrays that render shows",
+      "files": [
+        "scripts/site_config.py"
+      ]
+    },
+    "T009": {
+      "status": "DONE",
+      "did": "Cohort class: finds by idnumber in any context, blocking wrong-context/ambiguous, compares name and visible=0, applies via cohort_add_cohort/cohort_update_cohort without component or members",
+      "files": [
+        "moodle/local_ltuse/classes/siteconfig/cohorts.php"
+      ]
+    },
+    "T006": {
+      "status": "DONE",
+      "did": "Added competencies.yaml to the Site Config workflow's push and pull_request paths",
+      "files": [
+        ".github/workflows/site-config.yml"
+      ]
+    },
+    "T010": {
+      "status": "DONE",
+      "did": "Wrote the profile field class: check and apply the category and fields via profile_save_category/profile_save_field, wrong-datatype and ambiguous block, extra menu options kept",
+      "files": [
+        "moodle/local_ltuse/classes/siteconfig/profilefields.php"
+      ]
+    },
+    "T012": {
+      "status": "DONE",
+      "did": "report.php allows kinds adopted (changed only) and ambiguous, wrong-context, wrong-datatype (fail only), enforced by KIND_STATUS; harness cases added",
+      "files": [
+        "moodle/local_ltuse/classes/siteconfig/report.php",
+        "tests/report_harness.php"
+      ]
+    },
+    "T011": {
+      "status": "DONE",
+      "did": "Wrote cohortrules class: checks plugin first, finds rule via cohort idnumber, compares condition and enabled, applies through rule_manager::process_form then enables; owned_rules() for drift",
+      "files": [
+        "moodle/local_ltuse/classes/siteconfig/cohortrules.php"
+      ]
+    },
+    "T008": {
+      "status": "DONE",
+      "did": "categories.php finds categories by idnumber, adopts a single empty-idnumber name+parent match (drift: missing/adoptable, apply: changed/adopted), blocks on ambiguous, compares name and parent, writes via core_course_category create/update, never deletes",
+      "files": [
+        "moodle/local_ltuse/classes/siteconfig/categories.php"
+      ]
+    },
+    "T005": {
+      "status": "DONE",
+      "did": "Validation cases for organisations.yaml, profile-fields.yaml and the orgmanager role, plus the expansion case; asserts pass/fail only, fixture keys fixture-*",
+      "files": [
+        "tests/test_site_config.py"
+      ]
+    },
+    "T016": {
+      "status": "DONE",
+      "did": "Pinned tool_dynamic_cohorts 2026031300 (marketplace archive + sha256 from R4), enabled enrol_cohort, raised local_ltuse pin to 2026100101",
+      "files": [
+        "moodle/site/site.yaml"
+      ]
+    },
+    "T017": {
+      "status": "DONE",
+      "did": "Added settings/cohorts.yaml pinning tool_dynamic_cohorts releasemembers=0 and realtime=1, each with a why; validate and test_site_config pass",
+      "files": [
+        "moodle/site/settings/cohorts.yaml"
+      ]
+    },
+    "T014": {
+      "status": "DONE",
+      "did": "Applier runs categories, cohorts, profile field category and fields, then cohort rules after settings, one class instance per run",
+      "files": [
+        "moodle/local_ltuse/classes/siteconfig/applier.php"
+      ]
+    },
+    "T018": {
+      "status": "DONE",
+      "did": "Declared About your work: locked ltct_org menu from organisations, ltct_role (teachers), five ltct_exp_* checkboxes, each with a why",
+      "files": [
+        "moodle/site/profile-fields.yaml"
+      ]
+    },
+    "T015": {
+      "status": "DONE",
+      "did": "drift reports undeclared ltct: categories and cohorts, ltct_ profile fields and ltct:-named cohort rules (skipped when tool_dynamic_cohorts is absent) as non-blocking extra, never members",
+      "files": [
+        "moodle/local_ltuse/classes/siteconfig/drift.php"
+      ]
+    },
+    "T013": {
+      "status": "DONE",
+      "did": "inspector hands categories, cohorts, profile_fields and cohort_rules to their classes in contract order after settings (inspect_structure), exposes the checker instances for the applier, and has_blocking counts their blocking results",
+      "files": [
+        "moodle/local_ltuse/classes/siteconfig/inspector.php"
+      ]
+    },
+    "T019": {
+      "status": "DONE",
+      "did": "declared organisations.yaml: rows [8, 15], purpose, shared categories published/pilots/organisations (LTC Organisations) and T003's four organisations, independent among them",
+      "files": [
+        "moodle/site/organisations.yaml"
+      ]
+    },
+    "T020": {
+      "status": "DONE",
+      "did": "Deployed local_ltuse 2026100101; apply adopted LTC Published/Pilots (ids 3/2) and created 25 items; second apply and drift: no changes",
+      "files": [
+        "moodle/local_ltuse/classes/siteconfig/categories.php",
+        "moodle/local_ltuse/classes/siteconfig/cohorts.php"
+      ]
+    },
+    "T021": {
+      "status": "DONE",
+      "did": "US1 verified on instance: ids 2/3 kept, standard shape, add/rename/remove test-a behave as specified, 5 s edit-to-apply",
+      "files": [
+        "none"
+      ]
+    },
+    "T022": {
+      "status": "DONE",
+      "did": "Profile decision harness, no Moodle needed, fixture-* keys, covers every data-model case and never FORCE_ALLOW; failed first, passes on the instance",
+      "files": [
+        "tests/profile_access_harness.php"
+      ]
+    },
+    "T027": {
+      "status": "DONE",
+      "did": "Pure static profile_access::decide() returning PREVENT or DO_NOT_PREVENT only; harness ALL PASSED on the instance",
+      "files": [
+        "moodle/local_ltuse/classes/profile_access.php"
+      ]
+    },
+    "T023": {
+      "status": "DONE",
+      "did": "ensure_course tests with a recording stub client (dry_run False): groupmode 1 on update and on create, groupmodeforce never sent; failed first, 3 passed",
+      "files": [
+        "tests/test_publish_moodle.py"
+      ]
+    },
+    "T026": {
+      "status": "DONE",
+      "did": "ensure_course sends groupmode 1 on core_course_update_courses and core_course_create_courses; T023 passes",
+      "files": [
+        "scripts/publish_moodle.py"
+      ]
+    },
+    "T024": {
+      "status": "DONE",
+      "did": "Declared orgmanager: empty archetype, contextlevels [course], viewparticipants, viewdetails, viewuseridentity allow, why citing #8 #15 FR-005..FR-007; validate passes and rejects viewalldetails",
+      "files": [
+        "moodle/site/roles.yaml"
+      ]
+    },
+    "T025": {
+      "status": "DONE",
+      "did": "groups.yaml rows [8, 15]: groupmode 1, groupmodeforce 0, enrol_cohort/unenrolaction 3, forceloginforprofiles 1, hiddenuserfields empty string, each with a why; validate passes",
+      "files": [
+        "moodle/site/settings/groups.yaml"
+      ]
+    },
+    "T028": {
+      "status": "DONE",
+      "did": "local_ltuse_control_view_profile in lib.php: self and no-managed-org return DO_NOT_PREVENT first; one cached cohort+cohort_members read via sql_like; gathers ltct_org, staff and viewalldetails then returns decide(); writes nothing. php -l clean, stubbed scratch test passed",
+      "files": [
+        "moodle/local_ltuse/lib.php"
+      ]
+    },
+    "T029": {
+      "status": "DONE",
+      "did": "US2 verified on instance with real logins: separation, moved learner (hook + known limit + manual unenrol), removed managers, one role",
+      "files": [
+        "none"
+      ]
+    },
+    "T030": {
+      "status": "DONE",
+      "did": "US3 verified: field set -> cohort + enrolment immediately; move keeps history; ltct_org frozen on learner form; cohort plugin-owned",
+      "files": [
+        "none"
+      ]
+    },
+    "T031": {
+      "status": "DONE",
+      "did": "US4 verified (visibility by viewer, values persist); full clean-up; drift clean after ignoring enrol_flatfile/map_10",
+      "files": [
+        "moodle/site/ignore.yaml"
+      ]
+    },
+    "T037": {
+      "status": "DONE",
+      "did": "Repo-wide *.csv backstop for learner uploads, citing constitution III and GitDoc",
+      "files": [
+        ".gitignore"
+      ]
+    },
+    "T036": {
+      "status": "DONE",
+      "did": "Spec 001 contract links spec 002's addition: two files, four item types, profile hook",
+      "files": [
+        "specs/001-site-config-as-code/contracts/declaration.md"
+      ]
+    },
+    "T035": {
+      "status": "DONE",
+      "did": "INTENT decision 2026-10-01 on onboarding; open question narrowed to manager self-service after SC-004",
+      "files": [
+        "INTENT.md"
+      ]
+    },
+    "T034": {
+      "status": "DONE",
+      "did": "Rows #8 and #18 built and verified; #15 built, verified only after SC-004",
+      "files": [
+        "moodle/REQUIREMENTS.md"
+      ]
+    },
+    "T033": {
+      "status": "DONE",
+      "did": "README lists spec 002 classes, plugin API calls, the profile hook and every raw read with its index status",
+      "files": [
+        "moodle/local_ltuse/README.md"
+      ]
+    },
+    "T032": {
+      "status": "DONE",
+      "did": "Site README: new files, how to add an organisation, new drift kinds, the site team's four steps incl. CSV outside the repo",
+      "files": [
+        "moodle/site/README.md"
+      ]
+    },
+    "T038": {
+      "status": "DONE",
+      "did": "Validated: validate, pytest 96+20, both PHP harnesses, drift clean, leak check clean; SC-001/002/003/005 covered, SC-004 open",
+      "files": [
+        "tests/test_site_config.py"
+      ]
+    }
+  },
+  "verified": [
+    {
+      "what": "declaration validates",
+      "command": "python scripts/site_config.py validate",
+      "source": "derived",
+      "exitCode": 0,
+      "durationSeconds": 0.3,
+      "result": "[ok] declaration valid: 19 settings in 7 files, 10 plugins, 4 roles, 9 ignore entries, 7 categories, 8 cohorts, 7 profile fields, 4 cohort rules"
+    },
+    {
+      "what": "python test suite",
+      "command": "python -m pytest -q tests/",
+      "source": "derived",
+      "exitCode": 0,
+      "durationSeconds": 7.2,
+      "result": "............................................................... [ 65%] · .................................                             [100%] · 96 passed, 20 subtests passed in 6.07s"
+    },
+    {
+      "what": "PHP harnesses (report, profile access) on instance PHP",
+      "command": "bash C:/Users/higby/AppData/Local/Temp/claude/C--projects-virtual-ltct/7f34dd12-e9b1-49fd-92bb-c8d124ba54db/scratchpad/run_php_harnesses.sh",
+      "source": "derived",
+      "exitCode": 0,
+      "durationSeconds": 2.2,
+      "result": "ok: never FORCE_ALLOW · ok: only PREVENT and DO_NOT_PREVENT occur, both of them · ALL PASSED"
+    },
+    {
+      "what": "drift on ltuse.net reports no differences",
+      "command": "python scripts/site_config.py drift",
+      "source": "derived",
+      "exitCode": 0,
+      "durationSeconds": 2.8,
+      "result": "[ok] cohortrule:ltct:org:seed-company: declared 'ltct_org equals 'seed-company', enabled', live 'ltct_org equals 'seed-company', enabled' · [ok] cohortrule:ltct:org:independent: declared 'ltct_org equals 'independent', enabled', live 'ltct_org equals 'independent', enabled' · No differences."
+    },
+    {
+      "what": "US1 on ltuse.net with a scratch test organisation",
+      "result": "ids 2/3 kept; add/rename/remove behave as specified; 5 s edit-to-second-apply (SC-001)"
+    },
+    {
+      "what": "US2 separation on ltuse.net with ltct-test-* accounts, CLI plus real HTTP logins and mobile tokens",
+      "result": "own learners reachable on every path, other org refused on every path including web services and the participants page; moved learner refused by the hook; known limit confirmed and closed by the manual unenrol; removed managers lose access; one role (SC-002, SC-005)"
+    },
+    {
+      "what": "US3 on ltuse.net",
+      "result": "setting ltct_org enrols at once; a move keeps grade and completion; ltct_org frozen on the learner's own edit form (SC-003)"
+    },
+    {
+      "what": "US4 on ltuse.net",
+      "result": "ltct_role hidden from another learner and the manager, shown to the learner and admin; values persist after the course is deleted"
+    },
+    {
+      "what": "Leak check on the branch delta (moodle, scripts, tests, .github, .gitignore, INTENT.md)",
+      "result": "no test key, test account, probe name, password, token or member data"
+    }
+  ],
+  "concerns": [
+    {
+      "note": "tool_dynamic_cohorts 2026031300 declares supported = [404, 501]; its PHPUnit suite was not run on 5.2 (maintainer decision). 13 hand checks plus the US2-US4 runs are the evidence. Re-check on every pin change.",
+      "step": "implement"
+    },
+    {
+      "note": "Known limit: in a course two organisations share, a moved learner stays on the old manager's participants list until the site team unenrols the stale suspended enrolment by hand (documented in moodle/site/README.md).",
+      "step": "implement"
+    },
+    {
+      "note": "SC-004 is open: row #15 is built, not verified, until 2-3 real organisation managers have used it.",
+      "step": "implement"
+    },
+    {
+      "note": "enrol_flatfile/map_N ignore entries are keyed by per-site role ids, so a rebuilt server will report different map_N settings as unmanaged until ignore.yaml is updated.",
+      "step": "implement"
+    },
+    {
+      "note": "report.php redacts any item whose name contains key, pass, token, salt or secret, so an organisation key containing one of those words would have its values shown as <secret>.",
+      "step": "implement"
+    },
+    {
+      "note": "The host shows permission warnings for moodledata/cache/_temp directories owned by another user during CLI upgrades; harmless so far. A backup of the previous local_ltuse sits in /home/ltuse/ltuse-backup-20261001230607 and can be deleted.",
+      "step": "implement"
+    },
+    {
+      "note": "PHP is not installed locally; PHP lint and harnesses ran on the instance's PHP over stdin, writing nothing to Moodle.",
+      "step": "implement"
+    }
+  ],
+  "last_action": "38/38 tasks done; validate ok; 96 pytest + 20 subtests pass; both PHP harnesses pass; drift: no differences"
+}

@@ -1,0 +1,33 @@
+name: Site Config
+
+on:
+  push:
+    paths:
+      - 'moodle/site/**'
+      - 'moodle/local_ltuse/version.php'
+      - 'moodle/REQUIREMENTS.md'
+      - 'competencies.yaml'
+      - 'scripts/site_config.py'
+      - 'tests/test_site_config.py'
+  pull_request:
+    paths:
+      - 'moodle/site/**'
+      - 'moodle/local_ltuse/version.php'
+      - 'moodle/REQUIREMENTS.md'
+      - 'competencies.yaml'
+      - 'scripts/site_config.py'
+      - 'tests/test_site_config.py'
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install pyyaml pytest
+      - name: Validate the Moodle site declaration
+        run: python scripts/site_config.py validate
+      - name: Unit tests for site_config.py
+        run: python -m pytest -q tests/test_site_config.py

@@ -1,0 +1,17 @@
+{
+  "workflow": "speckit",
+  "specName": "Progress Tracking and Reporting",
+  "branch": "specs/moodle-requirements",
+  "currentStep": "specify",
+  "status": "specified",
+  "history": [
+    {
+      "step": "specify",
+      "substep": null,
+      "kind": "start",
+      "by": "extension",
+      "at": "2026-09-30T20:46:58.212Z"
+    }
+  ],
+  "telemetryInstanceId": "8fe30c9f-a11e-42c5-9f89-bb2f831b969b"
+}

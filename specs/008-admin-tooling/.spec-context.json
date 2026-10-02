@@ -1,0 +1,17 @@
+{
+  "workflow": "speckit",
+  "specName": "Simple Administration Tooling",
+  "branch": "specs/moodle-requirements",
+  "currentStep": "specify",
+  "status": "specified",
+  "history": [
+    {
+      "step": "specify",
+      "substep": null,
+      "kind": "start",
+      "by": "extension",
+      "at": "2026-09-30T20:47:04.735Z"
+    }
+  ],
+  "telemetryInstanceId": "ca7b7865-32c3-47f5-9b66-14db77307056"
+}

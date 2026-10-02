@@ -1,0 +1,17 @@
+{
+  "workflow": "speckit",
+  "specName": "Learning Pathways Mapped to CBC",
+  "branch": "specs/moodle-requirements",
+  "currentStep": "specify",
+  "status": "specified",
+  "history": [
+    {
+      "step": "specify",
+      "substep": null,
+      "kind": "start",
+      "by": "extension",
+      "at": "2026-09-30T20:47:01.148Z"
+    }
+  ],
+  "telemetryInstanceId": "5e5714d2-f7f1-40c8-b80d-b9ed39584fbc"
+}

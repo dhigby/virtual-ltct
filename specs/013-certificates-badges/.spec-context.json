@@ -1,0 +1,17 @@
+{
+  "workflow": "speckit",
+  "specName": "Completion Badges and Certificates",
+  "branch": "specs/moodle-requirements",
+  "currentStep": "specify",
+  "status": "specified",
+  "history": [
+    {
+      "step": "specify",
+      "substep": null,
+      "kind": "start",
+      "by": "extension",
+      "at": "2026-09-30T20:47:11.720Z"
+    }
+  ],
+  "telemetryInstanceId": "43e7d5c9-d168-46f2-9cb1-2453c776376a"
+}

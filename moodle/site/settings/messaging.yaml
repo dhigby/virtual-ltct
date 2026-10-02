@@ -1,0 +1,16 @@
+# Row #19: one-to-one and group messaging, in the browser and the app.
+
+rows: [19]
+purpose: >-
+  Messaging. It is on, for one-to-one and course group conversations, but a learner can be
+  messaged only by their contacts and people in their courses, never by any account on the
+  site, and each learner can narrow that further in their own preferences.
+settings:
+  - name: messaging
+    value: 1
+    why: With it off there are no conversations at all, in the browser or the app (FR-015).
+  - name: messagingallusers
+    value: 0
+    why: >-
+      On, any account on the site could message any learner. Off keeps contact to contacts
+      and course members, and leaves the learner's own "who can message me" choice in charge.

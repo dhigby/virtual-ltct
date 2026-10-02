@@ -327,6 +327,22 @@ a course and `ltct:<slug>:<source filename>` for a module. That is what makes re
 update rather than duplicate, and what makes moving to another Moodle server a re-publish
 rather than a data move.
 
+**Look up every Moodle API before using it; don't write it from memory.** Query Context7
+first (`/websites/moodledev_io_5_2_apis` for the API guides; `/moodle/moodle` for core's
+`UPGRADING.md` notes), then confirm the signature in upstream source on `MOODLE_502_STABLE`,
+since Context7 indexes `main` and misses some APIs. We run **open-source, self-hosted Moodle
+LMS**, so a documented feature may not be ours: Moodle Workplace, MoodleCloud and the paid
+app plans have features core does not, sometimes under the same name (Workplace "Programs"
+is not the free `tool_muprog`). If it isn't in core source or a free, verified plugin, we
+don't have it. Our plugins call Moodle's public APIs and
+never edit vendored code. See Principle XI of
+[the constitution](.specify/memory/constitution.md); issues #62–#65 are what skipping this
+step cost.
+
+**Every site setting, plugin pin and role lives in [`moodle/site/`](moodle/site/README.md)**, and is
+applied with `python scripts/site_config.py apply`. A setting clicked into the admin UI is not done;
+`drift` reports it. Settings `config.php` sets (`wwwroot`, `debug`) are provisioning's, not this folder's.
+
 `MOODLE_URL` and `MOODLE_TOKEN` come from the environment. **The repo is public — never
 write a token into a file here.** The plugin the publisher depends on is
 [`moodle/local_ltuse/`](moodle/local_ltuse/README.md); Moodle has no core web service that
@@ -356,6 +372,8 @@ constructing it — the host changes when the server moves.
 - `moodle_xml.py` — serialises parsed questions to Moodle XML.
 - `moodle_client.py` — thin Moodle REST client; `--whoami` checks a server and token.
 - `publish_moodle.py` — build → verify → push. `--dry-run` sends nothing.
+- `site_config.py` — `validate` · `drift` · `apply` the Moodle site declaration in `moodle/site/`
+  (settings, plugin pins, roles). `drift` is read-only; `apply` changes only what differs.
 - `gen_site.py` — `mkdocs-gen-files` build hook; generates the site pages + nav from
   `competencies.yaml` and `competencies/*.md`. Not run by hand; invoked by `mkdocs`.
 - `check_competency_descriptors.py` — validates descriptors stay in sync with the

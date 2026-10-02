@@ -76,7 +76,7 @@ project text." This isn't a bug or a trap the tool is setting for the team; it's
 the tool's normal starting state, and the task is straightforward: work through the
 list and add the appropriate rendering for each term from the project's own text.
 
-![A Biblical Terms row still at its default state: orange highlight, "Double click to enter rendering(s) from project text."](images/L2-1.Blank-BT-Row.png)
+![A Biblical Terms row still at its default state: orange highlight, "Double click to enter rendering(s) from project text."](assets/ss-02-blank-bt-row.png)
 *A term still at its default, unfilled state — not an error, just unfinished.*
 
 Where this becomes a false-clean risk is the same pattern as the wordlist above: a team
@@ -101,7 +101,7 @@ coach the fix: have the team review the full rendering list for a term, confirm 
 rendering(s) are current and correct, and remove the stale ones themselves — you're
 coaching this, not doing it at their keyboard.
 
-![A Biblical Terms row for "adikos" showing three candidate renderings ("da bad guys," "no on us," "no do da ting") but a Found count of only 2/11.](images/L2-2-TermMult-only-2-used.png)
+![A Biblical Terms row for "adikos" showing three candidate renderings ("da bad guys," "no on us," "no do da ting") but a Found count of only 2/11.](assets/ss-02-term-only-2-renderings-used.png)
 *Renderings pile up over time — the Found column tells you which one is actually live.*
 
 > **NOTE:** A related, less common pattern: a rendering that's just the verse's first
@@ -155,7 +155,7 @@ older, separate Numbers check — though not every team's Paratext version has m
 to it yet. Don't assume every project's terms lists look identical, or that a list
 you've seen behave one way in one project will exist or behave the same way in another.
 
-![The Open Biblical Terms List dialog, showing Major Biblical Terms, All Biblical Terms, Numbers, and other lists as separate entries.](images/L2-5.BT-choose-list.png)
+![The Open Biblical Terms List dialog, showing Major Biblical Terms, All Biblical Terms, Numbers, and other lists as separate entries.](assets/ss-02-bt-choose-list.png)
 *Numbers and Measures are separate entries here — never one combined list.*
 
 **Key takeaways**

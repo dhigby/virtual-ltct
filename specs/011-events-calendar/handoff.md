@@ -7,6 +7,14 @@
 - Two of the spec's assumptions fail against what spec 002 built.
 - You've since given a direction that changes 002 itself: competency courses run across organisations (most mentors will be SIL), with no organisational walls inside a course, because cohorts are small. An organisation can host a course only for its own people, as the exception, and organisation leaders can still manage their people in Moodle.
 
+## Decision record
+
+**Approved by Doug, 2026-10-02 (relayed by Matthew).** The recommendations below are accepted as written, with these clarifications from Doug:
+
+- **Things are open by default.** Students see all their classmates. Course leaders see their students. Mentors see and interact with their mentees, across organisations.
+- **Organisation managers can see *and manage* their users.** This changes **B5**: managers manage, rather than follow only. B3 (a user-context follow role) and D3 (managers posting events) are therefore no longer "wait for Phase B". What "manage" covers is scoped in the Part 1 change, against core's limit that enrolment selectors search every site user.
+- **Identity protection gets its own spec.** Some users need extra protection of their identity because of where they work: a hidden email address, first name only, or a pseudonym. That must not block them taking part in Moodle. Open courses make this more urgent, so that spec runs alongside the Part 1 change.
+
 That direction is bigger than events, so this handoff has two parts. Part 1 is the cross-cutting change. Part 2 is what's left to decide for 011 once Part 1 is settled. When you've answered, the 011 plan, data model, contracts and quickstart follow in this PR.
 
 ## Part 1. Open courses, with organisation-only courses as the exception

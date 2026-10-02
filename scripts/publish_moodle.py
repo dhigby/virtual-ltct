@@ -98,6 +98,11 @@ def ensure_sections(client, courseidnumber, count, names):
 # forum can still run across organisations.
 GROUPMODE_SEPARATE = 1
 
+# Hidden sections "Hide completely" (1), not "Show section names only" (0), so a learner
+# never sees even the name of the Retired section that holds modules the repo no longer
+# has. Sent on update too, since the site default only applies to new courses.
+HIDE_SECTIONS_COMPLETELY = [{"name": "hiddensections", "value": "1"}]
+
 
 def ensure_course(client, manifest, category_id):
     """Find the course by idnumber, or create it. Returns the course id."""
@@ -109,6 +114,7 @@ def ensure_course(client, manifest, category_id):
             "summary": manifest["summary_html"],
             "summaryformat": 1,
             "groupmode": GROUPMODE_SEPARATE,
+            "courseformatoptions": HIDE_SECTIONS_COMPLETELY,
         }])
         return int(existing["id"]), False
 
@@ -124,6 +130,7 @@ def ensure_course(client, manifest, category_id):
         "numsections": max(len(manifest["sections"]), 1),
         "visible": 0,          # created hidden; a human decides when learners see it
         "groupmode": GROUPMODE_SEPARATE,
+        "courseformatoptions": HIDE_SECTIONS_COMPLETELY,
     }])
     if client.dry_run:
         return 0, True
@@ -262,24 +269,25 @@ def publish(client, payload_dir, category_id):
         print("  links     %s in %d page(s)"
               % ("would be resolved" if client.dry_run else "resolved", rewritten))
 
-    # --- last: hide what the course no longer has ----------------------------------------
+    # --- last: retire what the course no longer has -------------------------------------
     # A lesson renamed, renumbered or removed in the repo leaves its old module in Moodle
-    # under an idnumber this run did not produce. Hidden, never deleted: a learner's
-    # attempt and grade live on it, and a mistaken publish must stay recoverable. Done
-    # after everything else, so a publish that fails part-way never hides the old version
+    # under an idnumber this run did not produce. Retired, never deleted: hidden and moved
+    # into one hidden "Retired" section at the end, because a learner's attempt and grade
+    # live on it and a mistaken publish must stay recoverable, and because hidden in place
+    # it would sit between lessons for anyone walking the course as a teacher. Done after
+    # everything else, so a publish that fails part-way never retires the old version
     # before its replacement exists. Only this course's modules (the "ltct:<slug>:"
-    # prefix); the question bank and anything made by hand in Moodle are left alone.
+    # prefix); the question bank and anything made by hand in Moodle are left alone. One
+    # retired by an earlier publish is not sent again.
     prefix = manifest["idnumber"] + ":"     # every module is ltct:<slug>:<key>
     stale = [k for k in server if k.startswith(prefix) and k not in this_run]
-    hidden = 0
-    if stale:
+    to_retire = [k for k in stale
+                 if not (server[k].get("retired") and not server[k].get("visible", 1))]
+    if to_retire:
         result = client.call("local_ltuse_hide_modules",
-                             courseidnumber=manifest["idnumber"], idnumbers=stale)
+                             courseidnumber=manifest["idnumber"], idnumbers=to_retire)
         for r in result["modules"]:
-            was = "hidden" if r["outcome"] == "hidden" else "already hidden"
-            print("  hide      %-46s %s (%s)"
-                  % (r["idnumber"], was, server[r["idnumber"]]["modname"]))
-            hidden += r["outcome"] == "hidden"
+            print("  retire    %-46s %s" % (r["idnumber"], server[r["idnumber"]]["modname"]))
 
     if client.dry_run:
         print("  pages: dry-run; images: %d would be sent (%d KB)"
@@ -288,9 +296,9 @@ def publish(client, payload_dir, category_id):
         print("  pages: %d created, %d updated, %d unchanged; images: %d sent (%d KB), %d kept"
               % (counts["created"], counts["updated"], counts["unchanged"],
                  sent, round(sent_bytes / 1024), kept))
-        if stale:
-            print("  removed from the repo: %d module(s) hidden, %d already hidden"
-                  % (hidden, len(stale) - hidden))
+        if to_retire:
+            print("  retired: %d module(s) no longer in the repo, moved to the hidden "
+                  "Retired section" % len(to_retire))
 
     return manifest, cmids
 

@@ -61,6 +61,7 @@ class get_course_manifest extends external_api {
         }
 
         $fs = get_file_storage();
+        $retired = util::retired_section($course);
         $modules = [];
         foreach (util::owned_modules((int)$course->id) as $mid => $m) {
             $files = [];
@@ -82,6 +83,7 @@ class get_course_manifest extends external_api {
                 'section' => $m['section'],
                 'instance' => $m['instance'],
                 'visible' => $m['visible'],
+                'retired' => $retired !== null && $m['section'] === (int)$retired->section,
                 'files' => $files,
             ];
         }
@@ -117,6 +119,9 @@ class get_course_manifest extends external_api {
                     'section' => new external_value(PARAM_INT, 'Section number'),
                     'instance' => new external_value(PARAM_INT, 'Activity instance id'),
                     'visible' => new external_value(PARAM_INT, 'Whether it is visible'),
+                    'retired' => new external_value(PARAM_BOOL,
+                        'In the Retired section: hidden because the repo no longer has it',
+                        VALUE_DEFAULT, false),
                     'files' => new external_multiple_structure(
                         new external_single_structure([
                             'filename' => new external_value(PARAM_FILE, 'File name'),

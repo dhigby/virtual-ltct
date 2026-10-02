@@ -65,9 +65,10 @@ class FakeClient:
             out = []
             for idn in params["idnumbers"]:
                 m = self.server[idn]
+                done = m.get("retired") and not m.get("visible", 1)
                 out.append({"idnumber": idn, "cmid": m["cmid"],
-                            "outcome": "hidden" if m.get("visible", 1) else "alreadyhidden"})
-                m["visible"] = 0
+                            "outcome": "alreadyretired" if done else "retired"})
+                m["visible"], m["retired"] = 0, True
             return {"modules": out}
         if function == "local_ltuse_import_questions":
             return {"count": 1}
@@ -221,8 +222,8 @@ class Publish(unittest.TestCase):
         self.assertNotIn("local_ltuse_get_course_manifest", [f for f, _ in client.calls])
         self.assertIn("dry-run", out)
 
-    # Modules the repo no longer has (spec 009 follow-up): hidden, never deleted.
-    def test_module_the_repo_no_longer_has_is_hidden(self):
+    # Modules the repo no longer has: retired (hidden, in the Retired section), never deleted.
+    def test_module_the_repo_no_longer_has_is_retired(self):
         mods = self.server_as_published()
         mods += [
             # The old filename identity of a lesson, as the pre-2026-10-02 scheme wrote it.
@@ -240,24 +241,43 @@ class Publish(unittest.TestCase):
         self.assertEqual(sorted(calls[0]["idnumbers"]),
                          [mid("01-one-old-name.md"), mid("09-quiz.md")])
         self.assertEqual(calls[0]["courseidnumber"], COURSE)
-        self.assertIn("2 module(s) hidden, 0 already hidden", out)
-        # Hiding is the last write: nothing is hidden before its replacement exists.
+        self.assertIn("retired: 2 module(s)", out)
+        # Retiring is the last write: nothing is retired before its replacement exists.
         writes = [f for f, _ in client.calls if f.startswith("local_ltuse_")
                   and f != "local_ltuse_get_course_manifest"]
         self.assertEqual(writes[-1], "local_ltuse_hide_modules")
 
-    def test_already_hidden_module_is_reported_not_rehidden(self):
+    def test_already_retired_module_is_not_sent_again(self):
+        mods = self.server_as_published()
+        mods.append({"idnumber": mid("03-gone.md"), "cmid": 120, "modname": "page",
+                     "visible": 0, "retired": True, "files": []})
+        client = FakeClient(mods)
+        out = self.publish(client)
+        self.assertEqual(client.hide_calls(), [])
+        self.assertNotIn("retire", out)
+
+    def test_hidden_in_place_by_an_older_plugin_is_moved(self):
+        # Plugin 0.5.0 hid stale modules where they stood; they still need moving.
         mods = self.server_as_published()
         mods.append({"idnumber": mid("03-gone.md"), "cmid": 120, "modname": "page",
                      "visible": 0, "files": []})
-        out = self.publish(FakeClient(mods))
-        self.assertIn("0 module(s) hidden, 1 already hidden", out)
+        client = FakeClient(mods)
+        self.publish(client)
+        self.assertEqual(client.hide_calls()[0]["idnumbers"], [mid("03-gone.md")])
+
+    def test_retired_but_shown_by_a_teacher_is_hidden_again(self):
+        mods = self.server_as_published()
+        mods.append({"idnumber": mid("03-gone.md"), "cmid": 120, "modname": "page",
+                     "visible": 1, "retired": True, "files": []})
+        client = FakeClient(mods)
+        self.publish(client)
+        self.assertEqual(client.hide_calls()[0]["idnumbers"], [mid("03-gone.md")])
 
     def test_nothing_removed_means_no_hide_call(self):
         client = FakeClient(self.server_as_published())
         out = self.publish(client)
         self.assertEqual(client.hide_calls(), [])
-        self.assertNotIn("removed from the repo", out)
+        self.assertNotIn("retire", out)
 
     def test_dry_run_hides_nothing(self):
         mods = self.server_as_published()
@@ -324,6 +344,16 @@ class EnsureCourseGroupMode(unittest.TestCase):
         self.assertEqual(course["id"], 5)
         self.assertEqual(course["groupmode"], 1)
         self.assertNotIn("core_course_create_courses", [n for n, _ in client.calls])
+
+    def test_hidden_sections_hidden_completely_on_create_and_update(self):
+        for existing, function in (({"id": 5}, "core_course_update_courses"),
+                                   (None, "core_course_create_courses")):
+            with self.subTest(function=function):
+                client = StubClient(existing)
+                pm.ensure_course(client, MANIFEST, 3)
+                course = course_payload(client, function)
+                self.assertEqual(course["courseformatoptions"],
+                                 [{"name": "hiddensections", "value": "1"}])
 
     def test_create_sends_separate_groups(self):
         client = StubClient(None)

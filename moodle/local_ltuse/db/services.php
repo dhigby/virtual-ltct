@@ -39,11 +39,13 @@ $functions = [
     ],
     'local_ltuse_hide_modules' => [
         'classname'    => 'local_ltuse\external\hide_modules',
-        'description'  => 'Hide modules a course no longer has, identified by their '
-                        . 'course-module idnumbers. Never deletes.',
+        'description'  => 'Retire modules a course no longer has, identified by their '
+                        . 'course-module idnumbers: hide them and move them into a hidden '
+                        . 'Retired section at the end. Never deletes.',
         'type'         => 'write',
         'ajax'         => false,
-        'capabilities' => 'local/ltuse:publish, moodle/course:activityvisibility',
+        'capabilities' => 'local/ltuse:publish, moodle/course:activityvisibility, '
+                        . 'moodle/course:manageactivities, moodle/course:update',
     ],
     'local_ltuse_create_quiz' => [
         'classname'    => 'local_ltuse\external\create_quiz',

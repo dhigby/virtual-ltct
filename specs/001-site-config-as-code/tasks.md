@@ -113,7 +113,7 @@ Files: `moodle/site/settings/content-embeds.yaml`, `moodle/site/settings/mobile.
 **⟶ Wait for T024, then (verification, independent):**
 
 - [ ] **T025** [P] [US4] #3 with test accounts, in the browser and the Android app. A SCORM 1.2 package, an H5P item and a Vimeo embed all open. An iframe saved by an editing teacher is not rendered, but the same iframe from a manager is. Settle R9's Google Drive question: either a Drive iframe survives trusted text, or Drive stays a link. Record the result as a comment in content-embeds.yaml (US4 scenarios 1 and 2) · moodle/site/settings/content-embeds.yaml
-- [ ] **T026** [P] [US4] #4 with test accounts. A learner signs in through the Android app, sees callouts styled by the mobile stylesheet, and downloads a course for offline use (US4 scenario 3). No files
+- [x] **T026** [P] [US4] #4 with test accounts. A learner signs in through the Android app, sees callouts styled by the mobile stylesheet, and downloads a course for offline use (US4 scenario 3). No files
 - [ ] **T027** [P] [US4] #16 with test accounts. An administrator completes a full data export for one test learner and acts on a deletion request. A manager backs up a course (US4 scenario 4). No files
 - [ ] **T028** [P] [US4] #19 with test accounts. 1:1 and group conversations work in the browser and the app, and a learner restricts who may message them (US4 scenario 5). No files
 - [ ] **T029** [P] [US4] #25 with a new test account. Forum digest is the default, and the learner can change their preferences. Push stays off (US4 scenario 6). No files

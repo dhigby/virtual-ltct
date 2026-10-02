@@ -7,6 +7,11 @@
  *
  * Scoped to .local-ltuse-page, which scripts/moodle_payload.py wraps each page in, so
  * nothing here can affect a page somebody else made.
+ *
+ * Every background is a translucent tint and no rule sets a text colour, so the theme's own
+ * text colour shows through in light and dark alike. Do not add a prefers-color-scheme
+ * block: the Moodle app ignores the phone's setting unless the learner picks "System", so
+ * a phone in dark mode with the app in light painted these boxes black under black text.
  */
 
 /* Callouts. The curriculum writes these as blockquotes with a bold lead-in
@@ -14,7 +19,7 @@
  * admonitions, so the blockquote rule is the one that actually does the work. */
 .local-ltuse-page blockquote {
     border-left: 4px solid #4a7ebb;
-    background: #f4f7fb;
+    background: rgba(74, 126, 187, 0.12);
     margin: 1em 0;
     padding: 0.75em 1em;
     border-radius: 0 4px 4px 0;
@@ -30,7 +35,7 @@
  * the publisher emits when an answer key could not be cleanly separated. */
 .local-ltuse-page .admonition {
     border-left: 4px solid #4a7ebb;
-    background: #f4f7fb;
+    background: rgba(74, 126, 187, 0.12);
     margin: 1em 0;
     padding: 0.75em 1em;
     border-radius: 0 4px 4px 0;
@@ -43,7 +48,7 @@
 
 .local-ltuse-page .admonition.warning {
     border-left-color: #c9761a;
-    background: #fdf6ec;
+    background: rgba(201, 118, 26, 0.12);
 }
 
 /* Screenshots. Lessons teach software, so most pages carry one; without a max-width they
@@ -67,37 +72,14 @@
 .local-ltuse-page table th,
 .local-ltuse-page table td {
     padding: 0.4em 0.6em;
-    border: 1px solid #d5d9de;
+    border: 1px solid rgba(127, 127, 127, 0.35);
     vertical-align: top;
 }
 
 .local-ltuse-page pre {
     overflow-x: auto;
     padding: 0.75em;
-    background: #f5f5f5;
+    background: rgba(127, 127, 127, 0.12);
     border-radius: 4px;
 }
 
-/* Moodle 4.x/5.x ship a dark mode in some themes; keep the callouts legible there
- * rather than leaving dark text on a near-white panel. */
-@media (prefers-color-scheme: dark) {
-    .local-ltuse-page blockquote,
-    .local-ltuse-page .admonition {
-        background: #23272b;
-        border-left-color: #6f9bd1;
-    }
-
-    .local-ltuse-page .admonition.warning {
-        background: #2d2721;
-        border-left-color: #d89a4e;
-    }
-
-    .local-ltuse-page pre {
-        background: #1f2225;
-    }
-
-    .local-ltuse-page table th,
-    .local-ltuse-page table td {
-        border-color: #3a4046;
-    }
-}

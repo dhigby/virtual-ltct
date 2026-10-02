@@ -158,7 +158,7 @@ php public/local/ltuse/cli/setup_publishing.php --token-file=/home/ltuse/.ltuse-
 ```
 
 `apply` turns on web services and the mobile app service, sets `mobilecssurl` so published
-callouts render in the Android app, and creates the `ltcpublisher` role with exactly the
+callouts render in the Android app (the app applies it only on the Premium app plan), and creates the `ltcpublisher` role with exactly the
 capabilities the publisher uses. `local/ltuse:publish` is deliberately in no archetype,
 because this token rewrites course content wholesale. `setup_publishing.php` then creates
 the account, authorises it on the restricted *LTC curriculum publishing* service, and writes

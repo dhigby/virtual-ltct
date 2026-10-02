@@ -33,10 +33,21 @@ use core_plugin_manager;
  *   settings   [{name, value?, secret?}]   value is absent for a secret in drift mode
  *   failed_env [{name, env}, ...]         settings whose env: variable was not set (each also carries env_missing)
  *
+ * and, from spec 002 (specs/002-org-structure-cohorts/data-model.md "Rendered payload"), four
+ * arrays that are handed to their own classes for checking:
+ *
+ *   categories     [{idnumber, name, parent_idnumber}]          categories, parents first
+ *   cohorts        [{idnumber, name, visible}]                  cohorts
+ *   profile_fields [{category, shortname, name, datatype, ...}] profilefields
+ *   cohort_rules   [{cohort_idnumber, name, condition, ...}]    cohortrules
+ *
  * Each check returns item results of this shape, which the report class renders:
  *
- *   type      'release' | 'plugin' | 'role' | 'setting'
- *   item      setting key, plugin component, 'role:<shortname>' or '<shortname>:<capability>'
+ *   type      'release' | 'plugin' | 'role' | 'setting', or a spec 002 type: 'category',
+ *             'cohort', 'profilecategory', 'profilefield', 'cohortrule'
+ *   item      setting key, plugin component, 'role:<shortname>' or '<shortname>:<capability>',
+ *             or a spec 002 subject: 'category:<idnumber>', 'cohort:<idnumber>',
+ *             'profilecategory:<name>', 'profilefield:<shortname>', 'cohortrule:<idnumber>'
  *   result    one of the RESULT_* constants
  *   declared  what the declaration says, as display text (null when not applicable)
  *   live      what the server holds, as display text (null when absent)
@@ -108,6 +119,15 @@ class inspector {
     /** @var int system context id */
     protected $syscontextid;
 
+    /** @var categories|null checks the payload's categories; remembers ids resolved in order */
+    protected $categories = null;
+
+    /** @var cohorts|null checks the payload's cohorts */
+    protected $cohorts = null;
+
+    /** @var profilefields|null checks the payload's profile field category and fields */
+    protected $profilefields = null;
+
     /**
      * @param array $declaration the decoded JSON payload (associative arrays throughout)
      */
@@ -121,6 +141,57 @@ class inspector {
      */
     public function declaration(): array {
         return $this->declaration;
+    }
+
+    // --- spec 002 checkers -----------------------------------------------------------------
+
+    /**
+     * The category checker this inspector uses. It remembers the live id each declared
+     * idnumber resolved to, so the applier can apply through the same instance.
+     *
+     * @return categories
+     */
+    public function categories(): categories {
+        if ($this->categories === null) {
+            $this->categories = new categories();
+        }
+        return $this->categories;
+    }
+
+    /**
+     * @return cohorts the cohort checker this inspector uses
+     */
+    public function cohorts(): cohorts {
+        if ($this->cohorts === null) {
+            $this->cohorts = new cohorts();
+        }
+        return $this->cohorts;
+    }
+
+    /**
+     * @return profilefields the checker for the payload's `profile_fields`
+     */
+    public function profilefields(): profilefields {
+        if ($this->profilefields === null) {
+            $this->profilefields = new profilefields(self::entries($this->declaration['profile_fields'] ?? []));
+        }
+        return $this->profilefields;
+    }
+
+    /**
+     * One payload array as a list of associative arrays. Anything that is not an array is
+     * treated as empty; site_config.py's validate rejects such a payload before it gets here.
+     *
+     * @param mixed $entries
+     * @return array[]
+     */
+    public static function entries($entries): array {
+        if (!is_array($entries)) {
+            return [];
+        }
+        return array_values(array_map(function($entry) {
+            return (array)$entry;
+        }, $entries));
     }
 
     // --- admin tree ----------------------------------------------------------------------
@@ -203,8 +274,11 @@ class inspector {
 
     /**
      * Every declared item's comparison result, in report order: release, plugins, roles,
-     * settings (data-model "Run report"). Undeclared state (extra plugins, unmanaged
-     * settings) is the drift class's job, not this one.
+     * settings (data-model "Run report"), then spec 002's categories, cohorts, profile field
+     * category and fields, and cohort rules, in the order the contract applies them
+     * (specs/002-org-structure-cohorts/contracts/declaration.md "Output additions").
+     * Undeclared state (extra plugins, unmanaged settings, undeclared `ltct:` items) is the
+     * drift class's job, not this one.
      *
      * @return array[] item results
      */
@@ -219,11 +293,40 @@ class inspector {
         foreach ($this->declaration['settings'] ?? [] as $setting) {
             $items[] = $this->check_setting($setting);
         }
+        return array_merge($items, $this->inspect_structure());
+    }
+
+    /**
+     * Spec 002's item results, in apply order: categories (parents first), cohorts, the
+     * profile field category and fields, then cohort rules. WRITES NOTHING.
+     *
+     * The order matters because a later check reads what an earlier one resolved: a category
+     * whose parent does not exist yet is plain `missing`, and a rule whose cohort does not
+     * exist yet is a non-blocking `missing`, since apply creates the parent and the cohort
+     * first.
+     *
+     * @return array[] item results
+     */
+    public function inspect_structure(): array {
+        $items = $this->categories()->check_all(self::entries($this->declaration['categories'] ?? []));
+        $items = array_merge($items,
+            $this->cohorts()->check_all(self::entries($this->declaration['cohorts'] ?? [])));
+        if (self::entries($this->declaration['profile_fields'] ?? [])) {
+            $items = array_merge($items, $this->profilefields()->check());
+        }
+        foreach (self::entries($this->declaration['cohort_rules'] ?? []) as $rule) {
+            $items[] = cohortrules::check($rule);
+        }
         return $items;
     }
 
     /**
      * Whether any item means apply must write nothing.
+     *
+     * It counts every item inspect() returns, so a blocking result from any class stops apply
+     * before its first write, whichever array it came from: a release below the minimum, a
+     * missing plugin, a forced setting, an `ambiguous` category, a `wrong-context` cohort, a
+     * `wrong-datatype` profile field or an unreadable cohort rule.
      *
      * @param array[] $items
      * @return bool

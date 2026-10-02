@@ -10,16 +10,31 @@ defined('MOODLE_INTERNAL') || die();
 /**
  * Reports how this site differs from the declaration, and changes nothing (US2).
  *
- * Three passes:
+ * Four passes:
  *   1. every declared item, through the inspector (changed, missing, unknown, forced, ...);
  *   2. installed plugins that are not standard and not declared (extra);
  *   3. undeclared settings whose value differs from Moodle's default and that ignore.yaml
- *      does not list (unmanaged, research R5).
+ *      does not list (unmanaged, research R5);
+ *   4. items this site owns that are no longer declared (extra, spec 002): an `ltct:`
+ *      category or cohort, an `ltct_` profile field, and an `ltct: `-named cohort rule.
  *
  * A setting forced in config.php is skipped in pass 3: config.php belongs to provisioning,
  * not to this declaration (R6). Any difference makes the run exit 1 (FR-008).
+ *
+ * Pass 4 only reports. Nothing undeclared is ever deleted (FR-004), and none of its items
+ * blocks apply. A cohort is reported by idnumber and name only: no member is read, listed or
+ * counted (constitution III). Its raw reads are by indexed prefix on core tables:
+ * `course_categories.idnumber`, `cohort.idnumber` and `user_info_field.shortname`. Rules are
+ * read only through cohortrules::owned_rules(), which uses the plugin's own persistent class
+ * and returns nothing when tool_dynamic_cohorts is not installed, so that scan is skipped.
  */
 class drift {
+
+    /** The idnumber prefix of every category and cohort this site owns. */
+    const OWNED_IDNUMBER_PREFIX = 'ltct:';
+
+    /** The shortname prefix of every profile field this site owns. */
+    const OWNED_FIELD_PREFIX = 'ltct_';
 
     /** @var inspector */
     protected $inspector;
@@ -46,6 +61,99 @@ class drift {
         $declaration = $this->inspector->declaration();
         $this->report_extra_plugins($declaration);
         $this->report_unmanaged_settings($declaration);
+        $this->report_extra_owned($declaration);
+    }
+
+    /**
+     * Pass 4: every item this site owns that the declaration no longer lists, as `extra`.
+     *
+     * @param array $declaration
+     */
+    protected function report_extra_owned(array $declaration): void {
+        $declared = self::declared_values($declaration['categories'] ?? [], 'idnumber');
+        foreach (self::owned_records('course_categories', 'idnumber', self::OWNED_IDNUMBER_PREFIX,
+                'id, idnumber, name') as $record) {
+            if (!isset($declared[(string)$record->idnumber])) {
+                $this->report->add('fail', 'extra', categories::subject((string)$record->idnumber), null,
+                    (string)$record->name, 'no longer declared in organisations.yaml; kept, never deleted');
+            }
+        }
+
+        $declared = self::declared_values($declaration['cohorts'] ?? [], 'idnumber');
+        foreach (self::owned_records('cohort', 'idnumber', self::OWNED_IDNUMBER_PREFIX,
+                'id, idnumber, name') as $record) {
+            if (!isset($declared[(string)$record->idnumber])) {
+                $this->report->add('fail', 'extra', cohorts::subject((string)$record->idnumber), null,
+                    (string)$record->name, 'no longer declared in organisations.yaml; kept, never deleted');
+            }
+        }
+
+        $declared = self::declared_values($declaration['profile_fields'] ?? [], 'shortname');
+        foreach (self::owned_records('user_info_field', 'shortname', self::OWNED_FIELD_PREFIX,
+                'id, shortname, name') as $record) {
+            if (!isset($declared[(string)$record->shortname])) {
+                $this->report->add('fail', 'extra', 'profilefield:' . $record->shortname, null,
+                    (string)$record->name, 'no longer declared in profile-fields.yaml; kept, never deleted');
+            }
+        }
+
+        if (!cohortrules::plugin_installed()) {
+            return;
+        }
+        $declared = self::declared_values($declaration['cohort_rules'] ?? [], 'cohort_idnumber');
+        foreach (cohortrules::owned_rules() as $rule) {
+            $idnumber = (string)$rule['cohort_idnumber'];
+            if ($idnumber !== '' && isset($declared[$idnumber])) {
+                continue;
+            }
+            if ($idnumber === '') {
+                // Its cohort is gone, so name the rule by the idnumber its name carries.
+                $subject = cohortrules::TYPE . ':' . substr((string)$rule['name'], strlen(cohortrules::NAME_PREFIX));
+                $message = 'its cohort no longer exists; kept, never deleted';
+            } else {
+                $subject = cohortrules::TYPE . ':' . $idnumber;
+                $message = 'no longer declared in organisations.yaml; kept, never deleted';
+            }
+            $this->report->add('fail', 'extra', $subject, null, (string)$rule['name'], $message);
+        }
+    }
+
+    /**
+     * Records of a core table whose key column starts with a prefix, matched case-sensitively.
+     * The prefix is checked again in PHP, because a collation may still fold case.
+     *
+     * @param string $table
+     * @param string $column an indexed key column
+     * @param string $prefix
+     * @param string $fields
+     * @return \stdClass[] keyed by id
+     */
+    protected static function owned_records(string $table, string $column, string $prefix, string $fields): array {
+        global $DB;
+        $select = $DB->sql_like($column, ':prefix', true, true);
+        $params = ['prefix' => $DB->sql_like_escape($prefix) . '%'];
+        $records = $DB->get_records_select($table, $select, $params, $column, $fields);
+        return array_filter($records, function($record) use ($column, $prefix) {
+            return strpos((string)$record->$column, $prefix) === 0;
+        });
+    }
+
+    /**
+     * The values of one key across a payload array, as a set.
+     *
+     * @param array $entries
+     * @param string $key
+     * @return array<string, true>
+     */
+    protected static function declared_values(array $entries, string $key): array {
+        $values = [];
+        foreach ($entries as $entry) {
+            $entry = (array)$entry;
+            if (isset($entry[$key])) {
+                $values[(string)$entry[$key]] = true;
+            }
+        }
+        return $values;
     }
 
     /**

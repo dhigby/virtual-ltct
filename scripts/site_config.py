@@ -218,7 +218,43 @@ TOP_FILES = {
     "site.yaml": ({"moodle"}, {"plugins"}),
     "ignore.yaml": ({"ignore"}, set()),
     "roles.yaml": ({"roles"}, set()),
+    # Spec 002: the partner organisations and the profile fields. Both are optional, so a
+    # site that hosts no organisations needs neither (specs/002-org-structure-cohorts/
+    # contracts/declaration.md).
+    "organisations.yaml": ({"rows", "purpose", "categories", "organisations"}, set()),
+    "profile-fields.yaml": ({"rows", "purpose", "category", "fields"}, set()),
 }
+
+# --- spec 002: organisations, categories, cohorts and profile fields ---------------------
+
+COMPETENCIES = REPO / "competencies.yaml"   # the expertise areas are its categories
+KEY = re.compile(r"^[a-z][a-z0-9-]*$")     # valid in an idnumber and as a menu option
+ORG_KEY_MAX = 30
+IDNUMBER_MAX = 100                         # course_categories.idnumber, cohort.idnumber
+CATEGORY_NAME_MAX = 255                    # course_categories.name
+COHORT_NAME_MAX = 254                      # cohort.name
+REQUIRED_CATEGORIES = ("published", "pilots", "organisations")
+ORG_PARENT = "organisations"               # every organisation category sits in it
+INDEPENDENT = "independent"                # consultants with no partner organisation
+EMAIL = re.compile(r"[^@\s]+@[^@\s]+\.[^@\s]+")
+FIELD_SHORTNAME = re.compile(r"^ltct_[a-z0-9_]+$")
+EXPERTISE_PREFIX = "ltct_exp_"
+ORG_FIELD = "ltct_org"
+DATATYPES = ("menu", "checkbox")
+# profile/lib.php PROFILE_VISIBLE_*: the payload carries the user_info_field column value.
+VISIBILITY = {"all": 2, "teachers": 3, "private": 1, "none": 0}
+OPTIONS_FROM = ("organisations",)
+META_CATEGORY = "Meta"                     # holds only Uncategorized, so gets no checkbox
+COHORT_RULE_CONDITION = "user_custom_profile"
+
+ORGMANAGER = "orgmanager"
+# Capabilities orgmanager must never carry, in any permission (contracts/declaration.md,
+# data-model "Role declaration orgmanager"). The list of what it may hold is reviewed in
+# roles.yaml; this guards against the dangerous additions.
+ORGMANAGER_DENY = frozenset({"moodle/site:accessallgroups", "moodle/user:viewalldetails",
+                             "moodle/course:managegroups", "moodle/course:viewsuspendedusers"})
+ORGMANAGER_DENY_PREFIXES = ("moodle/cohort:", "moodle/role:", "enrol/")
+ORGMANAGER_DENY_USER = re.compile(r"create|update|delete|edit|manage|loginas")
 
 
 # ---------------------------------------------------------------------------------------
@@ -399,7 +435,8 @@ def validate(site_dir=SITE_DIR):
     """Load and check the declaration. Returns (declaration, Problems)."""
     problems = Problems()
     site_dir = pathlib.Path(site_dir)
-    decl = {"moodle": None, "plugins": [], "ignore": [], "roles": [], "settings": []}
+    decl = {"moodle": None, "plugins": [], "ignore": [], "roles": [], "settings": [],
+            "categories": [], "cohorts": [], "profile_fields": [], "cohort_rules": []}
     if not site_dir.is_dir():
         problems.add(_rel(site_dir), "declaration directory not found")
         return decl, problems
@@ -407,7 +444,8 @@ def validate(site_dir=SITE_DIR):
     for path in sorted(site_dir.iterdir()):
         if path.is_file() and path.suffix in (".yaml", ".yml") and path.name not in TOP_FILES:
             problems.add(_rel(path), "unexpected file; the declaration is site.yaml, "
-                         "ignore.yaml, roles.yaml and settings/*.yaml")
+                         "ignore.yaml, roles.yaml, organisations.yaml, "
+                         "profile-fields.yaml and settings/*.yaml")
 
     loaded = {}
     for name, (required, optional) in TOP_FILES.items():
@@ -667,7 +705,376 @@ def validate(site_dir=SITE_DIR):
                 if short not in role_names:
                     problems.add(s["file"], "%s names role %r, which is neither core nor in "
                                  "roles.yaml" % (s["name"], short))
+
+    # Spec 002: organisations.yaml and profile-fields.yaml, then the four payload arrays.
+    orgs = None
+    if "organisations.yaml" in loaded:
+        path, data = loaded["organisations.yaml"]
+        orgs = _validate_organisations(_rel(path), data, rows, problems)
+    fields = None
+    if "profile-fields.yaml" in loaded:
+        path, data = loaded["profile-fields.yaml"]
+        fields = _validate_profile_fields(_rel(path), data, rows, orgs, problems)
+    if orgs is not None and orgs["organisations"]:
+        if fields is None:
+            problems.add("organisations.yaml", "each organisation's cohort rule needs the "
+                         "%s field, but profile-fields.yaml is missing" % ORG_FIELD)
+        for role in decl["roles"]:
+            for org in orgs["organisations"]:
+                if org["key"] in role["shortname"]:
+                    problems.add("roles.yaml", "role %s contains organisation key %r; there "
+                                 "is one manager role for every partner (SC-005)"
+                                 % (role["shortname"], org["key"]))
+    for role in decl["roles"]:
+        if role["shortname"] == ORGMANAGER:
+            _check_orgmanager(role, problems)
+    _expand(decl, orgs, fields)
     return decl, problems
+
+
+def _check_rows(where, data, rows, problems):
+    cited = data.get("rows")
+    if not isinstance(cited, list) or not cited or not all(_is_int(r) for r in cited):
+        problems.add(where, "rows must be a list of moodle/REQUIREMENTS.md row numbers")
+        return
+    for r in cited:
+        if r not in rows:
+            problems.add(where, "row %d is not in moodle/REQUIREMENTS.md" % r)
+
+
+def _check_name(where, label, value, limit, problems):
+    """A display name: non-empty text on one line, within its column, naming no one."""
+    if not _text(value):
+        problems.add(where, "%s must be text" % label)
+        return False
+    if "\n" in value or "\r" in value:
+        problems.add(where, "%s must be on one line" % label)
+        return False
+    if len(value) > limit:
+        problems.add(where, "%s is %d characters; the column holds %d"
+                     % (label, len(value), limit))
+    if EMAIL.search(value):
+        problems.add(where, "%s holds an email address; nothing here names a person "
+                     "(constitution III)" % label)
+    return True
+
+
+def _validate_organisations(where, data, rows, problems):
+    """Check organisations.yaml. Returns {categories, organisations}: the valid entries."""
+    _check_hosts(where, data, problems)
+    _check_rows(where, data, rows, problems)
+    if not _text(data.get("purpose")):
+        problems.add(where, "purpose must say what this file is for")
+    out = {"categories": [], "organisations": []}
+
+    cats = data.get("categories")
+    if not isinstance(cats, list):
+        problems.add(where, "categories must be a list")
+        cats = []
+    keys, names = set(), set()
+    for i, cat in enumerate(cats):
+        cwhere = "%s categories[%d]" % (where, i)
+        if not _check_keys(cwhere, cat, {"key", "name", "why"}, {"parent"}, problems):
+            continue
+        key = cat.get("key")
+        if not (isinstance(key, str) and KEY.match(key)):
+            problems.add(cwhere, "key %r must match %s" % (key, KEY.pattern))
+            continue
+        cwhere = "%s category %s" % (where, key)
+        if key in keys:
+            problems.add(cwhere, "declared twice")
+            continue
+        if key == "org":
+            problems.add(cwhere, "a shared category key cannot be 'org', so ltct:<key> never "
+                         "collides with ltct:org:<organisation>")
+            continue
+        if len("ltct:" + key) > IDNUMBER_MAX:
+            problems.add(cwhere, "key is too long for an idnumber (%d characters)"
+                         % IDNUMBER_MAX)
+        if not _text(cat.get("why")):
+            problems.add(cwhere, "why must say which row or spec needs it")
+        name = cat.get("name")
+        _check_name(cwhere, "name", name, CATEGORY_NAME_MAX, problems)
+        parent = cat.get("parent")
+        if "parent" in cat and parent not in keys:
+            # Earlier in the list, so parents are created first and there is no cycle.
+            problems.add(cwhere, "parent %r is not a category declared earlier in the list"
+                         % (parent,))
+            parent = None
+        if isinstance(name, str):
+            if (parent, name) in names:
+                problems.add(cwhere, "another category under the same parent is named %r"
+                             % name)
+            names.add((parent, name))
+        keys.add(key)
+        out["categories"].append({"key": key, "name": name, "parent": parent})
+    for key in REQUIRED_CATEGORIES:
+        if key not in keys:
+            problems.add(where, "categories must include %r" % key)
+
+    orgs = data.get("organisations")
+    if not isinstance(orgs, list):
+        problems.add(where, "organisations must be a list")
+        orgs = []
+    seen, orgnames = set(), set()
+    for i, org in enumerate(orgs):
+        owhere = "%s organisations[%d]" % (where, i)
+        # Only key and name: no branding, role or setting per organisation (constitution
+        # VII), and nothing that could hold a person (constitution III).
+        if not _check_keys(owhere, org, {"key", "name"}, set(), problems):
+            continue
+        key = org.get("key")
+        if not (isinstance(key, str) and KEY.match(key)):
+            problems.add(owhere, "key %r must match %s" % (key, KEY.pattern))
+            continue
+        owhere = "%s organisation %s" % (where, key)
+        if len(key) > ORG_KEY_MAX:
+            problems.add(owhere, "key is %d characters; at most %d" % (len(key), ORG_KEY_MAX))
+        if key in seen:
+            problems.add(owhere, "declared twice")
+            continue
+        seen.add(key)
+        name = org.get("name")
+        # "<name> managers" is the longest name derived from it, and must fit cohort.name.
+        if _check_name(owhere, "name", name, COHORT_NAME_MAX - len(" managers"), problems):
+            if name in orgnames:
+                problems.add(owhere, "another organisation is named %r" % name)
+            elif (ORG_PARENT, name) in names:
+                problems.add(owhere, "a shared category under %r is already named %r"
+                             % (ORG_PARENT, name))
+            orgnames.add(name)
+        out["organisations"].append({"key": key, "name": name})
+    if INDEPENDENT not in seen:
+        problems.add(where, "organisations must include %r, for consultants with no partner "
+                     "organisation" % INDEPENDENT)
+    return out
+
+
+def _competency_categories(problems):
+    """The top-level category names of competencies.yaml, or None if it cannot be read."""
+    try:
+        with open(COMPETENCIES, encoding="utf-8") as fh:
+            data = yaml.safe_load(fh)
+    except (OSError, yaml.YAMLError) as exc:
+        problems.add(_rel(COMPETENCIES), "cannot read the expertise areas: %s" % exc)
+        return None
+    if not isinstance(data, dict):
+        problems.add(_rel(COMPETENCIES), "must map each category to its competencies")
+        return None
+    return [str(k) for k in data]
+
+
+def _validate_profile_fields(where, data, rows, orgs, problems):
+    """Check profile-fields.yaml. Returns {category, fields}: the valid entries, expanded."""
+    _check_hosts(where, data, problems)
+    _check_rows(where, data, rows, problems)
+    if not _text(data.get("purpose")):
+        problems.add(where, "purpose must say what this file is for")
+    out = {"category": None, "fields": []}
+    cat = data.get("category")
+    if _check_keys(where + " category", cat, {"name"}, set(), problems):
+        if _check_name(where + " category", "name", cat.get("name"), CATEGORY_NAME_MAX,
+                       problems):
+            out["category"] = cat["name"]
+
+    areas = _competency_categories(problems)
+    wanted = [a for a in (areas or []) if a != META_CATEGORY]
+    covered = {}
+    fields = data.get("fields")
+    if not isinstance(fields, list):
+        problems.add(where, "fields must be a list")
+        fields = []
+    seen, from_orgs = set(), []
+    for i, field in enumerate(fields):
+        fwhere = "%s fields[%d]" % (where, i)
+        # No description and no default: an unknown key is an error, so neither can be
+        # declared (a default would write one value onto every learner).
+        if not _check_keys(fwhere, field, {"shortname", "datatype", "name", "visible",
+                                           "locked", "why"},
+                           {"required", "options", "options_from", "area"}, problems):
+            continue
+        short = field.get("shortname")
+        if not (isinstance(short, str) and FIELD_SHORTNAME.match(short)):
+            problems.add(fwhere, "shortname %r must match %s" % (short, FIELD_SHORTNAME.pattern))
+            continue
+        fwhere = "%s %s" % (where, short)
+        if short in seen:
+            problems.add(fwhere, "declared twice")
+            continue
+        seen.add(short)
+        ok = True
+        datatype = field.get("datatype")
+        if datatype not in DATATYPES:
+            problems.add(fwhere, "datatype must be one of %s" % ", ".join(DATATYPES))
+            ok = False
+        ok &= _check_name(fwhere, "name", field.get("name"), CATEGORY_NAME_MAX, problems)
+        visible = field.get("visible")
+        if not isinstance(visible, str) or visible not in VISIBILITY:
+            problems.add(fwhere, "visible must be one of %s" % ", ".join(VISIBILITY))
+            ok = False
+        flags = {}
+        for key, allowed in (("locked", (0, 1)), ("required", (0,))):
+            value = field.get(key, 0)
+            if isinstance(value, Flag):
+                problems.add(fwhere, "%s: YAML boolean %r; write 1 or 0" % (key, value.text))
+                ok = False
+            elif not (_is_int(value) and value in allowed):
+                problems.add(fwhere, "%s must be %s" % (key, " or ".join(map(str, allowed))))
+                ok = False
+            else:
+                flags[key] = value
+        if not _text(field.get("why")):
+            problems.add(fwhere, "why must say which row or acceptance scenario needs it")
+
+        options = None
+        has_options, has_from = "options" in field, "options_from" in field
+        if datatype == "menu":
+            if has_options == has_from:
+                problems.add(fwhere, "a menu has exactly one of options and options_from")
+                ok = False
+            elif has_options:
+                options = _check_options(fwhere, field["options"], problems)
+                ok &= options is not None
+            elif field["options_from"] not in OPTIONS_FROM:
+                problems.add(fwhere, "options_from must be one of %s" % ", ".join(OPTIONS_FROM))
+                ok = False
+            else:
+                from_orgs.append(short)
+                if orgs is None or not orgs["organisations"]:
+                    problems.add(fwhere, "options_from: organisations, but organisations.yaml "
+                                 "is missing or declares no organisations")
+                    ok = False
+                else:
+                    options = [o["key"] for o in orgs["organisations"]]
+        elif datatype == "checkbox" and (has_options or has_from):
+            problems.add(fwhere, "only a menu has options")
+            ok = False
+
+        expertise = short.startswith(EXPERTISE_PREFIX)
+        if expertise and datatype != "checkbox":
+            problems.add(fwhere, "an %s* field is a checkbox, one per area" % EXPERTISE_PREFIX)
+            ok = False
+        if "area" in field and not expertise:
+            problems.add(fwhere, "only an %s* field has an area" % EXPERTISE_PREFIX)
+            ok = False
+        elif expertise:
+            area = field.get("area")
+            if not isinstance(area, str):
+                problems.add(fwhere, "an %s* field needs, in area, the competencies.yaml "
+                             "category it stands for" % EXPERTISE_PREFIX)
+                ok = False
+            elif area == META_CATEGORY:
+                problems.add(fwhere, "%s holds only Uncategorized, so it has no expertise "
+                             "checkbox" % META_CATEGORY)
+                ok = False
+            elif areas is not None and area not in wanted:
+                problems.add(fwhere, "area %r is not a competencies.yaml category; copy it "
+                             "verbatim" % area)
+                ok = False
+            elif area in covered:
+                problems.add(fwhere, "area %r already has a checkbox, %s"
+                             % (area, covered[area]))
+                ok = False
+            else:
+                covered[area] = short
+        if ok:
+            out["fields"].append({
+                "shortname": short, "name": field["name"], "datatype": datatype,
+                "visible": VISIBILITY[visible], "locked": flags["locked"],
+                "required": flags["required"], "options": options or []})
+
+    org_field = next((f for f in fields if isinstance(f, dict)
+                      and f.get("shortname") == ORG_FIELD), None)
+    if org_field is None:
+        problems.add(where, "%s must be declared: a locked menu with options_from: "
+                     "organisations (FR-009)" % ORG_FIELD)
+    else:
+        if org_field.get("datatype") != "menu" or org_field.get("options_from") != \
+                "organisations" or "options" in org_field:
+            problems.add(where, "%s is a menu with options_from: organisations and no options"
+                         % ORG_FIELD)
+        locked = org_field.get("locked")
+        if not (_is_int(locked) and locked == 1):
+            problems.add(where, "%s must be locked: 1, so only the site team can change it "
+                         "(FR-009)" % ORG_FIELD)
+    for short in from_orgs:
+        if short != ORG_FIELD:
+            problems.add(where, "only %s takes options_from: organisations, not %s"
+                         % (ORG_FIELD, short))
+    for area in wanted:
+        if area not in covered:
+            problems.add(where, "competencies.yaml category %r has no %s* checkbox"
+                         % (area, EXPERTISE_PREFIX))
+    return out
+
+
+def _check_options(where, options, problems):
+    """A menu's declared options: unique, non-empty text, one line each."""
+    if not isinstance(options, list) or not options:
+        problems.add(where, "options must be a non-empty list")
+        return None
+    out = []
+    for option in options:
+        if not _text(option) or "\n" in option or "\r" in option:
+            problems.add(where, "each option is non-empty text on one line, not %r"
+                         % (getattr(option, "text", option),))
+            return None
+        if option in out:
+            problems.add(where, "option %r is listed twice" % option)
+            return None
+        out.append(option)
+    return out
+
+
+def _orgmanager_denied(cap):
+    if cap in ORGMANAGER_DENY or cap.startswith(ORGMANAGER_DENY_PREFIXES):
+        return True
+    component, _, name = cap.partition(":")
+    if "enrol" in name:
+        return True
+    return component == "moodle/user" and bool(ORGMANAGER_DENY_USER.search(name))
+
+
+def _check_orgmanager(role, problems):
+    """The follow-only manager role (FR-005 to FR-007, FR-013)."""
+    where = "roles.yaml %s" % ORGMANAGER
+    if role.get("contextlevels") != ["course"]:
+        problems.add(where, "contextlevels must be exactly [course]; it is assigned only "
+                     "through cohort sync in a course")
+    for cap, perm in role.get("capabilities", {}).items():
+        if perm == "prohibit":
+            problems.add(where, "%s: orgmanager uses no prohibit, so it never takes a "
+                         "permission away from another role" % cap)
+        if isinstance(cap, str) and _orgmanager_denied(cap):
+            problems.add(where, "%s is on orgmanager's deny list: a manager follows their "
+                         "people and changes nothing (FR-007, FR-013)" % cap)
+
+
+def _expand(decl, orgs, fields):
+    """Expand the two files into the payload arrays (data-model "Rendered payload").
+
+    One organisation becomes one category, two cohorts and one rule, so no two can differ
+    (constitution VII). Categories come parents first: the shared ones in declaration order
+    (each parent is declared before its children), then the organisations' categories.
+    """
+    if orgs is not None:
+        for cat in orgs["categories"]:
+            decl["categories"].append({
+                "idnumber": "ltct:" + cat["key"], "name": cat["name"],
+                "parent_idnumber": ("ltct:" + cat["parent"]) if cat["parent"] else None})
+        for org in orgs["organisations"]:
+            idnumber = "ltct:org:" + org["key"]
+            decl["categories"].append({"idnumber": idnumber, "name": org["name"],
+                                       "parent_idnumber": "ltct:" + ORG_PARENT})
+            decl["cohorts"].append({"idnumber": idnumber, "name": org["name"], "visible": 0})
+            decl["cohorts"].append({"idnumber": idnumber + ":managers",
+                                    "name": "%s managers" % org["name"], "visible": 0})
+            decl["cohort_rules"].append({
+                "cohort_idnumber": idnumber, "name": "ltct: " + idnumber,
+                "condition": COHORT_RULE_CONDITION, "field": ORG_FIELD, "value": org["key"]})
+    if fields is not None:
+        for field in fields["fields"]:
+            decl["profile_fields"].append(dict(field, category=fields["category"]))
 
 
 def _check_source(where, component, version, source, problems):
@@ -725,6 +1132,11 @@ def build_payload(decl, mode, environ, redact=False):
         "roles": decl["roles"],
         "settings": [],
         "failed_env": [],
+        # Spec 002, already expanded: PHP never sees an "organisation".
+        "categories": decl["categories"],
+        "cohorts": decl["cohorts"],
+        "profile_fields": decl["profile_fields"],
+        "cohort_rules": decl["cohort_rules"],
     }
     for s in decl["settings"]:
         out = {"name": s["name"], "plugin": s["plugin"], "setting": s["setting"],
@@ -793,9 +1205,11 @@ def run_remote(mode, decl, environ, as_json=False, runner=subprocess.run):
 
 def _summary(decl):
     files = len({s["file"] for s in decl["settings"]})
-    return ("%d settings in %d files, %d plugins, %d roles, %d ignore entries"
+    return ("%d settings in %d files, %d plugins, %d roles, %d ignore entries, "
+            "%d categories, %d cohorts, %d profile fields, %d cohort rules"
             % (len(decl["settings"]), files, len(decl["plugins"]), len(decl["roles"]),
-               len(decl["ignore"])))
+               len(decl["ignore"]), len(decl["categories"]), len(decl["cohorts"]),
+               len(decl["profile_fields"]), len(decl["cohort_rules"])))
 
 
 def main(argv=None, environ=None):

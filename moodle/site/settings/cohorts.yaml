@@ -1,0 +1,22 @@
+# Row #8: tool_dynamic_cohorts, the plugin that fills each organisation cohort from the
+# organisation profile field.
+
+rows: [8]
+purpose: >-
+  How the cohort plugin behaves. Each organisation cohort is filled by a tool_dynamic_cohorts
+  rule on the ltct_org profile field (spec 002, research R4). These two settings decide what
+  happens to a cohort's members when a rule stops managing it, and how soon membership follows
+  a change to someone's profile. Both are pinned to the values the plugin installs with, so a
+  change made by hand shows up as drift.
+settings:
+  - name: tool_dynamic_cohorts/releasemembers
+    value: 0
+    why: >-
+      At 1, unmanaging a cohort deletes all its members, without events (research R4), and
+      every cohort-sync enrolment that follows the cohort goes with them. At 0 the members are
+      kept.
+  - name: tool_dynamic_cohorts/realtime
+    value: 1
+    why: >-
+      Membership follows a learner's organisation field as soon as it changes, so they reach
+      their organisation's courses without waiting for a scheduled refresh (US3-1, SC-003).

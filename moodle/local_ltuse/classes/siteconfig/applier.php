@@ -21,7 +21,16 @@ defined('MOODLE_INTERNAL') || die();
  *   plugins   the plugininfo class's enable_plugin()
  *   roles     create_role(), set_role_contextlevels(), assign_capability(), unassign_capability()
  *
- * It never installs, upgrades or downgrades plugin code, and never resets or deletes a role.
+ * After settings come spec 002's four arrays, each handed to its own class, in the order the
+ * contract fixes (specs/002-org-structure-cohorts/contracts/declaration.md "Output additions"):
+ *
+ *   categories      categories::apply(), parents first, as the payload lists them
+ *   cohorts         cohorts::apply()
+ *   profile_fields  profilefields::apply(): the field category first, then the fields
+ *   cohort_rules    cohortrules::apply(), last, because a rule needs its cohort and its field
+ *
+ * It never installs, upgrades or downgrades plugin code, never resets or deletes a role, and
+ * never deletes a category, cohort, field or rule (FR-004).
  */
 class applier {
 
@@ -65,6 +74,34 @@ class applier {
         }
         foreach ($this->declaration['settings'] ?? [] as $setting) {
             $this->apply_setting($setting);
+        }
+        $this->apply_structure();
+    }
+
+    /**
+     * Apply spec 002's four arrays, in the contract's order. One instance of each class serves
+     * the whole run, so a category parent created or adopted here is known to its children.
+     * The preflight has already passed, so nothing here blocks; each class still reports a
+     * blocking result rather than writing over it.
+     */
+    protected function apply_structure(): void {
+        $categories = new categories();
+        foreach ($this->declaration['categories'] ?? [] as $category) {
+            $categories->apply((array)$category, $this->report);
+        }
+
+        $cohorts = new cohorts();
+        foreach ($this->declaration['cohorts'] ?? [] as $cohort) {
+            $cohorts->apply((array)$cohort, $this->report);
+        }
+
+        $fields = $this->declaration['profile_fields'] ?? [];
+        if ($fields) {
+            (new profilefields($fields))->apply($this->report);
+        }
+
+        foreach ($this->declaration['cohort_rules'] ?? [] as $rule) {
+            cohortrules::apply((array)$rule, $this->report);
         }
     }
 

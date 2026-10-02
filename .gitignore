@@ -17,6 +17,13 @@ id_ed25519*
 *token*.txt
 secrets.*
 
+# Learner data. The Moodle CSV user upload (spec 002, research R8) holds real learners'
+# names and emails, which must never reach this public repo (constitution III). The rule is
+# that the CSV is made and kept outside this folder; GitDoc pushes anything left here, so
+# this pattern is the backstop. No CSV is tracked today; add a `!path` exception if one
+# ever needs to be.
+*.csv
+
 # OS
 Thumbs.db
 .DS_Store

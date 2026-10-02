@@ -11,6 +11,14 @@ The declaration is YAML under `moodle/site/`, read only by `scripts/site_config.
 | `moodle/site/roles.yaml` | Roles: archetype plus overrides at system context. |
 | `moodle/site/settings/*.yaml` | Settings, one file per topic, each citing the `moodle/REQUIREMENTS.md` rows it serves. |
 | `moodle/site/README.md` | How to add a setting and what each kind means. Not read by the tool. |
+| `moodle/site/organisations.yaml`, `moodle/site/profile-fields.yaml` | Added by spec 002. Partner organisations, shared categories and profile fields. See below. |
+
+**Spec 002 extends this contract.** [Its declaration contract](../../002-org-structure-cohorts/contracts/declaration.md) adds three things:
+- `organisations.yaml` and `profile-fields.yaml`;
+- four item types the applier handles after settings: course categories, cohorts, profile fields and `tool_dynamic_cohorts` cohort rules;
+- the `local_ltuse_control_view_profile()` profile hook.
+
+Everything in this contract still holds for them.
 
 The baseline settings files are `content-embeds.yaml` (#3), `mobile.yaml` (#4), `data-export.yaml` (#16), `messaging.yaml` (#19), `notifications.yaml` (#25) and, once a per-server value is needed, `server.yaml` (values from the environment). The first drift run found none, because `debug` and `wwwroot` live in `config.php`. Specs 002–014 add their own file here.
 

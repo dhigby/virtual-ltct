@@ -1,5 +1,6 @@
-"""Unit tests for scripts/site_config.py (spec 001). Run: python -m pytest tests/"""
+"""Unit tests for scripts/site_config.py (specs 001 and 002). Run: python -m pytest tests/"""
 import contextlib, io, json, pathlib, shutil, sys, tempfile, textwrap, unittest
+import yaml
 REPO = pathlib.Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(REPO / "scripts"))
 import site_config as sc
@@ -61,6 +62,79 @@ ignore:
     reason: per install
 """
 
+# Spec 002 fixtures. Organisation keys are fixture-* (plus the required `independent`),
+# never the instance-test keys, so T038's leak check for those keys stays meaningful.
+# `independent` is declared before `fixture-north` so declaration order differs from sorted.
+ORGS = """\
+rows: [8, 15]
+purpose: fixture organisations
+categories:
+  - key: published
+    name: LTC Published
+    why: shared curriculum
+  - key: pilots
+    name: LTC Pilots
+    why: pilots
+  - key: organisations
+    name: Partner organisations
+    why: parent of every organisation category
+organisations:
+  - key: independent
+    name: Independent
+  - key: fixture-north
+    name: Fixture North
+"""
+with open(REPO / "competencies.yaml", encoding="utf-8") as _fh:
+    AREAS = [a for a in yaml.safe_load(_fh) if a != "Meta"]
+EXP_FIELD = """\
+  - shortname: ltct_exp_{n}
+    datatype: checkbox
+    name: {area}
+    visible: all
+    locked: 0
+    required: 0
+    area: {area}
+    why: expertise
+"""
+PROFILE = """\
+rows: [8, 18]
+purpose: fixture profile fields
+category:
+  name: About your work
+fields:
+  - shortname: ltct_org
+    datatype: menu
+    name: Organisation
+    visible: all
+    locked: 1
+    required: 0
+    options_from: organisations
+    why: cohort rules
+  - shortname: ltct_role
+    datatype: menu
+    name: Role in the work
+    visible: teachers
+    locked: 0
+    required: 0
+    options: [Fixture role one, Fixture role two]
+    why: profiles
+""" + "".join(EXP_FIELD.format(n=i, area=json.dumps(a)) for i, a in enumerate(AREAS))
+# A self-contained roles.yaml for the orgmanager cases, so they do not depend on whether the
+# tracked roles.yaml declares orgmanager yet (T024).
+ORGMANAGER_ROLES = """\
+roles:
+  - shortname: orgmanager
+    name: Organisation manager
+    description: fixture
+    archetype: ""
+    contextlevels: [course]
+    capabilities:
+      moodle/course:viewparticipants: allow
+      moodle/user:viewdetails: allow
+      moodle/site:viewuseridentity: allow
+    why: fixture
+"""
+
 VER = sc._php_stamp(sc.LTUSE_VERSION, "version")
 
 
@@ -72,9 +146,15 @@ class Base(unittest.TestCase):
         self.write("roles.yaml", ROLES)
         self.write("ignore.yaml", IGNORE)
         self.write("settings/test.yaml", SETTINGS)
+        self.write("organisations.yaml", ORGS)
+        self.write("profile-fields.yaml", PROFILE)
 
     def tearDown(self):
         shutil.rmtree(self.dir)
+
+    def reset(self):
+        self.tearDown()
+        self.setUp()
 
     def write(self, name, text):
         (self.dir / name).write_text(text, encoding="utf-8")
@@ -97,6 +177,13 @@ class Base(unittest.TestCase):
     def assertInvalid(self, needle):
         errs = self.errors()
         self.assertTrue(any(needle in e for e in errs), "%r not in %s" % (needle, errs))
+
+    # Spec 002 cases assert only whether validate passes, never how an error is worded.
+    def assertRejected(self):
+        self.assertTrue(self.errors(), "validate passed but should have failed")
+
+    def assertAccepted(self):
+        self.assertEqual(self.errors(), [])
 
 
 class Validate(Base):
@@ -239,6 +326,295 @@ class Validate(Base):
     def test_null_value(self):
         self.edit("settings/test.yaml", 'value: ""', "value:")
         self.assertInvalid("no value")
+
+
+class Organisations(Base):
+    """organisations.yaml (spec 002 contracts/declaration.md, data-model.md)."""
+    NORTH = "  - key: fixture-north\n    name: Fixture North\n"
+
+    def add_org(self, key, name):
+        self.edit("organisations.yaml", self.NORTH,
+                  self.NORTH + "  - key: %s\n    name: %s\n" % (json.dumps(key), json.dumps(name)))
+
+    def add_category(self, text):
+        self.edit("organisations.yaml", "organisations:\n  - key: independent",
+                  text + "organisations:\n  - key: independent")
+
+    def test_baseline_valid(self):
+        self.assertAccepted()
+
+    def test_key_pattern(self):
+        for bad in ("Fixture-North", "fixture_north", "1fixture", "fixture:north", "-fixture",
+                    "fixture north"):
+            with self.subTest(key=bad):
+                self.reset()
+                self.edit("organisations.yaml", "key: fixture-north", "key: %s" % json.dumps(bad))
+                self.assertRejected()
+
+    def test_key_of_30_characters(self):
+        self.edit("organisations.yaml", "key: fixture-north", "key: fixture-" + "n" * 22)
+        self.assertAccepted()
+
+    def test_key_of_31_characters(self):
+        self.edit("organisations.yaml", "key: fixture-north", "key: fixture-" + "n" * 23)
+        self.assertRejected()
+
+    def test_duplicate_organisation_key(self):
+        self.add_org("fixture-north", "Fixture Other")
+        self.assertRejected()
+
+    def test_duplicate_organisation_name(self):
+        self.add_org("fixture-south", "Fixture North")
+        self.assertRejected()
+
+    def test_duplicate_category_key(self):
+        self.add_category("  - key: pilots\n    name: Other pilots\n    why: w\n")
+        self.assertRejected()
+
+    def test_independent_required(self):
+        self.edit("organisations.yaml", "  - key: independent\n    name: Independent\n", "")
+        self.assertRejected()
+
+    def test_shared_categories_required(self):
+        blocks = {
+            "published": "  - key: published\n    name: LTC Published\n    why: shared curriculum\n",
+            "pilots": "  - key: pilots\n    name: LTC Pilots\n    why: pilots\n",
+            "organisations": "  - key: organisations\n    name: Partner organisations\n"
+                             "    why: parent of every organisation category\n",
+        }
+        for key, block in blocks.items():
+            with self.subTest(category=key):
+                self.reset()
+                self.edit("organisations.yaml", block, "")
+                self.assertRejected()
+
+    def test_shared_key_org(self):
+        self.add_category("  - key: org\n    name: Org\n    why: w\n")
+        self.assertRejected()
+
+    def test_parent_declared_earlier(self):
+        self.add_category("  - key: archive\n    name: Archive\n    parent: published\n    why: w\n")
+        self.assertAccepted()
+
+    def test_parent_unknown(self):
+        self.add_category("  - key: archive\n    name: Archive\n    parent: nowhere\n    why: w\n")
+        self.assertRejected()
+
+    def test_unknown_key_on_organisation(self):
+        self.edit("organisations.yaml", self.NORTH, self.NORTH + "    email: someone@example.org\n")
+        self.assertRejected()
+
+    def test_why_on_organisation(self):
+        self.edit("organisations.yaml", self.NORTH, self.NORTH + "    why: a partner\n")
+        self.assertRejected()
+
+    def test_unknown_row(self):
+        self.edit("organisations.yaml", "rows: [8, 15]", "rows: [8, 999]")
+        self.assertRejected()
+
+    def test_options_from_without_organisations_file(self):
+        (self.dir / "organisations.yaml").unlink()
+        self.assertRejected()
+
+    def test_options_from_with_no_organisations(self):
+        self.edit("organisations.yaml",
+                  "organisations:\n  - key: independent\n    name: Independent\n" + self.NORTH,
+                  "organisations: []\n")
+        self.assertRejected()
+
+
+class ProfileFields(Base):
+    """profile-fields.yaml (spec 002 contracts/declaration.md, data-model.md)."""
+    ROLE_OPTIONS = "    options: [Fixture role one, Fixture role two]\n"
+    ORG_BLOCK = ("  - shortname: ltct_org\n    datatype: menu\n    name: Organisation\n"
+                 "    visible: all\n    locked: 1\n    required: 0\n"
+                 "    options_from: organisations\n    why: cohort rules\n")
+
+    def add_field(self, text):
+        self.write("profile-fields.yaml", PROFILE + text)
+
+    def exp(self, n, area):
+        return EXP_FIELD.format(n=n, area=json.dumps(area))
+
+    def test_baseline_valid(self):
+        self.assertAccepted()
+
+    def test_shortname_needs_prefix(self):
+        self.edit("profile-fields.yaml", "shortname: ltct_role", "shortname: role")
+        self.assertRejected()
+
+    def test_duplicate_shortname(self):
+        self.edit("profile-fields.yaml", "shortname: ltct_role", "shortname: ltct_org")
+        self.assertRejected()
+
+    def test_org_field_required(self):
+        self.edit("profile-fields.yaml", self.ORG_BLOCK, "")
+        self.assertRejected()
+
+    def test_org_field_locked(self):
+        self.edit("profile-fields.yaml", "    locked: 1\n", "    locked: 0\n")
+        self.assertRejected()
+
+    def test_locked_yaml_boolean(self):
+        self.edit("profile-fields.yaml", "    locked: 1\n", "    locked: true\n")
+        self.assertRejected()
+
+    def test_org_field_options_instead_of_options_from(self):
+        self.edit("profile-fields.yaml", "    options_from: organisations\n",
+                  "    options: [independent, fixture-north]\n")
+        self.assertRejected()
+
+    def test_options_and_options_from_together(self):
+        self.edit("profile-fields.yaml", "    options_from: organisations\n",
+                  "    options_from: organisations\n    options: [independent, fixture-north]\n")
+        self.assertRejected()
+
+    def test_options_from_on_a_second_field(self):
+        self.edit("profile-fields.yaml", self.ROLE_OPTIONS, "    options_from: organisations\n")
+        self.assertRejected()
+
+    def test_options_from_unknown_source(self):
+        self.edit("profile-fields.yaml", "options_from: organisations", "options_from: countries")
+        self.assertRejected()
+
+    def test_menu_without_options(self):
+        self.edit("profile-fields.yaml", self.ROLE_OPTIONS, "")
+        self.assertRejected()
+
+    def test_duplicate_option(self):
+        self.edit("profile-fields.yaml", self.ROLE_OPTIONS,
+                  "    options: [Fixture role one, Fixture role one]\n")
+        self.assertRejected()
+
+    def test_empty_option(self):
+        self.edit("profile-fields.yaml", self.ROLE_OPTIONS, "    options: [Fixture role one, \"\"]\n")
+        self.assertRejected()
+
+    def test_area_not_verbatim(self):
+        self.edit("profile-fields.yaml", "area: %s" % json.dumps(AREAS[0]),
+                  "area: %s" % json.dumps(AREAS[0].lower()))
+        self.assertRejected()
+
+    def test_area_meta(self):
+        self.add_field(self.exp("meta", "Meta"))
+        self.assertRejected()
+
+    def test_area_missing(self):
+        self.edit("profile-fields.yaml", self.exp(len(AREAS) - 1, AREAS[-1]), "")
+        self.assertRejected()
+
+    def test_area_twice(self):
+        self.add_field(self.exp("again", AREAS[0]))
+        self.assertRejected()
+
+    def test_description_on_field(self):
+        self.edit("profile-fields.yaml", self.ROLE_OPTIONS, self.ROLE_OPTIONS + "    description: x\n")
+        self.assertRejected()
+
+    def test_default_on_field(self):
+        self.edit("profile-fields.yaml", self.ROLE_OPTIONS,
+                  self.ROLE_OPTIONS + "    default: Fixture role one\n")
+        self.assertRejected()
+
+    def test_required_one(self):
+        self.edit("profile-fields.yaml", "    locked: 0\n    required: 0\n    options:",
+                  "    locked: 0\n    required: 1\n    options:")
+        self.assertRejected()
+
+    def test_unknown_datatype(self):
+        self.edit("profile-fields.yaml", "    datatype: menu\n    name: Role", "    datatype: text\n    name: Role")
+        self.assertRejected()
+
+    def test_unknown_visibility(self):
+        self.edit("profile-fields.yaml", "visible: teachers", "visible: everyone")
+        self.assertRejected()
+
+    def test_category_required(self):
+        self.edit("profile-fields.yaml", "category:\n  name: About your work\n", "")
+        self.assertRejected()
+
+
+class OrgManager(Base):
+    """The orgmanager role's deny list and the one-role-for-every-partner rule (SC-005)."""
+    LAST_CAP = "      moodle/site:viewuseridentity: allow\n"
+
+    def setUp(self):
+        super().setUp()
+        self.write("roles.yaml", ORGMANAGER_ROLES)
+
+    def test_allowed_capabilities(self):
+        self.assertAccepted()
+
+    def test_denied_capabilities(self):
+        for cap in ("moodle/user:viewalldetails", "moodle/site:accessallgroups", "moodle/user:create",
+                    "moodle/user:update", "moodle/cohort:assign", "moodle/cohort:manage",
+                    "enrol/manual:enrol", "enrol/cohort:config", "moodle/role:assign"):
+            with self.subTest(capability=cap):
+                self.reset()
+                self.edit("roles.yaml", self.LAST_CAP, self.LAST_CAP + "      %s: allow\n" % cap)
+                self.assertRejected()
+
+    def test_prohibit(self):
+        self.edit("roles.yaml", "moodle/user:viewdetails: allow", "moodle/user:viewdetails: prohibit")
+        self.assertRejected()
+
+    def test_contextlevels_course_only(self):
+        self.edit("roles.yaml", "contextlevels: [course]", "contextlevels: [system, course]")
+        self.assertRejected()
+
+    def test_role_named_for_an_organisation(self):
+        self.write("roles.yaml", ORGMANAGER_ROLES + "  - shortname: independent_viewer\n"
+                   "    name: Independent viewer\n    archetype: \"\"\n    contextlevels: [course]\n"
+                   "    why: fixture\n")
+        self.assertRejected()
+
+
+class Expansion(Base):
+    """One organisation entry becomes one category, two cohorts and one rule (FR-002)."""
+
+    def payload(self):
+        rc, out, err = self.run_main("render")
+        self.assertEqual(rc, 0, err)
+        return json.loads(out)
+
+    def test_one_entry_one_shape(self):
+        p = self.payload()
+        keys = ["independent", "fixture-north"]
+        cats = {c["idnumber"]: c for c in p["categories"]}
+        order = [c["idnumber"] for c in p["categories"]]
+        for key in ("published", "pilots", "organisations"):
+            self.assertIn("ltct:" + key, cats)
+        cohorts = {c["idnumber"]: c for c in p["cohorts"]}
+        for key in keys:
+            with self.subTest(organisation=key):
+                cat = cats["ltct:org:" + key]
+                self.assertEqual(cat["parent_idnumber"], "ltct:organisations")
+                self.assertLess(order.index("ltct:organisations"), order.index("ltct:org:" + key))
+                for idn in ("ltct:org:" + key, "ltct:org:%s:managers" % key):
+                    self.assertIn(idn, cohorts)
+                    self.assertEqual(cohorts[idn]["visible"], 0)
+                rules = [r for r in p["cohort_rules"] if r["cohort_idnumber"] == "ltct:org:" + key]
+                self.assertEqual(len(rules), 1)
+                self.assertEqual(rules[0]["field"], "ltct_org")
+                self.assertEqual(rules[0]["value"], key)
+        self.assertEqual(cohorts["ltct:org:fixture-north"]["name"], "Fixture North")
+        self.assertEqual(cohorts["ltct:org:fixture-north:managers"]["name"], "Fixture North managers")
+        self.assertEqual(len(p["categories"]), 3 + len(keys))
+        self.assertEqual(len(p["cohorts"]), 2 * len(keys))
+        self.assertEqual(len(p["cohort_rules"]), len(keys))
+
+    def test_org_field_options_in_declaration_order(self):
+        fields = {f["shortname"]: f for f in self.payload()["profile_fields"]}
+        options = fields["ltct_org"]["options"]
+        if isinstance(options, str):
+            options = options.split("\n")
+        self.assertEqual(options, ["independent", "fixture-north"])
+        self.assertNotIn("options_from", fields["ltct_org"])
+
+    def test_countries_key_rejected(self):
+        self.edit("organisations.yaml", "organisations:\n  - key: independent",
+                  "countries: [fixture-land]\norganisations:\n  - key: independent")
+        self.assertRejected()
 
 
 class Render(Base):

@@ -13,7 +13,10 @@ repo checkout.
     site_config.py drift    [--json]   compare the server with the declaration; change nothing
 
 Contracts: specs/001-site-config-as-code/contracts/ (declaration.md, site-config-cli.md,
-output.md); every validation rule is in data-model.md.
+output.md); every validation rule is in data-model.md. Spec 012 adds
+moodle/site/course-discussions.yaml (which courses' discussions are shared across
+organisations), read only by load_discussions(), which moodle_payload.py also uses
+(specs/012-assignments-peer-review/contracts/site-declaration.md).
 
 ENVIRONMENT (never a file; the repo is public)
 
@@ -49,7 +52,12 @@ except ImportError:
     sys.exit("pyyaml required: pip install pyyaml")
 
 REPO = pathlib.Path(__file__).resolve().parent.parent
+sys.path.insert(0, str(REPO / "scripts"))
+from course_stage import NOT_A_COURSE, branch_slug  # noqa: E402
+
 SITE_DIR = REPO / "moodle" / "site"
+MODULES = REPO / "modules"
+DISCUSSIONS_FILE = "course-discussions.yaml"
 REQUIREMENTS = REPO / "moodle" / "REQUIREMENTS.md"
 LTUSE_VERSION = REPO / "moodle" / "local_ltuse" / "version.php"
 CLI_PATH = "public/local/ltuse/cli/site_config.php"   # under $MOODLE_DIR (research R1)
@@ -223,6 +231,8 @@ TOP_FILES = {
     # contracts/declaration.md).
     "organisations.yaml": ({"rows", "purpose", "categories", "organisations"}, set()),
     "profile-fields.yaml": ({"rows", "purpose", "category", "fields"}, set()),
+    # Spec 012: optional; validated by load_discussions(), not by the loop in validate().
+    DISCUSSIONS_FILE: ({"rows", "shared"}, set()),
 }
 
 # --- spec 002: organisations, categories, cohorts and profile fields ---------------------
@@ -431,12 +441,13 @@ def _check_value(where, key, value, secret, problems):
     return None
 
 
-def validate(site_dir=SITE_DIR):
+def validate(site_dir=SITE_DIR, modules_dir=None):
     """Load and check the declaration. Returns (declaration, Problems)."""
     problems = Problems()
     site_dir = pathlib.Path(site_dir)
     decl = {"moodle": None, "plugins": [], "ignore": [], "roles": [], "settings": [],
-            "categories": [], "cohorts": [], "profile_fields": [], "cohort_rules": []}
+            "categories": [], "cohorts": [], "profile_fields": [], "cohort_rules": [],
+            "discussions": {"shared": []}}
     if not site_dir.is_dir():
         problems.add(_rel(site_dir), "declaration directory not found")
         return decl, problems
@@ -445,10 +456,13 @@ def validate(site_dir=SITE_DIR):
         if path.is_file() and path.suffix in (".yaml", ".yml") and path.name not in TOP_FILES:
             problems.add(_rel(path), "unexpected file; the declaration is site.yaml, "
                          "ignore.yaml, roles.yaml, organisations.yaml, "
-                         "profile-fields.yaml and settings/*.yaml")
+                         "profile-fields.yaml, %s and settings/*.yaml"
+                         % DISCUSSIONS_FILE)
 
     loaded = {}
     for name, (required, optional) in TOP_FILES.items():
+        if name == DISCUSSIONS_FILE:
+            continue   # load_discussions() below; the publisher reads it through the same loader
         path = site_dir / name
         if not path.exists():
             if name == "site.yaml":
@@ -728,6 +742,10 @@ def validate(site_dir=SITE_DIR):
     for role in decl["roles"]:
         if role["shortname"] == ORGMANAGER:
             _check_orgmanager(role, problems)
+    # course-discussions.yaml (spec 012)
+    shared, discussion_problems = load_discussions(site_dir, modules_dir)
+    problems.items.extend(discussion_problems.items)
+    decl["discussions"] = {"shared": [e["slug"] for e in shared]}
     _expand(decl, orgs, fields)
     return decl, problems
 
@@ -1077,6 +1095,96 @@ def _expand(decl, orgs, fields):
             decl["profile_fields"].append(dict(field, category=fields["category"]))
 
 
+def _course_slugs(modules_dir):
+    """Every course's branch_slug(), keyed to its folder name. _template is not a course."""
+    slugs = {}
+    try:
+        for d in sorted(pathlib.Path(modules_dir).iterdir()):
+            if d.is_dir() and d.name not in NOT_A_COURSE and not d.name.startswith("."):
+                slugs[branch_slug(d.name)] = d.name
+    except OSError:
+        pass
+    return slugs
+
+
+def load_discussions(site_dir=None, modules_dir=None):
+    """Read moodle/site/course-discussions.yaml (spec 012, FR-015).
+
+    Returns (shared, Problems): `shared` is a list of {slug, why}, one per course whose
+    discussion is shared across organisations. Every other course is separated, which is
+    also what an absent file or an empty list means.
+
+    This is the only reader of the file. scripts/moodle_payload.py calls it for each
+    course's `discussion.shared`, and validate() for the drift/apply payload, so the
+    publisher and the drift check cannot disagree (contracts/site-declaration.md).
+
+    Rules: rows cite moodle/REQUIREMENTS.md; each slug is a course under modules/,
+    compared with course_stage.branch_slug(); `why` is required; no slug twice.
+    """
+    site_dir = pathlib.Path(site_dir) if site_dir is not None else SITE_DIR
+    modules_dir = pathlib.Path(modules_dir) if modules_dir is not None else MODULES
+    problems = Problems()
+    path = site_dir / DISCUSSIONS_FILE
+    if not path.exists():
+        return [], problems
+    where = _rel(path)
+    before = len(problems.items)
+    data = _load(path, problems)
+    if data is None:
+        if len(problems.items) == before:
+            problems.add(where, "empty; write `rows: [10]` and `shared: []`")
+        return [], problems
+    required, optional = TOP_FILES[DISCUSSIONS_FILE]
+    if not _check_keys(where, data, required, optional, problems):
+        return [], problems
+    _check_hosts(where, data, problems)
+
+    cited = data.get("rows")
+    if not isinstance(cited, list) or not all(_is_int(r) for r in cited):
+        problems.add(where, "rows must be a list of moodle/REQUIREMENTS.md row numbers")
+    else:
+        rows = _requirement_rows()
+        for r in cited:
+            if r not in rows:
+                problems.add(where, "row %d is not in moodle/REQUIREMENTS.md" % r)
+
+    entries = data.get("shared")
+    if entries is None:
+        entries = []                     # `shared:` with nothing under it: none shared
+    if not isinstance(entries, list):
+        problems.add(where, "shared must be a list of {slug, why}")
+        return [], problems
+
+    courses = _course_slugs(modules_dir)
+    shared, seen = [], set()
+    for i, entry in enumerate(entries):
+        ewhere = "%s shared[%d]" % (where, i)
+        if not _check_keys(ewhere, entry, {"slug", "why"}, set(), problems):
+            continue
+        slug = entry.get("slug")
+        if not _text(slug):
+            problems.add(ewhere, "slug must be a course's branch_slug()")
+            continue
+        if slug not in courses:
+            canonical = branch_slug(slug)
+            if canonical in courses:
+                problems.add(ewhere, "%s: write it as %s, the course's branch_slug()"
+                             % (slug, canonical))
+            else:
+                problems.add(ewhere, "%s is not a course under modules/" % slug)
+            continue
+        if slug in seen:
+            problems.add(ewhere, "%s is declared twice" % slug)
+            continue
+        seen.add(slug)
+        if not _text(entry.get("why")):
+            problems.add(ewhere, "%s: why must say who agreed to share and why it is safe"
+                         % slug)
+            continue
+        shared.append({"slug": slug, "why": entry["why"]})
+    return shared, problems
+
+
 def _check_source(where, component, version, source, problems):
     if not isinstance(source, dict):
         problems.add(where, "source is {url, sha256} or {path}")
@@ -1137,6 +1245,8 @@ def build_payload(decl, mode, environ, redact=False):
         "cohorts": decl["cohorts"],
         "profile_fields": decl["profile_fields"],
         "cohort_rules": decl["cohort_rules"],
+        # Spec 012: slugs only. The `why` stays in the repo; the server needs only the list.
+        "discussions": {"shared": list(decl.get("discussions", {}).get("shared", []))},
     }
     for s in decl["settings"]:
         out = {"name": s["name"], "plugin": s["plugin"], "setting": s["setting"],
@@ -1206,10 +1316,12 @@ def run_remote(mode, decl, environ, as_json=False, runner=subprocess.run):
 def _summary(decl):
     files = len({s["file"] for s in decl["settings"]})
     return ("%d settings in %d files, %d plugins, %d roles, %d ignore entries, "
-            "%d categories, %d cohorts, %d profile fields, %d cohort rules"
+            "%d categories, %d cohorts, %d profile fields, %d cohort rules, "
+            "%d shared course discussions"
             % (len(decl["settings"]), files, len(decl["plugins"]), len(decl["roles"]),
                len(decl["ignore"]), len(decl["categories"]), len(decl["cohorts"]),
-               len(decl["profile_fields"]), len(decl["cohort_rules"])))
+               len(decl["profile_fields"]), len(decl["cohort_rules"]),
+               len(decl["discussions"]["shared"])))
 
 
 def main(argv=None, environ=None):

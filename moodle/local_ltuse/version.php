@@ -9,9 +9,8 @@
 defined('MOODLE_INTERNAL') || die();
 
 $plugin->component = 'local_ltuse';
-$plugin->version   = 2026100201;   // hide_modules: a module the repo no longer has is hidden,
-                                   // never deleted. moodle/site/site.yaml pins local_ltuse to
-                                   // this stamp, and validate fails if they differ.
+$plugin->version   = 2026100202;   // ensure_discussion (spec 012), after hide_modules. moodle/site/site.yaml
+                                   // pins local_ltuse to this stamp, and validate fails if they differ.
 
 // PIN THIS DELIBERATELY. Moodle 5.0 moved the question bank out of course context and
 // into its own activity module (mod_qbank), which changes how import_questions has to

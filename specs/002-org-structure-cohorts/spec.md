@@ -165,4 +165,5 @@ On delivery, the same PR updates these rows' status in moodle/REQUIREMENTS.md (c
 
 - 001-site-config-as-code: applies the organisations, cohorts, fields and role.
 - 008-admin-tooling: bulk account creation, enrolment and manager assignment build on this structure.
-- Relied on by 003-mentor-role, 004-progress-reporting (reports scoped per organisation), 006-learning-pathways and 005-community-space.
+- Relied on by 003-mentor-role, 004-progress-reporting (reports scoped per organisation), 006-learning-pathways, 005-community-space and 012-assignments-peer-review.
+- **012-assignments-peer-review relies on two things this spec's plan must adopt, or tell 012 it won't**: every course group lies within exactly one organisation, and course groups carry the idnumbers `ltct:org:<key>` and `ltct:cohort:<key>`. 012's peer allocator keeps reviewers inside an organisation by those idnumbers, and its discussion forum separates organisations by group (012 plan, "Cross-spec effects").

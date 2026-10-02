@@ -20,6 +20,7 @@ defined('MOODLE_INTERNAL') || die();
  *   settings  admin_setting::write_setting(), then post_write_settings() as admin_write_settings() does
  *   plugins   the plugininfo class's enable_plugin()
  *   roles     create_role(), set_role_contextlevels(), assign_capability(), unassign_capability()
+ *   discussions  ensure_discussion::apply_groupmode(), the publisher's own path (spec 012)
  *
  * After settings come spec 002's four arrays, each handed to its own class, in the order the
  * contract fixes (specs/002-org-structure-cohorts/contracts/declaration.md "Output additions"):
@@ -29,8 +30,11 @@ defined('MOODLE_INTERNAL') || die();
  *   profile_fields  profilefields::apply(): the field category first, then the fields
  *   cohort_rules    cohortrules::apply(), last, because a rule needs its cohort and its field
  *
- * It never installs, upgrades or downgrades plugin code, never resets or deletes a role, and
- * never deletes a category, cohort, field or rule (FR-004).
+ * Then each ltct: course's discussion forum (spec 012).
+ *
+ * It never installs, upgrades or downgrades plugin code, never resets or deletes a role,
+ * never deletes a category, cohort, field or rule (FR-004), and never creates a course's
+ * discussion forum or writes a post.
  */
 class applier {
 
@@ -76,6 +80,9 @@ class applier {
             $this->apply_setting($setting);
         }
         $this->apply_structure();
+        foreach ($this->inspector->discussion_targets() as $target) {
+            $this->apply_discussion($target);
+        }
     }
 
     /**
@@ -102,6 +109,41 @@ class applier {
 
         foreach ($this->declaration['cohort_rules'] ?? [] as $rule) {
             cohortrules::apply((array)$rule, $this->report);
+        }
+    }
+
+    /**
+     * Restore one course discussion's group mode (spec 012, contracts/site-declaration.md).
+     *
+     * `differs` is corrected through ensure_discussion::apply_groupmode(), the same code path
+     * a publish takes, which writes only the forum's group mode and grouping. A `missing`
+     * forum is never created here: that is the publisher's job, with the course's own name
+     * and intro, so it is reported as [skip]. Warnings (forced, allparticipants) cannot be
+     * fixed by a write and are reported as [skip] too. Nothing here writes a post.
+     *
+     * @param array $target one entry of inspector::discussion_targets()
+     */
+    protected function apply_discussion(array $target): void {
+        foreach ($this->inspector->check_discussion($target) as $item) {
+            if ($item['result'] === inspector::RESULT_MISSING) {
+                $this->report->add_result($item, 'skip');
+                continue;
+            }
+            if ($item['result'] !== inspector::RESULT_DIFFERS) {
+                $this->report->add_result($item);
+                continue;
+            }
+            \local_ltuse\external\ensure_discussion::apply_groupmode($target['course'],
+                (int)$target['cm']->id, (int)$target['groupmode']);
+            $target['cm'] = \local_ltuse\util::cm_by_idnumber((int)$target['course']->id,
+                $target['course']->idnumber . inspector::DISCUSSION_SUFFIX);
+            $after = null;
+            foreach ($this->inspector->check_discussion($target) as $recheck) {
+                if ($recheck['item'] === $item['item']) {
+                    $after = $recheck;
+                }
+            }
+            $this->report_write($after ?? $item, $item);
         }
     }
 

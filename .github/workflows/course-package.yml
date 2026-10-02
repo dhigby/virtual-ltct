@@ -8,6 +8,7 @@ on:
       - 'scripts/disclosure.py'
       - 'scripts/image_reduce.py'
       - 'scripts/quiz_parse.py'
+      - 'tests/**'
   push:
     branches: [main]
     paths:
@@ -16,6 +17,7 @@ on:
       - 'scripts/disclosure.py'
       - 'scripts/image_reduce.py'
       - 'scripts/quiz_parse.py'
+      - 'tests/**'
 
 permissions:
   contents: read
@@ -35,3 +37,8 @@ jobs:
       # Catching it here means the author finds out, not the publisher.
       - name: Parse every quiz
         run: python scripts/quiz_parse.py --check-all
+      # test_site_config.py is site-config.yml's; it runs there.
+      - name: Unit tests
+        run: |
+          pip install pytest pyyaml markdown pymdown-extensions
+          python -m pytest -q tests --ignore=tests/test_site_config.py

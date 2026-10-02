@@ -153,3 +153,4 @@ On delivery, the same PR updates these rows' status in moodle/REQUIREMENTS.md (c
 - **001-site-config-as-code** — applies the caching and mobile/offline settings (#4 baseline).
 - **007-learner-experience** — the app experience in which offline download must be discoverable.
 - **015-production-hosting-ops** — caching at scale and any cache service on the production server.
+- **012-assignments-peer-review** reports a limit this spec should plan for: the free Moodle app plan allows **2 offline courses per device per site** (moodle.com/app, documentation, not yet verified on the instance). A consultant who wants more than two courses offline at once hits it (012 research R6).

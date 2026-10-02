@@ -32,13 +32,30 @@ roles:
       moodle/question:viewall: allow
       moodle/site:trustcontent: allow          # #3: published pages carry iframe embeds that trusted text keeps
       moodle/course:changelockedcustomfields: allow   # #7: writes ltct_competencies, ltct_target_level (R11)
+      moodle/badges:createbadge: allow         # #23: set_course_recognition creates the course badge (spec 013 R1)
+      moodle/badges:configuredetails: allow    # ... rewords it in place (R5)
+      moodle/badges:configurecriteria: allow   # ... sets its course-completion criterion and activates it
+      moodle/badges:configuremessages: allow   # ... sets its award message
+      mod/customcert:addinstance: allow        # #23: creates the certificate activity (R7)
+      mod/customcert:manage: allow             # ... and copies the site template into it
     why: >-
       The publisher's web-service account (scripts/publish_moodle.py, local_ltuse). The 15
       capabilities are the ones setup_publishing.php used to hard-code; that script now only
       creates the account, service authorisation and token. moodle/site:trustcontent is #3.
       moodle/course:changelockedcustomfields is #7 (spec 004, R11): both course fields are
       locked, and the course web services silently drop a locked field the caller may not
-      change.
+      change. The badge and customcert capabilities are #23 (spec 013): the publisher makes
+      each delivered course's badge and certificate activity.
+
+  - shortname: user
+    archetype: user
+    capabilities:
+      moodle/badges:viewotherbadges: inherit
+    why: >-
+      #23 (spec 013 R10, FR-011): a learner's badges are not shown to other learners. The
+      capability is granted to the mentor role in the learner's user context (spec 003), and
+      managers keep it through their archetype, so the evidence stays visible to those who
+      need it.
 
   - shortname: manager
     archetype: manager

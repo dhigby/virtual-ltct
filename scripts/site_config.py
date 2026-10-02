@@ -33,7 +33,9 @@ EXIT CODES: 0 valid / applied / no differences; 1 invalid / a step failed / drif
 2 usage or configuration error (including an invalid declaration at apply or drift time).
 """
 import argparse
+import base64
 import decimal
+import hashlib
 import json
 import os
 import pathlib
@@ -47,6 +49,9 @@ try:
     import yaml
 except ImportError:
     sys.exit("pyyaml required: pip install pyyaml")
+
+sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent))
+import cbc_wording  # noqa: E402
 
 REPO = pathlib.Path(__file__).resolve().parent.parent
 SITE_DIR = REPO / "moodle" / "site"
@@ -227,6 +232,10 @@ TOP_FILES = {
     # (specs/004-progress-reporting/contracts/declaration.md).
     "reports.yaml": ({"rows", "purpose", "reports"}, set()),
     "course-fields.yaml": ({"rows", "category", "fields"}, {"purpose"}),
+    # Spec 013: the badge template. Optional; certificate/template.yaml sits beside it in its
+    # own folder (specs/013-certificates-badges/contracts/declaration.md).
+    "badges.yaml": ({"rows", "image", "name", "description", "imagecaption", "message_subject",
+                     "message", "version", "language", "why"}, set()),
 }
 
 # --- spec 002: organisations, categories, cohorts and profile fields ---------------------
@@ -442,7 +451,7 @@ def validate(site_dir=SITE_DIR):
     decl = {"moodle": None, "plugins": [], "ignore": [], "roles": [], "settings": [],
             "categories": [], "cohorts": [], "profile_fields": [], "cohort_rules": [],
             "course_field_category": None, "course_fields": [], "competencies": [],
-            "reports": []}
+            "reports": [], "badge_template": None, "certificate_template": None}
     if not site_dir.is_dir():
         problems.add(_rel(site_dir), "declaration directory not found")
         return decl, problems
@@ -451,8 +460,8 @@ def validate(site_dir=SITE_DIR):
         if path.is_file() and path.suffix in (".yaml", ".yml") and path.name not in TOP_FILES:
             problems.add(_rel(path), "unexpected file; the declaration is site.yaml, "
                          "ignore.yaml, roles.yaml, organisations.yaml, "
-                         "profile-fields.yaml, course-fields.yaml, reports.yaml and "
-                         "settings/*.yaml")
+                         "profile-fields.yaml, course-fields.yaml, reports.yaml, badges.yaml, "
+                         "certificate/template.yaml and settings/*.yaml")
 
     loaded = {}
     for name, (required, optional) in TOP_FILES.items():
@@ -748,6 +757,22 @@ def validate(site_dir=SITE_DIR):
         path, data = loaded["reports.yaml"]
         decl["reports"] = _validate_reports(
             _rel(path), data, rows, orgs, role_names, decl, problems)
+
+    # Spec 013: the badge template and the certificate template, then what they need.
+    if "badges.yaml" in loaded:
+        path, data = loaded["badges.yaml"]
+        decl["badge_template"] = _validate_badges(_rel(path), data, rows, site_dir, decl,
+                                                  problems)
+    cert = site_dir / CERT_DIR / CERT_FILE
+    if cert.exists():
+        data = _load(cert, problems)
+        if data is None:
+            problems.add(_rel(cert), "empty")
+        else:
+            decl["certificate_template"] = _validate_certificate(_rel(cert), data, rows,
+                                                                 site_dir, decl, problems)
+    if "badges.yaml" in loaded or cert.exists():
+        _check_recognition_site(decl, problems)
     return decl, problems
 
 
@@ -778,47 +803,12 @@ def _check_name(where, label, value, limit, problems):
     return True
 
 
-# Spec 004 FR-010: a report never shows a learner at a CBC level, and names a course's
-# target only as an aim, in CBC vocabulary. The retired vocabulary is CLAUDE.md's.
-AIM_CERTIF = re.compile(r"certif", re.I)
-AIM_RETIRED = re.compile(r"\b(?:advanced\s+beginner|practitioner|trainer|proficient)\b", re.I)
-AIM_NEAR = 3                               # "within three words of level"
-# Keys are word stems: a plural "learners" or "levels" matches as "learner" or "level".
-AIM_NEAR_LEVEL = {"learner": "places a learner at a level",
-                  "reached": "says a level was reached", "achieved": "says a level was reached",
-                  "attained": "says a level was reached"}
-AIM_STRICT = re.compile(r"reached|achieved|attained|\bcompetent\b", re.I)
-
-
-def _aim_stem(word):
-    """A word lowercased, with a plural s dropped: "Learners" -> "learner"."""
-    word = word.lower()
-    return word[:-1] if word.endswith("s") and word[:-1] in ("learner", "level") else word
-
-
+# Spec 004 FR-010: a report never shows a learner at a CBC level. The rule lives in
+# cbc_wording.py, with spec 013's badge and certificate rule beside it.
 def _check_aim_label(where, label, problems, strict=False):
     """A report label (FR-010). strict=True is for competency-coverage."""
-    if not isinstance(label, str):
-        return
-    if AIM_CERTIF.search(label):
-        problems.add(where, "%r mentions certification; a report shows no CBC result "
-                     "(FR-010)" % label)
-    m = AIM_RETIRED.search(label)
-    if m:
-        problems.add(where, "%r uses the retired level name %r; CBC vocabulary only (FR-010)"
-                     % (label, m.group(0)))
-    words = [_aim_stem(w) for w in re.findall(r"[A-Za-z]+", label)]
-    levels = [i for i, w in enumerate(words) if w == "level"]
-    for i, w in enumerate(words):
-        if w in AIM_NEAR_LEVEL and any(abs(i - j) <= AIM_NEAR for j in levels):
-            problems.add(where, "%r %s; label a target level as what the course aims at "
-                         "(FR-010)" % (label, AIM_NEAR_LEVEL[w]))
-            break
-    if strict:
-        m = AIM_STRICT.search(label)
-        if m:
-            problems.add(where, "%r says %r; competency coverage counts completions, not "
-                         "competence (FR-010)" % (label, m.group(0)))
+    for message in cbc_wording.report_label_problems(label, strict=strict):
+        problems.add(where, message)
 
 
 def _validate_organisations(where, data, rows, problems):
@@ -1770,6 +1760,322 @@ def _check_source(where, component, version, source, problems):
 
 
 # ---------------------------------------------------------------------------------------
+# Spec 013: the badge template and the certificate template (specs/013-certificates-badges/
+# data-model.md). Every text passes cbc_wording.check_recognition(), rendered against every
+# course in modules/, because a course title is free text and reaches the badge.
+
+MODULES = REPO / "modules"
+CERT_DIR = "certificate"
+CERT_FILE = "template.yaml"
+PLACEHOLDER = re.compile(r"\{([^{}]*)\}")
+BADGE_PLACEHOLDERS = ("course", "competencies", "target_level", "programme")
+CERT_PLACEHOLDERS = ("programme",)      # the rest of a certificate is elements, not text
+PROGRAMME_SETTING = "badges_defaultissuername"
+BADGE_SETTINGS = ("enablebadges", "badges_allowcoursebadges", "badges_allowexternalbackpack",
+                  PROGRAMME_SETTING, "badges_defaultissuercontact",
+                  "customcert/verifyallcertificates")
+BADGE_SALT = "badges_badgesalt"         # per site; changing it breaks every issued badge (R9)
+RECOGNITION_PLUGINS = ("mod_customcert", "availability_coursecompleted")
+BADGE_NAME_MAX = 1333                   # badge.name is a char(1333) (lib/db/install.xml)
+BADGE_IMAGE_MAX = 256 * 1024            # the badge form's limit, which only the form enforces (R2)
+BADGE_IMAGE_MIN = 512                   # process_new_icon() writes a 512px size, f3
+CERT_IMAGES_MAX = 100 * 1024            # SC-005: the PDF downloads in 30 s at 256 kbit/s
+CERT_ELEMENTS = {                       # type -> (required keys, optional keys)
+    "text": ({"text", "x", "y"}, {"size", "align", "width"}),
+    "studentname": ({"x", "y"}, {"size", "align", "width"}),
+    "coursename": ({"x", "y"}, {"size", "align", "width"}),
+    "date": ({"date", "format", "x", "y"}, {"size", "align", "width"}),
+    "code": ({"x", "y"}, {"size", "align", "width"}),
+    "qrcode": ({"x", "y", "width"}, {"height"}),
+    "image": ({"file", "x", "y", "width"}, {"height"}),
+    "bgimage": ({"file"}, set()),
+}
+CERT_ONE_EACH = ("studentname", "coursename", "date", "code")   # FR-003
+CERT_NAME_MAX = 255                     # customcert_templates.name and customcert.name
+DATE_ITEMS = {"completion": -2}         # element_date DATE_COMPLETION; never the issue date (R6)
+DATE_FORMAT = re.compile(r"^(?:[1-5]|strftime[a-z]+)$")   # element_helper::get_date_format_string
+ALIGN = ("L", "C", "R")
+FONTS = ("freesans", "freeserif", "dejavusans")   # embedded Unicode TCPDF families (R11)
+
+
+def _courses():
+    """(title, competencies, target) for every course in modules/, from README frontmatter."""
+    out = []
+    for readme in sorted(MODULES.glob("*/README.md")):
+        text = readme.read_text(encoding="utf-8", errors="replace")
+        m = re.match(r"^---\s*\n(.*?)\n---", text, re.S)
+        try:
+            meta = yaml.safe_load(m.group(1)) if m else {}
+        except yaml.YAMLError:
+            meta = {}
+        meta = meta if isinstance(meta, dict) else {}
+        names = meta.get("competencies") or []
+        out.append((str(meta.get("title") or readme.parent.name),
+                    ", ".join(str(n) for n in names) if isinstance(names, list) else "",
+                    str(meta.get("target_outcome_level") or "")))
+    return out
+
+
+def _png_size(path):
+    """(width, height) of a PNG, or None if the file is not one."""
+    head = path.read_bytes()[:24]
+    if head[:8] != b"\x89PNG\r\n\x1a\n" or head[12:16] != b"IHDR":
+        return None
+    return int.from_bytes(head[16:20], "big"), int.from_bytes(head[20:24], "big")
+
+
+def _image_file(where, base, rel, problems):
+    """A declared image path, inside its folder and present; or None."""
+    if not isinstance(rel, str) or not rel or pathlib.PurePosixPath(rel).is_absolute():
+        problems.add(where, "image %r must be a path relative to %s" % (rel, _rel(base)))
+        return None
+    path = (base / rel).resolve()
+    if base.resolve() not in path.parents:
+        problems.add(where, "image %s is outside %s" % (rel, _rel(base)))
+        return None
+    if not path.is_file():
+        problems.add(where, "image %s does not exist" % rel)
+        return None
+    return path
+
+
+def _image_record(path):
+    data = path.read_bytes()
+    return {"filename": path.name, "sha256": hashlib.sha256(data).hexdigest(),
+            "path": str(path)}
+
+
+def _check_placeholders(where, label, text, allowed, problems):
+    for name in PLACEHOLDER.findall(text):
+        if name not in allowed:
+            problems.add(where, "%s uses {%s}; the placeholders are %s" % (
+                label, name, ", ".join("{%s}" % a for a in allowed)))
+    for m in re.finditer(r"\{target_level\}", text):
+        if not text[:m.start()].rstrip().lower().endswith(cbc_wording.AIM_PHRASE):
+            problems.add(where, "%s uses {target_level} other than straight after \"%s\" "
+                         "(FR-005)" % (label, cbc_wording.AIM_PHRASE))
+
+
+def _render(text, values):
+    return PLACEHOLDER.sub(lambda m: values.get(m.group(1), m.group(0)), text)
+
+
+def _programme(decl):
+    for s in decl["settings"]:
+        if s["name"] == PROGRAMME_SETTING and not s["env"] and isinstance(s["value"], str):
+            return s["value"]
+    return ""
+
+
+def _validate_badges(where, data, rows, site_dir, decl, problems):
+    """Check badges.yaml. Returns the badge template for the payload, or None."""
+    _check_hosts(where, data, problems)
+    _check_rows(where, data, rows, problems)
+    if not _text(data.get("why")):
+        problems.add(where, "why must say which row or spec needs it")
+    ok = True
+    texts = {}
+    for key in ("name", "description", "imagecaption", "message_subject", "message"):
+        value = data.get(key)
+        if not _text(value):
+            problems.add(where, "%s must be text" % key)
+            ok = False
+            continue
+        if EMAIL.search(value):
+            problems.add(where, "%s holds an email address; nothing here names a person "
+                         "(constitution III)" % key)
+        _check_placeholders(where, key, value, BADGE_PLACEHOLDERS, problems)
+        texts[key] = value.strip()
+    for key in ("version", "language"):
+        if not _text(data.get(key)):
+            problems.add(where, "%s must be text, in quotes" % key)
+            ok = False
+    if ok and "{course}" not in texts["name"]:
+        problems.add(where, "name must contain {course}, so each course's badge names it")
+        ok = False
+    if ok and "%badgelink%" not in texts["message"]:
+        problems.add(where, "message must contain %badgelink%, so the learner can find the badge")
+        ok = False
+
+    image = _image_file(where, site_dir, data.get("image"), problems)
+    if image is not None:
+        size = _png_size(image)
+        if size is None:
+            problems.add(where, "image %s is not a PNG" % data["image"])
+            image = None
+        else:
+            if size[0] != size[1] or size[0] < BADGE_IMAGE_MIN:
+                problems.add(where, "image %s is %dx%d; it must be square and at least %dpx "
+                             "(R2)" % (data["image"], size[0], size[1], BADGE_IMAGE_MIN))
+            if image.stat().st_size > BADGE_IMAGE_MAX:
+                problems.add(where, "image %s is %d KB; at most %d KB (R2)" % (
+                    data["image"], image.stat().st_size // 1024, BADGE_IMAGE_MAX // 1024))
+    if not ok or image is None:
+        return None
+
+    # {programme} is the declared setting, filled in here; the rest the server fills per
+    # course (R16). Rendered against every course, so a title cannot slip "certified" past.
+    programme = _programme(decl)
+    texts = {k: _render(v, {"programme": programme}) for k, v in texts.items()}
+    before = len(problems.items)
+    labels = cbc_wording.cbc_labels()
+    uses_target = any("{target_level}" in v for v in texts.values())
+    for title, competencies, target in _courses() or [("A course", "", "")]:
+        if uses_target and target and target not in labels:
+            problems.add(where, "course %r has target_outcome_level %r, which is not a CBC "
+                         "label; the badge would print it (FR-005)" % (title, target))
+        values = {"course": title, "competencies": competencies, "target_level": target}
+        for key, value in texts.items():
+            rendered = _render(value, values)
+            for message in cbc_wording.check_recognition(rendered,
+                                                         require_completed=(key == "name")):
+                problems.add("%s %s (course %r)" % (where, key, title), message)
+            if key == "name" and len(rendered) > BADGE_NAME_MAX:
+                problems.add(where, "name for course %r is %d characters; badge.name holds %d"
+                             % (title, len(rendered), BADGE_NAME_MAX))
+        if len(problems.items) > before:
+            break   # one course's failures say it; the template is what to fix
+    if len(problems.items) > before:
+        return None
+    out = dict(texts, version=str(data["version"]), language=str(data["language"]),
+               image=_image_record(image))
+    return out
+
+
+def _validate_certificate(where, data, rows, site_dir, decl, problems):
+    """Check certificate/template.yaml. Returns the template for the payload, or None."""
+    if not _check_keys(where, data, {"rows", "name", "activity_name", "intro", "font", "pages",
+                                     "why"}, set(), problems):
+        return None
+    _check_hosts(where, data, problems)
+    _check_rows(where, data, rows, problems)
+    if not _text(data.get("why")):
+        problems.add(where, "why must say which row or spec needs it")
+    before = len(problems.items)
+    base = site_dir / CERT_DIR
+    programme = _programme(decl)
+    for key in ("name", "activity_name", "intro"):
+        if _check_name(where, key, data.get(key), CERT_NAME_MAX, problems):
+            _check_placeholders(where, key, data[key], (), problems)
+            for message in cbc_wording.check_recognition(data[key]):
+                problems.add("%s %s" % (where, key), message)
+    if data.get("font") not in FONTS:
+        problems.add(where, "font must be one of %s, which embed and cover any script (R11)"
+                     % ", ".join(FONTS))
+    pages = data.get("pages")
+    if not isinstance(pages, list) or not pages:
+        problems.add(where, "pages must be a list of at least one page")
+        return None
+
+    counts = {t: 0 for t in CERT_ONE_EACH}
+    texts, images, out_pages = [], [], []
+    for p, page in enumerate(pages):
+        pwhere = "%s pages[%d]" % (where, p)
+        if not _check_keys(pwhere, page, {"width", "height", "elements"}, {"margins"},
+                           problems):
+            continue
+        out_page = {"elements": []}
+        for key in ("width", "height"):
+            if not (_is_int(page.get(key)) and page[key] > 0):
+                problems.add(pwhere, "%s must be a whole number of millimetres" % key)
+            out_page[key] = page.get(key)
+        margins = page.get("margins") or {}
+        if not isinstance(margins, dict) or set(margins) - {"left", "right"} or \
+                not all(_is_int(v) and v >= 0 for v in margins.values()):
+            problems.add(pwhere, "margins is {left, right}, whole millimetres")
+            margins = {}
+        out_page["leftmargin"] = margins.get("left", 0)
+        out_page["rightmargin"] = margins.get("right", 0)
+        elements = page.get("elements")
+        if not isinstance(elements, list):
+            problems.add(pwhere, "elements must be a list")
+            continue
+        for e, element in enumerate(elements):
+            ewhere = "%s elements[%d]" % (pwhere, e)
+            kind = element.get("type") if isinstance(element, dict) else None
+            if kind not in CERT_ELEMENTS:
+                problems.add(ewhere, "type must be one of %s" % ", ".join(CERT_ELEMENTS))
+                continue
+            required, optional = CERT_ELEMENTS[kind]
+            if not _check_keys(ewhere, element, required | {"type"}, optional, problems):
+                continue
+            for key in ("x", "y", "size", "width", "height"):
+                if key in element and not (_is_int(element[key]) and element[key] >= 0):
+                    problems.add(ewhere, "%s must be a whole number" % key)
+            if "align" in element and element["align"] not in ALIGN:
+                problems.add(ewhere, "align is one of %s" % ", ".join(ALIGN))
+            out = {k: element[k] for k in element if k not in ("date", "format", "file")}
+            if kind in counts:
+                counts[kind] += 1
+            if kind == "text":
+                text = element["text"]
+                if not _text(text):
+                    problems.add(ewhere, "text must be text")
+                    continue
+                _check_placeholders(ewhere, "text", text, CERT_PLACEHOLDERS, problems)
+                out["text"] = _render(text, {"programme": programme})
+                texts.append(out["text"])
+            elif kind == "date":
+                if element["date"] not in DATE_ITEMS:
+                    problems.add(ewhere, "date must be completion: the issue date is the "
+                                 "first download, not when the course was completed (R6)")
+                else:
+                    out["dateitem"] = DATE_ITEMS[element["date"]]
+                if not (isinstance(element["format"], (str, int)) and
+                        DATE_FORMAT.match(str(element["format"]))):
+                    problems.add(ewhere, "format is 1-5 or a langconfig key such as "
+                                 "strftimedate (element_helper::get_date_format_string)")
+                out["dateformat"] = str(element["format"])
+            elif kind in ("image", "bgimage"):
+                path = _image_file(ewhere, base, element["file"], problems)
+                if path is not None:
+                    if _png_size(path) is None and path.read_bytes()[:3] != b"\xff\xd8\xff":
+                        problems.add(ewhere, "%s is neither a PNG nor a JPEG" % element["file"])
+                    out["image"] = _image_record(path)
+                    images.append(path)
+            out_page["elements"].append(out)
+        out_pages.append(out_page)
+
+    for kind, n in counts.items():
+        if n != 1:
+            problems.add(where, "needs exactly one %s element, not %d (FR-003)" % (kind, n))
+    for text in texts:
+        for message in cbc_wording.check_recognition(text):
+            problems.add("%s text" % where, message)
+    if not any(cbc_wording.COMPLETED.search(t) for t in texts):
+        problems.add(where, "no text element says \"training completed\" or \"completed the "
+                     "course\" (FR-004)")
+    total = sum(p.stat().st_size for p in set(images))
+    if total > CERT_IMAGES_MAX:
+        problems.add(where, "images total %d KB; at most %d KB, so the PDF downloads on a slow "
+                     "link (SC-005)" % (total // 1024, CERT_IMAGES_MAX // 1024))
+    if len(problems.items) > before:
+        return None
+    return {"name": data["name"], "activity_name": data["activity_name"],
+            "intro": data["intro"], "font": data["font"], "pages": out_pages}
+
+
+def _check_recognition_site(decl, problems):
+    """What badges and the certificate need from the rest of the declaration."""
+    pinned = {p["component"] for p in decl["plugins"] if "version" in p}
+    for component in RECOGNITION_PLUGINS:
+        if component not in pinned:
+            problems.add("site.yaml", "%s must be pinned: the certificate needs it (row 23)"
+                         % component)
+    declared = {s["name"]: s for s in decl["settings"]}
+    for name in BADGE_SETTINGS:
+        if name not in declared:
+            problems.add("settings/badges.yaml", "%s must be declared (spec 013 R12)" % name)
+    if BADGE_SALT in declared:
+        problems.add(declared[BADGE_SALT]["file"], "%s is per site, and changing it breaks "
+                     "every badge already issued; list it in ignore.yaml (R9)" % BADGE_SALT)
+    programme = declared.get(PROGRAMME_SETTING)
+    if programme and isinstance(programme["value"], str):
+        for message in cbc_wording.check_recognition(programme["value"]):
+            problems.add(programme["file"], message)
+
+
+# ---------------------------------------------------------------------------------------
 # The payload: the declaration as the JSON site_config.php reads (data-model "Rendered
 # payload"). Built in memory; the resolved form is only ever written to the child's stdin.
 
@@ -1777,6 +2083,36 @@ def _literal(value):
     if isinstance(value, list):
         return [str(v) for v in value]
     return str(value)
+
+
+def _payload_image(record):
+    data = pathlib.Path(record["path"]).read_bytes()
+    return {"filename": record["filename"], "sha256": record["sha256"],
+            "content": base64.b64encode(data).decode("ascii")}
+
+
+def _payload_badge(template):
+    if template is None:
+        return None
+    out = {k: v for k, v in template.items() if k != "image"}
+    out["image"] = _payload_image(template["image"])
+    out["deny"] = [{"pattern": p, "why": why} for p, why in cbc_wording.DENY_PATTERNS]
+    return out
+
+
+def _payload_certificate(template):
+    if template is None:
+        return None
+    pages = []
+    for page in template["pages"]:
+        elements = []
+        for element in page["elements"]:
+            element = dict(element)
+            if "image" in element:
+                element["image"] = _payload_image(element["image"])
+            elements.append(element)
+        pages.append(dict(page, elements=elements))
+    return dict(template, pages=pages)
 
 
 def build_payload(decl, mode, environ, redact=False):
@@ -1803,6 +2139,11 @@ def build_payload(decl, mode, environ, redact=False):
         "course_fields": decl["course_fields"],
         "competencies": decl["competencies"],
         "reports": decl["reports"],
+        # Spec 013, after reports (contracts/declaration.md "Payload arrays"). Images travel
+        # as base64, and the badge template carries cbc_wording's deny patterns, so the
+        # plugin re-checks each course's rendered text without a copy of its own (R15).
+        "badge_template": _payload_badge(decl["badge_template"]),
+        "certificate_template": _payload_certificate(decl["certificate_template"]),
     }
     for s in decl["settings"]:
         out = {"name": s["name"], "plugin": s["plugin"], "setting": s["setting"],
@@ -1873,11 +2214,13 @@ def _summary(decl):
     files = len({s["file"] for s in decl["settings"]})
     return ("%d settings in %d files, %d plugins, %d roles, %d ignore entries, "
             "%d categories, %d cohorts, %d profile fields, %d cohort rules, "
-            "%d course fields, %d competencies, %d reports"
+            "%d course fields, %d competencies, %d reports, %d badge template, "
+            "%d certificate template"
             % (len(decl["settings"]), files, len(decl["plugins"]), len(decl["roles"]),
                len(decl["ignore"]), len(decl["categories"]), len(decl["cohorts"]),
                len(decl["profile_fields"]), len(decl["cohort_rules"]),
-               len(decl["course_fields"]), len(decl["competencies"]), len(decl["reports"])))
+               len(decl["course_fields"]), len(decl["competencies"]), len(decl["reports"]),
+               decl["badge_template"] is not None, decl["certificate_template"] is not None))
 
 
 def main(argv=None, environ=None):

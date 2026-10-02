@@ -30,6 +30,12 @@ competencies and target level go to two course fields, and the competencies also
 plugin's per-competency table; both are read back. Anything that needs a person is
 listed after the summary and the exit code is 1, though the publish itself completed.
 
+BADGE AND CERTIFICATE (spec 013). After completion, local_ltuse_set_course_recognition makes
+or rewords the course's badge from the template site_config.py apply stored. Only a delivery
+publish (course_stage.py at stage 8) activates the badge and makes the certificate activity;
+a pilot issues nothing. The certificate's idnumber is never offered for hiding, because
+hiding it is a step towards deleting it, which deletes every issued code.
+
 Environment:
     MOODLE_URL, MOODLE_TOKEN    see scripts/moodle_client.py
 
@@ -246,6 +252,32 @@ def note_completion(results, idnumber, source, result):
     return value
 
 
+def ensure_recognition(client, manifest, problems):
+    """The course's badge, and on delivery its certificate (spec 013, contracts/publish.md).
+
+    Straight after the completion criteria, so both see the final ones. A refusal (wording,
+    templates not applied) is a MoodleError and stops the publish; a warning goes into
+    `problems`, so the publish completes and exits 1.
+    """
+    recognition = manifest["recognition"]
+    params = {"courseidnumber": manifest["idnumber"], "delivery": recognition["delivery"]}
+    if recognition.get("certificate"):
+        params["certificateidnumber"] = recognition["certificate"]["idnumber"]
+    result = client.call("local_ltuse_set_course_recognition", **params)
+    pilot = "" if recognition["delivery"] else " (pilot: no badge is issued until stage 8)"
+    if client.dry_run:
+        print("  recognition  dry-run: badge%s%s" % (
+            ", activated; certificate" if recognition["delivery"] else "", pilot))
+        return
+    result = result or {}
+    line = "  recognition  badge %s, %s" % (result.get("badge"), result.get("status"))
+    if recognition["delivery"]:
+        line += "; certificate %s" % result.get("certificate")
+    print(line + pilot)
+    for w in result.get("warnings") or []:
+        problems.append("recognition %s: %s" % (w.get("code"), w.get("message")))
+
+
 def publish(client, payload_dir, category_id):
     manifest = json.loads((payload_dir / "manifest.json").read_text(encoding="utf-8"))
     if not manifest["publishable"]:
@@ -277,6 +309,9 @@ def publish(client, payload_dir, category_id):
     cmids = {k: m["cmid"] for k, m in server.items()}
     this_run = {mod["idnumber"] for s in manifest["sections"] for mod in s["modules"]}
     this_run |= {q["idnumber"] for q in manifest["quizzes"]}
+    certificate = (manifest.get("recognition") or {}).get("certificate")
+    if certificate:
+        this_run.add(certificate["idnumber"])   # never stale, so never hidden (R14)
     records = manifest.get("assets") or {}
 
     def module_url(cmid):
@@ -436,6 +471,7 @@ def publish(client, payload_dir, category_id):
         if criteria.get("othercriteria"):
             print("  completion  NOTE: the course also has criteria set by hand in Moodle; "
                   "they were left alone")
+    ensure_recognition(client, manifest, problems)
     not_applied = sorted(k for k, (_, v) in completion.items() if v == "")
     if not_applied:
         print("  completion  NOTE: not applied to %d module(s) -- is completion on for the "

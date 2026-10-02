@@ -37,6 +37,11 @@ defined('MOODLE_INTERNAL') || die();
  *   reports                               reports::apply(), last, because a report's columns and
  *                                         audiences need the fields and cohorts made above
  *
+ * Then spec 013's, after reports (specs/013-certificates-badges/contracts/declaration.md):
+ *
+ *   badge_template        badgetemplate::apply(): store it, then reword every mapped badge
+ *   certificate_template  certtemplate::apply(): the site template, then every activity's copy
+ *
  * The preflight stops on a run-wide block only (report::has_blocking()). A report-scoped
  * block, such as an audience cohort that does not exist, leaves just that report unwritten:
  * reports::apply() checks each report again and skips the blocked one.
@@ -89,6 +94,21 @@ class applier {
         }
         $this->apply_structure();
         $this->apply_reporting();
+        $this->apply_recognition();
+    }
+
+    /**
+     * Apply spec 013's two templates, after reports: store the badge template and reword every
+     * published badge from it, then build the certificate site template and copy it into every
+     * certificate activity. Never deactivates a badge or deletes an activity or a template.
+     */
+    protected function apply_recognition(): void {
+        if ($this->inspector->badgetemplate()) {
+            $this->inspector->badgetemplate()->apply($this->report);
+        }
+        if ($this->inspector->certtemplate()) {
+            $this->inspector->certtemplate()->apply($this->report);
+        }
     }
 
     /**

@@ -9,8 +9,8 @@
 defined('MOODLE_INTERNAL') || die();
 
 $plugin->component = 'local_ltuse';
-$plugin->version   = 2026100202;   // Progress reporting (spec 004), bumped once for the whole
-                                   // feature; db/upgrade.php saves its savepoint at this stamp.
+$plugin->version   = 2026100300;   // Badges and certificates (spec 013), bumped once for the
+                                   // whole feature; db/upgrade.php saves its savepoint at this stamp.
                                    // moodle/site/site.yaml pins local_ltuse to this stamp, and
                                    // validate fails if they differ.
 
@@ -31,7 +31,7 @@ $plugin->requires  = 2026042000;   // Moodle 5.2 -- the release this was
 $plugin->supported = [502, 502];
 
 $plugin->maturity  = MATURITY_ALPHA;
-$plugin->release   = '0.6.0';
+$plugin->release   = '0.7.0';
 
 // No third-party dependencies, deliberately. Sections were originally going to be
 // local_wsmanagesections' job, but it could not be installed here, so local_ltuse grew an

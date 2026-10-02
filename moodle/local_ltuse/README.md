@@ -24,6 +24,7 @@ shape and Moodle's.
 | `local_ltuse_hide_modules` | write | Hides modules the course no longer has, by course-module idnumber. Never deletes. |
 | `local_ltuse_set_course_completion` | write | Makes a course's activity completion criteria exactly its visible, tracked `ltct:` modules, one criterion at a time. Never clears a learner's course completion (spec 004). |
 | `local_ltuse_set_course_competencies` | write | Replaces the competencies a published course aims at, by name, in the plugin's own map table. Fails closed on a name the site does not have (spec 004). |
+| `local_ltuse_set_course_recognition` | write | Creates or rewords a published course's completion badge, activates it on a delivery publish, and on delivery makes its certificate activity. Never deactivates a badge or deletes a certificate (spec 013). |
 
 Course create/update stays on core (`core_course_create_courses`,
 `core_course_update_courses`, `core_course_get_courses_by_field`) and section handling on
@@ -184,6 +185,83 @@ the report cannot widen it: a course counts only if its idnumber starts `ltct:`;
 enabled `cohort` enrol instance whose role has shortname `student` (looked up by shortname,
 never by id), which leaves out each organisation's managers cohort and every manual (pilot)
 enrolment.
+
+## Badges and certificates (spec 013)
+
+Training evidence only: "training completed", never "certified", and never a CBC level held.
+The wording rule is `scripts/cbc_wording.py`. `site_config.py apply` sends its deny patterns
+with the badge template, and `classes/recognition/wording.php` re-checks each course's
+rendered text against them before anything is written. The plugin holds no copy of the rule.
+
+### The badge: `classes/recognition/badges.php`
+
+One core **course badge** per published course, awarded by core's own observer the moment the
+learner's course completion is recorded. Core has no web service that creates or updates a
+badge, so the plugin calls the classes the badge pages use:
+
+| Call | For |
+|---|---|
+| `\core_badges\badge::create_badge($data, $courseid)` | A new badge. It sets the status to inactive and a default message, which the plugin then rewrites. |
+| `award_criteria::build([...])->save([...])` | The overall criterion (`agg` ALL), then the course criterion `course_<id>`. Nothing else: a competency criterion would read as a competency awarded. |
+| `$badge->save()` | Rewording in place, active or not. The details form freezes an active badge, but that is a UI rule only. |
+| `$badge->set_status()` | Activation, on a delivery publish only. Never a deactivation: an inactive-locked or archived badge makes the BadgeClass JSON return 410 to everyone who already holds it. |
+| `badges_process_badge_image($badge, $tmp)` | The image. It deletes the file it is given, so it gets a temporary copy, and it does nothing without GD, so the plugin refuses loudly instead. |
+| `course_handler::create()->get_instance_data($courseid, true)` | The raw values of `ltct_competencies` and `ltct_target_level`, which fill `{competencies}` and `{target_level}`. |
+
+**The pilot learner at delivery.** A pilot and the published course are one Moodle course, so
+a pilot learner's completion is still there when the badge is activated, and the badge cron
+would award them. Stage 8 suspends their manual enrolment first (`process/stages/08-publish.md`).
+
+**Who sees a learner's badges.** `roles.yaml` sets `moodle/badges:viewotherbadges` to
+`inherit` for the authenticated-user role, so learners cannot see each other's badges.
+**Spec 003's mentor role must grant `moodle/badges:viewotherbadges`, assigned in the learner's
+user context**, so a mentor sees exactly their assigned learners' badges. Managers keep it
+through their archetype. Organisation managers follow completion through spec 004's reports
+instead: a course-context role cannot reach a user-context capability.
+
+### The certificate: `classes/recognition/certificate.php`, `classes/siteconfig/certtemplate.php`
+
+A `mod_customcert` activity per delivered course, made through `util::upsert_module()` with
+course-module idnumber `ltct:<slug>:certificate`, `verifyany` 1, completion off, and the
+availability `{"op":"&","c":[{"type":"coursecompleted","id":"1"}],"showc":[true]}` from
+`availability_coursecompleted`. The call refuses while `enableavailability` is off, because
+`add_moduleinfo()` would drop the condition and leave the certificate open.
+`set_course_completion` leaves the certificate's idnumber out of its wanted set. The activity
+is **never deleted**: deleting it deletes every issued code. A course is retired by hiding it.
+
+**Calls into `mod_customcert`'s own classes (Principle XI).** These are not a published API,
+and they were refactored heavily during 5.2.x. Re-run quickstart V6 on every `mod_customcert`
+re-pin.
+
+| Class | Method | For |
+|---|---|---|
+| `mod_customcert\template` | `create()`, `from_record()` | The site template, found by its exact name at system context. |
+| `mod_customcert\service\template_repository` | `list_by_context()` | Finding it. Two with the declared name is `ambiguous` and blocks the run. |
+| `mod_customcert\service\template_service` | `create()`, `delete_page()` | Replacing the site template's pages when the declaration changes. |
+| `mod_customcert\service\page_repository` | `create()`, `list_by_template()` | Its pages. |
+| `mod_customcert\service\element_factory` | `build_with_defaults()`, `create()` | Its elements, from records whose `data` mirrors each element's `normalise_data()`. |
+| `mod_customcert\service\element_repository` | `create()`, `list_by_page()` | Writing and reading elements. |
+| `mod_customcert\service\element_layout` | `from_record()` | An element's position, reference point and alignment. |
+| `mod_customcert\service\template_load_service` | `create()`, `replace()` | Copying the site template into an activity whose pages differ. |
+| `mod_customcert\element_helper` | `CUSTOMCERT_REF_POINT_*` | The reference point for each alignment. |
+
+Images go into `mod_customcert`'s own `image` file area at system context, through the file
+API, which is where its image element looks for a site template's files. Each is stored under
+its content hash and its name, because the image element reuses a course's copy of a file with
+the same name and never refreshes it, so a new logo must have a new name to reach courses
+already copied. Copying into a course moves the file to the course's context, so templates are
+compared by what they show (element type, name, position and data, and an image by its stored
+name and size), never by where the file is. The plugin writes none of `mod_customcert`'s tables with SQL. It reads them only
+through the classes above, plus one join to find the activities: `course_modules` and
+`customcert`, by `cm.idnumber LIKE 'ltct:%:certificate'`.
+
+### The badge map: `local_ltuse_course_badge`
+
+A badge has no idnumber, and a restore or a course copy duplicates its name, so this table is
+its identity: `courseid` (unique), `badgeid` (unique), `imagehash` (the sha256 of the template
+image the badge's image was made from, because core resizes it) and `timecreated`. It holds no
+user data, so the privacy provider stays a `null_provider`. A badge in an `ltct:` course that
+the map does not name is reported `extra` and never adopted.
 
 ## What the plugin relies on, and why (Principle XI)
 
@@ -375,6 +453,16 @@ calls and reads is listed under [What the plugin relies on](#what-the-plugin-rel
 | `user_info_field` | `shortname` | No (unique only by validation) | `profile_get_custom_field_data_by_shortname()` exists. The class reads the row directly so it can compare every column. |
 | `cohort` joined to `cohort_members` | `cm.userid`, `c.contextid`, `c.idnumber LIKE 'ltct:org:%:managers'` | `cohort_members.userid` is | `cohort_get_user_cohorts()` returns only visible cohorts, and every managers cohort is hidden. One query per request, cached. |
 | `course_categories`, `cohort`, `user_info_field` | `idnumber` or `shortname` prefix (`ltct:`, `ltct_`) | as above | Drift's scan for undeclared items. There is no core listing by prefix. |
+
+### Badge and certificate templates (spec 013)
+
+After reports, `apply` stores the badge template (config `local_ltuse/badge_template` and the
+plugin's `badgetemplate` file area) and rewords every mapped badge from it, reporting each as
+`badge <course idnumber>`. It then builds the certificate site template and copies it into
+each `ltct:<slug>:certificate` activity whose pages differ. `drift` reports a template that
+differs, a badge whose text or image differs from its rendering, a mapped badge that is gone
+(`missing`) and an unmapped badge in an `ltct:` course (`extra`). It never judges whether a
+badge should be active: only the publisher knows a course's stage.
 
 ## Verified against Moodle 5.2.3+ (2026-09-29)
 

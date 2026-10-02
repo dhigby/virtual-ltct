@@ -49,6 +49,12 @@ use core_plugin_manager;
  *   competencies           [{name, category, sortorder}]             competencies
  *   reports                [{area, name, source, columns, ...}]      reports
  *
+ * and, from spec 013 (specs/013-certificates-badges/contracts/declaration.md "Payload arrays"),
+ * two templates, checked after reports:
+ *
+ *   badge_template         {name, description, ..., image, deny}       badgetemplate
+ *   certificate_template   {name, activity_name, intro, font, pages}   certtemplate
+ *
  * A spec 004 result may carry `blocking` => report::BLOCKS_REPORT, which leaves only its own
  * report unwritten; has_blocking() delegates to report::has_blocking() so such a result does
  * not stop the run.
@@ -148,6 +154,12 @@ class inspector {
 
     /** @var reports|null checks the payload's custom reports */
     protected $reports = null;
+
+    /** @var badgetemplate|null checks the payload's badge template (spec 013) */
+    protected $badgetemplate = null;
+
+    /** @var certtemplate|null checks the payload's certificate template (spec 013) */
+    protected $certtemplate = null;
 
     /**
      * @param array $declaration the decoded JSON payload (associative arrays throughout)
@@ -256,6 +268,33 @@ class inspector {
             $this->reports = new reports(self::entries($this->declaration['reports'] ?? []));
         }
         return $this->reports;
+    }
+
+    // --- spec 013 checkers -----------------------------------------------------------------
+
+    /**
+     * The badge template checker, or null when the payload declares none (a payload from
+     * before spec 013, or a site with no badges.yaml).
+     *
+     * @return badgetemplate|null
+     */
+    public function badgetemplate(): ?badgetemplate {
+        if ($this->badgetemplate === null && is_array($this->declaration['badge_template'] ?? null)) {
+            $this->badgetemplate = new badgetemplate($this->declaration['badge_template']);
+        }
+        return $this->badgetemplate;
+    }
+
+    /**
+     * The certificate template checker, or null when the payload declares none.
+     *
+     * @return certtemplate|null
+     */
+    public function certtemplate(): ?certtemplate {
+        if ($this->certtemplate === null && is_array($this->declaration['certificate_template'] ?? null)) {
+            $this->certtemplate = new certtemplate($this->declaration['certificate_template']);
+        }
+        return $this->certtemplate;
     }
 
     /**
@@ -405,7 +444,15 @@ class inspector {
         if ($this->declares_competencies()) {
             $items = array_merge($items, $this->competencies()->check());
         }
-        return array_merge($items, $this->reports()->check());
+        $items = array_merge($items, $this->reports()->check());
+        // Spec 013, after reports (contracts/declaration.md "Payload arrays").
+        if ($this->badgetemplate()) {
+            $items = array_merge($items, $this->badgetemplate()->check());
+        }
+        if ($this->certtemplate()) {
+            $items = array_merge($items, $this->certtemplate()->check());
+        }
+        return $items;
     }
 
     /**

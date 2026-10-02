@@ -54,12 +54,37 @@ itself is automated: the markdown here is the source, and Moodle is a render of 
      moodle: https://…            # the published course in Moodle
    ```
 
-6. Open a small PR with those changes and merge it.
+6. **Suspend the pilot learners' enrolments.** In the course's *Participants* page, set
+   each pilot learner's **manual** enrolment to *Suspended*. Do not unenrol them: their
+   completion stays, and they keep it.
+
+   This has to come before the next step. The pilot and the published course are one
+   Moodle course, so a pilot learner's completion is still on record, and once the badge
+   is switched on Moodle's badge check would award it to them from their pilot run. A pilot
+   learner who later joins through their organisation is enrolled again by cohort, and gets
+   the badge then, from the completion they already have.
+
+7. **Publish again, as the delivery.** With the Moodle link in the README, the course is at
+   stage 8, and `/publish-to-moodle <course-slug>` now switches the course's **completion
+   badge** on and adds its **certificate** activity. A pilot publish never does either: a
+   pilot issues no badge and has no certificate. The publish says which it did:
+
+   ```text
+     recognition  badge unchanged, activated; certificate created
+   ```
+
+   The badge says "training completed", and the certificate is a certificate of training
+   completed, never a certification (spec 013). Learners who finish the course get the
+   badge automatically and can download the certificate from the course page.
+
+8. Open a small PR with those changes and merge it.
 
 ## Exit criteria
 
 - The course is live and visible in Moodle.
 - The Moodle URL is recorded under `external_links:` in the course's `README.md`.
+- The delivery publish ran after the link: the course's badge is active and its certificate
+  activity exists.
 - No lesson still reads `**Watch the video:** _To be recorded at stage 8._`
 
 ## Then
@@ -82,3 +107,10 @@ Two refusals are normal, and neither should be worked around:
 Anything reported as a **LEAK** means a page contains answer-key text. Nothing is
 published until that is fixed — there is no override, because once a page is on a server
 learners can reach, the disclosure has already happened.
+
+## Retiring a course
+
+**Hide it in Moodle; never delete it.** Deleting a course archives its badges, which breaks
+verification for everyone who holds one, and deleting its certificate activity deletes every
+certificate code already issued. A hidden course keeps both working: a badge's link and a
+certificate's code still verify, and learners can still download their certificates.

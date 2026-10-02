@@ -70,6 +70,17 @@ $functions = [
         'ajax'         => false,
         'capabilities' => 'local/ltuse:publish',
     ],
+    'local_ltuse_set_course_recognition' => [
+        'classname'    => 'local_ltuse\external\set_course_recognition',
+        'description'  => 'Create or reword a published course\'s completion badge, activate it '
+                        . 'on a delivery publish, and on delivery make its certificate activity. '
+                        . 'Never deactivates a badge or deletes a certificate. Idempotent.',
+        'type'         => 'write',
+        'ajax'         => false,
+        'capabilities' => 'local/ltuse:publish, moodle/badges:createbadge, '
+                        . 'moodle/badges:configurecriteria, moodle/badges:configuredetails, '
+                        . 'moodle/badges:configuremessages, mod/customcert:addinstance',
+    ],
 ];
 
 // One service, so a single token grants exactly these functions and nothing else.
@@ -88,6 +99,7 @@ $services = [
             'local_ltuse_hide_modules',
             'local_ltuse_set_course_completion',
             'local_ltuse_set_course_competencies',
+            'local_ltuse_set_course_recognition',
             // Core functions the publisher also needs. Listed here so one token covers
             // the whole publish rather than the operator wiring up several services.
             'core_course_create_courses',

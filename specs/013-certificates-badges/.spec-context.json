@@ -2,8 +2,8 @@
   "workflow": "speckit",
   "specName": "Completion Badges and Certificates",
   "branch": "specs/moodle-requirements",
-  "currentStep": "specify",
-  "status": "specified",
+  "currentStep": "implement",
+  "status": "implementing",
   "history": [
     {
       "step": "specify",
@@ -11,7 +11,738 @@
       "kind": "start",
       "by": "extension",
       "at": "2026-09-30T20:47:11.720Z"
+    },
+    {
+      "step": "plan",
+      "substep": null,
+      "kind": "complete",
+      "by": "extension",
+      "at": "2026-10-02T18:33:10.166Z"
+    },
+    {
+      "step": "tasks",
+      "substep": null,
+      "kind": "complete",
+      "by": "extension",
+      "at": "2026-10-02T19:05:13.778Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "kind": "start",
+      "by": "extension",
+      "at": "2026-10-02T19:23:19.620Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T001",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-02T19:26:30.908Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T002",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-02T19:26:31.103Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T003",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-02T19:26:31.326Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T004",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-02T19:27:53.755Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T006",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-02T19:27:53.973Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T007",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-02T19:27:54.158Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T008",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-02T19:27:54.340Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T009",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-02T19:31:07.482Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T010",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-02T19:31:07.658Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T014",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-02T19:31:07.840Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T011",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-02T19:33:15.280Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T012",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-02T19:33:15.460Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T013",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-02T19:33:29.395Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T005",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-02T19:48:46.884Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T015",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-02T19:48:47.105Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T016",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-02T19:48:47.302Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T017",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-02T19:48:47.489Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T018",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-02T19:48:47.679Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T019",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-02T19:48:56.439Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T020",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-02T19:48:56.645Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T021",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-02T19:48:56.870Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T023",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-02T19:49:05.737Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T024",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-02T19:49:05.969Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T025",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-02T19:49:06.214Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T026",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-02T19:49:06.412Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T027",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-02T19:49:07.001Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T028",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-02T19:49:07.216Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T029",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-02T19:49:07.453Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T031",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-02T19:51:13.125Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T032",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-02T19:51:49.970Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T034",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-02T19:51:50.201Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T035",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-02T19:51:50.421Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T038",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-02T19:52:07.756Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T039",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-02T19:52:07.939Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T040",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-02T19:52:28.856Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T041",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-02T19:52:29.048Z"
     }
   ],
-  "telemetryInstanceId": "43e7d5c9-d168-46f2-9cb1-2453c776376a"
+  "telemetryInstanceId": "43e7d5c9-d168-46f2-9cb1-2453c776376a",
+  "currentTask": "T041",
+  "task_summaries": {
+    "T001": {
+      "status": "DONE",
+      "did": "Badge template, certificate template and badge settings declared",
+      "files": [
+        "moodle/site/badges.yaml",
+        "moodle/site/settings/badges.yaml",
+        "moodle/site/certificate/template.yaml"
+      ]
+    },
+    "T002": {
+      "status": "DONE",
+      "did": "Placeholder 512px square badge PNG (1.5 KB)",
+      "files": [
+        "moodle/site/badges/completion.png"
+      ]
+    },
+    "T003": {
+      "status": "DONE",
+      "did": "Placeholder programme logo PNG (226 bytes)",
+      "files": [
+        "moodle/site/certificate/logo.png"
+      ]
+    },
+    "T004": {
+      "status": "DONE",
+      "did": "cbc_wording.py with two named rules, report_label_problems and check_recognition",
+      "files": [
+        "scripts/cbc_wording.py"
+      ]
+    },
+    "T006": {
+      "status": "DONE",
+      "did": "Pinned mod_customcert 2026042014 and availability_coursecompleted 2026070100; both sha256 computed from the marketplace zips",
+      "files": [
+        "moodle/site/site.yaml"
+      ]
+    },
+    "T007": {
+      "status": "DONE",
+      "did": "check_recognition: deny list, required completed phrase, CBC label only after the aim phrase, no level held",
+      "files": [
+        "scripts/cbc_wording.py"
+      ]
+    },
+    "T008": {
+      "status": "DONE",
+      "did": "004's FR-010 rule moved unchanged into cbc_wording; site_config wraps it; 181 tests pass",
+      "files": [
+        "scripts/cbc_wording.py",
+        "scripts/site_config.py"
+      ]
+    },
+    "T009": {
+      "status": "DONE",
+      "did": "validate checks badges.yaml: placeholders, image rules, every text rendered against all 32 course READMEs through check_recognition; payload carries base64 image and deny patterns",
+      "files": [
+        "scripts/site_config.py",
+        "tests/test_site_config.py"
+      ]
+    },
+    "T010": {
+      "status": "DONE",
+      "did": "validate checks certificate/template.yaml: element types, one each of studentname/coursename/date/code, date=completion -> -2, font, images <=100KB, wording",
+      "files": [
+        "scripts/site_config.py",
+        "moodle/site/certificate/template.yaml"
+      ]
+    },
+    "T014": {
+      "status": "DONE",
+      "did": "ignore.yaml swaps issuer entries for badges_badgesalt; roles.yaml adds user viewotherbadges inherit and the publisher's badge/customcert caps",
+      "files": [
+        "moodle/site/ignore.yaml",
+        "moodle/site/roles.yaml"
+      ]
+    },
+    "T011": {
+      "status": "DONE",
+      "did": "Payload recognition block: delivery from course_stage.stage_for (stage 8), certificate idnumber only on delivery",
+      "files": [
+        "scripts/moodle_payload.py"
+      ]
+    },
+    "T012": {
+      "status": "DONE",
+      "did": "check_moodle_payload check 8: start date, rendered badge name/description through check_recognition, certificate idnumber shape/length/no module clash",
+      "files": [
+        "scripts/check_moodle_payload.py"
+      ]
+    },
+    "T013": {
+      "status": "DONE",
+      "did": "local_ltuse_course_badge (courseid, badgeid foreign-unique, timecreated) in install.xml and upgrade step 2026100300; privacy stays null_provider",
+      "files": [
+        "moodle/local_ltuse/db/install.xml",
+        "moodle/local_ltuse/db/upgrade.php",
+        "moodle/local_ltuse/version.php",
+        "moodle/site/site.yaml"
+      ]
+    },
+    "T005": {
+      "status": "DONE",
+      "did": "Recognition test files: test_cbc_wording.py, test_payload_recognition.py, recognition_harness.php",
+      "files": [
+        "tests/test_cbc_wording.py",
+        "tests/test_payload_recognition.py",
+        "tests/recognition_harness.php"
+      ]
+    },
+    "T015": {
+      "status": "DONE",
+      "did": "PHPUnit badge-service tests: create inactive, criteria, activate on delivery, never deactivate, reword in place, wording refusal writes nothing, unmapped badge reported (not runnable here: needs a Moodle)",
+      "files": [
+        "moodle/local_ltuse/tests/recognition_test.php"
+      ]
+    },
+    "T016": {
+      "status": "DONE",
+      "did": "Pure harness: renderer, wording backstop against the real cbc_wording deny patterns (PCRE compiles each), availability JSON; passes with PHP 8.3",
+      "files": [
+        "tests/recognition_harness.php"
+      ]
+    },
+    "T017": {
+      "status": "DONE",
+      "did": "renderer: template + course name + ltct_ fields, [A] [B] -> A, B, single-pass substitution, issuerurl from wwwroot, escaped message HTML",
+      "files": [
+        "moodle/local_ltuse/classes/recognition/renderer.php"
+      ]
+    },
+    "T018": {
+      "status": "DONE",
+      "did": "wording: applies the stored deny patterns; empty list or uncompilable pattern refuses (fails closed)",
+      "files": [
+        "moodle/local_ltuse/classes/recognition/wording.php"
+      ]
+    },
+    "T019": {
+      "status": "DONE",
+      "did": "badges: create via create_badge + overall ALL + course_<id> criteria, map row with imagehash, reword in place via save(), activate only on delivery, never deactivate; warnings for startdate-future, course-hidden, badge-extra, active-not-delivery",
+      "files": [
+        "moodle/local_ltuse/classes/recognition/badges.php",
+        "moodle/local_ltuse/db/install.xml",
+        "moodle/local_ltuse/db/upgrade.php",
+        "moodle/local_ltuse/lang/en/local_ltuse.php"
+      ]
+    },
+    "T020": {
+      "status": "DONE",
+      "did": "badgetemplate: stores template config + image file at system context; apply rewords every mapped badge and reports badge <idnumber> changed; drift extras for unmapped badges",
+      "files": [
+        "moodle/local_ltuse/classes/siteconfig/badgetemplate.php"
+      ]
+    },
+    "T021": {
+      "status": "DONE",
+      "did": "Publisher calls local_ltuse_set_course_recognition after completion, prints the recognition line incl. pilot note, warnings to problems (exit 1), certificate idnumber kept out of stale; 39 publisher tests pass",
+      "files": [
+        "scripts/publish_moodle.py",
+        "tests/test_publish_moodle.py"
+      ]
+    },
+    "T023": {
+      "status": "DONE",
+      "did": "Payload recognition tests: delivery from stage_for, certificate block only on delivery, the four gate assertions",
+      "files": [
+        "tests/test_payload_recognition.py"
+      ]
+    },
+    "T024": {
+      "status": "DONE",
+      "did": "Publisher recognition tests: call order, pilot/delivery params and lines, certificate never hidden, warning exits 1, refusal stops, dry run",
+      "files": [
+        "tests/test_publish_moodle.py"
+      ]
+    },
+    "T025": {
+      "status": "DONE",
+      "did": "certtemplate: site template found by exact name (ambiguous blocks), pages/elements built from the declaration via customcert classes, images into its file area, signatures compare copies, replace() into differing activities",
+      "files": [
+        "moodle/local_ltuse/classes/siteconfig/certtemplate.php"
+      ]
+    },
+    "T026": {
+      "status": "DONE",
+      "did": "certificate: customcert activity via upsert_module with cm idnumber ltct:<slug>:certificate, verifyany 1, coursecompleted availability, completion 0, last section, template copied when it differs; refuses with availability off",
+      "files": [
+        "moodle/local_ltuse/classes/recognition/certificate.php"
+      ]
+    },
+    "T027": {
+      "status": "DONE",
+      "did": "local_ltuse_set_course_recognition web service: params, capabilities, recognition-not-applied refusal, returns badge/status/certificate/warnings only; registered in services.php and the publishing service",
+      "files": [
+        "moodle/local_ltuse/classes/external/set_course_recognition.php",
+        "moodle/local_ltuse/db/services.php"
+      ]
+    },
+    "T028": {
+      "status": "DONE",
+      "did": "set_course_completion leaves ltct:<slug>:certificate out of its wanted set; criteria harness still passes",
+      "files": [
+        "moodle/local_ltuse/classes/external/set_course_completion.php"
+      ]
+    },
+    "T029": {
+      "status": "DONE",
+      "did": "settings/badges.yaml declares enablebadges, course badges, backpack, issuer name, issuer contact from env:, verifyallcertificates, and enableavailability",
+      "files": [
+        "moodle/site/settings/badges.yaml"
+      ]
+    },
+    "T031": {
+      "status": "DONE",
+      "did": "Recorded spec 003's mentor-role requirement (viewotherbadges in the learner's user context) in both READMEs",
+      "files": [
+        "moodle/local_ltuse/README.md",
+        "moodle/site/README.md"
+      ]
+    },
+    "T032": {
+      "status": "DONE",
+      "did": "Confirmed the description renders the target only after the aim phrase; added a gate that the target is an exact CBC label (validate for any course, payload check on delivery)",
+      "files": [
+        "scripts/site_config.py",
+        "scripts/check_moodle_payload.py",
+        "tests/test_payload_recognition.py"
+      ]
+    },
+    "T034": {
+      "status": "DONE",
+      "did": "inspector checks badge_template and certificate_template after reports; applier applies both; drift adds unmapped badges as extra; never judges active-ness",
+      "files": [
+        "moodle/local_ltuse/classes/siteconfig/inspector.php",
+        "moodle/local_ltuse/classes/siteconfig/applier.php",
+        "moodle/local_ltuse/classes/siteconfig/drift.php"
+      ]
+    },
+    "T035": {
+      "status": "DONE",
+      "did": "Images travel base64 in the apply payload (checksum checked on store), GD-absent refusal, README lists every mod_customcert internal call and why",
+      "files": [
+        "scripts/site_config.py",
+        "moodle/local_ltuse/README.md"
+      ]
+    },
+    "T038": {
+      "status": "DONE",
+      "did": "local_ltuse version 2026100300 / release 0.7.0 (requires and supported stay 5.2), pinned in site.yaml; REQUIREMENTS row 23 marked Built, not yet verified",
+      "files": [
+        "moodle/local_ltuse/version.php",
+        "moodle/site/site.yaml",
+        "moodle/REQUIREMENTS.md"
+      ]
+    },
+    "T039": {
+      "status": "DONE",
+      "did": "Stage 8 how-to: suspend pilot learners' manual enrolment, then the delivery republish after linking; retire by hiding. Site README: badges and certificate, retire-by-hiding",
+      "files": [
+        "process/stages/08-publish.md",
+        "moodle/site/README.md"
+      ]
+    },
+    "T040": {
+      "status": "DONE",
+      "did": "site-config.yml runs test_cbc_wording.py and the recognition harness, triggered by cbc_wording, outcome levels and course READMEs; publisher-tests.yml runs test_payload_recognition.py",
+      "files": [
+        ".github/workflows/site-config.yml",
+        ".github/workflows/publisher-tests.yml"
+      ]
+    },
+    "T041": {
+      "status": "DONE",
+      "did": "pytest for both wording rules (certificate allowed, certified refused by both) and site_config badges.yaml + certificate validation (12 cases)",
+      "files": [
+        "tests/test_cbc_wording.py",
+        "tests/test_site_config.py"
+      ]
+    }
+  },
+  "verified": [
+    {
+      "what": "pytest suite",
+      "command": "python -m pytest -q tests/",
+      "source": "derived",
+      "exitCode": 0,
+      "durationSeconds": 37.3,
+      "result": "............................................................... [ 62%] · ...........................................................................................................................                 [100%] · 330 passed, 86 subtests passed in 36.77s"
+    },
+    {
+      "what": "site declaration validates",
+      "command": "python scripts/site_config.py validate",
+      "source": "derived",
+      "exitCode": 0,
+      "durationSeconds": 0.3,
+      "result": "[ok] declaration valid: 37 settings in 10 files, 12 plugins, 5 roles, 8 ignore entries, 7 categories, 8 cohorts, 7 profile fields, 4 cohort rules, 2 course fields, 42 competencies, 7 reports, 1 badge template, 1 certificate template"
+    },
+    {
+      "what": "recognition harness",
+      "command": "/c/Users/thoua/AppData/Local/Temp/claude/C--Github-virtual-ltct/932dfb16-3cd1-4c33-b4c9-bf807776f464/scratchpad/php/php.exe tests/recognition_harness.php",
+      "source": "derived",
+      "exitCode": 1,
+      "durationSeconds": 0.0,
+      "result": "The system cannot find the path specified.",
+      "warnings": [
+        "exited 1"
+      ]
+    },
+    {
+      "what": "criteria harness",
+      "command": "/c/Users/thoua/AppData/Local/Temp/claude/C--Github-virtual-ltct/932dfb16-3cd1-4c33-b4c9-bf807776f464/scratchpad/php/php.exe tests/criteria_harness.php",
+      "source": "derived",
+      "exitCode": 1,
+      "durationSeconds": 0.0,
+      "result": "The system cannot find the path specified.",
+      "warnings": [
+        "exited 1"
+      ]
+    },
+    {
+      "what": "Independent read of every new PHP call against MOODLE_502_STABLE, mod_customcert 5.2.9 and availability_coursecompleted source",
+      "command": "subagent review",
+      "result": "6 findings (QR height 0, int dateitem breaking restore, intro via introeditor, stale course logo copy, badge written before certificate refusal, minor); all fixed",
+      "warnings": []
+    },
+    {
+      "what": "php -l on every local_ltuse PHP file with portable PHP 8.3",
+      "command": "php -l",
+      "result": "no syntax errors",
+      "warnings": [
+        "tests/report_harness.php fails locally on a missing class before this change; CI does not run it"
+      ]
+    }
+  ],
+  "decisions": [
+    {
+      "decision": "Built every phase inline rather than dispatching story workers",
+      "why": "tasks.md has no Files: lines, US1/US3 share renderer.php, US1's publisher calls US2's service and US4's apply drives both; seams between workers could not be run here",
+      "rejected": "one worker per story phase"
+    },
+    {
+      "decision": "Added imagehash to local_ltuse_course_badge",
+      "why": "core resizes the badge image, so drift cannot compare stored files to the template",
+      "rejected": "comparing badge image files"
+    },
+    {
+      "decision": "Certificate images stored under <sha256 prefix>-<name>",
+      "why": "the image element reuses a course copy with the same name and never refreshes it",
+      "rejected": "plain filename"
+    },
+    {
+      "decision": "Declared enableavailability and refuse when it is off",
+      "why": "add_moduleinfo silently drops availability, leaving the certificate open before completion",
+      "rejected": "relying on the default"
+    },
+    {
+      "decision": "Delivery requires target_outcome_level to be an exact CBC label when the description prints it",
+      "why": "FR-005: any level shown uses CBC vocabulary exactly",
+      "rejected": "rendering whatever frontmatter holds"
+    }
+  ],
+  "concerns": [
+    {
+      "note": "Instance checks V1-V14 (T022, T030, T033, T036, T037), SC-004/SC-005 (T042) and SC-003 with real partner learners (T043) not run: no temporary instance in this session",
+      "step": "implement"
+    },
+    {
+      "note": "PHPUnit recognition_test.php written but not run: needs a Moodle install",
+      "step": "implement"
+    },
+    {
+      "note": "Badge design, logo, issuer name and certificate layout are placeholders pending the maintainer (plan decision 4); plan decisions 2, 3, 5, 6 still pending",
+      "step": "implement"
+    },
+    {
+      "note": "The certificate activity is placed in the course's last section when created and is not moved if lessons are added later",
+      "step": "implement"
+    },
+    {
+      "note": "Several task closes were stamped in batches after the work rather than as each task finished",
+      "step": "implement"
+    }
+  ],
+  "coverage": {
+    "FR-004": {
+      "tests": [
+        "tests/test_cbc_wording.py",
+        "tests/test_site_config.py::Recognition",
+        "tests/recognition_harness.php"
+      ]
+    },
+    "FR-005": {
+      "tests": [
+        "tests/test_cbc_wording.py",
+        "tests/test_payload_recognition.py::test_a_delivery_needs_a_cbc_target"
+      ]
+    },
+    "FR-006": {
+      "tests": [
+        "tests/test_site_config.py::Recognition",
+        "tests/test_payload_recognition.py"
+      ]
+    },
+    "FR-002": {
+      "tests": [
+        "moodle/local_ltuse/tests/recognition_test.php"
+      ]
+    },
+    "FR-007": {
+      "tests": [
+        "tests/test_site_config.py::Recognition::test_the_tracked_declaration_is_accepted_and_rendered"
+      ]
+    }
+  },
+  "step_summaries": {
+    "implement": {
+      "summary": "Completion badges and certificate of training completed: wording rule, declarations, plugin service, publisher and apply/drift built; instance checks open"
+    }
+  },
+  "last_action": "36/43 tasks done; 330 tests and 3 harnesses pass; 7 instance tasks open"
 }

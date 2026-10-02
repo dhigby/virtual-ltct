@@ -35,6 +35,8 @@ class FakeClient:
         self.course_completion = {"added": [], "removed": [], "aggregation": "unchanged",
                                   "reaggregated": 0, "othercriteria": False}
         self.competencies_back = None     # None: the server stores what it was sent
+        self.recognition = {"badge": "unchanged", "status": "inactive", "certificate": "none",
+                            "warnings": []}
 
     def manifest(self, idnumber):
         return self.call("local_ltuse_get_course_manifest", idnumber=idnumber)
@@ -66,6 +68,8 @@ class FakeClient:
             return {"warnings": self.update_warnings}
         if function == "local_ltuse_set_course_completion":
             return dict(self.course_completion)
+        if function == "local_ltuse_set_course_recognition":
+            return dict(self.recognition)
         if function == "local_ltuse_set_course_competencies":
             sent = list(params["competencies"])
             back = sent if self.competencies_back is None else self.competencies_back
@@ -141,7 +145,7 @@ class PublishBase(unittest.TestCase):
         self._tmp.cleanup()
 
     def write_manifest(self, quizzes=(), competencies=("Translation Tools",),
-                       level="2 - With Assistance"):
+                       level="2 - With Assistance", delivery=False):
         sections = []
         for n, (source, (html, assets)) in enumerate(sorted(self.pages.items()), start=1):
             stem = source[:-3]
@@ -160,6 +164,8 @@ class PublishBase(unittest.TestCase):
             "quizzes": list(quizzes), "withheld": [], "notes": [],
             "completion": "all", "competencies": list(competencies),
             "target_outcome_level": level,
+            "recognition": {"delivery": delivery, **(
+                {"certificate": {"idnumber": "%s:certificate" % COURSE}} if delivery else {})},
             "assets": {n: {"sha1": hashlib.sha1(d).hexdigest(), "bytes": len(d)}
                        for n, d in self.images.items()},
         }
@@ -288,9 +294,11 @@ class Publish(PublishBase):
         self.assertEqual(calls[0]["courseidnumber"], COURSE)
         self.assertIn("2 module(s) hidden, 0 already hidden", out)
         # Hiding follows every content write: nothing is hidden before its replacement
-        # exists. Only the course completion criteria come after it (spec 004).
-        self.assertEqual(client.writes()[-2:], ["local_ltuse_hide_modules",
-                                                "local_ltuse_set_course_completion"])
+        # exists. Only the course completion criteria (spec 004) and then the badge (spec
+        # 013) come after it.
+        self.assertEqual(client.writes()[-3:], ["local_ltuse_hide_modules",
+                                                "local_ltuse_set_course_completion",
+                                                "local_ltuse_set_course_recognition"])
 
     def test_already_hidden_module_is_reported_not_rehidden(self):
         mods = self.server_as_published()
@@ -488,14 +496,17 @@ class Completion(Main):
         calls = client.calls_to("local_ltuse_set_course_completion")
         self.assertEqual(calls, [{"courseidnumber": COURSE}])
         writes = client.writes()
-        self.assertEqual(writes[-1], "local_ltuse_set_course_completion")
+        self.assertEqual(writes[-2:], ["local_ltuse_set_course_completion",
+                                       "local_ltuse_set_course_recognition"])
         self.assertLess(writes.index("local_ltuse_hide_modules"),
                         writes.index("local_ltuse_set_course_completion"))
 
     def test_course_completion_is_last_with_nothing_to_hide(self):
+        # Last but for the badge, which must see the final criteria (spec 013).
         client = FakeClient(self.server_as_published())
         self.publish(client)
-        self.assertEqual(client.writes()[-1], "local_ltuse_set_course_completion")
+        self.assertEqual(client.writes()[-2:], ["local_ltuse_set_course_completion",
+                                                "local_ltuse_set_course_recognition"])
 
     def test_output_counts_added_and_removed_criteria(self):
         client = FakeClient(self.server_as_published())
@@ -543,6 +554,66 @@ class Completion(Main):
         client.completion[mid("01-one.md")] = ""
         out = self.publish(client)
         self.assertIn("not applied to 1 module(s)", out)
+
+
+class Recognition(Main):
+    """Spec 013: the badge after completion, the certificate on delivery only."""
+
+    def test_pilot_sends_no_certificate_and_says_so(self):
+        client = FakeClient(self.server_as_published())
+        out = self.publish(client)
+        self.assertEqual(client.calls_to("local_ltuse_set_course_recognition"),
+                         [{"courseidnumber": COURSE, "delivery": False}])
+        self.assertIn("recognition  badge unchanged, inactive (pilot: no badge is issued "
+                      "until stage 8)", out)
+
+    def test_delivery_sends_the_certificate_idnumber(self):
+        self.write_manifest(delivery=True)
+        client = FakeClient(self.server_as_published())
+        client.recognition.update(badge="updated", status="active", certificate="unchanged")
+        out = self.publish(client)
+        self.assertEqual(client.calls_to("local_ltuse_set_course_recognition"),
+                         [{"courseidnumber": COURSE, "delivery": True,
+                           "certificateidnumber": COURSE + ":certificate"}])
+        self.assertIn("recognition  badge updated, active; certificate unchanged", out)
+        self.assertNotIn("pilot", out)
+
+    def test_the_certificate_is_never_hidden(self):
+        # On the server, not a module of the payload: still part of this run (R14).
+        self.write_manifest(delivery=True)
+        mods = self.server_as_published()
+        mods.append({"idnumber": COURSE + ":certificate", "cmid": 140, "modname": "customcert",
+                     "files": []})
+        client = FakeClient(mods)
+        self.publish(client)
+        self.assertEqual(client.hide_calls(), [])
+
+    def test_a_warning_is_a_problem_and_exits_1(self):
+        client = FakeClient(self.server_as_published())
+        client.recognition["warnings"] = [{"code": "active-not-delivery",
+                                           "message": "left active"}]
+        rc, out = self.run_main(client)
+        self.assertEqual(rc, 1)
+        tail = out.split("NEEDS A DECISION")[-1]
+        self.assertIn("recognition active-not-delivery: left active", tail)
+
+    def test_a_refusal_stops_the_publish(self):
+        client = FakeClient(self.server_as_published())
+
+        def refuse(function, **params):
+            if function == "local_ltuse_set_course_recognition":
+                raise pm.MoodleError(function, {"message": "recognition-not-applied"})
+            return FakeClient.call(client, function, **params)
+        client.call = refuse
+        rc, out = self.run_main(client)
+        self.assertEqual(rc, 1)
+        self.assertIn("recognition-not-applied", out)
+
+    def test_dry_run_names_the_call_and_sends_nothing(self):
+        client = FakeClient(self.server_as_published(), dry_run=True)
+        out = self.publish(client)
+        self.assertIn("local_ltuse_set_course_recognition", [f for f, _ in client.calls])
+        self.assertIn("recognition  dry-run: badge (pilot", out)
 
 
 class Competencies(Main):

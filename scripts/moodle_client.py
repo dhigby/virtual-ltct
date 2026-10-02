@@ -212,11 +212,12 @@ def main():
         print("user      %s (%s)" % (info.get("fullname"), info.get("username")))
         available = {f["name"] for f in info.get("functions", [])}
         # Every function scripts/publish_moodle.py calls. Spec 009 added parameters to two
-        # of them but no new names.
+        # of them but no new names; spec 004 added the last two local_ltuse ones.
         needed = ["local_ltuse_get_course_manifest", "local_ltuse_create_page",
                   "local_ltuse_update_sections",
                   "local_ltuse_import_questions", "local_ltuse_create_quiz",
-                  "local_ltuse_hide_modules", "local_ltuse_ensure_discussion",
+                  "local_ltuse_hide_modules", "local_ltuse_set_course_completion",
+                  "local_ltuse_set_course_competencies", "local_ltuse_ensure_discussion",
                   "core_course_create_courses", "core_course_update_courses",
                   "core_course_get_courses_by_field"]
         print("\nfunctions this token can call:")

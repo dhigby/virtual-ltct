@@ -231,6 +231,10 @@ TOP_FILES = {
     # contracts/declaration.md).
     "organisations.yaml": ({"rows", "purpose", "categories", "organisations"}, set()),
     "profile-fields.yaml": ({"rows", "purpose", "category", "fields"}, set()),
+    # Spec 004: report templates and the two course fields. Both optional, as above
+    # (specs/004-progress-reporting/contracts/declaration.md).
+    "reports.yaml": ({"rows", "purpose", "reports"}, set()),
+    "course-fields.yaml": ({"rows", "category", "fields"}, {"purpose"}),
     # Spec 012: optional; validated by load_discussions(), not by the loop in validate().
     DISCUSSIONS_FILE: ({"rows", "shared"}, set()),
 }
@@ -447,7 +451,8 @@ def validate(site_dir=SITE_DIR, modules_dir=None):
     site_dir = pathlib.Path(site_dir)
     decl = {"moodle": None, "plugins": [], "ignore": [], "roles": [], "settings": [],
             "categories": [], "cohorts": [], "profile_fields": [], "cohort_rules": [],
-            "discussions": {"shared": []}}
+            "course_field_category": None, "course_fields": [], "competencies": [],
+            "reports": [], "discussions": {"shared": []}}
     if not site_dir.is_dir():
         problems.add(_rel(site_dir), "declaration directory not found")
         return decl, problems
@@ -456,8 +461,8 @@ def validate(site_dir=SITE_DIR, modules_dir=None):
         if path.is_file() and path.suffix in (".yaml", ".yml") and path.name not in TOP_FILES:
             problems.add(_rel(path), "unexpected file; the declaration is site.yaml, "
                          "ignore.yaml, roles.yaml, organisations.yaml, "
-                         "profile-fields.yaml, %s and settings/*.yaml"
-                         % DISCUSSIONS_FILE)
+                         "profile-fields.yaml, course-fields.yaml, reports.yaml, %s "
+                         "and settings/*.yaml" % DISCUSSIONS_FILE)
 
     loaded = {}
     for name, (required, optional) in TOP_FILES.items():
@@ -747,6 +752,18 @@ def validate(site_dir=SITE_DIR, modules_dir=None):
     problems.items.extend(discussion_problems.items)
     decl["discussions"] = {"shared": [e["slug"] for e in shared]}
     _expand(decl, orgs, fields)
+
+    # Spec 004: the competency list, the course fields, then the reports, which read both.
+    decl["competencies"] = _competency_list(problems)
+    if "course-fields.yaml" in loaded:
+        path, data = loaded["course-fields.yaml"]
+        cfields = _validate_course_fields(_rel(path), data, rows, problems)
+        decl["course_field_category"] = cfields["category"]
+        decl["course_fields"] = cfields["fields"]
+    if "reports.yaml" in loaded:
+        path, data = loaded["reports.yaml"]
+        decl["reports"] = _validate_reports(
+            _rel(path), data, rows, orgs, role_names, decl, problems)
     return decl, problems
 
 
@@ -775,6 +792,49 @@ def _check_name(where, label, value, limit, problems):
         problems.add(where, "%s holds an email address; nothing here names a person "
                      "(constitution III)" % label)
     return True
+
+
+# Spec 004 FR-010: a report never shows a learner at a CBC level, and names a course's
+# target only as an aim, in CBC vocabulary. The retired vocabulary is CLAUDE.md's.
+AIM_CERTIF = re.compile(r"certif", re.I)
+AIM_RETIRED = re.compile(r"\b(?:advanced\s+beginner|practitioner|trainer|proficient)\b", re.I)
+AIM_NEAR = 3                               # "within three words of level"
+# Keys are word stems: a plural "learners" or "levels" matches as "learner" or "level".
+AIM_NEAR_LEVEL = {"learner": "places a learner at a level",
+                  "reached": "says a level was reached", "achieved": "says a level was reached",
+                  "attained": "says a level was reached"}
+AIM_STRICT = re.compile(r"reached|achieved|attained|\bcompetent\b", re.I)
+
+
+def _aim_stem(word):
+    """A word lowercased, with a plural s dropped: "Learners" -> "learner"."""
+    word = word.lower()
+    return word[:-1] if word.endswith("s") and word[:-1] in ("learner", "level") else word
+
+
+def _check_aim_label(where, label, problems, strict=False):
+    """A report label (FR-010). strict=True is for competency-coverage."""
+    if not isinstance(label, str):
+        return
+    if AIM_CERTIF.search(label):
+        problems.add(where, "%r mentions certification; a report shows no CBC result "
+                     "(FR-010)" % label)
+    m = AIM_RETIRED.search(label)
+    if m:
+        problems.add(where, "%r uses the retired level name %r; CBC vocabulary only (FR-010)"
+                     % (label, m.group(0)))
+    words = [_aim_stem(w) for w in re.findall(r"[A-Za-z]+", label)]
+    levels = [i for i, w in enumerate(words) if w == "level"]
+    for i, w in enumerate(words):
+        if w in AIM_NEAR_LEVEL and any(abs(i - j) <= AIM_NEAR for j in levels):
+            problems.add(where, "%r %s; label a target level as what the course aims at "
+                         "(FR-010)" % (label, AIM_NEAR_LEVEL[w]))
+            break
+    if strict:
+        m = AIM_STRICT.search(label)
+        if m:
+            problems.add(where, "%r says %r; competency coverage counts completions, not "
+                         "competence (FR-010)" % (label, m.group(0)))
 
 
 def _validate_organisations(where, data, rows, problems):
@@ -1095,6 +1155,604 @@ def _expand(decl, orgs, fields):
             decl["profile_fields"].append(dict(field, category=fields["category"]))
 
 
+# --- spec 004: the competency list, course fields and reports ---------------------------
+
+COMPETENCY_NAME_MAX = 255                  # local_ltuse_competency.name and .category
+COMPETENCY_BAD = re.compile(r"[\x00-\x1f\x7f\[\]]")   # [Name] [Name] is the field's format
+
+COURSE_FIELD_NAME_MAX = 1333               # customfield_field.name, customfield_category.name
+COURSE_FIELD_SHORTNAME_MAX = 100           # customfield_field.shortname
+COURSE_FIELD_TYPES = ("text",)
+REQUIRED_COURSE_FIELDS = ("ltct_competencies", "ltct_target_level")   # the publisher writes them
+# core_course\customfield\course_handler VISIBLETOALL / VISIBLETOTEACHERS / NOTVISIBLE.
+COURSE_VISIBILITY = {"everyone": 2, "teachers": 1, "nobody": 0}
+COURSE_VISIBLE_TO_ALL = 2
+
+# reportbuilder_report.area is PARAM_AREA: core_component::is_valid_plugin_name()'s pattern
+# (lib/classes/component.php), in a char(100) column.
+REPORT_AREA = re.compile(r"^[a-z](?:[a-z0-9_](?!__))*[a-z0-9]+$")
+REPORT_AREA_MAX = 100
+REPORT_TEXT_MAX = 255                      # report name, column heading, schedule name/subject
+REPORT_IDENTIFIER = re.compile(r"^[a-z][a-z0-9_]*:[a-z][a-z0-9_]*$")   # entity:name
+DATASOURCE = re.compile(r"^[a-z][a-z0-9_]*(?:\\[a-z][a-z0-9_]*)+$")
+# reportbuilder/classes/local/aggregation/*.php on MOODLE_502_STABLE.
+AGGREGATIONS = frozenset(
+    "avg count countdistinct date groupconcat groupconcatdistinct max min percent sum".split())
+# Which aggregations a column type allows: each class's compatible() in
+# reportbuilder/classes/local/aggregation/ on MOODLE_502_STABLE (count and countdistinct
+# take every type; groupconcatdistinct only on Postgres and MySQL, and we run Postgres).
+AGGREGATIONS_BY_TYPE = {
+    "text": frozenset("count countdistinct groupconcat groupconcatdistinct".split()),
+    "timestamp": frozenset("count countdistinct date max min".split()),
+    "float": frozenset("avg count countdistinct groupconcat groupconcatdistinct max min sum"
+                       .split()),
+}
+# The type of each column a declaration may aggregate, from its entity's set_type() on
+# MOODLE_502_STABLE (contracts/declaration.md "Aggregation"). None means the column calls
+# set_disabled_aggregation_all(). validate refuses an aggregation on a column not listed
+# here; add the column (with its source line) before aggregating it. apply's own check
+# against aggregation::get_column_aggregations() stays the authority.
+COLUMN_TYPES = {
+    "user:fullnamewithlink": "text",           # reportbuilder/classes/local/entities/user.php
+    "user:username": "text",                   # user.php get_user_field_type() default
+    "group:name": "text",                      # group/classes/reportbuilder/local/entities/group.php
+    "course:coursefullnamewithlink": "text",   # reportbuilder/classes/local/entities/course.php
+    "enrolment:timecreated": "timestamp",      # course/classes/reportbuilder/local/entities/enrolment.php
+    "completion:timestarted": "timestamp",     # course/classes/reportbuilder/local/entities/completion.php
+    "completion:progresspercent": "text",
+    "completion:grade": "float",
+    "completion:timecompleted": "timestamp",
+    "access:timeaccess": "timestamp",          # course/classes/reportbuilder/local/entities/access.php
+}
+# A menu profile field and our text course fields are text columns (user_profile_fields.php,
+# custom_fields.php); our competency and coverage entities disable every aggregation.
+COLUMN_TYPE_PATTERNS = (
+    (re.compile(r"^user:profilefield_" + re.escape(ORG_FIELD) + r"$"), "text"),
+    (re.compile(r"^course:customfield_ltct_[a-z0-9_]+$"), "text"),
+    (re.compile(r"^(?:competency|coverage):[a-z0-9_]+$"), None),
+)
+ORG_PLACEHOLDER = "{org}"
+PER_VALUES = ("organisation",)
+# The three select conditions every per-organisation report carries, verbatim (FR-005).
+# A select stores the option key, so apply turns role:name's shortname into the role id.
+SCOPE_CONDITIONS = (
+    ("user:profilefield_" + ORG_FIELD, {"operator": "equal", "value": ORG_PLACEHOLDER}),
+    ("role:name", {"operator": "equal", "value": "student"}),
+    ("enrol:plugin", {"operator": "equal", "value": "cohort"}),
+)
+SELECT_CONDITIONS = frozenset(name for name, _ in SCOPE_CONDITIONS)
+# Operator words the applier maps to filter constants; only select::EQUAL_TO (1) so far.
+CONDITION_OPERATORS = ("equal",)
+MANAGERS_AUDIENCE = {"type": "cohortmember", "cohort": "ltct:org:%s:managers" % ORG_PLACEHOLDER}
+AUDIENCE_KEYS = {"cohortmember": "cohort", "systemrole": "role"}
+SORT_DIRECTIONS = ("asc", "desc")
+CUSTOMFIELD_COLUMN = re.compile(r"^course:customfield_(\w+)$")
+
+# competency-coverage (contracts/declaration.md "Validation rules for competency-coverage").
+COVERAGE_KEY = "competency-coverage"
+COVERAGE_SOURCE = "local_ltuse\\reportbuilder\\datasource\\competency_coverage"
+COVERAGE_ENTITIES = ("competency", "coverage")
+COVERAGE_AUDIENCES = [{"type": "systemrole", "role": "manager"}]
+
+# The message schedule type (core_reportbuilder\local\models\schedule and
+# reportbuilder\schedule\message on MOODLE_502_STABLE).
+SCHEDULE_KEYS = {"recurrence", "format", "viewas", "send_when_empty", "start", "subject",
+                 "message"}
+RECURRENCE = {"none": 0, "daily": 1, "weekdays": 2, "weekly": 3, "monthly": 4, "annually": 5,
+              "hourly": 6}
+VIEWAS = {"recipient": -1}                 # REPORT_VIEWAS_RECIPIENT; never creator (R12)
+SEND_WHEN_EMPTY = {0: 2}                   # 0 = don't send: REPORT_EMPTY_DONT_SEND is 2
+SCHEDULE_START = re.compile(r"^(?:monday|tuesday|wednesday|thursday|friday|saturday|sunday) "
+                            r"(?:[01][0-9]|2[0-3]):[0-5][0-9]$")
+FORMAT_HTML = 1
+
+
+def _competency_list(problems):
+    """The payload's competencies: competencies.yaml without Meta, in file order."""
+    where = _rel(COMPETENCIES)
+    try:
+        with open(COMPETENCIES, encoding="utf-8") as fh:
+            data = yaml.safe_load(fh)
+    except (OSError, yaml.YAMLError) as exc:
+        problems.add(where, "cannot read the competency list: %s" % exc)
+        return []
+    if not isinstance(data, dict):
+        problems.add(where, "must map each category to its competencies")
+        return []
+    out, seen = [], set()
+    for category, names in data.items():
+        if not isinstance(names, list):
+            problems.add(where, "%s must be a list of competency names" % (category,))
+            continue
+        for name in names:
+            if not _text(name):
+                problems.add(where, "%s: a competency name must be text, not %r"
+                             % (category, name))
+                continue
+            if name in seen:
+                problems.add(where, "%r is listed twice; a competency has one row" % name)
+                continue
+            seen.add(name)
+            if category == META_CATEGORY:
+                continue   # Uncategorized is not a competency a course aims at
+            ok = True
+            for label, value in (("competency", name), ("category", str(category))):
+                if len(value) > COMPETENCY_NAME_MAX:
+                    problems.add(where, "%s %r is %d characters; the column holds %d"
+                                 % (label, value, len(value), COMPETENCY_NAME_MAX))
+                    ok = False
+                if COMPETENCY_BAD.search(value):
+                    problems.add(where, "%s %r holds a control character, [ or ]; the course "
+                                 "field writes names as [Name] [Name]" % (label, value))
+                    ok = False
+            before = len(problems.items)
+            _check_aim_label(where, name, problems)
+            if ok and len(problems.items) == before:
+                out.append({"name": name, "category": str(category),
+                            "sortorder": len(out) + 1})
+    return out
+
+
+def _validate_course_fields(where, data, rows, problems):
+    """Check course-fields.yaml. Returns {category, fields}: the valid entries."""
+    _check_hosts(where, data, problems)
+    _check_rows(where, data, rows, problems)
+    out = {"category": None, "fields": []}
+    category = data.get("category")
+    if _check_name(where, "category", category, COURSE_FIELD_NAME_MAX, problems):
+        _check_aim_label(where + " category", category, problems)
+        out["category"] = category
+    fields = data.get("fields")
+    if not isinstance(fields, list):
+        problems.add(where, "fields must be a list")
+        fields = []
+    seen = set()
+    for i, field in enumerate(fields):
+        fwhere = "%s fields[%d]" % (where, i)
+        if not _check_keys(fwhere, field, {"shortname", "name", "type", "locked", "visibility",
+                                           "why"}, set(), problems):
+            continue
+        short = field.get("shortname")
+        if not (isinstance(short, str) and FIELD_SHORTNAME.match(short)) or \
+                len(short) > COURSE_FIELD_SHORTNAME_MAX:
+            problems.add(fwhere, "shortname %r must match %s, in at most %d characters"
+                         % (short, FIELD_SHORTNAME.pattern, COURSE_FIELD_SHORTNAME_MAX))
+            continue
+        fwhere = "%s %s" % (where, short)
+        if short in seen:
+            problems.add(fwhere, "declared twice")
+            continue
+        seen.add(short)
+        ok = _check_name(fwhere, "name", field.get("name"), COURSE_FIELD_NAME_MAX, problems)
+        before = len(problems.items)
+        _check_aim_label(fwhere + " name", field.get("name"), problems)
+        ok &= len(problems.items) == before
+        if field.get("type") not in COURSE_FIELD_TYPES:
+            problems.add(fwhere, "type must be %s" % " or ".join(COURSE_FIELD_TYPES))
+            ok = False
+        locked = field.get("locked")
+        if isinstance(locked, Flag):
+            problems.add(fwhere, "locked: YAML boolean %r; write 1 or 0" % locked.text)
+            ok = False
+        elif not (_is_int(locked) and locked in (0, 1)):
+            problems.add(fwhere, "locked must be 1 or 0")
+            ok = False
+        visibility = field.get("visibility")
+        if not isinstance(visibility, str) or visibility not in COURSE_VISIBILITY:
+            problems.add(fwhere, "visibility must be one of %s" % ", ".join(COURSE_VISIBILITY))
+            ok = False
+        if not _text(field.get("why")):
+            problems.add(fwhere, "why must say which row or spec needs it")
+        if ok:
+            out["fields"].append({"shortname": short, "name": field["name"], "type": "text",
+                                  "locked": locked,
+                                  "visibility": COURSE_VISIBILITY[visibility]})
+    for short in REQUIRED_COURSE_FIELDS:
+        if short not in seen:
+            problems.add(where, "%s must be declared: the publisher writes it (R11)" % short)
+    return out
+
+
+def _report_area(key, org_key=None):
+    """The encoded report area: PARAM_AREA has no hyphen or colon."""
+    area = key if org_key is None else "org_%s_%s" % (org_key, key)
+    return area.replace("-", "_")
+
+
+def _substitute(node, value):
+    """node with every {org} replaced by value (strings, lists and dicts)."""
+    if isinstance(node, str):
+        return node.replace(ORG_PLACEHOLDER, value)
+    if isinstance(node, list):
+        return [_substitute(v, value) for v in node]
+    if isinstance(node, dict):
+        return {k: _substitute(v, value) for k, v in node.items()}
+    return node
+
+
+def _validate_reports(where, data, rows, orgs, role_names, decl, problems):
+    """Check reports.yaml and expand it. Returns the payload's reports array."""
+    _check_hosts(where, data, problems)
+    _check_rows(where, data, rows, problems)
+    if not _text(data.get("purpose")):
+        problems.add(where, "purpose must say what this file is for")
+    templates = data.get("reports")
+    if not isinstance(templates, list):
+        problems.add(where, "reports must be a list")
+        templates = []
+    fields = {f["shortname"]: f for f in decl["course_fields"]}
+    cohorts = {c["idnumber"] for c in decl["cohorts"]}
+    organisations = orgs["organisations"] if orgs is not None else []
+    out, keys, areas = [], set(), {}
+    for i, template in enumerate(templates):
+        rwhere = "%s reports[%d]" % (where, i)
+        if not _check_keys(rwhere, template, {"key", "name", "source", "uniquerows", "columns",
+                                              "conditions", "filters", "audiences", "why"},
+                           {"per", "sorting", "schedule"}, problems):
+            continue
+        key = template.get("key")
+        if not (isinstance(key, str) and KEY.match(key)):
+            problems.add(rwhere, "key %r must match %s" % (key, KEY.pattern))
+            continue
+        rwhere = "%s report %s" % (where, key)
+        if key in keys:
+            problems.add(rwhere, "declared twice")
+            continue
+        keys.add(key)
+        before = len(problems.items)
+        report = _check_report(rwhere, key, template, role_names, fields, cohorts, problems)
+        if report is None or len(problems.items) != before:
+            continue
+        per = template.get("per")
+        if per is None:
+            expansions = [(None, None)]
+        elif not organisations:
+            problems.add(rwhere, "per: organisation, but organisations.yaml is missing or "
+                         "declares no organisations")
+            continue
+        else:
+            expansions = [(o["key"], o["name"]) for o in organisations]
+        for org_key, org_name in expansions:
+            area = _report_area(key, org_key)
+            awhere = "%s report %s" % (where, area)
+            if not REPORT_AREA.match(area):
+                problems.add(awhere, "area %r is not a valid PARAM_AREA (%s): no doubled, "
+                             "leading or trailing hyphen" % (area, REPORT_AREA.pattern))
+                continue
+            if len(area) > REPORT_AREA_MAX:
+                problems.add(awhere, "area is %d characters; reportbuilder_report.area holds "
+                             "%d" % (len(area), REPORT_AREA_MAX))
+                continue
+            if area in areas:
+                problems.add(awhere, "area %r is already taken by %s; areas must be unique "
+                             "once encoded" % (area, areas[area]))
+                continue
+            areas[area] = "report %s" % key + (" for %s" % org_key if org_key else "")
+            if org_key is None:
+                expanded = dict(report)
+            else:
+                expanded = {k: v for k, v in report.items() if k != "schedule"}
+                # Names and message text take the organisation's name; condition values and
+                # the audience cohort take its key.
+                expanded["name"] = report["name"].replace(ORG_PLACEHOLDER, org_name)
+                expanded["conditions"] = _substitute(report["conditions"], org_key)
+                expanded["audiences"] = _substitute(report["audiences"], org_key)
+                expanded["schedule"] = _substitute(report["schedule"], org_name)
+            strict = key == COVERAGE_KEY
+            labels = [("name", expanded["name"])] + [
+                ("heading of %s" % c["column"], c["heading"]) for c in expanded["columns"]
+                if c["heading"] is not None]
+            if expanded["schedule"] is not None:
+                configdata = expanded["schedule"]["configdata"]
+                labels.append(("schedule subject", configdata["subject"]))
+                # The weekly email's body goes to every organisation manager (FR-010). It
+                # is HTML, so tags are dropped before the words are read.
+                labels.append(("schedule message",
+                               re.sub(r"<[^>]*>", " ", configdata["message"]["text"])))
+            before = len(problems.items)
+            for label, value in labels:
+                if org_key is not None and label in ("name", "schedule subject"):
+                    _check_name(awhere, label, value, REPORT_TEXT_MAX, problems)
+                _check_aim_label("%s %s" % (awhere, label), value, problems, strict=strict)
+            if len(problems.items) == before:
+                out.append(dict(expanded, area=area))
+    return [{k: r[k] for k in ("area", "name", "source", "uniquerows", "columns",
+                               "conditions", "filters", "sorting", "audiences", "schedule")}
+            for r in out]
+
+
+def _check_report(where, key, template, role_names, fields, cohorts, problems):
+    """One template, before expansion. Returns its payload entry with {org} unexpanded."""
+    per = template.get("per")
+    if "per" in template and per not in PER_VALUES:
+        problems.add(where, "per must be %s, or absent" % " or ".join(PER_VALUES))
+        return None
+    coverage = key == COVERAGE_KEY
+    if coverage and per is not None:
+        problems.add(where, "%s is one report for the site; it takes no per" % COVERAGE_KEY)
+    if not _text(template.get("why")):
+        problems.add(where, "why must say which row or spec needs it")
+    if per is None:
+        for path, value in _walk_strings(template, ()):
+            if ORG_PLACEHOLDER in value:
+                problems.add(where, "%s uses %s, but the report has no per: organisation"
+                             % (".".join(path), ORG_PLACEHOLDER))
+    name = template.get("name")
+    _check_name(where, "name", name, REPORT_TEXT_MAX, problems)
+    source = template.get("source")
+    if not (isinstance(source, str) and DATASOURCE.match(source)):
+        problems.add(where, "source %r is not a report builder datasource class" % (source,))
+    elif coverage and source != COVERAGE_SOURCE:
+        problems.add(where, "%s's source is %s" % (COVERAGE_KEY, COVERAGE_SOURCE))
+    uniquerows = template.get("uniquerows")
+    if not (_is_int(uniquerows) and uniquerows in (0, 1)):
+        problems.add(where, "uniquerows must be 1 or 0")
+
+    columns = _check_columns(where, template.get("columns"), coverage, fields, problems)
+    conditions = _check_conditions(where, template.get("conditions"), per, role_names, problems)
+    if coverage and template.get("conditions"):
+        problems.add(where, "%s takes no condition: a condition only drops rows, and its "
+                     "zero rows are the point (FR-013)" % COVERAGE_KEY)
+    filters = _check_identifiers(where, "filters", template.get("filters"), problems)
+    sorting = _check_sorting(where, template.get("sorting", []),
+                             [c["column"] for c in columns], problems)
+    audiences = _check_audiences(where, template.get("audiences"), per, role_names, cohorts,
+                                 problems)
+    if coverage and audiences != COVERAGE_AUDIENCES:
+        problems.add(where, "%s's only audience is systemrole manager" % COVERAGE_KEY)
+    schedule = None
+    if "schedule" in template:
+        schedule = _check_schedule(where, template["schedule"], problems)
+        if not template.get("audiences"):
+            problems.add(where, "a schedule is sent to the report's audiences, and it has none")
+    return {"name": name, "source": source, "uniquerows": uniquerows, "columns": columns,
+            "conditions": conditions, "filters": filters, "sorting": sorting,
+            "audiences": audiences, "schedule": schedule}
+
+
+def _check_identifiers(where, label, items, problems):
+    if not isinstance(items, list):
+        problems.add(where, "%s must be a list of entity:name identifiers" % label)
+        return []
+    out = []
+    for item in items:
+        if not (isinstance(item, str) and REPORT_IDENTIFIER.match(item)):
+            problems.add(where, "%s: %r is not an entity:name identifier" % (label, item))
+        elif item in out:
+            problems.add(where, "%s: %s is listed twice" % (label, item))
+        else:
+            out.append(item)
+    return out
+
+
+def _check_columns(where, columns, coverage, fields, problems):
+    if not isinstance(columns, list) or not columns:
+        problems.add(where, "columns must be a non-empty list")
+        return []
+    out, seen = [], set()
+    for i, col in enumerate(columns):
+        cwhere = "%s columns[%d]" % (where, i)
+        if not _check_keys(cwhere, col, {"column"}, {"heading", "aggregation"}, problems):
+            continue
+        ident = col.get("column")
+        if not (isinstance(ident, str) and REPORT_IDENTIFIER.match(ident)):
+            problems.add(cwhere, "column %r is not an entity:name identifier" % (ident,))
+            continue
+        if ident in seen:
+            problems.add(cwhere, "%s is listed twice" % ident)
+            continue
+        seen.add(ident)
+        heading = col.get("heading")
+        if "heading" in col:
+            _check_name(cwhere, "heading", heading, REPORT_TEXT_MAX, problems)
+        aggregation = col.get("aggregation")
+        if "aggregation" in col and aggregation not in AGGREGATIONS:
+            problems.add(cwhere, "aggregation %r is not one of %s"
+                         % (aggregation, ", ".join(sorted(AGGREGATIONS))))
+        elif "aggregation" in col:
+            _check_column_aggregation(cwhere, ident, aggregation, problems)
+        entity = ident.split(":")[0]
+        if coverage and entity not in COVERAGE_ENTITIES:
+            problems.add(cwhere, "%s's columns come only from the %s entities, not %s"
+                         % (COVERAGE_KEY, " and ".join(COVERAGE_ENTITIES), ident))
+        if coverage and ident == "competency:name" and isinstance(heading, str) and \
+                "aim at" not in heading.lower():
+            problems.add(cwhere, "the competency heading must say what courses aim at")
+        m = CUSTOMFIELD_COLUMN.match(ident)
+        if m and m.group(1).startswith("ltct_"):
+            field = fields.get(m.group(1))
+            if field is None:
+                problems.add(cwhere, "%s reads course field %s, which course-fields.yaml does "
+                             "not declare" % (ident, m.group(1)))
+            elif field["visibility"] != COURSE_VISIBLE_TO_ALL:
+                problems.add(cwhere, "%s exists in report builder only if the field is "
+                             "visible to everyone" % ident)
+            if isinstance(heading, str) and "aims at" not in heading.lower():
+                problems.add(cwhere, "a course-level heading names the target as what the "
+                             "course aims at (FR-010)")
+        out.append({"column": ident, "heading": heading, "aggregation": aggregation})
+    return out
+
+
+def _column_type(ident):
+    """(known, type) for a column: type is a key of AGGREGATIONS_BY_TYPE, or None when the
+    column allows no aggregation."""
+    if ident in COLUMN_TYPES:
+        return True, COLUMN_TYPES[ident]
+    for pattern, ctype in COLUMN_TYPE_PATTERNS:
+        if pattern.match(ident):
+            return True, ctype
+    return False, None
+
+
+def _check_column_aggregation(where, ident, aggregation, problems):
+    """contracts/declaration.md: every column's aggregation is one that column allows."""
+    known, ctype = _column_type(ident)
+    if not known:
+        problems.add(where, "%s's type is not recorded, so validate cannot tell whether it "
+                     "allows %s; add it to COLUMN_TYPES from its entity's source"
+                     % (ident, aggregation))
+    elif ctype is None:
+        problems.add(where, "%s allows no aggregation (it disables them all)" % ident)
+    elif aggregation not in AGGREGATIONS_BY_TYPE[ctype]:
+        problems.add(where, "%s is a %s column, which allows %s, not %s"
+                     % (ident, ctype, ", ".join(sorted(AGGREGATIONS_BY_TYPE[ctype])),
+                        aggregation))
+
+
+def _check_conditions(where, conditions, per, role_names, problems):
+    if not isinstance(conditions, list):
+        problems.add(where, "conditions must be a list")
+        return []
+    out, seen = [], set()
+    for i, cond in enumerate(conditions):
+        cwhere = "%s conditions[%d]" % (where, i)
+        if not _check_keys(cwhere, cond, {"condition", "values"}, set(), problems):
+            continue
+        ident = cond.get("condition")
+        if not (isinstance(ident, str) and REPORT_IDENTIFIER.match(ident)):
+            problems.add(cwhere, "condition %r is not an entity:name identifier" % (ident,))
+            continue
+        if ident in seen:
+            problems.add(cwhere, "%s is listed twice" % ident)
+            continue
+        seen.add(ident)
+        values = cond.get("values")
+        if not _check_keys(cwhere + " values", values, {"operator", "value"}, set(), problems):
+            continue
+        operator, value = values.get("operator"), values.get("value")
+        if operator not in CONDITION_OPERATORS:
+            problems.add(cwhere, "operator %r is not one of %s"
+                         % (operator, ", ".join(CONDITION_OPERATORS)))
+        if not (isinstance(value, str) or _is_int(value)):
+            problems.add(cwhere, "value must be a string or an integer")
+            continue
+        # A select condition whose value is not among its options is silently skipped
+        # (MDL-84213), which widens the report, so the value is checked here too.
+        if ident == "role:name" and value not in role_names:
+            problems.add(cwhere, "role %r is neither core nor in roles.yaml" % (value,))
+        elif ident == "enrol:plugin" and value not in STANDARD["enrol"]:
+            problems.add(cwhere, "enrol plugin %r is not a core enrolment method" % (value,))
+        elif ident == SCOPE_CONDITIONS[0][0] and per is None:
+            problems.add(cwhere, "%s is the organisation scope; it belongs on a per: "
+                         "organisation report, as %s" % (ident, ORG_PLACEHOLDER))
+        out.append({"condition": ident, "values": {"operator": operator, "value": value}})
+    if per is not None:
+        declared = {c["condition"]: c["values"] for c in out}
+        for ident, values in SCOPE_CONDITIONS:
+            if declared.get(ident) != values:
+                problems.add(where, "a per: organisation report is scoped by %s = %s, "
+                             "verbatim; without it a manager sees other organisations' "
+                             "learners (FR-005)" % (ident, values["value"]))
+    return out
+
+
+def _check_sorting(where, sorting, columns, problems):
+    if not isinstance(sorting, list):
+        problems.add(where, "sorting must be a list of {column, direction}")
+        return []
+    out, seen = [], set()
+    for i, entry in enumerate(sorting):
+        swhere = "%s sorting[%d]" % (where, i)
+        if not _check_keys(swhere, entry, {"column", "direction"}, set(), problems):
+            continue
+        ident, direction = entry.get("column"), entry.get("direction")
+        if ident not in columns:
+            problems.add(swhere, "%r is not one of the report's columns" % (ident,))
+            continue
+        if ident in seen:
+            problems.add(swhere, "%s is sorted twice" % ident)
+            continue
+        seen.add(ident)
+        if direction not in SORT_DIRECTIONS:
+            problems.add(swhere, "direction must be asc or desc")
+            continue
+        out.append({"column": ident, "direction": direction})
+    return out
+
+
+def _check_audiences(where, audiences, per, role_names, cohorts, problems):
+    if not isinstance(audiences, list):
+        problems.add(where, "audiences must be a list")
+        return []
+    out = []
+    for i, audience in enumerate(audiences):
+        awhere = "%s audiences[%d]" % (where, i)
+        kind = audience.get("type") if isinstance(audience, dict) else None
+        if kind == "allusers":
+            problems.add(awhere, "no report has an allusers audience: it would show every "
+                         "learner to every account (FR-005)")
+            continue
+        if kind not in AUDIENCE_KEYS:
+            problems.add(awhere, "type must be one of %s" % ", ".join(AUDIENCE_KEYS))
+            continue
+        field = AUDIENCE_KEYS[kind]
+        if not _check_keys(awhere, audience, {"type", field}, set(), problems):
+            continue
+        value = audience.get(field)
+        if not _text(value):
+            problems.add(awhere, "%s must be text" % field)
+            continue
+        if kind == "systemrole" and value not in role_names:
+            problems.add(awhere, "role %r is neither core nor in roles.yaml" % value)
+        elif kind == "cohortmember" and per is None and value not in cohorts:
+            problems.add(awhere, "cohort %r is not a cohort organisations.yaml declares"
+                         % value)
+        entry = {"type": kind, field: value}
+        if entry in out:
+            problems.add(awhere, "listed twice")
+            continue
+        out.append(entry)
+    if per is not None and out != [MANAGERS_AUDIENCE]:
+        problems.add(where, "a per: organisation report has exactly one audience, cohortmember "
+                     "%s (FR-005)" % MANAGERS_AUDIENCE["cohort"])
+    return out
+
+
+def _check_schedule(where, schedule, problems):
+    swhere = where + " schedule"
+    if not _check_keys(swhere, schedule, SCHEDULE_KEYS, set(), problems):
+        return None
+    ok = True
+    recurrence = schedule.get("recurrence")
+    if not isinstance(recurrence, str) or recurrence not in RECURRENCE:
+        problems.add(swhere, "recurrence must be one of %s" % ", ".join(RECURRENCE))
+        ok = False
+    fmt = schedule.get("format")
+    if not isinstance(fmt, str) or fmt not in STANDARD["dataformat"]:
+        problems.add(swhere, "format must be a core dataformat: %s"
+                     % ", ".join(sorted(STANDARD["dataformat"])))
+        ok = False
+    viewas = schedule.get("viewas")
+    if not isinstance(viewas, str) or viewas not in VIEWAS:
+        problems.add(swhere, "viewas must be recipient, so no one receives more than they "
+                     "could open (R12)")
+        ok = False
+    empty = schedule.get("send_when_empty")
+    if not (_is_int(empty) and empty in SEND_WHEN_EMPTY):
+        problems.add(swhere, "send_when_empty must be 0: nothing is sent when there are no "
+                     "rows")
+        ok = False
+    start = schedule.get("start")
+    if not (isinstance(start, str) and SCHEDULE_START.match(start)):
+        problems.add(swhere, "start must be a weekday and a 24-hour time in site time, e.g. "
+                     "\"monday 07:00\"")
+        ok = False
+    subject = schedule.get("subject")
+    ok &= _check_name(swhere, "subject", subject, REPORT_TEXT_MAX, problems)
+    message = schedule.get("message")
+    if not _text(message):
+        problems.add(swhere, "message must be text")
+        ok = False
+    if not ok:
+        return None
+    return {"name": subject, "recurrence": RECURRENCE[recurrence], "format": fmt,
+            "userviewas": VIEWAS[viewas], "start": start,
+            "configdata": {"subject": subject,
+                           "message": {"text": message, "format": FORMAT_HTML},
+                           "reportempty": SEND_WHEN_EMPTY[empty]}}
+
+
 def _course_slugs(modules_dir):
     """Every course's branch_slug(), keyed to its folder name. _template is not a course."""
     slugs = {}
@@ -1247,6 +1905,12 @@ def build_payload(decl, mode, environ, redact=False):
         "cohort_rules": decl["cohort_rules"],
         # Spec 012: slugs only. The `why` stays in the repo; the server needs only the list.
         "discussions": {"shared": list(decl.get("discussions", {}).get("shared", []))},
+        # Spec 004, in application order; reports last (data-model "Rendered payload
+        # additions"). Every {org} is already expanded.
+        "course_field_category": decl["course_field_category"],
+        "course_fields": decl["course_fields"],
+        "competencies": decl["competencies"],
+        "reports": decl["reports"],
     }
     for s in decl["settings"]:
         out = {"name": s["name"], "plugin": s["plugin"], "setting": s["setting"],
@@ -1317,10 +1981,11 @@ def _summary(decl):
     files = len({s["file"] for s in decl["settings"]})
     return ("%d settings in %d files, %d plugins, %d roles, %d ignore entries, "
             "%d categories, %d cohorts, %d profile fields, %d cohort rules, "
-            "%d shared course discussions"
+            "%d course fields, %d competencies, %d reports, %d shared course discussions"
             % (len(decl["settings"]), files, len(decl["plugins"]), len(decl["roles"]),
                len(decl["ignore"]), len(decl["categories"]), len(decl["cohorts"]),
                len(decl["profile_fields"]), len(decl["cohort_rules"]),
+               len(decl["course_fields"]), len(decl["competencies"]), len(decl["reports"]),
                len(decl["discussions"]["shared"])))
 
 

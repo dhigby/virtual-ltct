@@ -12,7 +12,7 @@ Checking the payload rather than Moodle afterwards is the point: once a page is 
 server that learners can reach, a leak has already happened. There is no equivalent of
 "rebuild the site" for disclosure.
 
-Five checks, all fail-closed:
+Five disclosure checks, all fail-closed:
 
   1. Excluded sources  -- no page derives from the design doc, a mentor guide or a video
                           script, and no asset derives from one either.
@@ -37,6 +37,17 @@ Five checks, all fail-closed:
                           heavier than its source; and a file delivered unreduced must be
                           byte-identical to what is committed.
 
+And two structural checks, on every view, because a publish without them is wrong in
+Moodle even when it leaks nothing (spec 004):
+
+  6. Completion        -- every module carries a completion rule (view, submit or pass)
+                          and the course's is "all". A missing one would leave a module
+                          out of the course's completion, so it is refused, never given a
+                          default.
+  7. Competencies      -- every manifest competency is a name in competencies.yaml,
+                          verbatim. A near-miss would put the course against no competency
+                          in Moodle's per-competency table.
+
 Usage:
   python scripts/check_moodle_payload.py --payload <dir> --slug <slug>
   python scripts/check_moodle_payload.py --payload <dir> --all
@@ -50,6 +61,8 @@ import json
 import pathlib
 import re
 import sys
+
+import yaml
 
 sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent))
 import disclosure  # noqa: E402
@@ -66,6 +79,10 @@ if hasattr(sys.stdout, "reconfigure"):
 # check_learner_view.py uses, for the same reason.
 MIN_SIGNIFICANT = 25
 WITHHELD_MARK = "quiz withheld"
+
+COMPETENCIES = REPO / "competencies.yaml"
+MODULE_COMPLETION = ("view", "submit", "pass")     # moodle_payload.completion_for()
+COURSE_COMPLETION = "all"
 
 
 def normalise(text):
@@ -91,6 +108,10 @@ def check(payload_dir):
                           .read_text(encoding="utf-8", errors="replace"))
     problems, warnings = [], []
     slug = manifest["slug"]
+
+    # --- 6 and 7. structural, on every view ----------------------------------------------
+    problems += check_completion(slug, manifest)
+    problems += check_competencies(slug, manifest)
 
     if manifest["view"] != "learner":
         warnings.append("%s: payload is the '%s' view -- this check only certifies the "
@@ -174,6 +195,39 @@ def check(payload_dir):
         warnings.append("%s: not publishable -- %s" % (slug, manifest["blocked_reason"]))
 
     return problems, warnings
+
+
+def check_completion(slug, manifest):
+    """Check 6. Every module, and every quiz definition, names one of the three rules."""
+    problems = []
+    if manifest.get("completion") != COURSE_COMPLETION:
+        problems.append("%s: course completion is %r; it must be %r"
+                        % (slug, manifest.get("completion"), COURSE_COMPLETION))
+    items = [m for s in manifest.get("sections", []) for m in s.get("modules", [])]
+    items += manifest.get("quizzes", [])
+    for item in items:
+        value = item.get("completion")
+        if value not in MODULE_COMPLETION:
+            problems.append("%s: %s has completion %r; it must be one of %s"
+                            % (slug, item.get("idnumber", "?"), value,
+                               ", ".join(MODULE_COMPLETION)))
+    return problems
+
+
+def framework_names():
+    """Every competency name in competencies.yaml, across all its categories."""
+    cats = yaml.safe_load(COMPETENCIES.read_text(encoding="utf-8")) or {}
+    return {n for names in cats.values() for n in (names or [])}
+
+
+def check_competencies(slug, manifest):
+    """Check 7. Every manifest competency is in the framework, exactly."""
+    names = manifest.get("competencies") or []
+    if not isinstance(names, list):
+        return ["%s: competencies must be a list of names, not %r" % (slug, names)]
+    known = framework_names()
+    return ["%s: competency %r is not in competencies.yaml -- copy the name verbatim"
+            % (slug, n) for n in names if n not in known]
 
 
 # Delivered as the committed bytes, so they must BE the committed bytes.
@@ -261,7 +315,8 @@ def main():
               % (len(targets), len(problems)))
         return 1
     print("\n%d course payload(s) clean: no excluded sources, no answer-key text in any "
-          "page, every question keyed." % len(targets))
+          "page, every question keyed, every module's completion set, every competency "
+          "in the framework." % len(targets))
     return 0
 
 

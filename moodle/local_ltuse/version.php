@@ -9,9 +9,11 @@
 defined('MOODLE_INTERNAL') || die();
 
 $plugin->component = 'local_ltuse';
-$plugin->version   = 2026100203;   // ensure_discussion (spec 012), after hide_modules retired a
-                                   // module into a hidden Retired section. moodle/site/site.yaml
-                                   // pins local_ltuse to this stamp; validate fails if they differ.
+$plugin->version   = 2026100204;   // Progress reporting (spec 004) merged after ensure_discussion
+                                   // (spec 012, 2026100203); db/upgrade.php saves its savepoint at
+                                   // this stamp, so a site already at 2026100203 still gets the
+                                   // spec 004 tables. moodle/site/site.yaml pins local_ltuse to
+                                   // this stamp, and validate fails if they differ.
 
 // PIN THIS DELIBERATELY. Moodle 5.0 moved the question bank out of course context and
 // into its own activity module (mod_qbank), which changes how import_questions has to

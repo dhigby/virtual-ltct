@@ -12,11 +12,22 @@ The declaration is YAML under `moodle/site/`, read only by `scripts/site_config.
 | `moodle/site/settings/*.yaml` | Settings, one file per topic, each citing the `moodle/REQUIREMENTS.md` rows it serves. |
 | `moodle/site/README.md` | How to add a setting and what each kind means. Not read by the tool. |
 | `moodle/site/organisations.yaml`, `moodle/site/profile-fields.yaml` | Added by spec 002. Partner organisations, shared categories and profile fields. See below. |
+| `moodle/site/reports.yaml`, `moodle/site/course-fields.yaml`, `moodle/site/settings/completion.yaml` | Added by spec 004. Custom report templates with their audiences and schedules, the course custom fields, and the completion switches. See below. |
 
 **Spec 002 extends this contract.** [Its declaration contract](../../002-org-structure-cohorts/contracts/declaration.md) adds three things:
 - `organisations.yaml` and `profile-fields.yaml`;
 - four item types the applier handles after settings: course categories, cohorts, profile fields and `tool_dynamic_cohorts` cohort rules;
 - the `local_ltuse_control_view_profile()` profile hook.
+
+**Spec 004 extends it again.** [Its declaration contract](../../004-progress-reporting/contracts/declaration.md) adds:
+- `reports.yaml` (top-level keys `rows`, `purpose`, `reports`) and `course-fields.yaml` (`rows`, `category`, `fields`, optional `purpose`). A report template with `per: organisation` is expanded by `validate` into one report per organisation in `organisations.yaml`, with area `org_<key>_<template key>`, so PHP never sees an organisation;
+- `settings/completion.yaml`, an ordinary settings file under the rules below (`enablecompletion`, `moodlecourse/enablecompletion`, `moodlecourse/showcompletionconditions`);
+- four payload arrays the applier handles after spec 002's, in this order: `course_field_category` and `course_fields` (one class, `coursefields`: the category, then the fields), `competencies`, then `reports` last, because a report's columns and audiences need the fields and cohorts made before it;
+- the competency list, which has no file under `moodle/site/`: `validate` renders it from the repo-root `competencies.yaml`, leaving out the `Meta` category, into the plugin's own `local_ltuse_competency` table;
+- report identity by (`component = local_ltuse`, `area`), never by id or name. More than one match is `ambiguous`, and that report is left alone;
+- a second blocking scope. A report-scoped problem, such as an audience cohort that does not exist yet, leaves only that report unwritten; the rest of the run still applies. An `entity:name` the datasource does not offer still blocks the whole run, as an unknown setting does, except where this run can still create it (a course or profile custom field applied first, or a column of the `local_ltuse` datasource, whose plugin upgrade comes first); those block only their report.
+
+Apply still never deletes: a competency no longer declared is kept and marked retired, and an undeclared report or course field is reported `extra` and kept. A creation is reported as spec 002 reports one: status `changed`, kind `missing`, message `created`. Spec 004 also changes `roles.yaml` (`report/progress:view` and `report/completion:view` on `orgmanager`, `moodle/course:changelockedcustomfields` on `ltcpublisher`) and re-pins `local_ltuse` in `site.yaml`.
 
 Everything in this contract still holds for them.
 

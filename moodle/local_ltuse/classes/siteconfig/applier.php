@@ -32,9 +32,21 @@ defined('MOODLE_INTERNAL') || die();
  *
  * Then each ltct: course's discussion forum (spec 012).
  *
+ * Then spec 004's, last, in the order its contract fixes (specs/004-progress-reporting/contracts/
+ * declaration.md "Output additions"):
+ *
+ *   course_field_category, course_fields  coursefields::apply(): the category, then the fields
+ *   competencies                          competencies::apply(): retires, never deletes
+ *   reports                               reports::apply(), last, because a report's columns and
+ *                                         audiences need the fields and cohorts made above
+ *
+ * The preflight stops on a run-wide block only (report::has_blocking()). A report-scoped
+ * block, such as an audience cohort that does not exist, leaves just that report unwritten:
+ * reports::apply() checks each report again and skips the blocked one.
+ *
  * It never installs, upgrades or downgrades plugin code, never resets or deletes a role,
- * never deletes a category, cohort, field or rule (FR-004), and never creates a course's
- * discussion forum or writes a post.
+ * never deletes a category, cohort, field, rule, competency or report (FR-004), and never
+ * creates a course's discussion forum or writes a post.
  */
 class applier {
 
@@ -62,7 +74,7 @@ class applier {
      */
     public function run(): void {
         $preflight = $this->inspector->inspect();
-        if (inspector::has_blocking($preflight)) {
+        if (report::has_blocking($preflight)) {
             foreach ($preflight as $item) {
                 $this->report->add_result($item);
             }
@@ -83,6 +95,7 @@ class applier {
         foreach ($this->inspector->discussion_targets() as $target) {
             $this->apply_discussion($target);
         }
+        $this->apply_reporting();
     }
 
     /**
@@ -110,6 +123,22 @@ class applier {
         foreach ($this->declaration['cohort_rules'] ?? [] as $rule) {
             cohortrules::apply((array)$rule, $this->report);
         }
+    }
+
+    /**
+     * Apply spec 004's arrays, after spec 002's: the course field category and course fields,
+     * the competency list, then reports. Each is skipped when the payload does not declare it,
+     * by the same gates the preflight used (inspector::declares_*()), so apply never writes
+     * what the preflight did not check.
+     */
+    protected function apply_reporting(): void {
+        if ($this->inspector->declares_course_fields()) {
+            $this->inspector->coursefields()->apply($this->report);
+        }
+        if ($this->inspector->declares_competencies()) {
+            $this->inspector->competencies()->apply($this->report);
+        }
+        $this->inspector->reports()->apply($this->report);
     }
 
     /**

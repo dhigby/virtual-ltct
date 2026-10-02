@@ -39,7 +39,9 @@ itself is automated: the markdown here is the source, and Moodle is a render of 
    The publish is idempotent — every page and quiz is addressed by an identifier derived
    from its source file's number — so re-running it after a correction updates the course
    rather than creating a second one. Fixing a typo is: edit the markdown, merge,
-   re-publish. Once learners are enrolled, don't republish in the middle of a cohort:
+   re-publish. A lesson you rename, renumber or remove is **hidden** in Moodle on the next
+   publish, never deleted, so a learner's past attempt stays readable; the publish lists
+   each one it hides. Once learners are enrolled, don't republish in the middle of a cohort:
    a republish rebuilds the quiz, and an offline attempt that hasn't synced yet may not
    survive it.
 

@@ -37,6 +37,14 @@ $functions = [
         'ajax'         => false,
         'capabilities' => 'local/ltuse:publish',
     ],
+    'local_ltuse_hide_modules' => [
+        'classname'    => 'local_ltuse\external\hide_modules',
+        'description'  => 'Hide modules a course no longer has, identified by their '
+                        . 'course-module idnumbers. Never deletes.',
+        'type'         => 'write',
+        'ajax'         => false,
+        'capabilities' => 'local/ltuse:publish, moodle/course:activityvisibility',
+    ],
     'local_ltuse_create_quiz' => [
         'classname'    => 'local_ltuse\external\create_quiz',
         'description'  => 'Create or update a mod_quiz and populate its slots from a '
@@ -47,7 +55,7 @@ $functions = [
     ],
 ];
 
-// One service, so a single token grants exactly these four functions and nothing else.
+// One service, so a single token grants exactly these functions and nothing else.
 // restrictedusers = 1 means an administrator must link the publishing account to it from
 // Site administration > Server > Web services > External services > Authorised users:
 // this token can rewrite course content, so it should belong to one known account, not
@@ -60,6 +68,7 @@ $services = [
             'local_ltuse_create_page',
             'local_ltuse_import_questions',
             'local_ltuse_create_quiz',
+            'local_ltuse_hide_modules',
             // Core functions the publisher also needs. Listed here so one token covers
             // the whole publish rather than the operator wiring up several services.
             'core_course_create_courses',

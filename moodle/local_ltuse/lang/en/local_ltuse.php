@@ -18,3 +18,6 @@ $string['error:notoffline'] = 'This quiz could not be made available offline in 
     . 'because these settings prevent it: {$a}. Check the quiz defaults for this site.';
 $string['error:nokeepfile'] = 'Cannot keep "{$a}": this page has no such file. Republish to '
     . 'resend it.';
+$string['error:nomodule'] = 'Cannot hide "{$a}": this course has no module with that idnumber.';
+$string['error:nohideqbank'] = 'Cannot hide "{$a}": it is the course question bank, which the '
+    . 'publisher manages itself.';

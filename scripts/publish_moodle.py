@@ -18,8 +18,9 @@ moodle/local_ltuse/README.md. Running this twice must leave the course exactly a
 it once did, and the end-to-end check for that is simply to run it twice.
 
 WHAT IT DOES NOT DO. It never reads learner data, never syncs Moodle back to the repo,
-and never deletes anything: a module the course no longer has is HIDDEN, not removed, so
-a learner's completed attempt stays readable and a mistaken publish is recoverable.
+and never deletes anything: a module the course no longer has (its file renamed,
+renumbered or removed) is HIDDEN, not removed, so a learner's completed attempt stays
+readable and a mistaken publish is recoverable. Bringing the file back shows it again.
 
 Environment:
     MOODLE_URL, MOODLE_TOKEN    see scripts/moodle_client.py
@@ -261,6 +262,25 @@ def publish(client, payload_dir, category_id):
         print("  links     %s in %d page(s)"
               % ("would be resolved" if client.dry_run else "resolved", rewritten))
 
+    # --- last: hide what the course no longer has ----------------------------------------
+    # A lesson renamed, renumbered or removed in the repo leaves its old module in Moodle
+    # under an idnumber this run did not produce. Hidden, never deleted: a learner's
+    # attempt and grade live on it, and a mistaken publish must stay recoverable. Done
+    # after everything else, so a publish that fails part-way never hides the old version
+    # before its replacement exists. Only this course's modules (the "ltct:<slug>:"
+    # prefix); the question bank and anything made by hand in Moodle are left alone.
+    prefix = manifest["idnumber"] + ":"     # every module is ltct:<slug>:<key>
+    stale = [k for k in server if k.startswith(prefix) and k not in this_run]
+    hidden = 0
+    if stale:
+        result = client.call("local_ltuse_hide_modules",
+                             courseidnumber=manifest["idnumber"], idnumbers=stale)
+        for r in result["modules"]:
+            was = "hidden" if r["outcome"] == "hidden" else "already hidden"
+            print("  hide      %-46s %s (%s)"
+                  % (r["idnumber"], was, server[r["idnumber"]]["modname"]))
+            hidden += r["outcome"] == "hidden"
+
     if client.dry_run:
         print("  pages: dry-run; images: %d would be sent (%d KB)"
               % (sent, round(sent_bytes / 1024)))
@@ -268,6 +288,9 @@ def publish(client, payload_dir, category_id):
         print("  pages: %d created, %d updated, %d unchanged; images: %d sent (%d KB), %d kept"
               % (counts["created"], counts["updated"], counts["unchanged"],
                  sent, round(sent_bytes / 1024), kept))
+        if stale:
+            print("  removed from the repo: %d module(s) hidden, %d already hidden"
+                  % (hidden, len(stale) - hidden))
 
     return manifest, cmids
 

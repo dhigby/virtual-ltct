@@ -23,8 +23,8 @@ There are two kinds of data:
 | `scheduler.groupmode` | `1` | must be 1 |
 | `scheduler.maxbookings` | `1` | 1–5 |
 | `scheduler.schedulermode` | `onetime` | `onetime` or `oneonly` |
-| `scheduler.guardtime_hours` | `12` (plan decision 3) | 0–168; rendered to seconds |
-| `scheduler.allownotifications` | `1` | must be 1 (FR-007) |
+| `scheduler.guardtime_hours` | `12` (plan decision 3, accepted 2026-10-02) | 0–168; rendered to seconds |
+| `scheduler.allownotifications` | `0` | must be 0: `local_ltuse` sends every booking message (R20) |
 | `scheduler.defaultslotduration` | `30` | minutes, 5–240 |
 | `scheduler.usebookingform`, `grade` | `0`, `0` | must be 0 (V: no grading, CBC fidelity) |
 | `groups.name_template` | `Office hours {n}` | must contain `{n}`; must not contain `{name}`, `{firstname}` or `{lastname}` (spec 016) |
@@ -129,6 +129,27 @@ Within a request, one task is queued per key, and a cancellation outranks a chan
 - M and L are both members of it.
 
 `officehours_plan::diff(assignments, memberships, enrolments)` is pure and returns the creates, adds, removes, suspends and reactivates the task applies. Its output is counts only when logged.
+
+### Booking record (`local_ltuse_booking`, new plugin table)
+
+This is the "before" state that core's calendar events do not carry (R20).
+
+| Column | Type | Note |
+|---|---|---|
+| `id` | int | |
+| `eventid` | int | The learner's `SSstu:` calendar event id; unique |
+| `slotid` | int | Indexed |
+| `learnerid` | int, FK `user.id` | Indexed |
+| `mentorid` | int, FK `user.id` | Indexed; the slot's teacher when the booking was made |
+| `timestart`, `timeduration` | int | The last time notified |
+| `timecreated` | int | |
+
+- **Created** on `calendar_event_created` for an office-hours `SSstu:` event.
+- **Updated** when `timestart` or `timeduration` changes.
+- **Deleted** on `calendar_event_deleted`, on `slot_deleted` for its `slotid`, on `user_deleted` of either user, and by the reconcile task when its event no longer exists.
+- **Personal data**: the privacy provider declares, exports and deletes it.
+
+**States**: *booked* → (*changed*)* → gone. Each transition sends one `bookingnotice` to the learner and one to the mentor (R20).
 
 ### Slot and appointment (`mod_scheduler`)
 

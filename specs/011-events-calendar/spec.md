@@ -22,6 +22,15 @@ These are decisions D1–D7 of [handoff.md](handoff.md). The maintainer (Doug) a
 - **D6** Q: How are office hours booked, and how does a learner see only their own mentor's slots? → A: In the browser only, with `mod_scheduler` v5.2-r1. Each mentor has one group, kept in step with spec 003's mentor assignments.
 - **D7** Q: What is the site's default time zone? → A: UTC.
 
+### Session 2026-10-02 (plan decisions)
+
+These are answers to the decisions in [plan.md](plan.md), given in PR #85.
+
+- Q: Should office hours live in one dedicated course? → A: Yes.
+- Q: What is the cancellation window? → A: 12 hours.
+- Q: Should we accept that a crafted request can book another mentor's slot? → A: Yes, and document it.
+- Q: Which booking events are notified? → A: When a mentee books, both the mentor (as a notice) and the mentee (as a confirmation) are emailed. The same applies to cancellations and to changes, whoever makes them. Calendar events other than bookings are notified only when they change or are cancelled.
+
 ## User Scenarios & Testing *(mandatory)*
 
 ### User Story 1 - A learner sees what is coming up, for them (Priority: P1)
@@ -117,7 +126,7 @@ An event for a live session carries a clear "join" link. A learner who cannot at
 - **FR-004**: Learners MUST be able to subscribe to or export their own events to an external calendar without administrator help.
 - **FR-005**: Organisation managers MUST be able to create, edit, repeat and cancel events for their own people in their organisation's organisation-only courses, and nowhere else, within the single shared role set. Course mentors do the same in the courses they mentor, and the site team posts site events.
 - **FR-006**: Changes and cancellations MUST reach affected learners through their chosen notification route.
-- **FR-007**: Mentors MUST be able to offer bookable office-hour slots; learners they support MUST be able to book and cancel them; bookings MUST appear in both calendars. Booking happens in the browser. The Moodle app shows bookings in its calendar and opens the booking page in the browser (D6).
+- **FR-007**: Mentors MUST be able to offer bookable office-hour slots; learners they support MUST be able to book and cancel them; bookings MUST appear in both calendars. A booking, a cancellation or a change of time MUST be emailed to both the mentee and the mentor, as a confirmation to whoever made it and a notice to the other. Booking happens in the browser. The Moodle app shows bookings in its calendar and opens the booking page in the browser (D6).
 - **FR-008**: Who booked a slot MUST be visible to the mentor and to managers entitled to see that learner, and to no other learner. This holds in open courses too (D4).
 - **FR-009**: A live-session event MUST carry one clear join link usable from web and app, and MAY carry a follow-up link or notes afterwards.
 - **FR-010**: No course's completion, and no published course content, may depend on attending a live session.

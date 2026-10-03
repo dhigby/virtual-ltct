@@ -1,6 +1,6 @@
 # Research: Events, office hours and live sessions
 
-**Plan**: [plan.md](plan.md). The maintainer approved decisions D1–D7 of [handoff.md](handoff.md) on 2026-10-02; they are recorded in the spec's Clarifications. R1–R13 are the findings that went into the handoff. R14–R19 were added for the plan, and each was confirmed in source the same way. Every API below was looked up on 2026-10-02. Context7 was queried first (`/websites/moodledev_io_5_2_apis`, and `/moodle/moodle` for `UPGRADING.md`), then each claim was confirmed in upstream source:
+**Plan**: [plan.md](plan.md). The maintainer approved decisions D1–D7 of [handoff.md](handoff.md) on 2026-10-02; they are recorded in the spec's Clarifications. R1–R13 are the findings that went into the handoff. R14–R20 were added for the plan, and each was confirmed in source the same way. Every API below was looked up on 2026-10-02. Context7 was queried first (`/websites/moodledev_io_5_2_apis`, and `/moodle/moodle` for `UPGRADING.md`), then each claim was confirmed in upstream source:
 - core: `MOODLE_502_STABLE`. In 5.1 and later core lives under `public/`; paths here leave that prefix off.
 - the Moodle app: `moodlehq/moodleapp`, branch `main`.
 - `mod_scheduler`: `learnweb/moodle-mod_scheduler`, release `v5.2-r1` (zip from the plugins directory).
@@ -350,8 +350,8 @@ Paths are on `MOODLE_502_STABLE`, under `public/`.
   |---|---|---|
   | `maxbookings` | 1 | |
   | `schedulermode` | `onetime` | |
-  | `guardtime` | the cancellation window | It blocks both booking and cancelling inside it (`slot.php:189-193`) |
-  | `allownotifications` | 1 | The other side is told of a booking or cancellation (`studentview.controller.php:119, :302`; `teacherview.controller.php:308-322`) |
+  | `guardtime` | 43200 (12 hours, plan decision 3) | It blocks both booking and cancelling inside it (`slot.php:189-193`) |
+  | `allownotifications` | 0 | Off: `local_ltuse` sends every booking message instead (R20). Reminders do not depend on it (`classes/task/send_reminders.php:57-90`) |
   | `usebookingform` | 0 | |
   | `staffrolename` | `''` | |
   | `grade` | 0 | |
@@ -361,9 +361,70 @@ Paths are on `MOODLE_502_STABLE`, under `public/`.
   - A booking writes one user event for each side: `courseid = 0`, `modulename = scheduler`, eventtype `SSstu:`/`SSsup:`. The event's name carries the other side's `fullname()` (`classes/model/slot.php:358-454`).
   - An unbooked slot writes no event.
   - Spec 016 re-saves these when a protection level changes.
-  - Our change observer ignores them (R15), because the scheduler sends its own messages.
+  - R15's change observer ignores them. R20's booking observer handles them instead.
 - **Housekeeping**: `purge_unused_slots` deletes past unbooked slots every 5 minutes, and `send_reminders` runs hourly for slots with a reminder date.
 - **Gap: the group check is display-only.** `scheduler_book_slot()` checks only that the slot belongs to this scheduler and is open (`studentview.controller.php:45-52`), so a crafted request can book another mentor's slot. The mentor then sees an unexpected booking with the learner's name and can remove it, which tells the learner.
-  - **Proposed**: accept it and say so in the README. Closing it needs our code to cancel appointments through the scheduler's internal classes, which is another Principle XI exception.
-  - Decision 4 in the plan.
+  - **Decided** (plan decision 4, accepted 2026-10-02): accept it and say so in the README. Closing it would need our code to cancel appointments through the scheduler's internal classes, which would be another Principle XI exception.
 - **Privacy**: the provider exports and deletes slots and appointments (`classes/privacy/provider.php:48-91, :227-500`), which meets FR-012.
+
+## R20. Booking messages to both sides (FR-007, decided 2026-10-02)
+
+**The decision** (PR #85): a booking, a cancellation or a change of time is emailed to both the mentee and the mentor. Whoever made it gets a confirmation, and the other side gets a notice.
+
+**What the scheduler sends by itself** (v5.2-r1, only while `allownotifications` is on):
+
+| Action | Who is told | Where |
+|---|---|---|
+| A learner books | The mentor (`applied`) | `studentview.controller.php:116-131` |
+| A learner cancels | The mentor (`cancelled`) | `:300-317` |
+| A mentor uses "revoke all" | Each learner (`teachercancelled`) | `teacherview.controller.php:296-325` |
+
+So these are never confirmed to the person who acted, and two mentor actions send nothing:
+- A mentor deleting a booked slot (`scheduler_action_delete_slots()`, `:229-236`).
+- A mentor editing a slot's time, or removing one learner, in the slot form (`slotforms.php:508-588`).
+
+The provider `bookingnotification` declares no defaults (`db/messages.php:27-41`).
+
+**What every booking change does to the calendar** (`classes/model/slot.php:388-500`): `save()` rewrites the per-user events through core's calendar API.
+- An event is updated for each student who stays.
+- An event is created for a new one (`calendar_event::create()`).
+- `calendar_event::delete()` is called for one who left.
+
+Each of these fires core's `calendar_event_created`, `_updated` or `_deleted`. The learner's event, `SSstu:<slotid>`, carries `userid` (the learner), `timestart`, `timeduration` and `instance` (the scheduler id).
+
+The exceptions:
+- **A deleted slot.** `delete()` and `delete_all_appointments()` call `clear_calendar()`, a raw `delete_records('event', …)` that fires nothing (`:330-344, :376-381`). The plugin's own `\mod_scheduler\event\slot_deleted` fires just before (`teacherview.controller.php:234`). It carries `objectid` (the slot), `relateduserid` (the teacher) and a `scheduler_slots` snapshot (`classes/event/slot_base.php`).
+- **Updates that change no time.** Updates fire on every save, including a note edit and 016's re-save of a renamed user. The old time is not in the event (R15).
+
+**Decision**:
+- `allownotifications` is set to `0`, so the scheduler sends no booking messages. `local_ltuse` sends them all, so there is one sender, no duplicates and one wording. The scheduler's reminders are unaffected: `send_reminders` does not check `allownotifications`.
+- **A small `local_ltuse` table**, `local_ltuse_booking`, holds `eventid`, `slotid`, `learnerid`, `mentorid`, `timestart` and `timeduration`. It is the "before" that core does not keep.
+
+How each event is handled. The observer acts only on `modulename = scheduler` events whose `eventtype` starts `SSstu:` and whose `instance` is the `ltct:officehours:scheduler` instance.
+
+| Event | What we do | Messages |
+|---|---|---|
+| `calendar_event_created` | Read `mentorid` from `scheduler_slots.teacherid` by the slot id, then insert a row | **Booked** to the learner and the mentor |
+| `calendar_event_updated` | Compare `timestart` and `timeduration` with the row. If they differ, update the row | **Changed** to both. Otherwise nothing |
+| `calendar_event_deleted` | Delete the row | **Cancelled** to both |
+| `\mod_scheduler\event\slot_deleted` | For each row with that `slotid`, delete it. The observer runs at trigger time, before the slot is removed | **Cancelled** to each learner. One message to the mentor, naming how many bookings were cancelled |
+
+The rules for every message:
+- **Who.** It names the actor: "You booked…" to the actor, "<name> booked…" to the other.
+- **The time.** It is given in each recipient's own zone, with the zone named, because email has no other way to show it (D5).
+- **Timing.** It is sent at once, because one booking is two messages, not a site-wide fan-out.
+- **The provider.** `bookingnotice`, with email, popup and push enabled by default. Each person can turn any of them off.
+- **Names.** These go through `fullname()`, so spec 016's protected display applies.
+
+**Housekeeping**: the hourly `officehours_reconcile` task (R16) also deletes rows whose calendar event no longer exists. That covers a course or module deleted without per-slot events.
+
+**Principle XI**: the observer reads `scheduler_slots.teacherid` by primary key. That is a raw read of a third-party table, used because the plugin has no API that returns a slot's teacher without loading its internal model classes. It is listed in the README, and V13 is re-run on every re-pin. The `SSstu:`/`SSsup:` eventtype convention is plugin internals too, and is covered by the same check.
+
+**Alternatives considered**:
+- **Keep `allownotifications` on and add only the missing messages.** The mentor's "revoke all" sends the learner a message, and our calendar-event path then sends another. The two can't be told apart, so learners would get duplicates.
+- **Use only the scheduler's `booking_added` and `booking_removed`.** They fire only for the learner's own actions, never for the mentor's edits or deletions.
+
+**Verify** (V13):
+- A learner booking, cancelling, and being moved, removed or deleted by the mentor each produce exactly one message to the learner and one to the mentor, with the right wording and zone.
+- A note edit and a 016 re-save produce none.
+- Reminders still arrive.

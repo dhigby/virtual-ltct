@@ -49,7 +49,7 @@ A single repository that is the **source of truth** for two products: the **curr
 | Who | What they need from this repo |
 | --- | --- |
 | **Department staff (language technology use)** | To author, revise and test courses in a range of roles, without learning git. Practising consultants, not developers. |
-| **Seed Company (external partner)** | To review existing courses, possibly to author their own content here, and to enrol and follow their own learners in the training system. An outside organisation working in the same repo and on the same platform. |
+| **Seed Company (external partner)** | To review existing courses, possibly to author their own content here, and to enrol, follow and manage their own learners in the training system. An outside organisation working in the same repo and on the same platform. |
 | **Design approver, internal reviewer, pilot coordinator, publisher** | An unambiguous "it's your turn, here's what to check." |
 | **Maintainer (currently Doug)** | Board admin, merge rights, and tooling that doesn't need babysitting. |
 
@@ -58,10 +58,10 @@ A single repository that is the **source of truth** for two products: the **curr
 | Who | What they need from the training system |
 | --- | --- |
 | **Language technology consultants worldwide** | Courses and pathways that move them up the CBC ladder — whether their work advances Bible translation or linguistics and literacy in minority languages. The reason the whole thing exists. |
-| **Partner organisations' learners** | To be enrolled by their own organisation, grouped with their own colleagues, and to find what to do next without help. |
+| **Partner organisations' learners** | To be enrolled by their own organisation, learn alongside consultants from every organisation, and find what to do next without help. |
 | **Translation teams** | Training on the tools they use every day, at their level, on the devices and connections they actually have. |
 | **Mentors** | Material that supports guiding a learner, and — as Moodle users — a way to see their learners' progress and stay in contact with them over time. |
-| **Organisation and cohort managers** | To create cohorts, enrol learners and see their own people's progress, without seeing anyone else's. |
+| **Organisation and cohort managers** | To enrol their own people, manage them and follow their progress, without seeing or managing anyone else's people. The limit is on what managers can reach; inside a shared course, learners see each other. |
 | **Pilot learners** | To take a course before it is published — on Moodle, without the answer key. |
 | **CBC students** | A public competency site they are pointed to from the CBC modules, showing what each competency means and where to go learn it. |
 | **The Moodle operator** | Upgrades, backups, monitoring and support for a live system. _Nobody holds this role yet — see **Open questions**._ |
@@ -93,7 +93,7 @@ Hard, in roughly descending order of "breaking this breaks the point of the repo
 - **Built for Android, offline and low bandwidth.** These are requirements, not preferences. A course must work in the Moodle app and offline; pages stay light; video is never the only route to the content.
 - **Moodle core first.** Reach for core Moodle before a maintained free plugin, a plugin before our own code, and our own code before a bolt-on system. Every plugin is an upgrade liability and every bolt-on is another thing to operate. Never modify Moodle core, and pin every plugin to the release it was verified against, as `local_ltuse` does.
 - **Every change to Moodle must survive an upgrade.** Upstream security and feature releases have to apply cleanly, so every change we make to Moodle's behaviour is configuration, a maintained plugin, or a plugin of our own built on Moodle's extension points. We never edit vendored code, whether that is core, a bundled theme or a third-party plugin, and we never patch it at deploy time.
-- **Standardisation is the point — resist per-course special cases.** A course that needs its own bespoke structure, or its own exception to the process, erodes the very thing this repo exists to provide. The same goes for partner organisations: one set of roles and one structure, not a custom setup per partner.
+- **Standardisation is the point — resist per-course special cases.** A course that needs its own bespoke structure, or its own exception to the process, erodes the very thing this repo exists to provide. The same goes for partner organisations: one set of roles and one structure, not a custom setup per partner. An organisation-only course is one standard variant any organisation may have, not a special case.
 - **Generated artefacts are never hand-edited** (`COVERAGE.md`, the published site, the published Moodle courses). Hand-editing a generated file makes the generator a liar.
 - **Review must be independent.** A course needs at least two humans; the approver and internal reviewer cannot be the author.
 - **One course at a time.** An ordered queue, not parallel commitments — half-finished courses help nobody. _(assumption: worth revisiting now that up to ten people may be contributing.)_
@@ -107,7 +107,7 @@ Hard, in roughly descending order of "breaking this breaks the point of the repo
 - **Training evidence, not certification.** Moodle may record course completions, badges and competency evidence, and CBC assessors may consult them. But who has reached which CBC level is assessed and decided by the CBC program, not here. The training system never awards or records a CBC level, and no badge or certificate it issues says "certified".
 - **Two products, one boundary.** The training system _is_ an application: it has users, data, and an uptime and backup obligation, and somebody must operate it. The curriculum half is still not one — its scripts serve authors and CI, and that is the whole job. The publisher and [`moodle/local_ltuse/`](moodle/local_ltuse/README.md) are the bridge between them, and the only code that should know both a course's shape and Moodle's.
 - **Not a fork of Moodle, and not an LMS of our own.** We configure and extend Moodle; we do not modify its core or rebuild a feature that core or a maintained plugin already provides. We are not maintaining Moodle: if we ever needed a variant, it would be a distribution someone else maintains (such as IOMAD), never a fork of our own.
-- **We don't run a Moodle instance for each organisation.** Every partner we host shares one site and is separated inside it, by category, cohort and role. A partner running its own Moodle is a different case, covered under **Open questions**.
+- **We don't run a Moodle instance for each organisation.** Every partner we host shares one site. Inside it each organisation is identified by category, cohort and profile field, and its managers are scoped by cohort; the courses themselves are shared. A partner running its own Moodle is a different case, covered under **Open questions**.
 - **No Moodle → repo sync.** Not for content, which would break the source-of-truth split, and not for learner data, which would break the public-repo rule.
 - **Not a place to re-derive stage state by hand.** `scripts/course_stage.py` is the single implementation; a second one is a bug, not a feature.
 
@@ -129,6 +129,10 @@ Note what is deliberately **not** on this list. The published competency site is
   - **People who leave.** A small `local_ltuse` profile hook keeps someone who leaves an organisation out of their old manager's view. In a course both organisations share, the site team also removes the old enrolment by hand.
   - **What stays public.** Category pages and course names, because they hold no personal data.
   - **Country cohorts.** None are created in advance.
+- **2026-10-02 — Courses are open across organisations.** Supersedes the in-course parts of the 2026-10-01 decision: one group per organisation, managers who only follow, and the hand clean-up after a learner moves. The rest of it stands, including the site team creating accounts and the profile hook (now narrowed). Competency courses are shared by every organisation, because most mentors will be SIL and cohorts are small, so a wall inside a course costs more than it protects (Doug; spec 002 Clarifications 2026-10-02, spec 011 handoff B1–B6).
+  - **No walls inside a course.** Shared courses have no organisation groups. Learners see all their classmates, course leaders see their students, and mentors see and work with their mentees across organisations, each as the identity that person's protection level allows (spec 016).
+  - **Organisations are for identity and management, not separation.** A manager is scoped by membership of their organisation's managers cohort. They see and manage their own people (enrol and unenrol, suspend and reactivate, send a password-reset link, assign and end mentors) through our own pages, because core cannot limit any of those to one organisation, and each manager and their people become message contacts. They are no longer enrolled in shared courses.
+  - **The exception.** An organisation may have a course only for its own people. The maintainer declares it in `moodle/site/`, not in the course; the site team enrols the organisation, and its managers may enrol their own people. Its content is still public; only enrolment is restricted.
 
 ## Open questions
 
@@ -136,7 +140,7 @@ Note what is deliberately **not** on this list. The published competency site is
 - **Community inside Moodle, or bolted on?** A standing community course with topic forums costs nothing new to run but feels like a course. A bolt-on (Discourse, Matrix) is a better community but a second system to operate and pay for. Start inside Moodle and move only if engagement shows the need _(assumption)_.
 - **How do translated courses live in the repo?** The Moodle interface is easy to localise; course content is not. Whether a translation is a sibling course folder, a per-lesson variant, or something else touches the course layout, `course_stage.py` and the publisher, and should be designed before any is built.
 - **What is our data-protection position?** A worldwide learner base means a privacy notice, a retention rule, consent at sign-up, and an answer to "delete my data". None exists yet.
-- **Should partner managers enrol their own learners?** Onboarding was decided on 2026-10-01 (see **Decisions**): the site team enrols, and managers follow. Self-service would need our own code, and it is reconsidered once 2–3 real organisation managers have used the follow-only version (spec 002, SC-004).
+- **Who approves and enrols an organisation-only course, beyond the first ones?** Decided for now (2026-10-02): the maintainer approves and the site team enrols. Revisit once several organisations have asked for one. Partner managers enrolling their own learners was answered the same day: they do, for their own people (see **Decisions**).
 - **Where does admin tooling go?** Scripted cohort creation and bulk enrolment would make "a small team can run it" true, but they handle learner data. They belong in the training-system half, run against Moodle, and must never write learner data into git.
 - **Which Moodle app plan, if any?** The free plan's 50-device push limit will be outgrown; whether push notifications are worth a flat-rate plan, or email is enough, is undecided.
 - **Which pathway mechanism?** Core competency learning plans, or the free Programs plugin (`tool_muprog`) — whose listed releases stop at Moodle 5.1, so 5.2 support needs confirming first.

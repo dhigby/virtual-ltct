@@ -102,8 +102,9 @@ routing, not recognizing a specific known error.
 ## Scenario 3: The Inventory Nobody Opened (Objective 6 — formatting checks)
 
 **Situation:** A team's Basic Checks show a short list of formatting errors, all in the
-second half of Mark — marker flags clustered just after one section heading, and a
-reference that looks garbled. When the team opens that passage, the verses after the
+second half of Mark — for each of several consecutive verses just after one section
+heading, a pair of errors: "Verse number in heading" and "Marker cannot occur here: \v" —
+and a reference that looks garbled. When the team opens that passage, the verses after the
 heading are showing in the heading's bold style, with their verse numbers gone from the
 normal flow of the text. The team hasn't mentioned Chapter/Verse Numbers at all —
 they went straight to the marker and reference flags. Separately, the team tells you

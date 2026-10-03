@@ -50,6 +50,8 @@ that should be ordinary body text. That single missing marker can plausibly prod
 whole cluster of downstream-looking symptoms: an oversized or wrong-looking heading,
 verse numbers that appear to have vanished from the normal flow, and references that
 miscount because the checker is reading swallowed verse content as part of the heading.
+In Run Basic Checks it has a recognisable signature: **two errors for every swallowed
+verse** — "Verse number in heading" and "Marker cannot occur here: \v".
 
 ![A section heading with a \p marker correctly in place before verse 21, so verses 19-22 render as normal body text below the heading.](assets/ss-04-p-marker-in-place.png)
 
@@ -122,7 +124,7 @@ symptoms of a single cause higher up. Work in this order instead:
    team's:
    - Prompt the team to go through footnote placement book by book.
    - Point them to where to look — each footnote in the text, and any results from the
-     Footnote quotes category in Run Basic Checks.
+     Footnote quotes category in Run Basic Checks (not common, but possible).
 
    Note that an unclosed `\f` footnote marker (opened without its matching `\f*`) has a much narrower effect than the missing-`\p` example
    above: if it's unclosed at the end of a verse, it has no effect at all; if it's

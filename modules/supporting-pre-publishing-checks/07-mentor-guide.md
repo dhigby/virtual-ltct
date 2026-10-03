@@ -141,18 +141,19 @@ this team's specific Paratext version, or assuming no team could possibly have i
 
 First, Chapter/Verse Numbers. A strong answer confirms that check comes back clean
 *before* anything else, including the marker-pair census — because every other check on
-the list (references, footnotes, the marker flags at the heading) reports its results by
+the list (references, footnotes, the errors at the heading) reports its results by
 quoting a chapter/verse location, and those locations can't be trusted if the numbering
 has errors of its own.
 
 Second, once Chapter/Verse Numbers is confirmed clean, the learner moves to unclosed
-marker pairs and other structural breaks *before* chasing the individual marker flags
+marker pairs and other structural breaks *before* chasing the individual errors
 one by one. A missing `\p` marker after a section heading partway through Mark can
 cascade into exactly this kind of scattered-looking flag list downstream: everything
 between the heading and the next paragraph-style marker (such as `\p`, `\m`, `\q`, etc.)
 gets swallowed into and rendered as part of the heading, including verse numbers and
 verse text — which is what produces verse text in the heading's bold style, verse
-numbers missing from the normal flow, the marker flags clustered at that heading, and a
+numbers missing from the normal flow, the paired "Verse number in heading" and "Marker
+cannot occur here: \v" errors for every swallowed verse, and a
 garbled-looking reference. A strong answer confirms this by looking at the markup right
 after the heading for the missing `\p`, not by reading the heading or the verses —
 whether a heading's wording fits its passage is the team's call (Lesson 4, step 5), and

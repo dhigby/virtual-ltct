@@ -2,7 +2,7 @@
 
 **Estimated time:** 60 minutes
 
-**Purpose:** Six mentor-reviewed scenarios that put the whole course to work — diagnosing
+**Purpose:** Seven mentor-reviewed scenarios that put the whole course to work — diagnosing
 a check-area problem, deciding what to say to the team, and deciding what (if anything)
 to escalate. This is the component that earns this course's `3 - Independent` claim (see
 `00-design.md`, "Outcome-level open question"): a mentor scores your reasoning and
@@ -102,8 +102,10 @@ routing, not recognizing a specific known error.
 ## Scenario 3: The Inventory Nobody Opened (Objective 6 — formatting checks)
 
 **Situation:** A team's Basic Checks show a short list of formatting errors, all in the
-second half of Mark — a heading that doesn't match the text it introduces, and a
-reference that looks garbled. The team hasn't mentioned Chapter/Verse Numbers at all —
+second half of Mark — marker flags clustered just after one section heading, and a
+reference that looks garbled. When the team opens that passage, the verses after the
+heading are showing in the heading's bold style, with their verse numbers gone from the
+normal flow of the text. The team hasn't mentioned Chapter/Verse Numbers at all —
 they went straight to the marker and reference flags. Separately, the team tells you
 the Punctuation Inventory "was already checked back when we started the project." The
 project has since been through two more revision passes and is headed to a typesetter in

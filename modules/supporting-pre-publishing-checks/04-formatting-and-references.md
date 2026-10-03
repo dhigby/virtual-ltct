@@ -100,18 +100,31 @@ symptoms of a single cause higher up. Work in this order instead:
      headings, so comparing against it proves nothing.
    - Whether a heading's wording fits its passage is the team's call — route that
      question to them.
-6. **Book titles.** Inconsistent or incorrect book-name and book-title markup, especially
-   after a book has been renamed or reorganized mid-project.
+6. **Book titles.** This is a consistency check. Each book's name appears in more than
+   one place in the project, and every place should name the book the same way. What
+   you look for is one book named differently in different places — in English, the
+   pattern would be "Mark" in one place and "The Gospel of Mark" in another. You can
+   spot that by comparing the forms side by side, without reading the language. It
+   often happens after a book has been renamed or reorganized mid-project.
+   - Point out each mismatch to the team.
+   - Which form is right is the team's call — many book names are names of people or
+     cities, so route the choice to them rather than picking one.
 7. **References** (`\r` shows parallel passages; `\xt` is the actual cross-reference
    marker) and the **table of contents.** Missed book-name checks, foreign-language `\r`
    abbreviations left unadjusted (a common source:
    bulk-copying `\r` lines from another NT project as a starting point, which carries over
    that project's abbreviations instead of the current project's own), and a table of
    contents that doesn't match the book titles actually in the text.
-8. **Footnotes.** Beyond the marker-pair check in step 2, confirm footnote content and
-   placement are sound — a footnote that survives the marker check can still be attached
-   to the wrong verse or duplicated. Note that an unclosed `\f` footnote marker (opened
-   without its matching `\f*`) has a much narrower effect than the missing-`\p` example
+8. **Footnotes.** Beyond the marker-pair check in step 2, footnote placement still
+   needs a review — a footnote that survives the marker check can still be attached to
+   the wrong verse or duplicated. That isn't always easy for you to spot, and deciding
+   which verse a footnote belongs to depends on reading the text, so this review is the
+   team's:
+   - Prompt the team to go through footnote placement book by book.
+   - Point them to where to look — each footnote in the text, and any results from the
+     Footnote quotes category in Run Basic Checks.
+
+   Note that an unclosed `\f` footnote marker (opened without its matching `\f*`) has a much narrower effect than the missing-`\p` example
    above: if it's unclosed at the end of a verse, it has no effect at all; if it's
    unclosed partway through a verse, the only consequence is that the footnote text
    displays as part of the verse itself — it has no other flow-on effect, and does not

@@ -102,7 +102,7 @@ spotting it yourself."
 
 | On-screen | Voiceover / talking points |
 | --- | --- |
-| Slide: "Five lessons build knowledge. The scenario bank, mentor-reviewed, is what earns Independent." | "Everything in this video and in the five lessons builds your knowledge of these check areas — that's real, and it's worth having. But this course's target is Independent: being able to support a team through this, not just recognize it. That's what the mentor-reviewed scenario bank is for — six applied scenarios, each scored against a mentor's watch-for list, not just a right-answer key." |
+| Slide: "Five lessons build knowledge. The scenario bank, mentor-reviewed, is what earns Independent." | "Everything in this video and in the five lessons builds your knowledge of these check areas — that's real, and it's worth having. But this course's target is Independent: being able to support a team through this, not just recognize it. That's what the mentor-reviewed scenario bank is for — seven applied scenarios, each scored against a mentor's watch-for list, not just a right-answer key." |
 | Slide listing the recurring thread: "Watch for a false-clean result — in every check area." | "And notice the thread that ran through every segment just now: a clean-looking status that nobody actually earned. Watching for that isn't specific to any one check area — it's the habit this whole course is building." |
 
 ## Call to action / close
@@ -156,8 +156,8 @@ escalate, and submit your answers to your mentor for review."
   - PTXprint UI (Segment 5) was verified against PTXprint 3.0.38 in the lesson; confirm
     the presenter's installed version before recording and note on screen if menu labels
     have moved.
-  - This script does not invent any UI screenshot beyond what `list of images+videos.txt`
-    and the lesson files already describe — where a live recording is called for instead
+  - This script does not invent any UI screenshot beyond the screenshots in `assets/`
+    and what the lesson files already describe — where a live recording is called for instead
     of a still, that's a deliberate choice to show motion (e.g. down-arrow stepping,
     click-to-approve), not a gap in the source material.
 - **Live-demo caution:** several of this course's field cases involve settings that are

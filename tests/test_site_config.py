@@ -84,6 +84,9 @@ organisations:
     name: Independent
   - key: fixture-north
     name: Fixture North
+mentors:
+  name: Mentors
+  why: fixture mentor candidates
 """
 with open(REPO / "competencies.yaml", encoding="utf-8") as _fh:
     AREAS = [a for a in yaml.safe_load(_fh) if a != "Meta"]
@@ -715,7 +718,7 @@ class Expansion(Base):
         self.assertEqual(cohorts["ltct:org:fixture-north"]["name"], "Fixture North")
         self.assertEqual(cohorts["ltct:org:fixture-north:managers"]["name"], "Fixture North managers")
         self.assertEqual(len(p["categories"]), 3 + len(keys))
-        self.assertEqual(len(p["cohorts"]), 2 * len(keys))
+        self.assertEqual(len(p["cohorts"]), 2 * len(keys) + 1)   # + ltct:mentors
         self.assertEqual(len(p["cohort_rules"]), len(keys))
 
     def test_org_field_options_in_declaration_order(self):
@@ -732,96 +735,87 @@ class Expansion(Base):
         self.assertRejected()
 
 
-DISCUSSIONS = """\
-# test declaration
-rows: [10]
-shared:
-  - slug: coretech-computer-hardware
-    why: generic hardware Q&A, partners asked to pool answers
+# The orgmanager deny list as of 2026-10-01. The amendment gives managers their actions through
+# local_ltuse's pages, never through the role, so this list must not change (R2, R10).
+ORGMANAGER_DENY_2026_10_01 = frozenset({"moodle/site:accessallgroups", "moodle/user:viewalldetails",
+                                        "moodle/course:managegroups",
+                                        "moodle/course:viewsuspendedusers"})
+
+GROUPS = """\
+rows: [8, 15]
+purpose: fixture group defaults
+settings:
+  - name: moodlecourse/groupmode
+    value: 0
+    why: open courses
 """
+MENTORS = "mentors:\n  name: Mentors\n  why: fixture mentor candidates\n"
 
 
-class Discussions(Base):
-    """moodle/site/course-discussions.yaml (spec 012, FR-015, contracts/site-declaration.md)."""
+class OpenCourses(Base):
+    """Spec 002 amendment 2026-10-02: shared courses are open across organisations (R3, R14)."""
 
-    def setUp(self):
-        super().setUp()
-        self.write("course-discussions.yaml", DISCUSSIONS)
+    def payload(self):
+        rc, out, err = self.run_main("render")
+        self.assertEqual(rc, 0, err)
+        return json.loads(out)
 
-    def test_valid(self):
-        self.assertEqual(self.errors(), [])
-        rc, out, _ = self.run_main("validate")
-        self.assertEqual(rc, 0, out)
+    def test_groupmode_zero_accepted(self):
+        self.write("settings/groups.yaml", GROUPS)
+        self.assertAccepted()
 
-    def test_absent_file_is_valid(self):
-        (self.dir / "course-discussions.yaml").unlink()
-        self.assertEqual(self.errors(), [])
-        shared, problems = sc.load_discussions(self.dir)
-        self.assertEqual(shared, [])
-        self.assertFalse(problems)
+    def test_groupmode_other_than_zero_rejected(self):
+        for value in (1, 2):
+            with self.subTest(groupmode=value):
+                self.reset()
+                self.write("settings/groups.yaml", GROUPS.replace("value: 0", "value: %d" % value))
+                self.assertRejected()
 
-    def test_empty_list_valid(self):
+    def test_course_discussions_file_is_retired(self):
         self.write("course-discussions.yaml", "rows: [10]\nshared: []\n")
-        self.assertEqual(self.errors(), [])
-        self.write("course-discussions.yaml", "rows: [10]\nshared:\n")
-        self.assertEqual(self.errors(), [])
-        self.assertEqual(sc.load_discussions(self.dir)[0], [])
+        self.assertRejected()
+        self.assertFalse(hasattr(sc, "load_discussions"))
 
-    def test_unknown_slug(self):
-        self.edit("course-discussions.yaml", "slug: coretech-computer-hardware", "slug: no-such-course")
-        self.assertInvalid("no-such-course is not a course under modules/")
+    def test_payload_has_no_discussions_block(self):
+        self.assertNotIn("discussions", self.payload())
 
-    def test_slug_uses_branch_slug(self):
-        # A legacy folder with spaces is declared by its branch_slug() form, never its folder name.
-        self.edit("course-discussions.yaml", "slug: coretech-computer-hardware", "slug: paratext-9-advanced-support")
-        self.assertEqual(self.errors(), [])
-        self.edit("course-discussions.yaml", "slug: paratext-9-advanced-support", "slug: Paratext 9 advanced support")
-        self.assertInvalid("write it as paratext-9-advanced-support")
+    def test_mentors_cohort_generated(self):
+        p = self.payload()
+        cohorts = {c["idnumber"]: c for c in p["cohorts"]}
+        self.assertEqual(cohorts["ltct:mentors"]["name"], "Mentors")
+        self.assertEqual(cohorts["ltct:mentors"]["visible"], 0)
+        self.assertEqual([r for r in p["cohort_rules"] if r["cohort_idnumber"] == "ltct:mentors"], [])
 
-    def test_template_is_not_a_course(self):
-        self.edit("course-discussions.yaml", "slug: coretech-computer-hardware", "slug: template")
-        self.assertInvalid("is not a course")
+    def test_mentors_name_follows_declaration(self):
+        self.edit("organisations.yaml", "  name: Mentors", "  name: Fixture mentors")
+        cohorts = {c["idnumber"]: c for c in self.payload()["cohorts"]}
+        self.assertEqual(cohorts["ltct:mentors"]["name"], "Fixture mentors")
 
-    def test_missing_why(self):
-        self.edit("course-discussions.yaml", "    why: generic hardware Q&A, partners asked to pool answers\n", "")
-        self.assertInvalid("missing required key 'why'")
+    def test_mentors_required(self):
+        self.edit("organisations.yaml", MENTORS, "")
+        self.assertRejected()
 
-    def test_blank_why(self):
-        self.edit("course-discussions.yaml", "why: generic hardware Q&A, partners asked to pool answers", "why: ''")
-        self.assertInvalid("why must say")
+    def test_mentors_needs_name_and_why(self):
+        for old, new in (("  name: Mentors\n", ""), ("  why: fixture mentor candidates\n", ""),
+                         ("  name: Mentors", "  name: ''"),
+                         ("  why: fixture mentor candidates", "  why: ''")):
+            with self.subTest(change=old.strip()):
+                self.reset()
+                self.edit("organisations.yaml", old, new)
+                self.assertRejected()
 
-    def test_duplicate_slug(self):
-        self.write("course-discussions.yaml", DISCUSSIONS + "  - slug: coretech-computer-hardware\n    why: again\n")
-        self.assertInvalid("coretech-computer-hardware is declared twice")
+    def test_mentors_unknown_key_rejected(self):
+        self.edit("organisations.yaml", MENTORS, MENTORS + "  idnumber: ltct:fixture\n")
+        self.assertRejected()
 
-    def test_unknown_key(self):
-        self.edit("course-discussions.yaml", "    why:", "    shared: true\n    why:")
-        self.assertInvalid("unknown key 'shared'")
+    def test_orgmanager_deny_list_unchanged(self):
+        self.assertEqual(sc.ORGMANAGER_DENY, ORGMANAGER_DENY_2026_10_01)
 
-    def test_unknown_row(self):
-        self.edit("course-discussions.yaml", "rows: [10]", "rows: [999]")
-        self.assertInvalid("row 999")
-
-    def test_missing_shared(self):
-        self.write("course-discussions.yaml", "rows: [10]\n")
-        self.assertInvalid("missing required key 'shared'")
-
-    def test_load_returns_entries(self):
-        shared, problems = sc.load_discussions(self.dir)
-        self.assertFalse(problems)
-        self.assertEqual([e["slug"] for e in shared], ["coretech-computer-hardware"])
-
-    def test_payload_carries_slugs_not_reasons(self):
-        rc, out, _ = self.run_main("render", "--mode", "drift", environ={"MOODLE_URL": "https://m.example"})
-        self.assertEqual(rc, 0)
-        p = json.loads(out)
-        self.assertEqual(p["discussions"], {"shared": ["coretech-computer-hardware"]})
-        self.assertNotIn("pool answers", out)
-
-    def test_payload_empty_when_absent(self):
-        (self.dir / "course-discussions.yaml").unlink()
-        rc, out, _ = self.run_main("render")
-        self.assertEqual(json.loads(out)["discussions"], {"shared": []})
+    def test_tracked_orgmanager_keeps_viewuseridentity(self):
+        roles = yaml.safe_load(ROLES)["roles"]
+        om = [r for r in roles if r["shortname"] == "orgmanager"]
+        self.assertEqual(len(om), 1)
+        self.assertEqual(om[0]["capabilities"].get("moodle/site:viewuseridentity"), "allow")
 
 
 class Render(Base):

@@ -32,7 +32,6 @@ reports:
     columns:
       - {column: user:fullnamewithlink, heading: Learner}
       - {column: user:profilefield_ltct_org, heading: Organisation}
-      - {column: group:name, heading: Group}
       - {column: course:coursefullnamewithlink, heading: Course}
       - {column: enrolment:timecreated, heading: Enrolled}
       - {column: completion:timestarted, heading: Started}
@@ -106,7 +105,6 @@ reports:
     columns:
       - {column: user:fullnamewithlink, heading: Learner}
       - {column: user:profilefield_ltct_org, heading: Organisation}
-      - {column: group:name, heading: Group}
       - {column: course:coursefullnamewithlink, heading: Course}
       - {column: enrolment:timecreated, heading: Enrolled}
       - {column: completion:timestarted, heading: Started}

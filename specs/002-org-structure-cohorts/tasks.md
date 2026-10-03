@@ -311,3 +311,158 @@ Files: `moodle/site/README.md`, `moodle/local_ltuse/README.md`, `moodle/REQUIREM
 - **US3**: T030 needs T029's structure.
 - **US4**: T031 needs T029's and T030's accounts. Its clean-up is the last instance step.
 - **Polish**: Wave 1 (T032–T037) blocks T038.
+
+---
+
+# Amendment 2026-10-02: open courses
+
+**Input**: [plan.md](plan.md) § "Amendment 2026-10-02: open courses", [spec.md](spec.md) Clarifications 2026-10-02, [research.md](research.md) R2, R3, R7–R14, [data-model.md](data-model.md), [contracts/declaration.md](contracts/declaration.md). Branch `002-open-courses`.
+
+The rules at the top of this file still hold: verification on `ltuse.net` with `ltct-test-*` accounts only, test organisations only in a scratch copy of `moodle/site/`, evidence outside the repo tree, no member list, member count or profile value anywhere in git. Every Moodle API a task names was checked in `MOODLE_502_STABLE` (research R10–R14); a task that needs one research did not name looks it up in Context7 and `MOODLE_502_STABLE` first (constitution XI).
+
+The amendment changes one story, **US2** (now "sees and manages only their own people", including US2-6, organisation-only courses). US1, US3 and US4 are unchanged; T086 re-runs their checks once, because the shape of every course changes.
+
+## Phase 8: Setup (amendment)
+
+Files: `specs/002-org-structure-cohorts/research.md`
+
+**Wave 1, independent checks on the instance and in source** (each records its result in the named research section, as T001 did for R4):
+
+- [ ] **T039** [P] Verify the organisation-enrolment instance (R10). In `MOODLE_502_STABLE` source, confirm `enrol_self` allows several instances per course, that `customint6 = 0` refuses a learner's self-enrolment, that `enrol_plugin::enrol_user()` still enrols through such an instance, and which `customchar*` field is free to hold our marker. Then on the instance, in a throwaway course `ltct-test-course`, add one such instance with `enrol_get_plugin('self')->add_instance()` from a CLI script kept outside the repo, enrol `ltct-test-learner-a1` through it, and confirm the learner sees no self-enrol button and the course participants show the enrolment. Record the field and the result under R10 · specs/002-org-structure-cohorts/research.md
+- [ ] **T040** [P] Verify spec 004's delivery condition can change (R10). In source, confirm the report builder's enrolment-method condition (`enrol:plugin`) supports "is not equal to", and whether it can hold two values. Record which form 004 will use ("not `manual`", or `cohort` + `self`), and confirm it fails closed when no row matches (re-run 004's MDL-84213 SQL proof against it) · specs/002-org-structure-cohorts/research.md
+- [ ] **T041** [P] Verify the reset-link call (R10). Call `core_login_process_password_reset($user->username, '')` from a CLI script outside the repo for `ltct-test-learner-a1`. Confirm it prints nothing, emails only that account's address, returns a status, and on a second call within `$CFG->pwresettime` reuses the reset rather than adding a row. Record the status values the page must map · specs/002-org-structure-cohorts/research.md
+- [ ] **T042** [P] Verify cohort events and the NOGROUPS forum (R12, R14). Confirm on the instance that a `tool_dynamic_cohorts` rule change fires `\core\event\cohort_member_added` and `cohort_member_removed` (watch the standard log), and that a forum switched from SEPARATEGROUPS to NOGROUPS shows a post written with a stale `groupid` to a learner in no group (`public/mod/forum/lib.php:6792-6796`) · specs/002-org-structure-cohorts/research.md
+
+**Checkpoint**: if T039 or T040 fails, stop and raise it with the maintainer: R10's enrolment design depends on both.
+
+## Phase 9: Foundational (amendment): open the courses
+
+Files: `moodle/site/settings/groups.yaml`, `moodle/site/course-discussions.yaml`, `moodle/site/reports.yaml`, `moodle/site/roles.yaml`, `moodle/site/organisations.yaml`, `scripts/site_config.py`, `scripts/moodle_payload.py`, `scripts/publish_moodle.py`, `moodle/local_ltuse/classes/external/ensure_discussion.php`, `moodle/local_ltuse/classes/siteconfig/{inspector,applier,drift}.php`, `moodle/REQUIREMENTS.md`, tests
+
+Everything here ships together: a forum left in separate groups once the groups are gone stops learners posting (R3).
+
+### Tests
+
+- [X] **T043** [P] Change the publisher tests to expect `groupmode: 0`: the update payload, the create payload and the stub `ensure_discussion` return (today `:107`, `:427-435`, `:446-455`). Keep `test_groupmode_is_not_forced`, with its comment rewritten for open courses. Remove every assertion about `discussion.shared` and the "separated by organisation" label · tests/test_publish_moodle.py
+- [X] **T044** [P] Replace the `Discussions` class with failing-first cases for: `moodlecourse/groupmode` must be `0`; `course-discussions.yaml` is no longer read and its presence is an error ("retired, spec 002 R14"); `ltct:mentors` is generated from `organisations.yaml`'s new `mentors: {name, why}` key; `ORGMANAGER_DENY` is unchanged and `orgmanager` keeps `moodle/site:viewuseridentity`. Keys are `fixture-*` · tests/test_site_config.py
+- [X] **T045** [P] Rewrite or delete the cases pinning "absent means separated"; the payload carries no `discussion.shared` · tests/test_moodle_payload_discussion.py
+
+### Implementation
+
+**Wave 1, independent (different files):**
+
+- [X] **T046** [P] Set `moodlecourse/groupmode` to `0` and reword the file's purpose and every `why`: shared courses are open across organisations; a course or activity may use groups for teaching, never to separate organisations (FR-011, R3). Keep `groupmodeforce 0`, `unenrolaction 3`, `forceloginforprofiles 1` (its `why` now: the profile hook scopes managers, R9) and `hiddenuserfields` · moodle/site/settings/groups.yaml
+- [X] **T047** [P] Delete the file (R14) · moodle/site/course-discussions.yaml
+- [X] **T048** [P] Drop the `group:name` column from the `progress` and `pilots` reports (R2). Leave the `ltct_org` scope condition: it is spec 016's to change · moodle/site/reports.yaml
+- [X] **T049** [P] Reword `orgmanager`'s `description` and `why`: used only in organisation-only courses, never in a shared course; capabilities unchanged, `moodle/site:viewuseridentity` included (Doug, 2026-10-02). Reword the teacher role's `accessallgroups: inherit` `why`: it no longer scopes anyone in shared courses · moodle/site/roles.yaml
+- [X] **T050** [P] Add `mentors: {name: "Mentors", why: …}` (R10, spec 003 R7). Reword the purpose and published `why`: shared courses are cross-organisation · moodle/site/organisations.yaml
+- [X] **T051** [P] In `site_config.py`: delete `load_discussions()`, its `TOP_FILES` entry, the `DISCUSSIONS_FILE` constant and its call in `validate()`; add the `ltct:mentors` cohort (system context, hidden, no rule) to the cohorts `_expand` produces from `organisations.yaml`; require `moodlecourse/groupmode` to be `0`; refuse a present `course-discussions.yaml`. Make T044 pass · scripts/site_config.py
+- [X] **T052** [P] Remove `discussion.shared` from the manifest and its print (today `:119-128`, `:437-456`, `:646-651`); keep the intro warning about partner data. Make T045 pass · scripts/moodle_payload.py
+- [X] **T053** [P] Send `groupmode: 0` on create and update (replace `GROUPMODE_SEPARATE = 1` with a `GROUPMODE_NONE = 0` constant and a comment citing R3); never send `groupmodeforce`; keep `showreports: 0`. Rewrite the discussion label and the `courseforced` warning ("a forced group mode would wall the course forum"). Make T043 pass · scripts/publish_moodle.py
+- [X] **T054** [P] `wanted_groupmode()` returns `NOGROUPS` always; remove the `shared` parameter from `execute_parameters()`, `execute()` and the docblock; keep `apply_groupmode()`, the grouping clear and `courseforced` · moodle/local_ltuse/classes/external/ensure_discussion.php
+
+**⟶ Wait for Wave 1, then Wave 2:**
+
+- [X] **T055** [P] Add a course group-mode check for every course with an `ltct:` idnumber, modelled on `check_course_reports()`: subject `course:<idnumber>:groupmode`, status `changed` when it is not `0`, fixed by `apply` through `update_course()` like `apply_course_reports()`. Remove the discussion "all participants" warning and the forum vault count; keep the "course forces a group mode" warning, reworded. Add the count-only blocking `[fail]` for any `enrol_cohort` instance whose cohort idnumber matches `ltct:org:%:managers` in an `ltct:` course outside the `ltct:org:*` categories (R2), naming no person · moodle/local_ltuse/classes/siteconfig/inspector.php, moodle/local_ltuse/classes/siteconfig/applier.php, moodle/local_ltuse/classes/siteconfig/drift.php
+- [X] **T056** [P] Bump `$plugin->version` and `release`; note "open courses (spec 002, 2026-10-02)" · moodle/local_ltuse/version.php
+- [X] **T057** [P] Drop `course-discussions.yaml` from the push and pull-request paths · .github/workflows/publisher-tests.yml, .github/workflows/site-config.yml
+- [X] **T058** [P] Reset rows #7, #8, #10, #11 and #15 to "re-verify (spec 002 amendment, 2026-10-02)" and rewrite their text: #7 drops core per-course reports for managers in shared courses; #8 open courses, no organisation groups; #10 open course forums, `course-discussions.yaml` retired; #11 managers assign and end mentors for their own learners; #15 one manager role set, one page, organisation-only courses as one variant. Rework the SC-002 test line and add an organisation-only closure test · moodle/REQUIREMENTS.md
+
+**⟶ Wait for Wave 2, then:**
+
+- [ ] **T059** Run `python scripts/site_config.py validate` and `pytest tests/`. Deploy `local_ltuse` (LF line endings), run the CLI upgrade, purge caches. Run `drift` against a fresh scratch copy: it should report each `ltct:` course's group mode as `changed`, and nothing else unexpected. Do not `apply` yet; T068 does, after the migration · No files
+
+**Checkpoint**: the repo no longer creates or re-creates organisation walls.
+
+## Phase 10: User Story 2 (amended), a manager sees and manages only their own people (P2)
+
+**Goal**: shared courses are open; each manager sees all of their own organisation's people and manages its learners through one page, and reaches no one else as a manager; an organisation-only course stays with its organisation.
+
+**Independent Test**: R3's checklist (amended), R9's and R10's Verify lists, and R11's and R12's, with two test organisations, a manager each, two learners each, a mentor, a course teacher with an `ltct_org`, one shared test course and one organisation-only test course for A.
+
+### Tests
+
+- [X] **T060** [P] [US2] Extend the harness for the new `decide()` (data model, "Profile access decision", 2026-10-02 inputs in its order). Cases: viewing yourself; managing no organisation; own-organisation member gives `FORCE_ALLOW` whatever their role (learner, mentor, manager); another organisation's person with a participant path gives `DO_NOT_PREVENT`; another organisation's person reached only as a manager gives `PREVENT`; empty `ltct_org` and not staff gives `PREVENT`; `viewalldetails` or mentor gives `DO_NOT_PREVENT`. Replace the "never FORCE_ALLOW" sweep with "FORCE_ALLOW only when the viewed person is an own-organisation member". Write it to fail first · tests/profile_access_harness.php
+- [X] **T061** [P] [US2] Write a harness for `local_ltuse\organisation\access`, like `profile_access_harness.php`, keys `fixture-*`. `is_org_member_of_manager`: true only when V≠P, P's `ltct_org` is one of V's keys and P is in that key's member cohort; false when the field is set but P is not yet in the cohort. `may_manage_account`: additionally false for a site admin, a deleted user, a course contact (`has_coursecontact_role`), anyone with a system- or category-context role assignment, a managers-cohort member and an `ltct:mentors` member. Per-action rules: enrol only into `ltct:published` or `ltct:org:<P's ltct_org>`, never `ltct:pilots`, and never another of V's organisations' categories; unenrol only from the organisation-enrolment instance. Run as `php tests/org_access_harness.php` · tests/org_access_harness.php
+- [ ] **T062** [P] [US2] Add failing-first cases for `org-courses.yaml` (data model and contract): `rows`, `org_only` entries with `slug`, `organisation`, `why` all required; `slug` resolves to a course under `modules/`; `organisation` is a declared key; no duplicate slug; `why` present. And for the payload's `placement: {org_only, category_idnumber}` (`{false, null}` for a shared course), and for `check_moodle_payload.py` refusing a malformed `placement` · tests/test_site_config.py, tests/test_moodle_payload_discussion.py
+- [ ] **T063** [P] [US2] Add publisher tests with the recording stub: an organisation-only course calls `local_ltuse_place_course(courseidnumber, "ltct:org:<key>")` after create and after update; a shared course never calls it; a `moved: true` result is reported · tests/test_publish_moodle.py
+- [ ] **T064** [P] [US2] Add PHPUnit tests with synthetic users for the actions and observer: enrol creates the organisation-enrolment instance once and enrols as Student; unenrol never touches a manual or cohort-sync enrolment; suspend writes only `{id, suspended}` and ends sessions; reactivate; a manager's request for another organisation's learner, a mentor, a manager, a course teacher with the manager's `ltct_org`, and the site admin throws; a learner moving organisation has their organisation-enrolment enrolments in the old organisation's `ltct:org:*` courses suspended and their shared-course ones kept; contacts are added on `cohort_member_added` and removed on `cohort_member_removed` only when this plugin made them; a contact the two made themselves survives · moodle/local_ltuse/tests/organisation_test.php
+
+### Implementation
+
+**Wave 1, independent (different files):**
+
+- [X] **T065** [P] [US2] Write `local_ltuse\organisation\access`: pure static functions `is_org_member_of_manager()` and `may_manage_account()` and the per-action rules, from inputs gathered by the caller (data model, "Organisation access decision"). No Moodle calls. Make T061 pass · moodle/local_ltuse/classes/organisation/access.php
+- [X] **T066** [P] [US2] Rewrite `profile_access::decide()` with the 2026-10-02 inputs and the four outcomes in research R9's order; fix the class docblock. Make T060 pass · moodle/local_ltuse/classes/profile_access.php
+- [ ] **T067** [P] [US2] Write `load_org_courses()` (R11) as a copy of the retired `load_discussions()` checks plus "`organisation` is a declared key"; add it to `TOP_FILES` and `validate()`; expand it to the payload's `org_courses: [{slug, category_idnumber}]` in Python. Write `moodle/site/org-courses.yaml` with `rows: [8, 15]` and `org_only: []`, and a header saying `why` records only the approval, never the organisation's circumstances. Make T062's site_config cases pass · scripts/site_config.py, moodle/site/org-courses.yaml
+
+**⟶ Wait for Wave 1, then Wave 2:**
+
+- [ ] **T068** [US2] Write the migration CLI `cli/open_courses.php` (R13), `--dry-run` by default, `--execute` to write. For every `ltct:` course: set each `enrol_cohort` instance's `customint2` to `0` through `enrol_cohort_plugin::update_instance()` with its own `roleid`; delete each group whose idnumber is `ltct:org:<key>` or whose name is an organisation's display name, with `groups_delete_group()`. Only outside `ltct:org:*` categories: delete each `enrol_cohort` instance for an `ltct:org:%:managers` cohort. Print counts per step, never a name. Then run it on the instance: `--dry-run`, check the counts, `--execute`, run it again and confirm zero; then `apply` the scratch copy (fixes group mode and every forum to NOGROUPS) and `drift` (clean) · moodle/local_ltuse/cli/open_courses.php
+- [X] **T069** [P] [US2] Rewrite `local_ltuse_control_view_profile()` to gather the new inputs: whether the viewed person is a member of the `ltct:org:<key>` cohort for a key the viewer manages (one read of `{cohort_members}` joined to `{cohort}` by idnumber, cached for the request), whether the viewer is their mentor, and the participant path (`enrol_get_shared_courses($viewer, $user, true)` plus `get_user_roles()` per shared course, any role but `orgmanager`). `local_ltuse_managed_organisation_keys()` is unchanged. Update the docblocks at the top of the file (R9) · moodle/local_ltuse/lib.php
+- [ ] **T070** [P] [US2] Write `local_ltuse\organisation\people`: the manager's people (members of each managed key's member cohort, through `is_org_member_of_manager`), each with their courses and course completion through `\completion_info`, and whether `may_manage_account` holds; email shown for everyone, protected people included (Doug, 2026-10-02) · moodle/local_ltuse/classes/organisation/people.php
+- [ ] **T071** [P] [US2] Write `local_ltuse\organisation\actions`, each method re-checking `may_manage_account` and its per-action rule (R10 table):
+  - `enrol()`: find the course's organisation-enrolment instance by T039's marker, else create it with `enrol_get_plugin('self')->add_instance()` with `customint6 = 0`, a random key, no welcome message; `enrol_user($instance, $userid, $studentroleid)`;
+  - `unenrol()`: only from that instance;
+  - `send_reset()`: `core_login_process_password_reset($user->username, '')`, mapping T041's statuses;
+  - `suspend()`: `\core\session\manager::destroy_user_sessions($id)` then `user_update_user((object)['id' => $id, 'suspended' => 1], false)`, refusing a site admin and the acting user, as `admin/user.php:127-138`;
+  - `reactivate()`: `user_update_user((object)['id' => $id, 'suspended' => 0], false)`.
+
+  Make T064's action cases pass · moodle/local_ltuse/classes/organisation/actions.php
+- [ ] **T072** [P] [US2] Write `local_ltuse\organisation\contacts` and extend the observer: `cohort_member_added` / `cohort_member_removed` on `ltct:org:<key>` and `ltct:org:<key>:managers` add or remove manager–member contacts, recorded in `local_ltuse_org_contact` (`managerid`, `memberid`, `contactid`, `timecreated`), checking `\core_message\api::is_contact()` before `add_contact()` and removing only a contact this plugin made and no other relationship needs (R12). On `cohort_member_removed` from a member cohort, also suspend the person's organisation-enrolment enrolments in that organisation's `ltct:org:*` courses (R10). Register both events · moodle/local_ltuse/classes/organisation/contacts.php, moodle/local_ltuse/classes/observer.php, moodle/local_ltuse/db/events.php
+- [ ] **T073** [P] [US2] Add the `local_ltuse_org_contact` table (unique on `managerid, memberid`) and its upgrade step; add it to the privacy provider's metadata, export and delete, like `local_ltuse_mentor_contact` · moodle/local_ltuse/db/install.xml, moodle/local_ltuse/db/upgrade.php, moodle/local_ltuse/classes/privacy/provider.php
+- [ ] **T074** [P] [US2] Write the hourly `reconcile_org_contacts` task: repairs manager–member contacts both ways and the old-organisation enrolment suspensions, reporting counts only · moodle/local_ltuse/classes/task/reconcile_org_contacts.php, moodle/local_ltuse/db/tasks.php
+- [ ] **T075** [P] [US2] Write the `local_ltuse_place_course(courseidnumber, categoryidnumber)` web service (R11): requires `local/ltuse:publish`; accepts only a category idnumber `ltct:org:<key>`, `ltct:pilots` or `ltct:published`; resolves it by `course_categories.idnumber`; calls `move_courses([$id], $catid)` only when the course is elsewhere; returns `{moved: bool}`. Register it in `db/services.php` and the publishing service's function list · moodle/local_ltuse/classes/external/place_course.php, moodle/local_ltuse/db/services.php
+- [ ] **T076** [P] [US2] Add placement drift (R11): a declared organisation-only course outside its category is `changed`, an undeclared `ltct:` course inside an `ltct:org:*` category is `extra`, both non-blocking; `apply` never moves a course · moodle/local_ltuse/classes/siteconfig/inspector.php, moodle/local_ltuse/classes/siteconfig/drift.php
+
+**⟶ Wait for Wave 2, then Wave 3:**
+
+- [ ] **T077** [US2] Write `organisation.php`: `require_login()`; the people list from T070 grouped by organisation; per learner, the actions from T071 behind a confirmation that says what each does (suspension is site-wide; unenrolling a last enrolment removes grades and group places, not completion records); a sesskey on every write; course choices only those T065's enrol rule allows. Link it from the user menu for managers-cohort members only through the `extend_user_menu` hook. Add the strings · moodle/local_ltuse/organisation.php, moodle/local_ltuse/classes/hook_callbacks.php, moodle/local_ltuse/db/hooks.php, moodle/local_ltuse/lang/en/local_ltuse.php
+- [ ] **T078** [US2] Write `mentors.php?userid=` from spec 003 research R7 Phase B: the learner's current mentors with Remove, and an Add picker drawn only from `ltct:mentors`; authorised by `moodle/role:assign` in the learner's context (site team) or `may_manage_account`; writes through `role_assign()` / `role_unassign()` of `mentor`. Link it from each row of `organisation.php` · moodle/local_ltuse/mentors.php
+- [ ] **T079** [P] [US2] Add `placement` to the manifest from `site_config.load_org_courses()`; an invalid file stops the build. Check its shape in `check_moodle_payload.py`. Call `local_ltuse_place_course` after create and update for an organisation-only course, and report a move. Add `local_ltuse_place_course` to the client's required functions. Make T062's payload cases and T063 pass · scripts/moodle_payload.py, scripts/check_moodle_payload.py, scripts/publish_moodle.py, scripts/moodle_client.py
+- [ ] **T080** [P] [US2] Change spec 004's delivery condition to T040's form in the `progress` and `programme` reports and in `SCOPE_CONDITIONS`; make `coverage.php` and its test count the organisation-enrolment instance as delivery, and still never a manual one · moodle/site/reports.yaml, scripts/site_config.py, moodle/local_ltuse/classes/reportbuilder/local/entities/coverage.php, moodle/local_ltuse/tests/competency_coverage_test.php, tests/test_site_config.py
+
+**⟶ Wait for Wave 3, then:**
+
+- [ ] **T081** [US2] Run `validate`, `pytest tests/`, both harnesses and `php tests/report_harness.php < moodle/local_ltuse/classes/siteconfig/report.php`. Deploy `local_ltuse`, upgrade, purge caches, `apply` the scratch copy. Then, with `test-a` and `test-b` in the scratch copy and an organisation-only test course for A declared in a scratch `org-courses.yaml`, run every item of R3's amended Verify list, then R9's, R10's, R11's and R12's. Include the moved learner, the removed manager, the two-organisation manager, the learner whose field is set but who is not yet in the cohort, the mobile web-service calls, and the 004 report items (a manager-enrolled learner appears in their organisation report and not in the pilots report). Save the checklist result outside the repo · No files
+
+**Checkpoint**: US2 (amended) works on its own: open courses, scoped managers, an organisation-only course that stays closed.
+
+## Phase 11: Polish (amendment)
+
+**Wave 1, independent:**
+
+- [ ] **T082** [P] Rewrite the file table (`org-courses.yaml` added, `course-discussions.yaml` gone), the site team's steps as two recipes (shared course: one cohort sync per organisation as Student, no group, no managers cohort; organisation-only course: the organisation's cohort as Student and its managers cohort as `orgmanager`, no group), how to declare an organisation-only course (maintainer only; `why` records only the approval), the managers' page, and enrolling course leaders and filling `ltct:mentors`. Remove the moved-learner unenrol step (R8) · moodle/site/README.md
+- [ ] **T083** [P] List the new core APIs (R10–R13), the `user_password_resets`-free reset call, the unindexed reads (`cohort.idnumber`, `course_categories.idnumber`) as Principle XI exceptions, the 5.3 note on `user_update_user()` (migrated together with spec 016's hook), and the open-courses migration CLI; rewrite the discussion section · moodle/local_ltuse/README.md
+- [ ] **T084** [P] Add the two enrolment recipes after publishing (shared, organisation-only) · process/stages/08-publish.md
+- [ ] **T085** [P] Add one line under "Delivery: Moodle": shared courses have no organisation groups; managers are scoped by the managers cohort through `local_ltuse\organisation\access`; never send `groupmode: 1` · CLAUDE.md
+- [ ] **T086** [P] Run the US1, US3 and US4 checks again (T021, T030, T031's lists) on the open-course shape, to show nothing they relied on changed · No files
+- [X] **T087** [P] Remove the Sync Impact Report comment from the top of the constitution before the governing-text commit · .specify/memory/constitution.md
+
+**⟶ Wait for Wave 1, then:**
+
+- [ ] **T088** Validate against the Success Criteria:
+  - Run `validate`, `pytest tests/`, the three PHP harnesses, and `drift` on the instance; drift reports no differences.
+  - `git log -p main..HEAD -- moodle/ scripts/ tests/ .github/ CLAUDE.md INTENT.md` shows no `test-a`, `test-b`, `ltct-test-` or member data (constitution III).
+  - Confirm T081 covers SC-002 (amended) and T086 covers SC-001, SC-003 and SC-005.
+  - Update REQUIREMENTS rows #7, #8, #10, #11 and #15 from "re-verify" to verified, citing T081; #15 stays "verified when SC-004's real managers have used it".
+  - Record that SC-004 (real managers find, follow and manage their own learners) is still open · moodle/REQUIREMENTS.md
+
+## Dependencies & Execution Order (amendment)
+
+- **Phase 8 → Phase 9 → Phase 10 → Phase 11.** T039 and T040 gate T071, T080 and the whole of Phase 10's enrolment work; T041 gates T071's `send_reset()`; T042 gates T072 and T068's forum step.
+- **Phase 9**: T043–T045 first (failing). Wave 1 (T046–T054) blocks Wave 2 (T055–T058), which blocks T059.
+- **Phase 10**: T060–T064 first (failing). Wave 1 (T065–T067). Wave 2 (T068–T076): T068 needs T059 deployed; T069 needs T066; T070 and T071 need T065; T072 needs T042 and T073 needs nothing else; T079 needs T067 and T075. Wave 3 (T077–T080) needs Wave 2. T081 needs everything before it.
+- **Phase 11**: Wave 1 (T082–T087) blocks T088. T087 can run any time before the governing-text commit.
+- **Spec 016** starts after T068 and T069 are deployed (open courses and profile reach), and before production go-live (R13's gate).
+
+### Parallel examples
+
+- Phase 9 Wave 1: T046, T047, T048, T049, T050 (YAML), T051 (site_config), T052 (payload), T053 (publisher), T054 (PHP) all touch different files.
+- Phase 10 Wave 2: T070, T071, T072, T073, T074, T075 are separate PHP files; T069 is `lib.php` only.
+
+### Implementation strategy
+
+- **MVP (what spec 016 needs first)**: Phase 9 plus T060, T066, T068, T069: courses open, organisation groups gone, managers reach their own people's profiles.
+- **Then**: the shared check, the page and its actions (T061, T065, T070, T071, T077), mentors (T078), contacts (T072–T074), organisation-only courses (T062, T063, T067, T075, T076, T079), the 004 delivery change (T080).
+- **Each increment** is deployed and checked against its slice of T081 before the next.

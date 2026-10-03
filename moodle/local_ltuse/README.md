@@ -545,6 +545,42 @@ This plugin fills those three gaps and nothing else.
 | `course_completions` | `userid`, `timecompleted IS NOT NULL` | `userid` is | Lists a course the learner completed after their enrolment was deleted, which `enrol_get_all_users_courses()` no longer returns (FR-004). |
 | `role_allow_assign` | `(roleid, allowassign)` | unique key | The applier and drift check one declared allow-assign pair. `get_assignable_roles()` answers for a user in a context, not for a pair. |
 
+## Events and office hours (spec 011)
+
+Core's calendar does the rest of spec 011: event levels, export, the app's calendar, and the
+time zone on the profile. This plugin fills four gaps.
+
+| Piece | Where | Does |
+|---|---|---|
+| Change notices | `classes/calendar_notify.php` (pure), `classes/observer.php`, `classes/task/event_change_notice.php`, `db/messages.php` (`eventchange`) | Core sends nothing when an event changes. The observer (`calendar_event_updated` and `_deleted`, `internal => false`) keeps a site, course or group event's change or cancellation. It never keeps a module's, a subscription's or a user's. It buffers by series key (`r<repeatid>` or `e<id>`), and one `\core\shutdown_manager::register_function()` callback queues one adhoc task per key, two minutes ahead, with `reschedule_or_queue_adhoc_task()`. The task tells the event's active audience, except the person who made the change. New events are not announced (plan decision 5). |
+| Booking notices | `classes/booking_notice.php`, `classes/observer.php`, `db/messages.php` (`bookingnotice`), table `local_ltuse_booking` | Every office-hours booking, change of time and cancellation is emailed to the mentee and the mentor. The person who acted gets "You …"; the other side gets a notice. The office-hours scheduler sends none itself (`allownotifications` 0). The observer reads the scheduler's `SSstu:<slotid>` calendar events, which it rewrites on every save, and mod_scheduler's own `slot_deleted`. The table keeps each booking's last notified time, because core's update event carries no old one. So a note edit or spec 016's re-save sends nothing. |
+| Office-hours sync | `classes/officehours.php`, `classes/officehours_plan.php` (pure), `classes/task/officehours_reconcile.php`, `lib.php` `local_ltuse_allow_group_member_remove()` | One group per mentor (`ltct:mentor:<id>`, visibility OWN, a name with no person's name) in `ltct:officehours`, holding the mentor and each mentee. Members are added with component `local_ltuse`, through the course's one manual enrolment instance, and are suspended, never unenrolled. Spec 003's role observers sync a pair as it changes. The hourly task reconciles everything and clears booking records whose event is gone. Logs carry counts only. |
+| Time zone notice | `classes/timezone_notice.php` (pure), `classes/hook_callbacks.php` `top_of_body()`, `db/hooks.php` | On the office-hours scheduler's pages only, a notice through `\core\hook\output\before_standard_top_of_body_html_generation` names the zone their times are in, with a link to change it on the profile. It never redirects. |
+| Site config | `classes/siteconfig/officehours.php`, `classes/siteconfig/dashboard.php` | `apply` creates or updates the office-hours course and its scheduler, the enrolment instance and the group name template, then reconciles. It also adds the declared blocks to the default dashboard. It never deletes anything. |
+| Privacy | `classes/privacy/provider.php` | Declares, exports and deletes `local_ltuse_booking` rows in the learner's and the mentor's user contexts. The appointment is mod_scheduler's, and the events and notifications are core's. |
+
+Discussion checks (spec 012) skip `ltct:officehours`: it is site config's course, not the
+publisher's, and has no forum.
+
+**Principle XI exceptions added by spec 011.** Each is the only route to the behaviour, and
+each is re-checked as stated.
+
+| Exception | Why | Re-checked by |
+|---|---|---|
+| The office-hours privacy rests on mod_scheduler's group filter (`get_slots_available_to_student()`), and the plugin does not check groups when a slot is booked. | The plugin is the booking tool D6 chose. A crafted request can book another mentor's slot; the mentor sees it and can remove it (plan decision 4, accepted). | Quickstart V10 on every scheduler re-pin |
+| Raw read of `scheduler_slots.teacherid` by primary key, and reliance on the `SSstu:<slotid>` eventtype convention (`classes/model/slot.php`). | The plugin has no API that returns a slot's teacher without loading its internal model classes. Its calendar events are the only record of a booking's time that core's events report. | Quickstart V13 on every scheduler re-pin |
+| `update_record('scheduler', …)` for the declared columns of an existing activity (`maxbookings`, `schedulermode`, `guardtime`, `allownotifications`, `defaultslotduration`, `usebookingform`, `scale`), and the read of the same row. The name and group mode go through core's `set_coursemodule_name()` and `set_coursemodule_groupmode()`. | `scheduler_update_instance()` calls the activity form's `save_mod_data()` unconditionally, so `update_moduleinfo()` cannot run without a form. A new activity goes through `add_moduleinfo()`. | Quickstart V1 on every scheduler re-pin |
+
+**Raw reads added by spec 011**, all by indexed columns of stable core tables:
+
+| Table | Read by | Why there is no API |
+|---|---|---|
+| `role_assignments` joined to `context` | `roleid` (the mentor role), `contextlevel = CONTEXT_USER` | Every mentor relationship at once, for the reconcile. Spec 003's Mentoring page reads the same join. |
+| `user_enrolments` | `enrolid` | Every enrolment in the office-hours instance, with its status. `get_enrolled_users()` omits suspended ones. |
+| `groups`, `groups_members` | `courseid` and `idnumber`; `groupid` and `component` | The mentor groups and the memberships this plugin owns. `groups_get_members()` does not return `component` or `itemid`. |
+| `my_pages`, `block_instances` | `userid IS NULL`, `name`, `private`; `blockname`, `parentcontextid`, `pagetypepattern`, `subpagepattern` | Whether a declared block is on the system default dashboard. The block manager reads blocks only for a page being displayed. |
+| `event` left-joined from `local_ltuse_booking` | `id` | Booking records whose calendar event is gone. |
+
 ## Verified against Moodle 5.2.3+ (2026-09-29)
 
 Installed and exercised end to end on Moodle 5.2.3+ (Build 20260928), PHP 8.3, PostgreSQL

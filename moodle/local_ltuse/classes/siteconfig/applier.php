@@ -31,9 +31,10 @@ defined('MOODLE_INTERNAL') || die();
  *   profile_fields  profilefields::apply(): the field category first, then the fields
  *   cohort_rules    cohortrules::apply(), last, because a rule needs its cohort and its field
  *
- * Then each ltct: course's discussion forum (spec 012), then each ltct: course's "Show
- * activity reports", turned off again through update_course() where someone turned it on
- * (spec 003).
+ * Then each ltct: course's group mode, set to 0 through update_course() (spec 002 R3,
+ * amended 2026-10-02), then each ltct: course's discussion forum (spec 012), set to no
+ * groups, then each ltct: course's "Show activity reports", turned off again through
+ * update_course() where someone turned it on (spec 003).
  *
  * Then spec 004's, last, in the order its contract fixes (specs/004-progress-reporting/contracts/
  * declaration.md "Output additions"):
@@ -47,6 +48,12 @@ defined('MOODLE_INTERNAL') || die();
  *
  *   badge_template        badgetemplate::apply(): store it, then reword every mapped badge
  *   certificate_template  certtemplate::apply(): the site template, then every activity's copy
+ *
+ * Then spec 011's, last (specs/011-events-calendar/contracts/declaration.md):
+ *
+ *   officehours  officehours::apply(): the course, the scheduler, the enrolment instance, the
+ *                group name template, then a reconcile of memberships
+ *   dashboard    dashboard::apply(): every declared block missing from the default dashboard
  *
  * The preflight stops on a run-wide block only (report::has_blocking()). A report-scoped
  * block, such as an audience cohort that does not exist, leaves just that report unwritten:
@@ -104,34 +111,57 @@ class applier {
             $this->apply_setting($setting);
         }
         $this->apply_structure();
+        // The course's group mode before its forum's, so a course never forces separate
+        // groups on a forum this run has just opened (spec 002 R3).
+        $this->apply_course_flags('check_course_groupmodes', 'groupmode', NOGROUPS);
         foreach ($this->inspector->discussion_targets() as $target) {
             $this->apply_discussion($target);
         }
-        $this->apply_course_reports();
+        $this->apply_course_flags('check_course_reports', 'showreports', 0);
         $this->apply_reporting();
         $this->apply_recognition();
+        $this->apply_events();
     }
 
     /**
-     * Turn activity reports off again in each ltct: course where someone turned them on
-     * (spec 003, research R2), through core's update_course(), as the course settings form does.
+     * Apply spec 011's two arrays, last: the office-hours course, its activity, enrolment
+     * instance and group name template, then a reconcile of its memberships; then the default
+     * dashboard's blocks. Never deletes a course, an activity, a group or a block.
      */
-    protected function apply_course_reports(): void {
+    protected function apply_events(): void {
+        if ($this->inspector->officehours()) {
+            $this->inspector->officehours()->apply($this->report);
+        }
+        if ($this->inspector->dashboard()) {
+            $this->inspector->dashboard()->apply($this->report);
+        }
+    }
+
+    /**
+     * Set one course setting back in each ltct: course an inspector check lists, through core's
+     * update_course(), as the course settings form does: activity reports off (spec 003,
+     * research R2) and group mode 0 (spec 002 R3, amended 2026-10-02).
+     *
+     * @param string $check the inspector method listing the courses, each item with courseid
+     * @param string $field the course column to write
+     * @param int $value the value to write
+     */
+    protected function apply_course_flags(string $check, string $field, int $value): void {
         global $CFG;
-        $items = $this->inspector->check_course_reports();
+        $items = $this->inspector->$check();
         if (!$items) {
             return;
         }
         require_once($CFG->dirroot . '/course/lib.php');
         foreach ($items as $item) {
             try {
-                update_course((object)['id' => $item['courseid'], 'showreports' => 0]);
+                update_course((object)['id' => $item['courseid'], $field => $value]);
             } catch (\Throwable $e) {
                 $this->report->add_result($item, 'fail', 'Moodle refused the change: ' . $e->getMessage());
                 continue;
             }
             $still = false;
-            foreach ($this->inspector->check_course_reports() as $recheck) {
+            foreach ($this->inspector->$check() as $recheck) {
                 if ($recheck['item'] === $item['item']) {
                     $still = true;
                 }
@@ -207,8 +237,8 @@ class applier {
      * `differs` is corrected through ensure_discussion::apply_groupmode(), the same code path
      * a publish takes, which writes only the forum's group mode and grouping. A `missing`
      * forum is never created here: that is the publisher's job, with the course's own name
-     * and intro, so it is reported as [skip]. Warnings (forced, allparticipants) cannot be
-     * fixed by a write and are reported as [skip] too. Nothing here writes a post.
+     * and intro, so it is reported as [skip]. The forced warning cannot be fixed by a write
+     * and is reported as [skip] too. Nothing here writes a post.
      *
      * @param array $target one entry of inspector::discussion_targets()
      */

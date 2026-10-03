@@ -45,7 +45,9 @@ class report {
         'pending-upgrade', 'forced', 'unknown', 'env-missing', 'below-minimum',
         'adopted', 'ambiguous', 'wrong-context', 'wrong-datatype',
         // Spec 012 course discussions (contracts/site-declaration.md).
-        'differs', 'allparticipants'];
+        'differs',
+        // Spec 002 amendment 2026-10-02: a managers cohort synced into a shared course (R2).
+        'shared-managers'];
 
     /**
      * Kinds that are only ever reported with one status. `adopted` is a category given its
@@ -64,6 +66,7 @@ class report {
         'ambiguous' => 'fail',
         'wrong-context' => 'fail',
         'wrong-datatype' => 'fail',
+        'shared-managers' => 'fail',
     ];
 
     /**

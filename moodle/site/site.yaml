@@ -9,7 +9,7 @@ moodle:
 
 plugins:
   - component: local_ltuse
-    version: 2026100301
+    version: 2026100400
     source:
       path: moodle/local_ltuse
     why: The publish endpoint and this applier. Pinned to the version.php stamp in this repo.
@@ -61,6 +61,13 @@ plugins:
       url: https://marketplace.moodle.com/api/plugins/availability_coursecompleted/versions/2026070100/download
       sha256: "07e8c6c4237c594f3752b60134a0377eab794421a470a892c472945ead696a28"
     why: "#23 unlocks the certificate on the course completion record, v5.5.3 (spec 013 R8). Core has no course-completion condition, and an AND of lesson conditions re-locks a learner when a lesson is added. Verified by quickstart V5 and V11."
+  # Row #21: mentor office hours (spec 011, research R9, R19; decision D6).
+  - component: mod_scheduler
+    version: 2026080400
+    source:
+      url: https://marketplace.moodle.com/api/plugins/mod_scheduler/versions/2026080400/download
+      sha256: "928ea42b8a4835dcc2c398d2c069cd198c8d41e3130883c2299f36e090a97826"
+    why: "#21 office-hour booking, v5.2-r1 (supported = [500, 502]), the maintained scheduler; core has no booking module (spec 011 R9). Browser-only: it has no app support (D6). local_ltuse relies on its group filter, its SSstu: calendar events and scheduler_slots.teacherid (R16, R20), so re-run quickstart V10 and V13 on every re-pin."
   - component: enrol_cohort
     enabled: 1
     why: "#8 #15 cohort sync enrols an organisation, and its managers, into a course with its group."

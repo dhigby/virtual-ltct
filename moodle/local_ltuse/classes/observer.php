@@ -25,6 +25,14 @@ use core_message\api;
  *
  * Public APIs only: \core_message\api::is_contact(), add_contact(), remove_contact(), and
  * user_has_role_assignment(). The only table written is this plugin's own.
+ *
+ * Spec 011 adds:
+ *
+ *   role events      also keep the mentor's office-hours group in step (officehours, R16)
+ *   calendar events  an office-hours booking goes to booking_notice (R20); any other change
+ *                    or cancellation is buffered per series by calendar_notify, and one
+ *                    shutdown callback queues one task\event_change_notice per key (R15)
+ *   slot_deleted     mod_scheduler's own event, the only signal that a booked slot was deleted
  */
 class observer {
 
@@ -43,6 +51,7 @@ class observer {
         } catch (\Throwable $e) {
             debugging('local_ltuse: could not make the mentor contact: ' . $e->getMessage(), DEBUG_DEVELOPER);
         }
+        self::sync_office_hours($event);
     }
 
     /**
@@ -56,6 +65,135 @@ class observer {
             }
         } catch (\Throwable $e) {
             debugging('local_ltuse: could not remove the mentor contact: ' . $e->getMessage(), DEBUG_DEVELOPER);
+        }
+        self::sync_office_hours($event);
+    }
+
+    /**
+     * Spec 011 (R16): a mentor relationship that starts or ends changes the mentor's group in
+     * the office-hours course. After the contact handling, so a failure here leaves that done.
+     *
+     * @param \core\event\base $event role_assigned or role_unassigned
+     */
+    protected static function sync_office_hours(\core\event\base $event): void {
+        try {
+            [$mentorid, $learnerid] = self::pair($event);
+            if ($mentorid) {
+                officehours::sync_pair($mentorid, $learnerid);
+            }
+        } catch (\Throwable $e) {
+            debugging('local_ltuse: could not sync office hours: ' . $e->getMessage(), DEBUG_DEVELOPER);
+        }
+    }
+
+    // --- spec 011: calendar changes and bookings ---------------------------------------------
+
+    /** @var array<int, true> event ids created in this request */
+    protected static $created = [];
+
+    /** @var array<string, array> calendar notices buffered in this request, by key */
+    protected static $notices = [];
+
+    /** @var bool whether the shutdown callback that queues the notices is registered */
+    protected static $registered = false;
+
+    /**
+     * Remember the new event's id, so its second save in the same request is not announced
+     * (R15), and record a new office-hours booking (R20).
+     *
+     * @param \core\event\calendar_event_created $event
+     */
+    public static function calendar_event_created(\core\event\calendar_event_created $event): void {
+        self::$created[(int)$event->objectid] = true;
+        self::calendar_event_changed($event, booking_notice::CREATED);
+    }
+
+    /**
+     * @param \core\event\calendar_event_updated $event
+     */
+    public static function calendar_event_updated(\core\event\calendar_event_updated $event): void {
+        self::calendar_event_changed($event, booking_notice::UPDATED);
+    }
+
+    /**
+     * @param \core\event\calendar_event_deleted $event
+     */
+    public static function calendar_event_deleted(\core\event\calendar_event_deleted $event): void {
+        self::calendar_event_changed($event, booking_notice::DELETED);
+    }
+
+    /**
+     * Route one calendar change: an office-hours booking to booking_notice, anything else to
+     * the change-notice buffer. Never throws into core.
+     *
+     * @param \core\event\base $event
+     * @param string $kind created, updated or deleted
+     */
+    protected static function calendar_event_changed(\core\event\base $event, string $kind): void {
+        try {
+            $snapshot = $event->get_record_snapshot('event', $event->objectid) ?: null;
+            if (!$snapshot) {
+                return;
+            }
+            if ((string)($snapshot->modulename ?? '') === 'scheduler') {
+                booking_notice::from_calendar($kind, $snapshot, (int)$event->userid);
+                return;
+            }
+            if ($kind === booking_notice::CREATED) {
+                return; // New events are never announced (plan decision 5).
+            }
+            $deleted = $kind === booking_notice::DELETED;
+            $created = isset(self::$created[(int)$event->objectid]);
+            if (!calendar_notify::decide($snapshot, (array)$event->other, $deleted, $created)) {
+                return;
+            }
+            $key = calendar_notify::key($snapshot);
+            self::$notices[$key] = calendar_notify::merge(self::$notices[$key] ?? null, $deleted, $snapshot,
+                (int)$event->userid);
+            if (!self::$registered) {
+                self::$registered = true;
+                \core\shutdown_manager::register_function([self::class, 'queue_calendar_notices']);
+            }
+        } catch (\Throwable $e) {
+            debugging('local_ltuse: could not note a calendar change: ' . $e->getMessage(), DEBUG_DEVELOPER);
+        }
+    }
+
+    /**
+     * At the end of the request: one change notice per key, two minutes ahead, so a quick
+     * re-edit folds into the same task (R15).
+     */
+    public static function queue_calendar_notices(): void {
+        foreach (self::$notices as $data) {
+            try {
+                $task = new task\event_change_notice();
+                $task->set_component('local_ltuse');
+                $task->set_custom_data($data);
+                $task->set_next_run_time(time() + 2 * MINSECS);
+                \core\task\manager::reschedule_or_queue_adhoc_task($task);
+            } catch (\Throwable $e) {
+                debugging('local_ltuse: could not queue a calendar notice: ' . $e->getMessage(), DEBUG_DEVELOPER);
+            }
+        }
+        self::$notices = [];
+        self::$registered = false;
+    }
+
+    /**
+     * A mentor deleted a whole office-hours slot. The scheduler removes its calendar events
+     * with a raw delete that fires nothing, so this is the only signal (R20). Runs before the
+     * slot is removed.
+     *
+     * @param \mod_scheduler\event\slot_deleted $event
+     */
+    public static function scheduler_slot_deleted(\core\event\base $event): void {
+        try {
+            if ((int)$event->contextinstanceid !== (int)(officehours::scheduler_cm()->id ?? 0)) {
+                return;
+            }
+            booking_notice::from_slot_deleted((int)$event->objectid, (int)$event->relateduserid, (int)$event->userid);
+        } catch (\Throwable $e) {
+            debugging('local_ltuse: could not send slot cancellations: ' . $e->getMessage(), DEBUG_DEVELOPER);
         }
     }
 
@@ -74,6 +212,11 @@ class observer {
             }
         } catch (\Throwable $e) {
             debugging('local_ltuse: could not clear mentor contacts: ' . $e->getMessage(), DEBUG_DEVELOPER);
+        }
+        try {
+            officehours::sync_user((int)$event->objectid);   // Spec 011: their groups and bookings.
+        } catch (\Throwable $e) {
+            debugging('local_ltuse: could not sync office hours: ' . $e->getMessage(), DEBUG_DEVELOPER);
         }
     }
 

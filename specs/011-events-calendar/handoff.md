@@ -36,9 +36,9 @@ That direction is bigger than events, so this handoff has two parts. Part 1 is t
 |---|---|---|
 | B1 | Shared-course group mode: none (0), or visible groups (2) with organisation names kept as labels? | **0.** Labels in visible groups would let any course-context reader page through every organisation's data. |
 | B2 | Managers cohorts no longer enrolled in shared courses; leaders follow through 004's per-organisation report. Accept losing per-lesson detail there? | **Yes.** |
-| B3 | Add the user-context follow role now, or wait until leaders ask for per-learner detail? | **Wait.** The report covers following. Add the role in Phase B with manager self-service. |
+| B3 | Add the user-context follow role now, or wait until leaders ask for per-learner detail? | **Wait.** The report covers following. Add the role in Phase B with manager self-service. **Answered 2026-10-02: no role; the profile hook and a "my organisation" page instead (spec 002 Clarifications 2026-10-02).** |
 | B4 | Where is an organisation-only course declared: course frontmatter, or a maintainer-only `moodle/site/` file? Who approves one, and who enrols it? | **`moodle/site/`**. Who may enrol a partner's people is delivery policy, not content, as `course-discussions.yaml` already treats sharing. Approval rests with the maintainer, and the site team enrols. |
-| B5 | Should leaders enrol their own people (our own org-scoped page), or keep following only, plus 003 Phase B? | **Follow only for now.** Reconsider after 2–3 real managers, as INTENT already says. |
+| B5 | Should leaders enrol their own people (our own org-scoped page), or keep following only, plus 003 Phase B? | **Follow only for now.** Reconsider after 2–3 real managers, as INTENT already says. **Changed by Doug, 2026-10-02: managers manage — enrol and unenrol, reset links, mentors, suspend and reactivate (spec 002 Clarifications 2026-10-02).** |
 | B6 | How should this land? | **As its own change**, a spec 002 amendment plus INTENT and constitution, ahead of 011's plan. 011 then plans on open courses. Bundling it into 011 would bury a platform decision inside an events spec. |
 
 ## Part 2. Spec 011 under open courses

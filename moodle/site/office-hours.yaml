@@ -1,0 +1,47 @@
+# Row #21: mentor office hours (spec 011, research R16, R19 and R20; decision D6).
+#
+# Read only by scripts/site_config.py (contract: specs/011-events-calendar/contracts/
+# declaration.md). One course holds one mod_scheduler activity for every mentor. local_ltuse
+# keeps one group per mentor in step with spec 003's mentor relationships, so a learner sees
+# only their own mentors' slots. Who mentors whom, who is in which group and who booked what
+# are Moodle data and are never declared here (constitution III).
+#
+# apply creates or updates the course and the activity, and never deletes either, a group, a
+# slot or an appointment.
+
+rows: [21]
+purpose: >-
+  The one place mentors offer office hours and learners book them. Booking happens in the
+  browser; the Moodle app shows the bookings in its calendar and opens this course's booking
+  page in the browser (D6).
+course:
+  idnumber: ltct:officehours
+  fullname: Mentor office hours
+  shortname: ltct-officehours
+  category: mentoring
+  summary: >-
+    Book time with your mentor. You see your own mentor's free times, shown in your time
+    zone. Your bookings appear in your calendar.
+  groupmode: 1        # separate groups: a learner sees only the slots of a mentor in their group
+  groupmodeforce: 1   # forced, so the scheduler cannot be switched to open slots by mistake
+scheduler:
+  idnumber: ltct:officehours:scheduler
+  name: Book time with your mentor
+  intro: >-
+    Pick a free time to meet your mentor. Times are shown in your own time zone, which you
+    can change on your profile.
+  groupmode: 1
+  maxbookings: 1
+  schedulermode: onetime
+  guardtime_hours: 12   # plan decision 3: no booking or cancelling in the last 12 hours
+  allownotifications: 0 # local_ltuse sends every booking message instead (R20)
+  defaultslotduration: 30
+  usebookingform: 0
+  grade: 0              # office hours are never graded (constitution V)
+groups:
+  name_template: "Office hours {n}"   # never a person's name: it may be a protected identity (spec 016)
+why: >-
+  #21 (spec 011, D6, R16): spec 003's mentor relationship is with a learner, not a course, so
+  one course serves every mentor and every learner, whichever courses they take. Booking is
+  private (D4, FR-008): roles.yaml hides co-bookers, and each mentor's group hides its
+  members from one another.

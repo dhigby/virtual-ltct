@@ -3,8 +3,8 @@
   "specName": "011-events-calendar",
   "branch": "011-events-calendar",
   "selectedAt": "2026-09-30T20:45:00.948Z",
-  "currentStep": "specify",
-  "status": "specified",
+  "currentStep": "plan",
+  "status": "planned",
   "history": [
     {
       "step": "specify",
@@ -12,6 +12,13 @@
       "kind": "start",
       "by": "extension",
       "at": "2026-09-30T20:47:08.447Z"
+    },
+    {
+      "step": "plan",
+      "substep": null,
+      "kind": "complete",
+      "by": "extension",
+      "at": "2026-10-03T00:53:43.043Z"
     }
   ],
   "telemetryInstanceId": "34031070-2c2a-4b30-9b4a-fbac4447f1c3"

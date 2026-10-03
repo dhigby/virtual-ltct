@@ -16,6 +16,10 @@ on:
       - 'modules/*/README.md'
       - 'tests/test_cbc_wording.py'
       - 'tests/recognition_harness.php'
+      - 'tests/calendar_notify_harness.php'
+      - 'tests/timezone_notice_harness.php'
+      - 'tests/officehours_harness.php'
+      - 'tests/booking_notice_harness.php'
   pull_request:
     paths:
       - 'moodle/site/**'
@@ -31,6 +35,10 @@ on:
       - 'modules/*/README.md'
       - 'tests/test_cbc_wording.py'
       - 'tests/recognition_harness.php'
+      - 'tests/calendar_notify_harness.php'
+      - 'tests/timezone_notice_harness.php'
+      - 'tests/officehours_harness.php'
+      - 'tests/booking_notice_harness.php'
 
 jobs:
   validate:
@@ -54,3 +62,11 @@ jobs:
       # certificate's availability. Runs after setup-python, which the harness calls.
       - name: Recognition harness
         run: php tests/recognition_harness.php
+      # Spec 011: local_ltuse's pure decisions for calendar change notices, the time zone
+      # notice, the office-hours group sync and the booking messages. Needs no Moodle.
+      - name: Events and office-hours harnesses
+        run: |
+          php tests/calendar_notify_harness.php
+          php tests/timezone_notice_harness.php
+          php tests/officehours_harness.php
+          php tests/booking_notice_harness.php

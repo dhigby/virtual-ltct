@@ -120,15 +120,24 @@ roles:
     archetype: student
     capabilities:
       mod/workshop:viewauthornames: inherit   # FR-012a: peers never see who wrote what (R4)
+      mod/scheduler:seeotherstudentsbooking: inherit   # spec 011 D4: nobody sees who else booked (R19)
     why: >-
       #22 (spec 012): peer review is anonymous between learners. The student archetype allows
       mod/workshop:viewauthornames by default; removing it at system context hides author
-      names in every workshop. Inert until a course has a workshop.
+      names in every workshop. Inert until a course has a workshop. #21 (spec 011, D4, FR-008,
+      R19): bookings are private. The student archetype allows
+      mod/scheduler:seeotherstudentsbooking, which names everyone who booked a slot; removing
+      it at system context hides them on every booking page.
 
   - shortname: teacher          # "Non-editing teacher"; called "Course mentor" in our docs, not renamed in Moodle
     archetype: teacher
     capabilities:
       moodle/site:accessallgroups: inherit    # already absent from the teacher archetype (R3); listed so drift manages it
+      # Spec 011 (R19): a mentor manages only their own office-hour slots. All three are
+      # already absent from the teacher archetype; listed so a hand grant shows as drift.
+      mod/scheduler:manageallappointments: inherit
+      mod/scheduler:canscheduletootherteachers: inherit
+      mod/scheduler:canseeotherteachersbooking: inherit
     why: >-
       #22 (spec 012): the course-level role that assesses work. Its archetype defaults are what
       FR-010/FR-013 need (assign:grade, workshop allocate/switchphase/overridegrades,

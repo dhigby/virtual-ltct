@@ -9,9 +9,12 @@
 defined('MOODLE_INTERNAL') || die();
 
 $plugin->component = 'local_ltuse';
-$plugin->version   = 2026100301;   // Mentor relationship (spec 003): the viewmenteeprogress
-                                   // capability, the Mentoring page and app handler, message
-                                   // contacts for mentor and learner. After badges and
+$plugin->version   = 2026100400;   // Events and office hours (spec 011): calendar change
+                                   // notices, the office-hours sync, booking notices and
+                                   // their table (local_ltuse_booking), the time zone notice.
+                                   // After the mentor relationship (spec 003, 2026100301):
+                                   // the viewmenteeprogress capability, the Mentoring page and
+                                   // app handler, message contacts. After badges and
                                    // certificates (spec 013, 2026100300), progress reporting
                                    // (spec 004, 2026100204) and ensure_discussion (spec 012,
                                    // 2026100203). db/upgrade.php saves its savepoint at this
@@ -35,7 +38,7 @@ $plugin->requires  = 2026042000;   // Moodle 5.2 -- the release this was
 $plugin->supported = [502, 502];
 
 $plugin->maturity  = MATURITY_ALPHA;
-$plugin->release   = '0.8.0';
+$plugin->release   = '0.9.0';
 
 // No third-party dependencies, deliberately. Sections were originally going to be
 // local_wsmanagesections' job, but it could not be installed here, so local_ltuse grew an

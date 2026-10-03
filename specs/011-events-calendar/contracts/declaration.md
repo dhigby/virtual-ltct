@@ -43,7 +43,7 @@ Two arrays are handled after spec 013's:
   - It ensures the course has exactly one manual enrolment instance named `ltct:officehours`, adding it with `add_instance()`.
   - It then runs `\local_ltuse\officehours::reconcile()` once and reports counts only (`groups 4, members +2 −0, enrolments suspended 1`).
 - **`dashboard`**: for each declared block not already on the default `my-index` page, it calls `add_block()` there, with the default `my_pages` row as the subpage. It never removes a block and never resets a user's own dashboard.
-- **Settings**: applied as 001 applies any setting. `mod_scheduler/*` settings are applied only once the plugin is installed. Until then they are reported `missing`, not `changed`.
+- **Settings**: applied as 001 applies any setting. As with spec 013's plugins, `mod_scheduler` is installed before `apply` runs. Until it is, its settings are `unknown`, which stops the run.
 
 `drift`:
 - **`missing`**:

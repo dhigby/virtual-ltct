@@ -58,6 +58,12 @@ use core_plugin_manager;
  *   badge_template         {name, description, ..., image, deny}       badgetemplate
  *   certificate_template   {name, activity_name, intro, font, pages}   certtemplate
  *
+ * and, from spec 011 (specs/011-events-calendar/contracts/declaration.md "Payload arrays"),
+ * two more, checked last:
+ *
+ *   officehours   {course {...}, scheduler {...}, groups {name_template}}   officehours
+ *   dashboard     [{block, region}]                                        dashboard
+ *
  * A spec 004 result may carry `blocking` => report::BLOCKS_REPORT, which leaves only its own
  * report unwritten; has_blocking() delegates to report::has_blocking() so such a result does
  * not stop the run.
@@ -177,6 +183,12 @@ class inspector {
 
     /** @var certtemplate|null checks the payload's certificate template (spec 013) */
     protected $certtemplate = null;
+
+    /** @var officehours|null checks the payload's office-hours course (spec 011) */
+    protected $officehours = null;
+
+    /** @var dashboard|null checks the payload's default dashboard blocks (spec 011) */
+    protected $dashboard = null;
 
     /**
      * @param array $declaration the decoded JSON payload (associative arrays throughout)
@@ -312,6 +324,33 @@ class inspector {
             $this->certtemplate = new certtemplate($this->declaration['certificate_template']);
         }
         return $this->certtemplate;
+    }
+
+    // --- spec 011 checkers -----------------------------------------------------------------
+
+    /**
+     * The office-hours checker, or null when the payload declares none (a payload from before
+     * spec 011, or a site with no office-hours.yaml).
+     *
+     * @return officehours|null
+     */
+    public function officehours(): ?officehours {
+        if ($this->officehours === null && is_array($this->declaration['officehours'] ?? null)) {
+            $this->officehours = new officehours($this->declaration['officehours']);
+        }
+        return $this->officehours;
+    }
+
+    /**
+     * The default dashboard's checker, or null when the payload declares no blocks.
+     *
+     * @return dashboard|null
+     */
+    public function dashboard(): ?dashboard {
+        if ($this->dashboard === null && self::entries($this->declaration['dashboard'] ?? [])) {
+            $this->dashboard = new dashboard(self::entries($this->declaration['dashboard']));
+        }
+        return $this->dashboard;
     }
 
     /**
@@ -471,6 +510,14 @@ class inspector {
         }
         if ($this->certtemplate()) {
             $items = array_merge($items, $this->certtemplate()->check());
+        }
+        // Spec 011, last (contracts/declaration.md "Payload arrays"): the office-hours course
+        // needs its category, made above, and the dashboard needs nothing.
+        if ($this->officehours()) {
+            $items = array_merge($items, $this->officehours()->check());
+        }
+        if ($this->dashboard()) {
+            $items = array_merge($items, $this->dashboard()->check());
         }
         return $items;
     }
@@ -1079,6 +1126,9 @@ class inspector {
             $slug = substr($course->idnumber, strlen($prefix));
             if ($slug === '' || strpos($slug, ':') !== false) {
                 continue; // Not a course identity (ltct:<slug>), so not ours to judge.
+            }
+            if ($course->idnumber === \local_ltuse\officehours::COURSE) {
+                continue; // Spec 011's office-hours course: site config's, not the publisher's; no forum.
             }
             $isshared = isset($shared[$slug]);
             $targets[] = [

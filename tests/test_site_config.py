@@ -1362,10 +1362,10 @@ class Reports(ReportsBase):
         self.assertIsNone(prog["schedule"])
         self.assertEqual(prog["audiences"], [{"type": "systemrole", "role": "manager"}])
         self.assertEqual(prog["columns"][3]["aggregation"], "countdistinct")
-        # Spec 004's arrays in apply order, then spec 013's two after reports.
-        self.assertEqual(list(self.payload())[-6:],
+        # Spec 004's arrays in apply order, then spec 013's two after reports, then spec 011's.
+        self.assertEqual(list(self.payload())[-8:],
                          ["course_field_category", "course_fields", "competencies", "reports",
-                          "badge_template", "certificate_template"])
+                          "badge_template", "certificate_template", "officehours", "dashboard"])
 
     def test_summary_counts_reports(self):
         rc, out, _ = self.run_main("validate")
@@ -1782,3 +1782,167 @@ class Recognition(Base):
         self.write("settings/salt.yaml", "rows: [23]\npurpose: x\nsettings:\n"
                    "  - name: badges_badgesalt\n    value: abc\n    why: x\n")
         self.assertInvalid("badges_badgesalt is per site")
+
+
+# --- spec 011: office hours, the dashboard and the calendar ------------------------------
+# specs/011-events-calendar/data-model.md "Declared (repo)" and contracts/declaration.md.
+
+SCHEDULER_PIN = """\
+  - component: mod_scheduler
+    version: 2026080400
+    source: {url: "https://example.org/scheduler.zip", sha256: "%s"}
+    why: "#21"
+""" % ("d" * 64)
+MENTORING_CATEGORY = """\
+  - key: mentoring
+    name: LTC Mentoring
+    why: office hours
+"""
+NO_TIMEZONE_IGNORE = """\
+ignore:
+  - setting: calendar_exportsalt
+    reason: per install
+"""
+
+
+class EventsAbsent(Base):
+    """A site with none of spec 011's files is still valid (T007)."""
+
+    def test_without_any_spec_011_file(self):
+        self.assertAccepted()
+        decl = sc.validate(self.dir)[0]
+        self.assertIsNone(decl["officehours"])
+        self.assertEqual(decl["dashboard"], [])
+        payload = sc.build_payload(decl, "apply", {})
+        self.assertIsNone(payload["officehours"])
+        self.assertEqual(payload["dashboard"], [])
+
+
+class Events(Base):
+    """The tracked spec 011 declaration, then one broken rule at a time."""
+
+    def setUp(self):
+        super().setUp()
+        site = REPO / "moodle" / "site"
+        self.write("site.yaml", SITE.format(ver=VER, sha="a" * 64) + SCHEDULER_PIN)
+        self.write("ignore.yaml", NO_TIMEZONE_IGNORE)
+        self.edit("organisations.yaml", "organisations:\n  - key: independent",
+                  MENTORING_CATEGORY + "organisations:\n  - key: independent")
+        for rel in ("office-hours.yaml", "dashboard.yaml", "settings/calendar.yaml",
+                    "settings/scheduler.yaml"):
+            self.write(rel, (site / rel).read_text(encoding="utf-8"))
+
+    def test_the_tracked_declaration_is_accepted_and_rendered(self):
+        self.assertAccepted()
+        decl = sc.validate(self.dir)[0]
+        hours = decl["officehours"]
+        self.assertEqual(hours["course"]["idnumber"], "ltct:officehours")
+        self.assertEqual(hours["course"]["category_idnumber"], "ltct:mentoring")
+        self.assertEqual(hours["scheduler"]["guardtime"], 12 * 3600)   # decision 3
+        self.assertEqual(hours["scheduler"]["allownotifications"], 0)  # R20
+        self.assertEqual(decl["dashboard"], [{"block": "calendar_upcoming", "region": "side-post"}])
+        payload = sc.build_payload(decl, "apply", {})
+        self.assertEqual(payload["officehours"], hours)
+        self.assertEqual(payload["dashboard"], decl["dashboard"])
+        self.assertNotIn("guardtime_hours", json.dumps(payload))
+
+    def test_office_hours_rules(self):
+        cases = [
+            ("idnumber: ltct:officehours\n", "idnumber: ltct:hours\n"),
+            ("fullname: Mentor office hours", "fullname: " + "x" * 255),
+            ("shortname: ltct-officehours", "shortname: " + "x" * 101),
+            ("category: mentoring", "category: nowhere"),
+            ("  groupmode: 1        #", "  groupmode: 0        #"),
+            ("groupmodeforce: 1", "groupmodeforce: 0"),
+            ("idnumber: ltct:officehours:scheduler", "idnumber: ltct:officehours:other"),
+            ("  maxbookings: 1", "  maxbookings: 6"),
+            ("schedulermode: onetime", "schedulermode: weekly"),
+            ("guardtime_hours: 12", "guardtime_hours: 169"),
+            ("allownotifications: 0", "allownotifications: 1"),
+            ("defaultslotduration: 30", "defaultslotduration: 4"),
+            ("defaultslotduration: 30", "defaultslotduration: 241"),
+            ("usebookingform: 0", "usebookingform: 1"),
+            ("grade: 0 ", "grade: 10 "),
+            ('name_template: "Office hours {n}"', 'name_template: "Office hours"'),
+            ('name_template: "Office hours {n}"', 'name_template: "{name} {n}"'),
+            ('name_template: "Office hours {n}"', 'name_template: "{lastname} hours {n}"'),
+            ("  name: Book time with your mentor", "  name: Certified booking"),
+        ]
+        for old, new in cases:
+            with self.subTest(change=new):
+                self.reset()
+                self.edit("office-hours.yaml", old, new)
+                self.assertRejected()
+
+    def test_scheduler_must_be_pinned(self):
+        self.write("site.yaml", SITE.format(ver=VER, sha="a" * 64))
+        self.assertInvalid("mod_scheduler must be pinned")
+
+    def test_students_never_see_who_booked(self):
+        roles = (self.dir / "roles.yaml").read_text()
+        line = "      mod/scheduler:seeotherstudentsbooking: inherit"
+        self.assertIn(line, roles)
+        for replacement in ("      mod/scheduler:seeotherstudentsbooking: allow", ""):
+            with self.subTest(replacement=replacement):
+                self.reset()
+                self.edit("roles.yaml", line, replacement)
+                self.assertInvalid("mod/scheduler:seeotherstudentsbooking")
+
+    def test_dashboard_rules(self):
+        block = "  - block: calendar_upcoming\n    region: side-post\n    why: >-\n"
+        for old, new in [
+            ("block: calendar_upcoming", "block: not_a_block"),
+            ("region: side-post", "region: footer"),
+            (block, block.replace(">-\n", "upcoming\n") + block),   # the same block twice
+        ]:
+            with self.subTest(change=new):
+                self.reset()
+                self.edit("dashboard.yaml", old, new)
+                self.assertRejected()
+        self.reset()
+        self.write("dashboard.yaml", "rows: [21]\ndefault_blocks: []\n")
+        self.assertRejected()
+
+    def test_time_zone_rules(self):
+        for zone, accepted in (("UTC", True), ("Africa/Nairobi", True), ("America/Bogota", True),
+                               ("Mars/Base", False), ("Nairobi", False)):
+            with self.subTest(zone=zone):
+                self.reset()
+                self.edit("settings/calendar.yaml", "value: UTC", "value: %s" % zone)
+                (self.assertAccepted if accepted else self.assertRejected)()
+
+    def test_forcetimezone_must_be_99(self):
+        self.edit("settings/calendar.yaml", "value: 99", "value: Africa/Nairobi")
+        self.assertInvalid("forcetimezone must be 99")
+
+    def test_calendar_settings_come_together(self):
+        text = (self.dir / "settings" / "calendar.yaml").read_text()
+        head, _, rest = text.partition("  - name: calendar_adminseesall\n")
+        rest = rest[rest.index("  - name: timezone"):]
+        self.write("settings/calendar.yaml", head + rest)
+        self.assertInvalid("calendar_adminseesall must be declared")
+
+    def test_the_profile_always_shows_the_zone(self):
+        self.write("settings/hidden.yaml", "rows: [21]\npurpose: x\nsettings:\n"
+                   "  - name: hiddenuserfields\n    value: \"icqnumber,timezone\"\n    why: x\n")
+        self.assertInvalid("hiddenuserfields must not hide timezone")
+
+
+class OrgManagerCalendar(Base):
+    """D3, R17: orgmanager may hold moodle/calendar:manageentries and no other calendar cap."""
+    LAST_CAP = "      moodle/site:viewuseridentity: allow\n"
+
+    def setUp(self):
+        super().setUp()
+        self.write("roles.yaml", ORGMANAGER_ROLES + MENTOR_ENTRY)
+
+    def test_manageentries_is_allowed(self):
+        self.edit("roles.yaml", self.LAST_CAP, self.LAST_CAP + "      moodle/calendar:manageentries: allow\n")
+        self.assertAccepted()
+
+    def test_no_other_calendar_capability(self):
+        for cap in ("moodle/calendar:managegroupentries", "moodle/calendar:manageownentries"):
+            with self.subTest(capability=cap):
+                self.reset()
+                self.edit("roles.yaml", self.LAST_CAP, self.LAST_CAP + "      %s: allow\n" % cap)
+                self.assertInvalid("orgmanager holds no calendar capability")

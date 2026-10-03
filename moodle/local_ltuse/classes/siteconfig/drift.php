@@ -213,6 +213,9 @@ class drift {
     }
 
     /**
+     * A subplugin of a declared plugin is not extra: it ships inside that plugin's pinned
+     * release (mod_customcert's eighteen customcertelement_* elements), so its pin covers it.
+     *
      * @param array $declaration
      */
     protected function report_extra_plugins(array $declaration): void {
@@ -220,7 +223,8 @@ class drift {
         foreach (core_plugin_manager::instance()->get_plugins() as $plugins) {
             foreach ($plugins as $info) {
                 if ($info->is_standard() || $info->versiondb === null
-                        || in_array($info->component, $declared, true)) {
+                        || in_array($info->component, $declared, true)
+                        || in_array($info->get_parent_plugin(), $declared, true)) {
                     continue;
                 }
                 $this->report->add('fail', 'extra', $info->component, null, (string)$info->versiondb,

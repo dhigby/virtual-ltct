@@ -182,7 +182,7 @@ These are for the maintainer (Doug). `/speckit-tasks` may generate tasks as draf
 | 3 | **The cancellation window** (`guardtime`). Inside it, a learner can neither book nor cancel, and must message the mentor (R19). | **Accepted 2026-10-02: 12 hours.** |
 | 4 | **Booking another mentor's slot** by a crafted request is possible, because the scheduler's group check is display-only (R19). The mentor sees the booking and can remove it. Closing the gap would mean our code calling the scheduler's internals. | **Accepted 2026-10-02**: accept, and document. |
 | 5 | **What is announced.** Calendar events: changes and cancellations only, never new events (FR-006), so a new site event does not email every account. Bookings: every booking, cancellation and change of time is emailed to both the mentee and the mentor, whoever made it (R20). | **Decided 2026-10-02.** The booking half was added by this decision. |
-| 6 | **Merge order.** The `orgmanager` calendar grant is safe only once managers are enrolled in organisation-only courses alone (R17). This PR merges after the open-courses change, and V6 runs on that state. | Dependency, not a choice. |
+| 6 | **Merge order.** The `orgmanager` calendar grant is safe only once managers are enrolled in organisation-only courses alone (R17). This PR merges after the open-courses change, and V6 runs on that state. | Dependency, not a choice. **Met 2026-10-03:** this branch is built on `002-open-courses` (PR #86), and merges after it. |
 | 7 | **Showing the zone beside each time** stays out until 007 (D5). The profile, the booking-page notice and the booking messages are what 011 delivers. | Decided (D5). |
 
 ## Cross-spec effects

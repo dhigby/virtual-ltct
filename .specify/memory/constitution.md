@@ -117,7 +117,8 @@ people, and the learners are spread across many organisations and interface lang
 - Review MUST be independent: at least two humans, and neither the approver nor the internal
   reviewer may be the author.
 - One course per session. Per-course or per-partner special cases erode standardisation and
-  MUST be justified in the spec that introduces them; the default answer is no.
+  MUST be justified in the spec that introduces them; the default answer is no. The
+  organisation-only course is not one: it is a uniform variant open to every organisation.
 - Authoring is routed through the stage's agent and how-to so AI-assisted output is consistent
   rather than personal.
 
@@ -234,10 +235,17 @@ is exactly the kind of work this team cannot absorb.
   declare the Moodle branches they were verified on (Principle XI). A pin stops an unreviewed
   *plugin* update; it is never a reason to hold back a Moodle security release.
 - **One instance serves every partner we host.** Today that is `ltuse.net`. Partners on it are
-  separated by course category, cohort, role and profile field; no spec may stand up a
-  separate instance or a bespoke role set per organisation. A partner that runs its own Moodle
-  is a second publish target, not a second instance of ours: nothing may hard-code
+  identified and scoped by course category, cohort, role and profile field; no spec may stand
+  up a separate instance or a bespoke role set per organisation. A partner that runs its own
+  Moodle is a second publish target, not a second instance of ours: nothing may hard-code
   `ltuse.net`, and the server always comes from `MOODLE_URL`.
+  - Shared delivery courses MUST be open across organisations: no spec may separate
+    organisations by groups inside a shared delivery course.
+  - Organisation managers MUST be scoped by membership of their organisation's managers cohort,
+    through reporting and our own management pages, never by course groups.
+  - The organisation-only course is the one mechanism for keeping a course to one
+    organisation. The maintainer declares it in `moodle/site/`, never in course content, and it
+    restricts enrolment, not content: the course stays in the public repo.
 - **Never run `mkdocs gh-deploy` locally.** Deploying the Pages site is CI's job.
 - The competency site builds `strict: true`; a broken internal link fails the build.
 
@@ -275,7 +283,14 @@ is exactly the kind of work this team cannot absorb.
   it touches; NON-NEGOTIABLE principles (III, IV) admit no exception. Complexity or a special
   case must be justified in writing, in the spec or the PR.
 
-**Version**: 1.1.0 | **Ratified**: 2026-09-30 | **Last Amended**: 2026-09-30
+**Version**: 2.0.0 | **Ratified**: 2026-09-30 | **Last Amended**: 2026-10-02
+
+*2.0.0 — redefines how partners share the one instance, following the 2026-10-02 `INTENT.md`
+decision "Courses are open across organisations": partners are identified and scoped, no
+longer separated, by category, cohort, role and profile field; shared courses are open;
+managers are scoped by their managers cohort; the organisation-only course is the one declared
+exception (Platform & Delivery, Principle VII). Also records the maintainer's 2026-10-02 wording
+change to Principle II's `idnumber` rule (`<source filename>` became `<file number>`).*
 
 *1.1.0 — adds Principle XI (every change to Moodle survives an upgrade), following the
 2026-09-30 `INTENT.md` decision "Upgrades are never a porting project". Also narrows "Pin every

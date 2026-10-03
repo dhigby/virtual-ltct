@@ -175,6 +175,22 @@ final class officehours_test extends \advanced_testcase {
         $this->assertFalse(groups_remove_member_allowed($this->group((int)$mentor->id)->id, $learner->id));
     }
 
+    public function test_open_courses_never_take_its_groups_away(): void {
+        // Spec 002's open-courses check sets every shared ltct: course to no groups. The
+        // office-hours course is not shared and needs its separate groups (R16).
+        $shared = $this->getDataGenerator()->create_course(['idnumber' => 'ltct:fixture-shared',
+            'groupmode' => SEPARATEGROUPS]);
+        $inspector = new siteconfig\inspector([]);
+        $items = array_column($inspector->check_course_groupmodes(), 'item');
+        $this->assertContains('course:ltct:fixture-shared:groupmode', $items);
+        $this->assertNotContains('course:' . officehours::COURSE . ':groupmode', $items);
+        $this->assertNotEmpty($shared);
+        $targets = array_map(function($t) {
+            return $t['course']->idnumber;
+        }, $inspector->discussion_targets());
+        $this->assertNotContains(officehours::COURSE, $targets, 'and it has no discussion forum to check');
+    }
+
     public function test_no_course_yet_means_nothing_happens(): void {
         delete_course($this->course, false);
         $mentor = $this->getDataGenerator()->create_user();

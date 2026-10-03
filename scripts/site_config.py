@@ -13,10 +13,10 @@ repo checkout.
     site_config.py drift    [--json]   compare the server with the declaration; change nothing
 
 Contracts: specs/001-site-config-as-code/contracts/ (declaration.md, site-config-cli.md,
-output.md); every validation rule is in data-model.md. Spec 012 adds
-moodle/site/course-discussions.yaml (which courses' discussions are shared across
-organisations), read only by load_discussions(), which moodle_payload.py also uses
-(specs/012-assignments-peer-review/contracts/site-declaration.md).
+output.md); every validation rule is in data-model.md. Spec 012's
+moodle/site/course-discussions.yaml is retired: shared courses are open across
+organisations, so there is nothing to share or separate (spec 002 research R3, R14), and a
+file left behind is refused.
 
 ENVIRONMENT (never a file; the repo is public)
 
@@ -62,7 +62,11 @@ from course_stage import NOT_A_COURSE, branch_slug  # noqa: E402
 
 SITE_DIR = REPO / "moodle" / "site"
 MODULES = REPO / "modules"
-DISCUSSIONS_FILE = "course-discussions.yaml"
+RETIRED_FILES = {
+    # Spec 002 amendment 2026-10-02 (research R14): no organisation groups, so no sharing.
+    "course-discussions.yaml": "retired, spec 002 R14: shared courses are open across "
+                               "organisations, so there is nothing to share; delete it",
+}
 OFFICEHOURS_FILE = "office-hours.yaml"       # spec 011
 DASHBOARD_FILE = "dashboard.yaml"            # spec 011
 REQUIREMENTS = REPO / "moodle" / "REQUIREMENTS.md"
@@ -236,14 +240,13 @@ TOP_FILES = {
     # Spec 002: the partner organisations and the profile fields. Both are optional, so a
     # site that hosts no organisations needs neither (specs/002-org-structure-cohorts/
     # contracts/declaration.md).
-    "organisations.yaml": ({"rows", "purpose", "categories", "organisations"}, set()),
+    "organisations.yaml": ({"rows", "purpose", "categories", "organisations", "mentors"},
+                           set()),
     "profile-fields.yaml": ({"rows", "purpose", "category", "fields"}, set()),
     # Spec 004: report templates and the two course fields. Both optional, as above
     # (specs/004-progress-reporting/contracts/declaration.md).
     "reports.yaml": ({"rows", "purpose", "reports"}, set()),
     "course-fields.yaml": ({"rows", "category", "fields"}, {"purpose"}),
-    # Spec 012: optional; validated by load_discussions(), not by the loop in validate().
-    DISCUSSIONS_FILE: ({"rows", "shared"}, set()),
     # Spec 013: the badge template. Optional; certificate/template.yaml sits beside it in its
     # own folder (specs/013-certificates-badges/contracts/declaration.md).
     "badges.yaml": ({"rows", "image", "name", "description", "imagecaption", "message_subject",
@@ -262,6 +265,8 @@ ORG_KEY_MAX = 30
 IDNUMBER_MAX = 100                         # course_categories.idnumber, cohort.idnumber
 CATEGORY_NAME_MAX = 255                    # course_categories.name
 COHORT_NAME_MAX = 254                      # cohort.name
+MENTORS_COHORT = "ltct:mentors"            # fixed, not declared (spec 002 R10)
+GROUPMODE_SETTING = "moodlecourse/groupmode"
 REQUIRED_CATEGORIES = ("published", "pilots", "organisations")
 ORG_PARENT = "organisations"               # every organisation category sits in it
 INDEPENDENT = "independent"                # consultants with no partner organisation
@@ -482,7 +487,7 @@ def validate(site_dir=SITE_DIR, modules_dir=None):
     decl = {"moodle": None, "plugins": [], "ignore": [], "roles": [], "settings": [],
             "categories": [], "cohorts": [], "profile_fields": [], "cohort_rules": [],
             "course_field_category": None, "course_fields": [], "competencies": [],
-            "reports": [], "discussions": {"shared": []},
+            "reports": [],
             "badge_template": None, "certificate_template": None,
             "officehours": None, "dashboard": []}
     if not site_dir.is_dir():
@@ -490,17 +495,17 @@ def validate(site_dir=SITE_DIR, modules_dir=None):
         return decl, problems
 
     for path in sorted(site_dir.iterdir()):
-        if path.is_file() and path.suffix in (".yaml", ".yml") and path.name not in TOP_FILES:
+        if path.is_file() and path.name in RETIRED_FILES:
+            problems.add(_rel(path), RETIRED_FILES[path.name])
+        elif path.is_file() and path.suffix in (".yaml", ".yml") and path.name not in TOP_FILES:
             problems.add(_rel(path), "unexpected file; the declaration is site.yaml, "
                          "ignore.yaml, roles.yaml, organisations.yaml, "
-                         "profile-fields.yaml, course-fields.yaml, reports.yaml, %s, "
+                         "profile-fields.yaml, course-fields.yaml, reports.yaml, "
                          "badges.yaml, certificate/template.yaml, %s, %s and "
-                         "settings/*.yaml" % (DISCUSSIONS_FILE, OFFICEHOURS_FILE, DASHBOARD_FILE))
+                         "settings/*.yaml" % (OFFICEHOURS_FILE, DASHBOARD_FILE))
 
     loaded = {}
     for name, (required, optional) in TOP_FILES.items():
-        if name == DISCUSSIONS_FILE:
-            continue   # load_discussions() below; the publisher reads it through the same loader
         path = site_dir / name
         if not path.exists():
             if name == "site.yaml":
@@ -807,10 +812,13 @@ def validate(site_dir=SITE_DIR, modules_dir=None):
             MENTOR not in {r["shortname"] for r in decl["roles"]}:
         problems.add("roles.yaml", "the mentor role is missing, but local_ltuse %d defines "
                      "local/ltuse:viewmenteeprogress (FR-001)" % ltuse["version"])
-    # course-discussions.yaml (spec 012)
-    shared, discussion_problems = load_discussions(site_dir, modules_dir)
-    problems.items.extend(discussion_problems.items)
-    decl["discussions"] = {"shared": [e["slug"] for e in shared]}
+    # Spec 002 amendment (R3, FR-011): shared courses are open across organisations. A
+    # course may still use groups for teaching, but never as the site default.
+    for setting in decl["settings"]:
+        if setting.get("name") == GROUPMODE_SETTING and str(setting.get("value")) != "0":
+            problems.add(setting.get("file", "settings"),
+                         "%s must be 0: shared courses are open across organisations, and "
+                         "groups never separate organisations (spec 002 R3)" % GROUPMODE_SETTING)
     _expand(decl, orgs, fields)
 
     # Spec 004: the competency list, the course fields, then the reports, which read both.
@@ -894,7 +902,7 @@ def _validate_organisations(where, data, rows, problems):
     _check_rows(where, data, rows, problems)
     if not _text(data.get("purpose")):
         problems.add(where, "purpose must say what this file is for")
-    out = {"categories": [], "organisations": []}
+    out = {"categories": [], "organisations": [], "mentors": None}
 
     cats = data.get("categories")
     if not isinstance(cats, list):
@@ -976,6 +984,16 @@ def _validate_organisations(where, data, rows, problems):
     if INDEPENDENT not in seen:
         problems.add(where, "organisations must include %r, for consultants with no partner "
                      "organisation" % INDEPENDENT)
+
+    # The one mentors cohort (2026-10-02, research R10): mentors come from any organisation,
+    # so it belongs to none, and its idnumber is fixed rather than declared.
+    mentors = data.get("mentors")
+    mwhere = "%s mentors" % where
+    if _check_keys(mwhere, mentors, {"name", "why"}, set(), problems):
+        if not _text(mentors.get("why")):
+            problems.add(mwhere, "why must say which row or spec needs it")
+        if _check_name(mwhere, "name", mentors.get("name"), COHORT_NAME_MAX, problems):
+            out["mentors"] = {"name": mentors["name"]}
     return out
 
 
@@ -1226,6 +1244,10 @@ def _expand(decl, orgs, fields):
             decl["cohort_rules"].append({
                 "cohort_idnumber": idnumber, "name": "ltct: " + idnumber,
                 "condition": COHORT_RULE_CONDITION, "field": ORG_FIELD, "value": org["key"]})
+        if orgs["mentors"] is not None:
+            # Filled by hand, so no rule (R10).
+            decl["cohorts"].append({"idnumber": MENTORS_COHORT, "name": orgs["mentors"]["name"],
+                                    "visible": 0})
     if fields is not None:
         for field in fields["fields"]:
             decl["profile_fields"].append(dict(field, category=fields["category"]))
@@ -1839,84 +1861,6 @@ def _course_slugs(modules_dir):
     except OSError:
         pass
     return slugs
-
-
-def load_discussions(site_dir=None, modules_dir=None):
-    """Read moodle/site/course-discussions.yaml (spec 012, FR-015).
-
-    Returns (shared, Problems): `shared` is a list of {slug, why}, one per course whose
-    discussion is shared across organisations. Every other course is separated, which is
-    also what an absent file or an empty list means.
-
-    This is the only reader of the file. scripts/moodle_payload.py calls it for each
-    course's `discussion.shared`, and validate() for the drift/apply payload, so the
-    publisher and the drift check cannot disagree (contracts/site-declaration.md).
-
-    Rules: rows cite moodle/REQUIREMENTS.md; each slug is a course under modules/,
-    compared with course_stage.branch_slug(); `why` is required; no slug twice.
-    """
-    site_dir = pathlib.Path(site_dir) if site_dir is not None else SITE_DIR
-    modules_dir = pathlib.Path(modules_dir) if modules_dir is not None else MODULES
-    problems = Problems()
-    path = site_dir / DISCUSSIONS_FILE
-    if not path.exists():
-        return [], problems
-    where = _rel(path)
-    before = len(problems.items)
-    data = _load(path, problems)
-    if data is None:
-        if len(problems.items) == before:
-            problems.add(where, "empty; write `rows: [10]` and `shared: []`")
-        return [], problems
-    required, optional = TOP_FILES[DISCUSSIONS_FILE]
-    if not _check_keys(where, data, required, optional, problems):
-        return [], problems
-    _check_hosts(where, data, problems)
-
-    cited = data.get("rows")
-    if not isinstance(cited, list) or not all(_is_int(r) for r in cited):
-        problems.add(where, "rows must be a list of moodle/REQUIREMENTS.md row numbers")
-    else:
-        rows = _requirement_rows()
-        for r in cited:
-            if r not in rows:
-                problems.add(where, "row %d is not in moodle/REQUIREMENTS.md" % r)
-
-    entries = data.get("shared")
-    if entries is None:
-        entries = []                     # `shared:` with nothing under it: none shared
-    if not isinstance(entries, list):
-        problems.add(where, "shared must be a list of {slug, why}")
-        return [], problems
-
-    courses = _course_slugs(modules_dir)
-    shared, seen = [], set()
-    for i, entry in enumerate(entries):
-        ewhere = "%s shared[%d]" % (where, i)
-        if not _check_keys(ewhere, entry, {"slug", "why"}, set(), problems):
-            continue
-        slug = entry.get("slug")
-        if not _text(slug):
-            problems.add(ewhere, "slug must be a course's branch_slug()")
-            continue
-        if slug not in courses:
-            canonical = branch_slug(slug)
-            if canonical in courses:
-                problems.add(ewhere, "%s: write it as %s, the course's branch_slug()"
-                             % (slug, canonical))
-            else:
-                problems.add(ewhere, "%s is not a course under modules/" % slug)
-            continue
-        if slug in seen:
-            problems.add(ewhere, "%s is declared twice" % slug)
-            continue
-        seen.add(slug)
-        if not _text(entry.get("why")):
-            problems.add(ewhere, "%s: why must say who agreed to share and why it is safe"
-                         % slug)
-            continue
-        shared.append({"slug": slug, "why": entry["why"]})
-    return shared, problems
 
 
 def _check_source(where, component, version, source, problems):
@@ -2539,8 +2483,6 @@ def build_payload(decl, mode, environ, redact=False):
         "cohorts": decl["cohorts"],
         "profile_fields": decl["profile_fields"],
         "cohort_rules": decl["cohort_rules"],
-        # Spec 012: slugs only. The `why` stays in the repo; the server needs only the list.
-        "discussions": {"shared": list(decl.get("discussions", {}).get("shared", []))},
         # Spec 004, in application order; reports last (data-model "Rendered payload
         # additions"). Every {org} is already expanded.
         "course_field_category": decl["course_field_category"],
@@ -2626,14 +2568,13 @@ def _summary(decl):
     files = len({s["file"] for s in decl["settings"]})
     return ("%d settings in %d files, %d plugins, %d roles, %d ignore entries, "
             "%d categories, %d cohorts, %d profile fields, %d cohort rules, "
-            "%d course fields, %d competencies, %d reports, %d shared course discussions, "
+            "%d course fields, %d competencies, %d reports, "
             "%d badge template, %d certificate template, %d office-hours course, "
             "%d dashboard blocks"
             % (len(decl["settings"]), files, len(decl["plugins"]), len(decl["roles"]),
                len(decl["ignore"]), len(decl["categories"]), len(decl["cohorts"]),
                len(decl["profile_fields"]), len(decl["cohort_rules"]),
                len(decl["course_fields"]), len(decl["competencies"]), len(decl["reports"]),
-               len(decl["discussions"]["shared"]),
                decl["badge_template"] is not None, decl["certificate_template"] is not None,
                decl["officehours"] is not None, len(decl["dashboard"])))
 

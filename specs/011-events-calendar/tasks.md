@@ -26,7 +26,7 @@
 
 **Purpose**: The dependency gate, the harness skeletons and the plugin version.
 
-- [ ] T001 Confirm that the open-courses change (spec 002 amendment, branch `002-open-courses`) has merged to `main`, then merge `main` into `011-events-calendar`. Record the merge commit in the PR. T021 must not merge before this (plan decision 6, research R17).
+- [X] T001 Build on the open-courses change (spec 002 amendment, branch `002-open-courses`, PR #86): merged `002-open-courses` into `011-events-calendar` on 2026-10-03, ahead of #86 reaching `main`, so PR #85 merges after #86. Resolved: the `local_ltuse` version (2026100400, release 0.10.0), and `ltct:officehours` excluded from 002's `check_course_groupmodes()` and `discussion_targets()`, so the two applies never undo each other's group mode (plan decision 6, research R17).
 - [X] T002 [P] Create harness skeletons, following `tests/profile_access_harness.php`:
   - `tests/calendar_notify_harness.php`
   - `tests/timezone_notice_harness.php`
@@ -125,7 +125,7 @@
 
 ### Implementation for User Story 2
 
-- [ ] T021 [US2] In `moodle/site/roles.yaml`, give `orgmanager` `moodle/calendar:manageentries: allow`. Rewrite its description to include "posts events in its organisation's own courses", and its `why` to cite #21, D3 and R17. **Merge only after T001.**
+- [X] T021 [US2] In `moodle/site/roles.yaml`, give `orgmanager` `moodle/calendar:manageentries: allow`. Rewrite its description to include "posts events in its organisation's own courses", and its `why` to cite #21, D3 and R17. **Merge only after T001.**
 - [X] T022 [US2] Add the orgmanager calendar rule to `validate` in `scripts/site_config.py`, beside `_check_orgmanager`. `ORGMANAGER_DENY` is unchanged.
 - [X] T023 [P] [US2] Implement the pure `moodle/local_ltuse/classes/calendar_notify.php`: `decide()`, `key()`, and the buffer-merge rule (cancellation outranks change, and a second occurrence sets `series`).
 - [X] T024 [US2] Observe `\core\event\calendar_event_created`, `_updated` and `_deleted` in `moodle/local_ltuse/db/events.php`, with `'internal' => false`. In `classes/observer.php`:

@@ -108,11 +108,11 @@ def ensure_sections(client, courseidnumber, count, names):
                   for n in sorted(names) if names.get(n)])
 
 
-# Separate groups: each partner organisation is a group in a shared course, so a manager
-# sees only their own people (spec 002, R3). Sent on update too, so a course published
-# before spec 002 changes on its next publish. Not forced (groupmodeforce stays 0), so a
-# forum can still run across organisations.
-GROUPMODE_SEPARATE = 1
+# No groups: shared courses are open across organisations (spec 002 R3, amended
+# 2026-10-02), and groups never separate organisations. Sent on update too, so a course
+# published with separate groups opens on its next publish. groupmodeforce is never sent:
+# a teacher may still use groups in one activity for teaching.
+GROUPMODE_NONE = 0
 
 # Completion is switched on for every course the repo publishes (spec 004, R4), on update
 # too, so a course published before spec 004 gains it on its next publish. The site-level
@@ -186,7 +186,7 @@ def ensure_course(client, manifest, category_id, problems=None):
             "fullname": manifest["title"],
             "summary": manifest["summary_html"],
             "summaryformat": 1,
-            "groupmode": GROUPMODE_SEPARATE,
+            "groupmode": GROUPMODE_NONE,
             "showreports": SHOW_REPORTS_OFF,
             "enablecompletion": COMPLETION_ENABLED,
             "customfields": customfields,
@@ -212,7 +212,7 @@ def ensure_course(client, manifest, category_id, problems=None):
             "format": "topics",
             "numsections": max(len(manifest["sections"]), 1),
             "visible": 0,          # created hidden; a human decides when learners see it
-            "groupmode": GROUPMODE_SEPARATE,
+            "groupmode": GROUPMODE_NONE,
             "showreports": SHOW_REPORTS_OFF,
             "enablecompletion": COMPLETION_ENABLED,
             "courseformatoptions": HIDE_SECTIONS_COMPLETELY,
@@ -445,25 +445,20 @@ def publish(client, payload_dir, category_id):
               % ("would be resolved" if client.dry_run else "resolved", rewritten))
 
     # --- the course discussion (spec 012, FR-015) -----------------------------------------
-    # Created if absent; otherwise only its group mode is set, so a hand change is undone
-    # on every publish. Its posts are never written. Its idnumber starts ltct:<slug>: like
+    # Created if absent; otherwise only its group mode is set (no groups, spec 002 R3), so
+    # a hand change is undone on every publish. Its posts are never written. Its idnumber starts ltct:<slug>: like
     # a module's, so the retire step below must be told it belongs to this run.
     discussion = manifest["discussion"]
     result = client.call(
         "local_ltuse_ensure_discussion",
         courseidnumber=manifest["idnumber"], idnumber=discussion["idnumber"],
-        name=discussion["name"], intro=discussion["intro_html"],
-        shared=discussion["shared"])
-    scope = ("shared across organisations" if discussion["shared"]
-             else "separated by organisation")
-    print("    forum   %-46s %s (%s)" % (
+        name=discussion["name"], intro=discussion["intro_html"])
+    print("    forum   %-46s %s" % (
         discussion["idnumber"],
-        "dry-run" if client.dry_run else ("created" if result["created"] else "updated"),
-        scope))
+        "dry-run" if client.dry_run else ("created" if result["created"] else "updated")))
     if not client.dry_run and result.get("courseforced"):
-        print("    WARNING the course forces its own group mode, which overrides the "
-              "discussion's.\n            Turn off Course settings > Groups > Force "
-              "group mode, or organisations\n            may see each other's posts.")
+        print("    WARNING the course forces a group mode, which would wall the course forum."
+              "\n            Turn off Course settings > Groups > Force group mode.")
 
     # --- last: retire what the course no longer has -------------------------------------
     # A lesson renamed, renumbered or removed in the repo leaves its old module in Moodle

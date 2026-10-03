@@ -92,29 +92,32 @@ roles:
   - shortname: orgmanager
     name: Organisation manager
     description: >-
-      Follows one partner organisation's learners in the courses that organisation is enrolled
-      in: the participants page, their profiles and their identity fields, and the course's
-      activity and course completion reports, for their own group only. Changes nothing. Comes only through the organisation's managers cohort, by cohort
-      sync. Declared in moodle/site/roles.yaml and applied by scripts/site_config.py -- edit
+      Follows one partner organisation's learners in a course only that organisation takes:
+      the participants page, their profiles and their identity fields, and the course's
+      activity and course completion reports. Used only in organisation-only courses, never in
+      a course organisations share. Changes nothing by itself; a manager's actions go through
+      local_ltuse's organisation page. Comes only through the organisation's managers cohort,
+      by cohort sync. Declared in moodle/site/roles.yaml and applied by scripts/site_config.py -- edit
       that file rather than this role.
     archetype: ""   # every capability is managed, so a capability granted by hand shows as drift
     contextlevels: [course]   # assigned only by cohort sync in a course, never per person (R2, FR-012)
     capabilities:
-      moodle/course:viewparticipants: allow   # the participants page, filtered to their group (R3)
+      moodle/course:viewparticipants: allow   # the participants page of an organisation-only course (R2)
       moodle/user:viewdetails: allow          # open one of their people's profiles
       moodle/site:viewuseridentity: allow     # the identity fields the site shows, such as email
-      report/progress:view: allow             # per-lesson ticks for their own group (R8)
-      report/completion:view: allow           # course completion for their own group (R8)
+      report/progress:view: allow             # per-lesson ticks in an organisation-only course (R8)
+      report/completion:view: allow           # course completion in an organisation-only course (R8)
     why: >-
       #8 and #15 (FR-005 to FR-007): one follow-only role for every partner organisation, so
-      every manager holds the same permissions (SC-005). It holds no
-      moodle/site:accessallgroups, so separate groups keep each organisation apart, and no
-      moodle/user:viewalldetails, which reaches every learner site-wide and would show
-      teachers-visibility fields such as ltct_role (R2, R5). Nothing is prohibit, so a manager
-      who is also a mentor keeps that role's permissions. local_ltuse's profile hook limits
-      whose profiles a manager can open (R9). report/progress:view and report/completion:view
-      are #7 (spec 004, R8): both reports honour separate groups, so without
-      moodle/site:accessallgroups a manager sees only their own group's learners there too.
+      every manager holds the same permissions (SC-005). Amended 2026-10-02 (R2): shared
+      courses are open and have no organisation groups, so this role is assigned only in an
+      organisation-only course, where everyone enrolled belongs to the manager's organisation;
+      a managers cohort is never synced into a shared course, and drift fails if one is. It
+      holds no moodle/user:viewalldetails, which reaches every learner site-wide and would show
+      teachers-visibility fields such as ltct_role (R2, R5). moodle/site:viewuseridentity stays
+      (Doug, 2026-10-02). Nothing is prohibit, so a manager who is also a mentor keeps that
+      role's permissions. local_ltuse's profile hook limits whose profiles a manager can open
+      (R9). report/progress:view and report/completion:view are #7 (spec 004, R8).
 
   - shortname: student
     archetype: student
@@ -132,8 +135,9 @@ roles:
     why: >-
       #22 (spec 012): the course-level role that assesses work. Its archetype defaults are what
       FR-010/FR-013 need (assign:grade, workshop allocate/switchphase/overridegrades,
-      viewhiddenactivities). Lacking moodle/site:accessallgroups is what keeps a mentor inside
-      their organisation's groups (#10). A role with an archetype has only its listed
+      viewhiddenactivities). Since 2026-10-02 shared courses have no organisation groups, so
+      lacking moodle/site:accessallgroups no longer scopes anyone there; it matters only where
+      a teacher uses groups for teaching (spec 002 R3). A role with an archetype has only its listed
       capabilities managed, so accessallgroups is declared explicitly (as the archetype
       default, inherit) for drift to catch it being granted by hand.
 

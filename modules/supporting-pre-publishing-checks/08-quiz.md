@@ -107,15 +107,12 @@ any numbers/measures check results, what should you confirm?
 - C) Which check(s) the team's version actually has, and that it ran against their documented approach
 - D) That the typesetter has reviewed the results, since numbers often affect the layout of tables
 
-**Question 12:** You confirm that a team's Paratext version has not yet migrated to the
-new consolidated check — they only have the older, separate Numbers check, with no
-working Measures check at all. You run the Numbers check where it applies, along with
-what informal comparison you can do for the measures themselves, and that informal
-comparison turns up an inconsistency between two occurrences of what should be the same
-measurement. You're not sure whether the team's documented approach covers this case.
-What should you do?
-- A) Refer the inconsistency back to the team to resolve against their own documented approach
-- B) Ignore the flag, since an informal comparison isn't a reliable check on this Paratext version
+**Question 12:** A team's Paratext version has only the older Numbers check and no
+working Measures check. At your request, the team reviews their own measure renderings
+and finds two occurrences of the same measurement rendered differently. Nobody is sure
+a documented approach to measures exists. What should you do?
+- A) Settle whether a documented approach exists, then refer the inconsistency to the team
+- B) Compare the measure renderings yourself to confirm the team's finding before acting on it
 - C) Decide which of the two renderings is correct and ask the team to match the other to it
 - D) Ask the typesetter to make the two occurrences consistent when the files are composed
 

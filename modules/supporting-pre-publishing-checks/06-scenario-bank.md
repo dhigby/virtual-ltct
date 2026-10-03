@@ -64,13 +64,14 @@ judge the passages' meaning yourself.
 numbers, weights, and measures. When you go looking, you find that this team's Paratext
 version has not yet migrated to the new consolidated numbers/weights/measures check —
 they still only have the older, separate **Numbers** check, and there is no working
-Measures check available to them at all. You confirm this, then run the Numbers check
-where it applies, along with what informal comparison you can do for the measures
-themselves. That informal comparison turns up an inconsistency between two occurrences
-of what should be the same measurement — one passage renders it one way, another
-passage renders it differently. You ask the team what their documented approach to
-measures is, and they aren't sure such a document exists; someone recalls "a decision
-early on" but nobody can point to where it's written.
+Measures check available to them at all. You confirm this, run the Numbers check where
+it applies, tell the team there is no reliable tool for weights and measures on their
+version yet, and ask them to find and review their own measure renderings. Their review
+turns up an inconsistency between two occurrences of what should be the same
+measurement — one passage renders it one way, another passage renders it differently.
+When you ask what their documented approach to measures is, they aren't sure such a
+document exists; someone recalls "a decision early on" but nobody can point to where
+it's written.
 
 **Context:** A new consolidated check that covers numbers, weights, and measures
 together is expected to become available before too long, but rollout doesn't reach
@@ -83,16 +84,17 @@ routing, not recognizing a specific known error.
 **Your task:**
 1. **Diagnose:** How would you confirm, for this team's Paratext version, whether they
    have the new consolidated check or only the older, separate Numbers check with no
-   working Measures check — and what would you do about the measurement inconsistency
-   given that no working check can catch it reliably on their version? Separately, what
-   would you check first about the inconsistency you did find — the check result itself,
-   or whether an agreed approach exists at all? What's the difference between "an
-   inconsistency turned up" and "the team has no documented standard to check against"?
+   working Measures check — and, given that no working check can catch weights/measures
+   inconsistencies reliably on their version, why is it the team rather than you who
+   finds and reviews the measure renderings? Separately, what would you settle first
+   about the inconsistency the team found — the inconsistency itself, or whether an
+   agreed approach exists at all? What's the difference between "an inconsistency turned
+   up" and "the team has no documented standard to check against"?
 2. **Say to the team:** How would you explain to the team what their Paratext version
    does and doesn't have available yet, and how would you help them either locate their
    existing decision or agree on one now, without proposing a rendering yourself?
 3. **Escalate:** Once an approach is documented, whose job is it to decide which of the
-   two flagged renderings is correct — and is there any version of this situation that
+   two inconsistent renderings is correct — and is there any version of this situation that
    would need a Translation Consultant rather than staying inside the team?
 
 ---

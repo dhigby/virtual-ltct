@@ -97,16 +97,18 @@ numbers/weights/measures checking is in transition: a **new consolidated check**
 separate Numbers check, but not every team's Paratext version has migrated to it yet.
 This team is still on the older setup — only the separate Numbers check, with no working
 Measures check at all — and the learner should confirm that specifically for this
-team's version rather than assuming either way. A strong answer explicitly notes that
-because no working check can catch the weights/measures inconsistency reliably on this
-version, that changes what the informal comparison can tell you, not just how you
-interpret it. From there, the learner should distinguish two different problems that
-look similar — "an inconsistency turned up" (a normal, expected finding) vs. "the team
-has no documented standard to check against" (a process gap that has to be fixed before
-the finding means anything). A strong answer checks for the existence of a documented
-approach *first*, before treating the flagged inconsistency as something to resolve. A
-weak answer never asks which check(s) this team's version actually has, or assumes the
-new consolidated check must already be available everywhere.
+team's version rather than assuming either way. A strong answer confirms the available
+check, runs it against the team's documented approach, is honest that there is no
+reliable tool for weights and measures on this version, and asks the **team** to find and
+review their own measure renderings — rather than the learner comparing them. (Comparing
+measure renderings by hand is possible but not easy, and ambiguous terms get missed.)
+From there, the learner should distinguish two different problems that look similar —
+"an inconsistency turned up" (a normal, expected finding) vs. "the team has no
+documented standard to check against" (a process gap that has to be fixed before the
+finding means anything). A strong answer checks for the existence of a documented
+approach *first*, before treating the inconsistency the team found as something to
+resolve. A weak answer never asks which check(s) this team's version actually has, or
+assumes the new consolidated check must already be available everywhere.
 
 **Watch for in what they'd say to the team:** the learner explains, in plain terms, what
 this team's Paratext version does and doesn't have available yet — the older Numbers
@@ -118,15 +120,17 @@ this scenario has no field "gotcha" to diagnose — it's pure process/routing (p
 design doc, this check area has no confirmed field case yet, so don't expect or reward
 an invented technical cause).
 
-**Watch for in escalation:** once an approach exists, deciding which of the two flagged
-renderings is correct stays with the team; a Translation Consultant only enters if the team
+**Watch for in escalation:** once an approach exists, deciding which of the two
+inconsistent renderings is correct stays with the team; a Translation Consultant only enters if the team
 itself can't agree or the question turns out to be a genuine translation/content judgment
 beyond a documented style choice. A learner who says "escalate to a Translation Consultant"
 by default, without first establishing whether the team can resolve it internally, has
 skipped a step.
 
 **Common wrong turn:** proposing which rendering is "right" instead of routing the decision
-back to the team; assuming the new consolidated check is available without confirming it for
+back to the team; trying to compare or judge the measure renderings themselves and decide
+what counts as consistent, instead of asking the team to find and review them (mark
+down); assuming the new consolidated check is available without confirming it for
 this team's specific Paratext version, or assuming no team could possibly have it yet.
 
 ---

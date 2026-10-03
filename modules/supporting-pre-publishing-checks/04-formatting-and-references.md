@@ -93,8 +93,11 @@ symptoms of a single cause higher up. Work in this order instead:
    - Each heading is present, uses a heading marker, and hasn't swallowed verse text —
      the missing-`\p` cascade above.
    - Each heading falls where the headings in the LWC (Language of Wider Communication)
-     Bible or a back translation fall, so a missing or misplaced heading shows up
-     without your reading the language.
+     Bible fall, so a missing or misplaced heading shows up without your reading the
+     language. The LWC Bible is your main cross-check. A back translation only helps if
+     it was made manually, outside Paratext — one made in Paratext (e.g. as a
+     back-translation project based on the translation) carries the translation's own
+     headings, so comparing against it proves nothing.
    - Whether a heading's wording fits its passage is the team's call — route that
      question to them.
 6. **Book titles.** Inconsistent or incorrect book-name and book-title markup, especially

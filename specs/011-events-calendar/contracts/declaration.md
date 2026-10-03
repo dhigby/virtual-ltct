@@ -68,4 +68,5 @@ These are the rules in data-model.md, plus:
 - the group name template holds `{n}` and no name placeholder;
 - `orgmanager` holds no calendar capability other than `manageentries`;
 - `student` does not allow `mod/scheduler:seeotherstudentsbooking`;
-- `dashboard.yaml` names no block twice.
+- `dashboard.yaml` names no block twice;
+- `hiddenuserfields` (`settings/groups.yaml`) never contains `timezone`, so the profile always shows the zone (R14).

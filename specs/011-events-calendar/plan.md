@@ -12,8 +12,8 @@ Most of this spec is core Moodle, configured from `moodle/site/`. Open courses m
   - Organisation managers post in their organisation's organisation-only courses: `orgmanager` gains `moodle/calendar:manageentries` (D3). Because the open-courses change enrols managers only in those courses, that is exactly where the capability reaches. This PR therefore merges after that change.
 - **Time zones** (R5, R14):
   - The site default zone is UTC (D7).
-  - FR-002 is relaxed: the learner's zone is confirmed at first login and shown on their profile (D5).
-  - Core shows it on the profile, in the browser and in the app, but never asks for it. So `local_ltuse` asks once: on the web through a one-field page, and in the app through core's own "complete your profile" route.
+  - FR-002 is relaxed: the learner's zone is shown on their profile, where they change it. Nobody is prompted at first login (D5, plan decision 2).
+  - Core already shows it on the profile, in the browser and in the app. `local_ltuse` reminds the learner where a wrong zone matters most. It adds a one-line notice naming the zone to the office-hours booking pages, through a core output hook, and every booking message names it.
 - **Changes and cancellations** (R6, R15). Core sends nothing, so `local_ltuse` adds an observer, a message provider and an adhoc task. A whole series produces one message, by email and app push (row #25).
 - **Office hours** (R9, R16, R19).
   - **The plugin.** `mod_scheduler` v5.2-r1, pinned, used in the browser only (D6).
@@ -39,14 +39,12 @@ Most of this spec is core Moodle, configured from `moodle/site/`. Open courses m
   - enrolment: `enrol_manual`
   - `create_course`, `create_module`
   - the block manager on the default `my-index` page
-  - `user_update_user`
-  - the legacy `after_require_login` callback
-  - the `user_updated` event
+  - the output hook `\core\hook\output\before_standard_top_of_body_html_generation`
 - `mod_scheduler` v5.2-r1 (`2026080400`), free and pinned in `site.yaml`.
 - Our own `local_ltuse`, built on spec 003's observers, and PyYAML.
 
 **Storage**:
-- Moodle's database: events, scheduler slots and appointments, groups, enrolments, and one user preference, `local_ltuse_tzconfirmed`.
+- Moodle's database: events, scheduler slots and appointments, groups, and enrolments.
 - One new `local_ltuse` table, `local_ltuse_booking`, holding each booking's last notified time (R20). It is personal data and has a privacy provider.
 - Group membership needs no table: it records its owner through `component` and `itemid`.
 - The repo holds declarations only.
@@ -55,7 +53,7 @@ Most of this spec is core Moodle, configured from `moodle/site/`. Open courses m
 - `pytest` for `site_config.py`'s new validation and rendering (synthetic inputs).
 - Three PHP harnesses for the pure decisions, run as the existing ones are:
   - `calendar_notify_harness.php`: is this event change announced, and under which key;
-  - `timezone_gate_harness.php`: is this request asked to confirm a zone;
+  - `timezone_notice_harness.php`: on which pages the time zone notice shows, and its text;
   - `officehours_harness.php`: the difference between assignments and memberships;
   - `booking_notice_harness.php`: which booking change sends which message.
 - PHPUnit on synthetic data for the sync, in `moodle/local_ltuse/tests/officehours_test.php`.
@@ -93,15 +91,12 @@ No NEEDS CLARIFICATION remains. Every API above was confirmed on `MOODLE_502_STA
 | III. Public repo (NON-NEGOTIABLE) | PASS. No relationship, booking or member is declared. `apply`, `drift` and the reconcile task report counts and idnumbers, never names. Group names carry no names. Quickstart evidence stays outside the repo, and only `ltct-test-*` accounts are used. |
 | IV. Disclosure (NON-NEGOTIABLE) | PASS. Not touched. Events and the office-hours course carry no course content, and the payload gates are unchanged. |
 | V. CBC fidelity | PASS. No event, booking or attendance awards or implies a level, and the scheduler's grading is off (`grade 0`). New strings carry no level vocabulary and no "certified". |
-| VI. No LMS orientation | PASS with gates. Learners find events on their dashboard and in the app's calendar. They reach office hours from one course card. A manager posts from the course's own calendar. The zone is asked once, in one field. SC-003 and SC-004 need 2–3 real learners and managers (quickstart). |
+| VI. No LMS orientation | PASS with gates. Learners find events on their dashboard and in the app's calendar. They reach office hours from one course card. A manager posts from the course's own calendar. The zone is on the profile and is named on the booking page. SC-003 and SC-004 need 2–3 real learners and managers (quickstart). |
 | VII. One shape | PASS. One set of event levels, one office-hours course and one manager capability for every partner. An organisation-only course is the uniform variant the open-courses change defines, not a per-partner calendar. |
 | VIII. Language data | Not applicable. |
 | IX. Flat cost, field-ready | PASS with a stated limit. Core, one free plugin and our own code. Events and bookings show in the app's calendar and offline once synced. Booking itself is browser-only (D6), and the app's "Open in browser" covers it. Live sessions are never the only route (FR-010), and no conferencing server is run (FR-013). |
-| X. Traceable and verified | PASS with gates. The plan cites row #21, and the delivering PR updates it. The scheduler pin, group filtering, the time zone route in the app, notification collapsing and manager reach are verify tasks that block their stories. New recurring operations: keeping the scheduler pin current on every Moodle upgrade (015's operator), and the hourly reconcile and the scheduler's own tasks, which ride the cron 015 already monitors. |
-| XI. Survives an upgrade | PASS with listed exceptions. Writes go through core APIs only: `create_course`, `create_module`, `groups_*`, `enrol_manual`, `user_update_user`, `message_send`, block manager, tasks. Three exceptions are listed in the plugin README:
-1. Throwing core's `usernotfullysetup` from our callback, to reach the app's profile route (R14). V3 is re-run on every core or app upgrade.
-2. Relying on the scheduler's group filter (R16). V10 is re-run on every re-pin.
-3. A raw read of `scheduler_slots.teacherid` by primary key, plus the scheduler's `SSstu:` eventtype convention (R20). V13 is re-run on every re-pin. The legacy `after_require_login` callback is used because no hook replaces it. `local_ltuse` keeps `requires` and `supported` at 5.2. |
+| X. Traceable and verified | PASS with gates. The plan cites row #21, and the delivering PR updates it. The scheduler pin, group filtering, the time zone notice, booking messages, notification collapsing and manager reach are verify tasks that block their stories. New recurring operations: keeping the scheduler pin current on every Moodle upgrade (015's operator), and the hourly reconcile and the scheduler's own tasks, which ride the cron 015 already monitors. |
+| XI. Survives an upgrade | PASS with listed exceptions. Writes go through core APIs and our own table only: `create_course`, `create_module`, `groups_*`, `enrol_manual`, `message_send`, block manager, tasks. Two exceptions are listed in the plugin README. (1) Relying on the scheduler's group filter (R16); V10 is re-run on every re-pin. (2) A raw read of `scheduler_slots.teacherid` by primary key, plus the scheduler's `SSstu:` eventtype convention (R20); V13 is re-run on every re-pin. The time zone notice uses a core hook, so it is no exception. `local_ltuse` keeps `requires` and `supported` at 5.2. |
 | Platform: core first | PASS. The calendar, export, the profile's time zone, the dashboard block and messaging are core. Booking is a maintained free plugin because core has none (R9). Our code fills three gaps core leaves: notifying changes, asking for the zone, and turning 003's user-context relationships into scheduler groups (Complexity Tracking). |
 
 Re-checked after Phase 1 design: no change.
@@ -121,7 +116,7 @@ specs/011-events-calendar/
 ├── quickstart.md        # instance checks V1–V18
 ├── contracts/
 │   ├── declaration.md   # office-hours.yaml, dashboard.yaml, settings, roles, site.yaml
-│   └── local-ltuse.md   # observer, task, provider, time zone gate, office-hours sync
+│   └── local-ltuse.md   # observers, tasks, providers, time zone notice, office-hours sync, booking notices
 └── tasks.md             # /speckit-tasks
 ```
 
@@ -141,33 +136,34 @@ moodle/
 ├── local_ltuse/
 │   ├── classes/calendar_notify.php     # new: pure decide() and key() for a calendar change (R15)
 │   ├── classes/task/event_change_notice.php  # new: adhoc task; resolves recipients, sends
-│   ├── classes/timezone_gate.php       # new: pure decide() for the first-login prompt (R14)
+│   ├── classes/timezone_notice.php     # new: pure applies() and text() for the booking-page notice (R14)
+│   ├── classes/hook_callbacks.php      # changed: + before_standard_top_of_body_html_generation
+│   ├── db/hooks.php                    # changed: + the top-of-body hook
 │   ├── classes/booking_notice.php      # new: decide() (pure) and the booked/changed/cancelled messages (R20)
 │   ├── db/install.xml, db/upgrade.php  # changed: + local_ltuse_booking
 │   ├── classes/officehours.php         # new: sync_pair(), reconcile(), group and enrolment writes (R16)
 │   ├── classes/officehours_plan.php    # new: pure difference of assignments and memberships
 │   ├── classes/task/officehours_reconcile.php  # new: scheduled, hourly
-│   ├── classes/observer.php            # changed: calendar events, user_updated; mentor events also sync office hours
+│   ├── classes/observer.php            # changed: calendar and scheduler events; mentor events also sync office hours
 │   ├── classes/siteconfig/officehours.php      # new: apply/drift for the course and the activity
 │   ├── classes/siteconfig/dashboard.php        # new: apply/drift for the default dashboard block
 │   ├── classes/siteconfig/{inspector,applier,drift}.php  # changed: hand them their arrays
-│   ├── classes/privacy/provider.php    # changed: declares the user preference
-│   ├── timezone.php, templates/timezone.mustache  # new: the one-field page
-│   ├── lib.php                         # changed: after_require_login, allow_group_member_remove
-│   ├── db/events.php                   # changed: + calendar_event_created/_updated/_deleted, user_updated
+│   ├── classes/privacy/provider.php    # changed: declares the booking table and the message providers
+│   ├── lib.php                         # changed: allow_group_member_remove
+│   ├── db/events.php                   # changed: + calendar_event_created/_updated/_deleted, mod_scheduler slot_deleted
 │   ├── db/messages.php                 # new: providers eventchange and bookingnotice
 │   ├── db/tasks.php                    # new: officehours_reconcile
 │   ├── lang/en/local_ltuse.php         # strings
 │   ├── tests/officehours_test.php      # new: PHPUnit, synthetic data
 │   ├── version.php                     # bumped
-│   └── README.md                       # changed: the two XI exceptions, the new tasks and observers
+│   └── README.md                       # changed: the XI exceptions, the new table, tasks and observers
 └── REQUIREMENTS.md                     # row 21 updated on delivery
 scripts/
 └── site_config.py                      # changed: validate and render office-hours.yaml, dashboard.yaml, calendar rules
 tests/
 ├── test_site_config.py                 # changed
 ├── calendar_notify_harness.php         # new
-├── timezone_gate_harness.php           # new
+├── timezone_notice_harness.php         # new
 ├── officehours_harness.php             # new
 └── booking_notice_harness.php          # new
 .github/workflows/site-config.yml       # changed: runs the four harnesses
@@ -182,12 +178,12 @@ These are for the maintainer (Doug). `/speckit-tasks` may generate tasks as draf
 | # | Limit or choice | Status |
 |---|---|---|
 | 1 | **One office-hours course** (`ltct:officehours`, "Mentor office hours") holds the scheduler for every mentor. Not one in every shared course, and not 005's community course, which doesn't exist yet (R16). It is one more course card for learners who have a mentor. | **Accepted 2026-10-02.** |
-| 2 | **How the zone is asked** (R14). A preference records the confirmation. The web uses a one-field page, and the app uses core's "complete your profile" route, reached by throwing core's `usernotfullysetup`. That reuse is a listed Principle XI exception. | Answered "time zone on the profile makes sense" (2026-10-02). **To confirm**: whether the first-login prompt stays, or showing it on the profile is enough. |
+| 2 | **How the zone is handled** (R14). There is no first-login prompt. The profile shows the zone and the learner changes it there. The office-hours booking page and every booking message name the zone in use. | **Decided 2026-10-02 (option b)**, with the booking-page reminder. |
 | 3 | **The cancellation window** (`guardtime`). Inside it, a learner can neither book nor cancel, and must message the mentor (R19). | **Accepted 2026-10-02: 12 hours.** |
 | 4 | **Booking another mentor's slot** by a crafted request is possible, because the scheduler's group check is display-only (R19). The mentor sees the booking and can remove it. Closing the gap would mean our code calling the scheduler's internals. | **Accepted 2026-10-02**: accept, and document. |
 | 5 | **What is announced.** Calendar events: changes and cancellations only, never new events (FR-006), so a new site event does not email every account. Bookings: every booking, cancellation and change of time is emailed to both the mentee and the mentor, whoever made it (R20). | **Decided 2026-10-02.** The booking half was added by this decision. |
 | 6 | **Merge order.** The `orgmanager` calendar grant is safe only once managers are enrolled in organisation-only courses alone (R17). This PR merges after the open-courses change, and V6 runs on that state. | Dependency, not a choice. |
-| 7 | **Showing the zone beside each time** stays out until 007 (D5). The profile and the first-login prompt are what 011 delivers. | Decided (D5). |
+| 7 | **Showing the zone beside each time** stays out until 007 (D5). The profile, the booking-page notice and the booking messages are what 011 delivers. | Decided (D5). |
 
 ## Cross-spec effects
 
@@ -215,7 +211,7 @@ These are for the maintainer (Doug). `/speckit-tasks` may generate tasks as draf
 | Exception | Why Needed | Simpler Alternative Rejected Because |
 |-----------|------------|-------------------------------------|
 | Our own change-notice observer, task and message provider | FR-006: core sends nothing when an event changes (R6) | **Nothing**: fails FR-006. **The app's local reminders**: they don't fire on a change, and don't reach email. |
-| Our own first-login time zone prompt, with the app route through core's `usernotfullysetup` | D5: "set at first login", which core never asks for (R14) | **A required custom profile field**: the tick and the zone are separate, so UTC stays. **Site team sets it**: not "at first login", and they rarely know it. |
+| Our own time zone notice on the booking page (a core hook) | Decision 2: remind the learner of the zone where a wrong one costs a missed meeting (R14) | **Mentors say it in the slot's comments**: easy to forget. **A child theme for every event time**: deferred to 007. |
 | Our own office-hours group sync and reconcile task | D6: 003's relationship is a user-context role, and the scheduler knows only course groups (R9, R16) | **Groups by hand**: drift between relationships and slots, and site-team work on every change. **Open slots**: Doug chose a group per mentor. |
 | Our own booking notices, a new table `local_ltuse_booking`, and a raw read of `scheduler_slots.teacherid` (R20) | Decision 5: every booking, cancellation and change goes to both sides. The scheduler confirms nothing to the actor and is silent on a mentor's edits and deletions. | **The scheduler's own messages plus ours**: "revoke all" would send duplicates. **No table**: core's update event has no old time, so every note edit or 016 re-save would announce a "change". |
 | A third-party plugin, `mod_scheduler` | Core has no booking module (R9) | **Our own booking code**: rebuilds a maintained plugin. **`mod_organizer`**: the same app gap and a larger surface. |

@@ -26,6 +26,7 @@ These are decisions D1–D7 of [handoff.md](handoff.md). The maintainer (Doug) a
 
 These are answers to the decisions in [plan.md](plan.md), given in PR #85.
 
+- Q: Must learners set their zone at first login? → A: No. Showing it on the profile is enough, and the learner changes it there. The booking page and every booking message remind the learner of the zone in use, because bookings are where a wrong zone matters most. This relaxes D5 further.
 - Q: Should office hours live in one dedicated course? → A: Yes.
 - Q: What is the cancellation window? → A: 12 hours.
 - Q: Should we accept that a crafted request can book another mentor's slot? → A: Yes, and document it.
@@ -108,7 +109,7 @@ An event for a live session carries a clear "join" link. A learner who cannot at
 
 ### Edge Cases
 
-- A learner has no time zone set, or travels: events show in the site default zone (UTC) until they set one. The zone is set at first login and shown on the learner's profile. Showing it beside each event time is deferred to spec 007 (D5).
+- A learner has no time zone set, or travels: events show in the site default zone (UTC) until they set one. The zone is shown on the learner's profile, on the booking page and in every booking message. Showing it beside each event time is deferred to spec 007 (D5).
 - Daylight-saving changes between booking and meeting: the booked time stays correct for both sides.
 - A mentor supports learners in several organisations: they see their own mentees' bookings across organisations, but no learner ever sees another learner's booking (D4).
 - A recurring event is edited: the manager can change one occurrence or the whole series.
@@ -121,7 +122,7 @@ An event for a live session carries a clear "join" link. A learner who cannot at
 ### Functional Requirements
 
 - **FR-001**: The system MUST offer events at site, course and group level, using core Moodle capability where it exists. It MUST show each learner the site's events, the events of every course they are enrolled in and the events of every group they belong to, and no others. Events are open across organisations. An organisation-only course's events reach only that organisation, because only its people are enrolled.
-- **FR-002**: Every event time MUST be shown in the viewer's own time zone. The learner's zone MUST be set at their first login and shown on their profile. Until it is set, the site default, UTC, applies. *(Relaxed 2026-10-02, D5: showing the zone beside each time is revisited with spec 007.)*
+- **FR-002**: Every event time MUST be shown in the viewer's own time zone. The learner's zone MUST be shown on their profile, where they can change it. Until they do, the site default, UTC, applies. The booking page and every booking message MUST name the zone in use. *(Relaxed 2026-10-02, D5 and the plan decisions: showing the zone beside each event time is revisited with spec 007.)*
 - **FR-003**: Upcoming events MUST appear on the learner dashboard and in the Moodle app, and events already synced MUST remain viewable offline.
 - **FR-004**: Learners MUST be able to subscribe to or export their own events to an external calendar without administrator help.
 - **FR-005**: Organisation managers MUST be able to create, edit, repeat and cancel events for their own people in their organisation's organisation-only courses, and nowhere else, within the single shared role set. Course mentors do the same in the courses they mentor, and the site team posts site events.

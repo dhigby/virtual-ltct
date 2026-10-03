@@ -66,7 +66,7 @@ Because of R2, an event for "everyone in organisation A" needs a course that A's
 - **No calendar view shows the zone.** The time formats (`humandate`, `humantimeperiod`, `strftimetime`) have no `%Z`, and the `event_details` and `upcoming_mini` templates print no zone. FR-002 ("with the zone indicated") and the spec edge case ("the zone in use is always visible beside the time") are not met by core.
 - Options: a template override in a child theme (allowed by constitution XI, but adds a theme), our own block or output hook, or relaxing FR-002 to "the learner's zone is shown on their profile and set at first login".
 
-**Status**: decided (D5, D7). FR-002 is relaxed: the zone is set at first login and shown on the profile (R14), and `$CFG->timezone` is `UTC`. Showing the zone beside each time is revisited with 007.
+**Status**: decided (D5, D7). FR-002 is relaxed: the zone is shown on the profile and named on the booking page and in booking messages (R14), and `$CFG->timezone` is `UTC`. Showing the zone beside each time is revisited with 007.
 
 ## R6. Core sends no notification when an event changes
 
@@ -160,7 +160,7 @@ All are read by the app through `tool_mobile`.
 - **The Communication API (`communication_customlink`, `communication_matrix`) is `MATURITY_ALPHA`** in 5.2. It is not a route to per-course meeting rooms.
 - **Site managers can manage anyone's user events** (`calendar_can_manage_user_event()`, system `manageentries`). Personal events are private from other learners, not from the site team.
 
-## R14. Setting the time zone at first login (D5, D7)
+## R14. Showing the learner's time zone (D5, D7)
 
 Paths are on `MOODLE_502_STABLE`, under `public/`; the app is `moodlehq/moodleapp` `main`.
 
@@ -187,21 +187,27 @@ Paths are on `MOODLE_502_STABLE`, under `public/`; the app is `moodlehq/moodleap
 - The legacy callback `<plugin>_after_require_login()` runs on every `require_login()` (`lib/moodlelib.php:2427, :2444-2446, :2679-2681`). It is still live and has no hook replacement.
 - **App users.** Web services call `require_login(..., preventredirect = true)` (`lib/external/classes/external_api.php:521`). When core throws `usernotfullysetup`, the app opens `user/edit.php` in its browser, and treats reaching `user/preferences.php` as done (`src/core/classes/sites/authenticated-site.ts:739-743`; `src/core/features/user/pages/complete-profile/complete-profile.ts:60-108`).
 
-**Decision**: `local_ltuse` records a user preference, `local_ltuse_tzconfirmed`. Until it is set:
-- On the web, `local_ltuse_after_require_login()` redirects the learner once per session to `local/ltuse/timezone.php`. That page has one time-zone menu, preset from the browser's zone, and saves through `user_update_user()`.
-- In the app, the callback throws core's own `usernotfullysetup`. The app opens `user/edit.php`, and the time zone menu is on that form. A `\core\event\user_updated` observer sets the preference when the learner saves their own profile, and our page sets it directly.
-- Never for: the site team, the publisher's web-service account (`ltcpublisher`), guests, a `loginas` session, or AJAX and service calls that the web redirect cannot reach.
-
-The site team may also put a `timezone` column in a user upload. That does not set the preference, so the learner still confirms.
+**Decision** (plan decision 2, answered 2026-10-02: option b): no first-login prompt.
+- **The profile.** It shows the zone, on the web and in the app, and the learner changes it there (`user/edit.php`). `site_config validate` refuses a `hiddenuserfields` value that contains `timezone`, so the profile always shows it.
+- **The booking page.** It reminds the learner of the zone in use, because a booking is where a wrong zone costs a missed meeting.
+  - `local_ltuse` adds a callback for the core hook `\core\hook\output\before_standard_top_of_body_html_generation`. It is dispatched from `core_renderer::standard_top_of_body_html()` (`lib/classes/output/core_renderer.php:308`), and the callback adds HTML with `add_html()`.
+  - On the `ltct:officehours:scheduler` pages only (page type `mod-scheduler-*` and that course module's idnumber), it adds one notice. It reads "Times on this page are in your time zone: <zone>. Change it", linking to `user/edit.php`. For a stored `99` it reads "UTC, the site default".
+  - Booking is browser-only (D6), so the app's in-app browser shows the same notice.
+- **Every booking message** names the zone beside the time (R20).
+- **Other event times** still show no zone, which is revisited with 007 (D5).
 
 **Alternatives considered**:
-- A required custom profile field "Confirm your time zone". It is core-only and uses the same path in the app, but the tick and the zone are separate, so a learner can tick and leave UTC. It also adds a field to every profile.
-- Relying on `timezone == 99`. Uploaded users hold the literal zone, so it misses them.
-- The site team sets the zone and nobody confirms it. That does not meet "set at first login".
+- The first-login prompt, through `after_require_login` plus core's `usernotfullysetup` in the app. It needed a Principle XI exception, and the maintainer chose the profile instead.
+- A required custom profile field: a tick separate from the zone.
+- A child-theme template for every event time: deferred to 007.
 
-**Principle XI**: the callback and the observer are supported extension points. Throwing core's `usernotfullysetup` from our callback reuses an error code core owns to reach the app's existing handling. It is listed in the plugin README, and quickstart V3 is re-run on every app or core upgrade.
+**Principle XI**: the hook is a supported extension point, so no exception is needed.
 
-**Verify** (V3): web, the redirect happens once and saving ends it; app, the login opens the profile form and saving returns to the app; the site team, `ltcpublisher` and `loginas` are never redirected.
+**Verify** (V3):
+- The profile shows the zone, on the web and in the app.
+- The office-hours scheduler page shows the notice with the learner's zone, and with "UTC, the site default" for a learner who never set one, on the web and in the app's browser.
+- No other page shows it.
+- `validate` fails if `hiddenuserfields` hides `timezone`.
 
 ## R15. Notifying a change or cancellation (FR-006)
 

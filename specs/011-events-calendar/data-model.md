@@ -108,11 +108,11 @@ Within a request, one task is queued per key, and a cancellation outranks a chan
 
 **States**: *queued* → *sent*. If the event is gone or hidden when a `changed` task runs, it sends nothing.
 
-### Time zone confirmation (user preference `local_ltuse_tzconfirmed`)
+### Time zone
 
-- The value is the confirmation time.
-- It is set when the user saves `local/ltuse/timezone.php`, or saves their own profile in `user/edit.php` (`user_updated` where the user is updating themselves).
-- It is never unset by us. Personal data: declared and exported by the privacy provider.
+- **Storage.** Core's `user.timezone`; `99` means the site default, UTC (D7). Nothing of ours is stored.
+- **Visibility.** `hiddenuserfields` must never contain `timezone` (`validate`), so the profile always shows it.
+- **The booking-page notice.** `timezone_notice::applies(pagetype, cmidnumber)` is true only for `mod-scheduler-*` pages of `ltct:officehours:scheduler`. `text(zone)` gives "Times on this page are in your time zone: <zone>. Change it", or "UTC, the site default" for `99` (R14).
 
 ### Office-hours membership
 

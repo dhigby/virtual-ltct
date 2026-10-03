@@ -193,7 +193,7 @@ class badgetemplate {
                 $report->add_result($item, 'fail', 'not stored: ' . $e->getMessage());
                 return;
             }
-            $report->add_result($item, 'changed');
+            $report->add_result($item, 'changed', $item['result'] === 'missing' ? 'created' : null);
         }
 
         $template = self::stored();

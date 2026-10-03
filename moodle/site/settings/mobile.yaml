@@ -25,6 +25,14 @@ settings:
       new address makes it fetch again. The app reads this address from the site details it
       saved at sign-in, so a signed-in learner sees a change only after logging out and back
       in; "Synchronise now" is not enough (verified 2026-10-02).
+  - name: additionalhtmlhead
+    value: '<meta name="moodle-validation" content="7a36d31e3e409d3ce519c81aa5194935">'
+    why: >-
+      The site-ownership tag the Moodle Apps portal issued for ltuse.net, which the Premium app
+      plan (and so mobilecssurl above) depends on. Not secret: it is in every page's HTML.
+      Declared rather than ignored because this setting is injected into every page head, so
+      drift must catch any other hand edit to it. It is issued per site: a new server gets its
+      own tag from the portal at provisioning (spec 015), and this value changes with it.
   - name: tool_mobile/disabledfeatures
     value: ""
     why: >-

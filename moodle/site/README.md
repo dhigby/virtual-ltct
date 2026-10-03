@@ -102,7 +102,7 @@ Drift skips them, and apply refuses to write them. They belong to whoever writes
 | `pending-upgrade` | Plugin code is newer than the database. | Run `admin/cli/upgrade.php`. |
 | `unknown` | A declared setting or capability does not exist on the server. | Its plugin is missing, or an upgrade renamed it. Fix the declaration. |
 | `forced` | A declared setting is set in `config.php`. | Remove it from the declaration. |
-| `extra` | A plugin is installed but not declared, or an `ltct:` category, cohort or rule, an `ltct_` field, a menu option, a report of ours or a competency is no longer declared. | Declare it again, or retire it by hand. Apply never deletes it. (A competency no longer declared is retired by apply, and leaves the competencies report.) |
+| `extra` | A plugin is installed but not declared (a subplugin of a declared plugin, such as `customcertelement_*`, is covered by its parent's pin), or an `ltct:` category, cohort or rule, an `ltct_` field, a menu option, a report of ours or a competency is no longer declared. | Declare it again, or retire it by hand. Apply never deletes it. (A competency no longer declared is retired by apply, and leaves the competencies report.) |
 | `adopted` | Apply gave an existing category its `ltct:` idnumber instead of creating a duplicate. | Nothing. |
 | `ambiguous`, `wrong-context`, `wrong-datatype` | Two candidates match one declared item, a cohort sits outside system context, or a field has another type. Apply stops before writing anything. | Fix it by hand on the server, then run `apply` again. |
 | `unmanaged` | An undeclared setting differs from Moodle's default. | Someone changed it by hand. Declare it, revert it, or add it to `ignore.yaml` with a reason. |

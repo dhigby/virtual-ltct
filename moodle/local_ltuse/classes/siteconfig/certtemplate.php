@@ -214,7 +214,7 @@ class certtemplate {
                 $report->add_result($item, 'fail', 'not built: ' . $e->getMessage());
                 return;
             }
-            $report->add_result($item, 'changed');
+            $report->add_result($item, 'changed', $item['result'] === 'missing' ? 'created' : null);
         }
 
         $site = self::find_site_templates((string)$this->declared['name']);

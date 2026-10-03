@@ -1138,23 +1138,35 @@ symptoms of a single cause higher up. Work in this order instead:</p>
      headings, so comparing against it proves nothing.</li>
 <li>Whether a heading's wording fits its passage is the team's call — route that
      question to them.</li>
-<li><strong>Book titles.</strong> Inconsistent or incorrect book-name and book-title markup, especially
-   after a book has been renamed or reorganized mid-project.</li>
+<li><strong>Book titles.</strong> This is a consistency check. Each book's name appears in more than
+   one place in the project, and every place should name the book the same way. What
+   you look for is one book named differently in different places — in English, the
+   pattern would be "Mark" in one place and "The Gospel of Mark" in another. You can
+   spot that by comparing the forms side by side, without reading the language. It
+   often happens after a book has been renamed or reorganized mid-project.</li>
+<li>Point out each mismatch to the team.</li>
+<li>Which form is right is the team's call — many book names are names of people or
+     cities, so route the choice to them rather than picking one.</li>
 <li><strong>References</strong> (<code>\r</code> shows parallel passages; <code>\xt</code> is the actual cross-reference
    marker) and the <strong>table of contents.</strong> Missed book-name checks, foreign-language <code>\r</code>
    abbreviations left unadjusted (a common source:
    bulk-copying <code>\r</code> lines from another NT project as a starting point, which carries over
    that project's abbreviations instead of the current project's own), and a table of
    contents that doesn't match the book titles actually in the text.</li>
-<li><strong>Footnotes.</strong> Beyond the marker-pair check in step 2, confirm footnote content and
-   placement are sound — a footnote that survives the marker check can still be attached
-   to the wrong verse or duplicated. Note that an unclosed <code>\f</code> footnote marker (opened
-   without its matching <code>\f*</code>) has a much narrower effect than the missing-<code>\p</code> example
+<li><strong>Footnotes.</strong> Beyond the marker-pair check in step 2, footnote placement still
+   needs a review — a footnote that survives the marker check can still be attached to
+   the wrong verse or duplicated. That isn't always easy for you to spot, and deciding
+   which verse a footnote belongs to depends on reading the text, so this review is the
+   team's:</li>
+<li>Prompt the team to go through footnote placement book by book.</li>
+<li>Point them to where to look — each footnote in the text, and any results from the
+     Footnote quotes category in Run Basic Checks.</li>
+</ol>
+<p>Note that an unclosed <code>\f</code> footnote marker (opened without its matching <code>\f*</code>) has a much narrower effect than the missing-<code>\p</code> example
    above: if it's unclosed at the end of a verse, it has no effect at all; if it's
    unclosed partway through a verse, the only consequence is that the footnote text
    displays as part of the verse itself — it has no other flow-on effect, and does not
-   cascade into headings, references, or other markers elsewhere in the chapter.</li>
-</ol>
+   cascade into headings, references, or other markers elsewhere in the chapter.</p>
 <p>Diagnosing structural-first doesn't mean the team fixes things in that exact order line
 by line — it means <em>you</em> look for the highest-leverage cause first, so you're not
 sending a team to manually correct fifty symptoms of one unclosed marker.</p>

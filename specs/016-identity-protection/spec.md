@@ -17,6 +17,15 @@
 - Q: What do a pseudonymous learner's certificate and badge show? → A: The real name on the learner's own downloaded certificate; only the protected display, or the fact of a valid award, on public verification pages.
 - (Matthew) Protection can be set for a whole organisation as well as for one user.
 
+### Session 2026-10-04
+
+Doug's decisions of 2026-10-03 and 2026-10-04 (`INTENT.md`; spec 002 Clarifications 2026-10-03, PR #87) change who counts as a learner's organisation and their mentors. The answers below amend this spec where stated.
+
+- Q: Who is a learner's "own organisation" now? → A: The organisation entry their `ltct_org` names (constitution 2.1.0). SIL and SIL Partner are declared Area by Area, so a SIL learner's own organisation managers are their Area Language Technology Coordinators (ALTCs). A SIL partner learner's are the SIL ALTCs of their Area too, with full manager rights, protected identities included (Doug, 2026-10-03).
+- Q: Does a mentor who mentors a learner for just one course see their real identity? → A: Yes (Doug, 2026-10-04). A course is taken by a cohort with one or more course mentors, or by a student with their mentor, and mentors grade. Every course mentor of a course the learner takes is entitled while they hold that role, whether or not they are the learner's default (spec 003) mentor (FR-006).
+- Q: Where are organisation minimums kept? → A: As Moodle data, set by the site team, never declared in the repo (plan decision 8, accepted 2026-10-04 with constitution 2.1.0, Principle II). This replaces the 2026-10-02 answer "Organisation minimums are declared by the maintainer". FR-008 and FR-014 are amended.
+- Q: Do the Area keys break research R12's neutral-key rule? → A: No, they are a deliberate exception. `sil-americas`, `sil-eurasia` and the rest name SIL's own published structure and mark no one as at risk, and the country-to-Area map is never in the repo (spec 002 FR-016). Protection inside an Area is set person by person. If a group within an Area needs organisation-wide protection, it gets its own entry with a neutral key and name from its first commit, not a minimum on the Area entry (spec 002 Clarifications 2026-10-03).
+
 ## Context
 
 On 2026-10-02 the maintainer decided that the training system is **open by default**. Students see all their classmates, course leaders see their students, mentors see and work with their mentees across organisations, and organisation managers see and manage their own users ([spec 011 handoff](../011-events-calendar/handoff.md), decision record). That removes the per-organisation walls that, until now, also limited who could see whom.
@@ -103,7 +112,7 @@ Some things leave the site and outlive any setting: emailed notifications, calen
 - **Several roles at once**: a person is both a classmate and the learner's mentor. They see what their most entitled role allows, and only in that capacity's views.
 - **Usernames and login**: the protected learner still needs a login, and email for their own notifications. Their username and email are never shown to others, and a username built from their real name is not used.
 - **Things the learner writes**: the learner's own words (a forum post that signs off with their real name, a profile description) are theirs to control. The site does not rewrite them, but the learner is told about this when protection is set.
-- **The organisation itself identifies people**: for a protected organisation, its name on a learner's profile is hidden from non-entitled people by FR-001. The organisation's category and display name are public (spec 002 R6), so a protected organisation should have a neutral display name; choosing it is the maintainer's call when the organisation is added.
+- **The organisation itself identifies people**: for a protected organisation, its name on a learner's profile is hidden from non-entitled people by FR-001. The organisation's category and display name are public (spec 002 R6), so a protected organisation should have a neutral display name; choosing it is the maintainer's call when the organisation is added. SIL's Area entries are the deliberate exception: their names are SIL's public structure, and no Area entry carries a minimum (Clarifications 2026-10-04).
 - **A learner moves between organisations**: their effective level follows their current organisation from the moment their organisation field changes (FR-001a). Moving from a protected organisation to an unprotected one must not expose details from their time in the first one, such as earlier posts, beyond what their new level allows from then on.
 - **Organisation and profile details**: the learner's organisation, country and experience fields can identify them as much as their name does. At "first name only" and "pseudonym" levels, these are shown only to entitled people.
 - **Profile pictures**: a photo identifies a person. At "first name only" and "pseudonym" levels, others see the default picture.
@@ -123,23 +132,29 @@ Some things leave the site and outlive any setting: emailed notifications, calen
 - **FR-003**: A protected user MUST be able to do everything an unprotected user in the same role can do: enrol, post, reply, submit, peer-review, message, book mentor slots, join events and earn completion.
 - **FR-004**: Searching by a protected user's real name, surname, username or email MUST return nothing to anyone not entitled under FR-006.
 - **FR-005**: Email and other notifications about a protected user's activity MUST carry only their protected display name, and never their email address.
-- **FR-006**: The real identity of a protected user MUST be visible to: the site team; their assigned mentors (spec 003), while assigned; and the organisation managers of the learner's **own** organisation, since managers see and manage their users (2026-10-02). An organisation's declaration MAY withhold real identities from its own managers. No one else may see it, including managers of any other organisation.
+- **FR-006**: The real identity of a protected user MUST be visible to:
+  - the site team;
+  - their assigned mentors (spec 003), while assigned;
+  - the course mentors of each course they take, including someone who mentors them for that one course only, while they hold that role (Clarifications 2026-10-04);
+  - the organisation managers of the learner's **own** organisation, since managers see and manage their users (2026-10-02). For SIL and SIL partner learners these are the ALTCs of their Area (Clarifications 2026-10-04).
+
+  An organisation's setting, which is Moodle data set by the site team (R12), MAY withhold real identities from its own managers. No one else may see it, including managers of any other organisation.
 - **FR-007**: People who can see a protected user's real identity MUST see a clear protection marker beside it, including on report rows and exports.
-- **FR-008**: Protection MUST be granted, changed or removed only by the user's own organisation manager or the site team. A learner can always ask for protection, and the way to ask MUST be visible to them. An organisation's minimum level (FR-001a) is set only in the repo's declaration, by the maintainer. Every change MUST be recorded in Moodle (who, when, which level), never in the repo.
+- **FR-008**: Protection MUST be granted, changed or removed only by the user's own organisation manager or the site team. A learner can always ask for protection, and the way to ask MUST be visible to them. An organisation's minimum level (FR-001a) is Moodle data, set by the site team only, never declared in the repo (R12; Clarifications 2026-10-04). Every change MUST be recorded in Moodle (who, when, which level), never in the repo. The way to ask, and the preview of FR-012, MUST say who will see the learner's real identity; for a SIL partner learner that includes their SIL Area coordinator.
 - **FR-009**: A change of protection level MUST take effect across the whole site at once, with no per-course step.
 - **FR-010**: A protected user's badges and certificates MUST respect their protection level on the item and on any public verification page. The learner's own downloaded certificate shows their real name, so it is useful to them. Public verification pages for the badge and the certificate show only the protected display (for *pseudonym*, the pseudonym), or only that a valid award exists. A third party can check the award, but cannot learn the real name from the site.
 - **FR-011**: Calendar exports and feeds (spec 011) MUST show protected users only as their protected display.
 - **FR-012**: The protected user MUST be able to see their own level and a preview of what others see of them.
 - **FR-013**: Protection settings and pseudonyms are learner data. They MUST live only in Moodle, MUST NOT appear in the repo or in any committed fixture, log or test output, and MUST be included in the learner's data export.
-- **FR-014**: The protection levels, which fields each level hides, each organisation's minimum level, and the capabilities that make someone entitled MUST be declared from the repo's Moodle configuration and be rebuildable. Which individual users are protected, and their pseudonyms, is operational data in Moodle, not configuration.
+- **FR-014**: The protection levels, which fields each level hides, and the capabilities that make someone entitled MUST be declared from the repo's Moodle configuration and be rebuildable. Each organisation's minimum level and its withholding setting are Moodle data, set by the site team and recovered by the data restore, because declaring them would publish who is at risk (FR-008, constitution 2.1.0 Principle II). Which individual users are protected, and their pseudonyms, is operational data in Moodle, not configuration.
 - **FR-015**: Any behaviour that cannot be protected through core Moodle or a maintained plugin, and that would leak identity, MUST be listed in the delivering PR as a known gap with its workaround, and not silently shipped.
 
 ### Key Entities
 
 - **Protection level**: one of *none*, *email hidden*, *first name only*, *pseudonym*, and the set of identity details each one withholds from people who are not entitled.
-- **Organisation protection**: the minimum protection level set for every member of an organisation (spec 002). Declared configuration, because which organisations exist is already declared in `moodle/site/organisations.yaml`. Who belongs is Moodle data.
+- **Organisation protection**: the minimum protection level set for every member of an organisation (spec 002). Moodle data, set by the site team, never declared in the repo (FR-014). Who belongs is Moodle data too.
 - **Protected user**: a user whose effective level (the stricter of their organisation's and their own) is other than *none*, and, at the *pseudonym* level, the pseudonym shown in place of their name. Learner data, Moodle only.
-- **Entitlement**: the relationship that lets someone see a protected user's real identity: site team membership, an active mentor assignment, or managing the user's own organisation, unless that organisation withholds it (FR-006).
+- **Entitlement**: the relationship that lets someone see a protected user's real identity: site team membership, an active mentor assignment, being a course mentor in a course the user takes, or managing the user's own organisation, unless that organisation withholds it (FR-006).
 - **Protection change record**: who changed a user's level, when, and from what to what. Moodle only.
 
 ## Success Criteria *(mandatory)*
@@ -151,7 +166,7 @@ Some things leave the site and outlive any setting: emailed notifications, calen
 - **SC-003**: Searches by a protected test user's real name, surname, username and email return 0 results for non-entitled test users.
 - **SC-004**: 100% of outbound items in US4 (notification emails, calendar feeds, certificates and their verification, badge verification pages, report exports) show only what the protection level allows.
 - **SC-005**: A protection level is granted, changed or removed in under 2 minutes by the person allowed to do it, and the change is visible site-wide within 5 minutes.
-- **SC-006**: A server rebuilt from the repo reproduces the protection levels, organisation minimums and entitlements with no manual step, and no learner's protection data is in the repo.
+- **SC-006**: A server rebuilt from the repo reproduces the protection levels and entitlements with no manual step, organisation minimums come back with the data restore, and no learner's protection data or organisation minimum is in the repo.
 - **SC-007**: At least 2 of 3 real protected users, or people acting for them, confirm in a pilot that what others see matches what they expected.
 
 ## Assumptions
@@ -174,12 +189,12 @@ On delivery, the same PR updates this row's status in moodle/REQUIREMENTS.md (co
 ## Constitution Check
 
 - **I. Source of truth**: Levels, the fields each one hides and entitlements are declared in `moodle/`. Who is protected, and their pseudonym, live only in Moodle and are never synced back.
-- **II. Portability**: Configuration is rebuildable (SC-006). Protection data is included in the learner's data export (FR-013).
+- **II. Portability**: Configuration is rebuildable (SC-006). Organisation minimums are configuration whose publication would identify at-risk people, so they are Moodle data recovered by the data restore (constitution 2.1.0). Protection data is included in the learner's data export (FR-013).
 - **III. Public repo, private people (NON-NEGOTIABLE)**: This spec is Principle III extended inside Moodle. No protected user, pseudonym or change record is ever committed, including in fixtures, logs and quickstart evidence. Verification uses test accounts only.
 - **IV. Disclosure**: Not touched. Protection concerns people, not course content.
 - **V. CBC fidelity**: Certificates and badges keep the "training completed" wording (spec 013). Only the name shown changes (FR-010).
 - **VI. No LMS orientation**: A protected learner does nothing extra to take part (FR-003). Granting protection takes one step by the right person (SC-005).
-- **VII. One shape**: The same three levels and the same entitlements apply to every organisation. An organisation-level minimum is one declared field per organisation, not a per-partner variant.
+- **VII. One shape**: The same three levels and the same entitlements apply to every organisation. An organisation-level minimum is one setting per organisation, held in Moodle (FR-014), not a per-partner variant. SIL's Area entries are ordinary organisations (constitution 2.1.0).
 - **VIII. Language data**: Not touched. Pseudonyms are free text in any script.
 - **IX. Flat cost, field-ready**: No paid service. Protection holds in the Moodle app (FR-002) and in offline-synced data.
 - **X. Traceable and verified**: Adds row #26. Every view in FR-002 is verified on the 5.2.3+ instance, on web and app, before the plan depends on it. Gaps are listed, not shipped silently (FR-015). SC-007 needs real protected users.
@@ -190,7 +205,9 @@ On delivery, the same PR updates this row's status in moodle/REQUIREMENTS.md (co
 
 - **011 handoff decision (2026-10-02)**: the open-by-default direction that makes this spec necessary. The open-courses change (spec 002 amendment) and this spec should land together, so no protected user is exposed in between.
 - **002-org-structure-cohorts**: the profile fields (`ltct_org`, experience fields) that FR-001 hides at higher levels, and the organisation manager role in FR-006.
+- **002 Areas amendment (2026-10-03, PR #87)**: SIL and SIL Partner as Area entries, ALTCs as their managers, and the country-to-Area map kept out of the repo.
 - **003-mentor-role**: the mentor assignment that entitles a mentor to the real identity (FR-006).
+- **012-assignments-peer-review and the 008 re-plan**: the course-level Course mentor role, and the automatic enrolment of a course mentor for a pair or a cohort, which entitle course mentors (FR-006).
 - **004-progress-reporting**: reports and exports that carry the protection marker (FR-007).
 - **011-events-calendar**: calendar views, booking and feeds (FR-011).
 - **012-assignments-peer-review**: anonymous peer review and course discussions (FR-002, FR-003).

@@ -1,5 +1,7 @@
 # Implementation Plan: Partner organisations, cohorts and profiles
 
+> **Amended 2026-10-03 in the spec** (Areas and Area Language Technology Coordinators, [Clarifications 2026-10-03](spec.md)). This file is not yet redone for it; that happens in the plan step, before any build. Where this file disagrees with the 2026-10-03 Clarifications, the spec wins.
+
 **Branch**: `specs/moodle-requirements`; amended on `002-open-courses` | **Date**: 2026-10-01, amended 2026-10-02 | **Spec**: [spec.md](spec.md)
 
 > **Amended 2026-10-02: open courses.** Organisations are no longer separated inside a course. The [amendment](#amendment-2026-10-02-open-courses) at the end of this plan supersedes the paragraphs and lines marked *(superseded 2026-10-02)*; everything else stands.

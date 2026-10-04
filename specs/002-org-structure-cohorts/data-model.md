@@ -1,5 +1,7 @@
 # Data Model: Partner organisations, cohorts and profiles
 
+> **Amended 2026-10-03 in the spec** (Areas and Area Language Technology Coordinators, [Clarifications 2026-10-03](spec.md)). This file is not yet redone for it; that happens in the plan step, before any build. Where this file disagrees with the 2026-10-03 Clarifications, the spec wins.
+
 **Spec**: [spec.md](spec.md) | **Plan**: [plan.md](plan.md) | **Research**: [research.md](research.md)
 
 > **Amended 2026-10-02: open courses** (spec Clarifications 2026-10-02; research R2, R3, R8–R14; plan, "Amendment 2026-10-02"). Organisations are no longer separated inside a course. Text describing current behaviour is rewritten in place and marked *(amended 2026-10-02)*; sections added by the amendment are marked *(2026-10-02)*.

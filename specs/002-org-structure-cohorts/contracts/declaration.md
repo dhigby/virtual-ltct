@@ -1,5 +1,7 @@
 # Contract: Organisations, profile fields and the manager role
 
+> **Amended 2026-10-03 in the spec** (Areas and Area Language Technology Coordinators, [Clarifications 2026-10-03](../spec.md)). This file is not yet redone for it; that happens in the plan step, before any build. Where this file disagrees with the 2026-10-03 Clarifications, the spec wins.
+
 > **Amended 2026-10-02: open courses** (spec Clarifications 2026-10-02; research R2, R3, R8–R14; plan, "Amendment 2026-10-02"). Organisations are no longer separated inside a course. Text describing current behaviour is rewritten in place and marked *(amended 2026-10-02)*; additions are marked *(2026-10-02)*.
 
 This extends [spec 001's declaration contract](../../001-site-config-as-code/contracts/declaration.md) and its [output contract](../../001-site-config-as-code/contracts/output.md). Everything there still holds: the files are read only by `scripts/site_config.py`, the PHP side receives them as JSON on stdin, apply creates only what is absent and never deletes, and nothing names a learner. The CLI is unchanged: `python scripts/site_config.py validate | drift | apply`, with the same `--json`.

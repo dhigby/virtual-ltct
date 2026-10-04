@@ -38,6 +38,11 @@ categories:
     why: >-
       The parent of every organisation's own category, so the category list stays short
       however many partners are added (#15, R6).
+  - key: mentoring
+    name: LTC Mentoring
+    why: >-
+      Holds the one office-hours course every mentor and mentee shares (spec 011, R16). Shared
+      by every organisation, as published and pilots are.
 organisations:
   - key: sil
     name: SIL

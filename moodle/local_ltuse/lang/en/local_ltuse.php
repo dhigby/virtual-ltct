@@ -80,4 +80,57 @@ $string['privacy:metadata:mentor_contact:learnerid'] = 'The learner.';
 $string['privacy:metadata:mentor_contact:timecreated'] = 'When the contact was made.';
 $string['privacy:path:mentorcontacts'] = 'Mentor message contacts';
 $string['privacy:metadata:mentor_contact:contactid'] = 'The message contact this plugin made, so that only that contact is ever removed.';
-$string['privacy:metadata:core_message'] = 'While a mentor relationship lasts, the mentor and the learner are made message contacts of each other. The contact is removed when the relationship ends.';
+$string['privacy:metadata:core_message'] = 'While a mentor relationship lasts, the mentor and the learner are made message contacts of each other. The contact is removed when the relationship ends. Calendar changes and office-hours bookings are sent as notifications.';
+
+// Spec 011: calendar change notices, office-hours booking notices, the time zone notice and
+// the tasks. Times are always shown in the reader's own zone, with the zone named. No string
+// here names a CBC level or says "certified".
+$string['officehours'] = 'Mentor office hours';
+$string['messageprovider:eventchange'] = 'Changes to calendar events and their cancellation';
+$string['messageprovider:bookingnotice'] = 'Office-hours bookings, changes and cancellations';
+$string['task:eventchange'] = 'Tell people a calendar event changed or was cancelled';
+$string['task:officehoursreconcile'] = 'Keep office-hours groups in step with mentors';
+
+$string['eventchange:changed:subject'] = 'Changed: {$a->name}';
+$string['eventchange:changed'] = '"{$a->name}" has changed. It is now on {$a->when} ({$a->zone}). Open your calendar for the details.';
+$string['eventchange:changedseries:subject'] = 'Changed: {$a->name}';
+$string['eventchange:changedseries'] = 'The repeating event "{$a->name}" has changed. The next one is on {$a->when} ({$a->zone}). Open your calendar for the details.';
+$string['eventchange:cancelled:subject'] = 'Cancelled: {$a->name}';
+$string['eventchange:cancelled'] = '"{$a->name}" on {$a->when} ({$a->zone}) has been cancelled.';
+$string['eventchange:cancelleddate:subject'] = 'Cancelled: {$a->name}, {$a->when}';
+$string['eventchange:cancelleddate'] = '"{$a->name}" on {$a->when} ({$a->zone}) has been cancelled. The other dates in the series still stand.';
+$string['eventchange:cancelledseries:subject'] = 'Cancelled: {$a->name}';
+$string['eventchange:cancelledseries'] = 'The repeating event "{$a->name}" has been cancelled, every date of it.';
+
+$string['bookingnotice:booked:you:subject'] = 'Booked: office hours on {$a->when}';
+$string['bookingnotice:booked:you'] = 'You booked time with {$a->other} on {$a->when} ({$a->zone}), for {$a->minutes} minutes. It is in your calendar.';
+$string['bookingnotice:booked:notice:subject'] = 'New booking: {$a->actor}, {$a->when}';
+$string['bookingnotice:booked:notice'] = '{$a->actor} booked your office hours on {$a->when} ({$a->zone}), for {$a->minutes} minutes. It is in your calendar.';
+$string['bookingnotice:changed:you:subject'] = 'Moved: office hours with {$a->other}';
+$string['bookingnotice:changed:you'] = 'You moved your time with {$a->other} to {$a->when} ({$a->zone}), for {$a->minutes} minutes.';
+$string['bookingnotice:changed:notice:subject'] = 'Moved: office hours on {$a->when}';
+$string['bookingnotice:changed:notice'] = '{$a->actor} moved your office hours to {$a->when} ({$a->zone}), for {$a->minutes} minutes. Your calendar shows the new time.';
+$string['bookingnotice:cancelled:you:subject'] = 'Cancelled: office hours on {$a->when}';
+$string['bookingnotice:cancelled:you'] = 'You cancelled your time with {$a->other} on {$a->when} ({$a->zone}).';
+$string['bookingnotice:cancelled:notice:subject'] = 'Cancelled: office hours on {$a->when}';
+$string['bookingnotice:cancelled:notice'] = '{$a->actor} cancelled the office hours on {$a->when} ({$a->zone}).';
+$string['bookingnotice:slotdeleted:notice:subject'] = 'Cancelled by your mentor: office hours on {$a->when}';
+$string['bookingnotice:slotdeleted:notice'] = 'Your mentor, {$a->actor}, cancelled your office hours on {$a->when} ({$a->zone}). You can book another time.';
+$string['bookingnotice:slotdeleted:you:subject'] = 'Cancelled: office hours on {$a->when}';
+$string['bookingnotice:slotdeleted:you'] = 'You cancelled the office hours on {$a->when} ({$a->zone}).';
+$string['bookingnotice:slotdeleted:mentor:subject'] = 'Cancelled: office hours on {$a->when}';
+$string['bookingnotice:slotdeleted:mentor'] = 'You deleted office hours on {$a->when} ({$a->zone}). The {$a->count} booking(s) in it were cancelled, and each learner has been told.';
+
+$string['tznotice'] = 'Times on this page are in your time zone: {$a}.';
+$string['tznotice:default'] = 'Times on this page are in {$a}, the site default, because you have not chosen a time zone.';
+$string['tznotice:change'] = 'Change it';
+
+$string['privacy:metadata:booking'] = 'Each office-hours booking\'s last notified time, so that a booking is announced again only when its time changes.';
+$string['privacy:metadata:booking:eventid'] = 'The learner\'s calendar event for the booking.';
+$string['privacy:metadata:booking:slotid'] = 'The office-hours slot.';
+$string['privacy:metadata:booking:learnerid'] = 'The learner who booked.';
+$string['privacy:metadata:booking:mentorid'] = 'The mentor whose slot it is.';
+$string['privacy:metadata:booking:timestart'] = 'The booking\'s start, as last notified.';
+$string['privacy:metadata:booking:timeduration'] = 'The booking\'s length, as last notified.';
+$string['privacy:metadata:booking:timecreated'] = 'When the booking was recorded.';
+$string['privacy:path:bookings'] = 'Office-hours bookings';

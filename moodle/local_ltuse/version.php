@@ -9,17 +9,19 @@
 defined('MOODLE_INTERNAL') || die();
 
 $plugin->component = 'local_ltuse';
-$plugin->version   = 2026100302;   // Open courses (spec 002, 2026-10-02): the course discussion
-                                   // is always open (ensure_discussion has no `shared`
-                                   // argument), drift checks each ltct: course's group mode,
-                                   // and a managers cohort synced into a shared course blocks
-                                   // apply. No schema change, so db/upgrade.php's last
-                                   // savepoint stays 2026100301. Before it: mentor relationship
-                                   // (spec 003, 2026100301), badges and certificates (spec 013,
-                                   // 2026100300), progress reporting (spec 004, 2026100204) and
-                                   // ensure_discussion (spec 012, 2026100203).
-                                   // moodle/site/site.yaml pins local_ltuse to this stamp, and
-                                   // validate fails if they differ.
+$plugin->version   = 2026100400;   // Events and office hours (spec 011): calendar change
+                                   // notices, the office-hours sync, booking notices and
+                                   // their table (local_ltuse_booking), the time zone notice.
+                                   // db/upgrade.php saves its savepoint at this stamp. After
+                                   // open courses (spec 002, 2026100302): the course
+                                   // discussion is always open, drift checks each published
+                                   // ltct: course's group mode, and a managers cohort synced
+                                   // into a shared course blocks apply. Before them: mentor
+                                   // relationship (spec 003, 2026100301), badges and
+                                   // certificates (spec 013, 2026100300), progress reporting
+                                   // (spec 004, 2026100204) and ensure_discussion (spec 012,
+                                   // 2026100203). moodle/site/site.yaml pins local_ltuse to
+                                   // this stamp, and validate fails if they differ.
 
 // PIN THIS DELIBERATELY. Moodle 5.0 moved the question bank out of course context and
 // into its own activity module (mod_qbank), which changes how import_questions has to
@@ -38,7 +40,7 @@ $plugin->requires  = 2026042000;   // Moodle 5.2 -- the release this was
 $plugin->supported = [502, 502];
 
 $plugin->maturity  = MATURITY_ALPHA;
-$plugin->release   = '0.9.0';
+$plugin->release   = '0.10.0';
 
 // No third-party dependencies, deliberately. Sections were originally going to be
 // local_wsmanagesections' job, but it could not be installed here, so local_ltuse grew an

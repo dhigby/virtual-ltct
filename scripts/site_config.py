@@ -67,6 +67,8 @@ RETIRED_FILES = {
     "course-discussions.yaml": "retired, spec 002 R14: shared courses are open across "
                                "organisations, so there is nothing to share; delete it",
 }
+OFFICEHOURS_FILE = "office-hours.yaml"       # spec 011
+DASHBOARD_FILE = "dashboard.yaml"            # spec 011
 REQUIREMENTS = REPO / "moodle" / "REQUIREMENTS.md"
 LTUSE_VERSION = REPO / "moodle" / "local_ltuse" / "version.php"
 CLI_PATH = "public/local/ltuse/cli/site_config.php"   # under $MOODLE_DIR (research R1)
@@ -249,6 +251,10 @@ TOP_FILES = {
     # own folder (specs/013-certificates-badges/contracts/declaration.md).
     "badges.yaml": ({"rows", "image", "name", "description", "imagecaption", "message_subject",
                      "message", "version", "language", "why"}, set()),
+    # Spec 011: the office-hours course and the default dashboard's blocks. Both optional
+    # (specs/011-events-calendar/contracts/declaration.md).
+    OFFICEHOURS_FILE: ({"rows", "course", "scheduler", "groups", "why"}, {"purpose"}),
+    DASHBOARD_FILE: ({"rows", "default_blocks"}, {"purpose"}),
 }
 
 # --- spec 002: organisations, categories, cohorts and profile fields ---------------------
@@ -283,6 +289,7 @@ ORGMANAGER_DENY = frozenset({"moodle/site:accessallgroups", "moodle/user:viewall
                              "moodle/course:managegroups", "moodle/course:viewsuspendedusers"})
 ORGMANAGER_DENY_PREFIXES = ("moodle/cohort:", "moodle/role:", "enrol/")
 ORGMANAGER_DENY_USER = re.compile(r"create|update|delete|edit|manage|loginas")
+ORGMANAGER_CALENDAR = "moodle/calendar:manageentries"   # spec 011 R17: its only calendar capability
 
 MENTOR = "mentor"
 # Everything the user-context mentor role may hold (spec 003 research R2), as an allowlist:
@@ -481,7 +488,8 @@ def validate(site_dir=SITE_DIR, modules_dir=None):
             "categories": [], "cohorts": [], "profile_fields": [], "cohort_rules": [],
             "course_field_category": None, "course_fields": [], "competencies": [],
             "reports": [],
-            "badge_template": None, "certificate_template": None}
+            "badge_template": None, "certificate_template": None,
+            "officehours": None, "dashboard": []}
     if not site_dir.is_dir():
         problems.add(_rel(site_dir), "declaration directory not found")
         return decl, problems
@@ -493,7 +501,8 @@ def validate(site_dir=SITE_DIR, modules_dir=None):
             problems.add(_rel(path), "unexpected file; the declaration is site.yaml, "
                          "ignore.yaml, roles.yaml, organisations.yaml, "
                          "profile-fields.yaml, course-fields.yaml, reports.yaml, "
-                         "badges.yaml, certificate/template.yaml and settings/*.yaml")
+                         "badges.yaml, certificate/template.yaml, %s, %s and "
+                         "settings/*.yaml" % (OFFICEHOURS_FILE, DASHBOARD_FILE))
 
     loaded = {}
     for name, (required, optional) in TOP_FILES.items():
@@ -839,6 +848,16 @@ def validate(site_dir=SITE_DIR, modules_dir=None):
                                                                  site_dir, decl, problems)
     if "badges.yaml" in loaded or cert.exists():
         _check_recognition_site(decl, problems)
+
+    # Spec 011: the office-hours course, the dashboard's blocks, and the calendar rules.
+    if OFFICEHOURS_FILE in loaded:
+        path, data = loaded[OFFICEHOURS_FILE]
+        decl["officehours"] = _validate_office_hours(_rel(path), data, rows, orgs, problems)
+        _check_office_hours_site(decl, problems)
+    if DASHBOARD_FILE in loaded:
+        path, data = loaded[DASHBOARD_FILE]
+        decl["dashboard"] = _validate_dashboard(_rel(path), data, rows, problems)
+    _check_calendar_settings(decl, problems)
     return decl, problems
 
 
@@ -1176,6 +1195,13 @@ def _check_orgmanager(role, problems):
         if isinstance(cap, str) and _orgmanager_denied(cap):
             problems.add(where, "%s is on orgmanager's deny list: a manager follows their "
                          "people and changes nothing (FR-007, FR-013)" % cap)
+        # Spec 011 (D3, R17): a manager may post events in their organisation's own courses,
+        # and nothing else in the calendar. manageentries in a course never reaches a site
+        # event, and every other calendar capability would.
+        if isinstance(cap, str) and cap.startswith("moodle/calendar:") and \
+                cap != ORGMANAGER_CALENDAR:
+            problems.add(where, "%s: orgmanager holds no calendar capability but %s (spec 011 "
+                         "R17)" % (cap, ORGMANAGER_CALENDAR))
 
 
 def _check_mentor(role, problems):
@@ -2185,6 +2211,220 @@ def _check_recognition_site(decl, problems):
             problems.add(programme["file"], message)
 
 
+# --- spec 011: office hours, the dashboard and the calendar ------------------------------
+# specs/011-events-calendar/data-model.md "Declared (repo)" and contracts/declaration.md.
+
+OFFICEHOURS_COURSE = "ltct:officehours"
+OFFICEHOURS_SCHEDULER = "ltct:officehours:scheduler"
+SCHEDULER = "mod_scheduler"
+SCHEDULER_MODES = ("onetime", "oneonly")
+COURSE_FULLNAME_MAX = 254                  # course.fullname
+COURSE_SHORTNAME_MAX = 100                 # course.shortname
+GROUP_NAME_PLACEHOLDER = "{n}"
+# A group's name is shown to its members; a mentor's name may be a protected identity
+# (spec 016), so a template may hold no name of anyone.
+GROUP_NAME_FORBIDDEN = ("{name}", "{firstname}", "{lastname}", "{fullname}")
+DASHBOARD_REGIONS = ("side-pre", "side-post", "content")
+CALENDAR_SETTINGS = ("enablecalendarexport", "calendar_customexport", "calendar_adminseesall",
+                     "timezone", "forcetimezone")
+NO_FORCED_TIMEZONE = "99"                  # forcetimezone: each learner's own zone wins (R5)
+# The IANA areas PHP's DateTimeZone::listIdentifiers() returns, for when Python has no tz
+# database (Windows without tzdata). CI's runner has one, so there the full list is used.
+TZ_AREAS = ("Africa", "America", "Antarctica", "Arctic", "Asia", "Atlantic", "Australia",
+            "Europe", "Indian", "Pacific")
+STUDENT_BOOKINGS = "mod/scheduler:seeotherstudentsbooking"
+
+
+def _valid_timezone(zone):
+    """Whether `zone` is a zone identifier Moodle's time zone menu offers."""
+    if not isinstance(zone, str):
+        return False
+    if zone == "UTC":
+        return True
+    try:
+        import zoneinfo
+        zones = zoneinfo.available_timezones()
+    except ImportError:
+        zones = set()
+    if zones:
+        return zone in zones
+    area, _, rest = zone.partition("/")
+    return area in TZ_AREAS and bool(re.match(r"^[A-Za-z0-9_+\-]+(?:/[A-Za-z0-9_+\-]+)*$", rest))
+
+
+def _int_in(where, label, value, low, high, problems):
+    if not (_is_int(value) and low <= value <= high):
+        problems.add(where, "%s must be a whole number from %d to %d" % (label, low, high))
+        return False
+    return True
+
+
+def _exactly(where, label, value, expected, why, problems):
+    if not (_is_int(value) and value == expected):
+        problems.add(where, "%s must be %d: %s" % (label, expected, why))
+
+
+def _validate_office_hours(where, data, rows, orgs, problems):
+    """Check office-hours.yaml. Returns the payload's `officehours`, or None if it is broken."""
+    _check_hosts(where, data, problems)
+    _check_rows(where, data, rows, problems)
+    if not _text(data.get("why")):
+        problems.add(where, "why must say which row or spec needs it")
+    course, scheduler, groups = data.get("course"), data.get("scheduler"), data.get("groups")
+    ok = _check_keys(where + " course", course,
+                     {"idnumber", "fullname", "shortname", "category", "summary", "groupmode",
+                      "groupmodeforce"}, set(), problems)
+    ok = _check_keys(where + " scheduler", scheduler,
+                     {"idnumber", "name", "intro", "groupmode", "maxbookings", "schedulermode",
+                      "guardtime_hours", "allownotifications", "defaultslotduration",
+                      "usebookingform", "grade"}, set(), problems) and ok
+    ok = _check_keys(where + " groups", groups, {"name_template"}, set(), problems) and ok
+    if not ok:
+        return None
+
+    cwhere = where + " course"
+    if course["idnumber"] != OFFICEHOURS_COURSE:
+        problems.add(cwhere, "idnumber must be %s; local_ltuse finds the course by it"
+                     % OFFICEHOURS_COURSE)
+    for key, limit in (("fullname", COURSE_FULLNAME_MAX), ("shortname", COURSE_SHORTNAME_MAX)):
+        if _check_name(cwhere, key, course[key], limit, problems):
+            for message in cbc_wording.check_recognition(course[key]):
+                problems.add(cwhere, message)
+    if not _text(course["summary"]):
+        problems.add(cwhere, "summary must say, in plain words, what the course is for")
+    else:
+        for message in cbc_wording.check_recognition(course["summary"]):
+            problems.add(cwhere, message)
+    keys = {c["key"] for c in orgs["categories"]} if orgs else set()
+    if course["category"] not in keys:
+        problems.add(cwhere, "category %r must be a key in organisations.yaml categories"
+                     % (course["category"],))
+    _exactly(cwhere, "groupmode", course["groupmode"], 1,
+             "separate groups, so a learner sees only their own mentor's slots (R16)", problems)
+    _exactly(cwhere, "groupmodeforce", course["groupmodeforce"], 1,
+             "forced, so the scheduler is never switched to open slots by mistake", problems)
+
+    swhere = where + " scheduler"
+    if scheduler["idnumber"] != OFFICEHOURS_SCHEDULER:
+        problems.add(swhere, "idnumber must be %s" % OFFICEHOURS_SCHEDULER)
+    if _check_name(swhere, "name", scheduler["name"], COURSE_FULLNAME_MAX, problems):
+        for message in cbc_wording.check_recognition(scheduler["name"]):
+            problems.add(swhere, message)
+    if not _text(scheduler["intro"]):
+        problems.add(swhere, "intro must tell a learner what to do on the page")
+    _exactly(swhere, "groupmode", scheduler["groupmode"], 1,
+             "the scheduler filters slots by group only in a group mode (R16)", problems)
+    _int_in(swhere, "maxbookings", scheduler["maxbookings"], 1, 5, problems)
+    if scheduler["schedulermode"] not in SCHEDULER_MODES:
+        problems.add(swhere, "schedulermode is %s" % " or ".join(SCHEDULER_MODES))
+    _int_in(swhere, "guardtime_hours", scheduler["guardtime_hours"], 0, 168, problems)
+    _exactly(swhere, "allownotifications", scheduler["allownotifications"], 0,
+             "local_ltuse sends every booking message, so the scheduler must send none (R20)",
+             problems)
+    _int_in(swhere, "defaultslotduration", scheduler["defaultslotduration"], 5, 240, problems)
+    _exactly(swhere, "usebookingform", scheduler["usebookingform"], 0,
+             "office hours ask nothing of a learner before booking", problems)
+    _exactly(swhere, "grade", scheduler["grade"], 0,
+             "office hours are never graded (constitution V)", problems)
+
+    template = groups["name_template"]
+    gwhere = where + " groups"
+    if not _text(template) or GROUP_NAME_PLACEHOLDER not in template:
+        problems.add(gwhere, "name_template must contain %s, the group's number"
+                     % GROUP_NAME_PLACEHOLDER)
+    elif any(p in template for p in GROUP_NAME_FORBIDDEN):
+        problems.add(gwhere, "name_template must not name anyone: a mentor's name may be a "
+                     "protected identity (spec 016)")
+    elif len(template.replace(GROUP_NAME_PLACEHOLDER, "9" * 10)) > CATEGORY_NAME_MAX:
+        problems.add(gwhere, "name_template is too long for a group name")
+
+    guardtime = scheduler["guardtime_hours"] * 3600 if _is_int(scheduler["guardtime_hours"]) else 0
+    return {
+        "course": {"idnumber": course["idnumber"], "fullname": course["fullname"],
+                   "shortname": course["shortname"],
+                   "category_idnumber": "ltct:" + str(course["category"]),
+                   "summary": course["summary"], "groupmode": course["groupmode"],
+                   "groupmodeforce": course["groupmodeforce"]},
+        "scheduler": {"idnumber": scheduler["idnumber"], "name": scheduler["name"],
+                      "intro": scheduler["intro"], "groupmode": scheduler["groupmode"],
+                      "maxbookings": scheduler["maxbookings"],
+                      "schedulermode": scheduler["schedulermode"], "guardtime": guardtime,
+                      "allownotifications": scheduler["allownotifications"],
+                      "defaultslotduration": scheduler["defaultslotduration"],
+                      "usebookingform": scheduler["usebookingform"],
+                      "grade": scheduler["grade"]},
+        "groups": {"name_template": template},
+    }
+
+
+def _check_office_hours_site(decl, problems):
+    """What the office-hours course needs from the rest of the declaration."""
+    pinned = {p["component"] for p in decl["plugins"] if "version" in p}
+    if SCHEDULER not in pinned:
+        problems.add("site.yaml", "%s must be pinned: office-hours.yaml needs it (row 21)"
+                     % SCHEDULER)
+    student = next((r for r in decl["roles"] if r["shortname"] == "student"), None)
+    perm = (student or {}).get("capabilities", {}).get(STUDENT_BOOKINGS)
+    if perm in (None, "allow"):
+        problems.add("roles.yaml", "student must declare %s as inherit (or stricter): the "
+                     "student archetype allows it, and it names everyone who booked a slot "
+                     "(spec 011 D4, FR-008)" % STUDENT_BOOKINGS)
+
+
+def _validate_dashboard(where, data, rows, problems):
+    """Check dashboard.yaml. Returns the payload's `dashboard`: [{block, region}]."""
+    _check_hosts(where, data, problems)
+    _check_rows(where, data, rows, problems)
+    blocks = data.get("default_blocks")
+    if not isinstance(blocks, list) or not blocks:
+        problems.add(where, "default_blocks must be a non-empty list")
+        return []
+    out, seen = [], set()
+    for i, entry in enumerate(blocks):
+        bwhere = "%s default_blocks[%d]" % (where, i)
+        if not _check_keys(bwhere, entry, {"block", "region", "why"}, set(), problems):
+            continue
+        block, region = entry["block"], entry["region"]
+        if block not in STANDARD["block"]:
+            problems.add(bwhere, "block %r is not a core block" % (block,))
+            continue
+        if block in seen:
+            problems.add(bwhere, "%s names no block twice; it is listed already" % block)
+            continue
+        seen.add(block)
+        if region not in DASHBOARD_REGIONS:
+            problems.add(bwhere, "region is one of %s" % ", ".join(DASHBOARD_REGIONS))
+            continue
+        if not _text(entry["why"]):
+            problems.add(bwhere, "why must say what the block is for")
+        out.append({"block": block, "region": region})
+    return out
+
+
+def _check_calendar_settings(decl, problems):
+    """Spec 011's rules on settings declared anywhere: the time zone and calendar export."""
+    declared = {s["name"]: s for s in decl["settings"]}
+    present = [n for n in CALENDAR_SETTINGS if n in declared]
+    if present:
+        for name in CALENDAR_SETTINGS:
+            if name not in declared:
+                problems.add("settings/calendar.yaml", "%s must be declared with the other "
+                             "calendar settings (spec 011 R12)" % name)
+    zone = declared.get("timezone")
+    if zone and not zone["env"] and not _valid_timezone(zone["value"]):
+        problems.add(zone["file"], "timezone %r is not a time zone identifier, such as UTC or "
+                     "Africa/Nairobi (D7)" % (zone["value"],))
+    force = declared.get("forcetimezone")
+    if force and str(force["value"]) != NO_FORCED_TIMEZONE:
+        problems.add(force["file"], "forcetimezone must be 99, so each learner's own zone wins "
+                     "(spec 011 R5)")
+    hidden = declared.get("hiddenuserfields")
+    if hidden and isinstance(hidden["value"], str) and \
+            "timezone" in [f.strip() for f in hidden["value"].split(",")]:
+        problems.add(hidden["file"], "hiddenuserfields must not hide timezone: the profile is "
+                     "where a learner sees and changes their zone (spec 011 R14)")
+
+
 # ---------------------------------------------------------------------------------------
 # The payload: the declaration as the JSON site_config.php reads (data-model "Rendered
 # payload"). Built in memory; the resolved form is only ever written to the child's stdin.
@@ -2254,6 +2494,10 @@ def build_payload(decl, mode, environ, redact=False):
         # plugin re-checks each course's rendered text without a copy of its own (R15).
         "badge_template": _payload_badge(decl["badge_template"]),
         "certificate_template": _payload_certificate(decl["certificate_template"]),
+        # Spec 011, after spec 013's (contracts/declaration.md "Payload arrays"): the
+        # office-hours course and activity, then the default dashboard's blocks.
+        "officehours": decl["officehours"],
+        "dashboard": decl["dashboard"],
     }
     for s in decl["settings"]:
         out = {"name": s["name"], "plugin": s["plugin"], "setting": s["setting"],
@@ -2325,12 +2569,14 @@ def _summary(decl):
     return ("%d settings in %d files, %d plugins, %d roles, %d ignore entries, "
             "%d categories, %d cohorts, %d profile fields, %d cohort rules, "
             "%d course fields, %d competencies, %d reports, "
-            "%d badge template, %d certificate template"
+            "%d badge template, %d certificate template, %d office-hours course, "
+            "%d dashboard blocks"
             % (len(decl["settings"]), files, len(decl["plugins"]), len(decl["roles"]),
                len(decl["ignore"]), len(decl["categories"]), len(decl["cohorts"]),
                len(decl["profile_fields"]), len(decl["cohort_rules"]),
                len(decl["course_fields"]), len(decl["competencies"]), len(decl["reports"]),
-               decl["badge_template"] is not None, decl["certificate_template"] is not None))
+               decl["badge_template"] is not None, decl["certificate_template"] is not None,
+               decl["officehours"] is not None, len(decl["dashboard"])))
 
 
 def main(argv=None, environ=None):

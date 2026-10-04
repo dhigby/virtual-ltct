@@ -1,0 +1,17 @@
+# Row #21: blocks every learner's default dashboard carries (spec 011, research R18).
+#
+# Read only by scripts/site_config.py (contract: specs/011-events-calendar/contracts/
+# declaration.md). Additive: apply adds a declared block that is missing from the system
+# default dashboard and never removes one, and never resets a dashboard someone has made
+# their own. Spec 007 owns the rest of the dashboard's layout, Timeline included.
+
+rows: [21]
+purpose: >-
+  What a learner sees on their dashboard without arranging anything (FR-003).
+default_blocks:
+  - block: calendar_upcoming
+    region: side-post
+    why: >-
+      Upcoming events: site, course and group events in the learner's own time zone. Core
+      does not put it on a new site's dashboard, and Timeline never shows hand-made events
+      (R8).

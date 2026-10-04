@@ -21,6 +21,11 @@ use core_privacy\local\request\writer;
  * in each one's user context. The mentor relationship itself (core role_assignments) and the
  * message contact (core message_contacts) are core's to export and delete.
  *
+ * Spec 011 adds local_ltuse_booking: each office-hours booking's last notified time, which
+ * belongs to the learner and the mentor alike and is reported in each one's user context. The
+ * appointment itself is mod_scheduler's to export, the calendar events core's, and the
+ * eventchange and bookingnotice notifications core messaging's.
+ *
  * Its other tables hold nothing about a person: the competency framework, which courses aim
  * at which competency (spec 004), and which badge is each course's (spec 013). The
  * per-competency report counts enrolments and completions from core's tables at query time
@@ -34,6 +39,9 @@ class provider implements
     /** The table. */
     const TABLE = 'local_ltuse_mentor_contact';
 
+    /** Spec 011: each office-hours booking's last notified time (research R20). */
+    const BOOKING = 'local_ltuse_booking';
+
     /**
      * @param collection $collection
      * @return collection
@@ -45,6 +53,15 @@ class provider implements
             'contactid' => 'privacy:metadata:mentor_contact:contactid',
             'timecreated' => 'privacy:metadata:mentor_contact:timecreated',
         ], 'privacy:metadata:mentor_contact');
+        $collection->add_database_table(self::BOOKING, [
+            'eventid' => 'privacy:metadata:booking:eventid',
+            'slotid' => 'privacy:metadata:booking:slotid',
+            'learnerid' => 'privacy:metadata:booking:learnerid',
+            'mentorid' => 'privacy:metadata:booking:mentorid',
+            'timestart' => 'privacy:metadata:booking:timestart',
+            'timeduration' => 'privacy:metadata:booking:timeduration',
+            'timecreated' => 'privacy:metadata:booking:timecreated',
+        ], 'privacy:metadata:booking');
         // The plugin also writes into core messaging: it makes mentor and learner contacts.
         $collection->add_subsystem_link('core_message', [], 'privacy:metadata:core_message');
         return $collection;
@@ -60,10 +77,12 @@ class provider implements
                   FROM {context} ctx
                  WHERE ctx.contextlevel = :level
                    AND ctx.instanceid = :userid
-                   AND EXISTS (SELECT 1 FROM {" . self::TABLE . "} mc
-                                WHERE mc.mentorid = :mentorid OR mc.learnerid = :learnerid)";
+                   AND (EXISTS (SELECT 1 FROM {" . self::TABLE . "} mc
+                                 WHERE mc.mentorid = :mentorid OR mc.learnerid = :learnerid)
+                        OR EXISTS (SELECT 1 FROM {" . self::BOOKING . "} b
+                                    WHERE b.mentorid = :bmentorid OR b.learnerid = :blearnerid))";
         $contextlist->add_from_sql($sql, ['level' => CONTEXT_USER, 'userid' => $userid,
-            'mentorid' => $userid, 'learnerid' => $userid]);
+            'mentorid' => $userid, 'learnerid' => $userid, 'bmentorid' => $userid, 'blearnerid' => $userid]);
         return $contextlist;
     }
 
@@ -92,6 +111,7 @@ class provider implements
             if (!$context instanceof context_user || (int)$context->instanceid !== $userid) {
                 continue;
             }
+            self::export_bookings($context, $userid);
             $rows = $DB->get_records_select(self::TABLE, 'mentorid = :mentorid OR learnerid = :learnerid',
                 ['mentorid' => $userid, 'learnerid' => $userid], 'timecreated, id');
             if (!$rows) {
@@ -153,8 +173,39 @@ class provider implements
      */
     protected static function has_rows(int $userid): bool {
         global $DB;
-        return $DB->record_exists_select(self::TABLE, 'mentorid = :mentorid OR learnerid = :learnerid',
-            ['mentorid' => $userid, 'learnerid' => $userid]);
+        $params = ['mentorid' => $userid, 'learnerid' => $userid];
+        return $DB->record_exists_select(self::TABLE, 'mentorid = :mentorid OR learnerid = :learnerid', $params)
+            || $DB->record_exists_select(self::BOOKING, 'mentorid = :mentorid OR learnerid = :learnerid', $params);
+    }
+
+    /**
+     * Export the user's office-hours booking records, as learner or as mentor (spec 011).
+     * The appointments themselves are mod_scheduler's to export.
+     *
+     * @param context_user $context
+     * @param int $userid
+     */
+    protected static function export_bookings(context_user $context, int $userid): void {
+        global $DB;
+        $rows = $DB->get_records_select(self::BOOKING, 'mentorid = :mentorid OR learnerid = :learnerid',
+            ['mentorid' => $userid, 'learnerid' => $userid], 'timestart, id');
+        if (!$rows) {
+            return;
+        }
+        $bookings = [];
+        foreach ($rows as $row) {
+            $bookings[] = (object)[
+                'role' => ((int)$row->mentorid === $userid) ? 'mentor' : 'learner',
+                'slotid' => (int)$row->slotid,
+                'learnerid' => (int)$row->learnerid,
+                'mentorid' => (int)$row->mentorid,
+                'timestart' => transform::datetime($row->timestart),
+                'minutes' => (int)round($row->timeduration / MINSECS),
+                'timecreated' => transform::datetime($row->timecreated),
+            ];
+        }
+        writer::with_context($context)->export_data(
+            [get_string('privacy:path:bookings', 'local_ltuse')], (object)['bookings' => $bookings]);
     }
 
     /**
@@ -171,5 +222,7 @@ class provider implements
             \local_ltuse\observer::remove_own_contact($row);
             $DB->delete_records(self::TABLE, ['id' => $row->id]);
         }
+        $DB->delete_records_select(self::BOOKING, 'mentorid = :mentorid OR learnerid = :learnerid',
+            ['mentorid' => $userid, 'learnerid' => $userid]);
     }
 }

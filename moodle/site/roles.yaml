@@ -94,8 +94,9 @@ roles:
     description: >-
       Follows one partner organisation's learners in a course only that organisation takes:
       the participants page, their profiles and their identity fields, and the course's
-      activity and course completion reports. Used only in organisation-only courses, never in
-      a course organisations share. Changes nothing by itself; a manager's actions go through
+      activity and course completion reports, and posts calendar events for them there. Used
+      only in organisation-only courses, never in a course organisations share. Otherwise
+      changes nothing by itself; a manager's actions go through
       local_ltuse's organisation page. Comes only through the organisation's managers cohort,
       by cohort sync. Declared in moodle/site/roles.yaml and applied by scripts/site_config.py -- edit
       that file rather than this role.
@@ -107,6 +108,7 @@ roles:
       moodle/site:viewuseridentity: allow     # the identity fields the site shows, such as email
       report/progress:view: allow             # per-lesson ticks in an organisation-only course (R8)
       report/completion:view: allow           # course completion in an organisation-only course (R8)
+      moodle/calendar:manageentries: allow    # spec 011 D3: course events in their organisation-only course (R17)
     why: >-
       #8 and #15 (FR-005 to FR-007): one follow-only role for every partner organisation, so
       every manager holds the same permissions (SC-005). Amended 2026-10-02 (R2): shared
@@ -118,20 +120,34 @@ roles:
       (Doug, 2026-10-02). Nothing is prohibit, so a manager who is also a mentor keeps that
       role's permissions. local_ltuse's profile hook limits whose profiles a manager can open
       (R9). report/progress:view and report/completion:view are #7 (spec 004, R8).
+      moodle/calendar:manageentries is #21 (spec 011, D3, R17): a manager posts, edits,
+      repeats and cancels course events for their own people. It is course-context, so it
+      reaches only the organisation-only courses this role is assigned in, and never a site
+      event (that needs it in the front-page course). Without moodle/site:accessallgroups it
+      gives no group events either. site_config.py allows no other calendar capability.
 
   - shortname: student
     archetype: student
     capabilities:
       mod/workshop:viewauthornames: inherit   # FR-012a: peers never see who wrote what (R4)
+      mod/scheduler:seeotherstudentsbooking: inherit   # spec 011 D4: nobody sees who else booked (R19)
     why: >-
       #22 (spec 012): peer review is anonymous between learners. The student archetype allows
       mod/workshop:viewauthornames by default; removing it at system context hides author
-      names in every workshop. Inert until a course has a workshop.
+      names in every workshop. Inert until a course has a workshop. #21 (spec 011, D4, FR-008,
+      R19): bookings are private. The student archetype allows
+      mod/scheduler:seeotherstudentsbooking, which names everyone who booked a slot; removing
+      it at system context hides them on every booking page.
 
   - shortname: teacher          # "Non-editing teacher"; called "Course mentor" in our docs, not renamed in Moodle
     archetype: teacher
     capabilities:
       moodle/site:accessallgroups: inherit    # already absent from the teacher archetype (R3); listed so drift manages it
+      # Spec 011 (R19): a mentor manages only their own office-hour slots. All three are
+      # already absent from the teacher archetype; listed so a hand grant shows as drift.
+      mod/scheduler:manageallappointments: inherit
+      mod/scheduler:canscheduletootherteachers: inherit
+      mod/scheduler:canseeotherteachersbooking: inherit
     why: >-
       #22 (spec 012): the course-level role that assesses work. Its archetype defaults are what
       FR-010/FR-013 need (assign:grade, workshop allocate/switchphase/overridegrades,

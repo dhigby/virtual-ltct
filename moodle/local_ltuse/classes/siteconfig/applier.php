@@ -49,6 +49,12 @@ defined('MOODLE_INTERNAL') || die();
  *   badge_template        badgetemplate::apply(): store it, then reword every mapped badge
  *   certificate_template  certtemplate::apply(): the site template, then every activity's copy
  *
+ * Then spec 011's, last (specs/011-events-calendar/contracts/declaration.md):
+ *
+ *   officehours  officehours::apply(): the course, the scheduler, the enrolment instance, the
+ *                group name template, then a reconcile of memberships
+ *   dashboard    dashboard::apply(): every declared block missing from the default dashboard
+ *
  * The preflight stops on a run-wide block only (report::has_blocking()). A report-scoped
  * block, such as an audience cohort that does not exist, leaves just that report unwritten:
  * reports::apply() checks each report again and skips the blocked one.
@@ -114,6 +120,21 @@ class applier {
         $this->apply_course_flags('check_course_reports', 'showreports', 0);
         $this->apply_reporting();
         $this->apply_recognition();
+        $this->apply_events();
+    }
+
+    /**
+     * Apply spec 011's two arrays, last: the office-hours course, its activity, enrolment
+     * instance and group name template, then a reconcile of its memberships; then the default
+     * dashboard's blocks. Never deletes a course, an activity, a group or a block.
+     */
+    protected function apply_events(): void {
+        if ($this->inspector->officehours()) {
+            $this->inspector->officehours()->apply($this->report);
+        }
+        if ($this->inspector->dashboard()) {
+            $this->inspector->dashboard()->apply($this->report);
+        }
     }
 
     /**

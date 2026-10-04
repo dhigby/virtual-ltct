@@ -1,0 +1,31 @@
+# Row #21: the calendar and the site's time zone (spec 011, research R7, R12; D7).
+
+rows: [21]
+purpose: >-
+  Calendar export and the site's default time zone. Every learner sees event times in their
+  own zone, which they set on their profile; anyone who has not set one sees UTC.
+settings:
+  - name: enablecalendarexport
+    value: 1
+    why: >-
+      Learners export or subscribe to their own events without help (FR-004, R7). Off, the
+      Export and "Get calendar URL" links disappear.
+  - name: calendar_customexport
+    value: 1
+    why: Lets a learner choose the period to export, as well as the defaults (R7).
+  - name: calendar_adminseesall
+    value: 0
+    why: >-
+      Off, so a site administrator's calendar holds the courses they are in, not every course
+      on the site (R12).
+  - name: timezone
+    value: UTC
+    why: >-
+      D7: the zone for anyone who has never chosen one. A stored 99 resolves to it
+      (core_date::get_user_timezone()). Learners are in every zone, so no regional default is
+      fairer than UTC.
+  - name: forcetimezone
+    value: 99
+    why: >-
+      99 forces nothing, so each learner's own zone wins (R5). Any other value would show
+      every learner the same zone.

@@ -91,5 +91,29 @@ function xmldb_local_ltuse_upgrade($oldversion) {
         upgrade_plugin_savepoint(true, 2026100301, 'local', 'ltuse');
     }
 
+    // Events and office hours (spec 011, research R20): each office-hours booking's last
+    // notified time, because core's calendar_event_updated carries no old time.
+    if ($oldversion < 2026100400) {
+        $table = new xmldb_table('local_ltuse_booking');
+        $table->add_field('id', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, XMLDB_SEQUENCE, null);
+        $table->add_field('eventid', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, null);
+        $table->add_field('slotid', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, null);
+        $table->add_field('learnerid', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, null);
+        $table->add_field('mentorid', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, '0');
+        $table->add_field('timestart', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, '0');
+        $table->add_field('timeduration', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, '0');
+        $table->add_field('timecreated', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, '0');
+        $table->add_key('primary', XMLDB_KEY_PRIMARY, ['id']);
+        $table->add_key('learnerid', XMLDB_KEY_FOREIGN, ['learnerid'], 'user', ['id']);
+        $table->add_index('eventid', XMLDB_INDEX_UNIQUE, ['eventid']);
+        $table->add_index('slotid', XMLDB_INDEX_NOTUNIQUE, ['slotid']);
+        $table->add_index('mentorid', XMLDB_INDEX_NOTUNIQUE, ['mentorid']);
+        if (!$dbman->table_exists($table)) {
+            $dbman->create_table($table);
+        }
+
+        upgrade_plugin_savepoint(true, 2026100400, 'local', 'ltuse');
+    }
+
     return true;
 }

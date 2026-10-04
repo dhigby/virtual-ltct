@@ -225,3 +225,21 @@ function local_ltuse_myprofile_navigation(\core_user\output\myprofile\tree $tree
             get_string('mentoring:thislearner', 'local_ltuse'), null, $url));
     }
 }
+
+/**
+ * Refuse removing an office-hours group member by hand (spec 011, research R16).
+ *
+ * Members of a mentor's group in the office-hours course are added with component local_ltuse
+ * and kept in step with the mentor relationship by local_ltuse\officehours; core's group pages
+ * call this through groups_remove_member_allowed() (group/lib.php). End the relationship on the
+ * learner's profile instead, and the sync removes them. Guards the interface only:
+ * groups_remove_member() itself, which the sync uses, is unconditional.
+ *
+ * @param int $itemid the mentor's user id
+ * @param int $groupid
+ * @param int $userid
+ * @return bool false: never removed by hand
+ */
+function local_ltuse_allow_group_member_remove($itemid, $groupid, $userid) {
+    return false;
+}

@@ -3,7 +3,7 @@
   "specName": "Learning Pathways Mapped to CBC",
   "branch": "specs/moodle-requirements",
   "currentStep": "implement",
-  "status": "implemented",
+  "status": "completed",
   "history": [
     {
       "step": "specify",

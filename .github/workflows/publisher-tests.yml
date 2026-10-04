@@ -24,6 +24,10 @@ on:
       - 'tests/test_disclosure_mentor_only.py'
       - 'tests/test_moodle_payload_discussion.py'
       - 'tests/fixtures/**'
+      # Spec 008: the site team's administration tool.
+      - 'scripts/ltct_admin.py'
+      - 'scripts/admin_files.py'
+      - 'tests/test_ltct_admin.py'
       - '.github/workflows/publisher-tests.yml'
   pull_request:
     paths:
@@ -48,6 +52,10 @@ on:
       - 'tests/test_disclosure_mentor_only.py'
       - 'tests/test_moodle_payload_discussion.py'
       - 'tests/fixtures/**'
+      # Spec 008: the site team's administration tool.
+      - 'scripts/ltct_admin.py'
+      - 'scripts/admin_files.py'
+      - 'tests/test_ltct_admin.py'
       - '.github/workflows/publisher-tests.yml'
 
 jobs:
@@ -65,3 +73,4 @@ jobs:
           tests/test_payload_completion.py tests/test_payload_recognition.py
           tests/test_publish_moodle.py
           tests/test_disclosure_mentor_only.py tests/test_moodle_payload_discussion.py
+          tests/test_ltct_admin.py

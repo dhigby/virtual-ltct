@@ -20,6 +20,8 @@ on:
       - 'tests/timezone_notice_harness.php'
       - 'tests/officehours_harness.php'
       - 'tests/booking_notice_harness.php'
+      - 'tests/admin_harness.php'
+      - 'scripts/admin_files.py'
   pull_request:
     paths:
       - 'moodle/site/**'
@@ -39,6 +41,8 @@ on:
       - 'tests/timezone_notice_harness.php'
       - 'tests/officehours_harness.php'
       - 'tests/booking_notice_harness.php'
+      - 'tests/admin_harness.php'
+      - 'scripts/admin_files.py'
 
 jobs:
   validate:
@@ -70,3 +74,7 @@ jobs:
           php tests/timezone_notice_harness.php
           php tests/officehours_harness.php
           php tests/booking_notice_harness.php
+      # Spec 008: local_ltuse's pure administration rules and the server-side masking, which
+      # it compares with scripts/admin_files.py through Python. Needs no Moodle.
+      - name: Administration harness
+        run: php tests/admin_harness.php

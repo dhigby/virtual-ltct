@@ -9,10 +9,15 @@
 defined('MOODLE_INTERNAL') || die();
 
 $plugin->component = 'local_ltuse';
-$plugin->version   = 2026100400;   // Events and office hours (spec 011): calendar change
+$plugin->version   = 2026100800;   // Administration (spec 008): the ltuse_admin service, the
+                                   // local/ltuse:administer capability and the course-mentor
+                                   // table. Agreed stamps: 016 = 2026100500, 006 = 20261006NN;
+                                   // whichever merges second re-bumps above main, renumbers its
+                                   // upgrade.php savepoint and re-pins site.yaml. Before it,
+                                   // events and office hours (spec 011, 2026100400): calendar change
                                    // notices, the office-hours sync, booking notices and
-                                   // their table (local_ltuse_booking), the time zone notice.
-                                   // db/upgrade.php saves its savepoint at this stamp. After
+                                   // their table (local_ltuse_booking, savepoint 2026100400),
+                                   // the time zone notice. After
                                    // open courses (spec 002, 2026100302): the course
                                    // discussion is always open, drift checks each published
                                    // ltct: course's group mode, and a managers cohort synced

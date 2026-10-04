@@ -1,0 +1,24 @@
+# Rows #14 and #11: what the site team's administration tool relies on (spec 008).
+
+rows: [14, 11]
+purpose: >-
+  scripts/ltct_admin.py brings learners on and keeps course mentors in step through
+  local_ltuse's administration service. These are the two settings it owns. The others it
+  depends on stay where their specs declare them (enrol_cohort/unenrolaction in groups.yaml,
+  tool_dynamic_cohorts/realtime in cohorts.yaml), and "ltct_admin.py check" refuses to run if
+  any of them is wrong (research R13).
+settings:
+  - name: allowaccountssameemail
+    value: 0
+    why: >-
+      A backstop for core's own account-creation paths (signup, Upload users,
+      core_user_create_users). The administration tool does not rely on it: its intake matches
+      by email under a lock and never creates a second account for one address (research R2).
+  - name: local_ltuse/coursementorsync
+    value: 0
+    why: >-
+      Off until plan decision 11 (how far a course mentor sees a protected learner) is made.
+      At 1, each learner's course mentors are enrolled as Course mentor in the courses they
+      take and removed by event (research R10); at 0 the observers and the hourly reconcile do
+      nothing, and one-course and cohort mentors can still be recorded. Instance checks turn
+      it on in their own --site-dir copy only.

@@ -134,3 +134,10 @@ $string['privacy:metadata:booking:timestart'] = 'The booking\'s start, as last n
 $string['privacy:metadata:booking:timeduration'] = 'The booking\'s length, as last notified.';
 $string['privacy:metadata:booking:timecreated'] = 'When the booking was recorded.';
 $string['privacy:path:bookings'] = 'Office-hours bookings';
+
+// Spec 008: administration. The site team's tool and its service; never shown to a learner.
+// No string here names a person, an organisation or a protection level.
+$string['ltuse:administer'] = 'Administer LTC learners through the administration service';
+$string['setting:coursementorsync'] = 'Enrol course mentors automatically';
+$string['setting:coursementorsync_desc'] = 'Keep each learner\'s course mentors enrolled as Course mentor in the courses they take, and remove them as soon as the reason ends. Declared in moodle/site/settings/admin.yaml; change it there.';
+$string['error:actionrefused'] = 'Refused: {$a}. Nothing was changed.';

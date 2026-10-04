@@ -18,8 +18,16 @@ TWO THINGS ABOUT MOODLE'S API THAT BITE
 CREDENTIALS come from the environment and never from a file. INTENT.md makes this a hard
 constraint: "The repo is public. No credentials, no learner PII."
 
-    MOODLE_URL     e.g. https://moodle.example.org
-    MOODLE_TOKEN   a token for the 'LTC curriculum publishing' service
+    MOODLE_URL          e.g. https://moodle.example.org
+    MOODLE_TOKEN        a token for the 'LTC curriculum publishing' service
+    MOODLE_ADMIN_TOKEN  the site-team member's own 'LTC administration' token, read by
+                        scripts/ltct_admin.py and passed in as token= (spec 008, R12)
+
+RETRIES are off unless asked for. scripts/ltct_admin.py asks: every call it makes is one
+idempotent row, so re-sending after a dropped connection or a 5xx is safe, and on a field
+link it is the difference between finishing and starting over (spec 008, R15). A Moodle
+`exception` body is never retried: the server answered, and its answer was no. The
+publisher does not ask, because core_course_create_courses is not idempotent.
 
 Usage as a CLI, to check a server is reachable and the token works:
   python scripts/moodle_client.py --whoami
@@ -27,12 +35,17 @@ Usage as a CLI, to check a server is reachable and the token works:
 import json
 import os
 import sys
+import time
 import urllib.error
 import urllib.parse
 import urllib.request
 import uuid
 
 DEFAULT_TIMEOUT = 120
+
+# Back-off before each retry, for clients that ask for retries (spec 008, R15): three
+# retries, after 2, 4 and 8 seconds.
+RETRY_DELAYS = (2, 4, 8)
 
 # Identify the client honestly -- and avoid the default one. Python's urllib sends
 # "Python-urllib/3.x", which Cloudflare's managed bot rules reject outright with a bare
@@ -76,13 +89,24 @@ def _flatten(value, prefix=""):
     return items
 
 
+class _Retryable(Exception):
+    """A failure worth sending again: no answer, or a 5xx. Carries the MoodleError to raise."""
+
+    def __init__(self, error):
+        self.error = error
+        super().__init__(str(error))
+
+
 class MoodleClient:
-    def __init__(self, url=None, token=None, timeout=DEFAULT_TIMEOUT, dry_run=False):
+    def __init__(self, url=None, token=None, timeout=DEFAULT_TIMEOUT, dry_run=False,
+                 retries=(), sleep=time.sleep):
         self.url = (url or os.environ.get("MOODLE_URL") or "").rstrip("/")
         self.token = (token or os.environ.get("MOODLE_TOKEN") or "").strip()
         self.timeout = timeout
         self.dry_run = dry_run
         self.calls = []            # every write attempted, for --dry-run reporting
+        self.retries = tuple(retries)   # back-off delays; empty means one attempt only
+        self._sleep = sleep
         if not dry_run:
             if not self.url:
                 raise SystemExit(
@@ -108,18 +132,15 @@ class MoodleClient:
             "moodlewsrestformat": "json",
         })
         data = urllib.parse.urlencode(body, encoding="utf-8").encode("utf-8")
-        req = urllib.request.Request(
-            self.url + "/webservice/rest/server.php", data=data,
-            headers={"Content-Type": "application/x-www-form-urlencoded; charset=utf-8",
-                     "User-Agent": USER_AGENT})
-        try:
-            with urllib.request.urlopen(req, timeout=self.timeout) as resp:
-                raw = resp.read().decode("utf-8", "replace")
-        except urllib.error.HTTPError as e:
-            raise MoodleError(function, {"message": "HTTP %s from %s" % (e.code, self.url)})
-        except urllib.error.URLError as e:
-            raise MoodleError(function, {"message": "cannot reach %s: %s"
-                                                    % (self.url, e.reason)})
+        delays = list(self.retries)
+        while True:
+            try:
+                raw = self._post(function, data)
+                break
+            except _Retryable as e:
+                if not delays:
+                    raise e.error
+                self._sleep(delays.pop(0))
 
         if not raw.strip():
             return None
@@ -133,6 +154,28 @@ class MoodleClient:
         if isinstance(payload, dict) and "exception" in payload:
             raise MoodleError(function, payload)
         return payload
+
+    def _post(self, function, data):
+        """One POST. Raises _Retryable for no answer or a 5xx, MoodleError for anything else."""
+        req = urllib.request.Request(
+            self.url + "/webservice/rest/server.php", data=data,
+            headers={"Content-Type": "application/x-www-form-urlencoded; charset=utf-8",
+                     "User-Agent": USER_AGENT})
+        try:
+            with urllib.request.urlopen(req, timeout=self.timeout) as resp:
+                return resp.read().decode("utf-8", "replace")
+        except urllib.error.HTTPError as e:
+            error = MoodleError(function, {"message": "HTTP %s from %s" % (e.code, self.url)})
+            if 500 <= e.code < 600:
+                raise _Retryable(error)
+            raise error
+        except urllib.error.URLError as e:
+            raise _Retryable(MoodleError(function, {"message": "cannot reach %s: %s"
+                                                               % (self.url, e.reason)}))
+        except TimeoutError:
+            # A read that stalls past the timeout surfaces as this, not as URLError.
+            raise _Retryable(MoodleError(function, {"message": "no answer from %s within "
+                                                               "%s s" % (self.url, self.timeout)}))
 
     # -- files ---------------------------------------------------------------------------
     def upload(self, path, itemid=0, filearea="draft"):

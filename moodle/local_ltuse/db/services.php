@@ -92,6 +92,28 @@ $functions = [
                         . 'moodle/badges:configurecriteria, moodle/badges:configuredetails, '
                         . 'moodle/badges:configuremessages, mod/customcert:addinstance',
     ],
+
+    // Spec 008: administration. The site team's functions, called by scripts/ltct_admin.py
+    // through the 'LTC administration' service below and no other. Each checks
+    // local/ltuse:administer, then the core capability for the write it makes. Entries are
+    // added as each function lands (specs/008-admin-tooling/contracts/admin-service.md).
+    'local_ltuse_admin_check' => [
+        'classname'    => 'local_ltuse\external\admin_check',
+        'description'  => 'Report what the administration tool relies on: the settings it '
+                        . 'needs, the capabilities the caller lacks, and whether learning '
+                        . 'pathways and identity protection are installed. Changes nothing.',
+        'type'         => 'read',
+        'ajax'         => false,
+        'capabilities' => 'local/ltuse:administer',
+    ],
+    'local_ltuse_admin_list' => [
+        'classname'    => 'local_ltuse\external\admin_list',
+        'description'  => 'List the ltct: cohorts or ltct: courses the site team may name, '
+                        . 'optionally for one organisation. Changes nothing.',
+        'type'         => 'read',
+        'ajax'         => false,
+        'capabilities' => 'local/ltuse:administer',
+    ],
 ];
 
 // One service, so a single token grants exactly these functions and nothing else.
@@ -129,5 +151,24 @@ $services = [
         // create_page. Without this the images never reach the course and the Android
         // app shows a lesson full of broken pictures.
         'uploadfiles'        => 1,
+    ],
+
+    // Spec 008: administration. A second service, so the site team's tool has a credential
+    // distinct from the publisher's, holding only administration's functions (FR-009,
+    // research R12). Each site-team member gets their own token on their own account
+    // (cli/setup_admin_token.php), so Moodle's logs show who made each change. Removing this
+    // entry deletes every token issued for it on the next upgrade.
+    'LTC administration' => [
+        'functions' => [
+            'local_ltuse_admin_check',
+            'local_ltuse_admin_list',
+            'core_webservice_get_site_info',
+        ],
+        'requiredcapability' => 'local/ltuse:administer',
+        'restrictedusers'    => 1,
+        'enabled'            => 1,
+        'shortname'          => 'ltuse_admin',
+        'downloadfiles'      => 0,
+        'uploadfiles'        => 0,
     ],
 ];

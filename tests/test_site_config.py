@@ -1940,3 +1940,30 @@ class OrgManagerCalendar(Base):
                 self.reset()
                 self.edit("roles.yaml", self.LAST_CAP, self.LAST_CAP + "      %s: allow\n" % cap)
                 self.assertInvalid("orgmanager holds no calendar capability")
+
+
+class AdminRole(Base):
+    """Spec 008 (research R12, T014-T016): the ltctadmin role and settings/admin.yaml."""
+
+    def test_ltctadmin_passes_validation(self):
+        self.assertIn("shortname: ltctadmin", ROLES)
+        self.assertAccepted()
+        roles = {r["shortname"]: r for r in sc.validate(self.dir)[0]["roles"]}
+        self.assertEqual(roles["ltctadmin"]["allowassign"], ["mentor", "teacher"])
+        self.assertEqual(roles["ltctadmin"]["capabilities"]["local/ltuse:administer"], "allow")
+
+    def test_ltctadmin_is_system_only(self):
+        self.edit("roles.yaml", "    contextlevels: [system]  #", "    contextlevels: [system, course]  #")
+        self.assertInvalid("ltctadmin")
+
+    def test_ltctadmin_has_no_archetype(self):
+        old = ('    archetype: ""            # every capability is managed, so one granted by '
+               'hand shows as drift\n    contextlevels: [system]')
+        self.edit("roles.yaml", old, "    archetype: manager\n    contextlevels: [system]")
+        self.assertInvalid("ltctadmin")
+
+    def test_admin_settings_file(self):
+        self.write("settings/admin.yaml",
+                   (REPO / "moodle" / "site" / "settings" / "admin.yaml").read_text())
+        self.assertAccepted()
+

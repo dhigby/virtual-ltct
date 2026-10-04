@@ -581,6 +581,20 @@ each is re-checked as stated.
 | `my_pages`, `block_instances` | `userid IS NULL`, `name`, `private`; `blockname`, `parentcontextid`, `pagetypepattern`, `subpagepattern` | Whether a declared block is on the system default dashboard. The block manager reads blocks only for a page being displayed. |
 | `event` left-joined from `local_ltuse_booking` | `id` | Booking records whose calendar event is gone. |
 
+**Raw reads added by spec 008** (the administration service), all read-only. The full
+"Administration (008)" section follows with spec 008's polish task (T072).
+
+| Table | Read by | Why there is no API |
+|---|---|---|
+| `cohort` | `idnumber LIKE 'ltct:%'` (`admin_list`); `idnumber = 'ltct:mentors'` (`organisation\actions::person_facts()`) | Every organisation cohort is hidden and in system context, which `cohort_get_all_cohorts()` filters by visibility for the caller. `cohort.idnumber` is not indexed in core; the table holds tens of rows. |
+| `course` joined to `course_categories` | `course.idnumber LIKE 'ltct:%'`, the category's `idnumber` (`admin_list`) | The courses the site team may name, with the category that decides which organisations may be enrolled. `core_course_category` lists by category, not by course idnumber. |
+| `course_categories` | `id` (`organisation\actions::do_enrol()`) | The idnumber of one course's category, for `access::may_enrol_into()`. |
+
+`cli/setup_publishing.php` still writes `external_services_users` and deletes
+`external_tokens` with `$DB` directly; `cli/setup_admin_token.php` uses
+`webservice::add_ws_authorised_user()`, `\core_external\util::generate_token()` and
+`webservice::delete_user_ws_token()` instead, and the publisher script should follow.
+
 ## Verified against Moodle 5.2.3+ (2026-09-29)
 
 Installed and exercised end to end on Moodle 5.2.3+ (Build 20260928), PHP 8.3, PostgreSQL

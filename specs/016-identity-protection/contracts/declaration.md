@@ -50,7 +50,7 @@ protection: {
 - `ltct_org` may be `private` only when no report's conditions include `user:profilefield_ltct_org` (R11).
 
 **`roles.yaml`**
-- `local/ltuse:viewidentity` is allowed only on `manager` and `mentor`.
+- `local/ltuse:viewidentity` is allowed only on `manager`, `mentor` and `teacher` (R7 path 4).
 - `local/ltuse:manageprotection` is allowed only on `manager`.
 - `moodle/reportbuilder:edit` and `editall` are allowed only on `manager`.
 - `editingteacher` and `teacher` must prohibit `moodle/course:useremail`, `moodle/backup:downloadfile`, `report/log:view` and `report/loglive:view`.

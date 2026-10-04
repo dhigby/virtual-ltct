@@ -156,7 +156,8 @@ The service takes the per-field snapshot (R5) before blanking anything, and rest
 **Decision**: There is one function, `\local_ltuse\protection\entitlement::can_view_identity($viewer, $user)`. It is true for:
 1. **the site team**: holders of `local/ltuse:viewidentity` at system context (the `manager` archetype);
 2. **an assigned mentor**: holders of `local/ltuse:viewidentity` in the learner's user context, which the 003 `mentor` role gains (`MENTOR_ALLOW` gets this one entry, a reviewed change). The grant ends with the assignment;
-3. **a manager of the learner's own organisation**: a member of `ltct:org:<key>:managers`, where `<key>` is the learner's `ltct_org`, **unless** that organisation's stored setting `managers_see_identity` is false (R12).
+3. **a manager of the learner's own organisation**: a member of `ltct:org:<key>:managers`, where `<key>` is the learner's `ltct_org`, **unless** that organisation's stored setting `managers_see_identity` is false (R12). The learner must also be in that key's member cohort, the field-and-cohort agreement `organisation\access::is_org_member_of_manager()` already requires (002 R10);
+4. **a course mentor of a course the learner takes** (FR-006, amended 2026-10-04): the learner is actively enrolled in a course whose idnumber is `ltct:<slug>` (`^ltct:[^:]+$`, one published or pilot course) and is not `ltct:officehours`, and the viewer holds `local/ltuse:viewidentity` in that course's context. The declared `teacher` role ("Course mentor") gains the capability through `roles.yaml`. The grant ends when the viewer's role or the learner's enrolment ends.
 
 `can_manage_protection($viewer, $user)` is the same, with `local/ltuse:manageprotection` and without the mentor path.
 
@@ -176,6 +177,7 @@ Everywhere else, an entitled viewer sees the protected display. A **non-entitled
 - Core cannot show a mentor or manager the real name in a forum or gradebook without showing it to everyone, because it renders from the record (R1, review H5).
 - **Reports**: a plugin cannot add an entity to a core report-builder datasource. Entities are added only in the datasource's own `initialise()`, and `reportbuilder/classes/` has no hook directory in 5.2. Spec 004's reports use `core_course\reportbuilder\datasource\participants`, so the real identity and the marker cannot be put on them. Our own page (surface 3) replaces that. Rebuilding the participants datasource inside `local_ltuse` was rejected as too much core logic to copy and maintain.
 - The profile node is web-only. In the app, the Mentoring handler is the entitled surface.
+- **Path 4's exclusions** (2026-10-04): the office-hours course enrols every mentor as `teacher` and every mentee as `student` in one course (spec 011 R16), so counting it would entitle every mentor to every mentee. A course without an `ltct:` idnumber is not counted, so the rule fails closed. `editingteacher` (course leaders) does not get the capability: FR-006 names course mentors, not course leaders. The capability is checked in a course context, which a user context does not inherit from, so a course mentor gains nothing in paths 1 and 2.
 
 **Alternatives considered**: `viewalldetails` (rejected in R5); a site-wide alternative name format (rejected in R1); two organisation-manager roles chosen per organisation (rejected, since a role per organisation setting goes against VII).
 

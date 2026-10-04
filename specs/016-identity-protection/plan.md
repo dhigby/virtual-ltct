@@ -10,7 +10,7 @@
 
 **Real identity** is kept in our own table, `local_ltuse_protection`, which has a privacy provider. One PRIVATE profile field, `ltct_certname`, holds every learner's real name for the certificate (R5, R10). The learner's own words (their profile description, interests and posts) are never rewritten; the learner is told to review them.
 
-**Supporters see the real identity through one entitlement function.** It covers the site team, the assigned mentor (a user-context capability on the 003 role), and managers of the learner's own organisation, recognised by managers-cohort membership unless the organisation withholds it (R7). The real identity and a **Protected** marker appear only on our own surfaces:
+**Supporters see the real identity through one entitlement function.** It covers the site team, the assigned mentor (a user-context capability on the 003 role), every course mentor of a course the learner takes (the same capability on the course-level `teacher` role, R7 path 4), and managers of the learner's own organisation, recognised by managers-cohort membership unless the organisation withholds it (R7). The real identity and a **Protected** marker appear only on our own surfaces:
 - the profile node;
 - the Mentoring page, on the web and in the app;
 - a "People I support" page, with a CSV export;
@@ -178,6 +178,7 @@ These are for the maintainer (Doug). `/speckit-tasks` may generate tasks as draf
 | 7 | **Where supporters see the real identity** (R7): the profile node (web), the Mentoring page (web and app), "People I support" with its CSV, and the granting page. Everywhere else they see the protected display. Amends US2-1, US2-3 and FR-007. | Proposed: accept. |
 | 8 | **Organisation minimums are Moodle data, not repo declarations** (R12). They are set by the site team, and the maximum is `firstname`. An organisation that may need protection gets a neutral key and name from its first commit; SIL's Area entries are a deliberate exception (spec Clarifications 2026-10-04). Amends FR-014. | **Accepted** (Doug, 2026-10-04, with constitution 2.1.0 Principle II). FR-008 and FR-014 amended. |
 | 9 | **The global search `core_user` area is disabled**, but global search itself is not (R9), so 014 can still use it. | Proposed: accept. |
+| 10 | **Course mentors see the real identity** (R7 path 4): `teacher` holds `local/ltuse:viewidentity`, counted only in `ltct:<slug>` courses the learner is actively enrolled in, never the office-hours course. A course leader (`editingteacher`) is still not entitled. | **Accepted** (Doug, 2026-10-04, FR-006); design added 2026-10-04. |
 
 ## Cross-spec effects
 
@@ -190,8 +191,9 @@ These are for the maintainer (Doug). `/speckit-tasks` may generate tasks as draf
 - **013**: the certificate's name element and its validator change. `ltct_certname` is back-filled for every user (R10).
 - **014**: global search stays available, because only the `core_user` area is off (decision 9).
 - **015**: the reconcile task runs on the monitored cron. The database restore carries organisation minimums and protection data.
-- **008**: bulk protection can use `local_ltuse_set_protection`.
-- **Course mentors (2026-10-04)**: FR-006 now entitles every course mentor of a course the learner takes, including a one-course mentor. R7's `can_view_identity()` gains that path: the viewer holds the course-level Course mentor role (Moodle's non-editing teacher) in a course where the learner is enrolled. It is not yet designed here; the plan and tasks add it before the build, together with spec 012's re-plan and the 008 re-plan that enrols course mentors automatically.
+- **008**: bulk protection calls `service::set_protection()` from its own admin function, or the `local_ltuse_set_protection` web service, after creating an account and before any cohort membership. It gates enrolment on `service::is_settled()` and `service::effective_level()` (agreed with the 008 session, 2026-10-04).
+- **006**: a mentor's pathway view reuses the Mentoring page's learner rows, which carry `protected` and, for the entitled only, `realname`. It never reads `ltct_org` for scope (agreed with the 006 session, 2026-10-04).
+- **Course mentors (2026-10-04)**: FR-006 now entitles every course mentor of a course the learner takes, including a one-course mentor. Designed as R7 path 4 (2026-10-04): `teacher` gains `local/ltuse:viewidentity`, and the viewer is entitled while the learner is actively enrolled in a published or pilot course (idnumber `ltct:<slug>`, never `ltct:officehours`) where the viewer holds that capability. The office-hours course is excluded because it enrols every mentor as `teacher` and every mentee as `student` (spec 011 R16), which would entitle every mentor to every mentee. 008's re-plan enrols course mentors as `teacher` in the `ltct:` course itself, which is what grants the entitlement, and removes that enrolment when the pairing ends (agreed with the 008 session, 2026-10-04).
 - **002 Areas amendment (2026-10-03)**: a SIL or SIL partner learner's own-organisation managers are their Area's ALTCs. No new code: entitlement already follows managers-cohort membership of the learner's organisation entry (R7).
 
 ## Complexity Tracking

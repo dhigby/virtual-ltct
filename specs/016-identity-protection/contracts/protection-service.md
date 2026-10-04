@@ -15,20 +15,32 @@ The pages, web services, hook, observers and tasks all call them, so a level is 
 | `local/ltuse:manageprotection` | CONTEXT_USER | write | `RISK_PERSONAL` | `manager` |
 | `local/ltuse:manageorgprotection` | CONTEXT_SYSTEM | write | `RISK_PERSONAL` | `manager` |
 
-`mentor` gets `viewidentity` through `roles.yaml`.
+`mentor` (in the learner's user context) and `teacher` (in a course's context, R7 path 4) get `viewidentity` through `roles.yaml`.
 
 ## Entitlement
 
 - **`can_view_identity($viewer, $user)`**: true if any of these holds:
   - the viewer has `viewidentity` at system context (the site team);
   - the viewer has `viewidentity` in the user's context (an assigned mentor);
-  - the viewer is a member of `ltct:org:<key>:managers`, where `<key>` is the user's `ltct_org`, **and** that organisation's `managers_see_identity` is 1.
+  - the viewer is a member of `ltct:org:<key>:managers`, where `<key>` is the user's `ltct_org` and the user is in `ltct:org:<key>`, **and** that organisation's `managers_see_identity` is 1;
+  - the user is actively enrolled in a course with idnumber `ltct:<slug>` other than `ltct:officehours`, and the viewer has `viewidentity` in that course's context (a course mentor, R7 path 4).
+- **`marker($viewerid, $userid)`**: the **Protected** badge as HTML, or `''` when the user is not protected or the viewer is not entitled. Every surface uses it, so none can show the marker to a non-entitled viewer.
 - **`can_manage_protection($viewer, $user)`**: true if either holds:
   - the viewer has `manageprotection` at system context;
   - the viewer is a member of that managers cohort.
 
   Managers manage their own people even when their organisation withholds identity. The granting page then shows them the protected display only, not the real values.
 - The user themselves can always see their own protection and preview. They cannot change it.
+
+## Service methods (PHP, `\local_ltuse\protection\service`)
+
+Named for the 006 and 008 sessions (2026-10-04); they are stable.
+
+- `set_protection(int $userid, string $level, array $options = [], ?int $actorid = null): array`: the logic below, **without** a permission check. Callers check `can_manage_protection()` first. Returns `{effectivelevel, warnings}`; refuses with `moodle_exception` (`protection:err:*`).
+- `apply(int $userid): string`: recompute and apply one user's effective level and `ltct_certname`, under the lock. The adhoc and reconcile tasks call it.
+- `effective_level(int $userid): string`: computed live, the maximum of the user's own level and their organisation's minimum.
+- `is_settled(int $userid): bool`: the level applied to the account equals `effective_level()`. Spec 008 gates enrolment on it.
+- `is_protected(int $userid): bool`, and `real_identity(int $userid): ?array` (`{firstname, lastname, level}`), which callers read only after `can_view_identity()`.
 
 ## Web service `local_ltuse_set_protection`
 

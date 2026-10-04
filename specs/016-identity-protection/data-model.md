@@ -59,6 +59,7 @@ There are two halves:
 | `editingteacher`, `teacher` | `moodle/course:useremail`, `moodle/backup:downloadfile`, `report/log:view` and `report/loglive:view`, each `prohibit` (R8, R14) |
 | `manager` | `local/ltuse:viewidentity` and `local/ltuse:manageprotection`, both `allow` (system context) |
 | `mentor` (003) | `local/ltuse:viewidentity: allow`. `MENTOR_ALLOW` gains this one capability. |
+| `teacher` ("Course mentor") | `local/ltuse:viewidentity: allow` (R7 path 4). Counted only in `ltct:<slug>` courses, never `ltct:officehours`. |
 
 No organisation-manager role is added or changed. Own-organisation managers are recognised by managers-cohort membership (R7). `moodle/reportbuilder:edit` and `editall` stay with `manager` only.
 

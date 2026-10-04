@@ -244,12 +244,13 @@ class intake_service {
     /**
      * Live accounts with this email, case-insensitively: not deleted, on this site (not an MNet
      * peer's). 008's own lookup is the guard against a second account for one email, because
-     * user_create_user() never checks (research R2).
+     * user_create_user() never checks (research R2). The suspension, move and membership
+     * services match people the same way.
      *
      * @param string $email lowercased
      * @return stdClass[] id, suspended
      */
-    protected static function match_accounts(string $email): array {
+    public static function match_accounts(string $email): array {
         global $CFG, $DB;
         if ($email === '') {
             return [];
@@ -439,7 +440,7 @@ class intake_service {
      * @return bool whether the field now holds $key (a menu field stores its default instead of
      *              a value that is not one of its options)
      */
-    protected static function set_organisation(int $userid, string $key): bool {
+    public static function set_organisation(int $userid, string $key): bool {
         global $CFG;
         require_once($CFG->dirroot . '/user/profile/lib.php');
         profile_save_data((object)['id' => $userid, 'profile_field_' . self::ORG_FIELD => $key]);
@@ -492,7 +493,7 @@ class intake_service {
      * @param int $userid
      * @return string
      */
-    protected static function organisation_of(int $userid): string {
+    public static function organisation_of(int $userid): string {
         global $CFG;
         require_once($CFG->dirroot . '/user/profile/lib.php');
         return trim((string)(profile_user_record($userid, false)->{self::ORG_FIELD} ?? ''));
@@ -517,7 +518,7 @@ class intake_service {
      * @param array $row
      * @return bool the row's email is an address Moodle would send to (validate_email())
      */
-    protected static function valid_email(array $row): bool {
+    public static function valid_email(array $row): bool {
         return (bool)validate_email(trim((string)($row['email'] ?? '')));
     }
 
@@ -525,7 +526,7 @@ class intake_service {
      * @param string $email
      * @return string
      */
-    protected static function normalise_email(string $email): string {
+    public static function normalise_email(string $email): string {
         return \core_text::strtolower(trim($email));
     }
 

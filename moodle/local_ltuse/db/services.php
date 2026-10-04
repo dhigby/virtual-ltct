@@ -154,6 +154,63 @@ $functions = [
         'ajax'         => false,
         'capabilities' => 'local/ltuse:administer, moodle/cohort:assign',
     ],
+    'local_ltuse_admin_preview_suspension' => [
+        'classname'    => 'local_ltuse\external\admin_preview_suspension',
+        'description'  => 'Preview suspending or reactivating accounts, with people masked '
+                        . 'unless asked. Changes nothing.',
+        'type'         => 'read',
+        'ajax'         => false,
+        'capabilities' => 'local/ltuse:administer, moodle/user:update',
+    ],
+    'local_ltuse_admin_apply_suspension' => [
+        'classname'    => 'local_ltuse\external\admin_apply_suspension',
+        'description'  => 'Suspend or reactivate one account as previewed. Sessions end on '
+                        . 'suspension; enrolments, grades and completion are kept.',
+        'type'         => 'write',
+        'ajax'         => false,
+        'capabilities' => 'local/ltuse:administer, moodle/user:update',
+    ],
+    'local_ltuse_admin_preview_move' => [
+        'classname'    => 'local_ltuse\external\admin_preview_move',
+        'description'  => 'The counted dry run before moving learners between organisations: '
+                        . 'per learner and course, what is kept, gained, suspended or lost. '
+                        . 'Changes nothing.',
+        'type'         => 'read',
+        'ajax'         => false,
+        'capabilities' => 'local/ltuse:administer, moodle/user:update',
+    ],
+    'local_ltuse_admin_apply_move' => [
+        'classname'    => 'local_ltuse\external\admin_apply_move',
+        'description'  => 'Move one learner to another organisation as previewed, by setting '
+                        . 'their organisation field only. Refused if any course would be lost.',
+        'type'         => 'write',
+        'ajax'         => false,
+        'capabilities' => 'local/ltuse:administer, moodle/user:update',
+    ],
+    'local_ltuse_admin_preview_cohort_members' => [
+        'classname'    => 'local_ltuse\external\admin_preview_cohort_members',
+        'description'  => 'Preview adding people to, or removing them from, managers cohorts '
+                        . 'and the mentors cohort. Changes nothing.',
+        'type'         => 'read',
+        'ajax'         => false,
+        'capabilities' => 'local/ltuse:administer, moodle/cohort:assign',
+    ],
+    'local_ltuse_admin_apply_cohort_members' => [
+        'classname'    => 'local_ltuse\external\admin_apply_cohort_members',
+        'description'  => 'Add one person to, or remove them from, a managers cohort or the '
+                        . 'mentors cohort, as previewed.',
+        'type'         => 'write',
+        'ajax'         => false,
+        'capabilities' => 'local/ltuse:administer, moodle/cohort:assign',
+    ],
+    'local_ltuse_admin_summary' => [
+        'classname'    => 'local_ltuse\external\admin_summary',
+        'description'  => 'One organisation\'s cohort membership and cohort enrolments: counts, '
+                        . 'and people masked unless asked. Changes nothing.',
+        'type'         => 'read',
+        'ajax'         => false,
+        'capabilities' => 'local/ltuse:administer, moodle/cohort:view',
+    ],
 ];
 
 // One service, so a single token grants exactly these functions and nothing else.
@@ -207,6 +264,13 @@ $services = [
             'local_ltuse_admin_preview_cohort_enrolment',
             'local_ltuse_admin_apply_cohort_enrolment',
             'local_ltuse_admin_apply_pathway_assignment',
+            'local_ltuse_admin_preview_suspension',
+            'local_ltuse_admin_apply_suspension',
+            'local_ltuse_admin_preview_move',
+            'local_ltuse_admin_apply_move',
+            'local_ltuse_admin_preview_cohort_members',
+            'local_ltuse_admin_apply_cohort_members',
+            'local_ltuse_admin_summary',
             'core_webservice_get_site_info',
         ],
         'requiredcapability' => 'local/ltuse:administer',

@@ -594,6 +594,16 @@ each is re-checked as stated.
 | `role` | `shortname = 'student'` (`organisation\actions::org_enrol_instance()`); `shortname` of the role `enrolment_rules` gives (`admin\cohort_enrolment`) | The Student (or `orgmanager`) role's id for a new enrolment instance. Core has no lookup of a role by shortname that is not a raw read. |
 | `user` | `deleted = 0`, `mnethostid`, `email` compared case-insensitively (`admin\intake_service::match_accounts()`); `username` and `mnethostid` exists (`new_username()`) | Matching an intake row to every live account with its email, so two accounts for one email are refused rather than one being picked. `core_user::get_user_by_email()` is case-sensitive and returns one record. The table has no index on `email`; intakes are tens of rows. |
 | `enrol` | `id` (`organisation\actions::org_enrol_instance()`) | The instance `enrol_self_plugin::add_instance()` just created, which returns only its id; `enrol_get_instances()` would read every instance of the course. |
+| `enrol` | `enrol = 'cohort'` and `customint1` (a cohort id), with `status` (`admin\cohort_enrolment::enabled_courses()`, used by `enrol mirror` and `admin\move_service`; `admin_summary`) | Which courses one cohort is enrolled in. `enrol_get_instances()` reads one course at a time; the question is "which courses", across all of them. |
+| `cohort` | `idnumber` exact, with `contextid` and `component` (`admin\membership_service::resolve()`); `idnumber` exact (`admin\move_service`, `admin_summary`) | The managers cohort or `ltct:mentors` a managers file names, and whether a plugin owns its members; an organisation's cohort for a move or a summary. As the first `cohort` row. |
+| `cohort_members` joined to `user` | `cohortid`, `user.deleted = 0`; returns `id`, `email`, `suspended` (`admin_summary`) | One organisation's members, masked on the server, and the suspended count. `core_cohort_get_cohort_members` returns user ids only (research R18). |
+| `user_enrolments` | `enrolid` and `status`, a count (`admin_summary`) | Active enrolments through one cohort-sync instance. `count_enrolled_users()` counts by course, not by instance. |
+| `course` | `id` (`admin_summary`) | The idnumber and category of the course an instance belongs to. As the `course` rows above. |
+
+`admin\move_service` reads a learner's active courses and enrolments with core's
+`enrol_get_all_users_courses()`, `enrol_get_course_users()` and `enrol_get_instances()`, and
+`admin\membership_service` writes with `cohort_add_member()` / `cohort_remove_member()` after
+`cohort_is_member()`; none of these is a raw read.
 
 `cli/setup_publishing.php` still writes `external_services_users` and deletes
 `external_tokens` with `$DB` directly; `cli/setup_admin_token.php` uses

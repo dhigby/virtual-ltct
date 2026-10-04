@@ -69,6 +69,13 @@ ADMIN_FUNCTIONS = [
     "local_ltuse_admin_preview_cohort_enrolment",
     "local_ltuse_admin_apply_cohort_enrolment",
     "local_ltuse_admin_apply_pathway_assignment",
+    "local_ltuse_admin_preview_suspension",
+    "local_ltuse_admin_apply_suspension",
+    "local_ltuse_admin_preview_move",
+    "local_ltuse_admin_apply_move",
+    "local_ltuse_admin_preview_cohort_members",
+    "local_ltuse_admin_apply_cohort_members",
+    "local_ltuse_admin_summary",
     "core_webservice_get_site_info",
 ]
 
@@ -157,6 +164,9 @@ class Plan:
     command: list
     gate: bool = False
     notes: list = field(default_factory=list)
+    # Called after the counts with ({row number: preview row}, out), for a command that has
+    # more to show than counts, such as a move's totals per course.
+    details: Callable = None
 
 
 def _print_refusal(result, out):
@@ -189,7 +199,9 @@ def _print_counts(plan, by_row, out):
         print("  %-20s %4d" % (outcome, n), file=out)
     for r in plan.rows:
         p = by_row[r["row"]]
-        if admin_files.outcome_class(p["outcome"]) != admin_files.PROCEEDS:
+        # A row that will not proceed, with its reason; or one that will, with a note (such as
+        # a manager joining their own organisation's managers cohort, research R9).
+        if admin_files.outcome_class(p["outcome"]) != admin_files.PROCEEDS or p.get("reason"):
             print("    row %-4s %-24s %-20s %s" % (p["row"], p.get("key", ""), p["outcome"],
                                                   p.get("reason", "")), file=out)
 
@@ -205,6 +217,8 @@ def drive(plan, apply, confirm, show_people, out=sys.stdout):
         return EXIT_REFUSED
     code, by_row = previewed
     _print_counts(plan, by_row, out)
+    if plan.details:
+        plan.details(by_row, out)
 
     if not apply:
         print("Nothing has been sent to Moodle.", file=out)
@@ -534,6 +548,223 @@ def cmd_enrol_pathway(args, client, out):
     return drive(plan, args.apply, args.confirm, args.show_people, out)
 
 
+def cmd_enrol_mirror(args, client, out):
+    """`enrol mirror --from K1 --to K2`: K2's cohort into every shared course K1's is in (R8).
+
+    Spec 002's rule: before anyone moves from K1 to K2, K2's cohort is enrolled in every shared
+    course K1's is. Rows are those courses as the server lists them, so the confirmation code
+    covers the course list; each is applied as its own `apply_cohort_enrolment` call.
+    """
+    orgs = declared_organisations(args.site_dir)
+    for key in (args.from_org, args.to_org):
+        if key not in orgs:
+            print("Refused: %r is not a declared organisation; run \"ltct_admin.py list "
+                  "organisations\"." % key, file=out)
+            return EXIT_REFUSED
+    if args.from_org == args.to_org:
+        print("Refused: --from and --to are the same organisation.", file=out)
+        return EXIT_REFUSED
+    cohort = "ltct:org:%s" % args.to_org
+    first = client.call("local_ltuse_admin_preview_cohort_enrolment", cohortidnumber=cohort,
+                        mirrorfrom=args.from_org) or {}
+    courses = [] if first.get("refusal") else [c["course"] for c in first.get("courses", [])]
+    if not courses and not first.get("refusal"):
+        print("ltct:org:%s is in no shared course, so there is nothing to mirror. Nothing was "
+              "sent." % args.from_org, file=out)
+        return EXIT_OK
+    rows = [{"row": n, "cohort": cohort, "from": args.from_org, "course": c}
+            for n, c in enumerate(courses, start=1)]
+
+    def preview(show_people):
+        result = _cohort_preview(client, out, cohortidnumber=cohort, mirrorfrom=args.from_org)
+        if result.get("refusal"):
+            return {"refusal": result["refusal"]}
+        by_course = {c["course"]: c for c in result.get("courses", [])}
+        if set(by_course) != set(courses):
+            return {"refusal": "the shared courses ltct:org:%s is in changed since the preview; "
+                               "preview again" % args.from_org}
+        return {"rows": [{"row": r["row"], "key": r["course"],
+                          "outcome": by_course[r["course"]]["outcome"],
+                          "reason": by_course[r["course"]].get("reason", ""), "changes": []}
+                         for r in rows]}
+
+    def apply(row, expected):
+        return client.call("local_ltuse_admin_apply_cohort_enrolment", cohortidnumber=cohort,
+                           courseidnumber=row["course"], action="ensure",
+                           expectedoutcome=expected)
+
+    plan = Plan(title="Enrol mirror", source="ltct:org:%s -> %s" % (args.from_org, cohort),
+                rows=rows, preview=preview, apply=apply,
+                command=["enrol", "mirror", "--from", args.from_org, "--to", args.to_org],
+                gate=_gate_needed(client))
+    return drive(plan, args.apply, args.confirm, args.show_people, out)
+
+
+def _people_file_or_email(args, kind):
+    """(source name, rows, command words) from FILE or --email E, checked offline."""
+    if args.file:
+        path, rows = load_file(args.file, kind, args.site_dir)
+        return path.name, rows, [args.file]
+    rows = [{"row": 1, "email": args.email}]
+    problems = admin_files.validate_file(kind, rows, [])
+    if problems:
+        raise admin_files.FileRefused([p.replace("row 1: ", "--email: ") for p in problems])
+    return "--email", rows, ["--email", args.email]
+
+
+def cmd_suspension(args, client, out, suspend):
+    """`suspend` and `reactivate`: one row per call, through spec 002's actions (research R6)."""
+    word = "suspend" if suspend else "reactivate"
+    source, rows, words = _people_file_or_email(args, "suspension")
+
+    def payload(row):
+        return {"row": row["row"], "email": row["email"].strip()}
+
+    plan = Plan(
+        title="Suspend" if suspend else "Reactivate", source=source, rows=rows,
+        preview=lambda show: client.call("local_ltuse_admin_preview_suspension",
+                                         rows=[payload(r) for r in rows], suspend=suspend,
+                                         showpeople=show),
+        apply=lambda row, expected: client.call("local_ltuse_admin_apply_suspension",
+                                                row=payload(row), suspend=suspend,
+                                                expectedoutcome=expected),
+        command=[word] + words)
+    plan.notes.append("Suspending ends the person's sessions and stops them signing in. Their "
+                      "enrolments, grades and completion are all kept, and reactivating "
+                      "restores access." if suspend else
+                      "Reactivating lets the person sign in again, with everything they had.")
+    return drive(plan, args.apply, args.confirm, args.show_people, out)
+
+
+def move_payload(row):
+    return {"row": row["row"], "email": row["email"].strip(),
+            "organisation": row["organisation"].strip()}
+
+
+def _print_course_totals(by_row, out):
+    """A move preview's totals per course and outcome (research R8)."""
+    totals = {}
+    for p in by_row.values():
+        for c in p.get("courses", []):
+            totals.setdefault(c["course"], Counter())[c["outcome"]] += 1
+    if not totals:
+        return
+    print("Per course:", file=out)
+    for course in sorted(totals):
+        print("  %-40s %s" % (course, ", ".join("%s %d" % (o, n) for o, n in
+                                                sorted(totals[course].items()))), file=out)
+
+
+def cmd_move(args, client, out):
+    """`move FILE`: a counted dry run, then the organisation field, one learner per call (R8)."""
+    path, rows = load_file(args.file, "move", args.site_dir)
+    payload = [move_payload(r) for r in rows]
+    latest = {}                  # row number -> the newest preview row, for expectedcourses
+
+    def preview(show_people):
+        result = client.call("local_ltuse_admin_preview_move", rows=payload,
+                             showpeople=show_people) or {}
+        latest.clear()
+        latest.update({r["row"]: r for r in result.get("rows", [])})
+        return result
+
+    def apply(row, expected):
+        courses = [{"course": c["course"], "outcome": c["outcome"]}
+                   for c in latest.get(row["row"], {}).get("courses", [])]
+        return client.call("local_ltuse_admin_apply_move", row=move_payload(row),
+                           expectedoutcome=expected, expectedcourses=courses)
+
+    plan = Plan(title="Move", source=path.name, rows=rows, preview=preview, apply=apply,
+                command=["move", args.file], details=_print_course_totals)
+    plan.notes.append("A move changes each learner's organisation. Their old organisation's "
+                      "enrolments are suspended with grades and completion kept. A learner who "
+                      "would lose a shared course, or whose protection is below the new "
+                      "organisation's minimum, is not moved.")
+    return drive(plan, args.apply, args.confirm, args.show_people, out)
+
+
+def managers_payload(row):
+    return {"row": row["row"], "email": row["email"].strip(), "cohortidnumber": row["cohort"].strip(),
+            "action": row["action"].strip().lower()}
+
+
+def cmd_managers(args, client, out):
+    """`managers FILE`: managers cohorts and ltct:mentors only, one row per call (R9)."""
+    path, rows = load_file(args.file, "managers", args.site_dir)
+    plan = Plan(
+        title="Managers", source=path.name, rows=rows,
+        preview=lambda show: client.call("local_ltuse_admin_preview_cohort_members",
+                                         rows=[managers_payload(r) for r in rows],
+                                         showpeople=show),
+        apply=lambda row, expected: client.call("local_ltuse_admin_apply_cohort_members",
+                                                row=managers_payload(row),
+                                                expectedoutcome=expected),
+        command=["managers", args.file])
+    return drive(plan, args.apply, args.confirm, args.show_people, out)
+
+
+def summary_lines(result, show_people):
+    """The summary as plain lines: counts, enrolments, and people unless left out."""
+    lines = ["Cohorts:"]
+    for c in result.get("cohorts", []):
+        lines.append("  %-40s %4d member%s, %d suspended"
+                     % (c["idnumber"], c["members"], "" if c["members"] == 1 else "s",
+                        c["suspended"]))
+    lines.append("Enrolments (cohort sync):")
+    courses = result.get("courses", [])
+    for c in courses:
+        flags = []
+        if c.get("viapathway"):
+            flags.append("made through a pathway")
+        if c.get("notonpathway"):
+            flags.append("ON NO PATHWAY THE COHORT HOLDS: unenrol if that is right")
+        lines.append("  %-30s %-28s %-20s %-8s %4d enrolled%s"
+                     % (c["cohort"], c["course"], "[%s]" % c.get("category", ""),
+                        "enabled" if c["enabled"] else "disabled", c["enrolled"],
+                        ("  (%s)" % "; ".join(flags)) if flags else ""))
+    if not courses:
+        lines.append("  (none)")
+    if show_people is not None:
+        lines.append("People%s:" % ("" if show_people else " (masked)"))
+        for p in result.get("people", []):
+            lines.append("  %-30s %-32s %s" % (p["cohort"], p["key"],
+                                              "suspended" if p.get("suspended") else ""))
+    return [line.rstrip() for line in lines]
+
+
+def cmd_summary(args, client_factory, out):
+    """`summary --org K [--out PATH]`: on screen, or into a file outside every git tree (R14)."""
+    if args.org not in declared_organisations(args.site_dir):
+        print("Refused: %r is not a declared organisation; run \"ltct_admin.py list "
+              "organisations\"." % args.org, file=out)
+        return EXIT_REFUSED
+    path = None
+    if args.out:
+        # Guarded before anything is fetched, so a refused path never holds people even briefly.
+        path = admin_files.guard_path(args.out)
+        if path.exists():
+            print("Refused: %s already exists. Choose a new file name." % path, file=out)
+            return EXIT_REFUSED
+    client = client_factory()
+    result = client.call("local_ltuse_admin_summary", orgkey=args.org,
+                         showpeople=args.show_people) or {}
+    if result.get("refusal"):
+        print("Refused: %s" % result["refusal"], file=out)
+        return EXIT_REFUSED
+    title = "Summary for %s" % args.org
+    if path is None:
+        print("\n".join([title] + summary_lines(result, args.show_people)), file=out)
+        return EXIT_OK
+    path.parent.mkdir(parents=True, exist_ok=True)
+    with open(path, "w", encoding="utf-8", newline="\n") as fh:
+        fh.write("\n".join([title] + summary_lines(result, args.show_people)) + "\n")
+    # On screen, the counts only: the people are in the file the operator asked for.
+    print("\n".join([title] + summary_lines(result, None)), file=out)
+    print("Wrote the summary, with %s, to %s. Delete it when you are done with it."
+          % ("emails" if args.show_people else "masked people", path), file=out)
+    return EXIT_OK
+
+
 def not_built(name, task):
     def run(*_args, **_kwargs):
         print("\"%s\" is not built yet (spec 008, task %s). Nothing was sent." % (name, task),
@@ -544,9 +775,7 @@ def not_built(name, task):
 
 # Commands whose implementation lands with its user story (specs/008-admin-tooling/tasks.md).
 PENDING = {
-    "enrol mirror": "T053", "suspend": "T050", "reactivate": "T050",
-    "move": "T052", "managers": "T054", "mentors assign": "T061", "mentors end": "T061",
-    "course-mentors": "T066", "summary": "T055",
+    "mentors assign": "T061", "mentors end": "T061", "course-mentors": "T066",
 }
 
 
@@ -649,6 +878,8 @@ def main(argv=None, environ=None, client_factory=None, out=sys.stdout):
             return cmd_template(args, out)
         if name == "list":
             return cmd_list(args, lambda: _connect(factory, environ), out)
+        if name == "summary":
+            return cmd_summary(args, lambda: _connect(factory, environ), out)
         if name in PENDING:
             return not_built(name, PENDING[name])(out=out)
         client = _connect(factory, environ)
@@ -662,6 +893,14 @@ def main(argv=None, environ=None, client_factory=None, out=sys.stdout):
             return cmd_enrol_course(args, client, out, "remove")
         if name == "enrol pathway":
             return cmd_enrol_pathway(args, client, out)
+        if name == "enrol mirror":
+            return cmd_enrol_mirror(args, client, out)
+        if name in ("suspend", "reactivate"):
+            return cmd_suspension(args, client, out, name == "suspend")
+        if name == "move":
+            return cmd_move(args, client, out)
+        if name == "managers":
+            return cmd_managers(args, client, out)
         raise ConfigError("unknown command %r" % name)
     except ConfigError as e:
         print(str(e), file=out)

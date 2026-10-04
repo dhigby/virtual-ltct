@@ -875,3 +875,432 @@ def test_enrol_pathway_with_a_refused_course_touches_nothing():
                       "competency:fixture"], client=server)
     assert code == 1 and "ltct:fixture-two" in text and "--confirm" not in text
     assert not _calls(server, "local_ltuse_admin_apply_pathway_assignment")
+
+
+# --- T049: suspension, move and managers files, and their resume behaviour ------------------------
+class PeopleServer(FakeClient):
+    """Accounts as the server sees them, for suspend/reactivate, move and managers.
+
+    `people[email]` is {"suspended": bool, "org": key, "cohorts": set of idnumbers}. Every
+    apply follows the server's rule: the previewed outcome is applied; one further along
+    (unchanged, moved) is already_done; anything else is refused. `lose` holds row numbers whose
+    apply succeeds but whose answer is lost; `lost[email]` lists courses a move would lose.
+    """
+
+    def __init__(self, **kw):
+        super().__init__(**kw)
+        self.people = {}
+        self.lose = set()
+        self.lost = {}
+
+    def add(self, n, **over):
+        person = {"suspended": False, "org": "fixture-a", "cohorts": set()}
+        person.update(over)
+        self.people["learner%d@example.org" % n] = person
+
+    def key(self, email, show):
+        return email if show else af.mask_email(email)
+
+    # Each kind's classification, as the server's services make it.
+    def suspension(self, row, suspend):
+        person = self.people.get(row["email"].lower())
+        if person is None:
+            return "rejected", "no account has this email"
+        return ("unchanged" if person["suspended"] == suspend else "would_change"), ""
+
+    def members(self, row):
+        person = self.people.get(row["email"].lower())
+        if person is None:
+            return "rejected", "no account has this email"
+        member = row["cohortidnumber"] in person["cohorts"]
+        changes = (not member) if row["action"] == "add" else member
+        note = ""
+        if changes and row["action"] == "add" and \
+                row["cohortidnumber"] == "ltct:org:%s:managers" % person["org"]:
+            note = "note: this person is in %s, the organisation they will manage" % person["org"]
+        return ("would_change" if changes else "unchanged"), note
+
+    def move(self, row):
+        email = row["email"].lower()
+        person = self.people.get(email)
+        if person is None:
+            return "rejected", "no account has this email", []
+        if person["org"] == row["organisation"]:
+            return "moved", "", []
+        if email in self.lost:
+            return "lost", "the move would leave them without access to %s" % \
+                ", ".join(self.lost[email]), [{"course": c, "outcome": "lost"} for c in self.lost[email]]
+        return "would_move", "", [{"course": "ltct:fixture-shared", "outcome": "kept"},
+                                  {"course": "ltct:fixture-a-only", "outcome": "suspended_by_rule"}]
+
+    def _answer(self, row, expected, current, path, write):
+        if expected in path and current == expected == path[0]:
+            write()
+            status = "done"
+        elif expected in path and current in path and path.index(current) > path.index(expected):
+            status = "already_done"
+        else:
+            return {"row": row["row"], "outcome": current, "status": "refused",
+                    "reason": "changed since the preview; preview again"}
+        if row["row"] in self.lose:
+            self.lose.discard(row["row"])
+            raise mc.MoodleError("apply", {"message": "HTTP 503 Service Unavailable"})
+        return {"row": row["row"], "outcome": current, "status": status, "reason": ""}
+
+    def call(self, function, **params):
+        show = params.get("showpeople", False)
+        if function == "local_ltuse_admin_preview_suspension":
+            self.calls.append((function, params))
+            rows = []
+            for r in params["rows"]:
+                outcome, reason = self.suspension(r, params["suspend"])
+                rows.append({"row": r["row"], "key": self.key(r["email"], show), "outcome": outcome,
+                             "reason": reason, "changes": []})
+            return {"refusal": "", "rows": rows}
+        if function == "local_ltuse_admin_apply_suspension":
+            self.calls.append((function, params))
+            row, suspend = params["row"], params["suspend"]
+            current, _ = self.suspension(row, suspend)
+            return self._answer(row, params["expectedoutcome"], current,
+                                ["would_change", "unchanged"],
+                                lambda: self.people[row["email"].lower()].update(suspended=suspend))
+        if function == "local_ltuse_admin_preview_cohort_members":
+            self.calls.append((function, params))
+            rows = []
+            for r in params["rows"]:
+                outcome, reason = self.members(r)
+                rows.append({"row": r["row"], "key": self.key(r["email"], show), "outcome": outcome,
+                             "reason": reason, "changes": []})
+            return {"refusal": "", "rows": rows}
+        if function == "local_ltuse_admin_apply_cohort_members":
+            self.calls.append((function, params))
+            row = params["row"]
+            current, _ = self.members(row)
+            cohorts = self.people.get(row["email"].lower(), {}).get("cohorts", set())
+            write = (lambda: cohorts.add(row["cohortidnumber"])) if row["action"] == "add" \
+                else (lambda: cohorts.discard(row["cohortidnumber"]))
+            return self._answer(row, params["expectedoutcome"], current,
+                                ["would_change", "unchanged"], write)
+        if function == "local_ltuse_admin_preview_move":
+            self.calls.append((function, params))
+            rows = []
+            for r in params["rows"]:
+                outcome, reason, courses = self.move(r)
+                rows.append({"row": r["row"], "key": self.key(r["email"], show), "outcome": outcome,
+                             "reason": reason, "changes": [], "courses": courses})
+            return {"refusal": "", "rows": rows}
+        if function == "local_ltuse_admin_apply_move":
+            self.calls.append((function, params))
+            row = params["row"]
+            current, _, _ = self.move(row)
+            return self._answer(row, params["expectedoutcome"], current, ["would_move", "moved"],
+                                lambda: self.people[row["email"].lower()].update(
+                                    org=row["organisation"]))
+        return super().call(function, **params)
+
+
+def _file(tmp_path, name, header, rows):
+    return write_csv(tmp_path / "ltct-private" / name, rows, header=header)
+
+
+def _suspension_file(tmp_path, count=3):
+    return _file(tmp_path, "leavers.csv", ["email"],
+                 [{"email": "learner%d@example.org" % n} for n in range(2, 2 + count)])
+
+
+@pytest.mark.parametrize("kind,header,rows,expect", [
+    ("suspend", ["email"], [{"email": "not-an-address"}], "row 2: email is not an email address"),
+    ("suspend", ["email"], [{"email": "a@example.org"}, {"email": "A@example.org"}],
+     "row 3: the same as row 2"),
+    ("suspend", ["email", "organisation"], [{"email": "a@example.org"}], "unknown column"),
+    ("move", ["email", "organisation"], [{"email": "a@example.org", "organisation": "fixture-nowhere"}],
+     "row 2: organisation 'fixture-nowhere' is not declared"),
+    ("move", ["email", "organisation"], [{"email": "a@example.org", "organisation": "fixture-b"},
+                                         {"email": "A@EXAMPLE.org", "organisation": "fixture-a"}],
+     "row 3: the same as row 2"),
+    ("move", ["email"], [{"email": "a@example.org"}], "required column 'organisation' is missing"),
+    ("managers", ["email", "cohort", "action"],
+     [{"email": "a@example.org", "cohort": "ltct:org:fixture-a", "action": "add"}],
+     "must be ltct:org:<key>:managers or ltct:mentors"),
+    ("managers", ["email", "cohort", "action"],
+     [{"email": "a@example.org", "cohort": "ltct:org:fixture-nowhere:managers", "action": "add"}],
+     "is not declared"),
+    ("managers", ["email", "cohort", "action"],
+     [{"email": "a@example.org", "cohort": "ltct:mentors", "action": "promote"}],
+     "action 'promote' is not add or remove"),
+    ("managers", ["email", "cohort", "action"],
+     [{"email": "a@example.org", "cohort": "ltct:mentors", "action": "add"},
+      {"email": "a@example.org", "cohort": "ltct:mentors", "action": "remove"}],
+     "row 3: the same as row 2"),
+])
+def test_routine_files_are_checked_offline(tmp_path, fixture_orgs, kind, header, rows, expect):
+    path = _file(tmp_path, "people.csv", header, rows)
+    server = PeopleServer()
+    code, text = run([kind, str(path)], client=server)
+    assert code == 1 and expect in text
+    assert server.calls == []                    # refused before any call
+
+
+def test_suspend_previews_applies_and_reruns_as_already_done(tmp_path, fixture_orgs):
+    server = PeopleServer()
+    server.add(2)
+    server.add(3, suspended=True)
+    server.add(4)
+    path = _suspension_file(tmp_path)
+    code, text = run(["suspend", str(path)], client=server)
+    assert code == 0 and "would_change" in text and "grades" in text
+    assert "learner2@example.org" not in text
+    assert not _calls(server, "local_ltuse_admin_apply_suspension")
+    confirm = _preview_code(text)
+    code, text = run(["suspend", str(path), "--apply", "--confirm", confirm], client=server)
+    assert code == 0
+    applied = _calls(server, "local_ltuse_admin_apply_suspension")
+    assert [(a["row"]["row"], a["suspend"], a["expectedoutcome"]) for a in applied] == \
+        [(2, True, "would_change"), (4, True, "would_change")]       # one row per call
+    assert all(p["suspended"] for p in server.people.values())
+    # The same command again: every row is unchanged, the code still matches, nothing is sent.
+    sent = len(server.calls)
+    code, text = run(["suspend", str(path), "--apply", "--confirm", confirm], client=server)
+    assert code == 0 and "already done 3" in text
+    assert not [c for c in server.calls[sent:] if c[0] == "local_ltuse_admin_apply_suspension"]
+
+
+def test_suspend_lost_response_then_rerun_reports_already_done(tmp_path, fixture_orgs):
+    server = PeopleServer()
+    for n in (2, 3, 4):
+        server.add(n)
+    path = _suspension_file(tmp_path)
+    confirm = _preview_code(run(["suspend", str(path)], client=server)[1])
+    server.lose = {3}
+    code, text = run(["suspend", str(path), "--apply", "--confirm", confirm], client=server)
+    assert code == 1 and "failed 1" in text
+    code, text = run(["suspend", str(path), "--apply", "--confirm", confirm], client=server)
+    assert code == 0 and "already done 3" in text
+
+
+def test_suspend_an_unknown_account_is_not_applied(tmp_path, fixture_orgs):
+    server = PeopleServer()
+    server.add(2)
+    path = _suspension_file(tmp_path, count=2)
+    code, text = run(["suspend", str(path)], client=server)
+    assert "no account has this email" in text
+    code, text = run(["suspend", str(path), "--apply", "--confirm", _preview_code(text)],
+                     client=server)
+    assert code == 1
+    assert [a["row"]["row"] for a in _calls(server, "local_ltuse_admin_apply_suspension")] == [2]
+
+
+def test_reactivate_one_person_by_email(fixture_orgs):
+    server = PeopleServer()
+    server.add(2, suspended=True)
+    argv = ["reactivate", "--email", "learner2@example.org"]
+    code, text = run(argv, client=server)
+    assert code == 0 and "would_change" in text
+    preview = _calls(server, "local_ltuse_admin_preview_suspension")[0]
+    assert preview["suspend"] is False and preview["rows"] == [{"row": 1, "email": "learner2@example.org"}]
+    code, text = run(argv + ["--apply", "--confirm", _preview_code(text)], client=server)
+    assert code == 0 and server.people["learner2@example.org"]["suspended"] is False
+
+
+def test_reactivate_a_malformed_email_is_refused_offline(fixture_orgs):
+    server = PeopleServer()
+    code, text = run(["reactivate", "--email", "not-an-address"], client=server)
+    assert code == 1 and "--email: email is not an email address" in text
+    assert server.calls == []
+
+
+def _move_file(tmp_path, rows):
+    return _file(tmp_path, "move.csv", ["email", "organisation"], rows)
+
+
+def test_move_previews_per_course_then_applies_with_the_courses_it_showed(tmp_path, fixture_orgs):
+    server = PeopleServer()
+    server.add(2)
+    server.add(3)
+    path = _move_file(tmp_path, [{"email": "learner2@example.org", "organisation": "fixture-b"},
+                                 {"email": "learner3@example.org", "organisation": "fixture-b"}])
+    code, text = run(["move", str(path)], client=server)
+    assert code == 0 and "would_move" in text
+    assert "Per course:" in text and "ltct:fixture-a-only" in text and "suspended_by_rule 2" in text
+    confirm = _preview_code(text)
+    code, text = run(["move", str(path), "--apply", "--confirm", confirm], client=server)
+    assert code == 0
+    applied = _calls(server, "local_ltuse_admin_apply_move")
+    assert [a["row"]["row"] for a in applied] == [2, 3]
+    assert applied[0]["expectedcourses"] == [
+        {"course": "ltct:fixture-shared", "outcome": "kept"},
+        {"course": "ltct:fixture-a-only", "outcome": "suspended_by_rule"}]
+    assert all(p["org"] == "fixture-b" for p in server.people.values())
+    # Again: both are moved; the code is the same (would_move and moved share a class).
+    sent = len(server.calls)
+    code, text = run(["move", str(path), "--apply", "--confirm", confirm], client=server)
+    assert code == 0 and "already done 2" in text
+    assert not [c for c in server.calls[sent:] if c[0] == "local_ltuse_admin_apply_move"]
+
+
+def test_move_with_a_lost_course_refuses_that_learner_only(tmp_path, fixture_orgs):
+    server = PeopleServer()
+    server.add(2)
+    server.add(3)
+    server.lost["learner3@example.org"] = ["ltct:fixture-shared"]
+    path = _move_file(tmp_path, [{"email": "learner2@example.org", "organisation": "fixture-b"},
+                                 {"email": "learner3@example.org", "organisation": "fixture-b"}])
+    code, text = run(["move", str(path)], client=server)
+    assert "lost" in text and "without access to ltct:fixture-shared" in text
+    code, text = run(["move", str(path), "--apply", "--confirm", _preview_code(text)],
+                     client=server)
+    assert code == 1
+    assert [a["row"]["row"] for a in _calls(server, "local_ltuse_admin_apply_move")] == [2]
+    assert server.people["learner3@example.org"]["org"] == "fixture-a"
+
+
+def test_move_that_became_lost_since_the_preview_is_refused(tmp_path, fixture_orgs):
+    server = PeopleServer()
+    server.add(2)
+    path = _move_file(tmp_path, [{"email": "learner2@example.org", "organisation": "fixture-b"}])
+    confirm = _preview_code(run(["move", str(path)], client=server)[1])
+    server.lost["learner2@example.org"] = ["ltct:fixture-shared"]
+    code, text = run(["move", str(path), "--apply", "--confirm", confirm], client=server)
+    assert code == 1 and "does not match" in text
+    assert not _calls(server, "local_ltuse_admin_apply_move")
+
+
+def _managers_file(tmp_path, rows):
+    return _file(tmp_path, "managers.csv", ["email", "cohort", "action"], rows)
+
+
+def test_managers_note_apply_and_rerun(tmp_path, fixture_orgs):
+    server = PeopleServer()
+    server.add(2, org="fixture-a")
+    server.add(3, org="fixture-b", cohorts={"ltct:mentors"})
+    path = _managers_file(tmp_path, [
+        {"email": "learner2@example.org", "cohort": "ltct:org:fixture-a:managers", "action": "add"},
+        {"email": "learner2@example.org", "cohort": "ltct:org:fixture-b:managers", "action": "add"},
+        {"email": "learner3@example.org", "cohort": "ltct:mentors", "action": "remove"},
+    ])
+    code, text = run(["managers", str(path)], client=server)
+    assert code == 0 and "would_change" in text
+    assert "the organisation they will manage" in text          # the own-organisation note
+    assert text.count("will manage") == 1
+    confirm = _preview_code(text)
+    code, text = run(["managers", str(path), "--apply", "--confirm", confirm], client=server)
+    assert code == 0
+    assert len(_calls(server, "local_ltuse_admin_apply_cohort_members")) == 3
+    assert server.people["learner2@example.org"]["cohorts"] == {"ltct:org:fixture-a:managers",
+                                                                "ltct:org:fixture-b:managers"}
+    assert server.people["learner3@example.org"]["cohorts"] == set()
+    sent = len(server.calls)
+    code, text = run(["managers", str(path), "--apply", "--confirm", confirm], client=server)
+    assert code == 0 and "already done 3" in text
+    assert not [c for c in server.calls[sent:] if c[0] == "local_ltuse_admin_apply_cohort_members"]
+
+
+def test_managers_removing_a_non_member_sends_nothing(tmp_path, fixture_orgs):
+    server = PeopleServer()
+    server.add(2)
+    path = _managers_file(tmp_path, [
+        {"email": "learner2@example.org", "cohort": "ltct:mentors", "action": "remove"}])
+    code, text = run(["managers", str(path)], client=server)
+    assert code == 0 and "unchanged" in text
+    code, text = run(["managers", str(path), "--apply", "--confirm", _preview_code(text)],
+                     client=server)
+    assert code == 0 and not _calls(server, "local_ltuse_admin_apply_cohort_members")
+
+
+# --- T053: enrol mirror ---------------------------------------------------------------------------
+class MirrorServer(EnrolServer):
+    def __init__(self, **kw):
+        super().__init__(**kw)
+        self.mirror = {"fixture-a": ["ltct:fixture-course", "ltct:fixture-two"]}
+
+    def call(self, function, **params):
+        if function == "local_ltuse_admin_preview_cohort_enrolment" and params.get("mirrorfrom"):
+            self.calls.append((function, params))
+            return {"refusal": "", "members": 3, "assignment": "",
+                    "courses": [{"course": c, "outcome": self.pair(c, "ensure"), "reason": ""}
+                                for c in self.mirror.get(params["mirrorfrom"], [])]}
+        return super().call(function, **params)
+
+
+def test_enrol_mirror_enrols_each_shared_course_once(fixture_orgs):
+    server = MirrorServer()
+    server.instances["ltct:fixture-two"] = "disabled"
+    argv = ["enrol", "mirror", "--from", "fixture-a", "--to", "fixture-b"]
+    code, text = run(argv, client=server)
+    assert code == 0 and "would_add" in text and "would_enable" in text
+    assert "spec 002 R13" in text
+    preview = _calls(server, "local_ltuse_admin_preview_cohort_enrolment")[0]
+    assert preview == {"cohortidnumber": "ltct:org:fixture-b", "mirrorfrom": "fixture-a"}
+    code, text = run(argv + ["--apply", "--confirm", _preview_code(text)], client=server)
+    assert code == 0
+    applied = _calls(server, "local_ltuse_admin_apply_cohort_enrolment")
+    assert [(a["courseidnumber"], a["expectedoutcome"]) for a in applied] == [
+        ("ltct:fixture-course", "would_add"), ("ltct:fixture-two", "would_enable")]
+    assert all(a["cohortidnumber"] == "ltct:org:fixture-b" and a["action"] == "ensure"
+               for a in applied)
+
+
+def test_enrol_mirror_with_nothing_to_mirror_sends_nothing(fixture_orgs):
+    server = MirrorServer()
+    server.mirror = {}
+    code, text = run(["enrol", "mirror", "--from", "fixture-a", "--to", "fixture-b"], client=server)
+    assert code == 0 and "nothing to mirror" in text and "--confirm" not in text
+
+
+@pytest.mark.parametrize("frm,to", [("fixture-a", "fixture-a"), ("fixture-nowhere", "fixture-b"),
+                                    ("fixture-a", "fixture-nowhere")])
+def test_enrol_mirror_refuses_a_bad_pair_offline(fixture_orgs, frm, to):
+    server = MirrorServer()
+    code, text = run(["enrol", "mirror", "--from", frm, "--to", to], client=server)
+    assert code == 1
+    assert not _calls(server, "local_ltuse_admin_preview_cohort_enrolment")
+
+
+# --- T055: summary --------------------------------------------------------------------------------
+class SummaryServer(FakeClient):
+    def call(self, function, **params):
+        if function == "local_ltuse_admin_summary":
+            self.calls.append((function, params))
+            show = params["showpeople"]
+            people = ["learner2@example.org", "learner3@example.org"]
+            return {
+                "refusal": "", "pathways": False,
+                "cohorts": [{"idnumber": "ltct:org:fixture-a", "members": 2, "suspended": 1},
+                            {"idnumber": "ltct:org:fixture-a:managers", "members": 0, "suspended": 0}],
+                "people": [{"cohort": "ltct:org:fixture-a",
+                            "key": e if show else af.mask_email(e), "suspended": e == people[1]}
+                           for e in people],
+                "courses": [{"cohort": "ltct:org:fixture-a", "course": "ltct:fixture-course",
+                             "category": "ltct:published", "enabled": True, "enrolled": 2,
+                             "viapathway": True, "notonpathway": True}],
+            }
+        return super().call(function, **params)
+
+
+def test_summary_on_screen_is_masked(fixture_orgs):
+    code, text = run(["summary", "--org", "fixture-a"], client=SummaryServer())
+    assert code == 0
+    assert "2 members, 1 suspended" in text and "l***@example.org" in text
+    assert "learner2@example.org" not in text
+    assert "ON NO PATHWAY" in text
+
+
+def test_summary_out_is_refused_in_the_repo_and_written_outside(tmp_path, fixture_orgs):
+    server = SummaryServer()
+    code, text = run(["summary", "--org", "fixture-a", "--out", str(REPO / "summary.txt")],
+                     client=server)
+    assert code == 1 and "inside this repository" in text
+    assert server.calls == [] and not (REPO / "summary.txt").exists()
+    out = tmp_path / "ltct-private" / "summary.txt"
+    code, text = run(["summary", "--org", "fixture-a", "--out", str(out)], client=server)
+    assert code == 0 and out.exists()
+    assert "l***@example.org" in out.read_text(encoding="utf-8")
+    assert "l***@example.org" not in text and "2 members" in text   # people only in the file
+    code, text = run(["summary", "--org", "fixture-a", "--out", str(out)], client=server)
+    assert code == 1 and "already exists" in text
+
+
+def test_summary_refuses_an_undeclared_organisation(fixture_orgs):
+    server = SummaryServer()
+    code, text = run(["summary", "--org", "fixture-nowhere"], client=server)
+    assert code == 1 and server.calls == []

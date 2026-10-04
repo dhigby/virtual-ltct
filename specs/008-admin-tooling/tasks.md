@@ -137,17 +137,17 @@ Code that calls 016 or 006 guards with `class_exists()` and degrades as research
 
 ### Tests for User Story 3
 
-- [ ] T048 [P] [US3] Harness cases for `move_rules::classify()` in `tests/admin_harness.php`: `kept` (new org cohort enabled in the shared course, or another active enrolment there), `gained`, `suspended_by_rule` (old org's organisation-only course), `lost` (shared course with no match → learner refused), `flagged_protection` (`effective_level` below new org minimum → refused)
-- [ ] T049 [P] [US3] pytest for suspension, move and managers file validation and their resume behaviour in `tests/test_ltct_admin.py` (one row per apply; `already done` on re-run)
+- [X] T048 [P] [US3] Harness cases for `move_rules::classify()` in `tests/admin_harness.php`: `kept` (new org cohort enabled in the shared course, or another active enrolment there), `gained`, `suspended_by_rule` (old org's organisation-only course), `lost` (shared course with no match → learner refused), `flagged_protection` (`effective_level` below new org minimum → refused)
+- [X] T049 [P] [US3] pytest for suspension, move and managers file validation and their resume behaviour in `tests/test_ltct_admin.py` (one row per apply; `already done` on re-run)
 
 ### Implementation for User Story 3
 
-- [ ] T050 [US3] ⛔ **002-A** Write `local_ltuse_admin_preview_suspension` / `apply_suspension` (one row, `suspend` bool, `expectedoutcome`) calling `organisation\actions::do_suspend()` / `do_reactivate()`; capability `local/ltuse:administer` then `moodle/user:update`; and `suspend`/`reactivate` in `scripts/ltct_admin.py` (file or `--email`)
-- [ ] T051 [US3] Implement `move_rules::classify()` in `moodle/local_ltuse/classes/admin/move_rules.php` (pure); makes T048 pass
-- [ ] T052 [US3] Implement `moodle/local_ltuse/classes/admin/move_service.php` and `local_ltuse_admin_preview_move` / `apply_move` (one row, `expectedoutcome`, `expectedcourses`): refuse on any `lost` or `flagged_protection`; ⛔ **016** read `service::org_minimum(<new key>)` / `effective_level()`, **never** call `set_protection`; write only `profile_field_ltct_org` + `user_updated`; confirm `is_settled()` after (research R8)
-- [ ] T053 [US3] Implement `enrol mirror --from K1 --to K2` in `cohort_enrolment` + CLI: for each enabled `ltct:org:K1` instance in `ltct:published`, `ensure(ltct:org:K2, course)`, previewed first (research R8)
-- [ ] T054 [US3] Implement `moodle/local_ltuse/classes/admin/membership_service.php` cohort part and `local_ltuse_admin_preview_cohort_members` / `apply_cohort_members`: only `ltct:org:K:managers` and `ltct:mentors`; refuse any cohort with a `component` and any `ltct:org:K`; check membership before `cohort_remove_member()`; preview note when a member of K joins K's managers cohort (research R9); CLI `managers`
-- [ ] T055 [US3] Implement `local_ltuse_admin_summary` in `moodle/local_ltuse/classes/external/admin_summary.php` (masked unless `showpeople`; member counts, suspended count, per-course enrolment counts, pathway-made instances whose course is in none of the cohort's enrolling pathways) and `summary --org K [--out]` in the CLI through `guard_path`
+- [ ] T050 [US3] ⛔ **002-A** Write `local_ltuse_admin_preview_suspension` / `apply_suspension` (one row, `suspend` bool, `expectedoutcome`) calling `organisation\actions::do_suspend()` / `do_reactivate()`; capability `local/ltuse:administer` then `moodle/user:update`; and `suspend`/`reactivate` in `scripts/ltct_admin.py` (file or `--email`) — *written 2026-10-04 (`classes/admin/suspension_service.php`, on the `actions.php` built under T012); open until T012's amendment to 002 is recorded*
+- [X] T051 [US3] Implement `move_rules::classify()` in `moodle/local_ltuse/classes/admin/move_rules.php` (pure); makes T048 pass
+- [ ] T052 [US3] Implement `moodle/local_ltuse/classes/admin/move_service.php` and `local_ltuse_admin_preview_move` / `apply_move` (one row, `expectedoutcome`, `expectedcourses`): refuse on any `lost` or `flagged_protection`; ⛔ **016** read `service::org_minimum(<new key>)` / `effective_level()`, **never** call `set_protection`; write only `profile_field_ltct_org` + `user_updated`; confirm `is_settled()` after (research R8) — *written 2026-10-04, guarded by `class_exists()` (without 016 every minimum counts as `none`); open until 016 is on the branch*
+- [X] T053 [US3] Implement `enrol mirror --from K1 --to K2` in `cohort_enrolment` + CLI: for each enabled `ltct:org:K1` instance in `ltct:published`, `ensure(ltct:org:K2, course)`, previewed first (research R8)
+- [X] T054 [US3] Implement `moodle/local_ltuse/classes/admin/membership_service.php` cohort part and `local_ltuse_admin_preview_cohort_members` / `apply_cohort_members`: only `ltct:org:K:managers` and `ltct:mentors`; refuse any cohort with a `component` and any `ltct:org:K`; check membership before `cohort_remove_member()`; preview note when a member of K joins K's managers cohort (research R9); CLI `managers`
+- [X] T055 [US3] Implement `local_ltuse_admin_summary` in `moodle/local_ltuse/classes/external/admin_summary.php` (masked unless `showpeople`; member counts, suspended count, per-course enrolment counts, pathway-made instances whose course is in none of the cohort's enrolling pathways) and `summary --org K [--out]` in the CLI through `guard_path`
 - [ ] T056 [US3] Instance: quickstart **V8**, **V10**, **V14**, **V15**, **V18**; record results
 
 **Checkpoint**: the site team can suspend, move (with dry run), mirror, manage manager/mentor cohorts and see a summary without Moodle's admin screens.
@@ -187,7 +187,7 @@ Code that calls 016 or 006 guards with `class_exists()` and degrades as research
 
 **Independent Test**: spec.md US4; quickstart V16 second half.
 
-- [ ] T068 [US4] Add a one-page manager guide section to `moodle/site/README.md` ("Asking for new accounts"): how to get a blank file (`ltct_admin.py template --kind intake`, sent by the site team), each column from data-model §1 in plain words, where to keep it (never in a repo folder), and that enrol/suspend/reactivate of one's own people is on the organisation page (002)
+- [X] T068 [US4] Add a one-page manager guide section to `moodle/site/README.md` ("Asking for new accounts"): how to get a blank file (`ltct_admin.py template --kind intake`, sent by the site team), each column from data-model §1 in plain words, where to keep it (never in a repo folder), and that enrol/suspend/reactivate of one's own people is on the organisation page (002)
 - [ ] T069 [US4] Instance: quickstart **V16** second half — as a `fixture-a` manager on 002's page, try to see, enrol, suspend and assign a mentor for a `fixture-b` learner; each refused (depends on 002's organisation page being built); record results
 
 ---

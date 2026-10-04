@@ -171,6 +171,11 @@ foreach ([['will_set_org', 'new'], ['unchanged', 'new'], ['will_enrol', 'will_se
 }
 check(intake_rules::progress('waits', 'waits') === $refused, 'progress: a stopping outcome is never applied');
 check(intake_rules::progress('flagged_other_org', 'new') === $refused, 'progress: flagged -> new is refused');
+check(intake_rules::change_progress('would_change', 'would_change') === $apply, 'change progress: as previewed applies');
+check(intake_rules::change_progress('would_change', 'unchanged') === $finish, 'change progress: unchanged is already done');
+check(intake_rules::change_progress('would_change', 'rejected') === $refused, 'change progress: -> rejected is refused');
+check(intake_rules::change_progress('rejected', 'rejected') === $refused, 'change progress: rejected is never applied');
+check(intake_rules::change_progress('unchanged', 'would_change') === $refused, 'change progress: backwards is refused');
 
 // --- enrolment_rules::decide (T039) -------------------------------------------------------
 function role_of(string $cohort, string $course, string $category): ?string {
@@ -210,6 +215,95 @@ foreach (['would_add', 'would_enable', 'would_disable'] as $o) {
 }
 check(enrolment_rules::progress('would_add', 'would_enable') === $refused, 'cohort progress: add -> enable is refused');
 check(enrolment_rules::progress('refused', 'refused') === $refused, 'cohort progress: refused is never applied');
+
+use local_ltuse\admin\move_rules;
+
+// --- move_rules::classify (T048) ----------------------------------------------------------
+/** Facts for a fixture-a learner moving to fixture-b, with spec 016 absent. */
+function move(array $over = []): array {
+    return array_merge(['accounts' => 1, 'org' => 'fixture-a', 'neworg' => 'fixture-b', 'effective' => 'none',
+        'newminimum' => 'none', 'courses' => [], 'gained' => []], $over);
+}
+/** One course the learner is active in: shared, through fixture-a's cohort sync only. */
+function active(array $over = []): array {
+    return array_merge(['course' => 'ltct:fixture-shared', 'category' => 'ltct:published', 'viaold' => true,
+        'other' => false, 'newcohort' => false], $over);
+}
+function course_outcomes(array $result): array {
+    $out = [];
+    foreach ($result['courses'] as $c) {
+        $out[$c['course']] = $c['outcome'];
+    }
+    return $out;
+}
+
+$r = move_rules::classify(move(['courses' => [active(['newcohort' => true])]]));
+check($r['outcome'] === 'would_move' && course_outcomes($r) === ['ltct:fixture-shared' => 'kept'],
+    'kept: the new organisation\'s cohort is enabled in the shared course');
+$r = move_rules::classify(move(['courses' => [active(['other' => true])]]));
+check($r['outcome'] === 'would_move' && course_outcomes($r) === ['ltct:fixture-shared' => 'kept'],
+    'kept: another active enrolment in the shared course');
+$r = move_rules::classify(move(['courses' => [active(['viaold' => false, 'other' => true])]]));
+check(course_outcomes($r) === ['ltct:fixture-shared' => 'kept'], 'kept: an enrolment the move does not touch');
+$r = move_rules::classify(move(['gained' => ['ltct:fixture-b-course']]));
+check($r['outcome'] === 'would_move' && course_outcomes($r) === ['ltct:fixture-b-course' => 'gained']
+    && in_array('enrol:ltct:fixture-b-course', $r['changes'], true), 'gained: a course the new cohort is enrolled in');
+$r = move_rules::classify(move(['courses' => [active(['newcohort' => true])], 'gained' => ['ltct:fixture-shared']]));
+check(course_outcomes($r) === ['ltct:fixture-shared' => 'kept'], 'gained: never a course the learner is already in');
+$r = move_rules::classify(move(['courses' => [active(['course' => 'ltct:fixture-a-only',
+    'category' => 'ltct:org:fixture-a'])]]));
+check($r['outcome'] === 'would_move' && course_outcomes($r) === ['ltct:fixture-a-only' => 'suspended_by_rule']
+    && in_array('suspend:ltct:fixture-a-only', $r['changes'], true),
+    'suspended_by_rule: the old organisation\'s own course, allowed');
+$r = move_rules::classify(move(['courses' => [active(['course' => 'ltct:fixture-a-only',
+    'category' => 'ltct:org:fixture-a', 'other' => true])]]));
+check(course_outcomes($r) === ['ltct:fixture-a-only' => 'suspended_by_rule'],
+    'suspended_by_rule: even with another enrolment there');
+$r = move_rules::classify(move(['courses' => [active()]]));
+check($r['outcome'] === 'lost' && course_outcomes($r) === ['ltct:fixture-shared' => 'lost']
+    && $r['lost'] === ['ltct:fixture-shared'] && $r['changes'] === [],
+    'lost: a shared course with no match refuses the learner');
+$r = move_rules::classify(move(['courses' => [active(), active(['course' => 'ltct:fixture-two', 'newcohort' => true])]]));
+check($r['outcome'] === 'lost' && $r['lost'] === ['ltct:fixture-shared'], 'lost: one course of two is enough to refuse');
+$r = move_rules::classify(move(['effective' => 'none', 'newminimum' => 'email',
+    'courses' => [active(['newcohort' => true])]]));
+check($r['outcome'] === 'flagged_protection' && $r['reason'] === 'protection_below_new' && $r['changes'] === [],
+    'flagged_protection: effective level below the new organisation\'s minimum');
+check(move_rules::classify(move(['effective' => 'firstname', 'newminimum' => 'email']))['outcome'] === 'would_move',
+    'protection above the new minimum moves');
+check(move_rules::classify(move(['effective' => 'email', 'newminimum' => 'email']))['outcome'] === 'would_move',
+    'protection equal to the new minimum moves');
+check(move_rules::classify(move(['newminimum' => 'firstname', 'courses' => [active()]]))['outcome'] === 'flagged_protection',
+    'flagged_protection is reported before lost');
+check(move_rules::classify(move(['org' => 'fixture-b']))['outcome'] === 'moved', 'moved: already in the new organisation');
+check(move_rules::classify(move(['accounts' => 0]))['outcome'] === 'rejected', 'rejected: no account');
+check(move_rules::classify(move(['accounts' => 2]))['reason'] === 'duplicate_accounts', 'rejected: two accounts');
+check(move_rules::classify(move(['org' => '']))['reason'] === 'no_org', 'rejected: no organisation yet (intake\'s work)');
+$nocourses = move();
+unset($nocourses['courses']);
+check(move_rules::classify($nocourses)['outcome'] === 'rejected', 'move: a fact not supplied fails closed');
+check(move_rules::classify(move(['effective' => 'secret']))['outcome'] === 'rejected', 'move: an unknown level fails closed');
+check(move_rules::classify(move(['courses' => [['course' => 'ltct:fixture-shared']]]))['outcome'] === 'rejected',
+    'move: a course missing its facts fails closed');
+check(move_rules::classify(move(['org' => 'fixture-ab', 'courses' => [active(['category' => 'ltct:org:fixture-a'])]]))['outcome']
+    === 'lost', 'move: a key that only starts alike is not the old organisation\'s course');
+
+// --- move_rules::progress ------------------------------------------------------------------
+$shown = [['course' => 'ltct:fixture-a-only', 'outcome' => 'suspended_by_rule'],
+    ['course' => 'ltct:fixture-shared', 'outcome' => 'kept']];
+check(move_rules::progress('would_move', 'would_move', $shown, $shown) === $apply, 'move progress: as previewed applies');
+check(move_rules::progress('would_move', 'moved', $shown, []) === $finish, 'move progress: moved is already done');
+check(move_rules::progress('would_move', 'would_move', $shown,
+    array_merge($shown, [['course' => 'ltct:fixture-b-course', 'outcome' => 'gained']])) === $apply,
+    'move progress: a course gained since is no reason to refuse');
+check(move_rules::progress('would_move', 'would_move', $shown,
+    array_merge($shown, [['course' => 'ltct:fixture-a-two', 'outcome' => 'suspended_by_rule']])) === $refused,
+    'move progress: a new suspension since the preview is refused');
+check(move_rules::progress('would_move', 'lost', $shown, []) === $refused, 'move progress: would_move -> lost is refused');
+check(move_rules::progress('would_move', 'flagged_protection', $shown, []) === $refused,
+    'move progress: would_move -> flagged_protection is refused');
+check(move_rules::progress('lost', 'lost', [], []) === $refused, 'move progress: a stopping outcome is never applied');
+check(move_rules::progress('would_move', 'rejected', [], []) === $refused, 'move progress: would_move -> rejected is refused');
 
 echo $fails ? "FAILURES: $fails\n" : "ALL PASSED\n";
 exit($fails ? 1 : 0);

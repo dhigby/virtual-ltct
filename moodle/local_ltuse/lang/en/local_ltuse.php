@@ -175,3 +175,19 @@ $string['admin:reason:enrol_failed'] = 'a listed course could not be enrolled; t
 $string['admin:reason:not_in_pathway'] = 'the course is no longer on that pathway';
 $string['admin:reason:pathway_course_refused'] = 'the cohort may not be enrolled into {$a}, which is on the pathway, so the pathway was not assigned';
 $string['admin:reason:pathway_unavailable'] = 'the pathway cannot be used now';
+
+// Spec 008: routine changes (user story 3): suspension, moves, enrol mirror, managers cohorts.
+$string['admin:refusal:mirror'] = 'a mirror goes from one organisation key to another organisation\'s cohort (ltct:org:<key>), never to itself';
+$string['admin:reason:no_account'] = 'no account has this email';
+$string['admin:reason:site_admin'] = 'the account is a site administrator; this tool never changes one';
+$string['admin:reason:own_account'] = 'this is your own account; ask another member of the site team';
+$string['admin:reason:actions_unavailable'] = 'the organisation actions (spec 002) are not installed, so nothing was done';
+$string['admin:reason:action_refused'] = 'Moodle refused the change for this account; nothing was done';
+$string['admin:reason:no_org'] = 'the account has no organisation yet; bring it on with "intake", not "move"';
+$string['admin:reason:lost'] = 'the move would leave them without access to {$a}; run "enrol mirror" first';
+$string['admin:reason:protection_below_new'] = 'their protection is below the minimum for {$a}; raise it on the protection page first, then move them';
+$string['admin:reason:moved_unsettled'] = 'moved; their protection has not settled yet, so check it on the protection page';
+$string['admin:reason:org_cohort_members'] = 'an organisation\'s own cohort follows the organisation field; change that with "move", never by hand';
+$string['admin:reason:cohort_not_managed'] = 'only a managers cohort (ltct:org:<key>:managers) or ltct:mentors can be changed this way';
+$string['admin:reason:cohort_component'] = 'a plugin manages this cohort\'s members, so it cannot be changed by hand';
+$string['admin:reason:manages_own'] = 'note: this person is in {$a}, the organisation they will manage; from now on only the site team can manage their account';

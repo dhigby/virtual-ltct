@@ -167,6 +167,27 @@ class intake_rules {
     }
 
     /**
+     * The same rule for a membership, mentor or suspension row, whose path is
+     * would_change -> unchanged (research R15).
+     *
+     * @param string $expected the outcome the preview reported
+     * @param string $current the outcome now
+     * @return string APPLY, FINISH or REFUSED
+     */
+    public static function change_progress(string $expected, string $current): string {
+        if (!in_array($expected, ['would_change', 'unchanged'], true)) {
+            return self::REFUSED;
+        }
+        if ($current === 'unchanged') {
+            return self::FINISH;
+        }
+        if ($expected === 'would_change' && $current === 'would_change') {
+            return self::APPLY;
+        }
+        return self::REFUSED;
+    }
+
+    /**
      * The stricter of two levels; '' counts as none. Null when either is not a level.
      *
      * @param string $a

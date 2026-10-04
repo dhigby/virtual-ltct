@@ -205,6 +205,53 @@ class cohort_enrolment {
         return $DB->count_records('cohort_members', ['cohortid' => $cohortid]);
     }
 
+    /**
+     * The courses this cohort has an enabled cohort-sync instance in, whoever made it.
+     *
+     * A read of enrol by enrol and customint1 (listed in README.md): enrol_get_instances()
+     * reads one course at a time, and the question here is "which courses".
+     *
+     * @param int $cohortid
+     * @return int[] course ids, ascending
+     */
+    public static function enabled_courses(int $cohortid): array {
+        global $DB;
+        $ids = $DB->get_fieldset_select('enrol', 'DISTINCT courseid',
+            'enrol = :enrol AND customint1 = :cohortid AND status = :status',
+            ['enrol' => self::PLUGIN, 'cohortid' => $cohortid, 'status' => ENROL_INSTANCE_ENABLED]);
+        $ids = array_map('intval', $ids);
+        sort($ids);
+        return $ids;
+    }
+
+    // --- enrol mirror (research R8) -----------------------------------------------------------
+
+    /**
+     * What `enrol mirror --from K1 --to K2` would do: for every course in ltct:published where
+     * K1's cohort has an enabled cohort-sync instance, preview ensure() for K2's cohort. This is
+     * spec 002's rule that each Area's cohort is enrolled in every shared course the sil cohort
+     * is before anyone moves.
+     *
+     * Organisation-only courses are left out: they are K1's own, and a mover's enrolment there
+     * is suspended by rule (spec 002 FR-017).
+     *
+     * @param int $tocohortid K2's cohort
+     * @param int $fromcohortid K1's cohort
+     * @return array preview()[] per course, in course id order
+     */
+    public static function preview_mirror(int $tocohortid, int $fromcohortid): array {
+        $courses = [];
+        foreach (self::enabled_courses($fromcohortid) as $courseid) {
+            $facts = self::pair_facts($fromcohortid, $courseid);
+            if ($facts['categoryidnumber'] !== enrolment_rules::PUBLISHED_CATEGORY
+                    || !preg_match(enrolment_rules::COURSE_PATTERN, $facts['courseidnumber'])) {
+                continue;
+            }
+            $courses[] = self::preview($tocohortid, $courseid, 'ensure');
+        }
+        return $courses;
+    }
+
     // --- pathways (spec 006) ------------------------------------------------------------------
 
     /**

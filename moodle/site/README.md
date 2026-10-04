@@ -185,6 +185,46 @@ These steps change learner data, not configuration, so they are done in Moodle a
 
 An organisation manager only follows their own people. They cannot create accounts, enrol anyone or change anyone's organisation (spec 002).
 
+## Asking for new accounts
+
+*For organisation managers. Spec 008, user story 4.*
+
+Only the site team creates accounts. To ask for some, send the site team a list in the form
+below. They preview it, check it with you if anything is unclear, and apply it unchanged.
+
+**1. Get a blank file.** Ask the site team for an intake file. They make it with
+`python scripts/ltct_admin.py template --kind intake --out <a folder outside the repo>/intake.csv`
+and send it to you. It holds the column names and nothing else.
+
+**2. Fill in one person per row.** Open it in a spreadsheet and keep the first row as it is.
+
+| Column | Fill in | Must you? |
+|---|---|---|
+| `email` | The person's own email address. Each address once only. Moodle sends their password to it. | Yes |
+| `firstname` | Their first name, as they want it shown. | Yes |
+| `lastname` | Their last name. | Yes |
+| `organisation` | Your organisation's key, exactly as the site team gave it to you (for example `seed-company`), not its full name. | Yes |
+| `country` | Their country as two letters, for example `KE` or `PG`. | No |
+| `protection` | Leave empty unless this person's identity needs protecting. Then write `email`, `firstname` or `pseudonym`, and talk to the site team first. | No |
+| `pseudonym` | The name to show instead of theirs. Only with `protection` set to `pseudonym`. | No |
+| `courses` | Courses to start them in, by the course code the site team gave you (`ltct:<name>`), separated by `;`. Leave empty if your organisation's courses are enough. | No |
+
+There is no column for a username, a password or a role. Moodle makes a neutral username and
+emails each person a password; their organisation decides their cohort and courses. A column
+the form does not have is refused, so do not add any.
+
+**3. Keep it private.** The list names real people. Save it in a folder only you can open, and
+**never inside a repository folder or a folder that syncs to one**: anything there can be
+published. Send it to the site team the way you would send any personal data, and delete your
+copy once they confirm the accounts exist.
+
+**What you do yourself.** Once the accounts exist, everything else about your own people is on
+your **organisation page** (spec 002): enrolling them in a course, unenrolling them, suspending
+and reactivating their accounts, sending a password reset link, and assigning their mentors.
+You never need the site team for those, and you cannot see or change anyone outside your
+organisation. Ask the site team only for new accounts, or to move someone to another
+organisation.
+
 ## Mentors: assigning and ending a relationship
 
 A mentor follows the learners assigned to them across every course those learners take, for as long as the relationship lasts (spec 003). The relationship is the `mentor` role, held by the mentor **in the learner's own profile**, never in a course. Who mentors whom is learner data, so it lives only in Moodle and is never written in this repo.

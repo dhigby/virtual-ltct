@@ -141,3 +141,36 @@ $string['ltuse:administer'] = 'Administer LTC learners through the administratio
 $string['setting:coursementorsync'] = 'Enrol course mentors automatically';
 $string['setting:coursementorsync_desc'] = 'Keep each learner\'s course mentors enrolled as Course mentor in the courses they take, and remove them as soon as the reason ends. Declared in moodle/site/settings/admin.yaml; change it there.';
 $string['error:actionrefused'] = 'Refused: {$a}. Nothing was changed.';
+
+// Spec 008: why a row or a whole command is refused. Shown by ltct_admin.py to the site team.
+// {$a} is only ever an idnumber, an organisation key or a course idnumber, never a person.
+$string['admin:refusal:missing'] = 'not found in Moodle: {$a}. Check the names with "ltct_admin.py list", or apply the site declaration first';
+$string['admin:refusal:nopathways'] = 'learning pathways are not installed on this site (spec 006), so nothing was done';
+$string['admin:refusal:pathwaykey'] = '"{$a}" is not a pathway that can be assigned';
+$string['admin:refusal:target'] = 'name exactly one course or one pathway, with ensure or remove; a pathway can only be enrolled';
+$string['admin:reason:facts'] = 'the server could not read everything it needs about this row; nothing was done';
+$string['admin:reason:duplicate_accounts'] = 'two accounts already share this email; the site team must merge or change one by hand first';
+$string['admin:reason:suspended'] = 'the account exists and is suspended; reactivate it deliberately if that is right';
+$string['admin:reason:other_org'] = 'the account is already in {$a}; use "move" if this is right';
+$string['admin:reason:course_not_allowed'] = 'a listed course is not one this organisation may be enrolled into';
+$string['admin:reason:protection_absent'] = 'protection is asked for, and identity protection (spec 016) is not installed; the row waits';
+$string['admin:reason:protection_unavailable'] = 'the protection this row needs cannot be set on this site yet; the row waits';
+$string['admin:reason:protection_below'] = 'the account\'s protection is below what this row needs; raise it on the protection page first';
+$string['admin:reason:course_not_ltct'] = 'the course is not one this repository publishes (ltct:<slug>), or is the office-hours course';
+$string['admin:reason:course_category'] = 'the course is neither shared (ltct:published) nor an organisation\'s own; pilot courses are never enrolled this way';
+$string['admin:reason:other_org_course'] = 'the course belongs to another organisation';
+$string['admin:reason:managers_shared'] = 'a managers cohort is never enrolled into a shared course';
+$string['admin:reason:mentors_cohort'] = 'the mentors cohort is never enrolled into a course; course mentors are enrolled automatically';
+$string['admin:reason:cohort_kind'] = 'only an organisation\'s cohort, or its managers cohort in its own course, can be enrolled';
+$string['admin:reason:role_mismatch'] = 'this cohort already has an enrolment method in the course with another role; the site team decides by hand';
+$string['admin:reason:changed'] = 'changed since the preview; preview again';
+$string['admin:reason:busy'] = 'another run is working on this row now; run the same command again in a minute';
+$string['admin:reason:protection_not_permitted'] = 'your account may not set protection for a new account; the account was made, and the row resumes once you may';
+$string['admin:reason:protection_failed'] = 'identity protection refused the level; the account was made, is in no organisation, and the row resumes when run again';
+$string['admin:reason:protection_unsettled'] = 'protection has not settled yet; the account is in no organisation, and the row resumes when run again';
+$string['admin:reason:org_not_saved'] = 'the organisation field did not accept this key; check the site declaration has been applied';
+$string['admin:reason:enrol_unavailable'] = 'course enrolment through the Organisation enrolment is not installed (spec 002)';
+$string['admin:reason:enrol_failed'] = 'a listed course could not be enrolled; the rest of the row is done';
+$string['admin:reason:not_in_pathway'] = 'the course is no longer on that pathway';
+$string['admin:reason:pathway_course_refused'] = 'the cohort may not be enrolled into {$a}, which is on the pathway, so the pathway was not assigned';
+$string['admin:reason:pathway_unavailable'] = 'the pathway cannot be used now';

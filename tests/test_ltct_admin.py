@@ -520,3 +520,358 @@ def test_the_publisher_still_gets_one_attempt(monkeypatch):
     with pytest.raises(mc.MoodleError):
         client.call("local_ltuse_get_course_manifest")
     assert len(seen) == 1
+
+
+# --- T028: intake offline validation ------------------------------------------------------------
+INTAKE_HEADER = ["email", "firstname", "lastname", "organisation", "country", "protection",
+                 "pseudonym", "courses"]
+
+
+def write_csv(path, rows, header=INTAKE_HEADER):
+    """Write rows to a CSV under pytest's tmp_path: outside the repository, never committed."""
+    import csv
+    path.parent.mkdir(parents=True, exist_ok=True)
+    with open(path, "w", newline="", encoding="utf-8") as fh:
+        writer = csv.writer(fh)
+        writer.writerow(header)
+        for row in rows:
+            writer.writerow([row.get(c, "") for c in header])
+    return path
+
+
+@pytest.fixture
+def fixture_orgs(monkeypatch):
+    """Declared organisations are fixture-a and fixture-b, whatever the repo declares."""
+    monkeypatch.setattr(la, "declared_organisations", lambda site_dir: list(ORGS))
+
+
+@pytest.mark.parametrize("change,expect", [
+    ({"email": "not-an-address"}, "email is not an email address"),
+    ({"organisation": "fixture-nowhere"}, "is not declared"),
+    ({"protection": "secret"}, "protection 'secret' is not one of"),
+    ({"protection": "pseudonym"}, "the pseudonym column is needed"),
+    ({"pseudonym": "fixture-alias"}, "protection is not pseudonym"),
+    ({"courses": "ltct:fixture-course;fixture-course"}, "is not a course idnumber"),
+    ({"courses": "ltct:fixture-course:03"}, "is not a course idnumber"),
+    ({"firstname": ""}, "firstname is empty"),
+    ({"country": "KEN"}, "not a two-letter country code"),
+])
+def test_intake_offline_problems_refuse_the_whole_file(tmp_path, fixture_orgs, change, expect):
+    rows = [intake_row(n) for n in range(2, 5)]
+    rows[1].update(change)
+    path = write_csv(tmp_path / "ltct-private" / "intake.csv", rows)
+    client = FakeClient()
+    code, text = run(["intake", str(path)], client=client)
+    assert code == 1
+    assert "row 3:" in text and expect in text
+    assert client.calls == []                    # refused before any call
+
+
+def test_intake_duplicate_email_is_refused_case_insensitively(tmp_path, fixture_orgs):
+    rows = [intake_row(2), intake_row(3, email="LEARNER2@example.org")]
+    path = write_csv(tmp_path / "intake.csv", rows)
+    client = FakeClient()
+    code, text = run(["intake", str(path)], client=client)
+    assert code == 1 and "row 3: the same as row 2" in text
+    assert client.calls == []
+
+
+def test_intake_missing_or_unknown_column_is_refused(tmp_path, fixture_orgs):
+    missing = write_csv(tmp_path / "a.csv", [intake_row(2)],
+                        header=["email", "firstname", "lastname"])
+    code, text = run(["intake", str(missing)], client=FakeClient())
+    assert code == 1 and "required column 'organisation' is missing" in text
+    unknown = write_csv(tmp_path / "b.csv", [intake_row(2)], header=INTAKE_HEADER + ["password"])
+    code, text = run(["intake", str(unknown)], client=FakeClient())
+    assert code == 1 and "unknown column 'password'" in text
+
+
+def test_intake_file_inside_a_git_tree_is_never_opened(tmp_path, fixture_orgs):
+    (tmp_path / "proj" / ".git").mkdir(parents=True)
+    path = write_csv(tmp_path / "proj" / "intake.csv", [intake_row(2)])
+    client = FakeClient()
+    code, text = run(["intake", str(path)], client=client)
+    assert code == 1 and "git working tree" in text
+    assert client.calls == []
+
+
+# --- T029: intake resume, against a fake server ---------------------------------------------------
+PATH = ["new", "will_set_org", "will_enrol", "unchanged"]
+
+
+class IntakeServer(FakeClient):
+    """A Moodle that remembers which rows are done, with intake_rules' "further along" rule.
+
+    `state[email]` is absent (new), "half" (created, no organisation: will_set_org), "done"
+    (unchanged) or "other" (flagged_other_org). `lose` holds row numbers whose apply succeeds
+    on the server but whose answer is lost on the way back; `before_apply` runs once, just
+    before the first apply call, to change the server under a run.
+    """
+
+    def __init__(self, **kw):
+        super().__init__(**kw)
+        self.state = {}
+        self.lose = set()
+        self.before_apply = None
+
+    def outcome(self, email):
+        return {None: "new", "half": "will_set_org", "done": "unchanged",
+                "other": "flagged_other_org"}[self.state.get(email.lower())]
+
+    def call(self, function, **params):
+        if function == "local_ltuse_admin_preview_intake":
+            self.calls.append((function, params))
+            return {"refusal": "", "rows": [
+                {"row": r["row"], "outcome": self.outcome(r["email"]), "reason": "",
+                 "key": r["email"] if params["showpeople"] else af.mask_email(r["email"]),
+                 "changes": []} for r in params["rows"]]}
+        if function == "local_ltuse_admin_apply_intake_row":
+            self.calls.append((function, params))
+            if self.before_apply:
+                self.before_apply(self)
+                self.before_apply = None
+            row, expected = params["row"], params["expectedoutcome"]
+            email = row["email"].lower()
+            current = self.outcome(email)
+            if expected == current:
+                status = "done"
+            elif current in PATH and PATH.index(current) > PATH.index(expected):
+                status = "already_done" if current == "unchanged" else "done"
+            else:
+                return {"row": row["row"], "outcome": current, "status": "refused",
+                        "reason": "changed since the preview; preview again"}
+            self.state[email] = "done"
+            if row["row"] in self.lose:
+                self.lose.discard(row["row"])
+                raise mc.MoodleError("local_ltuse_admin_apply_intake_row",
+                                     {"message": "HTTP 503 Service Unavailable"})
+            return {"row": row["row"], "outcome": current, "status": status, "reason": ""}
+        return super().call(function, **params)
+
+
+def _intake_file(tmp_path, count=3):
+    return write_csv(tmp_path / "ltct-private" / "intake.csv",
+                     [intake_row(n) for n in range(2, 2 + count)])
+
+
+def _preview_code(text):
+    return text.rsplit("--confirm ", 1)[1].strip()
+
+
+def test_intake_preview_then_apply_then_reapply_is_a_no_op(tmp_path, fixture_orgs):
+    path = _intake_file(tmp_path)
+    server = IntakeServer()
+    code, text = run(["intake", str(path)], client=server)
+    assert code == 0 and "new" in text
+    assert not _calls(server, "local_ltuse_admin_apply_intake_row")
+    confirm = _preview_code(text)
+    code, text = run(["intake", str(path), "--apply", "--confirm", confirm], client=server)
+    assert code == 0 and "done 3" in text
+    # The same command again: every row is unchanged, the code is the same, nothing is sent.
+    sent = len(server.calls)
+    code, text = run(["intake", str(path), "--apply", "--confirm", confirm], client=server)
+    assert code == 0 and "already done 3" in text
+    assert not [c for c in server.calls[sent:] if c[0] == "local_ltuse_admin_apply_intake_row"]
+
+
+def test_intake_resumes_after_a_partial_apply(tmp_path, fixture_orgs):
+    path = _intake_file(tmp_path)
+    server = IntakeServer()
+    confirm = _preview_code(run(["intake", str(path)], client=server)[1])
+    # A run cut off part-way: row 2 finished, row 3 created but not finished.
+    server.state["learner2@example.org"] = "done"
+    server.state["learner3@example.org"] = "half"
+    code, text = run(["intake", str(path), "--apply", "--confirm", confirm], client=server)
+    assert code == 0
+    assert "already done" in text
+    applied = [c["row"]["row"] for c in _calls(server, "local_ltuse_admin_apply_intake_row")]
+    assert applied == [3, 4]                      # row 2 needed no call
+    assert all(v == "done" for v in server.state.values())
+
+
+def test_a_lost_response_then_a_rerun_reports_already_done(tmp_path, fixture_orgs):
+    path = _intake_file(tmp_path)
+    server = IntakeServer()
+    confirm = _preview_code(run(["intake", str(path)], client=server)[1])
+    server.lose = {3}
+    code, text = run(["intake", str(path), "--apply", "--confirm", confirm], client=server)
+    assert code == 1 and "failed 1" in text       # the answer for row 3 never arrived
+    code, text = run(["intake", str(path), "--apply", "--confirm", confirm], client=server)
+    assert code == 0 and "already done 3" in text
+
+
+def test_a_retry_racing_the_first_attempt_is_already_done(tmp_path, fixture_orgs):
+    path = _intake_file(tmp_path, count=1)
+    server = IntakeServer()
+    confirm = _preview_code(run(["intake", str(path)], client=server)[1])
+    # Between the apply run's preview and its call, another run finished the row.
+    server.before_apply = lambda s: s.state.update({"learner2@example.org": "done"})
+    code, text = run(["intake", str(path), "--apply", "--confirm", confirm], client=server)
+    assert code == 0 and "already done 1" in text
+
+
+def test_a_row_that_became_flagged_is_refused(tmp_path, fixture_orgs):
+    path = _intake_file(tmp_path)
+    server = IntakeServer()
+    confirm = _preview_code(run(["intake", str(path)], client=server)[1])
+    server.before_apply = lambda s: s.state.update({"learner4@example.org": "other"})
+    code, text = run(["intake", str(path), "--apply", "--confirm", confirm], client=server)
+    assert code == 1
+    assert "refused 1" in text and "changed since the preview" in text
+    assert server.state.get("learner4@example.org") == "other"
+
+
+def test_intake_with_courses_prints_the_production_gate(tmp_path, fixture_orgs):
+    path = write_csv(tmp_path / "intake.csv", [intake_row(2, courses="ltct:fixture-course")])
+    server = IntakeServer()
+    code, text = run(["intake", str(path)], client=server)
+    assert code == 0 and "spec 002 R13" in text
+    sent = _calls(server, "local_ltuse_admin_preview_intake")
+    assert sent[0]["rows"][0]["courses"] == ["ltct:fixture-course"]
+
+
+def test_intake_without_courses_prints_no_gate(tmp_path, fixture_orgs):
+    code, text = run(["intake", str(_intake_file(tmp_path))], client=IntakeServer())
+    assert code == 0 and "spec 002 R13" not in text
+
+
+def test_intake_output_masks_people_unless_asked(tmp_path, fixture_orgs):
+    path = _intake_file(tmp_path)
+    server = IntakeServer()
+    server.state["learner3@example.org"] = "other"
+    code, text = run(["intake", str(path)], client=server)
+    assert "l***@example.org" in text and "learner3@example.org" not in text
+    code, text = run(["intake", str(path), "--show-people"], client=server)
+    assert "learner3@example.org" in text
+
+
+# --- T044/T045: enrol course, unenrol, enrol pathway ----------------------------------------------
+class EnrolServer(FakeClient):
+    """Cohort sync as the server sees it: course idnumber -> instance state."""
+
+    def __init__(self, **kw):
+        super().__init__(items=[{"idnumber": "ltct:fixture-course", "name": "Fixture",
+                                 "category": "ltct:published"}], **kw)
+        self.instances = {}                     # course -> "enabled" | "disabled"
+        self.refuse = set()                     # courses the rules refuse
+        self.pathway = None                     # (key, [courses]) once 006 is "installed"
+        self.assigned = False
+
+    def pair(self, course, action):
+        state = self.instances.get(course)
+        if action == "remove":
+            return "would_disable" if state == "enabled" else "already"
+        if course in self.refuse:
+            return "refused"
+        return {None: "would_add", "disabled": "would_enable", "enabled": "already"}[state]
+
+    def call(self, function, **params):
+        if function == "local_ltuse_admin_preview_cohort_enrolment":
+            self.calls.append((function, params))
+            if params.get("pathwaykey"):
+                if not self.pathway:
+                    return {"refusal": "learning pathways are not installed on this site"}
+                return {"refusal": "", "members": 3,
+                        "assignment": "already" if self.assigned else "would_add",
+                        "courses": [{"course": c, "outcome": self.pair(c, "ensure"), "reason": ""}
+                                    for c in self.pathway[1]]}
+            course = params["courseidnumber"]
+            return {"refusal": "", "members": 3, "assignment": "",
+                    "courses": [{"course": course, "outcome": self.pair(course, params["action"]),
+                                 "reason": ""}]}
+        if function == "local_ltuse_admin_apply_cohort_enrolment":
+            self.calls.append((function, params))
+            course = params["courseidnumber"]
+            current = self.pair(course, params["action"])
+            if current == "already":
+                return {"outcome": "already", "status": "already_done", "reason": ""}
+            if current != params["expectedoutcome"]:
+                return {"outcome": current, "status": "refused", "reason": "changed"}
+            self.instances[course] = "disabled" if params["action"] == "remove" else "enabled"
+            return {"outcome": current, "status": "done", "reason": ""}
+        if function == "local_ltuse_admin_apply_pathway_assignment":
+            self.calls.append((function, params))
+            self.assigned = True
+            return {"outcome": "would_add", "status": "done", "reason": ""}
+        return super().call(function, **params)
+
+
+def _calls(server, function):
+    return [c[1] for c in server.calls if c[0] == function]
+
+
+def test_enrol_course_previews_then_applies_once():
+    server = EnrolServer()
+    argv = ["enrol", "course", "--cohort", "ltct:org:fixture-a", "--course", "ltct:fixture-course"]
+    code, text = run(argv, client=server)
+    assert code == 0 and "would_add" in text and "holds 3 members" in text
+    assert "spec 002 R13" in text                 # a shared course while 016 is not ready
+    assert not _calls(server, "local_ltuse_admin_apply_cohort_enrolment")
+    code, text = run(argv + ["--apply", "--confirm", _preview_code(text)], client=server)
+    assert code == 0
+    assert _calls(server, "local_ltuse_admin_apply_cohort_enrolment") == [
+        {"cohortidnumber": "ltct:org:fixture-a", "courseidnumber": "ltct:fixture-course",
+         "action": "ensure", "expectedoutcome": "would_add"}]
+    code, text = run(argv, client=server)
+    assert "already" in text
+
+
+def test_unenrol_disables_and_has_its_own_code():
+    server = EnrolServer()
+    server.instances["ltct:fixture-course"] = "enabled"
+    enrol = run(["enrol", "course", "--cohort", "ltct:org:fixture-a", "--course",
+                 "ltct:fixture-course"], client=server)[1]
+    argv = ["unenrol", "--cohort", "ltct:org:fixture-a", "--course", "ltct:fixture-course"]
+    code, text = run(argv, client=server)
+    assert code == 0 and "would_disable" in text and "grades" in text
+    assert "spec 002 R13" not in text
+    assert _preview_code(text) != _preview_code(enrol)
+    code, text = run(argv + ["--apply", "--confirm", _preview_code(text)], client=server)
+    assert code == 0 and server.instances["ltct:fixture-course"] == "disabled"
+
+
+def test_enrol_course_refused_by_the_rules_exits_1():
+    server = EnrolServer()
+    server.refuse.add("ltct:fixture-course")
+    argv = ["enrol", "course", "--cohort", "ltct:mentors", "--course", "ltct:fixture-course"]
+    code, text = run(argv, client=server)
+    code, text = run(argv + ["--apply", "--confirm", _preview_code(text)], client=server)
+    assert code == 1
+    assert not _calls(server, "local_ltuse_admin_apply_cohort_enrolment")
+
+
+def test_enrol_pathway_without_spec_006_is_refused():
+    server = EnrolServer()
+    code, text = run(["enrol", "pathway", "--cohort", "ltct:org:fixture-a", "--pathway",
+                      "competency:fixture"], client=server)
+    assert code == 1 and "not installed" in text and "--confirm" not in text
+
+
+def test_enrol_pathway_assigns_once_then_enrols_each_course():
+    server = EnrolServer()
+    server.pathway = ("competency:fixture", ["ltct:fixture-course", "ltct:fixture-two"])
+    argv = ["enrol", "pathway", "--cohort", "ltct:org:fixture-a", "--pathway",
+            "competency:fixture"]
+    code, text = run(argv, client=server)
+    assert code == 0
+    code, text = run(argv + ["--apply", "--confirm", _preview_code(text)], client=server)
+    assert code == 0
+    assert len(_calls(server, "local_ltuse_admin_apply_pathway_assignment")) == 1
+    applied = _calls(server, "local_ltuse_admin_apply_cohort_enrolment")
+    assert [a["courseidnumber"] for a in applied] == ["ltct:fixture-course", "ltct:fixture-two"]
+    assert all(a["pathwaykey"] == "competency:fixture" for a in applied)
+    # Again: the assignment is held and both courses are enrolled; nothing more is assigned.
+    code, text = run(argv, client=server)
+    assert code == 0
+    code, text = run(argv + ["--apply", "--confirm", _preview_code(text)], client=server)
+    assert code == 0 and len(_calls(server, "local_ltuse_admin_apply_pathway_assignment")) == 1
+
+
+def test_enrol_pathway_with_a_refused_course_touches_nothing():
+    server = EnrolServer()
+    server.pathway = ("competency:fixture", ["ltct:fixture-course", "ltct:fixture-two"])
+    server.refuse.add("ltct:fixture-two")
+    code, text = run(["enrol", "pathway", "--cohort", "ltct:org:fixture-a", "--pathway",
+                      "competency:fixture"], client=server)
+    assert code == 1 and "ltct:fixture-two" in text and "--confirm" not in text
+    assert not _calls(server, "local_ltuse_admin_apply_pathway_assignment")

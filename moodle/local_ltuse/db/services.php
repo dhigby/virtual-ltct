@@ -114,6 +114,46 @@ $functions = [
         'ajax'         => false,
         'capabilities' => 'local/ltuse:administer, moodle/cohort:view',
     ],
+    'local_ltuse_admin_preview_intake' => [
+        'classname'    => 'local_ltuse\external\admin_preview_intake',
+        'description'  => 'Preview an intake file: what applying each row would do, with '
+                        . 'people masked unless asked. Changes nothing.',
+        'type'         => 'read',
+        'ajax'         => false,
+        'capabilities' => 'local/ltuse:administer, moodle/user:create',
+    ],
+    'local_ltuse_admin_apply_intake_row' => [
+        'classname'    => 'local_ltuse\external\admin_apply_intake_row',
+        'description'  => 'Apply one intake row as previewed: create the account, protect it, '
+                        . 'set its organisation and enrol it in the row\'s courses.',
+        'type'         => 'write',
+        'ajax'         => false,
+        'capabilities' => 'local/ltuse:administer, moodle/user:create',
+    ],
+    'local_ltuse_admin_preview_cohort_enrolment' => [
+        'classname'    => 'local_ltuse\external\admin_preview_cohort_enrolment',
+        'description'  => 'Preview enrolling a cohort into a course or a pathway by cohort '
+                        . 'sync, or disabling that enrolment. Changes nothing.',
+        'type'         => 'read',
+        'ajax'         => false,
+        'capabilities' => 'local/ltuse:administer, enrol/cohort:config',
+    ],
+    'local_ltuse_admin_apply_cohort_enrolment' => [
+        'classname'    => 'local_ltuse\external\admin_apply_cohort_enrolment',
+        'description'  => 'Enrol one cohort into one course by cohort sync, or disable that '
+                        . 'enrolment, as previewed. Never deletes an enrolment method.',
+        'type'         => 'write',
+        'ajax'         => false,
+        'capabilities' => 'local/ltuse:administer, enrol/cohort:config',
+    ],
+    'local_ltuse_admin_apply_pathway_assignment' => [
+        'classname'    => 'local_ltuse\external\admin_apply_pathway_assignment',
+        'description'  => 'Give a cohort a learning pathway that enrols, if the cohort may be '
+                        . 'enrolled into every course on it.',
+        'type'         => 'write',
+        'ajax'         => false,
+        'capabilities' => 'local/ltuse:administer, moodle/cohort:assign',
+    ],
 ];
 
 // One service, so a single token grants exactly these functions and nothing else.
@@ -162,6 +202,11 @@ $services = [
         'functions' => [
             'local_ltuse_admin_check',
             'local_ltuse_admin_list',
+            'local_ltuse_admin_preview_intake',
+            'local_ltuse_admin_apply_intake_row',
+            'local_ltuse_admin_preview_cohort_enrolment',
+            'local_ltuse_admin_apply_cohort_enrolment',
+            'local_ltuse_admin_apply_pathway_assignment',
             'core_webservice_get_site_info',
         ],
         'requiredcapability' => 'local/ltuse:administer',

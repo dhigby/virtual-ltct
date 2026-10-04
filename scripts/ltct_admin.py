@@ -64,6 +64,11 @@ EXIT_OK, EXIT_REFUSED, EXIT_CONFIG = 0, 1, 2
 ADMIN_FUNCTIONS = [
     "local_ltuse_admin_check",
     "local_ltuse_admin_list",
+    "local_ltuse_admin_preview_intake",
+    "local_ltuse_admin_apply_intake_row",
+    "local_ltuse_admin_preview_cohort_enrolment",
+    "local_ltuse_admin_apply_cohort_enrolment",
+    "local_ltuse_admin_apply_pathway_assignment",
     "core_webservice_get_site_info",
 ]
 
@@ -369,6 +374,166 @@ def cmd_template(args, out):
     return EXIT_OK
 
 
+def load_file(path, kind, site_dir):
+    """Guard, read and check an operator's file offline; (resolved path, rows) or a refusal.
+
+    The guard comes first, so a file inside a git tree is never even opened (research R14).
+    Every offline problem is reported with its row number before anything is sent.
+    """
+    resolved = admin_files.guard_path(path)
+    if not resolved.is_file():
+        raise ConfigError("%s is not a file. Give the path of the %s file, kept in %s."
+                          % (resolved, kind, admin_files.SUGGESTED_HOME))
+    rows = admin_files.read_csv(resolved, kind)
+    problems = admin_files.validate_file(kind, rows, declared_organisations(site_dir))
+    if problems:
+        raise admin_files.FileRefused(problems)
+    return resolved, rows
+
+
+def _split(cell):
+    return [v.strip() for v in str(cell or "").split(admin_files.MULTI_SEP) if v.strip()]
+
+
+def intake_payload(row):
+    """One intake row as local_ltuse_admin_preview_intake and apply_intake_row take it."""
+    return {
+        "row": row["row"],
+        "email": row["email"].strip(),
+        "firstname": row["firstname"].strip(),
+        "lastname": row["lastname"].strip(),
+        "organisation": row["organisation"].strip(),
+        "country": (row.get("country") or "").strip().upper(),
+        "protection": (row.get("protection") or "").strip().lower(),
+        "pseudonym": (row.get("pseudonym") or "").strip(),
+        "courses": _split(row.get("courses")),
+    }
+
+
+def _gate_needed(client):
+    """True while 002 R13's production gate applies: 016 absent or not every level ready."""
+    return not protection_ready(client.call("local_ltuse_admin_check") or {})
+
+
+def cmd_intake(args, client, out):
+    path, rows = load_file(args.file, "intake", args.site_dir)
+    gate = any(_split(r.get("courses")) for r in rows) and _gate_needed(client)
+    payload = [intake_payload(r) for r in rows]
+    plan = Plan(
+        title="Intake", source=path.name, rows=rows,
+        preview=lambda show: client.call("local_ltuse_admin_preview_intake", rows=payload,
+                                         showpeople=show),
+        apply=lambda row, expected: client.call("local_ltuse_admin_apply_intake_row",
+                                                row=intake_payload(row),
+                                                expectedoutcome=expected),
+        command=["intake", args.file], gate=gate)
+    return drive(plan, args.apply, args.confirm, args.show_people, out)
+
+
+def _cohort_preview(client, out, **params):
+    """local_ltuse_admin_preview_cohort_enrolment, printing the cohort's size."""
+    result = client.call("local_ltuse_admin_preview_cohort_enrolment", **params) or {}
+    if not result.get("refusal"):
+        members = result.get("members", 0)
+        print("Cohort %s holds %d member%s." % (params["cohortidnumber"], members,
+                                               "" if members == 1 else "s"), file=out)
+    return result
+
+
+def _shared_course(client, idnumber):
+    """Is this course in ltct:published? (002 R13's gate is about shared courses.)"""
+    items = (client.call("local_ltuse_admin_list", what="courses") or {}).get("items", [])
+    return any(i.get("idnumber") == idnumber and i.get("category") == "ltct:published"
+               for i in items)
+
+
+def cmd_enrol_course(args, client, out, action):
+    """`enrol course` (action ensure) and `unenrol` (action remove): one (cohort, course) pair."""
+    rows = [{"row": 1, "cohort": args.cohort, "course": args.course, "action": action}]
+
+    def preview(show_people):
+        result = _cohort_preview(client, out, cohortidnumber=args.cohort,
+                                 courseidnumber=args.course, action=action)
+        if result.get("refusal"):
+            return {"refusal": result["refusal"]}
+        return {"rows": [{"row": 1, "key": c["course"], "outcome": c["outcome"],
+                          "reason": c.get("reason", ""), "changes": []}
+                         for c in result.get("courses", [])[:1]]}
+
+    def apply(row, expected):
+        return client.call("local_ltuse_admin_apply_cohort_enrolment", cohortidnumber=args.cohort,
+                           courseidnumber=args.course, action=action, expectedoutcome=expected)
+
+    gate = action == "ensure" and _shared_course(client, args.course) and _gate_needed(client)
+    command = (["enrol", "course"] if action == "ensure" else ["unenrol"]) + \
+        ["--cohort", args.cohort, "--course", args.course]
+    plan = Plan(title="Enrol" if action == "ensure" else "Unenrol",
+                source="%s in %s" % (args.cohort, args.course), rows=rows, preview=preview,
+                apply=apply, command=command, gate=gate)
+    if action == "remove":
+        plan.notes.append("Unenrolling disables the cohort's enrolment method in the course. "
+                          "Nobody's grades or completion are deleted, and enrolling again brings "
+                          "everything back.")
+    return drive(plan, args.apply, args.confirm, args.show_people, out)
+
+
+def cmd_enrol_pathway(args, client, out):
+    """`enrol pathway`: assign the pathway (enrol = 1), then cohort sync per course (R11).
+
+    Row 1 is the assignment; rows 2.. are the pathway's courses as the server lists them, so
+    the confirmation code covers the course list too. A cohort the rules refuse in any of the
+    pathway's courses refuses the whole command, and 006's table is not touched.
+    """
+    first = client.call("local_ltuse_admin_preview_cohort_enrolment", cohortidnumber=args.cohort,
+                        pathwaykey=args.pathway) or {}
+    courses = [] if first.get("refusal") else [c["course"] for c in first.get("courses", [])]
+    rows = [{"row": 1, "cohort": args.cohort, "pathway": args.pathway, "course": ""}]
+    rows += [{"row": n, "cohort": args.cohort, "pathway": args.pathway, "course": c}
+             for n, c in enumerate(courses, start=2)]
+    assigned = {"ok": False}
+
+    def preview(show_people):
+        result = _cohort_preview(client, out, cohortidnumber=args.cohort, pathwaykey=args.pathway)
+        if result.get("refusal"):
+            return {"refusal": result["refusal"]}
+        by_course = {c["course"]: c for c in result.get("courses", [])}
+        if set(by_course) != set(courses):
+            return {"refusal": "the pathway's courses changed since the preview; preview again"}
+        refused = [c for c in result.get("courses", []) if c["outcome"] == "refused"]
+        if refused:
+            return {"refusal": "the cohort may not be enrolled into %s, which is on the pathway "
+                               "(%s); the pathway was not assigned"
+                               % (refused[0]["course"], refused[0].get("reason", ""))}
+        # The driver sends nothing for a row already done, so note it here.
+        assigned["ok"] = result.get("assignment") == "already"
+        out_rows = [{"row": 1, "key": args.pathway, "outcome": result.get("assignment", ""),
+                     "reason": "", "changes": []}]
+        out_rows += [{"row": r["row"], "key": r["course"], "outcome": by_course[r["course"]]["outcome"],
+                      "reason": by_course[r["course"]].get("reason", ""), "changes": []}
+                     for r in rows[1:]]
+        return {"rows": out_rows}
+
+    def apply(row, expected):
+        if row["row"] == 1:
+            answer = client.call("local_ltuse_admin_apply_pathway_assignment",
+                                 cohortidnumber=args.cohort, pathwaykey=args.pathway,
+                                 expectedoutcome=expected) or {}
+            assigned["ok"] = answer.get("status") in ("done", "already_done")
+            return answer
+        if not assigned["ok"]:
+            return {"status": "refused", "reason": "the pathway was not assigned, so its courses "
+                                                   "were left alone"}
+        return client.call("local_ltuse_admin_apply_cohort_enrolment", cohortidnumber=args.cohort,
+                           courseidnumber=row["course"], action="ensure",
+                           expectedoutcome=expected, pathwaykey=args.pathway)
+
+    plan = Plan(title="Enrol pathway", source="%s on %s" % (args.cohort, args.pathway),
+                rows=rows, preview=preview, apply=apply,
+                command=["enrol", "pathway", "--cohort", args.cohort, "--pathway", args.pathway],
+                gate=bool(courses) and _gate_needed(client))
+    return drive(plan, args.apply, args.confirm, args.show_people, out)
+
+
 def not_built(name, task):
     def run(*_args, **_kwargs):
         print("\"%s\" is not built yet (spec 008, task %s). Nothing was sent." % (name, task),
@@ -379,8 +544,7 @@ def not_built(name, task):
 
 # Commands whose implementation lands with its user story (specs/008-admin-tooling/tasks.md).
 PENDING = {
-    "intake": "T037", "enrol course": "T044", "enrol pathway": "T045",
-    "enrol mirror": "T053", "unenrol": "T044", "suspend": "T050", "reactivate": "T050",
+    "enrol mirror": "T053", "suspend": "T050", "reactivate": "T050",
     "move": "T052", "managers": "T054", "mentors assign": "T061", "mentors end": "T061",
     "course-mentors": "T066", "summary": "T055",
 }
@@ -490,6 +654,14 @@ def main(argv=None, environ=None, client_factory=None, out=sys.stdout):
         client = _connect(factory, environ)
         if name == "check":
             return cmd_check(args, client, out)
+        if name == "intake":
+            return cmd_intake(args, client, out)
+        if name == "enrol course":
+            return cmd_enrol_course(args, client, out, "ensure")
+        if name == "unenrol":
+            return cmd_enrol_course(args, client, out, "remove")
+        if name == "enrol pathway":
+            return cmd_enrol_pathway(args, client, out)
         raise ConfigError("unknown command %r" % name)
     except ConfigError as e:
         print(str(e), file=out)

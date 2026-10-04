@@ -586,10 +586,13 @@ each is re-checked as stated.
 
 | Table | Read by | Why there is no API |
 |---|---|---|
-| `cohort` | `idnumber LIKE 'ltct:%'` (`admin_list`); `idnumber = 'ltct:mentors'` (`organisation\actions::person_facts()`) | Every organisation cohort is hidden and in system context, which `cohort_get_all_cohorts()` filters by visibility for the caller. `cohort.idnumber` is not indexed in core; the table holds tens of rows. |
+| `cohort` | `idnumber LIKE 'ltct:%'` (`admin_list`); `idnumber = 'ltct:mentors'` (`organisation\actions::person_facts()`); `idnumber` exact and `id` (`admin\intake_service`, `admin\cohort_enrolment`) | Every organisation cohort is hidden and in system context, which `cohort_get_all_cohorts()` filters by visibility for the caller. `cohort.idnumber` is not indexed in core; the table holds tens of rows. |
+| `cohort_members` | `cohortid`, a count (`admin\cohort_enrolment::member_count()`) | The member count a cohort-enrolment preview prints. `core_cohort_get_cohort_members` returns every user id, not a count (research R18). |
 | `course` joined to `course_categories` | `course.idnumber LIKE 'ltct:%'`, the category's `idnumber` (`admin_list`) | The courses the site team may name, with the category that decides which organisations may be enrolled. `core_course_category` lists by category, not by course idnumber. |
-| `course_categories` | `id` (`organisation\actions::do_enrol()`) | The idnumber of one course's category, for `access::may_enrol_into()`. |
-| `role` | `shortname = 'student'` (`organisation\actions::org_enrol_instance()`) | The Student role's id for a new organisation-enrolment instance. Core has no lookup of a role by shortname that is not a raw read. |
+| `course` | `idnumber` exact, and `id` (`admin\intake_service::resolve()`, `admin\cohort_enrolment`) | The course an intake row or a cohort enrolment names. `get_course()` takes an id; there is no lookup by idnumber that is not a read. |
+| `course_categories` | `id` (`organisation\actions::do_enrol()`, `admin\intake_service`, `admin\cohort_enrolment`) | The idnumber of one course's category, for `access::may_enrol_into()` and `admin\enrolment_rules`. |
+| `role` | `shortname = 'student'` (`organisation\actions::org_enrol_instance()`); `shortname` of the role `enrolment_rules` gives (`admin\cohort_enrolment`) | The Student (or `orgmanager`) role's id for a new enrolment instance. Core has no lookup of a role by shortname that is not a raw read. |
+| `user` | `deleted = 0`, `mnethostid`, `email` compared case-insensitively (`admin\intake_service::match_accounts()`); `username` and `mnethostid` exists (`new_username()`) | Matching an intake row to every live account with its email, so two accounts for one email are refused rather than one being picked. `core_user::get_user_by_email()` is case-sensitive and returns one record. The table has no index on `email`; intakes are tens of rows. |
 | `enrol` | `id` (`organisation\actions::org_enrol_instance()`) | The instance `enrol_self_plugin::add_instance()` just created, which returns only its id; `enrol_get_instances()` would read every instance of the course. |
 
 `cli/setup_publishing.php` still writes `external_services_users` and deletes

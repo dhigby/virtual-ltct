@@ -43,4 +43,14 @@ $observers = [
         'eventname' => '\mod_scheduler\event\slot_deleted',
         'callback' => '\local_ltuse\observer::scheduler_slot_deleted',
     ],
+
+    // Spec 008: administration. A course joining a learning pathway (spec 006) is enrolled for
+    // every cohort that holds the pathway with enrol = 1 (research R11); a course leaving one
+    // unenrols nobody. Not internal, so a change that rolls back enrols no one. Harmless until
+    // spec 006 is installed: the event is never fired.
+    [
+        'eventname' => '\local_ltuse\event\pathway_courses_changed',
+        'callback' => '\local_ltuse\admin\observer::pathway_courses_changed',
+        'internal' => false,
+    ],
 ];

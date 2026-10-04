@@ -59,5 +59,157 @@ foreach ($addresses as $i => $address) {
     check(is_array($python) && $python[$i] === $php, "PHP and Python mask address $i alike ($php)");
 }
 
+use local_ltuse\admin\intake_rules;
+use local_ltuse\admin\enrolment_rules;
+
+// --- intake_rules::classify (T026) --------------------------------------------------------
+/** Facts for a row of fixture-a whose email matches no account, with spec 016 absent. */
+function intake(array $over = []): array {
+    return array_merge(['accounts' => 0, 'org' => '', 'suspended' => false, 'effective' => 'none',
+        'settled' => true, 'protection' => false, 'available' => [], 'roworg' => 'fixture-a',
+        'asked' => 'none', 'orgminimum' => 'none', 'courses' => [], 'active' => [], 'allowed' => []], $over);
+}
+/** The same, with spec 016 installed and every level available. */
+function intake016(array $over = []): array {
+    return intake(array_merge(['protection' => true,
+        'available' => ['none', 'email', 'firstname', 'pseudonym']], $over));
+}
+function outcome(array $facts): string {
+    return intake_rules::classify($facts)['outcome'];
+}
+$existing = ['accounts' => 1, 'org' => 'fixture-a'];
+$course = ['courses' => ['ltct:fixture-course'], 'allowed' => ['ltct:fixture-course']];
+
+check(outcome(intake()) === 'new', 'new: no live account has the email');
+$r = intake_rules::classify(intake($course));
+check($r['changes'] === ['create', 'set_org:fixture-a', 'enrol:ltct:fixture-course'],
+    'new: create, then organisation, then the course');
+$r = intake_rules::classify(intake016(['asked' => 'email']));
+check($r['outcome'] === 'new' && $r['changes'] === ['create', 'set_protection:email', 'set_org:fixture-a'],
+    'new with protection: protection before the organisation');
+check(intake_rules::classify(intake016(['orgminimum' => 'firstname']))['target'] === 'firstname',
+    'target is the organisation minimum when it is stricter than the row');
+check(intake_rules::classify(intake016(['asked' => 'pseudonym', 'orgminimum' => 'email']))['target'] === 'pseudonym',
+    'target is the row level when it is stricter than the minimum');
+
+check(outcome(intake($existing)) === 'unchanged', 'unchanged: same organisation, no courses');
+check(outcome(intake(array_merge($existing, $course, ['active' => ['ltct:fixture-course']]))) === 'unchanged',
+    'unchanged: every listed course already active');
+$r = intake_rules::classify(intake(array_merge($existing, $course)));
+check($r['outcome'] === 'will_enrol' && $r['changes'] === ['enrol:ltct:fixture-course'],
+    'will_enrol: same organisation, a listed course not yet active');
+check(outcome(intake016(array_merge($existing, $course, ['asked' => 'email', 'effective' => 'firstname']))) === 'will_enrol',
+    'will_enrol: protection above the target is enough');
+
+check(outcome(intake(['accounts' => 1])) === 'will_set_org', 'will_set_org: account with no organisation');
+$r = intake_rules::classify(intake016(['accounts' => 1, 'asked' => 'email', 'effective' => 'none', 'settled' => true]));
+check($r['outcome'] === 'will_set_org' && $r['changes'] === ['set_protection:email', 'set_org:fixture-a'],
+    'will_set_org: created, protection never set: protect first');
+$r = intake_rules::classify(intake016(['accounts' => 1, 'asked' => 'email', 'effective' => 'email', 'settled' => false]));
+check($r['outcome'] === 'will_set_org' && in_array('set_protection:email', $r['changes'], true),
+    'will_set_org: created, protection set but not settled');
+$r = intake_rules::classify(intake016(['accounts' => 1, 'asked' => 'email', 'effective' => 'email', 'settled' => true]));
+check($r['outcome'] === 'will_set_org' && $r['changes'] === ['set_org:fixture-a'],
+    'will_set_org: protection settled: only the organisation remains');
+
+check(outcome(intake(['accounts' => 1, 'org' => 'fixture-b'])) === 'flagged_other_org',
+    'flagged_other_org: already under another organisation');
+check(outcome(intake(['accounts' => 1, 'org' => 'fixture-a', 'suspended' => true])) === 'flagged_suspended',
+    'flagged_suspended: the account is suspended');
+check(outcome(intake(['accounts' => 1, 'suspended' => true])) === 'flagged_suspended',
+    'flagged_suspended: even with no organisation yet');
+check(outcome(intake016(array_merge($existing, ['asked' => 'firstname', 'effective' => 'email']))) === 'flagged_protection',
+    'flagged_protection: existing account below the row target');
+check(outcome(intake016(array_merge($existing, ['orgminimum' => 'email', 'effective' => 'none']))) === 'flagged_protection',
+    'flagged_protection: existing account below the organisation minimum');
+check(outcome(intake016(array_merge($existing, ['asked' => 'pseudonym', 'effective' => 'email',
+    'available' => ['none', 'email']]))) === 'flagged_protection',
+    'flagged_protection: an existing account is flagged, not made to wait');
+
+check(outcome(intake(['asked' => 'email'])) === 'waits', 'waits: protection asked, spec 016 absent');
+check(outcome(intake(array_merge($existing, ['asked' => 'email']))) === 'waits',
+    'waits: protection asked, 016 absent, even for an existing account');
+check(outcome(intake016(['asked' => 'firstname', 'available' => ['none', 'email']])) === 'waits',
+    'waits: level_available false for the target');
+check(outcome(intake016(['orgminimum' => 'pseudonym', 'available' => ['none', 'email']])) === 'waits',
+    'waits: the organisation minimum is not available yet');
+check(intake_rules::classify(intake(['asked' => 'email']))['changes'] === [], 'waits: no change at all');
+check(outcome(intake016(['accounts' => 1, 'asked' => 'firstname', 'available' => ['none', 'email']])) === 'waits',
+    'waits: an interrupted account still needing protection');
+
+check(outcome(intake(['accounts' => 2])) === 'rejected', 'rejected: two live accounts share the email');
+check(outcome(intake(['courses' => ['ltct:fixture-course'], 'allowed' => []])) === 'rejected',
+    'rejected: a course the organisation may not be enrolled into');
+check(intake_rules::classify(intake(['courses' => ['ltct:fixture-course']]))['reason'] === 'course_not_allowed',
+    'rejected: names its reason');
+check(outcome(intake(array_merge($existing, ['courses' => ['ltct:fixture-course', 'ltct:fixture-other'],
+    'allowed' => ['ltct:fixture-course']]))) === 'rejected', 'rejected: one course of two not allowed');
+$noaccounts = intake();
+unset($noaccounts['accounts']);
+check(outcome($noaccounts) === 'rejected', 'a fact not supplied fails closed');
+check(outcome(intake(['asked' => 'secret'])) === 'rejected', 'an unknown protection level fails closed');
+check(outcome(intake(['accounts' => 1, 'org' => 'fixture-b', 'suspended' => true])) === 'flagged_suspended',
+    'suspension is reported before the other organisation');
+
+// --- intake_rules::progress (T027) --------------------------------------------------------
+$apply = intake_rules::APPLY;
+$finish = intake_rules::FINISH;
+$refused = intake_rules::REFUSED;
+foreach (['new', 'will_set_org', 'will_enrol'] as $o) {
+    check(intake_rules::progress($o, $o) === $apply, "progress: $o -> $o applies");
+}
+foreach ([['new', 'will_set_org'], ['new', 'will_enrol'], ['new', 'unchanged'], ['will_set_org', 'will_enrol'],
+          ['will_set_org', 'unchanged'], ['will_enrol', 'unchanged']] as [$from, $to]) {
+    check(intake_rules::progress($from, $to) === $finish, "progress: $from -> $to finishes or is already done");
+}
+foreach (['flagged_other_org', 'flagged_suspended', 'flagged_protection', 'rejected', 'waits'] as $to) {
+    check(intake_rules::progress('new', $to) === $refused, "progress: new -> $to is refused");
+    check(intake_rules::progress('will_enrol', $to) === $refused, "progress: will_enrol -> $to is refused");
+}
+foreach ([['will_set_org', 'new'], ['unchanged', 'new'], ['will_enrol', 'will_set_org']] as [$from, $to]) {
+    check(intake_rules::progress($from, $to) === $refused, "progress: backwards $from -> $to is refused");
+}
+check(intake_rules::progress('waits', 'waits') === $refused, 'progress: a stopping outcome is never applied');
+check(intake_rules::progress('flagged_other_org', 'new') === $refused, 'progress: flagged -> new is refused');
+
+// --- enrolment_rules::decide (T039) -------------------------------------------------------
+function role_of(string $cohort, string $course, string $category): ?string {
+    return enrolment_rules::decide($cohort, $course, $category)['role'];
+}
+$c = 'ltct:fixture-course';
+check(role_of('ltct:org:fixture-a', $c, 'ltct:published') === 'student', 'org cohort: Student in ltct:published');
+check(role_of('ltct:org:fixture-a', $c, 'ltct:org:fixture-a') === 'student', 'org cohort: Student in its own category');
+check(role_of('ltct:org:fixture-a', $c, 'ltct:org:fixture-b') === null, 'org cohort: refused in another organisation');
+check(role_of('ltct:org:fixture-a', $c, 'ltct:org:fixture-ab') === null, 'org cohort: a key that only starts alike');
+check(role_of('ltct:org:fixture-ab', $c, 'ltct:org:fixture-a') === null, 'org cohort: a longer key, a shorter category');
+check(role_of('ltct:org:fixture-a:managers', $c, 'ltct:org:fixture-a') === 'orgmanager',
+    'managers cohort: orgmanager in its own category');
+check(role_of('ltct:org:fixture-a:managers', $c, 'ltct:published') === null, 'managers cohort: refused in ltct:published');
+check(enrolment_rules::decide('ltct:org:fixture-a:managers', $c, 'ltct:published')['reason'] === 'managers_shared',
+    'managers cohort in ltct:published: names its reason');
+check(role_of('ltct:org:fixture-a:managers', $c, 'ltct:org:fixture-b') === null,
+    'managers cohort: refused in another organisation');
+foreach (['ltct:published', 'ltct:org:fixture-a', 'ltct:pilots', ''] as $cat) {
+    check(role_of('ltct:mentors', $c, $cat) === null, "ltct:mentors refused in '$cat'");
+}
+foreach (['fixture-teaching', 'ltct:fixture-teaching', 'ltct:org:', 'ltct:org:Fixture-A', 'ltct:org:fixture-a:extra', ''] as $other) {
+    check(role_of($other, $c, 'ltct:published') === null, "other cohort '$other' refused (plan decision 8)");
+}
+check(role_of('ltct:org:fixture-a', $c, 'ltct:pilots') === null, 'ltct:pilots refused');
+check(role_of('ltct:org:fixture-a', 'ltct:officehours', 'ltct:published') === null, 'ltct:officehours refused');
+foreach (['fixture-course', 'ltct:fixture-course:03', 'ltct:', 'ltct:org:fixture-a', ''] as $bad) {
+    check(role_of('ltct:org:fixture-a', $bad, 'ltct:published') === null, "non-ltct:<slug> course '$bad' refused");
+}
+check(role_of('ltct:org:fixture-a', $c, 'fixture-category') === null, 'a category of no kind refused');
+check(enrolment_rules::cohort_kind('ltct:org:fixture-a:managers') === ['managers', 'fixture-a'], 'cohort_kind: managers');
+check(enrolment_rules::cohort_kind('ltct:org:fixture-a') === ['org', 'fixture-a'], 'cohort_kind: organisation');
+foreach (['would_add', 'would_enable', 'would_disable'] as $o) {
+    check(enrolment_rules::progress($o, $o) === $apply, "cohort progress: $o -> $o applies");
+    check(enrolment_rules::progress($o, 'already') === $finish, "cohort progress: $o -> already is already done");
+    check(enrolment_rules::progress($o, 'refused') === $refused, "cohort progress: $o -> refused is refused");
+}
+check(enrolment_rules::progress('would_add', 'would_enable') === $refused, 'cohort progress: add -> enable is refused');
+check(enrolment_rules::progress('refused', 'refused') === $refused, 'cohort progress: refused is never applied');
+
 echo $fails ? "FAILURES: $fails\n" : "ALL PASSED\n";
 exit($fails ? 1 : 0);

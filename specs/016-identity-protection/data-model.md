@@ -66,7 +66,7 @@ No organisation-manager role is added or changed. Own-organisation managers are 
 ### Certificate template (repo: `moodle/site/certificate/template.yaml`, changed)
 
 - `{type: studentname}` becomes `{type: userfield, field: ltct_certname}`. `CERT_ONE_EACH` counts either kind as the one name element.
-- The activity is declared with `emailteachers: 0` and `emailothers: ""`.
+- The activity keeps `emailteachers: 0` and `emailothers: ""`, which spec 013's publisher already writes on every publish; nothing new is declared.
 
 ### Spec 004 report scope (repo: `moodle/site/reports.yaml`, changed under decision 2)
 

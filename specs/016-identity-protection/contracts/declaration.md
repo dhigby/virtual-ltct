@@ -58,7 +58,7 @@ protection: {
 **`certificate/template.yaml`**
 - Exactly one name element: `studentname`, or `userfield` with `field: ltct_certname`.
 - A `userfield` must name a declared `private` field.
-- `emailteachers` must be 0 and `emailothers` empty.
+- `emailteachers` 0 and `emailothers` empty need no declaration: spec 013's `recognition\certificate::fields()` already writes both on every publish, create and update alike (checked 2026-10-04 at build).
 
 **Organisation cohort rules**
 - `bulkprocessing` stays 0, so membership changes fire cohort events (R2). `cohortrules.php` already sets it, and the validator keeps it.

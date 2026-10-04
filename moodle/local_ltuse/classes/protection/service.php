@@ -3,6 +3,11 @@ namespace local_ltuse\protection;
 
 defined('MOODLE_INTERNAL') || die();
 
+// The organisation-key readers (local_ltuse_organisation_member_keys() and friends) live in
+// lib.php, which core does not load in a task or a web service.
+global $CFG;
+require_once($CFG->dirroot . '/local/ltuse/lib.php');
+
 use context_user;
 use core_user;
 use moodle_exception;
@@ -99,6 +104,21 @@ class service {
      */
     public static function orgscope_ready(): bool {
         return !empty(self::config()['orgscope_ready']);
+    }
+
+    /**
+     * Can this level be applied on this site now? Read only and needs no user, so spec 008's
+     * intake preview can say "waits" before any account exists. False for every level until
+     * apply has stored protection.yaml, except none.
+     *
+     * @param string $level
+     * @return bool
+     */
+    public static function level_available(string $level): bool {
+        if ($level === levels::NONE) {
+            return true;
+        }
+        return self::config() !== null && levels::available($level, self::orgscope_ready());
     }
 
     /**

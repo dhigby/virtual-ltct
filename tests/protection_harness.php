@@ -77,7 +77,11 @@ check(L::display('pseudonym', 'Fixfirst', 'Fixlast', 'Pseudo', '·') === ['Pseud
 
 // --- folding and pseudonyms (data-model) ---------------------------------------------------------
 check(L::fold("  Ana   B ") === 'ana b', 'fold trims, collapses and lowercases');
-check(L::fold("e\u{0301}") === L::fold("\u{00E9}"), 'fold normalises to NFC');
+if (class_exists('\Normalizer')) {   // Moodle requires intl; a bare CI PHP may lack it.
+    check(L::fold("e\u{0301}") === L::fold("\u{00E9}"), 'fold normalises to NFC');
+} else {
+    echo "skip: fold normalises to NFC (no intl extension here)\n";
+}
 check(L::fold('ÉLAN') === 'élan', 'fold lowercases beyond ASCII');
 check(L::pseudonym_problems('', 'Fixfirst', 'Fixlast', []) === ['empty'], 'an empty pseudonym');
 check(L::pseudonym_problems('   ', 'Fixfirst', 'Fixlast', []) === ['empty'], 'a blank pseudonym');
@@ -87,7 +91,9 @@ check(in_array('isrealname', L::pseudonym_problems('fixFIRST', 'Fixfirst', 'Fixl
 check(in_array('hasrealname', L::pseudonym_problems('The Fixlast One', 'Fixfirst', 'Fixlast', []), true), 'contains the real surname');
 check(!in_array('hasrealname', L::pseudonym_problems('Boxer', 'Fixfirst', 'Ox', []), true), 'a two-letter surname is not searched for');
 check(in_array('taken', L::pseudonym_problems('Kestrel', 'a', 'b', ['kestrel']), true), 'taken by another protected user');
-check(in_array('taken', L::pseudonym_problems("Cafe\u{0301}", 'a', 'b', ["caf\u{00E9}"]), true), 'taken after NFC');
+if (class_exists('\Normalizer')) {
+    check(in_array('taken', L::pseudonym_problems("Cafe\u{0301}", 'a', 'b', ["caf\u{00E9}"]), true), 'taken after NFC');
+}
 check(L::pseudonym_problems('Kestrel', 'Fixfirst', 'Fixlast', ['heron']) === [], 'a good pseudonym');
 
 // --- usernames (R13) -------------------------------------------------------------------------------

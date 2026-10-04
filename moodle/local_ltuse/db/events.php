@@ -54,9 +54,12 @@ $observers = [
         'eventname' => '\core\event\user_updated',
         'callback' => '\local_ltuse\protection\observer::user_updated',
     ],
+    // Priority above enrol_cohort's (0), so an organisation's minimum is applied before cohort
+    // sync enrols the new member anywhere (US3-3).
     [
         'eventname' => '\core\event\cohort_member_added',
         'callback' => '\local_ltuse\protection\observer::cohort_member_added',
+        'priority' => 1000,
     ],
     [
         'eventname' => '\core\event\cohort_member_removed',

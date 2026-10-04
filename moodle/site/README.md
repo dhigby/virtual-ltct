@@ -216,6 +216,34 @@ It asks first, prints counts only, and leaves every learner's records as they ar
 
 **Feedback on a learner's work** is not this role's job. Where a course asks for work, enrol the mentor as **Course mentor** (`teacher`) with the organisation's group, as in step 2 above (spec 012). Assigning many mentors at once, and enrolling mentors into their learners' courses automatically, are spec 008's.
 
+## Protecting a person or an organisation
+
+Some learners work where being identifiable puts them, or the people they work with, at risk. Identity protection lets them take part exactly as before under less of their identity (spec 016). **Who is protected, their pseudonym and their real name live only in Moodle. Never write them here, in an issue, a PR or a screenshot.**
+
+| Level | Others see |
+|---|---|
+| Email hidden | The name and profile, not the email address |
+| First name only | The first name only: no surname, email, picture, location, organisation, role or expertise |
+| Pseudonym | A chosen name only |
+
+Each level includes the ones before it. The site team, the learner's mentors, the course mentors of the courses they take, and their own organisation's managers still see the real identity, with a **Protected** marker, on the learner's profile, the Mentoring page and **People I support** (`/local/ltuse/protected.php`). Nobody else ever sees the marker.
+
+**To protect a person**: open their profile, choose **Identity protection**, pick the level, and save. A manager of the person's own organisation can do this too. The learner gets a notice saying what others now see.
+
+**Protect early.** Set protection when the account is made, before the person is enrolled anywhere. Later, a rename links their earlier posts to the new name, so the page asks you to acknowledge that first, and recommends a fresh account instead.
+
+**Usernames.** For First name only or Pseudonym, the username must not contain the real first name or surname. The page offers a neutral one and tells the learner their new login. Give every new account a neutral username from the start.
+
+**To protect a whole organisation** (site team only): `/local/ltuse/orgprotection.php`. Choose the organisation, its minimum level (Email hidden or First name only), and whether its own managers see real identities. Every member is protected at least at that level, and a new member is protected from the moment they join. **Never declare a minimum in this repo**: `organisations.yaml` is public, and its history keeps what was ever written there. An organisation that may need protection gets a **neutral key and name from its first commit**, because the key can never change. SIL's Area entries are the one deliberate exception, and none of them carries a minimum; a group within an Area that needs organisation-wide protection gets its own neutral entry.
+
+**Lowering.** Nothing is lowered automatically. Someone who leaves a protected organisation keeps their level until an entitled person lowers it. A picture removed by protection does not come back; the learner uploads it again.
+
+**Names are locked for everyone** (`settings/identity.yaml`, pending decision 3): learners no longer change their own name or email. The site team changes them in the admin user editor; for a protected learner, use their **Identity protection** page.
+
+**Not yet available**: First name only and Pseudonym wait until the organisation field is hidden from everyone, which needs spec 004's report to be scoped by cohort first (decision 2). Until then only Email hidden can be set.
+
+What protection cannot do, and what to tell the learner, is listed as known gaps in [spec 016's research](../../specs/016-identity-protection/research.md#known-gaps-fr-015): copies already emailed or downloaded, the app's cache for up to 18 hours, and file author names inside uploaded documents.
+
 ## Events and live sessions
 
 Row #21 (spec 011). Events are open across organisations: a course's events reach everyone in

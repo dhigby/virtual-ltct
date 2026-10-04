@@ -46,6 +46,13 @@ Apply never deactivates, archives or deletes a badge, and never deletes a certif
 
 Apply never deletes the office-hours course, its activity, a group or a dashboard block.
 
+**Spec 016 extends it again.** [Its declaration contract](../../016-identity-protection/contracts/declaration.md) adds:
+- `protection.yaml` (the protection levels and the account fields each withholds) and `settings/identity.yaml`;
+- a `text` profile field datatype and the private field `ltct_certname`, protection capabilities in `roles.yaml`, prohibits for `editingteacher` and `teacher`, and a `userfield` certificate element;
+- one payload item, `protection`, which the applier stores after structure and before reporting.
+
+Apply never reads or writes any user's protection or any organisation's minimum: both are Moodle data, never declared.
+
 Everything in this contract still holds for them.
 
 The baseline settings files are `content-embeds.yaml` (#3), `mobile.yaml` (#4), `data-export.yaml` (#16), `messaging.yaml` (#19), `notifications.yaml` (#25) and, once a per-server value is needed, `server.yaml` (values from the environment). The first drift run found none, because `debug` and `wwwroot` live in `config.php`. Specs 002–014 add their own file here.

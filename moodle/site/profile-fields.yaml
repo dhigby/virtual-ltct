@@ -95,3 +95,15 @@ fields:
     why: >-
       Expertise in the framework's Education competencies (#18, FR-008). One checkbox per
       competencies.yaml category (R5). Meta holds only Uncategorized, so it has no checkbox.
+
+  - shortname: ltct_certname
+    datatype: text
+    name: Name on certificate
+    visible: private
+    locked: 1
+    required: 0
+    why: >-
+      #26 (spec 016, R10): the real full name the certificate prints. local_ltuse fills it for
+      every learner and keeps it in step with their name, and for a protected learner it holds
+      the real name while the account shows the protected display. Private, so only the
+      learner and the site team see it; locked, so only local_ltuse writes it.

@@ -3,6 +3,11 @@ namespace local_ltuse\protection;
 
 defined('MOODLE_INTERNAL') || die();
 
+// local_ltuse_managed_organisation_keys() and local_ltuse_organisation_member_keys() live in
+// lib.php, which core does not load in a task or a web service.
+global $CFG;
+require_once($CFG->dirroot . '/local/ltuse/lib.php');
+
 use context_course;
 use context_system;
 use context_user;

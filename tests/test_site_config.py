@@ -1356,10 +1356,12 @@ class Reports(ReportsBase):
         self.assertIsNone(prog["schedule"])
         self.assertEqual(prog["audiences"], [{"type": "systemrole", "role": "manager"}])
         self.assertEqual(prog["columns"][3]["aggregation"], "countdistinct")
-        # Spec 004's arrays in apply order, then spec 013's two after reports, then spec 011's.
-        self.assertEqual(list(self.payload())[-8:],
+        # Spec 004's arrays in apply order, then spec 013's two after reports, then spec 011's,
+        # then spec 016's protection last.
+        self.assertEqual(list(self.payload())[-9:],
                          ["course_field_category", "course_fields", "competencies", "reports",
-                          "badge_template", "certificate_template", "officehours", "dashboard"])
+                          "badge_template", "certificate_template", "officehours", "dashboard",
+                          "protection"])
 
     def test_summary_counts_reports(self):
         rc, out, _ = self.run_main("validate")
@@ -1707,6 +1709,11 @@ class Recognition(Base):
         shutil.copytree(site / "certificate", self.dir / "certificate")
         for rel in ("badges.yaml", "settings/badges.yaml"):
             self.write(rel, (site / rel).read_text(encoding="utf-8"))
+        # Spec 016 prints the name from ltct_certname, which needs profile-fields.yaml and the
+        # organisations behind it. This class tests spec 013's rules alone, so its copy keeps
+        # core's studentname; tests/test_protection_declaration.py tests the tracked userfield.
+        self.edit("certificate/template.yaml", "{type: userfield, field: ltct_certname,",
+                  "{type: studentname,")
 
     def test_the_tracked_declaration_is_accepted_and_rendered(self):
         self.assertAccepted()

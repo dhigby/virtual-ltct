@@ -192,6 +192,9 @@ class inspector {
     /** @var dashboard|null checks the payload's default dashboard blocks (spec 011) */
     protected $dashboard = null;
 
+    /** @var protection|null checks the payload's protection levels (spec 016) */
+    protected $protection = null;
+
     /**
      * @param array $declaration the decoded JSON payload (associative arrays throughout)
      */
@@ -299,6 +302,21 @@ class inspector {
             $this->reports = new reports(self::entries($this->declaration['reports'] ?? []));
         }
         return $this->reports;
+    }
+
+    // --- spec 016 checker -----------------------------------------------------------------
+
+    /**
+     * The protection config checker, or null when the payload declares none (a payload from
+     * before spec 016, or a site with no protection.yaml).
+     *
+     * @return protection|null
+     */
+    public function protection(): ?protection {
+        if ($this->protection === null && is_array($this->declaration['protection'] ?? null)) {
+            $this->protection = new protection($this->declaration['protection']);
+        }
+        return $this->protection;
     }
 
     // --- spec 013 checkers -----------------------------------------------------------------
@@ -501,6 +519,10 @@ class inspector {
         }
         foreach (self::entries($this->declaration['cohort_rules'] ?? []) as $rule) {
             $items[] = cohortrules::check($rule);
+        }
+        // Spec 016, after structure and before reporting (contracts/declaration.md "Applier").
+        if ($this->protection()) {
+            $items = array_merge($items, $this->protection()->check());
         }
         if ($this->declares_course_fields()) {
             $items = array_merge($items, $this->coursefields()->check());

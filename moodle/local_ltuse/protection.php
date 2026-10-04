@@ -84,9 +84,12 @@ if ($form->is_cancelled()) {
 }
 $error = null;
 if ($data = $form->get_data()) {
+    // The suggested username is only for First name only and Pseudonym; at a looser level the
+    // hidden field still submits it, and the account must not be renamed for nothing.
+    $renames = levels::rank((string)$data->level) >= levels::rank(levels::FIRSTNAME);
     $options = [
         'pseudonym' => (string)($data->pseudonym ?? ''),
-        'newusername' => (string)($data->newusername ?? ''),
+        'newusername' => $renames ? (string)($data->newusername ?? '') : '',
         'acknowledgehistory' => !empty($data->acknowledgehistory),
     ];
     if ($seeidentity) {

@@ -118,6 +118,11 @@ class applier {
             $this->apply_discussion($target);
         }
         $this->apply_course_flags('check_course_reports', 'showreports', 0);
+        // Spec 016: store protection.yaml, after structure (the profile fields the service
+        // writes exist by now) and before reporting. Never touches a user or an organisation.
+        if ($this->inspector->protection()) {
+            $this->inspector->protection()->apply($this->report);
+        }
         $this->apply_reporting();
         $this->apply_recognition();
         $this->apply_events();

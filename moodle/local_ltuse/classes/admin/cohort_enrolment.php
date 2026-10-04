@@ -348,9 +348,11 @@ class cohort_enrolment {
         if ($catalogue::parse_key($key) === null) {
             return get_string('admin:refusal:pathwaykey', 'local_ltuse', $key);
         }
-        // exists() is false for a live competency with no course yet; is_assignable() is true
-        // for it, and its first course will arrive through pathway_courses_changed.
-        if (!$catalogue::exists($key) && !$catalogue::is_assignable($key)) {
+        // is_assignable() is the test assignments::assign() applies, so a key it refuses never
+        // reaches assign() as an exception. It is true for every key exists() is true for,
+        // except a retired competency that still has courses, and also for a live competency
+        // with no course yet, whose first course arrives through pathway_courses_changed.
+        if (!$catalogue::is_assignable($key)) {
             return get_string('admin:refusal:pathwaykey', 'local_ltuse', $key);
         }
         return '';

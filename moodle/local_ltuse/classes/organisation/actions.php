@@ -74,7 +74,10 @@ class actions {
      *
      * Only into a course access::may_enrol_into() allows for that person: a published ltct:
      * course, in ltct:published or in their own organisation's ltct:org:<key> category. Never
-     * a pilot. Idempotent: enrol_user() on an existing enrolment leaves it as it is.
+     * a pilot. Idempotent: an existing enrolment through that instance is left as it is,
+     * except that a suspended one is made active again. Without the explicit status,
+     * enrol_user() keeps a suspended enrolment suspended, so the person would stay unable to
+     * enter the course while every re-run of an intake reported the row done.
      *
      * @param int $userid
      * @param int $courseid
@@ -89,7 +92,8 @@ class actions {
             throw new moodle_exception('error:actionrefused', 'local_ltuse', '', 'enrol: course not allowed');
         }
         $instance = self::org_enrol_instance($course);
-        enrol_get_plugin(access::ENROL_PLUGIN)->enrol_user($instance, $userid, $instance->roleid);
+        enrol_get_plugin(access::ENROL_PLUGIN)->enrol_user($instance, $userid, $instance->roleid, 0, 0,
+            ENROL_USER_ACTIVE);
     }
 
     /**

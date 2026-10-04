@@ -179,6 +179,30 @@ final class admin_test extends \advanced_testcase {
         $this->assertSame(organisation\access::ENROL_MARKER, $instance->customchar1);
     }
 
+    public function test_a_suspended_course_enrolment_is_made_active_again(): void {
+        $this->redirectEmails();
+        $row = $this->row(['courses' => ['ltct:fixture-course']]);
+        intake_service::apply_row($row, 'new');
+        $accounts = $this->accounts('fixture-learner@example.org');
+        $user = reset($accounts);
+        $instance = organisation\actions::org_enrol_instance($this->course);
+        enrol_get_plugin('self')->update_user_enrol($instance, $user->id, ENROL_USER_SUSPENDED);
+        $this->assertSame('will_enrol', intake_service::preview([$row], false)['rows'][0]['outcome']);
+
+        $this->assertSame('done', intake_service::apply_row($row, 'will_enrol')['status']);
+        $this->assertTrue(is_enrolled(\context_course::instance($this->course->id), $user->id, '', true));
+        $this->assertSame('unchanged', intake_service::preview([$row], false)['rows'][0]['outcome']);
+    }
+
+    public function test_a_malformed_email_is_rejected_by_the_server_too(): void {
+        $row = $this->row(['email' => 'not-an-address']);
+        $preview = intake_service::preview([$row], false);
+        $this->assertSame('rejected', $preview['rows'][0]['outcome']);
+        $this->assertSame('***', $preview['rows'][0]['key']);
+        $this->assertSame('refused', intake_service::apply_row($row, 'new')['status']);
+        $this->assertCount(0, $this->accounts('not-an-address'));
+    }
+
     // --- cohort enrolment (T040) --------------------------------------------------------------
 
     /**

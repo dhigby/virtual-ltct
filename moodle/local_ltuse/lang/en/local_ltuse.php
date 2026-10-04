@@ -148,6 +148,7 @@ $string['admin:refusal:missing'] = 'not found in Moodle: {$a}. Check the names w
 $string['admin:refusal:nopathways'] = 'learning pathways are not installed on this site (spec 006), so nothing was done';
 $string['admin:refusal:pathwaykey'] = '"{$a}" is not a pathway that can be assigned';
 $string['admin:refusal:target'] = 'name exactly one course or one pathway, with ensure or remove; a pathway can only be enrolled';
+$string['admin:reason:bad_email'] = 'the email is not an address Moodle can send to; nothing was done';
 $string['admin:reason:facts'] = 'the server could not read everything it needs about this row; nothing was done';
 $string['admin:reason:duplicate_accounts'] = 'two accounts already share this email; the site team must merge or change one by hand first';
 $string['admin:reason:suspended'] = 'the account exists and is suspended; reactivate it deliberately if that is right';

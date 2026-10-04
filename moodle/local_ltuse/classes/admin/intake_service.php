@@ -70,6 +70,13 @@ class intake_service {
         }
         $results = [];
         foreach ($rows as $row) {
+            if (!self::valid_email($row)) {
+                // The CLI refuses such a file offline; this guards every other caller of the
+                // web service, because user_create_user() would store the address as given.
+                $results[] = ['row' => (int)$row['row'], 'key' => masking::mask_email((string)$row['email']),
+                    'outcome' => 'rejected', 'reason' => self::reason('bad_email'), 'changes' => []];
+                continue;
+            }
             $facts = self::facts($row, $context);
             $decision = intake_rules::classify($facts);
             $results[] = [
@@ -91,6 +98,9 @@ class intake_service {
      * @return array [row, outcome, status: done|already_done|refused, reason]
      */
     public static function apply_row(array $row, string $expectedoutcome): array {
+        if (!self::valid_email($row)) {
+            return self::answer($row, 'rejected', 'refused', self::reason('bad_email'));
+        }
         $email = self::normalise_email((string)$row['email']);
         // Keyed on a hash of the lowercased email, so the lock table never holds an address.
         $lock = \core\lock\lock_config::get_lock_factory(self::LOCK_TYPE)
@@ -501,6 +511,14 @@ class intake_service {
             }
         }
         return $courses;
+    }
+
+    /**
+     * @param array $row
+     * @return bool the row's email is an address Moodle would send to (validate_email())
+     */
+    protected static function valid_email(array $row): bool {
+        return (bool)validate_email(trim((string)($row['email'] ?? '')));
     }
 
     /**

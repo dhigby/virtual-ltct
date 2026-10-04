@@ -2,8 +2,8 @@
   "workflow": "companion",
   "specName": "Learning Pathways Mapped to CBC",
   "branch": "specs/moodle-requirements",
-  "currentStep": "tasks",
-  "status": "ready-to-implement",
+  "currentStep": "implement",
+  "status": "implementing",
   "history": [
     {
       "step": "specify",
@@ -60,6 +60,149 @@
       "kind": "complete",
       "by": "ai",
       "at": "2026-10-04T21:36:03.450Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "kind": "start",
+      "by": "extension",
+      "at": "2026-10-04T21:36:20.610Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T001",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-04T21:36:58.601Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T002",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-04T21:37:18.967Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T009",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-04T21:42:44.730Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T010",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-04T21:44:39.374Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T003",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-04T21:45:59.032Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T011",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-04T21:46:03.969Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T007",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-04T21:46:05.170Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T004",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-04T21:46:09.654Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T008",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-04T21:46:13.901Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T005",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-04T21:47:26.962Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T006",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-04T21:47:27.172Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T015",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-04T21:49:50.798Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T016",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-04T21:51:22.271Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T012",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-04T21:51:26.480Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T014",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-04T21:53:30.246Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T013",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-04T21:57:01.092Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T017",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-04T21:58:30.678Z"
     }
   ],
   "telemetryInstanceId": "5e5714d2-f7f1-40c8-b80d-b9ed39584fbc",
@@ -216,6 +359,138 @@
       "title": "Usable in the Moodle app",
       "tasks": [
         "T021"
+      ]
+    }
+  },
+  "currentTask": "T017",
+  "task_summaries": {
+    "T001": {
+      "status": "DONE",
+      "did": "Confirmed event base, cohort_deleted and XMLDB APIs in MOODLE_502_STABLE; recorded in research",
+      "files": [
+        "specs/006-learning-pathways/research.md"
+      ]
+    },
+    "T002": {
+      "status": "DONE",
+      "did": "local_ltuse 2026100600 / 0.11.0, pinned in site.yaml",
+      "files": [
+        "moodle/local_ltuse/version.php",
+        "moodle/site/site.yaml"
+      ]
+    },
+    "T009": {
+      "status": "DONE",
+      "did": "Spec 006 pathways string block (18 strings from contracts/pages.md), three event names and local_ltuse_pathway_cohort privacy strings; all pass cbc_wording strict",
+      "files": [
+        "moodle/local_ltuse/lang/en/local_ltuse.php"
+      ]
+    },
+    "T010": {
+      "status": "DONE",
+      "did": "site_config.py: competency slug and url, levels array, optional pathways.yaml validation and role_pathways payload",
+      "files": [
+        "scripts/site_config.py",
+        "tests/test_site_config.py"
+      ]
+    },
+    "T003": {
+      "status": "DONE",
+      "did": "Four pathway tables and slug/url on local_ltuse_competency in install.xml and one upgrade step at 2026100600",
+      "files": [
+        "moodle/local_ltuse/db/install.xml",
+        "moodle/local_ltuse/db/upgrade.php"
+      ]
+    },
+    "T011": {
+      "status": "DONE",
+      "did": "moodle/site/pathways.yaml with rows [12], purpose, roles: [] and the commented role shape",
+      "files": [
+        "moodle/site/pathways.yaml"
+      ]
+    },
+    "T007": {
+      "status": "DONE",
+      "did": "pathway progress: pure state() over mentoring::progress_status(), for_courses() reading user_enrolments+enrol and course_completions",
+      "files": [
+        "moodle/local_ltuse/classes/pathway/progress.php"
+      ]
+    },
+    "T004": {
+      "status": "DONE",
+      "did": "pathway\\catalogue: pinned key constants, parse_key (refuses trailing newline), membership_sql, exists, is_assignable, courses, pathways_for_course, all; 43-case SQLite check passes",
+      "files": [
+        "moodle/local_ltuse/classes/pathway/catalogue.php"
+      ]
+    },
+    "T008": {
+      "status": "DONE",
+      "did": "Events pathway_courses_changed, pathway_assigned, pathway_unassigned with contract shapes, validate_data on every other key, restore mappings NOT_MAPPED; 41-case stub check passes",
+      "files": [
+        "moodle/local_ltuse/classes/event/pathway_courses_changed.php",
+        "moodle/local_ltuse/classes/event/pathway_assigned.php",
+        "moodle/local_ltuse/classes/event/pathway_unassigned.php"
+      ]
+    },
+    "T005": {
+      "status": "DONE",
+      "did": "pathway\\builder: competency and role views per contracts/pages.md; parses on PHP 8.3 (wasm); behaviour tested by T015",
+      "files": [
+        "moodle/local_ltuse/classes/pathway/builder.php"
+      ]
+    },
+    "T006": {
+      "status": "DONE",
+      "did": "pathway\\viewer::may_view with facts siteconfig, mentor, managedkeys, person; parses on PHP 8.3 (wasm); cases tested by T015",
+      "files": [
+        "moodle/local_ltuse/classes/pathway/viewer.php"
+      ]
+    },
+    "T015": {
+      "status": "DONE",
+      "did": "tests/pathway_harness.php: 70 checks over builder (layout, no-course rows, next, done, shared course, role totals once) and viewer may_view (every case, missing facts fail closed); all pass on PHP 8.3 (wasm)",
+      "files": [
+        "tests/pathway_harness.php"
+      ]
+    },
+    "T016": {
+      "status": "DONE",
+      "did": "pytest checks every string in the Spec 006 pathways lang block passes report_label_problems(strict=True); 20 passed",
+      "files": [
+        "tests/test_pathway_wording.py"
+      ]
+    },
+    "T012": {
+      "status": "DONE",
+      "did": "pathway assignments class: assign/unassign firing T008 events, for_cohort, cohorts_for, pathways_for_user, may_assign per contract; no PHP runtime here so unlinted and DB-untested",
+      "files": [
+        "moodle/local_ltuse/classes/pathway/assignments.php"
+      ]
+    },
+    "T014": {
+      "status": "DONE",
+      "did": "pytest: competency slug and url (42, unique, host from mkdocs.yml, gen_site slugify parity), levels exactly 1-4 verbatim, pathways.yaml validation (empty or missing ok; bad key, duplicate, unknown, Meta or repeated competency, empty list, level in name or description refused)",
+      "files": [
+        "tests/test_site_config.py"
+      ]
+    },
+    "T013": {
+      "status": "DONE",
+      "did": "Site config in PHP: competencies store and compare slug and url; new pathwaylevels (config pathwaylevel1-4) and rolepathways (retire never delete, pathway_courses_changed on course changes); wired into inspector, applier and drift",
+      "files": [
+        "moodle/local_ltuse/classes/siteconfig/competencies.php",
+        "moodle/local_ltuse/classes/siteconfig/pathwaylevels.php",
+        "moodle/local_ltuse/classes/siteconfig/rolepathways.php",
+        "moodle/local_ltuse/classes/siteconfig/inspector.php",
+        "moodle/local_ltuse/classes/siteconfig/applier.php",
+        "moodle/local_ltuse/classes/siteconfig/drift.php"
+      ]
+    },
+    "T017": {
+      "status": "DONE",
+      "did": "Privacy provider declares, exports and anonymises local_ltuse_pathway_cohort.usermodified; parses on PHP 8.3",
+      "files": [
+        "moodle/local_ltuse/classes/privacy/provider.php"
       ]
     }
   }

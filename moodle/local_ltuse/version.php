@@ -9,11 +9,15 @@
 defined('MOODLE_INTERNAL') || die();
 
 $plugin->component = 'local_ltuse';
-$plugin->version   = 2026100400;   // Events and office hours (spec 011): calendar change
+$plugin->version   = 2026100600;   // Learning pathways (spec 006): the pathway tables
+                                   // (local_ltuse_course_pathway, _role_pathway,
+                                   // _role_pathway_comp, _pathway_cohort), slug and url on
+                                   // local_ltuse_competency, set_course_pathway. db/upgrade.php
+                                   // saves its savepoint at this stamp. Before it, events and
+                                   // office hours (spec 011, 2026100400): calendar change
                                    // notices, the office-hours sync, booking notices and
                                    // their table (local_ltuse_booking), the time zone notice.
-                                   // db/upgrade.php saves its savepoint at this stamp. After
-                                   // open courses (spec 002, 2026100302): the course
+                                   // After open courses (spec 002, 2026100302): the course
                                    // discussion is always open, drift checks each published
                                    // ltct: course's group mode, and a managers cohort synced
                                    // into a shared course blocks apply. Before them: mentor
@@ -40,7 +44,7 @@ $plugin->requires  = 2026042000;   // Moodle 5.2 -- the release this was
 $plugin->supported = [502, 502];
 
 $plugin->maturity  = MATURITY_ALPHA;
-$plugin->release   = '0.10.0';
+$plugin->release   = '0.11.0';
 
 // No third-party dependencies, deliberately. Sections were originally going to be
 // local_wsmanagesections' job, but it could not be installed here, so local_ltuse grew an

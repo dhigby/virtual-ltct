@@ -228,3 +228,24 @@ and as the headings of the level rows. Strings say "aims at", never "reached", "
 "attained", "certified" or a learner's level. A pytest runs `cbc_wording.report_label_problems(
 strict=True)` over every 006 lang string, as 004's test does for its datasource strings.
 `pathways.yaml` names and descriptions pass the same check in `validate` (FR-011, SC-004).
+
+## Confirmed in source (T001)
+
+Checked on 2026-10-04 in upstream `MOODLE_502_STABLE` (paths under `public/`):
+- **Events.** `lib/classes/event/base.php`: `abstract protected function init()` (:233–244) sets
+  `crud` (`c`/`r`/`u`/`d`), `edulevel` (`LEVEL_OTHER` :58) and `objecttable` when there is an
+  `objectid`; `final public static function create(?array $data = null)` (:195);
+  `protected function validate_data()` (:276); `get_name()` (:292), `get_description()` (:313),
+  `get_url()` (:354). `other` holds scalars and arrays only, never objects (:50, checked :556).
+- **`\core\event\cohort_deleted`** (`lib/classes/event/cohort_deleted.php`): `objecttable`
+  `cohort` (:43), `objectid` the cohort id (:56), no record snapshot. Our observer needs only the
+  id.
+- **XMLDB** (`lib/ddl/database_manager.php`): `table_exists($table)` (:90),
+  `field_exists($table, $field)` (:133), `create_table(xmldb_table)` (:329),
+  `add_field(xmldb_table, xmldb_field)` (:411), `index_exists` (:185), `add_index` (:635).
+- Already confirmed by earlier specs and reused unchanged: `primary_extend` and
+  `CoreMainMenuDelegate` (003, research "Source results T001"), `completion_info` and
+  `course_completions` (003 R3, 004 R3), `core_external\external_api` (004 R15).
+- **Cohort membership** is read with a join on `{cohort_members}` (`cohortid`, `userid`), the
+  indexed columns `cohort/lib.php`'s `cohort_is_member()` itself queries, so no core function is
+  needed per row.

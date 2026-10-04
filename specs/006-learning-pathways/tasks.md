@@ -13,36 +13,36 @@ Paths are from the repository root. `local_ltuse/` means `moodle/local_ltuse/`.
 
 **Wave 1 — independent (different files):**
 
-- [ ] **T001** [P] Confirm every core API in research R11 in upstream `MOODLE_502_STABLE` source (event base, `cohort_deleted`, `primary_extend`, `cohort_is_member`, `completion_info`, XMLDB `add_field`/`field_exists`, `CoreMainMenuDelegate`), and record file and line under a "Confirmed in source" heading · specs/006-learning-pathways/research.md
-- [ ] **T002** [P] Bump `local_ltuse` to `2026100600`, release `0.11.0`, and pin it in `site.yaml` · local_ltuse/version.php, moodle/site/site.yaml
+- [x] **T001** [P] Confirm every core API in research R11 in upstream `MOODLE_502_STABLE` source (event base, `cohort_deleted`, `primary_extend`, `cohort_is_member`, `completion_info`, XMLDB `add_field`/`field_exists`, `CoreMainMenuDelegate`), and record file and line under a "Confirmed in source" heading · specs/006-learning-pathways/research.md
+- [x] **T002** [P] Bump `local_ltuse` to `2026100600`, release `0.11.0`, and pin it in `site.yaml` · local_ltuse/version.php, moodle/site/site.yaml
 
 ## Phase 2: Foundational (blocks every story)
 
 **Wave 1 — independent (different files):**
 
-- [ ] **T003** [P] Four tables (`local_ltuse_course_pathway` with `pathwaykeys`, `local_ltuse_role_pathway`, `local_ltuse_role_pathway_comp`, `local_ltuse_pathway_cohort`) and `slug`, `url` on `local_ltuse_competency`, in install.xml and in one `upgrade.php` step at `2026100600` · local_ltuse/db/install.xml, local_ltuse/db/upgrade.php
-- [ ] **T004** [P] `pathway\catalogue`: key constants and pattern, `parse_key()`, `exists()`, `is_assignable()`, `courses()`, `pathways_for_course()`, `all()`, and the membership SQL of data-model "Pathway membership" (FR-001, FR-002, FR-005, FR-014) · local_ltuse/classes/pathway/catalogue.php
-- [ ] **T005** [P] `pathway\builder`, pure: competency pathway (four level rows, courses by full name, `nocourseyet` with the competency url, `next`, `done`) and role pathway (competencies in order, distinct-course totals), from facts handed in (FR-003, FR-004, FR-008, FR-011, R6) · local_ltuse/classes/pathway/builder.php
-- [ ] **T006** [P] `pathway\viewer::may_view()`, pure, fails closed on a missing fact (FR-012, R8) · local_ltuse/classes/pathway/viewer.php
-- [ ] **T007** [P] `pathway\progress`: for a learner and a set of course ids, enrolment and `course_completions.timecompleted`, mapped through `mentoring::progress_status()` (FR-010, R7) · local_ltuse/classes/pathway/progress.php
-- [ ] **T008** [P] Events `pathway_courses_changed`, `pathway_assigned` and `pathway_unassigned`, shapes as contracts/pathway-api.md "Events" · local_ltuse/classes/event/pathway_courses_changed.php, local_ltuse/classes/event/pathway_assigned.php, local_ltuse/classes/event/pathway_unassigned.php
-- [ ] **T009** [P] The "Spec 006: pathways" string block from contracts/pages.md, plus `privacy:metadata:local_ltuse_pathway_cohort*` strings and the event names · local_ltuse/lang/en/local_ltuse.php
-- [ ] **T010** [P] `site_config.py`: `slug` and `url` on each competency (descriptor slug, `mkdocs.yml` site_url, category slug), the `levels` array, and `pathways.yaml` as an optional top file with its validation and `role_pathways` payload (contracts/declaration.md) · scripts/site_config.py
-- [ ] **T011** [P] `moodle/site/pathways.yaml` with `rows: [12]`, `purpose` and `roles: []`, and the commented shape · moodle/site/pathways.yaml
+- [x] **T003** [P] Four tables (`local_ltuse_course_pathway` with `pathwaykeys`, `local_ltuse_role_pathway`, `local_ltuse_role_pathway_comp`, `local_ltuse_pathway_cohort`) and `slug`, `url` on `local_ltuse_competency`, in install.xml and in one `upgrade.php` step at `2026100600` · local_ltuse/db/install.xml, local_ltuse/db/upgrade.php
+- [x] **T004** [P] `pathway\catalogue`: key constants and pattern, `parse_key()`, `exists()`, `is_assignable()`, `courses()`, `pathways_for_course()`, `all()`, and the membership SQL of data-model "Pathway membership" (FR-001, FR-002, FR-005, FR-014) · local_ltuse/classes/pathway/catalogue.php
+- [x] **T005** [P] `pathway\builder`, pure: competency pathway (four level rows, courses by full name, `nocourseyet` with the competency url, `next`, `done`) and role pathway (competencies in order, distinct-course totals), from facts handed in (FR-003, FR-004, FR-008, FR-011, R6) · local_ltuse/classes/pathway/builder.php
+- [x] **T006** [P] `pathway\viewer::may_view()`, pure, fails closed on a missing fact (FR-012, R8) · local_ltuse/classes/pathway/viewer.php
+- [x] **T007** [P] `pathway\progress`: for a learner and a set of course ids, enrolment and `course_completions.timecompleted`, mapped through `mentoring::progress_status()` (FR-010, R7) · local_ltuse/classes/pathway/progress.php
+- [x] **T008** [P] Events `pathway_courses_changed`, `pathway_assigned` and `pathway_unassigned`, shapes as contracts/pathway-api.md "Events" · local_ltuse/classes/event/pathway_courses_changed.php, local_ltuse/classes/event/pathway_assigned.php, local_ltuse/classes/event/pathway_unassigned.php
+- [x] **T009** [P] The "Spec 006: pathways" string block from contracts/pages.md, plus `privacy:metadata:local_ltuse_pathway_cohort*` strings and the event names · local_ltuse/lang/en/local_ltuse.php
+- [x] **T010** [P] `site_config.py`: `slug` and `url` on each competency (descriptor slug, `mkdocs.yml` site_url, category slug), the `levels` array, and `pathways.yaml` as an optional top file with its validation and `role_pathways` payload (contracts/declaration.md) · scripts/site_config.py
+- [x] **T011** [P] `moodle/site/pathways.yaml` with `rows: [12]`, `purpose` and `roles: []`, and the commented shape · moodle/site/pathways.yaml
 
 **⟶ Wait for Wave 1 to finish, then:**
 
 **Wave 2 — independent (different files):**
 
-- [ ] **T012** [P] `pathway\assignments`: `assign()`, `unassign()`, `for_cohort()`, `cohorts_for()`, `pathways_for_user()`, `may_assign()`, firing T008's events, signatures exactly as contracts/pathway-api.md (FR-013) · local_ltuse/classes/pathway/assignments.php
-- [ ] **T013** [P] Site config in PHP: `competencies.php` stores and compares `slug` and `url`; new `pathwaylevels.php` (config `pathwaylevel1`–`4`) and `rolepathways.php` (roles and their competencies, retire never delete, `pathway_courses_changed` for a role whose set changed); wired into the inspector, applier and drift · local_ltuse/classes/siteconfig/competencies.php, local_ltuse/classes/siteconfig/pathwaylevels.php, local_ltuse/classes/siteconfig/rolepathways.php, local_ltuse/classes/siteconfig/inspector.php, local_ltuse/classes/siteconfig/applier.php, local_ltuse/classes/siteconfig/drift.php
-- [ ] **T014** [P] pytest: competency slug and url (42, unique, host from mkdocs.yml), `levels` exactly 1–4 verbatim, `pathways.yaml` (empty ok; bad key, unknown or Meta competency, duplicate, level word in name refused) · tests/test_site_config.py
-- [ ] **T015** [P] Harness for `builder` and `viewer`: level layout, no-course rows, next, done, two courses at one level, a course in two competencies, role totals counted once, every `may_view` case and a missing fact · tests/pathway_harness.php
-- [ ] **T016** [P] pytest: every string in the "Spec 006: pathways" block passes `cbc_wording.report_label_problems(strict=True)` (R13, SC-004) · tests/test_pathway_wording.py
+- [x] **T012** [P] `pathway\assignments`: `assign()`, `unassign()`, `for_cohort()`, `cohorts_for()`, `pathways_for_user()`, `may_assign()`, firing T008's events, signatures exactly as contracts/pathway-api.md (FR-013) · local_ltuse/classes/pathway/assignments.php
+- [x] **T013** [P] Site config in PHP: `competencies.php` stores and compares `slug` and `url`; new `pathwaylevels.php` (config `pathwaylevel1`–`4`) and `rolepathways.php` (roles and their competencies, retire never delete, `pathway_courses_changed` for a role whose set changed); wired into the inspector, applier and drift · local_ltuse/classes/siteconfig/competencies.php, local_ltuse/classes/siteconfig/pathwaylevels.php, local_ltuse/classes/siteconfig/rolepathways.php, local_ltuse/classes/siteconfig/inspector.php, local_ltuse/classes/siteconfig/applier.php, local_ltuse/classes/siteconfig/drift.php
+- [x] **T014** [P] pytest: competency slug and url (42, unique, host from mkdocs.yml), `levels` exactly 1–4 verbatim, `pathways.yaml` (empty ok; bad key, unknown or Meta competency, duplicate, level word in name refused) · tests/test_site_config.py
+- [x] **T015** [P] Harness for `builder` and `viewer`: level layout, no-course rows, next, done, two courses at one level, a course in two competencies, role totals counted once, every `may_view` case and a missing fact · tests/pathway_harness.php
+- [x] **T016** [P] pytest: every string in the "Spec 006: pathways" block passes `cbc_wording.report_label_problems(strict=True)` (R13, SC-004) · tests/test_pathway_wording.py
 
 **⟶ Wait for Wave 2 to finish, then:**
 
-- [ ] **T017** Privacy provider declares `local_ltuse_pathway_cohort.usermodified`; export lists a user's assignments, deletion sets it to 0 · local_ltuse/classes/privacy/provider.php
+- [x] **T017** Privacy provider declares `local_ltuse_pathway_cohort.usermodified`; export lists a user's assignments, deletion sets it to 0 · local_ltuse/classes/privacy/provider.php
 
 **Checkpoint**: tables, membership, layout, access and site config exist and are tested.
 

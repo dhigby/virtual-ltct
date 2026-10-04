@@ -204,9 +204,9 @@ Built by the pure `pathway\builder` from facts handed to it; tested by `pathway_
 | Field | Value |
 |---|---|
 | `key` | `competency:<slug>` |
-| `name` | Competency name, verbatim |
+| `title` | Competency name, verbatim |
 | `levels` | Four level rows, ids 1–4 in order |
-| `next` | The first course, in level then course full-name order, whose status is not `completed`; null if none |
+| `nextcourse` | The first course, in level then course full-name order, whose status is not `completed`; null if none |
 | `done` | True when the pathway lists at least one course and every one is `completed` |
 
 Level row:
@@ -215,8 +215,8 @@ Level row:
 |---|---|
 | `id`, `label` | From `pathwaylevel<n>` |
 | `courses` | Courses at this target level, by full name |
-| `nocourse` | True when `courses` is empty |
-| `siteurl` | The competency's `url`; present only when `nocourse` |
+| `nocourseyet` | True when `courses` is empty |
+| `competencyurl` | The competency's `url`; present only when `nocourseyet` |
 
 Course entry:
 
@@ -224,7 +224,7 @@ Course entry:
 |---|---|
 | `courseid`, `fullname`, `url` | From `course`; `url` is the course page, always linked (FR-008) |
 | `status` | `completed`, `inprogress` or `notstarted`, for the learner being viewed |
-| `isnext` | True for the one course that is `next` |
+| `next` | True for the one course that is `nextcourse` |
 
 The page says "Aims at <label>" for a course and, when `done`, "You have completed the training
 on this pathway". No field holds a level for the learner, and no string names one (FR-011,
@@ -234,7 +234,7 @@ R13).
 
 | Field | Value |
 |---|---|
-| `key`, `name`, `description` | From `local_ltuse_role_pathway` |
+| `key`, `title`, `description` | From `local_ltuse_role_pathway` |
 | `competencies` | A competency pathway view per non-retired competency, in declared order |
 | `completed`, `total` | Distinct courses across the role, and how many are `completed`, each course counted once |
 | `done` | `total > 0` and `completed = total` |
@@ -326,7 +326,7 @@ All `\local_ltuse\event\*`, built on `\core\event\base` (R11). Shapes are pinned
 |---|---|
 | FR-001, FR-002 | Pathway membership; no stored pathway |
 | FR-003 | Level rows in id order, labels from `pathwaylevel<n>` |
-| FR-004 | `nocourse` and `siteurl` from the competency `url` |
+| FR-004 | `nocourseyet` and `competencyurl` from the competency `url` |
 | FR-005 | `delivery = 1` and `visible = 1` in membership |
 | FR-006 | Every table written only by the publisher or `apply` |
 | FR-007 | `pathways.yaml`, `local_ltuse_role_pathway`, `_comp` |

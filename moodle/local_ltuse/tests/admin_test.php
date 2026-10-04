@@ -342,6 +342,7 @@ final class admin_test extends \advanced_testcase {
     private const NOT_MENTORING = ['enrolled' => false, 'teacher' => false, 'grouped' => false, 'anyteacher' => false];
 
     public function test_a_default_mentor_is_enrolled_and_removed_with_the_relationship(): void {
+        global $DB;
         [$learner, $mentor, $roleid] = $this->mentoring();
         $learnercontext = \context_user::instance($learner->id);
 
@@ -349,6 +350,9 @@ final class admin_test extends \advanced_testcase {
         $this->assertSame(self::MENTORING, $this->course_mentor_state((int)$mentor->id));
         $this->assertTrue($this->in_group_of((int)$mentor->id, (int)$learner->id), 'the learner is in the group');
         $this->assertTrue($this->group_named_neutrally((int)$mentor->id));
+        $this->assertEquals(1, $DB->get_field('groups', 'participation', ['courseid' => $this->course->id,
+            'idnumber' => course_mentor_sync::GROUP_PREFIX . $mentor->id]),
+            'separate-groups activities can use the mentor group (plan decision 3)');
 
         // Same request: no task, no cron.
         role_unassign($roleid, $mentor->id, $learnercontext->id);

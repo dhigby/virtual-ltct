@@ -523,9 +523,11 @@ class course_mentor_sync {
 
     /**
      * Make a mentor's group, named with the next free number and never after a person.
-     * Visible to its own members only, so one mentor's learners never see one another; the
-     * course stays in group mode 0 (spec 002 FR-011), and spec 012's assessed activities use
-     * separate groups.
+     * Visible to its own members only (GROUPS_VISIBILITY_MEMBERS), with participation on, so
+     * spec 012's assessed activities can use it in separate-groups mode (plan decision 3); the
+     * course stays in group mode 0 (spec 002 FR-011). Not GROUPS_VISIBILITY_OWN: for OWN and
+     * NONE, groups_create_group() forces participation off (group/lib.php), and a group without
+     * participation is never offered to an activity in group mode.
      *
      * @param int $courseid
      * @param int $mentorid
@@ -539,7 +541,7 @@ class course_mentor_sync {
             $n++;
         } while ($DB->record_exists('groups', ['courseid' => $courseid, 'name' => $name]));
         $id = groups_create_group((object)['courseid' => $courseid, 'name' => $name,
-            'idnumber' => self::GROUP_PREFIX . $mentorid, 'visibility' => GROUPS_VISIBILITY_OWN,
+            'idnumber' => self::GROUP_PREFIX . $mentorid, 'visibility' => GROUPS_VISIBILITY_MEMBERS,
             'participation' => 1, 'enablemessaging' => 0]);
         return $DB->get_record('groups', ['id' => $id], '*', MUST_EXIST);
     }

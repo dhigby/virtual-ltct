@@ -54,9 +54,9 @@ $observers = [
         'internal' => false,
     ],
 
-    // Spec 008: course mentors (research R10). Internal (the default), so a course mentor
-    // whose reason ends loses Teacher, their course-mentor enrolment and their group in the
-    // same request, as spec 016's identity entitlement requires. All of them do nothing while
+    // Spec 008: administration. Course mentors (research R10). Internal (the default), so a
+    // course mentor whose reason ends loses Teacher, their course-mentor enrolment and their
+    // group in the same request, as spec 016's identity entitlement requires. All of them do nothing while
     // local_ltuse/coursementorsync is 0; the hourly course_mentor_reconcile is the backstop.
     [
         'eventname' => '\core\event\role_assigned',

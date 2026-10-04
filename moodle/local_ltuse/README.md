@@ -606,6 +606,7 @@ each is re-checked as stated.
 | `course` | `idnumber LIKE 'ltct:%'` (`admin\course_mentor_sync::reconcile()`); `id` (`admin\observer`, `sync_course()`) | Every course the reconcile visits, and whether an event's course is one the sync looks after. As the `course` rows above. |
 | `user_enrolments`, `enrol` | `id`, for an event's `enrolid` and its instance's `enrol` and `customchar1` (`admin\observer::user_enrolment_changed()`) | Whether a user-enrolment event is about the course-mentor instance, so the sync ignores its own writes. The event carries only the user enrolment's id. |
 | `user` | `id`, returns `email` (`admin\membership_service::preview_end()`) | The masked email of each learner an end-all lists. `core_user::get_user()` reads the whole record. |
+| `course`, `cohort` | `idnumber` exact, returns `id` (`admin\course_mentor_records::resolve()`, including `ltct:mentors`; `admin\membership_service::mentor_setup()`, `ltct:mentors` only) | The course and cohort a course-mentors row names, and the mentors cohort a mentor must belong to. As the first `course` and `cohort` rows. |
 | `local_ltuse_course_mentor` left-joined to `course`, `user`, `cohort` | `id` (`admin\course_mentor_sync::remove_orphan_records()`) | Course-mentor records whose course, cohort or people are gone. The plugin's own table. |
 
 `admin\course_mentor_sync` reads each course's enrolments with core's

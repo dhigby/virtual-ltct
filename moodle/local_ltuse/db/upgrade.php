@@ -115,5 +115,33 @@ function xmldb_local_ltuse_upgrade($oldversion) {
         upgrade_plugin_savepoint(true, 2026100400, 'local', 'ltuse');
     }
 
+    // Administration (spec 008, research R10): one-course and cohort mentors, which the
+    // course-mentor sync enrols. Default mentors are never copied here. 2026100801, not
+    // 2026100800: the service and capability shipped at 2026100800 with no schema change, so a
+    // site already at that stamp would skip a step numbered 2026100800.
+    if ($oldversion < 2026100801) {
+        $table = new xmldb_table('local_ltuse_course_mentor');
+        $table->add_field('id', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, XMLDB_SEQUENCE, null);
+        $table->add_field('courseid', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, null);
+        $table->add_field('mentorid', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, null);
+        $table->add_field('learnerid', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, '0');
+        $table->add_field('cohortid', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, '0');
+        $table->add_field('usermodified', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, '0');
+        $table->add_field('timecreated', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, '0');
+        $table->add_field('timemodified', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, '0');
+        $table->add_key('primary', XMLDB_KEY_PRIMARY, ['id']);
+        $table->add_key('courseid', XMLDB_KEY_FOREIGN, ['courseid'], 'course', ['id']);
+        $table->add_key('mentorid', XMLDB_KEY_FOREIGN, ['mentorid'], 'user', ['id']);
+        $table->add_index('course-mentor-learner-cohort', XMLDB_INDEX_UNIQUE,
+            ['courseid', 'mentorid', 'learnerid', 'cohortid']);
+        $table->add_index('learnerid', XMLDB_INDEX_NOTUNIQUE, ['learnerid']);
+        $table->add_index('cohortid', XMLDB_INDEX_NOTUNIQUE, ['cohortid']);
+        if (!$dbman->table_exists($table)) {
+            $dbman->create_table($table);
+        }
+
+        upgrade_plugin_savepoint(true, 2026100801, 'local', 'ltuse');
+    }
+
     return true;
 }

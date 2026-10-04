@@ -88,5 +88,27 @@
         <INDEX NAME="mentorid" UNIQUE="false" FIELDS="mentorid"/>
       </INDEXES>
     </TABLE>
+    <TABLE NAME="local_ltuse_course_mentor" COMMENT="Course mentors who are not a learner's default mentor (spec 008, research R10): one-course mentors (learnerid set) and the mentors of a cohort in a course (cohortid set). Exactly one of learnerid, cohortid is non-zero, and neither is ever NULL, so the unique index holds. The foreign keys on courseid and mentorid are their indexes.">
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
+        <FIELD NAME="courseid" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false" COMMENT="course.id of an ltct:slug course, never ltct:officehours"/>
+        <FIELD NAME="mentorid" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false" COMMENT="user.id of the course mentor, a member of ltct:mentors when recorded"/>
+        <FIELD NAME="learnerid" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="user.id of the learner for a one-course mentor; 0 when unused"/>
+        <FIELD NAME="cohortid" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="cohort.id for a cohort mentor; 0 when unused"/>
+        <FIELD NAME="usermodified" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="user.id of who recorded it"/>
+        <FIELD NAME="timecreated" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false"/>
+        <FIELD NAME="timemodified" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false"/>
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+        <KEY NAME="courseid" TYPE="foreign" FIELDS="courseid" REFTABLE="course" REFFIELDS="id"/>
+        <KEY NAME="mentorid" TYPE="foreign" FIELDS="mentorid" REFTABLE="user" REFFIELDS="id"/>
+      </KEYS>
+      <INDEXES>
+        <INDEX NAME="course-mentor-learner-cohort" UNIQUE="true" FIELDS="courseid, mentorid, learnerid, cohortid"/>
+        <INDEX NAME="learnerid" UNIQUE="false" FIELDS="learnerid"/>
+        <INDEX NAME="cohortid" UNIQUE="false" FIELDS="cohortid"/>
+      </INDEXES>
+    </TABLE>
   </TABLES>
 </XMLDB>

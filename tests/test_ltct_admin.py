@@ -5,6 +5,7 @@ tests/test_publish_moodle.py), every address is @example.org, every organisation
 fixture-*, and rows are built in memory. No CSV fixture is ever committed (constitution III);
 a test that needs a file on disk writes it under pytest's tmp_path, outside the repository.
 """
+import hashlib
 import http.client
 import io
 import pathlib
@@ -1304,3 +1305,218 @@ def test_summary_refuses_an_undeclared_organisation(fixture_orgs):
     server = SummaryServer()
     code, text = run(["summary", "--org", "fixture-nowhere"], client=server)
     assert code == 1 and server.calls == []
+
+
+# --- T061, T066: mentors and course mentors -------------------------------------------------------
+class MentorServer(FakeClient):
+    """Mentor relationships and course-mentor records as the server keeps them.
+
+    `pairs` holds (learner email, mentor email); `records` holds (course, mentor email, learner
+    email or cohort). Each apply follows the server's rule: would_change is applied; unchanged,
+    after a would_change preview, is already_done; anything else is refused.
+    """
+
+    def __init__(self, **kw):
+        super().__init__(**kw)
+        self.pairs = set()
+        self.records = set()
+        self.mentors = {"mentor1@example.org", "mentor2@example.org"}
+
+    @staticmethod
+    def ref(learner):
+        return hashlib.sha256(("fixture:" + learner).encode("utf-8")).hexdigest()[:16]
+
+    def assign_state(self, row):
+        if row["mentoremail"].lower() not in self.mentors:
+            return "rejected", "the mentor is not in ltct:mentors"
+        pair = (row["learneremail"].lower(), row["mentoremail"].lower())
+        return ("unchanged" if pair in self.pairs else "would_change"), ""
+
+    def learners_of(self, mentor):
+        return sorted((self.ref(learner), learner) for learner, m in self.pairs if m == mentor)
+
+    @staticmethod
+    def record_key(row):
+        return (row["courseidnumber"], row["mentoremail"].lower(),
+                row["learneremail"].lower() or row["cohortidnumber"])
+
+    def call(self, function, **params):
+        show = params.get("showpeople", False)
+        if function == "local_ltuse_admin_preview_mentors":
+            self.calls.append((function, params))
+            if params.get("endmentoremail"):
+                mentor = params["endmentoremail"].lower()
+                return {"refusal": "", "rows": [
+                    {"row": n, "key": learner if show else af.mask_email(learner),
+                     "outcome": "would_change", "reason": "", "changes": ["end:mentor"], "ref": ref}
+                    for n, (ref, learner) in enumerate(self.learners_of(mentor), start=1)]}
+            rows = []
+            for r in params["rows"]:
+                outcome, reason = self.assign_state(r)
+                rows.append({"row": r["row"], "key": af.mask_email(r["learneremail"]),
+                             "outcome": outcome, "reason": reason, "changes": [], "ref": ""})
+            return {"refusal": "", "rows": rows}
+        if function == "local_ltuse_admin_apply_mentors":
+            self.calls.append((function, params))
+            row, expected = params["row"], params["expectedoutcome"]
+            if params.get("endmentoremail"):
+                mentor = params["endmentoremail"].lower()
+                learner = dict(self.learners_of(mentor)).get(params["ref"])
+                if learner is None:
+                    return {"row": row["row"], "outcome": "unchanged", "status": "already_done",
+                            "reason": ""}
+                self.pairs.discard((learner, mentor))
+                return {"row": row["row"], "outcome": "would_change", "status": "done", "reason": ""}
+            current, _ = self.assign_state(row)
+            if current == "unchanged":
+                return {"row": row["row"], "outcome": current, "status": "already_done", "reason": ""}
+            if current != expected:
+                return {"row": row["row"], "outcome": current, "status": "refused",
+                        "reason": "changed since the preview; preview again"}
+            self.pairs.add((row["learneremail"].lower(), row["mentoremail"].lower()))
+            return {"row": row["row"], "outcome": current, "status": "done", "reason": ""}
+        if function == "local_ltuse_admin_preview_course_mentors":
+            self.calls.append((function, params))
+            rows = []
+            for r in params["rows"]:
+                exists = self.record_key(r) in self.records
+                changes = exists if params["remove"] else not exists
+                rows.append({"row": r["row"], "key": af.mask_email(r["mentoremail"]),
+                             "outcome": "would_change" if changes else "unchanged", "reason": "",
+                             "changes": []})
+            return {"refusal": "", "rows": rows}
+        if function == "local_ltuse_admin_apply_course_mentors":
+            self.calls.append((function, params))
+            row, key = params["row"], self.record_key(params["row"])
+            if params["remove"]:
+                self.records.discard(key)
+            else:
+                self.records.add(key)
+            return {"row": row["row"], "outcome": params["expectedoutcome"], "status": "done",
+                    "reason": ""}
+        return super().call(function, **params)
+
+
+def _mentors_file(tmp_path, rows):
+    return _file(tmp_path, "mentors.csv", ["learner_email", "mentor_email"], rows)
+
+
+def _course_mentors_file(tmp_path, rows):
+    return _file(tmp_path, "course-mentors.csv",
+                 ["course", "mentor_email", "learner_email", "cohort"], rows)
+
+
+def test_mentors_assign_previews_applies_and_reruns_as_already_done(tmp_path, fixture_orgs):
+    server = MentorServer()
+    path = _mentors_file(tmp_path, [
+        {"learner_email": "learner2@example.org", "mentor_email": "mentor1@example.org"},
+        {"learner_email": "learner3@example.org", "mentor_email": "mentor1@example.org"},
+        {"learner_email": "learner4@example.org", "mentor_email": "fixture-staff@example.org"},
+    ])
+    code, text = run(["mentors", "assign", str(path)], client=server)
+    assert code == 0 and "would_change" in text and "not in ltct:mentors" in text
+    assert "learner2@example.org" not in text                    # masked
+    assert not _calls(server, "local_ltuse_admin_apply_mentors")
+    confirm = _preview_code(text)
+    code, text = run(["mentors", "assign", str(path), "--apply", "--confirm", confirm], client=server)
+    assert code == 1                                             # the rejected row is not applied
+    sent = _calls(server, "local_ltuse_admin_apply_mentors")
+    assert [c["row"]["row"] for c in sent] == [2, 3]             # one row per call
+    assert server.pairs == {("learner2@example.org", "mentor1@example.org"),
+                            ("learner3@example.org", "mentor1@example.org")}
+    code, text = run(["mentors", "assign", str(path)], client=server)
+    assert "unchanged" in text and _preview_code(text) == confirm   # progress keeps the code
+
+
+@pytest.mark.parametrize("rows,expect", [
+    ([{"learner_email": "a@example.org", "mentor_email": "A@example.org"}],
+     "a learner cannot be their own mentor"),
+    ([{"learner_email": "a@example.org", "mentor_email": "b@example.org"},
+      {"learner_email": "A@example.org", "mentor_email": "b@example.org"}], "row 3: the same as row 2"),
+    ([{"learner_email": "a@example.org", "mentor_email": "not-an-address"}],
+     "mentor_email is not an email address"),
+])
+def test_mentors_file_is_checked_offline(tmp_path, fixture_orgs, rows, expect):
+    server = MentorServer()
+    code, text = run(["mentors", "assign", str(_mentors_file(tmp_path, rows))], client=server)
+    assert code == 1 and expect in text and server.calls == []
+
+
+def test_mentors_end_lists_learners_and_sends_each_reference_back(fixture_orgs):
+    server = MentorServer()
+    server.pairs = {("learner2@example.org", "mentor1@example.org"),
+                    ("learner3@example.org", "mentor1@example.org"),
+                    ("learner4@example.org", "mentor2@example.org")}
+    code, text = run(["mentors", "end", "--mentor", "mentor1@example.org"], client=server)
+    assert code == 0 and "2 rows from --mentor" in text and "would_change" in text
+    confirm = _preview_code(text)
+    code, text = run(["mentors", "end", "--mentor", "mentor1@example.org", "--apply", "--confirm",
+                      confirm], client=server)
+    assert code == 0 and "done 2" in text
+    sent = _calls(server, "local_ltuse_admin_apply_mentors")
+    assert len(sent) == 2 and all(c["ref"] and c["endmentoremail"] == "mentor1@example.org"
+                                  for c in sent)
+    assert server.pairs == {("learner4@example.org", "mentor2@example.org")}
+
+
+def test_mentors_end_code_changes_when_the_learners_change(fixture_orgs):
+    server = MentorServer()
+    server.pairs = {("learner2@example.org", "mentor1@example.org")}
+    code, text = run(["mentors", "end", "--mentor", "mentor1@example.org"], client=server)
+    confirm = _preview_code(text)
+    server.pairs.add(("learner3@example.org", "mentor1@example.org"))   # a new mentee since
+    code, text = run(["mentors", "end", "--mentor", "mentor1@example.org", "--apply", "--confirm",
+                      confirm], client=server)
+    assert code == 1 and "does not match" in text
+    assert not _calls(server, "local_ltuse_admin_apply_mentors")
+
+
+def test_mentors_end_refuses_a_malformed_email_offline(fixture_orgs):
+    server = MentorServer()
+    code, text = run(["mentors", "end", "--mentor", "not-an-address"], client=server)
+    assert code == 1 and "not an email address" in text and server.calls == []
+
+
+def test_course_mentors_record_then_remove_need_their_own_codes(tmp_path, fixture_orgs):
+    server = MentorServer()
+    path = _course_mentors_file(tmp_path, [
+        {"course": "ltct:fixture-shared", "mentor_email": "mentor1@example.org",
+         "learner_email": "learner2@example.org"},
+        {"course": "ltct:fixture-shared", "mentor_email": "mentor2@example.org",
+         "cohort": "ltct:org:fixture-a"},
+    ])
+    code, text = run(["course-mentors", str(path)], client=server)
+    assert code == 0
+    code, text = run(["course-mentors", str(path), "--apply", "--confirm", _preview_code(text)],
+                     client=server)
+    assert code == 0 and len(server.records) == 2
+    sent = _calls(server, "local_ltuse_admin_apply_course_mentors")
+    assert [c["row"]["cohortidnumber"] for c in sent] == ["", "ltct:org:fixture-a"]
+    assert all(c["remove"] is False for c in sent)
+    # Every record is there now, so an add preview says unchanged. Its code must not confirm
+    # a removal.
+    code, text = run(["course-mentors", str(path)], client=server)
+    unchanged_code = _preview_code(text)
+    code, text = run(["course-mentors", str(path), "--remove", "--apply", "--confirm",
+                      unchanged_code], client=server)
+    assert code == 1 and "does not match" in text and len(server.records) == 2
+    code, text = run(["course-mentors", str(path), "--remove"], client=server)
+    assert "--remove --apply --confirm" in text
+    code, text = run(["course-mentors", str(path), "--remove", "--apply", "--confirm",
+                      _preview_code(text)], client=server)
+    assert code == 0 and server.records == set()
+
+
+@pytest.mark.parametrize("row,expect", [
+    ({"course": "ltct:fixture-shared", "mentor_email": "m@example.org"},
+     "give exactly one of learner_email or cohort"),
+    ({"course": "ltct:fixture-shared", "mentor_email": "m@example.org",
+      "learner_email": "l@example.org", "cohort": "ltct:org:fixture-a"},
+     "give exactly one of learner_email or cohort"),
+    ({"course": "fixture-shared", "mentor_email": "m@example.org", "learner_email": "l@example.org"},
+     "is not a course idnumber"),
+])
+def test_course_mentors_file_is_checked_offline(tmp_path, fixture_orgs, row, expect):
+    server = MentorServer()
+    code, text = run(["course-mentors", str(_course_mentors_file(tmp_path, [row]))], client=server)
+    assert code == 1 and expect in text and server.calls == []

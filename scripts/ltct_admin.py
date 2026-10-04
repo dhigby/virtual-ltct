@@ -76,6 +76,10 @@ ADMIN_FUNCTIONS = [
     "local_ltuse_admin_preview_cohort_members",
     "local_ltuse_admin_apply_cohort_members",
     "local_ltuse_admin_summary",
+    "local_ltuse_admin_preview_mentors",
+    "local_ltuse_admin_apply_mentors",
+    "local_ltuse_admin_preview_course_mentors",
+    "local_ltuse_admin_apply_course_mentors",
     "core_webservice_get_site_info",
 ]
 
@@ -703,6 +707,92 @@ def cmd_managers(args, client, out):
     return drive(plan, args.apply, args.confirm, args.show_people, out)
 
 
+def mentors_payload(row):
+    return {"row": row["row"], "learneremail": row["learner_email"].strip(),
+            "mentoremail": row["mentor_email"].strip()}
+
+
+def cmd_mentors_assign(args, client, out):
+    """`mentors assign FILE`: spec 003's mentor relationship in bulk, one row per call (R9)."""
+    path, rows = load_file(args.file, "mentors", args.site_dir)
+    plan = Plan(
+        title="Mentors", source=path.name, rows=rows,
+        preview=lambda show: client.call("local_ltuse_admin_preview_mentors",
+                                         rows=[mentors_payload(r) for r in rows],
+                                         showpeople=show),
+        apply=lambda row, expected: client.call("local_ltuse_admin_apply_mentors",
+                                                row=mentors_payload(row),
+                                                expectedoutcome=expected),
+        command=["mentors", "assign", args.file])
+    plan.notes.append("Each row makes the mentor the learner's mentor, as on the Mentoring "
+                      "page: they become message contacts, and the mentor can follow the "
+                      "learner's progress. The mentor must already be in ltct:mentors.")
+    return drive(plan, args.apply, args.confirm, args.show_people, out)
+
+
+def cmd_mentors_end(args, client, out):
+    """`mentors end --mentor E`: every relationship of one mentor, one learner per call (R9).
+
+    The learners come from the server's preview, each with a reference the apply sends back,
+    so the code covers exactly the learners the preview listed. An interrupted run lists only
+    the learners left, so it shows a new code: preview again and apply with that.
+    """
+    email = args.mentor.strip()
+    if not admin_files.EMAIL.fullmatch(email):
+        raise admin_files.FileRefused(["--mentor: not an email address"])
+    rows = []                    # filled by each preview: one per learner the mentor has now
+
+    def preview(show_people):
+        result = client.call("local_ltuse_admin_preview_mentors", endmentoremail=email,
+                             showpeople=show_people) or {}
+        rows[:] = [{"row": r["row"], "mentor_email": email, "ref": r.get("ref", "")}
+                   for r in result.get("rows", [])]
+        return result
+
+    def apply(row, expected):
+        return client.call("local_ltuse_admin_apply_mentors", row={"row": row["row"]},
+                           expectedoutcome=expected, endmentoremail=email, ref=row["ref"])
+
+    plan = Plan(title="End mentor", source="--mentor", rows=rows, preview=preview, apply=apply,
+                command=["mentors", "end", "--mentor", email])
+    plan.notes.append("Ending a relationship stops the mentor following that learner and removes "
+                      "the message contact it made. Nothing the learner did is lost.")
+    return drive(plan, args.apply, args.confirm, args.show_people, out)
+
+
+def course_mentors_payload(row):
+    return {"row": row["row"], "courseidnumber": row["course"].strip(),
+            "mentoremail": row["mentor_email"].strip(),
+            "learneremail": (row.get("learner_email") or "").strip(),
+            "cohortidnumber": (row.get("cohort") or "").strip()}
+
+
+def cmd_course_mentors(args, client, out):
+    """`course-mentors FILE [--remove]`: one-course and cohort mentors, one row per call (R10)."""
+    path, rows = load_file(args.file, "course-mentors", args.site_dir)
+    remove = bool(args.remove)
+    # The direction is part of what the code covers: without it, a code from a preview that
+    # found every record already there would also confirm removing them all.
+    coded = [dict(r, action="remove" if remove else "record") for r in rows]
+    plan = Plan(
+        title="Course mentors (remove)" if remove else "Course mentors", source=path.name,
+        rows=coded,
+        preview=lambda show: client.call("local_ltuse_admin_preview_course_mentors",
+                                         rows=[course_mentors_payload(r) for r in coded],
+                                         remove=remove, showpeople=show),
+        apply=lambda row, expected: client.call("local_ltuse_admin_apply_course_mentors",
+                                                row=course_mentors_payload(row),
+                                                expectedoutcome=expected, remove=remove),
+        command=["course-mentors", args.file] + (["--remove"] if remove else []))
+    plan.notes.append(
+        "Removing a record ends that course mentor's enrolment once nothing else gives them a "
+        "reason; the learner's default mentor takes over in that course." if remove else
+        "A one-course mentor, or the mentors of a cohort, replace the learner's default mentor "
+        "in that course. Moodle enrols them as Course mentor automatically, and removes them "
+        "when the reason ends.")
+    return drive(plan, args.apply, args.confirm, args.show_people, out)
+
+
 def summary_lines(result, show_people):
     """The summary as plain lines: counts, enrolments, and people unless left out."""
     lines = ["Cohorts:"]
@@ -768,20 +858,6 @@ def cmd_summary(args, client_factory, out):
     print("Wrote the summary, with %s, to %s. Delete it when you are done with it."
           % ("emails" if args.show_people else "masked people", path), file=out)
     return EXIT_OK
-
-
-def not_built(name, task):
-    def run(*_args, **_kwargs):
-        print("\"%s\" is not built yet (spec 008, task %s). Nothing was sent." % (name, task),
-              file=_kwargs.get("out", sys.stdout))
-        return EXIT_CONFIG
-    return run
-
-
-# Commands whose implementation lands with its user story (specs/008-admin-tooling/tasks.md).
-PENDING = {
-    "mentors assign": "T061", "mentors end": "T061", "course-mentors": "T066",
-}
 
 
 # --- argument parsing ------------------------------------------------------------------------
@@ -885,8 +961,6 @@ def main(argv=None, environ=None, client_factory=None, out=sys.stdout):
             return cmd_list(args, lambda: _connect(factory, environ), out)
         if name == "summary":
             return cmd_summary(args, lambda: _connect(factory, environ), out)
-        if name in PENDING:
-            return not_built(name, PENDING[name])(out=out)
         client = _connect(factory, environ)
         if name == "check":
             return cmd_check(args, client, out)
@@ -906,6 +980,12 @@ def main(argv=None, environ=None, client_factory=None, out=sys.stdout):
             return cmd_move(args, client, out)
         if name == "managers":
             return cmd_managers(args, client, out)
+        if name == "mentors assign":
+            return cmd_mentors_assign(args, client, out)
+        if name == "mentors end":
+            return cmd_mentors_end(args, client, out)
+        if name == "course-mentors":
+            return cmd_course_mentors(args, client, out)
         raise ConfigError("unknown command %r" % name)
     except ConfigError as e:
         print(str(e), file=out)

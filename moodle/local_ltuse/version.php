@@ -9,10 +9,11 @@
 defined('MOODLE_INTERNAL') || die();
 
 $plugin->component = 'local_ltuse';
-$plugin->version   = 2026100800;   // Administration (spec 008): the ltuse_admin service, the
+$plugin->version   = 2026100801;   // Administration (spec 008): the ltuse_admin service, the
                                    // local/ltuse:administer capability and the coursementorsync
-                                   // setting. No schema change yet: the course-mentor table
-                                   // comes with its own 20261008NN bump and savepoint. Agreed stamps: 016 = 2026100500, 006 = 20261006NN;
+                                   // setting (2026100800); then the course-mentor table
+                                   // (local_ltuse_course_mentor, savepoint 2026100801), its sync,
+                                   // observers and hourly reconcile. Agreed stamps: 016 = 2026100500, 006 = 20261006NN;
                                    // whichever merges second re-bumps above main, renumbers its
                                    // upgrade.php savepoint and re-pins site.yaml. Before it,
                                    // events and office hours (spec 011, 2026100400): calendar change

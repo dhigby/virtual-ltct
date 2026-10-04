@@ -218,6 +218,21 @@ class observer {
         } catch (\Throwable $e) {
             debugging('local_ltuse: could not sync office hours: ' . $e->getMessage(), DEBUG_DEVELOPER);
         }
+        try {
+            // Spec 008: one-course and cohort mentors recorded with them, as mentor or learner,
+            // then the courses those records were about (research R10, data-model section 3).
+            $userid = (int)$event->objectid;
+            $select = 'mentorid = :mentorid OR learnerid = :learnerid';
+            $params = ['mentorid' => $userid, 'learnerid' => $userid];
+            $table = admin\course_mentor_sync::TABLE;
+            $courseids = $DB->get_fieldset_select($table, 'DISTINCT courseid', $select, $params);
+            $DB->delete_records_select($table, $select, $params);
+            foreach ($courseids as $courseid) {
+                admin\course_mentor_sync::sync_course((int)$courseid);
+            }
+        } catch (\Throwable $e) {
+            debugging('local_ltuse: could not clear course mentors: ' . $e->getMessage(), DEBUG_DEVELOPER);
+        }
     }
 
     /**

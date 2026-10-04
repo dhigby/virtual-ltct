@@ -15,4 +15,17 @@ $tasks = [
         'month' => '*',
         'dayofweek' => '*',
     ],
+
+    // Spec 008: administration. Hourly, keep every ltct: course's course mentors in step
+    // (research R10; nothing while local_ltuse/coursementorsync is 0) and every pathway's
+    // cohort enrolments (research R11; nothing until spec 006 is installed).
+    [
+        'classname' => '\local_ltuse\task\course_mentor_reconcile',
+        'blocking' => 0,
+        'minute' => 'R',
+        'hour' => '*',
+        'day' => '*',
+        'month' => '*',
+        'dayofweek' => '*',
+    ],
 ];

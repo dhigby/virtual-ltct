@@ -599,6 +599,20 @@ each is re-checked as stated.
 | `cohort_members` joined to `user` | `cohortid`, `user.deleted = 0`; returns `id`, `email`, `suspended` (`admin_summary`) | One organisation's members, masked on the server, and the suspended count. `core_cohort_get_cohort_members` returns user ids only (research R18). |
 | `user_enrolments` | `enrolid` and `status`, a count (`admin_summary`) | Active enrolments through one cohort-sync instance. `count_enrolled_users()` counts by course, not by instance. |
 | `course` | `id` (`admin_summary`) | The idnumber and category of the course an instance belongs to. As the `course` rows above. |
+| `role` | `shortname` in (`teacher`, `student`, `mentor`) (`admin\course_mentor_sync::role_ids()`); `shortname = 'mentor'` (`admin\membership_service::mentor_setup()`) | The course-mentor, learner and mentor roles' ids. As the first `role` row. |
+| `role_assignments` joined to `context` | mentor `roleid`, `contextlevel = user`, `instanceid` in the course's learners (`admin\course_mentor_sync::default_mentors()`); `userid` of one mentor (`sync_mentor()`, `admin\membership_service::mentor_learners()`, with `component = ''`) | A learner's default mentors, and one mentor's learners: the same read as spec 003's Mentoring page (above), restricted to those people. `get_role_users()` reads one context at a time and never by holder. |
+| `role_assignments` | `contextid`, `roleid` (Teacher), `component = 'local_ltuse'`; returns `userid`, `itemid` (`admin\course_mentor_sync::state()`); joined to `context` and `course` for the same in courses no longer `ltct:` (`remove_stray_roles()`) | The Teacher assignments the sync gave and must take away. `get_role_users()` does not return `component` or `itemid`. |
+| `groups`, `groups_members` | `courseid` and `idnumber LIKE 'ltct:mentorgroup:%'`; `groupid` and `component` (`admin\course_mentor_sync`) | The mentor groups and the memberships the sync owns, as office hours' (above). |
+| `course` | `idnumber LIKE 'ltct:%'` (`admin\course_mentor_sync::reconcile()`); `id` (`admin\observer`, `sync_course()`) | Every course the reconcile visits, and whether an event's course is one the sync looks after. As the `course` rows above. |
+| `user_enrolments`, `enrol` | `id`, for an event's `enrolid` and its instance's `enrol` and `customchar1` (`admin\observer::user_enrolment_changed()`) | Whether a user-enrolment event is about the course-mentor instance, so the sync ignores its own writes. The event carries only the user enrolment's id. |
+| `user` | `id`, returns `email` (`admin\membership_service::preview_end()`) | The masked email of each learner an end-all lists. `core_user::get_user()` reads the whole record. |
+| `local_ltuse_course_mentor` left-joined to `course`, `user`, `cohort` | `id` (`admin\course_mentor_sync::remove_orphan_records()`) | Course-mentor records whose course, cohort or people are gone. The plugin's own table. |
+
+`admin\course_mentor_sync` reads each course's enrolments with core's
+`enrol_get_course_users()` and `enrol_get_instances()`, and each person's courses with
+`enrol_get_all_users_courses()`. It writes only through core: `enrol_self_plugin::add_instance()`,
+`enrol_user()`, `update_user_enrol()`, `unenrol_user()`, `update_status()`, `role_assign()`,
+`role_unassign()`, `groups_create_group()`, `groups_add_member()` and `groups_remove_member()`.
 
 `admin\move_service` reads a learner's active courses and enrolments with core's
 `enrol_get_all_users_courses()`, `enrol_get_course_users()` and `enrol_get_instances()`, and

@@ -305,5 +305,108 @@ check(move_rules::progress('would_move', 'flagged_protection', $shown, []) === $
 check(move_rules::progress('lost', 'lost', [], []) === $refused, 'move progress: a stopping outcome is never applied');
 check(move_rules::progress('would_move', 'rejected', [], []) === $refused, 'move progress: would_move -> rejected is refused');
 
+use local_ltuse\admin\course_mentor_rules;
+
+// --- course_mentor_rules::target (T057) ------------------------------------------------------
+// User ids: 11-19 learners, 21-29 mentors, 31-39 cohorts. Student role 5, Teacher 4.
+const CM_NOW = 1800000000;
+const CM_STUDENT = 5;
+/** One active Student enrolment through cohort 31's cohort sync. */
+function cm_enrol(array $over = []): array {
+    return array_merge(['userid' => 11, 'method' => 'cohort', 'cohortid' => 31, 'roleid' => CM_STUDENT,
+        'active' => true, 'enabled' => true, 'timestart' => 0, 'timeend' => 0, 'suspended' => false], $over);
+}
+/** Facts for one course: learner 11 enrolled through cohort 31, default mentor 21. */
+function cm_facts(array $over = []): array {
+    return array_merge(['now' => CM_NOW, 'studentroleid' => CM_STUDENT, 'enrolments' => [cm_enrol()],
+        'onecourse' => [], 'cohortmentors' => [], 'defaults' => [11 => [21]]], $over);
+}
+function cm_mentors(array $facts): array {
+    return course_mentor_rules::target($facts)['mentors'];
+}
+
+$r = course_mentor_rules::target(cm_facts());
+check($r['mentors'] === [21 => [11]] && $r['learners'] === [11 => 'default'],
+    'course mentors: the default mentor when nothing else is recorded');
+check(cm_mentors(cm_facts(['cohortmentors' => [[31, 22]]])) === [22 => [11]],
+    'course mentors: a cohort mentor replaces the default mentor');
+check(cm_mentors(cm_facts(['cohortmentors' => [[31, 22]], 'onecourse' => [[11, 23]]])) === [23 => [11]],
+    'course mentors: a one-course mentor beats cohort mentors and the default');
+check(cm_mentors(cm_facts(['onecourse' => [[11, 23]]])) === [23 => [11]],
+    'course mentors: a one-course mentor replaces the default mentor');
+check(cm_mentors(cm_facts(['cohortmentors' => [[32, 22]]])) === [21 => [11]],
+    'course mentors: another cohort\'s mentors do not apply');
+check(cm_mentors(cm_facts(['enrolments' => [cm_enrol(), cm_enrol(['cohortid' => 32])],
+    'cohortmentors' => [[31, 22], [32, 24]]])) === [22 => [11], 24 => [11]],
+    'course mentors: the mentors of every cohort enrolling the learner, together');
+check(cm_mentors(cm_facts(['enrolments' => [cm_enrol(), cm_enrol(['cohortid' => 32, 'enabled' => false])],
+    'cohortmentors' => [[32, 24]]])) === [21 => [11]],
+    'course mentors: a cohort whose enrolment is disabled is not a reason');
+check(cm_mentors(cm_facts(['enrolments' => [cm_enrol(['method' => 'orgenrol', 'cohortid' => 0])],
+    'cohortmentors' => [[31, 22]]])) === [21 => [11]],
+    'course mentors: the Organisation enrolment counts, with the default mentor');
+check(cm_mentors(cm_facts(['defaults' => [11 => [21, 25]]])) === [21 => [11], 25 => [11]],
+    'course mentors: every default mentor');
+check(cm_mentors(cm_facts(['enrolments' => [cm_enrol(), cm_enrol(['userid' => 12])],
+    'defaults' => [11 => [21], 12 => [21]]])) === [21 => [11, 12]],
+    'course mentors: one mentor of two learners');
+check(cm_mentors(cm_facts(['defaults' => []])) === [], 'course mentors: a learner with no mentor gives none');
+check(cm_mentors(cm_facts(['defaults' => [11 => [11]]])) === [], 'course mentors: nobody is their own course mentor');
+
+// Pilots and "active".
+check(cm_mentors(cm_facts(['enrolments' => [cm_enrol(['method' => 'manual', 'cohortid' => 0])]])) === [],
+    'course mentors: a pilot (manual) learner is excluded');
+check(cm_mentors(cm_facts(['enrolments' => [cm_enrol(['method' => 'other', 'cohortid' => 0])]])) === [],
+    'course mentors: any other method is excluded');
+check(cm_mentors(cm_facts(['enrolments' => [cm_enrol(['active' => false])]])) === [],
+    'active: a suspended user enrolment does not count');
+check(cm_mentors(cm_facts(['enrolments' => [cm_enrol(['enabled' => false])]])) === [],
+    'active: a disabled instance does not count');
+check(cm_mentors(cm_facts(['enrolments' => [cm_enrol(['suspended' => true])]])) === [],
+    'active: a suspended account does not count');
+check(cm_mentors(cm_facts(['enrolments' => [cm_enrol(['timestart' => CM_NOW + 1])]])) === [],
+    'active: an enrolment that has not started does not count');
+check(cm_mentors(cm_facts(['enrolments' => [cm_enrol(['timeend' => CM_NOW])]])) === [],
+    'active: an enrolment that has ended does not count');
+check(cm_mentors(cm_facts(['enrolments' => [cm_enrol(['timestart' => CM_NOW - 10, 'timeend' => CM_NOW + 10])]]))
+    === [21 => [11]], 'active: within timestart and timeend counts');
+check(cm_mentors(cm_facts(['enrolments' => [cm_enrol(['roleid' => 4])]])) === [],
+    'Student: read from the instance roleid, so a Teacher instance does not count');
+check(cm_mentors(cm_facts(['enrolments' => [cm_enrol(['active' => false]), cm_enrol(['method' => 'orgenrol',
+    'cohortid' => 0])]])) === [21 => [11]], 'active: one active enrolment of two is enough');
+check(cm_mentors(cm_facts(['enrolments' => [cm_enrol(['active' => false])], 'onecourse' => [[11, 23]]])) === [],
+    'a one-course mentor needs the learner actively enrolled too');
+
+// Failing towards removal.
+$broken = cm_facts();
+unset($broken['defaults']);
+check(cm_mentors($broken) === [], 'target: a fact not supplied gives no course mentors');
+check(cm_mentors(cm_facts(['enrolments' => [['userid' => 11, 'method' => 'cohort']]])) === [],
+    'target: an enrolment missing its facts gives no course mentors');
+check(cm_mentors(cm_facts(['studentroleid' => 0])) === [], 'target: no Student role gives no course mentors');
+
+// --- course_mentor_rules::diff ----------------------------------------------------------------
+$target = course_mentor_rules::target(cm_facts());
+$d = course_mentor_rules::diff($target, ['enrolled' => [], 'roles' => [], 'groups' => [], 'members' => []]);
+check($d['enrol'] === [21] && $d['addrole'] === [21] && $d['creategroups'] === [21]
+    && $d['add'] === [[21, 21], [21, 11]] && !$d['remove'] && !$d['removerole'] && !$d['unenrol'],
+    'diff: a new course mentor is enrolled, given Teacher, and grouped with their learner');
+$d = course_mentor_rules::diff($target, ['enrolled' => [21 => true], 'roles' => [21], 'groups' => [21],
+    'members' => [21 => [21, 11]]]);
+check(array_sum(course_mentor_rules::counts($d)) === 0, 'diff: nothing to do when in step');
+$d = course_mentor_rules::diff($target, ['enrolled' => [21 => false], 'roles' => [21], 'groups' => [21],
+    'members' => [21 => [21, 11]]]);
+check($d['reactivate'] === [21] && !$d['enrol'], 'diff: a suspended course-mentor enrolment is made active');
+$d = course_mentor_rules::diff(['learners' => [], 'mentors' => []], ['enrolled' => [21 => true], 'roles' => [21],
+    'groups' => [21], 'members' => [21 => [21, 11]]]);
+check($d['removerole'] === [21] && $d['unenrol'] === [21] && $d['remove'] === [[21, 21], [21, 11]]
+    && !$d['enrol'] && !$d['add'], 'diff: a mentor with no reason left loses Teacher, enrolment and group');
+$d = course_mentor_rules::diff(['learners' => [], 'mentors' => []], ['enrolled' => [], 'roles' => [26],
+    'groups' => [], 'members' => []]);
+check($d['removerole'] === [26] && !$d['unenrol'], 'diff: a stray local_ltuse Teacher assignment is removed');
+$d = course_mentor_rules::diff($target, ['enrolled' => [21 => true], 'roles' => [21], 'groups' => [21],
+    'members' => [21 => [21, 11, 12]]]);
+check($d['remove'] === [[21, 12]] && !$d['add'], 'diff: a learner no longer assessed leaves the group');
+
 echo $fails ? "FAILURES: $fails\n" : "ALL PASSED\n";
 exit($fails ? 1 : 0);

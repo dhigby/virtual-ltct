@@ -191,3 +191,27 @@ $string['admin:reason:org_cohort_members'] = 'an organisation\'s own cohort foll
 $string['admin:reason:cohort_not_managed'] = 'only a managers cohort (ltct:org:<key>:managers) or ltct:mentors can be changed this way';
 $string['admin:reason:cohort_component'] = 'a plugin manages this cohort\'s members, so it cannot be changed by hand';
 $string['admin:reason:manages_own'] = 'note: this person is in {$a}, the organisation they will manage; from now on only the site team can manage their account';
+
+// Spec 008: mentors (user story 5): mentor relationships in bulk, one-course and cohort mentors,
+// and the course-mentor sync.
+$string['admin:refusal:mentorsmode'] = 'give either a mentors file or one mentor whose relationships all end, not both';
+$string['admin:refusal:mentornone'] = 'no account has the mentor\'s email';
+$string['admin:refusal:mentorduplicate'] = 'two accounts share the mentor\'s email; the site team must merge or change one by hand first';
+$string['admin:reason:mentor_no_account'] = 'no account has the mentor\'s email';
+$string['admin:reason:mentor_duplicate_accounts'] = 'two accounts share the mentor\'s email; the site team must merge or change one by hand first';
+$string['admin:reason:own_mentor'] = 'a learner cannot be their own mentor';
+$string['admin:reason:not_a_mentor'] = 'the mentor is not in ltct:mentors; add them with "managers" first';
+$string['admin:reason:learner_or_cohort'] = 'give exactly one of a learner or a cohort';
+$string['admin:reason:cohort_not_enrolled'] = 'note: this cohort is not enrolled in the course yet; its mentors are enrolled once it is';
+$string['admin:reason:coursementorsync_off'] = 'recorded; course mentors are not enrolled automatically on this site yet (local_ltuse/coursementorsync is off)';
+$string['task:coursementorreconcile'] = 'Keep course mentors and pathway enrolments in step';
+
+$string['privacy:metadata:course_mentor'] = 'Course mentors recorded by the site team who are not a learner\'s default mentor: a mentor for one learner in one course, or the mentors of a cohort in a course. Course mentors are enrolled in those courses as Course mentor while their learners are.';
+$string['privacy:metadata:course_mentor:courseid'] = 'The course.';
+$string['privacy:metadata:course_mentor:mentorid'] = 'The course mentor.';
+$string['privacy:metadata:course_mentor:learnerid'] = 'The learner, for a mentor of one learner in one course.';
+$string['privacy:metadata:course_mentor:cohortid'] = 'The cohort, for the mentors of a cohort.';
+$string['privacy:metadata:course_mentor:usermodified'] = 'Who recorded it.';
+$string['privacy:metadata:course_mentor:timecreated'] = 'When it was recorded.';
+$string['privacy:metadata:course_mentor:timemodified'] = 'When it last changed.';
+$string['privacy:path:coursementors'] = 'Course mentors';

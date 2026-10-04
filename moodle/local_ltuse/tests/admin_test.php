@@ -1,6 +1,7 @@
 <?php
-// PHPUnit tests for spec 008's administration services: intake (US1) and cohort enrolment
-// (US2). The pure rules are tested by tests/admin_harness.php; these cover what needs Moodle.
+// PHPUnit tests for spec 008's administration services: intake (US1), cohort enrolment (US2)
+// and the course-mentor sync (US5). The pure rules are tested by tests/admin_harness.php;
+// these cover what needs Moodle.
 //
 // Synthetic data only, in the PHPUnit database: every address is @example.org, every
 // organisation key fixture-*, every name a fixture value. Where this runs is spec 004's
@@ -9,17 +10,21 @@
 namespace local_ltuse;
 
 use local_ltuse\admin\cohort_enrolment;
+use local_ltuse\admin\course_mentor_sync;
 use local_ltuse\admin\intake_service;
 
 /**
  * intake_service creates accounts as research R2 requires and never writes an existing
  * account's names; cohort_enrolment adds or re-enables one instance per (cohort, course) and
- * disables rather than deletes.
+ * disables rather than deletes; course mentors come and go with their reason, in the same
+ * request.
  *
  * @package    local_ltuse
  * @category   test
  * @covers     \local_ltuse\admin\intake_service
  * @covers     \local_ltuse\admin\cohort_enrolment
+ * @covers     \local_ltuse\admin\course_mentor_sync
+ * @covers     \local_ltuse\admin\observer
  */
 final class admin_test extends \advanced_testcase {
 
@@ -273,5 +278,185 @@ final class admin_test extends \advanced_testcase {
         $this->assertSame([], array_filter(enrol_get_instances($course->id, false), function($i) {
             return $i->enrol === 'cohort';
         }));
+    }
+
+    // --- course mentors (T058) ----------------------------------------------------------------
+
+    /**
+     * A learner in ltct:org:fixture-a, enrolled in the shared course through cohort sync, and a
+     * mentor; spec 003's mentor role exists and the sync is switched on unless told otherwise.
+     *
+     * @param bool $on local_ltuse/coursementorsync
+     * @return array [learner, mentor, mentor role id]
+     */
+    private function mentoring(bool $on = true): array {
+        $generator = $this->getDataGenerator();
+        set_config('coursementorsync', $on ? 1 : 0, 'local_ltuse');
+        $roleid = $generator->create_role(['shortname' => 'mentor', 'name' => 'Mentor']);
+        $learner = $generator->create_user(['email' => 'fixture-learner@example.org']);
+        $mentor = $generator->create_user(['email' => 'fixture-mentor@example.org']);
+        cohort_add_member($this->cohort->id, $learner->id);
+        $this->assertSame('added', cohort_enrolment::ensure((int)$this->cohort->id, (int)$this->course->id));
+        $this->assertTrue(is_enrolled(\context_course::instance($this->course->id), $learner->id, '', true));
+        return [$learner, $mentor, (int)$roleid];
+    }
+
+    /**
+     * What a person holds in the shared course as a course mentor.
+     *
+     * @param int $userid
+     * @return array ['enrolled' => through ltct:coursementor, 'teacher' => Teacher given by
+     *               local_ltuse, 'grouped' => in their mentor group, 'anyteacher' => Teacher at all]
+     */
+    private function course_mentor_state(int $userid): array {
+        global $DB;
+        $context = \context_course::instance($this->course->id);
+        $teacherid = (int)$DB->get_field('role', 'id', ['shortname' => 'teacher'], MUST_EXIST);
+        $instance = null;
+        foreach (enrol_get_instances($this->course->id, false) as $i) {
+            if (course_mentor_sync::is_own_instance($i)) {
+                $instance = $i;
+            }
+        }
+        $grouped = $DB->record_exists_sql("SELECT 1
+                                             FROM {groups_members} gm
+                                             JOIN {groups} g ON g.id = gm.groupid
+                                            WHERE g.courseid = :courseid AND g.idnumber = :idnumber
+                                                  AND gm.userid = :userid",
+            ['courseid' => $this->course->id, 'idnumber' => course_mentor_sync::GROUP_PREFIX . $userid,
+                'userid' => $userid]);
+        return [
+            'enrolled' => $instance && $DB->record_exists('user_enrolments',
+                ['enrolid' => $instance->id, 'userid' => $userid]),
+            'teacher' => $DB->record_exists('role_assignments', ['contextid' => $context->id, 'roleid' => $teacherid,
+                'userid' => $userid, 'component' => course_mentor_sync::COMPONENT]),
+            'grouped' => $grouped,
+            'anyteacher' => user_has_role_assignment($userid, $teacherid, $context->id),
+        ];
+    }
+
+    /** @var array a course mentor in step */
+    private const MENTORING = ['enrolled' => true, 'teacher' => true, 'grouped' => true, 'anyteacher' => true];
+
+    /** @var array nobody's course mentor */
+    private const NOT_MENTORING = ['enrolled' => false, 'teacher' => false, 'grouped' => false, 'anyteacher' => false];
+
+    public function test_a_default_mentor_is_enrolled_and_removed_with_the_relationship(): void {
+        [$learner, $mentor, $roleid] = $this->mentoring();
+        $learnercontext = \context_user::instance($learner->id);
+
+        role_assign($roleid, $mentor->id, $learnercontext->id);
+        $this->assertSame(self::MENTORING, $this->course_mentor_state((int)$mentor->id));
+        $this->assertTrue($this->in_group_of((int)$mentor->id, (int)$learner->id), 'the learner is in the group');
+        $this->assertTrue($this->group_named_neutrally((int)$mentor->id));
+
+        // Same request: no task, no cron.
+        role_unassign($roleid, $mentor->id, $learnercontext->id);
+        $this->assertSame(self::NOT_MENTORING, $this->course_mentor_state((int)$mentor->id));
+        $this->assertFalse($this->in_group_of((int)$mentor->id, (int)$learner->id));
+    }
+
+    public function test_disabling_the_cohort_enrolment_removes_that_cohorts_course_mentors(): void {
+        global $DB;
+        [$learner, $mentor] = $this->mentoring();
+        $DB->insert_record(course_mentor_sync::TABLE, ['courseid' => $this->course->id, 'mentorid' => $mentor->id,
+            'learnerid' => 0, 'cohortid' => $this->cohort->id, 'usermodified' => 0, 'timecreated' => time(),
+            'timemodified' => time()]);
+        course_mentor_sync::sync_course((int)$this->course->id);
+        $this->assertSame(self::MENTORING, $this->course_mentor_state((int)$mentor->id));
+
+        $this->assertSame('disabled', cohort_enrolment::remove((int)$this->cohort->id, (int)$this->course->id));
+        $this->assertSame(self::NOT_MENTORING, $this->course_mentor_state((int)$mentor->id));
+    }
+
+    public function test_disabling_the_instance_directly_is_seen_by_the_observer(): void {
+        global $DB;
+        [$learner, $mentor] = $this->mentoring();
+        $DB->insert_record(course_mentor_sync::TABLE, ['courseid' => $this->course->id, 'mentorid' => $mentor->id,
+            'learnerid' => 0, 'cohortid' => $this->cohort->id, 'usermodified' => 0, 'timecreated' => time(),
+            'timemodified' => time()]);
+        course_mentor_sync::sync_course((int)$this->course->id);
+        $instance = cohort_enrolment::find_instance((int)$this->cohort->id, (int)$this->course->id);
+        enrol_get_plugin('cohort')->update_status($instance, ENROL_INSTANCE_DISABLED);
+        $this->assertSame(self::NOT_MENTORING, $this->course_mentor_state((int)$mentor->id));
+    }
+
+    public function test_suspending_the_learners_account_removes_their_course_mentor(): void {
+        global $CFG;
+        require_once($CFG->dirroot . '/user/lib.php');
+        [$learner, $mentor, $roleid] = $this->mentoring();
+        role_assign($roleid, $mentor->id, \context_user::instance($learner->id)->id);
+        $this->assertSame(self::MENTORING, $this->course_mentor_state((int)$mentor->id));
+
+        user_update_user((object)['id' => $learner->id, 'suspended' => 1], false);
+        $this->assertSame(self::NOT_MENTORING, $this->course_mentor_state((int)$mentor->id));
+    }
+
+    public function test_a_mentor_enrolled_another_way_still_loses_teacher(): void {
+        [$learner, $mentor, $roleid] = $this->mentoring();
+        $this->getDataGenerator()->enrol_user($mentor->id, $this->course->id, 'student', 'manual');
+        $learnercontext = \context_user::instance($learner->id);
+        role_assign($roleid, $mentor->id, $learnercontext->id);
+        $this->assertSame(self::MENTORING, $this->course_mentor_state((int)$mentor->id));
+
+        role_unassign($roleid, $mentor->id, $learnercontext->id);
+        $this->assertSame(self::NOT_MENTORING, $this->course_mentor_state((int)$mentor->id));
+        $this->assertTrue(is_enrolled(\context_course::instance($this->course->id), $mentor->id),
+            'their own enrolment stays');
+    }
+
+    public function test_a_one_course_mentor_replaces_the_default_mentor_in_that_course(): void {
+        global $DB;
+        [$learner, $mentor, $roleid] = $this->mentoring();
+        $other = $this->getDataGenerator()->create_user(['email' => 'fixture-mentor2@example.org']);
+        role_assign($roleid, $mentor->id, \context_user::instance($learner->id)->id);
+        $DB->insert_record(course_mentor_sync::TABLE, ['courseid' => $this->course->id, 'mentorid' => $other->id,
+            'learnerid' => $learner->id, 'cohortid' => 0, 'usermodified' => 0, 'timecreated' => time(),
+            'timemodified' => time()]);
+        course_mentor_sync::sync_course((int)$this->course->id);
+        $this->assertSame(self::MENTORING, $this->course_mentor_state((int)$other->id));
+        $this->assertSame(self::NOT_MENTORING, $this->course_mentor_state((int)$mentor->id));
+    }
+
+    public function test_a_pilot_learner_gets_no_course_mentor(): void {
+        [$learner, $mentor, $roleid] = $this->mentoring();
+        $pilot = $this->getDataGenerator()->create_user(['email' => 'fixture-pilot@example.org']);
+        $this->getDataGenerator()->enrol_user($pilot->id, $this->course->id, 'student', 'manual');
+        role_assign($roleid, $mentor->id, \context_user::instance($pilot->id)->id);
+        $this->assertSame(self::NOT_MENTORING, $this->course_mentor_state((int)$mentor->id));
+    }
+
+    public function test_nothing_happens_while_the_sync_is_off(): void {
+        global $DB;
+        [$learner, $mentor, $roleid] = $this->mentoring(false);
+        role_assign($roleid, $mentor->id, \context_user::instance($learner->id)->id);
+        $this->assertSame(self::NOT_MENTORING, $this->course_mentor_state((int)$mentor->id));
+        $this->assertSame([], course_mentor_sync::sync_course((int)$this->course->id));
+        $this->assertSame([], course_mentor_sync::reconcile());
+        $this->assertFalse($DB->record_exists('enrol', ['courseid' => $this->course->id,
+            'customchar1' => course_mentor_sync::MARKER]), 'no course-mentor instance is made');
+    }
+
+    /**
+     * @param int $mentorid
+     * @param int $userid
+     * @return bool the user is in the mentor's group in the shared course
+     */
+    private function in_group_of(int $mentorid, int $userid): bool {
+        global $DB;
+        $group = $DB->get_record('groups', ['courseid' => $this->course->id,
+            'idnumber' => course_mentor_sync::GROUP_PREFIX . $mentorid]);
+        return $group && groups_is_member($group->id, $userid);
+    }
+
+    /**
+     * @param int $mentorid
+     * @return bool the mentor's group is "Mentor group <n>", never a person's name
+     */
+    private function group_named_neutrally(int $mentorid): bool {
+        global $DB;
+        $name = (string)$DB->get_field('groups', 'name', ['courseid' => $this->course->id,
+            'idnumber' => course_mentor_sync::GROUP_PREFIX . $mentorid]);
+        return (bool)preg_match('/^Mentor group \d+$/', $name);
     }
 }

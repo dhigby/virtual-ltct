@@ -20,7 +20,7 @@ use stdClass;
  * and Moodle clears a learner's grades and completion when their last enrolment in a course
  * goes (spec 002 R7); disabling keeps everything and re-enabling brings it back. Disabling
  * fires only enrol_instance_updated, with no per-user event, so both ensure() and remove()
- * call the course-mentor sync themselves (research R10) once it exists.
+ * call the course-mentor sync themselves (research R10).
  *
  * Pathways (spec 006, research R11): the cohort is checked against every course of the
  * pathway before 006's table is touched, because 006 never lowers enrol = 1. A course joining
@@ -44,9 +44,6 @@ class cohort_enrolment {
     /** Spec 006's classes (research R11), called only when installed. */
     const CATALOGUE = '\local_ltuse\pathway\catalogue';
     const ASSIGNMENTS = '\local_ltuse\pathway\assignments';
-
-    /** The course-mentor sync (task T063), called only once it exists. */
-    const MENTOR_SYNC = '\local_ltuse\admin\course_mentor_sync';
 
     /**
      * Find a cohort and a course by idnumber. Either missing is a refusal naming it.
@@ -446,16 +443,13 @@ class cohort_enrolment {
     }
 
     /**
-     * Keep the course's course mentors in step after an instance changed (research R10). A
-     * no-op until the sync exists (task T063); the sync itself does nothing while
-     * local_ltuse/coursementorsync is 0.
+     * Keep the course's course mentors in step after an instance changed (research R10), in
+     * this request rather than waiting for the enrol_instance_updated observer's turn. The sync
+     * does nothing while local_ltuse/coursementorsync is 0.
      *
      * @param int $courseid
      */
     protected static function sync_mentors(int $courseid): void {
-        if (class_exists(self::MENTOR_SYNC)) {
-            $sync = self::MENTOR_SYNC;
-            $sync::sync_course($courseid);
-        }
+        course_mentor_sync::sync_course($courseid);
     }
 }

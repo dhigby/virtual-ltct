@@ -211,6 +211,38 @@ $functions = [
         'ajax'         => false,
         'capabilities' => 'local/ltuse:administer, moodle/cohort:view',
     ],
+    'local_ltuse_admin_preview_mentors' => [
+        'classname'    => 'local_ltuse\external\admin_preview_mentors',
+        'description'  => 'Preview mentor relationships made in bulk, or all of one mentor\'s '
+                        . 'relationships ended, with people masked unless asked. Changes nothing.',
+        'type'         => 'read',
+        'ajax'         => false,
+        'capabilities' => 'local/ltuse:administer, moodle/role:assign',
+    ],
+    'local_ltuse_admin_apply_mentors' => [
+        'classname'    => 'local_ltuse\external\admin_apply_mentors',
+        'description'  => 'Make one mentor relationship, or end one of a mentor\'s '
+                        . 'relationships, as previewed.',
+        'type'         => 'write',
+        'ajax'         => false,
+        'capabilities' => 'local/ltuse:administer, moodle/role:assign',
+    ],
+    'local_ltuse_admin_preview_course_mentors' => [
+        'classname'    => 'local_ltuse\external\admin_preview_course_mentors',
+        'description'  => 'Preview recording or removing one-course and cohort mentors. '
+                        . 'Changes nothing.',
+        'type'         => 'read',
+        'ajax'         => false,
+        'capabilities' => 'local/ltuse:administer, moodle/role:assign, moodle/course:managegroups',
+    ],
+    'local_ltuse_admin_apply_course_mentors' => [
+        'classname'    => 'local_ltuse\external\admin_apply_course_mentors',
+        'description'  => 'Record or remove one one-course or cohort mentor as previewed, then '
+                        . 'bring the course\'s course mentors into step.',
+        'type'         => 'write',
+        'ajax'         => false,
+        'capabilities' => 'local/ltuse:administer, moodle/role:assign, moodle/course:managegroups',
+    ],
 ];
 
 // One service, so a single token grants exactly these functions and nothing else.
@@ -271,6 +303,10 @@ $services = [
             'local_ltuse_admin_preview_cohort_members',
             'local_ltuse_admin_apply_cohort_members',
             'local_ltuse_admin_summary',
+            'local_ltuse_admin_preview_mentors',
+            'local_ltuse_admin_apply_mentors',
+            'local_ltuse_admin_preview_course_mentors',
+            'local_ltuse_admin_apply_course_mentors',
             'core_webservice_get_site_info',
         ],
         'requiredcapability' => 'local/ltuse:administer',

@@ -9,7 +9,7 @@ moodle:
 
 plugins:
   - component: local_ltuse
-    version: 2026100400
+    version: 2026100401
     source:
       path: moodle/local_ltuse
     why: The publish endpoint and this applier. Pinned to the version.php stamp in this repo.

@@ -9,10 +9,13 @@
 defined('MOODLE_INTERNAL') || die();
 
 $plugin->component = 'local_ltuse';
-$plugin->version   = 2026100400;   // Events and office hours (spec 011): calendar change
-                                   // notices, the office-hours sync, booking notices and
-                                   // their table (local_ltuse_booking), the time zone notice.
-                                   // db/upgrade.php saves its savepoint at this stamp. After
+$plugin->version   = 2026100401;   // Manage mentors (spec 003 Phase B): mentors.php and
+                                   // the profile link, for the site team and a learner's
+                                   // organisation manager. No schema change. Before it,
+                                   // events and office hours (spec 011, 2026100400): calendar
+                                   // change notices, the office-hours sync, booking notices
+                                   // and their table (local_ltuse_booking), the time zone
+                                   // notice; db/upgrade.php saves its savepoint there. After
                                    // open courses (spec 002, 2026100302): the course
                                    // discussion is always open, drift checks each published
                                    // ltct: course's group mode, and a managers cohort synced

@@ -73,6 +73,24 @@ $string['mentoring:nottracked'] = 'Completion not tracked';
 $string['mentoring:enrolmentsuspended'] = 'enrolment suspended';
 $string['mentoring:enrolmentremoved'] = 'no longer enrolled';
 $string['mentoring:thislearner'] = 'Mentoring';
+// Spec 003 Phase B: the Manage mentors page, for the site team and a learner's organisation
+// manager. Names in {$a} are escaped by the page.
+$string['mentors:manage'] = 'Manage mentors';
+$string['mentors:heading'] = 'Mentors of {$a}';
+$string['mentors:intro'] = 'A mentor sees this learner\'s courses and progress, and the two become message contacts. This is the learner\'s mentor across all their courses.';
+$string['mentors:mentor'] = 'Mentor';
+$string['mentors:none'] = 'This learner has no mentor yet.';
+$string['mentors:add'] = 'Add a mentor';
+$string['mentors:choose'] = 'Choose a mentor';
+$string['mentors:remove'] = 'Remove';
+$string['mentors:nocandidates'] = 'Nobody is available to add. The site team decides who can be chosen as a mentor.';
+$string['mentors:confirmadd'] = 'Make {$a->mentor} a mentor of {$a->learner}? {$a->mentor} will see {$a->learner}\'s courses and progress, and the two will become message contacts.';
+$string['mentors:confirmremove'] = 'Stop {$a->mentor} mentoring {$a->learner}? {$a->mentor} will no longer see {$a->learner}\'s courses and progress. Nothing of {$a->learner}\'s work or records changes.';
+$string['mentors:added'] = '{$a->mentor} is now a mentor of {$a->learner}.';
+$string['mentors:removed'] = '{$a->mentor} is no longer a mentor of {$a->learner}.';
+$string['mentors:notallowed'] = 'You cannot manage mentors for this person.';
+$string['mentors:invalidmentor'] = 'That person cannot be added or removed as a mentor here.';
+$string['mentors:back'] = 'Back to the profile';
 $string['nomentoring'] = 'Nobody is linked to you as a mentor or learner yet.';
 $string['privacy:metadata:mentor_contact'] = 'The message contacts this plugin made between a mentor and their learner, so that ending the mentor relationship removes them again.';
 $string['privacy:metadata:mentor_contact:mentorid'] = 'The mentor.';

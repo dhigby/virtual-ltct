@@ -51,6 +51,10 @@ Moodle even when it leaks nothing (spec 004):
                           cbc_wording.check_recognition(), since a title is free text and
                           reaches the badge; and the certificate's idnumber fits Moodle's column and is no
                           lesson's.
+  9. Target level      -- spec 006: a target_outcome_level that is present is one of
+                          outcome-levels.yaml's course_target_levels labels, verbatim. The
+                          publisher sends its leading digit as the course's pathway level,
+                          so a label it cannot read a digit from must never reach Moodle.
 
 Usage:
   python scripts/check_moodle_payload.py --payload <dir> --slug <slug>
@@ -69,6 +73,7 @@ import sys
 import yaml
 
 sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent))
+import _levels  # noqa: E402
 import cbc_wording  # noqa: E402
 import disclosure  # noqa: E402
 from course_stage import branch_slug  # noqa: E402
@@ -121,6 +126,7 @@ def check(payload_dir):
     problems += check_completion(slug, manifest)
     problems += check_competencies(slug, manifest)
     problems += check_recognition(slug, manifest)
+    problems += check_target_level(slug, manifest)
 
     if manifest["view"] != "learner":
         warnings.append("%s: payload is the '%s' view -- this check only certifies the "
@@ -301,6 +307,19 @@ def check_recognition(slug, manifest, site=SITE):
     elif recognition["delivery"]:
         problems.append("%s: a delivery publish must carry the certificate's idnumber" % slug)
     return problems
+
+
+def check_target_level(slug, manifest):
+    """Check 9. A present target_outcome_level is a course_target_levels label, verbatim."""
+    level = manifest.get("target_outcome_level")
+    if level is None:
+        return []
+    _, targets, _ = _levels.load()
+    if level in targets:
+        return []
+    return ["%s: target_outcome_level %r is not one of outcome-levels.yaml's "
+            "course_target_levels (%s) -- copy the label verbatim"
+            % (slug, level, "; ".join(targets))]
 
 
 def check_assets(slug, folder, payload_dir, manifest):

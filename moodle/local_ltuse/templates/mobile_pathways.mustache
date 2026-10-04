@@ -1,0 +1,105 @@
+{{!
+    @template local_ltuse/mobile_pathways
+
+    Pathways in the Moodle app (spec 006, R10; FR-015). Ionic markup, not Bootstrap. The same
+    view as local_ltuse/pathways and local_ltuse/pathway: the user's own pathways only, every
+    course linked and never locked, a level only as a row heading and as what a course aims at
+    (FR-008, FR-011). No images.
+
+    Context variables required for this template:
+    * nolevels: the level labels are not applied; unknown: the key does not resolve
+    * list: true for the list view, with
+        hasmine, mine: [{key, title, progresstext, done, nextcourse: {fullname, url, statustext} or null}],
+        none, all: [{key, kind, title, category}]
+    * haspathway: true for one pathway, with pathway: the local_ltuse/pathway context
+
+    Example context (json):
+    {
+        "nolevels": false, "unknown": false, "list": true, "haspathway": false,
+        "hasmine": true,
+        "mine": [{"key": "competency:keyboards", "title": "Keyboards",
+            "progresstext": "1 of 2 courses completed", "done": false,
+            "nextcourse": {"fullname": "Keyboards 2", "url": "#", "statustext": "Not started"}}],
+        "none": false,
+        "all": [{"key": "competency:keyboards", "kind": "competency", "title": "Keyboards", "category": "Core Technical"}]
+    }
+}}
+{{=<% %>=}}
+<%#nolevels%>
+<ion-item class="ion-text-wrap"><ion-label><p><%#str%>pathway:nolevels, local_ltuse<%/str%></p></ion-label></ion-item>
+<%/nolevels%>
+<%#unknown%>
+<ion-item class="ion-text-wrap"><ion-label><p><%#str%>pathway:unknown, local_ltuse<%/str%></p></ion-label></ion-item>
+<%/unknown%>
+<%#list%>
+<ion-list>
+    <ion-item-divider><ion-label><h2><%#str%>pathway:mine, local_ltuse<%/str%></h2></ion-label></ion-item-divider>
+    <%#none%>
+    <ion-item class="ion-text-wrap"><ion-label><p><%#str%>pathway:none, local_ltuse<%/str%></p></ion-label></ion-item>
+    <%/none%>
+    <%#mine%>
+    <ion-item class="ion-text-wrap" button core-site-plugins-new-content component="local_ltuse" method="pathways_view"
+            [args]="{key: '<% key %>'}" title="<% title %>">
+        <ion-label>
+            <h2 ngNonBindable><% title %></h2>
+            <p ngNonBindable><% progresstext %></p>
+            <%#done%><p>{{ 'plugin.local_ltuse.pathway:done' | translate }}</p><%/done%>
+            <%#nextcourse%>
+            <p class="cx-pathway-next"><strong><%#str%>pathway:next, local_ltuse<%/str%>:</strong> <span ngNonBindable><%{ fullname }%></span></p>
+            <%/nextcourse%>
+        </ion-label>
+    </ion-item>
+    <%/mine%>
+</ion-list>
+<ion-list>
+    <ion-item-divider><ion-label><h2><%#str%>pathway:browse, local_ltuse<%/str%></h2></ion-label></ion-item-divider>
+    <%#all%>
+    <ion-item class="ion-text-wrap" button core-site-plugins-new-content component="local_ltuse" method="pathways_view"
+            [args]="{key: '<% key %>'}" title="<% title %>">
+        <ion-label>
+            <h2 ngNonBindable><% title %></h2>
+            <p ngNonBindable><% category %></p>
+        </ion-label>
+    </ion-item>
+    <%/all%>
+</ion-list>
+<%/list%>
+<%#haspathway%>
+<%#pathway%>
+<ion-list>
+    <ion-item class="ion-text-wrap">
+        <ion-label>
+            <h2 ngNonBindable><% title %></h2>
+            <%#hasdescription%><p ngNonBindable><% description %></p><%/hasdescription%>
+            <p ngNonBindable><% progresstext %></p>
+            <%#done%><p>{{ 'plugin.local_ltuse.pathway:done' | translate }}</p><%/done%>
+        </ion-label>
+    </ion-item>
+    <%#parts%>
+    <%#showtitle%>
+    <ion-item-divider><ion-label><h2 ngNonBindable><% title %></h2></ion-label></ion-item-divider>
+    <%/showtitle%>
+    <%#levels%>
+    <ion-item-divider><ion-label><p ngNonBindable><strong><% label %></strong></p></ion-label></ion-item-divider>
+    <%#nocourseyet%>
+    <ion-item class="ion-text-wrap">
+        <ion-label>
+            <p>{{ 'plugin.local_ltuse.pathway:nocourseyet' | translate }}</p>
+            <%#hascompetencyurl%><p><a href="<% competencyurl %>" core-link capture="false"><%#str%>pathway:nocourseyetlink, local_ltuse<%/str%></a></p><%/hascompetencyurl%>
+        </ion-label>
+    </ion-item>
+    <%/nocourseyet%>
+    <%#courses%>
+    <ion-item class="ion-text-wrap<%#next%> cx-pathway-next<%/next%>">
+        <ion-label>
+            <%#next%><p><strong><%#str%>pathway:next, local_ltuse<%/str%></strong></p><%/next%>
+            <h2><a href="<% url %>" core-link capture="true" ngNonBindable><%{ fullname }%></a></h2>
+            <p ngNonBindable><% statustext %> · <% aimsattext %></p>
+        </ion-label>
+    </ion-item>
+    <%/courses%>
+    <%/levels%>
+    <%/parts%>
+</ion-list>
+<%/pathway%>
+<%/haspathway%>

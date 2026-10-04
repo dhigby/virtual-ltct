@@ -295,9 +295,9 @@ class rolepathways {
             $report->add_result($item, 'changed');
         }
 
-        if ($existed) {
-            self::announce($key, $before, catalogue::courses(catalogue::role_key($key)));
-        }
+        // A new role is announced too ($before is []), so its courses' next publish has nothing
+        // left to announce for it.
+        self::announce($key, $before, catalogue::courses(catalogue::role_key($key)));
     }
 
     /**
@@ -341,8 +341,9 @@ class rolepathways {
         if (!$added && !$removed) {
             return;
         }
+        self::record_announced(catalogue::role_key($key), $added, $removed);
+        // No context: the event's init() sets the system context itself.
         pathway_courses_changed::create([
-            'context' => \context_system::instance(),
             'other' => [
                 'pathwaykey' => catalogue::role_key($key),
                 'added' => $added,
@@ -455,6 +456,33 @@ class rolepathways {
             $diff[] = 'retired';
         }
         return $diff;
+    }
+
+    /**
+     * Note in each course's local_ltuse_course_pathway.pathwaykeys (the set set_course_pathway
+     * last announced) that this role key has now been announced as joined or left, so the
+     * course's next publish does not announce it again. Only this key changes: any course-level
+     * difference not yet announced is left for that publish.
+     *
+     * @param string $rolekey the full key, role:<key>
+     * @param int[] $added
+     * @param int[] $removed
+     * @return void
+     */
+    protected static function record_announced(string $rolekey, array $added, array $removed): void {
+        global $DB;
+        $ids = array_merge($added, $removed);
+        $rows = $DB->get_records_list('local_ltuse_course_pathway', 'courseid', $ids, '', 'id, courseid, pathwaykeys');
+        foreach ($rows as $row) {
+            $keys = json_decode((string)$row->pathwaykeys, true);
+            $keys = is_array($keys) ? array_values(array_map('strval', $keys)) : [];
+            $without = array_values(array_diff($keys, [$rolekey]));
+            $new = in_array((int)$row->courseid, $added, true) ? array_merge($without, [$rolekey]) : $without;
+            if ($new !== $keys) {
+                $DB->update_record('local_ltuse_course_pathway', (object)['id' => $row->id,
+                    'pathwaykeys' => json_encode($new), 'timemodified' => time()]);
+            }
+        }
     }
 
     /**

@@ -216,6 +216,8 @@ class mentoring {
             'gradesurl' => (new moodle_url('/grade/report/overview/index.php',
                 ['id' => SITEID, 'userid' => $learner->id]))->out(false),
             'messageurl' => (new moodle_url('/message/index.php', ['id' => $learner->id]))->out(false),
+            // Spec 006 (US4): the learner's pathways, behind pathway\viewer::may_view().
+            'pathwaysurl' => (new moodle_url('/local/ltuse/pathways.php', ['userid' => $learner->id]))->out(false),
             'courses' => $courses,
             'hascourses' => !empty($courses),
         ];

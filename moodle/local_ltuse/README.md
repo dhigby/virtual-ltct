@@ -381,6 +381,55 @@ and the entities `core_reportbuilder\local\entities\base`. Before raising `requi
 against it. Moodle 5.0 to 5.2 changed default entity initialisation, entity order, the
 abstract `get_default_tables()`, custom sort fields and select-filter values (research R15).
 
+**The pathway pages' raw reads (spec 006)**, all read-only, by indexed columns:
+
+| Table | Columns used | For |
+|---|---|---|
+| `{course}` | `id`, `idnumber`, `visible`, `fullname` | A pathway lists visible `ltct:<slug>` courses (`pathway\catalogue::membership_sql()`, the one membership rule). |
+| `{course_completions}` | `course`, `userid`, `timecompleted` | A course is completed for the learner (`pathway\progress`). |
+| `{user_enrolments}`, `{enrol}` | `userid`, `enrolid`, `id`, `courseid` | A course is in progress: the learner holds any enrolment in it. |
+| `{cohort}`, `{cohort_members}` | `id`, `idnumber`, `name`, `contextid`; `cohortid`, `userid` | Which pathways a learner has, and which cohorts a manager may give one to. |
+
+They write only the plugin's own tables.
+
+## Learning pathways (spec 006)
+
+A pathway is never stored as a Moodle object. `classes/pathway/` builds it when it is opened,
+from what the publisher and `site_config.py apply` keep up to date:
+
+- **`local_ltuse_course_pathway`**: one row per published course, written only by
+  `local_ltuse_set_course_pathway`, which the publisher calls on every publish straight after
+  `set_course_competencies`. It holds whether the course is delivered (stage 8, from
+  `course_stage.py`) and the level it aims at (1–4), and the pathway keys last announced, so
+  the next publish fires `pathway_courses_changed` for what changed.
+- **`local_ltuse_role_pathway`, `local_ltuse_role_pathway_comp`**: role pathways from
+  `moodle/site/pathways.yaml`, applied by `classes/siteconfig/rolepathways.php`. Retired,
+  never deleted.
+- **`local_ltuse_pathway_cohort`**: which cohorts have which pathway, set on
+  `pathways_manage.php`. Holds `usermodified`, declared by the privacy provider.
+- **`local_ltuse_competency`** gains `slug` and `url`, the competency's page on the competency
+  site, which a level with no course links to. Plugin config `pathwaylevel1`–`4` holds the
+  level labels from `outcome-levels.yaml`.
+
+| Class | Does |
+|---|---|
+| `pathway\catalogue` | Keys (`competency:<slug>`, `role:<key>`), which courses are on a pathway, every pathway. |
+| `pathway\builder` | Pure: lays out a pathway, marks the next course, totals a role. Tested by `tests/pathway_harness.php`. |
+| `pathway\viewer` | Pure: who may see whose pathways (the learner, their mentor, their organisation's manager, the site team). |
+| `pathway\progress` | One learner's state per course, through `mentoring::progress_status()`. |
+| `pathway\view` | Glue: one key for one learner as a template context. |
+| `pathway\assignments` | Pathway ↔ cohort, and who may assign. |
+
+**006 enrols nobody.** Spec 008 owns enrolment. It codes against
+[`specs/006-learning-pathways/contracts/pathway-api.md`](../../specs/006-learning-pathways/contracts/pathway-api.md):
+`catalogue::courses()`, `assignments::assign($key, $cohortid, true)`, `cohorts_for()`, and
+the events `pathway_courses_changed`, `pathway_assigned` and `pathway_unassigned`. Those names
+are frozen; change them only together with 008.
+
+**No level for a learner, anywhere.** A level appears only as what a course aims at and as a
+row heading. Finishing a pathway says the training is completed. `tests/test_pathway_wording.py`
+holds every pathway string to `scripts/cbc_wording.py`'s strict rule.
+
 ## Identity, and why republishing does not duplicate
 
 Every object the publisher creates carries an idnumber:

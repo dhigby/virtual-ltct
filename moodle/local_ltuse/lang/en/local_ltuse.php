@@ -142,6 +142,10 @@ $string['privacy:path:bookings'] = 'Office-hours bookings';
 $string['pathways'] = 'Pathways';
 $string['pathway:mine'] = 'Your pathways';
 $string['pathway:none'] = 'No pathway has been given to you yet. You can browse every pathway.';
+$string['pathway:noneforlearner'] = 'No pathway has been given to this learner yet.';
+$string['pathway:donelearner'] = 'The training on this pathway is completed.';
+$string['pathway:nocohorts'] = 'There is no cohort you can give a pathway to.';
+$string['pathway:assignhelp'] = 'Giving a pathway to a cohort shows it to every member, now and when they join. It does not enrol anyone in its courses.';
 $string['pathway:browse'] = 'Browse all pathways';
 $string['pathway:aimsat'] = 'Aims at {$a}';
 $string['pathway:nocourseyet'] = 'No course yet';
@@ -157,6 +161,8 @@ $string['pathway:manage'] = 'Assign pathways';
 $string['pathway:assign'] = 'Assign';
 $string['pathway:unassign'] = 'Remove';
 $string['pathway:cohortprogress'] = 'Pathway progress: {$a}';
+$string['pathway:nolevels'] = 'Pathways cannot be shown yet: their headings have not been set up on this site. Ask the site team to apply the site configuration.';
+$string['pathway:roles'] = 'Role pathways';
 // End of the spec 006 pathways block.
 
 $string['eventpathwaycourseschanged'] = 'Pathway courses changed';

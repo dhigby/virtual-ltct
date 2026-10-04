@@ -51,10 +51,10 @@ Rows of `local_ltuse_pathway_cohort` (`pathwaykey`, `cohortid`, `enrol`, `usermo
 | Method | Behaviour |
 |---|---|
 | `static assign(string $key, int $cohortid, bool $enrol = false): int` | Links the pathway to the cohort and returns the row id. Idempotent. Refuses a key `catalogue::is_assignable()` rejects, and a cohort that does not exist, with `invalid_parameter_exception`. New row: `enrol` is `(int)$enrol`. Existing row: `true` raises `enrol` to 1; `false` leaves it as it is, so `enrol` is never lowered and a manager re-assigning in 006's page never clears 008's flag. Fires `pathway_assigned` when a row is created or its `enrol` changes. Checks no capability: the caller does. |
-| `static unassign(string $key, int $cohortid): bool` | Deletes the row if present and fires `pathway_unassigned`, carrying the row's last `enrol`. The only way a row is removed. Unenrols nobody. Returns true when a row was deleted. Checks no capability. |
+| `static unassign(string $key, int $cohortid, ?\context $context = null): bool` | Deletes the row if present and fires `pathway_unassigned` in the cohort's context, carrying the row's last `enrol`. `$context` is used only when the cohort row is already gone (006's `cohort_deleted` observer passes the event's). The only way a row is removed. Unenrols nobody. Returns true when a row was deleted. Checks no capability. |
 | `static for_cohort(int $cohortid): array` | `[{pathwaykey, enrol}]` for the cohort, by key |
 | `static cohorts_for(string $key, ?bool $enrol = null): int[]` | cohort ids the key is assigned to, by id; `true` gives only rows with `enrol = 1`, `false` only `enrol = 0`, `null` all |
-| `static pathways_for_user(int $userid): string[]` | every key assigned to any cohort the user belongs to, each once (spec Edge Cases), in `catalogue::all()` order; a key that no longer `exists()` is left out, its rows kept |
+| `static pathways_for_user(int $userid): string[]` | every key assigned to any cohort the user belongs to, each once (spec Edge Cases), in `catalogue::assignable()` order; a key that is no longer `is_assignable()` (a retired role or competency) is left out, its rows kept. A live competency with no course yet stays, shown as "No course yet" |
 | `static may_assign(int $userid, int $cohortid): bool` | the rule below |
 
 **006 never passes `$enrol = true`.** The names and signatures above were locked with the 008 session on 2026-10-04. The manage page calls `assign($key, $cohortid)` and

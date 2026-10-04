@@ -245,4 +245,27 @@ class catalogue {
         }
         return $keys;
     }
+
+    /**
+     * Every key is_assignable() is true for, in the same order as all(): every live
+     * competency, with or without a course yet, then every live role. A learner's own list
+     * follows this, so a pathway given to them before its first course is delivered still
+     * shows, as "No course yet" rows.
+     *
+     * @return string[]
+     */
+    public static function assignable(): array {
+        global $DB;
+        $keys = [];
+        $competencies = $DB->get_records_select('local_ltuse_competency', "retired = 0 AND slug <> ''", [],
+            'sortorder, id', 'id, slug');
+        foreach ($competencies as $competency) {
+            $keys[] = self::competency_key($competency->slug);
+        }
+        $roles = $DB->get_records('local_ltuse_role_pathway', ['retired' => 0], 'sortorder, id', 'id, rolekey');
+        foreach ($roles as $role) {
+            $keys[] = self::role_key($role->rolekey);
+        }
+        return $keys;
+    }
 }

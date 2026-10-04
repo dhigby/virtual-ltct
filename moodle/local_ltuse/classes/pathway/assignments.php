@@ -87,13 +87,15 @@ class assignments {
      * Deletes the assignment if present and fires pathway_unassigned with the row's last enrol.
      *
      * The only way a row is removed. Unenrols nobody. Works for a cohort that has already been
-     * deleted (the cohort_deleted observer), whose event then carries the system context.
+     * deleted: core deletes the cohort row before cohort_deleted fires, so that observer passes
+     * the event's context, and the event still carries the cohort's context.
      *
      * @param string $key
      * @param int $cohortid
+     * @param \context|null $context the cohort's context, when the cohort row may be gone
      * @return bool true when a row was deleted
      */
-    public static function unassign(string $key, int $cohortid): bool {
+    public static function unassign(string $key, int $cohortid, ?\context $context = null): bool {
         global $DB;
 
         $row = $DB->get_record(self::TABLE, ['pathwaykey' => $key, 'cohortid' => $cohortid]);
@@ -105,7 +107,7 @@ class assignments {
 
         pathway_unassigned::create([
             'objectid' => (int)$row->id,
-            'context' => self::cohort_context($cohort ?: null),
+            'context' => $cohort ? self::cohort_context($cohort) : ($context ?? self::cohort_context(null)),
             'other' => ['pathwaykey' => $key, 'cohortid' => $cohortid, 'enrol' => (int)$row->enrol],
         ])->trigger();
         return true;
@@ -149,8 +151,9 @@ class assignments {
     }
 
     /**
-     * Every key assigned to any cohort the user belongs to, each once, in catalogue::all()
-     * order. A key that no longer exists() is left out; its rows are kept.
+     * Every key assigned to any cohort the user belongs to, each once, in
+     * catalogue::assignable() order. A key that is no longer assignable (a retired role or
+     * competency) is left out; its rows are kept.
      *
      * Cohort membership is read with a join on {cohort_members}, the indexed columns core's
      * cohort_is_member() queries (research R11).
@@ -173,7 +176,9 @@ class assignments {
         }
         $assigned = array_flip(array_map('strval', $assigned));
         $keys = [];
-        foreach (catalogue::all() as $key) {
+        // assignable(), not all(): a competency given before its first course is delivered
+        // still shows, as "No course yet" rows (data-model "A learner's pathways").
+        foreach (catalogue::assignable() as $key) {
             if (isset($assigned[$key])) {
                 $keys[] = $key;
             }

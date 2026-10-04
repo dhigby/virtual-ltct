@@ -83,3 +83,10 @@
     border-radius: 4px;
 }
 
+
+/* Spec 006: the next course on a pathway stands out from the rest of its list. */
+.local-ltuse-pathways .cx-pathway-next,
+.local-ltuse-pathway .cx-pathway-next {
+    border-left: 4px solid currentColor;
+    padding-left: 0.5em;
+}

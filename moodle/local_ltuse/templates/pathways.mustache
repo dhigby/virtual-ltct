@@ -1,0 +1,91 @@
+{{!
+    @template local_ltuse/pathways
+
+    The Pathways list views (spec 006, contracts/pages.md): a learner's own pathways, each as
+    a summary, or every pathway to browse. Phone-width first: lists, no wide tables. Shows
+    course completion only; never a level for the learner (FR-011, R13).
+
+    Context variables required for this template:
+    * learnername: fullname() of the learner viewed, or null when it is the viewer
+    * listurl, browseurl
+    * browse: true for the browse view
+    * hasmine, mine: [{key, title, kind, url, total, completed, done, progresstext,
+        nextcourse: {courseid, fullname (format_string, so unescaped), url, statustext} or null}]
+    * none: true when the learner has no pathway
+    * groups: [{name, pathways: [{title, url}]}]: competency pathways by category (browse)
+    * hasroles, roles: [{title, url}]: role pathways (browse)
+
+    Example context (json):
+    {
+        "learnername": null,
+        "listurl": "#",
+        "browseurl": "#",
+        "browse": false,
+        "hasmine": true,
+        "mine": [{"key": "competency:keyboards", "title": "Keyboards", "kind": "competency",
+            "url": "#", "total": 2, "completed": 1, "done": false,
+            "progresstext": "1 of 2 courses completed",
+            "nextcourse": {"courseid": 13, "fullname": "Keyboards 2", "url": "#",
+                "statustext": "Not started"}}],
+        "none": false,
+        "groups": [],
+        "hasroles": false,
+        "roles": []
+    }
+}}
+<div class="local-ltuse-pathways">
+{{#learnername}}
+    <h3>{{learnername}}</h3>
+{{/learnername}}
+{{^browse}}
+    {{#learnername}}<h3 class="h4">{{#str}}pathways, local_ltuse{{/str}}</h3>{{/learnername}}
+    {{^learnername}}<h3 class="h4">{{#str}}pathway:mine, local_ltuse{{/str}}</h3>{{/learnername}}
+    {{#none}}
+    {{#learnername}}<p>{{#str}}pathway:noneforlearner, local_ltuse{{/str}}</p>{{/learnername}}
+    {{^learnername}}<p>{{#str}}pathway:none, local_ltuse{{/str}}</p>{{/learnername}}
+    {{/none}}
+    {{#hasmine}}
+    <ul class="list-unstyled">
+        {{#mine}}
+        <li class="card mb-3">
+            <div class="card-body">
+                <h4 class="card-title h5"><a href="{{url}}">{{title}}</a></h4>
+                <p class="mb-1">{{progresstext}}</p>
+                {{#done}}
+                <p class="mb-0 text-success">{{#learnername}}{{#str}}pathway:donelearner, local_ltuse{{/str}}{{/learnername}}{{^learnername}}{{#str}}pathway:done, local_ltuse{{/str}}{{/learnername}}</p>
+                {{/done}}
+                {{#nextcourse}}
+                <p class="mb-0 cx-pathway-next">
+                    <span class="badge bg-primary">{{#str}}pathway:next, local_ltuse{{/str}}</span>
+                    <a href="{{url}}">{{{fullname}}}</a>
+                    <span class="text-muted">({{statustext}})</span>
+                </p>
+                {{/nextcourse}}
+            </div>
+        </li>
+        {{/mine}}
+    </ul>
+    {{/hasmine}}
+    <p><a href="{{browseurl}}">{{#str}}pathway:browse, local_ltuse{{/str}}</a></p>
+{{/browse}}
+{{#browse}}
+    <h3 class="h4">{{#str}}pathway:browse, local_ltuse{{/str}}</h3>
+    {{#groups}}
+    <h4 class="h5 mt-3">{{name}}</h4>
+    <ul>
+        {{#pathways}}
+        <li><a href="{{url}}">{{title}}</a></li>
+        {{/pathways}}
+    </ul>
+    {{/groups}}
+    {{#hasroles}}
+    <h4 class="h5 mt-3">{{#str}}pathway:roles, local_ltuse{{/str}}</h4>
+    <ul>
+        {{#roles}}
+        <li><a href="{{url}}">{{title}}</a></li>
+        {{/roles}}
+    </ul>
+    {{/hasroles}}
+    <p><a href="{{listurl}}">{{#learnername}}{{#str}}pathways, local_ltuse{{/str}}{{/learnername}}{{^learnername}}{{#str}}pathway:mine, local_ltuse{{/str}}{{/learnername}}</a></p>
+{{/browse}}
+</div>

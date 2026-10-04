@@ -48,7 +48,7 @@ Paths are from the repository root. `local_ltuse/` means `moodle/local_ltuse/`.
 
 ## Phase 3: User Story 1 - A learner follows a competency pathway (P1) MVP
 
-Files: local_ltuse/pathways.php, local_ltuse/templates/pathways.mustache, local_ltuse/templates/pathway.mustache, local_ltuse/classes/hook_callbacks.php, local_ltuse/db/mobile.php, local_ltuse/classes/output/mobile.php, local_ltuse/templates/mobile_pathways.mustache
+Files: local_ltuse/classes/pathway/view.php, local_ltuse/pathways.php, local_ltuse/templates/pathways.mustache, local_ltuse/templates/pathway.mustache, local_ltuse/classes/hook_callbacks.php, local_ltuse/db/mobile.php, local_ltuse/classes/output/mobile.php, local_ltuse/templates/mobile_pathways.mustache
 
 **Goal**: a learner sees their pathways, browses every competency pathway, and sees completed, next and remaining courses.
 
@@ -56,10 +56,10 @@ Files: local_ltuse/pathways.php, local_ltuse/templates/pathways.mustache, local_
 
 **Wave 1 — independent (different files):**
 
-- [ ] **T018** [P] [US1] Pathways page: own list, `key`, `browse`, `userid` with `viewer::may_view()` (contracts/pages.md) (FR-009, FR-012) · local_ltuse/pathways.php
-- [ ] **T019** [P] [US1] List and pathway templates; next course marked `cx-pathway-next`; levels only as "Aims at" and row headings · local_ltuse/templates/pathways.mustache, local_ltuse/templates/pathway.mustache
-- [ ] **T020** [P] [US1] Primary navigation: `local_ltuse_pathways` for every signed-in non-guest, and `local_ltuse_pathways_manage` when `may_assign()` holds for some cohort · local_ltuse/classes/hook_callbacks.php
-- [ ] **T021** [P] [US1] App handler `pathways` (`CoreMainMenuDelegate`), `pathways_init`, `pathways_view`, and its template, own pathways only (FR-015) · local_ltuse/db/mobile.php, local_ltuse/classes/output/mobile.php, local_ltuse/templates/mobile_pathways.mustache
+- [x] **T018** [P] [US1] `pathway\view`: one key for one learner as a `builder` context (competency row, delivered courses with level, `progress`, level labels), and a learner's summaries; then the Pathways page: own list, `key`, `browse`, `userid` with `viewer::may_view()` (contracts/pages.md) (FR-009, FR-012). US5 reuses `view` · local_ltuse/classes/pathway/view.php, local_ltuse/pathways.php
+- [x] **T019** [P] [US1] List and pathway templates; next course marked `cx-pathway-next`; levels only as "Aims at" and row headings · local_ltuse/templates/pathways.mustache, local_ltuse/templates/pathway.mustache
+- [x] **T020** [P] [US1] Primary navigation: `local_ltuse_pathways` for every signed-in non-guest, and `local_ltuse_pathways_manage` when `may_assign()` holds for some cohort · local_ltuse/classes/hook_callbacks.php
+- [x] **T021** [P] [US1] App handler `pathways` (`CoreMainMenuDelegate`), `pathways_init`, `pathways_view`, and its template, own pathways only (FR-015) · local_ltuse/db/mobile.php, local_ltuse/classes/output/mobile.php, local_ltuse/templates/mobile_pathways.mustache
 
 **Checkpoint**: with courses mapped and delivered, a learner can follow a pathway in the browser and the app.
 
@@ -73,16 +73,16 @@ Files: local_ltuse/classes/external/set_course_pathway.php, local_ltuse/db/servi
 
 ### Tests
 
-- [ ] **T022** [P] [US2] pytest, written first: `ensure_pathway` is called after the competency map with `delivery` and `targetlevel`; dry run sends nothing; a delivered course with no level exits 1; a read-back mismatch exits 1; `check_moodle_payload` refuses a level not in `outcome-levels.yaml` · tests/test_publish_moodle.py
+- [x] **T022** [P] [US2] pytest, written first: `ensure_pathway` is called after the competency map with `delivery` and `targetlevel`; dry run sends nothing; a delivered course with no level exits 1; a read-back mismatch exits 1; `check_moodle_payload` refuses a level not in `outcome-levels.yaml` · tests/test_publish_moodle.py
 
 ### Implementation
 
 **Wave 1 — independent (different files):**
 
-- [ ] **T023** [P] [US2] `local_ltuse_set_course_pathway`: validate, upsert, compute keys through `catalogue`, store `pathwaykeys`, fire `pathway_courses_changed` per key joined or left after commit, return the read-back (contracts/publish.md) (FR-002, FR-005, FR-006) · local_ltuse/classes/external/set_course_pathway.php
-- [ ] **T024** [P] [US2] Register the function in the `ltuse_publish` service, in a "Spec 006" block · local_ltuse/db/services.php
-- [ ] **T025** [P] [US2] Publisher: `ensure_pathway()` after `ensure_competencies()`, print lines and exit-1 cases of contracts/publish.md (SC-005) · scripts/publish_moodle.py
-- [ ] **T026** [P] [US2] Payload gate: a present `target_outcome_level` must be a `course_target_levels` label, verbatim · scripts/check_moodle_payload.py
+- [x] **T023** [P] [US2] `local_ltuse_set_course_pathway`: validate, upsert, compute keys through `catalogue`, store `pathwaykeys`, fire `pathway_courses_changed` per key joined or left after commit, return the read-back (contracts/publish.md) (FR-002, FR-005, FR-006) · local_ltuse/classes/external/set_course_pathway.php
+- [x] **T024** [P] [US2] Register the function in the `ltuse_publish` service, in a "Spec 006" block · local_ltuse/db/services.php
+- [x] **T025** [P] [US2] Publisher: `ensure_pathway()` after `ensure_competencies()`, print lines and exit-1 cases of contracts/publish.md (SC-005) · scripts/publish_moodle.py
+- [x] **T026** [P] [US2] Payload gate: a present `target_outcome_level` must be a `course_target_levels` label, verbatim · scripts/check_moodle_payload.py
 
 **Checkpoint**: a republish moves a course between pathways with no admin step.
 
@@ -92,7 +92,7 @@ Files: none of its own. The role declaration, its apply and its view are built i
 
 **Independent Test**: quickstart V12, on a scratch declaration that is never merged.
 
-- [ ] **T027** [US3] Run T014's and T015's role cases and confirm a role key renders through `pathways.php?key=role:<key>` in a local harness run; record the result in the task note. No file changes · (verification only)
+- [x] **T027** [US3] Run T014's and T015's role cases and confirm a role key renders through `pathways.php?key=role:<key>` in a local harness run; record the result in the task note. No file changes · (verification only)
 
 ## Phase 6: User Story 4 - A mentor sees a learner's pathway progress (P2)
 
@@ -100,7 +100,7 @@ Files: local_ltuse/templates/mentoring.mustache, local_ltuse/templates/mobile_me
 
 **Independent Test**: quickstart V7.
 
-- [ ] **T028** [P] [US4] Each mentee row links to `/local/ltuse/pathways.php?userid=<id>` in the browser, and names the Pathways menu in the app (FR-012) · local_ltuse/templates/mentoring.mustache, local_ltuse/templates/mobile_mentoring.mustache
+- [x] **T028** [P] [US4] Each mentee row links to `/local/ltuse/pathways.php?userid=<id>` in the browser, and names the Pathways menu in the app (FR-012) · local_ltuse/templates/mentoring.mustache, local_ltuse/templates/mobile_mentoring.mustache
 
 ## Phase 7: User Story 5 - A manager assigns a pathway and follows their organisation's progress (P3)
 
@@ -110,9 +110,9 @@ Files: local_ltuse/pathways_manage.php, local_ltuse/templates/pathways_manage.mu
 
 **Wave 1 — independent (different files):**
 
-- [ ] **T029** [P] [US5] Assign page: cohorts `may_assign()` allows, assign and unassign with sesskey, progress table of members with `pathway:roletotal` and links (FR-012, FR-013) · local_ltuse/pathways_manage.php
-- [ ] **T030** [P] [US5] Its template · local_ltuse/templates/pathways_manage.mustache
-- [ ] **T031** [P] [US5] `\core\event\cohort_deleted` observer calling `assignments::unassign()` for each of the cohort's rows · local_ltuse/db/events.php, local_ltuse/classes/observer.php
+- [x] **T029** [P] [US5] Assign page: cohorts `may_assign()` allows, assign and unassign with sesskey, progress table of members with `pathway:roletotal` and links (FR-012, FR-013) · local_ltuse/pathways_manage.php
+- [x] **T030** [P] [US5] Its template · local_ltuse/templates/pathways_manage.mustache
+- [x] **T031** [P] [US5] `\core\event\cohort_deleted` observer calling `assignments::unassign()` for each of the cohort's rows · local_ltuse/db/events.php, local_ltuse/classes/observer.php
 
 **Checkpoint**: every story works on its own.
 
@@ -120,18 +120,18 @@ Files: local_ltuse/pathways_manage.php, local_ltuse/templates/pathways_manage.mu
 
 **Wave 1 — independent (different files):**
 
-- [ ] **T032** [P] CI runs `tests/pathway_harness.php` and `tests/test_pathway_wording.py` · .github/workflows/site-config.yml
-- [ ] **T033** [P] Plugin README: pathways, the 008 seam, the core tables read (`course`, `course_completions`, `cohort`, `cohort_members`, `user_enrolments`, `enrol`) and why (Principle XI) · local_ltuse/README.md
-- [ ] **T034** [P] Site README: `pathways.yaml`, adding a role, retiring a course by hiding it · moodle/site/README.md
-- [ ] **T035** [P] Row 12: built, with what is still to verify on the instance (quickstart, SC-003) · moodle/REQUIREMENTS.md
+- [x] **T032** [P] CI runs `tests/pathway_harness.php` and `tests/test_pathway_wording.py` · .github/workflows/site-config.yml
+- [x] **T033** [P] Plugin README: pathways, the 008 seam, the core tables read (`course`, `course_completions`, `cohort`, `cohort_members`, `user_enrolments`, `enrol`) and why (Principle XI) · local_ltuse/README.md
+- [x] **T034** [P] Site README: `pathways.yaml`, adding a role, retiring a course by hiding it · moodle/site/README.md
+- [x] **T035** [P] Row 12: built, with what is still to verify on the instance (quickstart, SC-003) · moodle/REQUIREMENTS.md
 
 **⟶ Wait for Wave 1 to finish, then:**
 
-- [ ] **T036** Validate against the Success Criteria: run `pytest -q tests/`, every `php tests/*_harness.php`, `python scripts/site_config.py validate`, `python scripts/gen_coverage.py` (unchanged) and `php -l` on every changed PHP file · (suite run)
+- [x] **T036** Validate against the Success Criteria: run `pytest -q tests/`, every `php tests/*_harness.php`, `python scripts/site_config.py validate`, `python scripts/gen_coverage.py` (unchanged) and `php -l` on every changed PHP file · (suite run)
 
 ## Dependencies & Execution Order
 
 - Setup (T001–T002) → Foundational → stories → Polish.
 - Foundational: Wave 1 (T003–T011) → Wave 2 (T012–T016) → T017.
-- US1 (T018–T021) and US2 (T022–T026) depend only on Foundational and own disjoint files, so they can run in parallel. US3 (T027) needs Phase 2 and T018. US4 (T028) needs T018. US5 (T029–T031) needs Phase 2.
+- US1 (T018–T021) and US2 (T022–T026) depend only on Foundational and own disjoint files, so they can run in parallel. US3 (T027) needs Phase 2 and T018. US4 (T028) needs T018. US5 (T029–T031) needs Phase 2 and T018's `pathway\view`.
 - Polish: Wave 1 (T032–T035) → T036.

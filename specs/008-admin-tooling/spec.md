@@ -8,6 +8,19 @@
 
 **Input**: User description: "Deliver REQUIREMENTS.md row #14, Simple administration (Must, M, Ongoing): a small team — and the organisation and cohort managers of partner organisations — can create learner accounts in bulk, put learners into cohorts, enrol cohorts into courses and keep that up to date, without a dedicated LMS administrator. Scripted helpers run against Moodle from the training-system half of this repo and never write learner data into git; because GitDoc auto-commit pushes the working tree, their inputs and outputs must live outside it. Row #14 is a 'simple' row: it is not done until 2–3 real organisation or cohort managers have used it and their findings are recorded."
 
+## Clarifications
+
+### Session 2026-10-04 (re-plan on spec 002's amendments)
+
+This spec was written on 2026-09-30, before spec 002's amendments of 2026-10-02 (open courses; managers manage their own people) and 2026-10-03 (Areas and Area LT Coordinators). Spec 002 says 008 "is re-planned on the 2026-10-02 and 2026-10-03 amendments" (002 Dependencies). Each answer below cites the decision it rests on; nothing here is newly decided. Answers that the plan proposes, and that still need the maintainer, are in [plan.md](plan.md) "Decisions on the plan's limits", not here.
+
+- Q: May partner organisation managers create accounts and enrol their own learners (US4)? → A: Managers enrol, unenrol, suspend, reactivate, send a reset link and assign mentors for their own organisation's learners, through spec 002's organisation page; they never create accounts or edit the organisation field (002 Clarifications 2026-10-02, FR-006, FR-009, FR-013). The site team creates every account until spec 017 lets an ALTC create one by approving a request for their own Area (INTENT 2026-10-03, confirmed by Doug 2026-10-04). So US4 is delivered by spec 002's page, and 008's tooling is the site team's.
+- Q: What scopes a manager (FR-008)? → A: Membership of the organisation's managers cohort, checked by 002's shared `access` class, and the organisation page; not category-scoped roles (002 plan, Cross-spec effects). An ALTC is the organisation manager of each Area entry they cover (002 FR-015).
+- Q: Can the tooling put a learner into an organisation cohort directly? → A: No. Organisation cohorts are filled by `tool_dynamic_cohorts` from the `ltct_org` profile field and cannot be edited by hand (002 R4). The tooling sets `ltct_org`, which only the site team may do (002 FR-009).
+- Q: Are organisations separated by groups in a course? → A: No. Shared courses have no organisation groups (002 FR-011, FR-019). Enrolment has a shared-course case and an organisation-only case (002 plan, Cross-spec effects).
+- Q: What does this spec gain from other specs? → A: The counted dry run for moving learners from `sil` or `sil-partner` to an Area (002 FR-017); automatic enrolment of a learner's course mentor in `local_ltuse`, defaulting to their default mentor (002 Dependencies, 003 R8, 012 R3); bulk mentor assignment and ending all of a mentor's relationships (003 plan, R6); and assigning ALTCs to managers cohorts (002 FR-012, FR-015).
+- Q: How do accounts relate to identity protection? → A: An account is created with any protection it needs already set, before any enrolment. Until spec 016 is live, a request that asks for any protection waits (INTENT 2026-10-03). Usernames are neutral, never built from names (016 R13).
+
 ## User Scenarios & Testing *(mandatory)*
 
 ### User Story 1 - Bring a new intake of learners onto the system (Priority: P1)
@@ -63,14 +76,32 @@ Over months, learners change: someone moves organisation, leaves, needs their ac
 
 An organisation or cohort manager from a partner organisation brings on their own learners and enrols their own cohorts, within their organisation only, without asking our team — and cannot see or change anyone in another organisation.
 
-**Why this priority**: INTENT lists this as a need of organisation and cohort managers, but also as an open question: whether a partner may enrol its own learners without us. [NEEDS CLARIFICATION: May partner organisation managers create accounts and enrol their own learners without our team, or do they request it and our team applies it? This decides whether US4 is in scope for this spec; it is the same open question as 002-org-structure-cohorts FR-013 and should be answered once for both.]
+**Why this priority**: INTENT lists this as a need of organisation and cohort managers. Answered 2026-10-02 (Clarifications above): managers enrol and manage their own learners but never create accounts, and they do it on spec 002's organisation page. This spec's share of US4 is to leave the manager nothing to ask the site team for except a new account, and to make that request a list the site team applies unchanged.
 
-**Independent Test**: As a test organisation manager scoped to one organisation, add and enrol test learners; confirm they cannot see or affect learners, cohorts or courses in a second test organisation.
+**Independent Test**: As a test manager of organisation A, on spec 002's page, enrol and suspend A's test learners; confirm they cannot see or affect B's learners, cohorts or courses; and confirm that an intake list they fill in from the template is applied by the site team unchanged.
 
 **Acceptance Scenarios**:
 
-1. **Given** a manager scoped to organisation A, **When** they apply an intake, **Then** only organisation A's cohorts can be targeted.
+1. **Given** a manager scoped to organisation A, **When** they enrol a learner on spec 002's page, **Then** only A's learners, and the courses 002 allows, can be chosen.
 2. **Given** a manager scoped to organisation A, **When** they look for learners of organisation B, **Then** none are visible.
+3. **Given** a manager who needs new accounts, **When** they fill in the intake template and send it to the site team, **Then** the site team applies it with no correction.
+
+---
+
+### User Story 5 - Mentors follow their learners (Priority: P2)
+
+*Added 2026-10-04 from FR-017 and FR-018 (Clarifications).* The site team assigns mentors to many learners from one list, or ends all of one mentor's relationships. From then on, each learner's course mentor is in the courses the learner takes, able to assess their work, without anyone enrolling them, and leaves as soon as the reason ends.
+
+**Why this priority**: Every course is assessed by a mentor in the course (002 Dependencies). Without this, the site team enrols every mentor by hand in every course, and a mentor left enrolled keeps seeing a protected learner's real identity (016 FR-006).
+
+**Independent Test**: With test accounts, assign a test mentor to a learner enrolled in one course; confirm the mentor is enrolled as Course mentor in a group with that learner; end the relationship and confirm the mentor leaves the course in the same request.
+
+**Acceptance Scenarios**:
+
+1. **Given** a list of learner–mentor pairs held outside the repo, **When** the site team previews and applies it, **Then** each relationship exists once, and a re-run changes nothing.
+2. **Given** a learner with a default mentor, **When** the learner is enrolled in a course, **Then** the mentor is enrolled as Course mentor in that course.
+3. **Given** a one-course mentor recorded for a learner in a course, **When** the sync runs, **Then** that mentor is the learner's course mentor there (precedence per plan decision 2).
+4. **Given** a course mentor, **When** the relationship ends, or the learner's last active enrolment in the course ends, **Then** the mentor loses the enrolment and the role in the same request.
 
 ---
 
@@ -93,15 +124,23 @@ An organisation or cohort manager from a partner organisation brings on their ow
 - **FR-003**: Applying the same intake or change twice MUST leave Moodle exactly as applying it once did; existing accounts are matched, never duplicated.
 - **FR-004**: The tooling MUST refuse any input, output, report or log location inside the repository working tree, and MUST NOT write learner data into the repository under any circumstance.
 - **FR-005**: Operators MUST be able to enrol a cohort into a course, or into every course of a pathway, such that later cohort changes carry through automatically.
-- **FR-006**: Operators MUST be able to suspend a learner, move a learner between cohorts and add a learner to a further cohort; none of these MAY delete a learner's completions, attempts or other history.
+- **FR-006**: Operators MUST be able to suspend a learner, move a learner between cohorts and add a learner to a further cohort; none of these MAY delete a learner's completions, attempts or other history. *(2026-10-04: a further cohort beyond managers cohorts and `ltct:mentors` waits on spec 002's decision on ALTC teaching groups, 002 FR-015; plan decision 8.)*
 - **FR-007**: Operators MUST be able to see a summary of cohort membership for the organisations they are responsible for, shown on screen or saved only outside the repository.
-- **FR-008**: Every action MUST be confined to the organisations the operator is responsible for, using the organisation structure and category-scoped manager roles of 002; the same single role set applies to every partner.
+- **FR-008**: Every action MUST be confined to the organisations the operator is responsible for, using the organisation structure of 002, the managers cohort and the organisation page; the same single role set applies to every partner.
 - **FR-009**: Credentials and the server address MUST come from the environment only, and MUST NOT be written, echoed or logged into the repository; the tooling uses a credential distinct from the publishing credential, with only the permissions administration needs.
 - **FR-010**: The tooling MUST use core Moodle capability where it exists (for example its own bulk user upload and cohort enrolment) and add helpers only where core leaves the job hard for a small team.
 - **FR-011**: A team member MUST be able to run the tooling without git knowledge or LMS administration experience, guided through each step in plain language.
 - **FR-012**: The tooling MUST NOT record or change any CBC level; it handles accounts, cohorts and enrolments only.
 - **FR-013**: Automated tests and committed examples MUST use only obviously fictitious identities on a reserved example domain, never real learner data.
 - **FR-014**: The feature MUST NOT be marked done until 2–3 real organisation or cohort managers have used it and their findings are recorded, de-identified, with each finding resolved or consciously accepted.
+
+*Added 2026-10-04, from obligations other specs placed on this one (Clarifications):*
+
+- **FR-015**: The site team MUST be able to move learners from one organisation entry to another, including from `sil` or `sil-partner` to an Area, after a counted dry run that shows, per course, whether every enrolment the move would suspend is matched by an active enrolment through the new organisation; the move MUST be refused for any learner it would leave without access to a shared course they have (002 FR-017).
+- **FR-016**: The site team MUST be able to add and remove people from managers cohorts, including an ALTC covering several Area entries, and to add and remove people from the `ltct:mentors` cohort (002 FR-012, FR-015).
+- **FR-017**: The site team MUST be able to assign mentors to many learners from one list, and to end all of one mentor's relationships, as the same manual relationship spec 003 defines (003 plan, R1, R6).
+- **FR-018**: A learner's course mentor MUST be enrolled in each course the learner takes, automatically and without a manual step, defaulting to the learner's default mentor, and MUST lose that enrolment when the relationship, or the learner's last active enrolment in the course, ends. A one-course mentor and the mentors of a cohort in a course are recorded and synced the same way (002 Dependencies, 003 R8, 012 R3). Because this enrolment entitles the mentor to a protected learner's real identity (016 FR-006), it MUST never outlive its reason.
+- **FR-019**: No new account MAY be enrolled, or added to a cohort that enrols, until any protection it needs is settled, and no update by this tooling MAY write a field of an existing account other than its suspension and its organisation field (INTENT 2026-10-03; 016 R2, R13).
 
 ### Key Entities
 
@@ -118,13 +157,13 @@ An organisation or cohort manager from a partner organisation brings on their ow
 - **SC-001**: A team member brings on an intake of 30 learners, placed in a cohort and enrolled in a course, in under 15 minutes, excluding time spent preparing the list.
 - **SC-002**: Re-applying any intake or change produces zero new accounts, memberships or enrolments.
 - **SC-003**: Across the verification run and the manager pilot, zero files containing learner data appear in the repository working tree or its history.
-- **SC-004**: At least 2 of the 2–3 real managers complete an intake and a cohort enrolment unaided on first attempt, and none needs to be taught Moodle's administration screens.
-- **SC-005**: An operator scoped to one organisation can see or change zero learners, cohorts or enrolments of another organisation.
+- **SC-004**: At least 2 of the 2–3 real managers complete an intake and a cohort enrolment unaided on first attempt, and none needs to be taught Moodle's administration screens. *(Wording pending plan decision 6: managers never run the site team's tool, so the proposal is "a list they fill in is applied unchanged, and they enrol and suspend their own people on 002's page unaided".)*
+- **SC-005**: An operator scoped to one organisation can see or change zero learners, cohorts or enrolments of another organisation. *(The site team is not scoped to one organisation, by design; manager scope is enforced by spec 002's page and checked in quickstart V16.)*
 - **SC-006**: Every manager finding is recorded and marked resolved or accepted before the row is marked done.
 
 ## Assumptions
 
-- Operators are our team and, subject to the clarification in US4, partner organisation and cohort managers; none is expected to be an LMS administrator.
+- Operators of this spec's tooling are the site team; partner organisation managers act on spec 002's page (Clarifications). None is expected to be an LMS administrator.
 - The operator prepares the intake list from their organisation's own records; the tooling does not collect learner data from anywhere else.
 - Consent, a privacy notice and "delete my data" belong to the undecided data-protection position (INTENT open questions); this spec neither implements nor precludes them.
 - Account matching is by email address, as the one identifier every partner can supply.
@@ -137,8 +176,10 @@ An organisation or cohort manager from a partner organisation brings on their ow
 | # | Requirement | Pri | What this spec delivers |
 |---|---|---|---|
 | 14 | Simple administration | Must | Previewed, repeatable bulk intake into cohorts; cohort enrolment into courses and pathways; routine suspend and move; scoped cohort summaries; guidance a non-administrator can follow; and the 2–3 real-manager test that makes it done. |
+| 11 | Mentor / trainer interaction | Must | Bulk mentor assignment and ending all of a mentor's relationships; automatic enrolment of a learner's course mentor, removed when its reason ends (FR-017, FR-018). |
+| 8, 15 | Cohorts / scales across organisations | Must | The counted dry run and the move of learners from `sil` / `sil-partner` to their Area entry, with every shared-course enrolment matched first (FR-015). |
 
-On delivery, the same PR updates these rows' status in moodle/REQUIREMENTS.md (constitution X).
+On delivery, each PR updates the status of the rows it delivers in moodle/REQUIREMENTS.md (constitution X).
 
 ## Constitution Check
 
@@ -149,13 +190,17 @@ On delivery, the same PR updates these rows' status in moodle/REQUIREMENTS.md (c
 - **VI. No git, no LMS orientation**: A team member runs it without git or LMS administration knowledge (FR-011, SC-004).
 - **VII. One shape**: One role set and one process for every partner; no per-partner variant (FR-008).
 - **IX. Flat cost**: No paid plugin or service; resilient to interrupted low-bandwidth runs.
-- **X. Traceable and verified**: Cites row #14; every Moodle capability the plan relies on is verified on the temporary 5.2.3+ instance with test accounts; not done until 2–3 real managers have used it (FR-014). The recurring burden is administration time, carried by our team and, if US4 is confirmed, partner managers for their own people; server operation is not claimed as covered while the operator is undecided (015).
+- **X. Traceable and verified**: Cites row #14; every Moodle capability the plan relies on is verified on the temporary 5.2.3+ instance with test accounts; not done until 2–3 real managers have used it (FR-014). The recurring burden is administration time, carried by our team and, through spec 002's organisation page, partner managers for their own people; server operation is not claimed as covered while the operator is undecided (015).
 - **Platform & Delivery**: Core first (FR-010); Moodle core never modified; any plugin pinned; one instance for all partners; server always from `MOODLE_URL`, never hard-coded.
 
 ## Dependencies
 
 - **001-site-config-as-code** — applies the roles, capabilities and settings the tooling relies on.
-- **002-org-structure-cohorts** — organisations, categories, cohort definitions, profile fields and category-scoped managers the tooling acts within.
+- **002-org-structure-cohorts** — organisations, categories, cohort definitions, profile fields, the managers cohorts and the organisation page the tooling acts within.
 - **006-learning-pathways** — the pathways a cohort may be enrolled into (FR-005, pathway half).
 - **004-progress-reporting** — the place managers see progress; this spec does not duplicate it.
 - **015-production-hosting-ops** — real intakes wait for the production server and its operator.
+- **003-mentor-role** — the learner-level mentor relationship that bulk assignment writes and course-mentor enrolment follows (FR-017, FR-018).
+- **012-assignments-peer-review** — the Course mentor role (`teacher`) that course-mentor enrolment grants, and the assessed activities that limit an assessor to their own learners.
+- **016-identity-protection** — protection set before enrolment, neutral usernames, and course mentors' entitlement (FR-019, FR-018).
+- **017-enrolment-requests** (to be specified) — revisits who creates accounts; until then the site team creates every one.

@@ -26,13 +26,14 @@ class set_org_protection extends external_api {
             'orgkey' => new external_value(PARAM_ALPHANUMEXT, 'An organisation key from organisations.yaml'),
             'minlevel' => new external_value(PARAM_ALPHA, 'none, email or firstname'),
             'managers_see_identity' => new external_value(PARAM_BOOL,
-                'Whether the organisation\'s own managers see real identities', VALUE_DEFAULT, true),
+                'Whether the organisation\'s own managers see real identities; left out, what is stored is kept',
+                VALUE_DEFAULT, null),
             'acknowledgehistory' => new external_value(PARAM_BOOL,
                 'The site team knows members with activity are linked to their new display', VALUE_DEFAULT, false),
         ]);
     }
 
-    public static function execute(string $orgkey, string $minlevel, bool $managers_see_identity = true,
+    public static function execute(string $orgkey, string $minlevel, ?bool $managers_see_identity = null,
             bool $acknowledgehistory = false): array {
         global $USER;
         $params = self::validate_parameters(self::execute_parameters(),

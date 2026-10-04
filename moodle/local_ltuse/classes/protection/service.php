@@ -73,6 +73,9 @@ class service {
     /** @var array<int, bool> is_protected() for this request; emptied by every write */
     private static $protected = [];
 
+    /** @var stdClass[]|null org_rows(), until reset_caches() */
+    private static $orgrows = null;
+
     // --- reading -----------------------------------------------------------------------------
 
     /**
@@ -188,22 +191,34 @@ class service {
     }
 
     /**
-     * Every organisation's stored setting, by key. Cached for the request.
+     * Every organisation's stored setting, by key. Cached until reset_caches(), which apply()
+     * and set_org_protection() call: cron runs many tasks in one process, so a cache kept for
+     * the "request" would hide a minimum raised by an earlier task.
      *
      * @return stdClass[]
      */
     public static function org_rows(): array {
         global $DB;
-        static $rows = null;
-        if ($rows === null || (defined('PHPUNIT_TEST') && PHPUNIT_TEST)) {
-            $rows = [];
+        if (self::$orgrows === null) {
+            self::$orgrows = [];
             if (self::table_exists()) {
                 foreach ($DB->get_records(self::ORGTABLE) as $row) {
-                    $rows[(string)$row->orgkey] = $row;
+                    self::$orgrows[(string)$row->orgkey] = $row;
                 }
             }
         }
-        return $rows;
+        return self::$orgrows;
+    }
+
+    /**
+     * Forget every cached read: organisation rows, activity and protection flags. Cheap; the
+     * next read goes to the database.
+     */
+    public static function reset_caches(): void {
+        self::$orgrows = null;
+        self::$activity = [];
+        self::$protected = [];
+        entitlement::reset_cache();
     }
 
     /**
@@ -235,7 +250,7 @@ class service {
      * @return string
      */
     public static function user_org_minimum(int $userid): string {
-        $keys = local_ltuse_organisation_member_keys($userid);
+        $keys = local_ltuse_organisation_member_keys($userid, true);   // Never a stale membership.
         $org = self::user_org($userid);
         if ($org !== '') {
             $keys[] = $org;
@@ -333,10 +348,17 @@ class service {
         $realfirst = self::option_text($options, 'realfirstname') ?? $basefirst;
         $reallast = self::option_text($options, 'reallastname') ?? $baselast;
         $pseudonym = self::option_text($options, 'pseudonym') ?? ($row ? (string)$row->pseudonym : '');
+        // Someone who may manage but not see this person (a manager whose organisation
+        // withholds identity) gets one refusal for every name-based problem, so a guessed
+        // pseudonym or username can never confirm a real name.
+        $canview = entitlement::can_view_identity($actorid, $userid);
         if ($effective === levels::PSEUDONYM) {
             $others = $DB->get_fieldset_select(self::TABLE, 'pseudonym', "userid <> :userid AND pseudonym <> ''",
                 ['userid' => $userid]);
             $problems = levels::pseudonym_problems($pseudonym, $realfirst, $reallast, $others);
+            if ($problems && !$canview) {
+                throw new moodle_exception('protection:err:refused', 'local_ltuse');
+            }
             if ($problems) {
                 throw new moodle_exception('protection:err:pseudonym', 'local_ltuse', '',
                     implode(', ', array_map(function($p) {
@@ -345,12 +367,19 @@ class service {
             }
         }
         $newusername = self::option_text($options, 'newusername');
-        if ($newusername !== null) {
-            self::check_username($newusername, $userid, $realfirst, $reallast);
-        }
-        if (levels::rank($effective) >= levels::rank(levels::FIRSTNAME) &&
-                levels::username_reveals($newusername ?? (string)$user->username, $realfirst, $reallast)) {
-            throw new moodle_exception('protection:err:username', 'local_ltuse');
+        try {
+            if ($newusername !== null) {
+                self::check_username($newusername, $userid, $realfirst, $reallast);
+            }
+            if (levels::rank($effective) >= levels::rank(levels::FIRSTNAME) &&
+                    levels::username_reveals($newusername ?? (string)$user->username, $realfirst, $reallast)) {
+                throw new moodle_exception('protection:err:username', 'local_ltuse');
+            }
+        } catch (moodle_exception $e) {
+            if (!$canview && $e->errorcode === 'protection:err:username') {
+                throw new moodle_exception('protection:err:refused', 'local_ltuse');
+            }
+            throw $e;
         }
         $from = $row ? (string)$row->effectivelevel : levels::NONE;
         if (levels::needs_acknowledgement($from, $effective, self::has_activity($userid)) &&
@@ -367,7 +396,10 @@ class service {
             'reallastname' => $reallast,
             'corrections' => isset($options['realfields']) && is_array($options['realfields']) ? $options['realfields'] : [],
         ];
-        $corrected = $row && ($realfirst !== $basefirst || $reallast !== $baselast || $target['corrections']);
+        // FR-008: every change is recorded. Same level, but a corrected name or held value, a new
+        // pseudonym or a new username, is a correction.
+        $corrected = $row && ($realfirst !== $basefirst || $reallast !== $baselast || $target['corrections']
+            || trim($pseudonym) !== (string)$row->pseudonym) || $newusername !== null;
         $logsource = $from !== $effective ? $target['source'] : ($corrected ? levels::SOURCE_CORRECTION : null);
         self::write($user, $row, $target, $actorid, $logsource, $newusername);
 
@@ -390,6 +422,7 @@ class service {
      * @return string the effective level now applied
      */
     public static function apply(int $userid): string {
+        self::reset_caches();   // Cron runs tasks back to back in one process.
         $user = core_user::get_user($userid);
         if (!$user || $user->deleted || isguestuser($user) || !self::table_exists()) {
             return levels::NONE;
@@ -441,15 +474,20 @@ class service {
      * needs the acknowledgement, and the refusal carries only their count. Lowering lowers no
      * one: members keep their level as organisation-kept.
      *
+     * Every change is logged (FR-008) as one row with userid 0: the actor, the old and new
+     * minimum and the time. The organisation is not named in the log; its row holds the
+     * current setting, and the members' own log rows follow as apply_protection runs.
+     *
      * @param string $orgkey
      * @param string $minlevel none, email or firstname
-     * @param bool $managersseeidentity
+     * @param bool|null $managersseeidentity null keeps what is stored (1 for a new row), so a
+     *                  caller that only changes the minimum can never re-open withheld identities
      * @param bool $acknowledgehistory
      * @param int|null $actorid
      * @return array {members, withactivity}
      * @throws moodle_exception protection:err:* when refused
      */
-    public static function set_org_protection(string $orgkey, string $minlevel, bool $managersseeidentity,
+    public static function set_org_protection(string $orgkey, string $minlevel, ?bool $managersseeidentity = null,
             bool $acknowledgehistory = false, ?int $actorid = null): array {
         global $DB, $USER;
         $actorid = $actorid ?? (int)$USER->id;
@@ -477,14 +515,19 @@ class service {
             throw new moodle_exception('protection:err:orgneedsack', 'local_ltuse', '', $withactivity);
         }
         $existing = $DB->get_record(self::ORGTABLE, ['orgkey' => $orgkey]);
+        $see = $managersseeidentity ?? ($existing ? (bool)$existing->managers_see_identity : true);
         $record = (object)['orgkey' => $orgkey, 'minlevel' => $minlevel,
-            'managers_see_identity' => $managersseeidentity ? 1 : 0, 'timemodified' => time(), 'usermodified' => $actorid];
+            'managers_see_identity' => $see ? 1 : 0, 'timemodified' => time(), 'usermodified' => $actorid];
         if ($existing) {
             $record->id = $existing->id;
             $DB->update_record(self::ORGTABLE, $record);
         } else {
             $DB->insert_record(self::ORGTABLE, $record);
         }
+        $DB->insert_record(self::LOGTABLE, (object)['userid' => 0, 'actorid' => $actorid,
+            'fromlevel' => $existing ? (string)$existing->minlevel : levels::NONE, 'tolevel' => $minlevel,
+            'source' => levels::SOURCE_ORGMINIMUM, 'timecreated' => time()]);
+        self::reset_caches();
         foreach ($members as $userid) {
             \local_ltuse\task\apply_protection::queue($userid);
         }
@@ -609,12 +652,18 @@ class service {
         if (!$lock) {
             throw new moodle_exception('protection:err:busy', 'local_ltuse');
         }
-        $from = $row ? (string)$row->effectivelevel : levels::NONE;
         $level = (string)$target['effectivelevel'];
+        $from = levels::NONE;
         try {
             $transaction = $DB->start_delegated_transaction();
-            $user = core_user::get_user($userid, '*', MUST_EXIST);   // Fresh, under the lock.
+            // Fresh, under the lock: another write may have run while this one waited, so the
+            // starting level, the held values and the real names all come from here.
+            $user = core_user::get_user($userid, '*', MUST_EXIST);
             $row = self::row($userid);
+            $from = $row ? (string)$row->effectivelevel : levels::NONE;
+            if ($logsource === null && $from !== $level) {
+                $logsource = (string)$target['source'];
+            }
             $profile = profile_user_record($userid, false);
             $datatypes = $DB->get_records_menu('user_info_field', null, '', 'shortname, datatype');
 
@@ -776,6 +825,58 @@ class service {
             unset(self::$bypass[$userid]);
         }
         return true;
+    }
+
+    /**
+     * At a level that withholds no name (email), the account still shows the real names, and
+     * the user or the site team may change them there. Copy them into the row, so entitled
+     * viewers and the certificate see the current name.
+     *
+     * @param int $userid
+     */
+    public static function refresh_real_names(int $userid): void {
+        global $DB;
+        $row = self::row($userid);
+        $config = self::config();
+        if (!$row || !$config || $row->effectivelevel === levels::NONE) {
+            return;
+        }
+        $split = levels::split(levels::withheld((array)$config['withhold'], (string)$row->effectivelevel));
+        if ($split['names'] || $split['firstname']) {
+            return;
+        }
+        $user = core_user::get_user($userid, 'id, firstname, lastname');
+        if (!$user || ((string)$user->firstname === (string)$row->realfirstname
+                && (string)$user->lastname === (string)$row->reallastname)) {
+            return;
+        }
+        if (trim((string)$user->firstname) === '' || trim((string)$user->lastname) === '') {
+            return; // Never overwrite a held name with an empty one.
+        }
+        $DB->update_record(self::TABLE, (object)['id' => $row->id,
+            'realfirstname' => \core_text::substr((string)$user->firstname, 0, 100),
+            'reallastname' => \core_text::substr((string)$user->lastname, 0, 100), 'timemodified' => time()]);
+        self::sync_certname($userid, self::row($userid));
+    }
+
+    /**
+     * Apply now, or queue it when the caller is inside a transaction of its own: a nested
+     * rollback here would force the caller's rollback too, and the lock wait would hold its
+     * transaction open.
+     *
+     * @param int $userid
+     */
+    public static function apply_or_queue(int $userid): void {
+        global $DB;
+        if ($DB->is_transaction_started()) {
+            \local_ltuse\task\apply_protection::queue($userid);
+            return;
+        }
+        try {
+            self::apply($userid);
+        } catch (moodle_exception $e) {
+            \local_ltuse\task\apply_protection::queue($userid);   // Busy: the task retries.
+        }
     }
 
     /**

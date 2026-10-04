@@ -67,7 +67,11 @@ $form = new \local_ltuse\form\protection_form($url, [
     'available' => $available,
     'orgminimum' => $orgminimum,
     'hasactivity' => service::has_activity($userid),
-    'needsusername' => levels::username_reveals((string)$user->username, $realfirst, $reallast),
+    // From the real names on the server, whoever is looking: a manager who may not see them
+    // still needs the field, and its note then says nothing about why (FR-006).
+    'needsusername' => levels::username_reveals((string)$user->username,
+        $row ? (string)$row->realfirstname : (string)$user->firstname,
+        $row ? (string)$row->reallastname : (string)$user->lastname),
     'suggested' => service::suggest_username(),
     'held' => $held,
 ]);

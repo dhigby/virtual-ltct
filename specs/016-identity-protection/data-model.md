@@ -114,7 +114,7 @@ This table holds no learner data, but it lives only in Moodle, because which par
 | `id`, `userid`, `timecreated` | int | |
 | `actorid` | int | The person who made the change. For an organisation-minimum change it is the site-team member who set the minimum, never 0. |
 | `fromlevel`, `tolevel` | char | |
-| `source` | char | `own`, `organisation`, `organisation-kept` or `correction` (a real-value correction, where the level is unchanged) |
+| `source` | char | `own`, `organisation`, `organisation-kept`, `correction` (same level, but a corrected real value, pseudonym or username), or `orgminimum` (an organisation's minimum changed: `userid` is 0, and the organisation is not named; its own row holds the current setting) |
 
 The reconcile task writes no log rows. It reports a count only (V7).
 

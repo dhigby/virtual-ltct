@@ -54,7 +54,8 @@ class protection_form extends \moodleform {
             $mform->addElement('text', 'newusername', get_string('protection:newusername', 'local_ltuse'));
             $mform->setType('newusername', PARAM_USERNAME);
             $mform->setDefault('newusername', (string)$data['suggested']);
-            $mform->addElement('static', 'usernamenote', '', get_string('protection:usernamenote', 'local_ltuse'));
+            $note = !empty($data['seeidentity']) ? 'protection:usernamenote' : 'protection:usernamenote:neutral';
+            $mform->addElement('static', 'usernamenote', '', get_string($note, 'local_ltuse'));
             $mform->hideIf('newusername', 'level', 'in', [levels::NONE, levels::EMAIL]);
             $mform->hideIf('usernamenote', 'level', 'in', [levels::NONE, levels::EMAIL]);
         }

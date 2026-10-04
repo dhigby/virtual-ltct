@@ -39,14 +39,14 @@ class observer {
      */
     public static function user_updated(\core\event\user_updated $event): void {
         self::guard((int)$event->objectid, function(int $userid) {
-            $row = service::row($userid);
-            if ($row && $row->effectivelevel !== levels::NONE) {
-                if (service::drifted($userid, $row)) {
-                    service::apply($userid);
-                }
+            // A drifted account, or a new ltct_org whose organisation has a minimum (US3-3),
+            // is applied now, not at the next reconcile.
+            if (!service::is_settled($userid)) {
+                service::apply_or_queue($userid);
                 return;
             }
-            service::sync_certname($userid, $row);
+            service::refresh_real_names($userid);   // A name edited where names are not withheld.
+            service::sync_certname($userid, service::row($userid));
         });
     }
 
@@ -92,12 +92,8 @@ class observer {
             return;
         }
         self::guard((int)$event->relateduserid, function(int $userid) {
-            try {
-                service::apply($userid);
-            } catch (\moodle_exception $e) {
-                // Busy (another write holds the user's lock): never nested, done by the task.
-                apply_protection::queue($userid);
-            }
+            // Inside someone else's transaction, or busy: the task does it instead (R2).
+            service::apply_or_queue($userid);
         });
     }
 

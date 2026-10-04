@@ -41,6 +41,7 @@ class levels {
     const SOURCE_ORG = 'organisation';
     const SOURCE_KEPT = 'organisation-kept';
     const SOURCE_CORRECTION = 'correction';
+    const SOURCE_ORGMINIMUM = 'orgminimum';   // A log row for an organisation's minimum (userid 0).
 
     /** The account's alternate-name columns, blanked from firstname (R1). */
     const ALTNAMES = ['firstnamephonetic', 'lastnamephonetic', 'middlename', 'alternatename'];

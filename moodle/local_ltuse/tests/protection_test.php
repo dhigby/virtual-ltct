@@ -194,6 +194,21 @@ final class protection_test extends \advanced_testcase {
         $this->assertTrue(entitlement::can_view_identity((int)$mentor->id, (int)$user->id));
     }
 
+    /**
+     * Review finding 1: changing only the minimum must never re-open identities the site team
+     * withheld from the organisation's managers.
+     */
+    public function test_changing_a_minimum_keeps_withheld_identity_withheld(): void {
+        global $DB;
+        $field = (object)['shortname' => service::ORGFIELD, 'name' => 'Organisation', 'datatype' => 'menu',
+            'param1' => "fixture-a\nfixture-b", 'categoryid' => 1, 'visible' => 2, 'locked' => 1];
+        $DB->insert_record('user_info_field', $field);
+        service::set_org_protection('fixture-a', 'email', false);
+        service::set_org_protection('fixture-a', 'none');
+        $this->assertFalse(service::managers_see_identity('fixture-a'));
+        $this->assertEquals(2, $DB->count_records(service::LOGTABLE, ['userid' => 0, 'source' => 'orgminimum']));
+    }
+
     public function test_deleting_a_user_removes_their_rows_and_clears_them_as_an_actor(): void {
         global $DB;
         $user = $this->learner();

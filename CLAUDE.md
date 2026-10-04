@@ -379,6 +379,8 @@ constructing it — the host changes when the server moves.
 - `publish_moodle.py` — build → verify → push. `--dry-run` sends nothing.
 - `site_config.py` — `validate` · `drift` · `apply` the Moodle site declaration in `moodle/site/`
   (settings, plugin pins, roles). `drift` is read-only; `apply` changes only what differs.
+- `spec_status.py` — spec-kit progress (spec, plan, tasks done) for every spec across every
+  local branch and worktree; `--best` keeps each spec's most advanced state. Read-only.
 - `gen_site.py` — `mkdocs-gen-files` build hook; generates the site pages + nav from
   `competencies.yaml` and `competencies/*.md`. Not run by hand; invoked by `mkdocs`.
 - `check_competency_descriptors.py` — validates descriptors stay in sync with the

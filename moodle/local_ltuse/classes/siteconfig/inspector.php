@@ -33,8 +33,6 @@ use core_plugin_manager;
  *                allowassign?}]   allowassign: spec 003, the roles this one may assign
  *   settings   [{name, value?, secret?}]   value is absent for a secret in drift mode
  *   failed_env [{name, env}, ...]         settings whose env: variable was not set (each also carries env_missing)
- *   discussions {shared: [slug, ...]}     spec 012: courses whose discussion is shared across
- *                                         organisations; every other ltct: course is separated
  *
  * and, from spec 002 (specs/002-org-structure-cohorts/data-model.md "Rendered payload"), four
  * arrays that are handed to their own classes for checking:
@@ -57,6 +55,12 @@ use core_plugin_manager;
  *
  *   badge_template         {name, description, ..., image, deny}       badgetemplate
  *   certificate_template   {name, activity_name, intro, font, pages}   certtemplate
+ *
+ * and, from spec 011 (specs/011-events-calendar/contracts/declaration.md "Payload arrays"),
+ * two more, checked last:
+ *
+ *   officehours   {course {...}, scheduler {...}, groups {name_template}}   officehours
+ *   dashboard     [{block, region}]                                        dashboard
  *
  * A spec 004 result may carry `blocking` => report::BLOCKS_REPORT, which leaves only its own
  * report unwritten; has_blocking() delegates to report::has_blocking() so such a result does
@@ -85,9 +89,13 @@ use core_plugin_manager;
  * reader for one pair), both listed in the plugin README (constitution XI).
  *
  * Course discussions (spec 012, R5): groups_get_activity_groupmode()'s rule (lib/grouplib.php:
- * a course's groupmodeforce overrides the activity), and mod_forum's discussion_list vault
- * for the all-participants COUNT. Courses and their forum are looked up by idnumber, as
- * local_ltuse\util does. No discussion, post or user is ever read.
+ * a course's groupmodeforce overrides the activity). Courses and their forum are looked up by
+ * idnumber, as local_ltuse\util does. No discussion, post or user is ever read.
+ *
+ * Open courses (spec 002, amended 2026-10-02, research R2 and R3): every ltct: course has
+ * group mode 0, and no organisation's managers cohort is synced into a shared course. The
+ * second is a COUNT over enrol, cohort, course and course_categories, naming nothing; an
+ * enrolment instance is course configuration, not learner data.
  */
 class inspector {
 
@@ -109,10 +117,10 @@ class inspector {
     const RESULT_ENV_MISSING = 'env-missing';
     /** The server's Moodle is older than the declaration's minimum release. */
     const RESULT_BELOW_MINIMUM = 'below-minimum';
-    /** A course discussion's live group mode is not what course-discussions.yaml implies. */
+    /** A course discussion's live group mode is not no groups (spec 002 R3, R14). */
     const RESULT_DIFFERS = 'differs';
-    /** A separated discussion holds discussions posted to "All participants" (a warning). */
-    const RESULT_ALLPARTICIPANTS = 'allparticipants';
+    /** A managers cohort is synced into a shared course (spec 002 R2). Blocking. */
+    const RESULT_SHARED_MANAGERS = 'shared-managers';
 
     /** Course-module idnumber suffix of a course's discussion forum (spec 012, R7). */
     const DISCUSSION_SUFFIX = ':discussion';
@@ -177,6 +185,12 @@ class inspector {
 
     /** @var certtemplate|null checks the payload's certificate template (spec 013) */
     protected $certtemplate = null;
+
+    /** @var officehours|null checks the payload's office-hours course (spec 011) */
+    protected $officehours = null;
+
+    /** @var dashboard|null checks the payload's default dashboard blocks (spec 011) */
+    protected $dashboard = null;
 
     /**
      * @param array $declaration the decoded JSON payload (associative arrays throughout)
@@ -314,6 +328,33 @@ class inspector {
         return $this->certtemplate;
     }
 
+    // --- spec 011 checkers -----------------------------------------------------------------
+
+    /**
+     * The office-hours checker, or null when the payload declares none (a payload from before
+     * spec 011, or a site with no office-hours.yaml).
+     *
+     * @return officehours|null
+     */
+    public function officehours(): ?officehours {
+        if ($this->officehours === null && is_array($this->declaration['officehours'] ?? null)) {
+            $this->officehours = new officehours($this->declaration['officehours']);
+        }
+        return $this->officehours;
+    }
+
+    /**
+     * The default dashboard's checker, or null when the payload declares no blocks.
+     *
+     * @return dashboard|null
+     */
+    public function dashboard(): ?dashboard {
+        if ($this->dashboard === null && self::entries($this->declaration['dashboard'] ?? [])) {
+            $this->dashboard = new dashboard(self::entries($this->declaration['dashboard']));
+        }
+        return $this->dashboard;
+    }
+
     /**
      * One payload array as a list of associative arrays. Anything that is not an array is
      * treated as empty; site_config.py's validate rejects such a payload before it gets here.
@@ -432,6 +473,9 @@ class inspector {
         foreach ($this->declaration['settings'] ?? [] as $setting) {
             $items[] = $this->check_setting($setting);
         }
+        // In the preflight, so apply writes nothing while a managers cohort reaches a shared
+        // course (spec 002 R2). Run the open-courses migration CLI first.
+        $items = array_merge($items, $this->check_shared_managers());
         return array_merge($items, $this->inspect_structure());
     }
 
@@ -471,6 +515,14 @@ class inspector {
         }
         if ($this->certtemplate()) {
             $items = array_merge($items, $this->certtemplate()->check());
+        }
+        // Spec 011, last (contracts/declaration.md "Payload arrays"): the office-hours course
+        // needs its category, made above, and the dashboard needs nothing.
+        if ($this->officehours()) {
+            $items = array_merge($items, $this->officehours()->check());
+        }
+        if ($this->dashboard()) {
+            $items = array_merge($items, $this->dashboard()->check());
         }
         return $items;
     }
@@ -1065,11 +1117,10 @@ class inspector {
      * does; the forum is found by its course-module idnumber through util::cm_by_idnumber().
      *
      * @return array[] each {slug, course (id, idnumber, groupmode, groupmodeforce), cm|null,
-     *     shared, groupmode}
+     *     groupmode}
      */
     public function discussion_targets(): array {
         global $DB;
-        $shared = array_flip(array_map('strval', $this->declaration['discussions']['shared'] ?? []));
         $prefix = \local_ltuse\util::IDNUMBER_PREFIX;
         $courses = $DB->get_records_select('course', $DB->sql_like('idnumber', ':prefix'),
             ['prefix' => $DB->sql_like_escape($prefix) . '%'], 'idnumber',
@@ -1080,14 +1131,15 @@ class inspector {
             if ($slug === '' || strpos($slug, ':') !== false) {
                 continue; // Not a course identity (ltct:<slug>), so not ours to judge.
             }
-            $isshared = isset($shared[$slug]);
+            if ($course->idnumber === \local_ltuse\officehours::COURSE) {
+                continue; // Spec 011's office-hours course: site config's, not the publisher's; no forum.
+            }
             $targets[] = [
                 'slug' => $slug,
                 'course' => $course,
                 'cm' => \local_ltuse\util::cm_by_idnumber((int)$course->id,
                     $course->idnumber . self::DISCUSSION_SUFFIX),
-                'shared' => $isshared,
-                'groupmode' => \local_ltuse\external\ensure_discussion::wanted_groupmode($isshared),
+                'groupmode' => \local_ltuse\external\ensure_discussion::wanted_groupmode(),
             ];
         }
         return $targets;
@@ -1126,13 +1178,90 @@ class inspector {
     }
 
     /**
+     * Every ltct: course whose group mode is not 0 (spec 002 R3, amended 2026-10-02).
+     *
+     * Shared courses are open across organisations, so a course in separate or visible groups
+     * was published before the amendment or changed by hand. One `changed` item per such
+     * course; apply sets 0 through update_course(), as for showreports. An activity's own
+     * group mode is not checked: a course may use groups in one activity for teaching
+     * (FR-011). Read only.
+     *
+     * Spec 011's office-hours course is left out: it is not a shared course but site config's
+     * own, and it needs forced separate groups, because mod_scheduler shows a learner only the
+     * slots of a mentor in their group (spec 011 R16). siteconfig\officehours declares and
+     * checks its group mode instead; without this, the two applies would undo each other.
+     *
+     * @return array[] item results, keyed 'course:<idnumber>:groupmode'; none is blocking
+     */
+    public function check_course_groupmodes(): array {
+        global $DB;
+        $prefix = \local_ltuse\util::IDNUMBER_PREFIX;
+        $courses = $DB->get_records_select('course',
+            $DB->sql_like('idnumber', ':prefix') . ' AND groupmode <> 0',
+            ['prefix' => $DB->sql_like_escape($prefix) . '%'], 'idnumber', 'id, idnumber, groupmode');
+        $items = [];
+        foreach ($courses as $course) {
+            $slug = substr($course->idnumber, strlen($prefix));
+            if ($slug === '' || strpos($slug, ':') !== false) {
+                continue; // Not a course identity (ltct:<slug>).
+            }
+            if ($course->idnumber === \local_ltuse\officehours::COURSE) {
+                continue; // Spec 011: groups are how office hours work (R16).
+            }
+            $item = self::result('course', "course:{$course->idnumber}:groupmode", self::RESULT_CHANGED,
+                self::groupmode_text(NOGROUPS, null), self::groupmode_text((int)$course->groupmode, null),
+                'shared courses are open across organisations; apply sets no groups');
+            $item['courseid'] = (int)$course->id;
+            $items[] = $item;
+        }
+        return $items;
+    }
+
+    /**
+     * Any organisation's managers cohort synced into a shared course (spec 002 R2). Blocking.
+     *
+     * With no groups, orgmanager's course-wide capabilities would show that manager every
+     * organisation's participants and completion in the course. A managers cohort belongs only
+     * in its organisation's own courses, under ltct:org:<key>. A COUNT only: the result names
+     * no course, cohort or person (constitution III). cohort.idnumber and
+     * course_categories.idnumber are not indexed in core; the README lists this read.
+     *
+     * @return array[] none, or one blocking item
+     */
+    public function check_shared_managers(): array {
+        global $DB;
+        $params = [
+            'cohort' => 'cohort',
+            'managers' => $DB->sql_like_escape('ltct:org:') . '%' . $DB->sql_like_escape(':managers'),
+            'course' => $DB->sql_like_escape(\local_ltuse\util::IDNUMBER_PREFIX) . '%',
+            'orgcat' => $DB->sql_like_escape('ltct:org:') . '%',
+        ];
+        $sql = "SELECT COUNT(1)
+                  FROM {enrol} e
+                  JOIN {cohort} h ON h.id = e.customint1
+                  JOIN {course} c ON c.id = e.courseid
+             LEFT JOIN {course_categories} cc ON cc.id = c.category
+                 WHERE e.enrol = :cohort
+                   AND " . $DB->sql_like('h.idnumber', ':managers') . "
+                   AND " . $DB->sql_like('c.idnumber', ':course') . "
+                   AND (cc.idnumber IS NULL OR " . $DB->sql_like('cc.idnumber', ':orgcat', true, true, true) . ")";
+        $count = (int)$DB->count_records_sql($sql, $params);
+        if ($count === 0) {
+            return [];
+        }
+        return [self::result('enrol', 'enrol:shared-managers', self::RESULT_SHARED_MANAGERS, '0',
+            (string)$count,
+            'a managers cohort is synced into a course organisations share, which would show its '
+                . 'managers every organisation\'s people; run local/ltuse/cli/open_courses.php, '
+                . 'or remove the cohort sync by hand', false, true)];
+    }
+
+    /**
      * Compare one course's discussion forum with the declaration (contracts/site-declaration.md).
      *
-     * Kinds: differs (apply corrects it), missing (the publisher creates it, apply never
-     * does), forced (warning: the course overrides the forum's group mode), allparticipants
-     * (warning: a separated forum holds discussions every group can read). Nothing here
-     * reads a discussion's subject, a post or an author: the all-participants check is a
-     * COUNT through mod_forum's own discussion_list vault (constitution III).
+     * Kinds: differs (apply sets no groups), missing (the publisher creates it, apply never
+     * does), forced (warning: the course forces a group mode, which would wall the forum).
+     * Nothing here reads a discussion, a post or an author (constitution III).
      *
      * @param array $target one entry of discussion_targets()
      * @return array[] item results; none is blocking
@@ -1140,7 +1269,7 @@ class inspector {
     public function check_discussion(array $target): array {
         $course = $target['course'];
         // Subjects are idnumbers: the forum's for its group mode, the course's when the course
-        // forces one, and the forum's plus :allparticipants for the count (quickstart A5).
+        // forces one.
         $item = $course->idnumber . self::DISCUSSION_SUFFIX;
         $cm = $target['cm'];
         $want = self::groupmode_text((int)$target['groupmode'], 0);
@@ -1159,40 +1288,15 @@ class inspector {
         if (!empty($course->groupmodeforce)) {
             $items[] = self::warning(self::result('discussion', $course->idnumber, self::RESULT_FORCED,
                 $want, 'course forces ' . self::groupmode_text((int)$course->groupmode, null),
-                'the course forces its own group mode over the forum (Course settings > Groups > Force); '
-                    . 'turn the force off'));
+                'the course forces a group mode, which would wall the course forum '
+                    . '(Course settings > Groups > Force); turn the force off'));
         }
 
         $have = self::groupmode_text((int)$cm->groupmode, (int)$cm->groupingid);
         $same = (int)$cm->groupmode === (int)$target['groupmode'] && (int)$cm->groupingid === 0;
         $items[] = self::result('discussion', $item, $same ? self::RESULT_OK : self::RESULT_DIFFERS,
-            $want, $have, $same ? '' : 'changed by hand in Moodle; apply or the next publish restores it');
-
-        if ((int)$target['groupmode'] === SEPARATEGROUPS) {
-            $count = self::count_allparticipants((int)$cm->instance);
-            if ($count > 0) {
-                $items[] = self::warning(self::result('discussion', $item . ':allparticipants',
-                    self::RESULT_ALLPARTICIPANTS, '0', (string)$count,
-                    'discussions posted to "All participants" are readable by every organisation in '
-                        . 'the course; only the count is reported. A teacher with accessallgroups posted them.'));
-            }
-        }
+            $want, $have, $same ? '' : 'not open to the whole course; apply or the next publish sets no groups');
         return $items;
-    }
-
-    /**
-     * How many discussions in a forum are posted to all groups (groupid = -1). A count only.
-     *
-     * discussion_list_vault::get_total_discussion_count_from_forum_id_and_group_id() with no
-     * group ids counts exactly groupid = -1 (mod/forum/classes/local/vaults/discussion_list.php
-     * on MOODLE_502_STABLE). It runs SELECT COUNT(1) and returns no row.
-     *
-     * @param int $forumid
-     * @return int
-     */
-    public static function count_allparticipants(int $forumid): int {
-        $vault = \mod_forum\local\container::get_vault_factory()->get_discussions_in_forum_vault();
-        return (int)$vault->get_total_discussion_count_from_forum_id_and_group_id($forumid, [], true, null);
     }
 
     /**

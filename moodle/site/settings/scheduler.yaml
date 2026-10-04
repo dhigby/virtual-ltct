@@ -1,0 +1,27 @@
+# Row #21: mod_scheduler's site settings for office hours (spec 011, research R19).
+
+rows: [21]
+purpose: >-
+  How the booking plugin behaves across the site. Its per-activity settings are in
+  office-hours.yaml.
+settings:
+  - name: mod_scheduler/groupscheduling
+    value: 0
+    why: >-
+      Off hides "book for my whole group". Each mentor's group exists only to show a learner
+      their mentor's slots (R16); booking for the group would book every mentee at once.
+  - name: mod_scheduler/showemailplain
+    value: 0
+    why: Email addresses are never shown on the booking pages (FR-008, spec 016).
+  - name: mod_scheduler/mixindivgroup
+    value: 1
+    why: The plugin's default; group booking is off above, so this changes nothing in practice.
+  - name: mod_scheduler/maxstudentlistsize
+    value: 200
+    why: The plugin's default, declared so a hand change shows as drift.
+  - name: mod_scheduler/uploadmaxfiles
+    value: 5
+    why: The plugin's default; office hours ask for no upload (usebookingform 0).
+  - name: mod_scheduler/revealteachernotes
+    value: 0
+    why: A mentor's private notes on an appointment stay private.

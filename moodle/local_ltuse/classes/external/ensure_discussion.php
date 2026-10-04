@@ -19,18 +19,20 @@ use moodle_exception;
 use stdClass;
 
 /**
- * Make sure a course has its one discussion forum, scoped by organisation (spec 012, FR-015).
+ * Make sure a course has its one discussion forum, open to the whole course (spec 012, FR-015).
  *
  * Every published course gets one `general` forum, idnumber ltct:<slug>:discussion, in
  * section 0. It is created here if it is absent, with the name and intro the publisher
  * sends. After that, the name and intro belong to whoever runs the course: a republish
  * never touches them.
  *
- * GROUP MODE is the only thing set on an existing forum: SEPARATEGROUPS, or VISIBLEGROUPS
- * when moodle/site/course-discussions.yaml lists the course as shared, always with
- * groupingid = 0. Every group in a course belongs to exactly one organisation (spec 002),
- * so with no grouping a learner sees the discussions of the groups they are in, and never
- * another organisation's (research R5).
+ * GROUP MODE is the only thing set on an existing forum: NOGROUPS, always with
+ * groupingid = 0. Shared courses are open across organisations (spec 002 R3, amended
+ * 2026-10-02), so every learner in the course reads every post. A forum left in separate
+ * groups once the organisation groups are gone would stop learners in no group posting,
+ * which is why this and the course's own group mode change together (R3, R14). A post
+ * written earlier with a groupid stays visible: under NOGROUPS the forum filters nothing
+ * (mod/forum/lib.php, forum_user_can_see_group_discussion()).
  *
  * POSTS ARE NEVER WRITTEN, and no table is written directly (constitution XI):
  *
@@ -42,8 +44,9 @@ use stdClass;
  *               (maintainer's choice, 2026-10-02): a public API over a raw write.
  *
  * A course whose groupmodeforce is on overrides every activity's group mode
- * (groups_get_activity_groupmode()). The forum's own setting is still written, so it is
- * right the day the force is lifted, and `courseforced` tells the publisher to say so.
+ * (groups_get_activity_groupmode()), and a forced mode would wall the forum. The forum's own
+ * setting is still written, so it is right the day the force is lifted, and `courseforced`
+ * tells the publisher to say so.
  *
  * site_config.php's applier calls apply_groupmode() too, so `apply` and a publish correct a
  * hand change the same way (contracts/site-declaration.md).
@@ -63,20 +66,16 @@ class ensure_discussion extends external_api {
                 'Course-module idnumber of the forum, ltct:<slug>:discussion'),
             'name' => new external_value(PARAM_TEXT, 'Forum name; used only when creating it'),
             'intro' => new external_value(PARAM_RAW, 'Forum intro HTML; used only when creating it'),
-            'shared' => new external_value(PARAM_BOOL,
-                'True: visible groups (shared across organisations). False: separate groups.',
-                VALUE_DEFAULT, false),
         ]);
     }
 
     public static function execute(string $courseidnumber, string $idnumber, string $name,
-                                   string $intro, bool $shared = false): array {
+                                   string $intro): array {
         $params = self::validate_parameters(self::execute_parameters(), [
             'courseidnumber' => $courseidnumber,
             'idnumber' => $idnumber,
             'name' => $name,
             'intro' => $intro,
-            'shared' => $shared,
         ]);
 
         $course = util::course_by_idnumber($params['courseidnumber']);
@@ -89,7 +88,7 @@ class ensure_discussion extends external_api {
                 . ' does not belong to course ' . $course->idnumber . '.');
         }
 
-        $groupmode = self::wanted_groupmode($params['shared']);
+        $groupmode = self::wanted_groupmode();
         $existing = util::cm_by_idnumber((int)$course->id, $params['idnumber']);
 
         if (!$existing) {
@@ -138,32 +137,31 @@ class ensure_discussion extends external_api {
             'cmid' => new external_value(PARAM_INT, 'Course-module id of the forum'),
             'created' => new external_value(PARAM_BOOL, 'True if created by this call'),
             'groupmode' => new external_value(PARAM_INT,
-                'The group mode set on the forum: 1 separate groups, 2 visible groups'),
+                'The group mode set on the forum: always 0, no groups'),
             'courseforced' => new external_value(PARAM_BOOL,
                 'True when the course forces its own group mode over the forum\'s'),
         ]);
     }
 
     /**
-     * The group mode the declaration implies.
+     * The group mode every course discussion has: no groups (spec 002 R3, R14).
      *
-     * @param bool $shared listed in moodle/site/course-discussions.yaml
-     * @return int VISIBLEGROUPS or SEPARATEGROUPS
+     * @return int NOGROUPS
      */
-    public static function wanted_groupmode(bool $shared): int {
-        return $shared ? VISIBLEGROUPS : SEPARATEGROUPS;
+    public static function wanted_groupmode(): int {
+        return NOGROUPS;
     }
 
     /**
      * Set a discussion forum's group mode and clear its grouping. Touches nothing else.
      *
-     * The one write path for discussion scoping, shared by this web service and the
+     * The one write path for a discussion's group mode, shared by this web service and the
      * site_config applier. Writes no discussion or post. Only the rare grouping fix reads
      * ratings, through update_moduleinfo() (see the class comment).
      *
      * @param stdClass $course
      * @param int $cmid
-     * @param int $groupmode SEPARATEGROUPS or VISIBLEGROUPS
+     * @param int $groupmode NOGROUPS, from wanted_groupmode()
      * @return bool whether anything changed
      */
     public static function apply_groupmode(stdClass $course, int $cmid, int $groupmode): bool {

@@ -19,9 +19,11 @@ defined('MOODLE_INTERNAL') || die();
  *      category or cohort, an `ltct_` profile field, and an `ltct: `-named cohort rule;
  *      and, from spec 004, an `ltct_` course field, a live competency row, and a
  *      `local_ltuse` custom report.
- *   5. the discussion forum of every ltct: course against course-discussions.yaml (spec 012):
- *      differs, missing, and the warnings forced and allparticipants. allparticipants is a
- *      count only, never a subject, a post or a name (constitution III).
+ *   5. the discussion forum of every ltct: course (spec 012): differs when it is not open
+ *      to the whole course (spec 002 R14), missing, and the warning forced.
+ *   6. each ltct: course with activity reports on (spec 003) or a group mode other than 0
+ *      (spec 002 R3, amended 2026-10-02), as changed. A managers cohort synced into a shared
+ *      course is a blocking fail from pass 1, as a count only (spec 002 R2).
  *
  * A setting forced in config.php is skipped in pass 3: config.php belongs to provisioning,
  * not to this declaration (R6). Any difference makes the run exit 1 (FR-008); a warning is
@@ -79,8 +81,12 @@ class drift {
         $this->report_extra_owned($declaration);
         $this->report_extra_reporting();
         $this->report_discussions();
-        // Pass 6 (spec 003, R2): a published course with activity reports turned on.
+        // Pass 6: a published course with activity reports turned on (spec 003, R2), or not
+        // open across organisations (spec 002 R3).
         foreach ($this->inspector->check_course_reports() as $item) {
+            $this->report->add_result($item);
+        }
+        foreach ($this->inspector->check_course_groupmodes() as $item) {
             $this->report->add_result($item);
         }
     }

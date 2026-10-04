@@ -14,6 +14,10 @@ COURSE = "ltct:demo"
 URL = "https://moodle.example.org"
 
 
+SHARED = {"org_only": False, "category_idnumber": None}
+ORG_ONLY = {"org_only": True, "category_idnumber": "ltct:org:fixture-north"}
+
+
 def mid(name):
     return "ltct:demo:%s" % name
 
@@ -37,6 +41,7 @@ class FakeClient:
         self.competencies_back = None     # None: the server stores what it was sent
         self.recognition = {"badge": "unchanged", "status": "inactive", "certificate": "none",
                             "warnings": []}
+        self.placed = {"moved": False}    # local_ltuse_place_course's answer (spec 002 R11)
 
     def manifest(self, idnumber):
         return self.call("local_ltuse_get_course_manifest", idnumber=idnumber)
@@ -70,6 +75,8 @@ class FakeClient:
             return dict(self.course_completion)
         if function == "local_ltuse_set_course_recognition":
             return dict(self.recognition)
+        if function == "local_ltuse_place_course":
+            return dict(self.placed)
         if function == "local_ltuse_set_course_competencies":
             sent = list(params["competencies"])
             back = sent if self.competencies_back is None else self.competencies_back
@@ -151,7 +158,7 @@ class PublishBase(unittest.TestCase):
         self._tmp.cleanup()
 
     def write_manifest(self, quizzes=(), competencies=("Translation Tools",),
-                       level="2 - With Assistance", delivery=False):
+                       level="2 - With Assistance", delivery=False, placement=None):
         sections = []
         for n, (source, (html, assets)) in enumerate(sorted(self.pages.items()), start=1):
             stem = source[:-3]
@@ -176,6 +183,7 @@ class PublishBase(unittest.TestCase):
                 {"certificate": {"idnumber": "%s:certificate" % COURSE}} if delivery else {})},
             "assets": {n: {"sha1": hashlib.sha1(d).hexdigest(), "bytes": len(d)}
                        for n, d in self.images.items()},
+            "placement": placement or SHARED,
         }
         (self.dir / "manifest.json").write_text(json.dumps(manifest), encoding="utf-8")
 
@@ -775,3 +783,87 @@ class Competencies(Main):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class Placement(Main):
+    """Spec 002 R11: an organisation-only course is placed in its category on every publish."""
+
+    PLACE = "local_ltuse_place_course"
+
+    def test_org_only_course_is_placed_after_update(self):
+        self.write_manifest(placement=ORG_ONLY)
+        client = FakeClient(self.server_as_published())
+        self.publish(client)
+        self.assertEqual(client.calls_to(self.PLACE), [
+            {"courseidnumber": COURSE, "categoryidnumber": "ltct:org:fixture-north"}])
+        names = [f for f, _ in client.calls]
+        self.assertLess(names.index("core_course_update_courses"), names.index(self.PLACE))
+
+    def test_org_only_course_is_placed_after_create(self):
+        self.write_manifest(placement=ORG_ONLY)
+        client = FakeClient([])
+        real = client.call
+
+        def first_publish(function, **params):
+            if function == "core_course_get_courses_by_field" and not any(
+                    f == "core_course_create_courses" for f, _ in client.calls):
+                client.calls.append((function, params))
+                return None
+            return real(function, **params)
+        client.call = first_publish
+        self.publish(client)
+        names = [f for f, _ in client.calls]
+        self.assertIn("core_course_create_courses", names)
+        self.assertNotIn("core_course_update_courses", names)
+        self.assertEqual(client.calls_to(self.PLACE), [
+            {"courseidnumber": COURSE, "categoryidnumber": "ltct:org:fixture-north"}])
+        self.assertLess(names.index("core_course_create_courses"), names.index(self.PLACE))
+
+    def test_placed_before_content(self):
+        self.write_manifest(placement=ORG_ONLY)
+        client = FakeClient(self.server_as_published())
+        self.publish(client)
+        writes = client.writes()
+        self.assertLess(writes.index(self.PLACE), writes.index("local_ltuse_create_page"))
+
+    def test_shared_course_is_never_placed(self):
+        client = FakeClient(self.server_as_published())
+        self.publish(client)
+        self.assertEqual(client.calls_to(self.PLACE), [])
+
+    def test_a_move_is_reported(self):
+        self.write_manifest(placement=ORG_ONLY)
+        client = FakeClient(self.server_as_published())
+        client.placed = {"moved": True}
+        out = self.publish(client)
+        self.assertIn("placement moved to ltct:org:fixture-north", out)
+
+    def test_no_move_is_said_quietly(self):
+        self.write_manifest(placement=ORG_ONLY)
+        out = self.publish(FakeClient(self.server_as_published()))
+        self.assertIn("placement ltct:org:fixture-north (already there)", out)
+
+    def test_a_refusal_stops_the_publish(self):
+        self.write_manifest(placement=ORG_ONLY)
+        client = FakeClient(self.server_as_published())
+
+        def refuse(function, **params):
+            if function == self.PLACE:
+                raise pm.MoodleError(function, {"message": "invalidcategory"})
+            return FakeClient.call(client, function, **params)
+        client.call = refuse
+        rc, out = self.run_main(client)
+        self.assertEqual(rc, 1)
+        self.assertIn("invalidcategory", out)
+        self.assertEqual(client.calls_to("local_ltuse_create_page"), [])
+
+    def test_dry_run_names_the_call(self):
+        self.write_manifest(placement=ORG_ONLY)
+        client = FakeClient(self.server_as_published(), dry_run=True)
+        out = self.publish(client)
+        self.assertEqual(len(client.calls_to(self.PLACE)), 1)
+        self.assertIn("placement dry-run: ltct:org:fixture-north", out)
+
+    def test_client_requires_the_function(self):
+        import moodle_client
+        self.assertIn(self.PLACE, moodle_client.REQUIRED_FUNCTIONS)

@@ -106,16 +106,17 @@ function local_ltuse_control_view_profile($user, $course = null, $usercontext = 
  * cohort.idnumber is not indexed in core; moodle/local_ltuse/README.md lists this read.
  *
  * @param int $userid
+ * @param bool $reload read afresh and refresh the cache: organisation actions do, before a write
  * @return string[] organisation keys, empty when the user is in none
  */
-function local_ltuse_organisation_member_keys(int $userid): array {
+function local_ltuse_organisation_member_keys(int $userid, bool $reload = false): array {
     global $DB;
     static $cache = [];
 
     if ($userid <= 0) {
         return [];
     }
-    if (array_key_exists($userid, $cache)) {
+    if (!$reload && array_key_exists($userid, $cache)) {
         return $cache[$userid];
     }
 
@@ -154,16 +155,17 @@ function local_ltuse_organisation_member_keys(int $userid): array {
  * hidden (spec 002, R1). moodle/local_ltuse/README.md lists this direct read.
  *
  * @param int $userid
+ * @param bool $reload read afresh and refresh the cache: organisation actions do, before a write
  * @return string[] organisation keys, empty when the user manages none
  */
-function local_ltuse_managed_organisation_keys(int $userid): array {
+function local_ltuse_managed_organisation_keys(int $userid, bool $reload = false): array {
     global $DB;
     static $cache = [];
 
     if ($userid <= 0) {
         return [];
     }
-    if (array_key_exists($userid, $cache)) {
+    if (!$reload && array_key_exists($userid, $cache)) {
         return $cache[$userid];
     }
 

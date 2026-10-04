@@ -1,0 +1,25 @@
+# Rows #8 and #15: the courses only one organisation's people may join. Spec 002 R11
+# (specs/002-org-structure-cohorts/contracts/declaration.md "org-courses.yaml").
+#
+# Every other course is shared and open across organisations (R3). An empty list, or no file,
+# means every course is shared. Only the maintainer edits this file. A course is never made
+# organisation-only in its frontmatter, nor only by hand in Moodle: drift reports a course in
+# the wrong category.
+#
+# Read only by scripts/site_config.py load_org_courses(). The publisher uses it to place each
+# listed course in its organisation's category, ltct:org:<organisation>, on every publish;
+# drift uses it to report a course in the wrong category. Apply never moves a course.
+#
+# Organisation-only means restricted enrolment, not hidden content: the course stays in this
+# public repo, and its name shows on a public category page.
+#
+# Each entry:
+#   - slug: <course slug>       # a course under modules/, in its branch_slug() form
+#     organisation: <org key>   # a key in organisations.yaml
+#     why: approved by the maintainer, issue #N
+#
+# `why` records only the approval. Never write the organisation's circumstances here: this
+# repo is public. The reason itself is kept privately.
+
+rows: [8, 15]
+org_only: []

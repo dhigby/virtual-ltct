@@ -67,6 +67,23 @@
         <INDEX NAME="mentorlearner" UNIQUE="true" FIELDS="mentorid, learnerid"/>
       </INDEXES>
     </TABLE>
+    <TABLE NAME="local_ltuse_org_contact" COMMENT="Message contacts local_ltuse made between an organisation's manager and a person in it (spec 002 amendment 2026-10-02, research R12), so a leave removes only those.">
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
+        <FIELD NAME="managerid" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false" COMMENT="user.id of the manager"/>
+        <FIELD NAME="memberid" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false" COMMENT="user.id of the person in their organisation"/>
+        <FIELD NAME="contactid" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="message_contacts.id of the contact this plugin made, so only that one is ever removed"/>
+        <FIELD NAME="timecreated" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false"/>
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+        <KEY NAME="managerid" TYPE="foreign" FIELDS="managerid" REFTABLE="user" REFFIELDS="id"/>
+        <KEY NAME="memberid" TYPE="foreign" FIELDS="memberid" REFTABLE="user" REFFIELDS="id"/>
+      </KEYS>
+      <INDEXES>
+        <INDEX NAME="managermember" UNIQUE="true" FIELDS="managerid, memberid"/>
+      </INDEXES>
+    </TABLE>
     <TABLE NAME="local_ltuse_booking" COMMENT="Each office-hours booking's last notified time (spec 011, research R20), because core's calendar_event_updated carries no old time. One row per learner booking event.">
       <FIELDS>
         <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>

@@ -9,13 +9,16 @@
 defined('MOODLE_INTERNAL') || die();
 
 $plugin->component = 'local_ltuse';
-$plugin->version   = 2026100401;   // Manage mentors (spec 003 Phase B): mentors.php and
-                                   // the profile link, for the site team and a learner's
-                                   // organisation manager. No schema change. Before it,
-                                   // events and office hours (spec 011, 2026100400): calendar
-                                   // change notices, the office-hours sync, booking notices
-                                   // and their table (local_ltuse_booking), the time zone
-                                   // notice; db/upgrade.php saves its savepoint there. After
+$plugin->version   = 2026100402;   // Managers' own people (spec 002 amendment 2026-10-02):
+                                   // the "My organisation" page and its actions, the
+                                   // local_ltuse_org_contact table and the hourly
+                                   // reconcile_org_contacts task, the cohort observers, and the
+                                   // local_ltuse_place_course web service. db/upgrade.php saves
+                                   // its savepoint at this stamp. 2026100401 is spec 003's
+                                   // mentors page. Before them: events and office hours (spec
+                                   // 011, 2026100400): calendar change notices, the
+                                   // office-hours sync, booking notices and their table
+                                   // (local_ltuse_booking), the time zone notice. After
                                    // open courses (spec 002, 2026100302): the course
                                    // discussion is always open, drift checks each published
                                    // ltct: course's group mode, and a managers cohort synced
@@ -43,7 +46,7 @@ $plugin->requires  = 2026042000;   // Moodle 5.2 -- the release this was
 $plugin->supported = [502, 502];
 
 $plugin->maturity  = MATURITY_ALPHA;
-$plugin->release   = '0.10.0';
+$plugin->release   = '0.12.0';   // 0.11.0 is spec 003's mentors page.
 
 // No third-party dependencies, deliberately. Sections were originally going to be
 // local_wsmanagesections' job, but it could not be installed here, so local_ltuse grew an

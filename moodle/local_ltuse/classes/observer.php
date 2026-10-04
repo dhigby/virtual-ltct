@@ -33,6 +33,16 @@ use core_message\api;
  *                    or cancellation is buffered per series by calendar_notify, and one
  *                    shutdown callback queues one task\event_change_notice per key (R15)
  *   slot_deleted     mod_scheduler's own event, the only signal that a booked slot was deleted
+ *
+ * Spec 002 (amendment 2026-10-02, research R10 and R12) adds:
+ *
+ *   cohort_member_added    an organisation's managers and people become message contacts
+ *   cohort_member_removed  those contacts end unless something else links the pair, and a
+ *                          person leaving a member cohort has their organisation-enrolment
+ *                          enrolments in that organisation's own courses suspended
+ *   user_deleted           also forgets the organisation contact records
+ *
+ * The work is organisation\contacts'; these only route the event and keep failures out of core.
  */
 class observer {
 
@@ -214,9 +224,38 @@ class observer {
             debugging('local_ltuse: could not clear mentor contacts: ' . $e->getMessage(), DEBUG_DEVELOPER);
         }
         try {
+            organisation\contacts::user_deleted((int)$event->objectid);   // Spec 002 (R12).
+        } catch (\Throwable $e) {
+            debugging('local_ltuse: could not clear organisation contacts: ' . $e->getMessage(), DEBUG_DEVELOPER);
+        }
+        try {
             officehours::sync_user((int)$event->objectid);   // Spec 011: their groups and bookings.
         } catch (\Throwable $e) {
             debugging('local_ltuse: could not sync office hours: ' . $e->getMessage(), DEBUG_DEVELOPER);
+        }
+    }
+
+    // --- spec 002: organisation membership ------------------------------------------------
+
+    /**
+     * @param \core\event\cohort_member_added $event objectid the cohort, relateduserid the person
+     */
+    public static function cohort_member_added(\core\event\cohort_member_added $event): void {
+        try {
+            organisation\contacts::member_added((int)$event->objectid, (int)$event->relateduserid);
+        } catch (\Throwable $e) {
+            debugging('local_ltuse: could not make organisation contacts: ' . $e->getMessage(), DEBUG_DEVELOPER);
+        }
+    }
+
+    /**
+     * @param \core\event\cohort_member_removed $event objectid the cohort, relateduserid the person
+     */
+    public static function cohort_member_removed(\core\event\cohort_member_removed $event): void {
+        try {
+            organisation\contacts::member_removed((int)$event->objectid, (int)$event->relateduserid);
+        } catch (\Throwable $e) {
+            debugging('local_ltuse: could not end organisation contacts: ' . $e->getMessage(), DEBUG_DEVELOPER);
         }
     }
 

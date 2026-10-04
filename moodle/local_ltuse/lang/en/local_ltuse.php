@@ -98,7 +98,7 @@ $string['privacy:metadata:mentor_contact:learnerid'] = 'The learner.';
 $string['privacy:metadata:mentor_contact:timecreated'] = 'When the contact was made.';
 $string['privacy:path:mentorcontacts'] = 'Mentor message contacts';
 $string['privacy:metadata:mentor_contact:contactid'] = 'The message contact this plugin made, so that only that contact is ever removed.';
-$string['privacy:metadata:core_message'] = 'While a mentor relationship lasts, the mentor and the learner are made message contacts of each other. The contact is removed when the relationship ends. Calendar changes and office-hours bookings are sent as notifications.';
+$string['privacy:metadata:core_message'] = 'While a mentor relationship lasts, the mentor and the learner are made message contacts of each other. The contact is removed when the relationship ends. An organisation\'s managers and the people in it are made contacts in the same way while both are in the organisation. Calendar changes and office-hours bookings are sent as notifications.';
 
 // Spec 011: calendar change notices, office-hours booking notices, the time zone notice and
 // the tasks. Times are always shown in the reader's own zone, with the zone named. No string
@@ -152,3 +152,51 @@ $string['privacy:metadata:booking:timestart'] = 'The booking\'s start, as last n
 $string['privacy:metadata:booking:timeduration'] = 'The booking\'s length, as last notified.';
 $string['privacy:metadata:booking:timecreated'] = 'When the booking was recorded.';
 $string['privacy:path:bookings'] = 'Office-hours bookings';
+
+// Spec 002 (amendment 2026-10-02, research R10-R12): the "My organisation" page, its actions,
+// the organisation-enrolment instance, organisation-only course placement and the contacts
+// task. Course completion only; no string here names a CBC level or says "certified".
+$string['organisation'] = 'My organisation';
+$string['organisation:empty'] = 'You do not manage an organisation yet, or its people have not been set up.';
+$string['organisation:nopeople'] = 'Nobody is in this organisation yet.';
+$string['organisation:notmanager'] = 'This page is for organisation managers.';
+$string['organisation:notyours'] = 'You cannot manage this person\'s account: they are not a learner in an organisation you manage. The site team can help.';
+$string['organisation:notthiscourse'] = 'You cannot enrol this person in that course: only published courses, or courses of their own organisation, are open to managers.';
+$string['organisation:notorgenrolment'] = 'This person was not enrolled in that course by a manager, so the enrolment is the site team\'s to change.';
+$string['organisation:selfdisabled'] = 'Organisation enrolment is not available on this site (the self enrolment method is turned off). The site team can turn it on.';
+$string['organisation:siteteam'] = 'Staff, mentors and managers are managed by the site team.';
+$string['organisation:suspended'] = 'Suspended';
+$string['organisation:mentors'] = 'Mentors';
+$string['organisation:enrolin'] = 'Course to enrol them in';
+$string['organisation:action:enrol'] = 'Enrol';
+$string['organisation:action:unenrol'] = 'Unenrol';
+$string['organisation:action:reset'] = 'Send a password reset link';
+$string['organisation:action:suspend'] = 'Suspend account';
+$string['organisation:action:reactivate'] = 'Reactivate account';
+$string['organisation:confirm:enrol'] = 'Enrol {$a->person} in "{$a->course}" as a student? They will see the course on their dashboard.';
+$string['organisation:confirm:unenrol'] = 'Unenrol {$a->person} from "{$a->course}"? If this is their only enrolment in the course, their grades and group places in it are removed. Their activity and completion records are kept.';
+$string['organisation:confirm:reset'] = 'Send {$a->person} a password reset link? It goes to their own email address only; you will not see it.';
+$string['organisation:confirm:suspend'] = 'Suspend {$a->person}\'s account? This applies to the whole site, not just your organisation\'s courses: they are signed out now and cannot sign in until the account is reactivated.';
+$string['organisation:confirm:reactivate'] = 'Reactivate {$a->person}\'s account? They will be able to sign in again.';
+$string['organisation:done:enrol'] = 'Enrolled.';
+$string['organisation:done:unenrol'] = 'Unenrolled.';
+$string['organisation:done:suspend'] = 'The account is suspended.';
+$string['organisation:done:reactivate'] = 'The account is active again.';
+$string['organisation:reset:sent'] = 'A password reset email was sent to their own address.';
+$string['organisation:reset:alreadysent'] = 'Nothing was sent: a reset link was already sent to them twice recently. They can use the last one, or try again later.';
+$string['organisation:reset:notconfirmed'] = 'Nothing was sent: their account has not been confirmed yet. The site team can help.';
+$string['organisation:reset:noemail'] = 'Nothing was sent: their account has no email address. The site team can help.';
+$string['organisation:reset:notfound'] = 'Nothing was sent: no active account could be found for them. The site team can help.';
+$string['organisation:reset:maybesent'] = 'The request was made. This site does not say whether an email was sent; ask them to check their inbox.';
+$string['organisation:reset:suspended'] = 'Nothing was sent: their account is suspended. Reactivate it first.';
+$string['organisation:reset:failed'] = 'The reset email could not be sent. The site team can help.';
+$string['organisation:reset:unknown'] = 'The request was made, but the result is not known. Ask them to check their inbox.';
+$string['orgenrol:name'] = 'Organisation enrolment';
+$string['error:nocategoryidnumber'] = 'No single course category has idnumber "{$a}", or the course could not be moved there.';
+$string['task:reconcileorgcontacts'] = 'Keep organisation managers\' contacts and organisation-only enrolments in step';
+$string['privacy:metadata:org_contact'] = 'The message contacts this plugin made between an organisation\'s manager and a person in that organisation, so that leaving the organisation removes them again.';
+$string['privacy:metadata:org_contact:managerid'] = 'The organisation manager.';
+$string['privacy:metadata:org_contact:memberid'] = 'The person in their organisation.';
+$string['privacy:metadata:org_contact:contactid'] = 'The message contact this plugin made, so that only that contact is ever removed.';
+$string['privacy:metadata:org_contact:timecreated'] = 'When the contact was made.';
+$string['privacy:path:orgcontacts'] = 'Organisation message contacts';

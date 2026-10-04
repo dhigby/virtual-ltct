@@ -26,6 +26,14 @@ use core_privacy\local\request\writer;
  * appointment itself is mod_scheduler's to export, the calendar events core's, and the
  * eventchange and bookingnotice notifications core messaging's.
  *
+ * Spec 016 adds three: local_ltuse_protection (a protected user's level, pseudonym and real
+ * values), local_ltuse_protection_log (every change, with who made it) and
+ * local_ltuse_org_protection (an organisation's minimum, with the site-team member who set
+ * it). A user's own rows are exported in full; changes they made to someone else are exported
+ * as a count and dates only, never naming that person. Deletion is the one routine the
+ * user_deleted observer also runs: the user's own rows go, and wherever they acted their id is
+ * set to 0. The protectionchanged notification is core messaging's.
+ *
  * Its other tables hold nothing about a person: the competency framework, which courses aim
  * at which competency (spec 004), and which badge is each course's (spec 013). The
  * per-competency report counts enrolments and completions from core's tables at query time
@@ -41,6 +49,11 @@ class provider implements
 
     /** Spec 011: each office-hours booking's last notified time (research R20). */
     const BOOKING = 'local_ltuse_booking';
+
+    /** Spec 016: identity protection. */
+    const PROTECTION = 'local_ltuse_protection';
+    const PROTECTIONLOG = 'local_ltuse_protection_log';
+    const ORGPROTECTION = 'local_ltuse_org_protection';
 
     /**
      * @param collection $collection
@@ -62,6 +75,28 @@ class provider implements
             'timeduration' => 'privacy:metadata:booking:timeduration',
             'timecreated' => 'privacy:metadata:booking:timecreated',
         ], 'privacy:metadata:booking');
+        $collection->add_database_table(self::PROTECTION, [
+            'userid' => 'privacy:metadata:protection:userid',
+            'ownlevel' => 'privacy:metadata:protection:ownlevel',
+            'effectivelevel' => 'privacy:metadata:protection:effectivelevel',
+            'pseudonym' => 'privacy:metadata:protection:pseudonym',
+            'realfirstname' => 'privacy:metadata:protection:realfirstname',
+            'reallastname' => 'privacy:metadata:protection:reallastname',
+            'realfields' => 'privacy:metadata:protection:realfields',
+            'usermodified' => 'privacy:metadata:protection:usermodified',
+        ], 'privacy:metadata:protection');
+        $collection->add_database_table(self::PROTECTIONLOG, [
+            'userid' => 'privacy:metadata:protectionlog:userid',
+            'actorid' => 'privacy:metadata:protectionlog:actorid',
+            'fromlevel' => 'privacy:metadata:protectionlog:fromlevel',
+            'tolevel' => 'privacy:metadata:protectionlog:tolevel',
+            'timecreated' => 'privacy:metadata:protectionlog:timecreated',
+        ], 'privacy:metadata:protectionlog');
+        $collection->add_database_table(self::ORGPROTECTION, [
+            'usermodified' => 'privacy:metadata:orgprotection:usermodified',
+            'timemodified' => 'privacy:metadata:orgprotection:timemodified',
+        ], 'privacy:metadata:orgprotection');
+        $collection->add_message_provider('protectionchanged', 'privacy:metadata:protectionchanged');
         // The plugin also writes into core messaging: it makes mentor and learner contacts.
         $collection->add_subsystem_link('core_message', [], 'privacy:metadata:core_message');
         return $collection;
@@ -80,9 +115,17 @@ class provider implements
                    AND (EXISTS (SELECT 1 FROM {" . self::TABLE . "} mc
                                  WHERE mc.mentorid = :mentorid OR mc.learnerid = :learnerid)
                         OR EXISTS (SELECT 1 FROM {" . self::BOOKING . "} b
-                                    WHERE b.mentorid = :bmentorid OR b.learnerid = :blearnerid))";
+                                    WHERE b.mentorid = :bmentorid OR b.learnerid = :blearnerid)
+                        OR EXISTS (SELECT 1 FROM {" . self::PROTECTION . "} p
+                                    WHERE p.userid = :puserid OR p.usermodified = :pmodified)
+                        OR EXISTS (SELECT 1 FROM {" . self::PROTECTIONLOG . "} pl
+                                    WHERE pl.userid = :pluserid OR pl.actorid = :plactor)
+                        OR EXISTS (SELECT 1 FROM {" . self::ORGPROTECTION . "} op
+                                    WHERE op.usermodified = :opmodified))";
         $contextlist->add_from_sql($sql, ['level' => CONTEXT_USER, 'userid' => $userid,
-            'mentorid' => $userid, 'learnerid' => $userid, 'bmentorid' => $userid, 'blearnerid' => $userid]);
+            'mentorid' => $userid, 'learnerid' => $userid, 'bmentorid' => $userid, 'blearnerid' => $userid,
+            'puserid' => $userid, 'pmodified' => $userid, 'pluserid' => $userid, 'plactor' => $userid,
+            'opmodified' => $userid]);
         return $contextlist;
     }
 
@@ -112,6 +155,7 @@ class provider implements
                 continue;
             }
             self::export_bookings($context, $userid);
+            self::export_protection($context, $userid);
             $rows = $DB->get_records_select(self::TABLE, 'mentorid = :mentorid OR learnerid = :learnerid',
                 ['mentorid' => $userid, 'learnerid' => $userid], 'timecreated, id');
             if (!$rows) {
@@ -175,7 +219,8 @@ class provider implements
         global $DB;
         $params = ['mentorid' => $userid, 'learnerid' => $userid];
         return $DB->record_exists_select(self::TABLE, 'mentorid = :mentorid OR learnerid = :learnerid', $params)
-            || $DB->record_exists_select(self::BOOKING, 'mentorid = :mentorid OR learnerid = :learnerid', $params);
+            || $DB->record_exists_select(self::BOOKING, 'mentorid = :mentorid OR learnerid = :learnerid', $params)
+            || self::has_protection_rows($userid);
     }
 
     /**
@@ -209,6 +254,72 @@ class provider implements
     }
 
     /**
+     * Spec 016: whether the user has protection data, as the subject or as an actor.
+     *
+     * @param int $userid
+     * @return bool
+     */
+    protected static function has_protection_rows(int $userid): bool {
+        global $DB;
+        if (!$DB->get_manager()->table_exists(self::PROTECTION)) {
+            return false;
+        }
+        return $DB->record_exists_select(self::PROTECTION, 'userid = :a OR usermodified = :b', ['a' => $userid, 'b' => $userid])
+            || $DB->record_exists_select(self::PROTECTIONLOG, 'userid = :a OR actorid = :b', ['a' => $userid, 'b' => $userid])
+            || $DB->record_exists(self::ORGPROTECTION, ['usermodified' => $userid]);
+    }
+
+    /**
+     * Spec 016 (FR-013): the user's own protection, every change to it, and the changes they
+     * made to others as a count and dates only, never naming those people.
+     *
+     * @param context_user $context
+     * @param int $userid
+     */
+    protected static function export_protection(context_user $context, int $userid): void {
+        global $DB;
+        if (!$DB->get_manager()->table_exists(self::PROTECTION)) {
+            return;
+        }
+        $data = (object)[];
+        if ($row = $DB->get_record(self::PROTECTION, ['userid' => $userid])) {
+            $data->protection = (object)[
+                'ownlevel' => $row->ownlevel,
+                'effectivelevel' => $row->effectivelevel,
+                'source' => $row->source,
+                'pseudonym' => $row->pseudonym,
+                'realfirstname' => $row->realfirstname,
+                'reallastname' => $row->reallastname,
+                'realfields' => $row->realfields ? json_decode($row->realfields, true) : [],
+                'timecreated' => transform::datetime($row->timecreated),
+                'timemodified' => transform::datetime($row->timemodified),
+            ];
+        }
+        $changes = [];
+        foreach ($DB->get_records(self::PROTECTIONLOG, ['userid' => $userid], 'timecreated, id') as $log) {
+            $changes[] = (object)['from' => $log->fromlevel, 'to' => $log->tolevel, 'source' => $log->source,
+                'bysomeoneelse' => transform::yesno((int)$log->actorid !== $userid && (int)$log->actorid !== 0),
+                'time' => transform::datetime($log->timecreated)];
+        }
+        if ($changes) {
+            $data->changes = $changes;
+        }
+        $made = $DB->get_fieldset_select(self::PROTECTIONLOG, 'timecreated',
+            'actorid = :actor AND userid <> :self', ['actor' => $userid, 'self' => $userid]);
+        if ($made) {
+            $data->changesmadetoothers = (object)['count' => count($made),
+                'dates' => array_map([transform::class, 'datetime'], $made)];
+        }
+        $orgs = $DB->count_records(self::ORGPROTECTION, ['usermodified' => $userid]);
+        if ($orgs) {
+            $data->organisationsettingsmade = $orgs;
+        }
+        if ((array)$data) {
+            writer::with_context($context)->export_data([get_string('privacy:path:protection', 'local_ltuse')], $data);
+        }
+    }
+
+    /**
      * Delete the user's rows, and the message contacts they stand for: a contact whose record
      * is gone could never be removed when the relationship ends (research R5).
      *
@@ -224,5 +335,6 @@ class provider implements
         }
         $DB->delete_records_select(self::BOOKING, 'mentorid = :mentorid OR learnerid = :learnerid',
             ['mentorid' => $userid, 'learnerid' => $userid]);
+        \local_ltuse\protection\service::delete_user_data($userid);   // Spec 016: the shared routine.
     }
 }

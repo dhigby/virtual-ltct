@@ -154,7 +154,7 @@ class mentoring {
                 if (!$learner || $learner->deleted) {
                     continue;
                 }
-                $learners[] = self::learner($learner);
+                $learners[] = self::learner($learner, $userid);
             }
             $mentors = self::mentors($userid);
         }
@@ -200,14 +200,18 @@ class mentoring {
     }
 
     /**
-     * One learner's entry: name, links and courses.
+     * One learner's entry: name, links and courses. Spec 016 adds `protected`, `realname` and
+     * `protectedlabel`, filled only for a viewer entitled to see the learner's real identity
+     * (protection\surfaces::mentoring_fields), so the page and the app never show either to
+     * anyone else.
      *
      * @param \stdClass $learner
+     * @param int $viewerid who is looking
      * @return array
      */
-    protected static function learner(\stdClass $learner): array {
+    protected static function learner(\stdClass $learner, int $viewerid): array {
         $courses = self::courses((int)$learner->id);
-        return [
+        return \local_ltuse\protection\surfaces::mentoring_fields($viewerid, (int)$learner->id) + [
             'id' => (int)$learner->id,
             'fullname' => fullname($learner),
             'firstname' => (string)$learner->firstname,

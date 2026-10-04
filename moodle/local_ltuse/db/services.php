@@ -92,6 +92,25 @@ $functions = [
                         . 'moodle/badges:configurecriteria, moodle/badges:configuredetails, '
                         . 'moodle/badges:configuremessages, mod/customcert:addinstance',
     ],
+
+    // Spec 016 (R12): not in the publishing service. Each checks
+    // local_ltuse\protection\entitlement itself; the capability listed is the site team's.
+    'local_ltuse_set_protection' => [
+        'classname'    => 'local_ltuse\external\set_protection',
+        'description'  => 'Grant, change or remove one person\'s identity protection. Never '
+                        . 'returns a real identity.',
+        'type'         => 'write',
+        'ajax'         => false,
+        'capabilities' => 'local/ltuse:manageprotection',
+    ],
+    'local_ltuse_set_org_protection' => [
+        'classname'    => 'local_ltuse\external\set_org_protection',
+        'description'  => 'Set an organisation\'s minimum identity protection level. Site team '
+                        . 'only.',
+        'type'         => 'write',
+        'ajax'         => false,
+        'capabilities' => 'local/ltuse:manageorgprotection',
+    ],
 ];
 
 // One service, so a single token grants exactly these functions and nothing else.

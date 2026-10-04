@@ -115,5 +115,66 @@ function xmldb_local_ltuse_upgrade($oldversion) {
         upgrade_plugin_savepoint(true, 2026100400, 'local', 'ltuse');
     }
 
+    // Identity protection (spec 016, research R5, R12): a protected user's real identity, each
+    // organisation's minimum level, and the change log. All three are Moodle data, never the
+    // repo's. Then ltct_certname, the certificate's name field, is filled for every existing
+    // user (R10), so no learner's certificate prints the field's label instead of a name.
+    if ($oldversion < 2026100500) {
+        $table = new xmldb_table('local_ltuse_protection');
+        $table->add_field('id', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, XMLDB_SEQUENCE, null);
+        $table->add_field('userid', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, null);
+        $table->add_field('ownlevel', XMLDB_TYPE_CHAR, '20', null, XMLDB_NOTNULL, null, 'none');
+        $table->add_field('effectivelevel', XMLDB_TYPE_CHAR, '20', null, XMLDB_NOTNULL, null, 'none');
+        $table->add_field('source', XMLDB_TYPE_CHAR, '20', null, XMLDB_NOTNULL, null, 'own');
+        $table->add_field('pseudonym', XMLDB_TYPE_CHAR, '100', null, XMLDB_NOTNULL, null, '');
+        $table->add_field('realfirstname', XMLDB_TYPE_CHAR, '100', null, XMLDB_NOTNULL, null, '');
+        $table->add_field('reallastname', XMLDB_TYPE_CHAR, '100', null, XMLDB_NOTNULL, null, '');
+        $table->add_field('realfields', XMLDB_TYPE_TEXT, null, null, null, null, null);
+        $table->add_field('timecreated', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, '0');
+        $table->add_field('timemodified', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, '0');
+        $table->add_field('usermodified', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, '0');
+        $table->add_key('primary', XMLDB_KEY_PRIMARY, ['id']);
+        $table->add_key('userid', XMLDB_KEY_FOREIGN_UNIQUE, ['userid'], 'user', ['id']);
+        $table->add_index('usermodified', XMLDB_INDEX_NOTUNIQUE, ['usermodified']);
+        if (!$dbman->table_exists($table)) {
+            $dbman->create_table($table);
+        }
+
+        $table = new xmldb_table('local_ltuse_org_protection');
+        $table->add_field('id', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, XMLDB_SEQUENCE, null);
+        $table->add_field('orgkey', XMLDB_TYPE_CHAR, '30', null, XMLDB_NOTNULL, null, null);
+        $table->add_field('minlevel', XMLDB_TYPE_CHAR, '20', null, XMLDB_NOTNULL, null, 'none');
+        $table->add_field('managers_see_identity', XMLDB_TYPE_INTEGER, '1', null, XMLDB_NOTNULL, null, '1');
+        $table->add_field('timemodified', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, '0');
+        $table->add_field('usermodified', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, '0');
+        $table->add_key('primary', XMLDB_KEY_PRIMARY, ['id']);
+        $table->add_index('orgkey', XMLDB_INDEX_UNIQUE, ['orgkey']);
+        $table->add_index('usermodified', XMLDB_INDEX_NOTUNIQUE, ['usermodified']);
+        if (!$dbman->table_exists($table)) {
+            $dbman->create_table($table);
+        }
+
+        $table = new xmldb_table('local_ltuse_protection_log');
+        $table->add_field('id', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, XMLDB_SEQUENCE, null);
+        $table->add_field('userid', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, null);
+        $table->add_field('actorid', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, '0');
+        $table->add_field('fromlevel', XMLDB_TYPE_CHAR, '20', null, XMLDB_NOTNULL, null, 'none');
+        $table->add_field('tolevel', XMLDB_TYPE_CHAR, '20', null, XMLDB_NOTNULL, null, 'none');
+        $table->add_field('source', XMLDB_TYPE_CHAR, '20', null, XMLDB_NOTNULL, null, 'own');
+        $table->add_field('timecreated', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, '0');
+        $table->add_key('primary', XMLDB_KEY_PRIMARY, ['id']);
+        $table->add_index('userid', XMLDB_INDEX_NOTUNIQUE, ['userid']);
+        $table->add_index('actorid', XMLDB_INDEX_NOTUNIQUE, ['actorid']);
+        if (!$dbman->table_exists($table)) {
+            $dbman->create_table($table);
+        }
+
+        // The field itself is made by site_config.py apply (profile-fields.yaml). Where it does
+        // not exist yet this fills nothing, and the reconcile task fills it once it does.
+        \local_ltuse\protection\service::backfill_certnames();
+
+        upgrade_plugin_savepoint(true, 2026100500, 'local', 'ltuse');
+    }
+
     return true;
 }

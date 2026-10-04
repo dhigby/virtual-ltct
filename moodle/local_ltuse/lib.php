@@ -210,6 +210,7 @@ function local_ltuse_myprofile_navigation(\core_user\output\myprofile\tree $tree
     if (!isloggedin() || isguestuser() || !empty($course)) {
         return;
     }
+    local_ltuse_protection_profile_nodes($tree, $user, (bool)$iscurrentuser);
     $url = new moodle_url('/local/ltuse/mentoring.php');
     if ($iscurrentuser) {
         if (\local_ltuse\mentoring::has_relationship((int)$USER->id)) {
@@ -223,6 +224,58 @@ function local_ltuse_myprofile_navigation(\core_user\output\myprofile\tree $tree
         $url->set_anchor('learner-' . (int)$user->id);
         $tree->add_node(new \core_user\output\myprofile\node('miscellaneous', 'local_ltuse_mentoring_learner',
             get_string('mentoring:thislearner', 'local_ltuse'), null, $url));
+    }
+}
+
+/**
+ * Identity protection on profiles (spec 016, research R7 surface 1; FR-007, FR-008, FR-012).
+ * Web only; in the app, the Mentoring handler is the entitled surface.
+ *
+ * On your own profile: your level, a preview of what others see, who sees your real identity,
+ * how to ask, and "People I support" when you support anyone protected. On someone else's: the
+ * real identity and the Protected marker, only for an entitled viewer, and a link to the
+ * granting page for someone who may change it. A non-entitled viewer gets nothing, not even the
+ * category, so the profile never says whether a person is protected.
+ *
+ * @param \core_user\output\myprofile\tree $tree
+ * @param stdClass $user the profile's owner
+ * @param bool $iscurrentuser
+ */
+function local_ltuse_protection_profile_nodes(\core_user\output\myprofile\tree $tree, $user, bool $iscurrentuser): void {
+    global $USER;
+    if (!\local_ltuse\protection\service::table_exists()) {
+        return;
+    }
+    $viewerid = (int)$USER->id;
+    $userid = (int)$user->id;
+    $nodes = [];
+    if ($iscurrentuser) {
+        $nodes[] = new \core_user\output\myprofile\node('local_ltuse_protection', 'local_ltuse_protection_own',
+            get_string('protection:yourprotection', 'local_ltuse'), null, null,
+            \local_ltuse\protection\surfaces::own_summary($userid));
+        if (\local_ltuse\protection\surfaces::supports_anyone($viewerid)) {
+            $nodes[] = new \core_user\output\myprofile\node('local_ltuse_protection', 'local_ltuse_protection_supported',
+                get_string('protection:supported', 'local_ltuse'), null, new moodle_url('/local/ltuse/protected.php'));
+        }
+    } else {
+        $summary = \local_ltuse\protection\surfaces::entitled_summary($viewerid, $userid);
+        if ($summary !== '') {
+            $nodes[] = new \core_user\output\myprofile\node('local_ltuse_protection', 'local_ltuse_protection_identity',
+                get_string('protection:identity', 'local_ltuse'), null, null, $summary);
+        }
+        if (\local_ltuse\protection\entitlement::can_manage_protection($viewerid, $userid)) {
+            $nodes[] = new \core_user\output\myprofile\node('local_ltuse_protection', 'local_ltuse_protection_manage',
+                get_string('protection:manage', 'local_ltuse'), null,
+                \local_ltuse\protection\surfaces::granting_url($userid));
+        }
+    }
+    if (!$nodes) {
+        return;
+    }
+    $tree->add_category(new \core_user\output\myprofile\category('local_ltuse_protection',
+        get_string('protection:category', 'local_ltuse'), 'contact'));
+    foreach ($nodes as $node) {
+        $tree->add_node($node);
     }
 }
 

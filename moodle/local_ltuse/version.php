@@ -9,7 +9,13 @@
 defined('MOODLE_INTERNAL') || die();
 
 $plugin->component = 'local_ltuse';
-$plugin->version   = 2026100400;   // Events and office hours (spec 011): calendar change
+$plugin->version   = 2026100500;   // Identity protection (spec 016): three tables
+                                   // (local_ltuse_protection, _org_protection,
+                                   // _protection_log), three capabilities, the
+                                   // before_user_updated hook, observers, two tasks, two
+                                   // web services and the protectionchanged message.
+                                   // Before it: events and office hours (spec 011,
+                                   // 2026100400): calendar change
                                    // notices, the office-hours sync, booking notices and
                                    // their table (local_ltuse_booking), the time zone notice.
                                    // db/upgrade.php saves its savepoint at this stamp. After
@@ -40,7 +46,7 @@ $plugin->requires  = 2026042000;   // Moodle 5.2 -- the release this was
 $plugin->supported = [502, 502];
 
 $plugin->maturity  = MATURITY_ALPHA;
-$plugin->release   = '0.10.0';
+$plugin->release   = '0.11.0';
 
 // No third-party dependencies, deliberately. Sections were originally going to be
 // local_wsmanagesections' job, but it could not be installed here, so local_ltuse grew an

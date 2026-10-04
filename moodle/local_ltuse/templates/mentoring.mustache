@@ -5,7 +5,8 @@
     Course completion only; never a quiz answer, a submission or a CBC level (FR-013).
 
     Context variables required for this template:
-    * haslearners, learners: [{id, fullname, profileurl, gradesurl, messageurl, hascourses,
+    * haslearners, learners: [{id, fullname, protected, protectedlabel, realname (spec 016: set only
+        for a viewer entitled to the real identity), profileurl, gradesurl, messageurl, hascourses,
         courses: [{fullname (format_string, so unescaped), statustext, completed, inprogress, notstarted, nottracked,
                    hidden, notactive, enrolmenttext}]}]
     * hasmentors, mentors: [{fullname, messageurl}]
@@ -32,7 +33,10 @@
     {{#learners}}
     <section class="card mb-3" id="learner-{{id}}">
         <div class="card-body">
-            <h4 class="card-title h5">{{fullname}}</h4>
+            <h4 class="card-title h5">{{fullname}}
+                {{#protected}}<span class="badge bg-warning text-dark local-ltuse-protected">{{protectedlabel}}</span>{{/protected}}
+            </h4>
+            {{#protected}}<p class="mb-1">{{#str}}protection:realname, local_ltuse, {{realname}}{{/str}}</p>{{/protected}}
             <p class="mb-2">
                 <a href="{{profileurl}}">{{#str}}mentoring:profile, local_ltuse{{/str}}</a> ·
                 <a href="{{gradesurl}}">{{#str}}mentoring:grades, local_ltuse{{/str}}</a> ·

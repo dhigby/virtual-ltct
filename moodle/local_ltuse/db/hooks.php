@@ -15,4 +15,10 @@ $callbacks = [
         'hook' => \core\hook\output\before_standard_top_of_body_html_generation::class,
         'callback' => \local_ltuse\hook_callbacks::class . '::top_of_body',
     ],
+    // Spec 016 (R2): a protected user's protected values are re-applied on every
+    // user_update_user(), whoever calls it.
+    [
+        'hook' => \core_user\hook\before_user_updated::class,
+        'callback' => \local_ltuse\protection\hook_callbacks::class . '::before_user_updated',
+    ],
 ];

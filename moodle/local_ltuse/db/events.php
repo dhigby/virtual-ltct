@@ -43,4 +43,27 @@ $observers = [
         'eventname' => '\mod_scheduler\event\slot_deleted',
         'callback' => '\local_ltuse\observer::scheduler_slot_deleted',
     ],
+
+    // Spec 016 (R2): the writers the before_user_updated hook misses. Internal (the default),
+    // so they run while the protection service still holds its bypass set for the user.
+    [
+        'eventname' => '\core\event\user_created',
+        'callback' => '\local_ltuse\protection\observer::user_created',
+    ],
+    [
+        'eventname' => '\core\event\user_updated',
+        'callback' => '\local_ltuse\protection\observer::user_updated',
+    ],
+    [
+        'eventname' => '\core\event\cohort_member_added',
+        'callback' => '\local_ltuse\protection\observer::cohort_member_added',
+    ],
+    [
+        'eventname' => '\core\event\cohort_member_removed',
+        'callback' => '\local_ltuse\protection\observer::cohort_member_removed',
+    ],
+    [
+        'eventname' => '\core\event\user_deleted',
+        'callback' => '\local_ltuse\protection\observer::user_deleted',
+    ],
 ];

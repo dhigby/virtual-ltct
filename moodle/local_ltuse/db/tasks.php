@@ -15,4 +15,15 @@ $tasks = [
         'month' => '*',
         'dayofweek' => '*',
     ],
+    // Spec 016 (R2): repair protected accounts the hook and observers missed, every
+    // reconcile_minutes (protection.yaml, 60), at a minute Moodle picks per site.
+    [
+        'classname' => '\local_ltuse\task\reconcile_protection',
+        'blocking' => 0,
+        'minute' => 'R',
+        'hour' => '*',
+        'day' => '*',
+        'month' => '*',
+        'dayofweek' => '*',
+    ],
 ];

@@ -176,7 +176,7 @@ These are for the maintainer (Doug). `/speckit-tasks` may generate tasks as draf
 | 5 | **Course leaders lose course backups and course logs** (R14). | Proposed: accept. |
 | 6 | **Known gaps** (research): the badge email hash, app cache lag, copies already sent, file metadata, backups carrying `ltct_certname`, core exports without a marker, same-first-name lookalikes. Amends SC-005 for the app. | Proposed: accept, listed in the delivering PR (FR-015). |
 | 7 | **Where supporters see the real identity** (R7): the profile node (web), the Mentoring page (web and app), "People I support" with its CSV, and the granting page. Everywhere else they see the protected display. Amends US2-1, US2-3 and FR-007. | Proposed: accept. |
-| 8 | **Organisation minimums are Moodle data, not repo declarations** (R12). They are set by the site team, and the maximum is `firstname`. An organisation that may need protection gets a neutral key and name from its first commit. Amends FR-014. | Proposed: accept. |
+| 8 | **Organisation minimums are Moodle data, not repo declarations** (R12). They are set by the site team, and the maximum is `firstname`. An organisation that may need protection gets a neutral key and name from its first commit; SIL's Area entries are a deliberate exception (spec Clarifications 2026-10-04). Amends FR-014. | **Accepted** (Doug, 2026-10-04, with constitution 2.1.0 Principle II). FR-008 and FR-014 amended. |
 | 9 | **The global search `core_user` area is disabled**, but global search itself is not (R9), so 014 can still use it. | Proposed: accept. |
 
 ## Cross-spec effects
@@ -191,6 +191,8 @@ These are for the maintainer (Doug). `/speckit-tasks` may generate tasks as draf
 - **014**: global search stays available, because only the `core_user` area is off (decision 9).
 - **015**: the reconcile task runs on the monitored cron. The database restore carries organisation minimums and protection data.
 - **008**: bulk protection can use `local_ltuse_set_protection`.
+- **Course mentors (2026-10-04)**: FR-006 now entitles every course mentor of a course the learner takes, including a one-course mentor. R7's `can_view_identity()` gains that path: the viewer holds the course-level Course mentor role (Moodle's non-editing teacher) in a course where the learner is enrolled. It is not yet designed here; the plan and tasks add it before the build, together with spec 012's re-plan and the 008 re-plan that enrols course mentors automatically.
+- **002 Areas amendment (2026-10-03)**: a SIL or SIL partner learner's own-organisation managers are their Area's ALTCs. No new code: entitlement already follows managers-cohort membership of the learner's organisation entry (R7).
 
 ## Complexity Tracking
 

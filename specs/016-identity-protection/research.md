@@ -307,6 +307,7 @@ Until both are applied, the service **refuses** `firstname` and `pseudonym`, and
 - An organisation's minimum level and its `managers_see_identity` are **Moodle data**, stored by `local_ltuse` and set by the site team only, on `/local/ltuse/orgprotection.php` or through `local_ltuse_set_org_protection`.
 - **They are not declared in the repo.** **(review, Principle III)** A `protection:` key in the public `organisations.yaml` would publish which partners are at risk, and git history would keep it even after removal.
 - An organisation that needs protection is added to `organisations.yaml` with a **neutral key and name from its first commit**. The key cannot be changed later: it is the `ltct_org` option and the cohort and category idnumber.
+- **Exception (2026-10-04):** SIL's ten Area entries (`sil-*`, `silp-*`) are deliberately not neutral. They name SIL's own published structure and mark no one as at risk, and no Area entry carries a minimum. A group within an Area that needs organisation-wide protection gets its own neutral entry (spec Clarifications 2026-10-04).
 - FR-014 is amended (decision 8).
 - An organisation minimum may be `email` or `firstname`, **never `pseudonym`**, because a pseudonym is chosen per person.
 - Raising an organisation's minimum shows the count of members who already have activity (counts only), and needs an acknowledgement before it is applied (R13).

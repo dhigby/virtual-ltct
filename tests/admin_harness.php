@@ -36,15 +36,17 @@ check(masking::mask_email('@example.org') === '***', 'no local part');
 check(masking::mask_email('alice@') === '***', 'no domain');
 
 // The same five addresses through both, compared character for character.
-$addresses = ['alice@example.org', 'B.Okafor@Example.org', ' c@example.org ', 'd+tag@sub.example.org',
-    'élodie@example.org'];
+$addresses = ['alice@example.org', 'B.Fixture@Example.org', ' c@example.org ', 'd+tag@sub.example.org',
+    'é-fixture@example.org'];
 $python = null;
-// Single quotes only inside: escapeshellarg() on Windows turns a double quote into a space.
+// No double quote may reach the shell: escapeshellarg() on Windows turns one into a space.
+// So the script uses single quotes only, and the addresses go across as hex-encoded JSON.
 $script = "import json,sys; sys.path.insert(0, 'scripts'); import admin_files; "
-    . "print(json.dumps([admin_files.mask_email(a) for a in json.loads(sys.argv[1])]))";
+    . "print(json.dumps([admin_files.mask_email(a) for a in "
+    . "json.loads(bytes.fromhex(sys.argv[1]).decode('utf-8'))]))";
 foreach (['python3', 'python'] as $exe) {
     $out = shell_exec($exe . ' -c ' . escapeshellarg($script) . ' '
-        . escapeshellarg(json_encode($addresses, JSON_UNESCAPED_UNICODE)) . ' 2>&1');
+        . bin2hex(json_encode($addresses, JSON_UNESCAPED_UNICODE)) . ' 2>&1');
     $decoded = is_string($out) ? json_decode(trim($out), true) : null;
     if (is_array($decoded) && count($decoded) === count($addresses)) {
         $python = $decoded;

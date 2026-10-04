@@ -93,6 +93,18 @@ if ($existing && !$options['rotate']) {
     cli_writeln("             Pass --rotate to revoke it and write a new one.");
     exit(0);
 }
+
+// Make the file private before anything is revoked or issued, so a file that cannot be
+// prepared costs nothing: a new file is created empty under a 077 umask, an existing one is
+// narrowed to 600 first (a umask does not change a file that is already there).
+$tokenfile = $options['token-file'];
+$old = umask(0077);
+$prepared = touch($tokenfile) && chmod($tokenfile, 0600);
+umask($old);
+if (!$prepared) {
+    cli_error("Could not create {$tokenfile} with mode 600; nothing was revoked or issued.");
+}
+
 foreach ($existing as $token) {
     $webservice->delete_user_ws_token($token->id);
 }
@@ -103,15 +115,9 @@ if ($existing) {
 $token = \core_external\util::generate_token(EXTERNAL_TOKEN_PERMANENT, $service, (int)$user->id,
     $syscontext, 0, '', 'ltct_admin.py');
 
-$tokenfile = $options['token-file'];
-// Create the file private before the token goes in, so it is never readable by others.
-$old = umask(0077);
-$written = file_put_contents($tokenfile, $token . "\n");
-umask($old);
-if ($written === false) {
-    cli_error("Could not write the token to {$tokenfile}");
+if (file_put_contents($tokenfile, $token . "\n") === false) {
+    cli_error("Could not write the token to {$tokenfile}. Run again with --rotate.");
 }
-chmod($tokenfile, 0600);
 
 cli_writeln("");
 cli_writeln("Token written to {$tokenfile} (mode 600). It is deliberately not printed here.");

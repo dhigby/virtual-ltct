@@ -32,6 +32,7 @@ publisher does not ask, because core_course_create_courses is not idempotent.
 Usage as a CLI, to check a server is reachable and the token works:
   python scripts/moodle_client.py --whoami
 """
+import http.client
 import json
 import os
 import sys
@@ -176,6 +177,14 @@ class MoodleClient:
             # A read that stalls past the timeout surfaces as this, not as URLError.
             raise _Retryable(MoodleError(function, {"message": "no answer from %s within "
                                                                "%s s" % (self.url, self.timeout)}))
+        except (ConnectionError, http.client.HTTPException) as e:
+            # The request went out and the answer was lost: urllib wraps errors while
+            # sending in URLError, but not a connection dropped while the response is read
+            # (RemoteDisconnected, a reset, an IncompleteRead). That is the lost response a
+            # field link produces, and the one-row "further along" rule makes a resend safe.
+            raise _Retryable(MoodleError(function, {"message": "the connection to %s dropped "
+                                                               "before Moodle answered (%s)"
+                                                               % (self.url, e.__class__.__name__)}))
 
     # -- files ---------------------------------------------------------------------------
     def upload(self, path, itemid=0, filearea="draft"):

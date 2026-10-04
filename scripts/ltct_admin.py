@@ -215,35 +215,42 @@ def drive(plan, apply, confirm, show_people, out=sys.stdout):
         return EXIT_REFUSED
 
     tally = Counter()
+    per_outcome = {}            # outcome -> Counter of results, for the applied counts
     problems = []
     for r in plan.rows:
         p = by_row[r["row"]]
         outcome = p["outcome"]
         if admin_files.outcome_class(outcome) != admin_files.PROCEEDS:
-            tally["not applied"] += 1
-            continue
-        if outcome in NOTHING_TO_DO:
-            tally["already done"] += 1
-            continue
-        try:
-            answer = plan.apply(r, outcome) or {}
-        except MoodleError as e:
-            tally["failed"] += 1
-            problems.append((p, e.message))
-            continue
-        status = answer.get("status")
-        if status == "done":
-            tally["done"] += 1
-        elif status == "already_done":
-            tally["already done"] += 1
+            label = "not applied"
+        elif outcome in NOTHING_TO_DO:
+            label = "already done"
         else:
-            tally["refused"] += 1
-            problems.append((p, answer.get("reason") or "refused"))
+            try:
+                answer = plan.apply(r, outcome) or {}
+            except MoodleError as e:
+                answer = None
+                label = "failed"
+                problems.append((p, e.message))
+            if answer is not None:
+                status = answer.get("status")
+                if status == "done":
+                    label = "done"
+                elif status == "already_done":
+                    label = "already done"
+                else:
+                    label = "refused"
+                    problems.append((p, answer.get("reason") or "refused"))
+        tally[label] += 1
+        per_outcome.setdefault(outcome, Counter())[label] += 1
 
+    # The preview's counts again, each split into what happened (contracts/cli.md).
+    labels = ("done", "already done", "refused", "failed", "not applied")
     print("%s applied:" % plan.title, file=out)
-    for label in ("done", "already done", "refused", "failed", "not applied"):
-        if tally[label]:
-            print("  %-20s %4d" % (label, tally[label]), file=out)
+    for outcome, results in sorted(per_outcome.items(),
+                                   key=lambda kv: (-sum(kv[1].values()), kv[0])):
+        print("  %-20s %4d   %s" % (outcome, sum(results.values()),
+                                    ", ".join("%s %d" % (lb, results[lb])
+                                              for lb in labels if results[lb])), file=out)
     for p, reason in problems:
         print("    row %-4s %-24s %s" % (p["row"], p.get("key", ""), reason), file=out)
     if tally["not applied"]:

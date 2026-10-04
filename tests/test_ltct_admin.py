@@ -5,6 +5,7 @@ tests/test_publish_moodle.py), every address is @example.org, every organisation
 fixture-*, and rows are built in memory. No CSV fixture is ever committed (constitution III);
 a test that needs a file on disk writes it under pytest's tmp_path, outside the repository.
 """
+import http.client
 import io
 import pathlib
 import shutil
@@ -195,7 +196,7 @@ def test_code_is_stable_across_runs():
 @pytest.mark.parametrize("column,value", [
     ("email", "someone.else@example.org"), ("firstname", "Other"), ("lastname", "Other"),
     ("organisation", "fixture-b"), ("country", "KE"), ("protection", "email"),
-    ("courses", "ltct:fixture-course"),
+    ("courses", "ltct:fixture-course"), ("pseudonym", "fixture-alias"),
 ])
 def test_code_changes_with_any_input_column(column, value):
     outcomes = ["new", "new", "new"]
@@ -486,6 +487,14 @@ def test_retries_are_bounded(monkeypatch):
 def test_a_connection_error_is_retried(monkeypatch):
     client, sleeps, seen = _client_with(
         monkeypatch, [urllib.error.URLError("unreachable"), '{"ok": 1}'])
+    assert client.call("local_ltuse_admin_check") == {"ok": 1}
+    assert sleeps == [2]
+
+
+def test_a_response_lost_mid_read_is_retried(monkeypatch):
+    # urllib does not wrap a connection dropped while the answer is read: the lost response.
+    client, sleeps, seen = _client_with(
+        monkeypatch, [http.client.RemoteDisconnected("closed"), '{"ok": 1}'])
     assert client.call("local_ltuse_admin_check") == {"ok": 1}
     assert sleeps == [2]
 

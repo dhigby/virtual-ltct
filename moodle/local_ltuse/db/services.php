@@ -112,7 +112,7 @@ $functions = [
                         . 'optionally for one organisation. Changes nothing.',
         'type'         => 'read',
         'ajax'         => false,
-        'capabilities' => 'local/ltuse:administer',
+        'capabilities' => 'local/ltuse:administer, moodle/cohort:view',
     ],
 ];
 

@@ -589,6 +589,8 @@ each is re-checked as stated.
 | `cohort` | `idnumber LIKE 'ltct:%'` (`admin_list`); `idnumber = 'ltct:mentors'` (`organisation\actions::person_facts()`) | Every organisation cohort is hidden and in system context, which `cohort_get_all_cohorts()` filters by visibility for the caller. `cohort.idnumber` is not indexed in core; the table holds tens of rows. |
 | `course` joined to `course_categories` | `course.idnumber LIKE 'ltct:%'`, the category's `idnumber` (`admin_list`) | The courses the site team may name, with the category that decides which organisations may be enrolled. `core_course_category` lists by category, not by course idnumber. |
 | `course_categories` | `id` (`organisation\actions::do_enrol()`) | The idnumber of one course's category, for `access::may_enrol_into()`. |
+| `role` | `shortname = 'student'` (`organisation\actions::org_enrol_instance()`) | The Student role's id for a new organisation-enrolment instance. Core has no lookup of a role by shortname that is not a raw read. |
+| `enrol` | `id` (`organisation\actions::org_enrol_instance()`) | The instance `enrol_self_plugin::add_instance()` just created, which returns only its id; `enrol_get_instances()` would read every instance of the course. |
 
 `cli/setup_publishing.php` still writes `external_services_users` and deletes
 `external_tokens` with `$DB` directly; `cli/setup_admin_token.php` uses

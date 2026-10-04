@@ -756,8 +756,13 @@ def cmd_summary(args, client_factory, out):
         print("\n".join([title] + summary_lines(result, args.show_people)), file=out)
         return EXIT_OK
     path.parent.mkdir(parents=True, exist_ok=True)
-    with open(path, "w", encoding="utf-8", newline="\n") as fh:
-        fh.write("\n".join([title] + summary_lines(result, args.show_people)) + "\n")
+    # "x": never overwrite, even a file that appeared after the check above.
+    try:
+        with open(path, "x", encoding="utf-8", newline="\n") as fh:
+            fh.write("\n".join([title] + summary_lines(result, args.show_people)) + "\n")
+    except FileExistsError:
+        print("Refused: %s already exists. Choose a new file name." % path, file=out)
+        return EXIT_REFUSED
     # On screen, the counts only: the people are in the file the operator asked for.
     print("\n".join([title] + summary_lines(result, None)), file=out)
     print("Wrote the summary, with %s, to %s. Delete it when you are done with it."

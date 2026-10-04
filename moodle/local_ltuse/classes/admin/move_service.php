@@ -104,7 +104,10 @@ class move_service {
                 return self::answer($row, $decision['outcome'], 'refused', $reason);
             }
             if ($step === intake_rules::FINISH) {
-                return self::answer($row, $decision['outcome'], 'already_done', '');
+                // A retry after a lost response lands here: the move was made, so confirm
+                // protection settled, as the first attempt would have (research R8).
+                return self::answer($row, $decision['outcome'], 'already_done',
+                    self::settled((int)$facts['userid']) ? '' : intake_service::reason('moved_unsettled'));
             }
             $neworg = trim((string)$row['organisation']);
             if (!intake_service::set_organisation((int)$facts['userid'], $neworg)) {

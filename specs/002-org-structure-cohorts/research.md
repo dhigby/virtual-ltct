@@ -1,5 +1,7 @@
 # Research: Partner organisations, cohorts and profiles
 
+> **Amended 2026-10-03 in the spec** (Areas and Area Language Technology Coordinators, [Clarifications 2026-10-03](spec.md)). This file is not yet redone for it; that happens in the plan step, before any build. Where this file disagrees with the 2026-10-03 Clarifications, the spec wins.
+
 **Plan**: [plan.md](plan.md). R1–R9 date from 2026-10-01; the 2026-10-02 amendment rewrites R2, R3, R7's known limit and R8 in place, amends R9 (its 2026-10-01 text is marked superseded where it no longer holds), and adds R10–R14. Every API below was confirmed in `MOODLE_502_STABLE` source on 2026-10-01 or 2026-10-02, after a Context7 query (`/websites/moodledev_io_5_2_apis`). The context7 guides cover contexts and enrolment, not cohort availability, profile fields or profile access, so source is the authority here. Each **Verify** line is something to confirm on the 5.2.3+ instance, with test accounts only, before the task that depends on it is closed.
 
 ## R1. Organisation cohorts are site-level and hidden
@@ -118,6 +120,8 @@ Country is Moodle's own `country` field, which every account already has. Its vi
 **Alternatives considered**: Organisation as a text field (typos split cohorts). The display name as the stored value (a rename breaks every learner's value). A custom country menu (duplicates a core field).
 
 ## R6. Identity is the `idnumber`, and existing categories are adopted
+
+> **Superseded in part, 2026-10-03.** `sil-partner` is no longer the one organisation for every SIL partner: SIL partners are declared Area by Area, and `sil-partner` stays only as a holding entry for people whose Area is not yet known (spec Clarifications 2026-10-03, FR-014).
 
 **Decision**: Categories carry `idnumber` `ltct:<key>` for shared categories (`ltct:published`, `ltct:pilots`, `ltct:organisations`) and `ltct:org:<key>` for organisation categories. Cohorts use the idnumbers in R1. Organisation categories sit inside `ltct:organisations`, so the category list stays short. When no category has the idnumber, apply adopts a category with the declared name, the declared parent and an idnumber that is empty or does not start with `ltct:`, if there is exactly one: it sets the idnumber and reports `[changed] adopted`. More than one match is a blocking `[fail]`. The build host's existing "LTC Pilots" and "LTC Published" are adopted this way, so their ids, and the publisher's `--category`, do not change.
 

@@ -15,6 +15,8 @@
 - **Organisation managers can see *and manage* their users.** This changes **B5**: managers manage, rather than follow only. B3 (a user-context follow role) and D3 (managers posting events) are therefore no longer "wait for Phase B". What "manage" covers is scoped in the Part 1 change, against core's limit that enrolment selectors search every site user.
 - **Identity protection gets its own spec.** Some users need extra protection of their identity because of where they work: a hidden email address, first name only, or a pseudonym. That must not block them taking part in Moodle. Open courses make this more urgent, so that spec runs alongside the Part 1 change.
 
+**Later, 2026-10-03 (Doug).** SIL and SIL Partner are declared Area by Area, and an Area Language Technology Coordinator is that Area's organisation manager. Learners ask for a course and the request reaches their Area's coordinator. See `INTENT.md` (2026-10-03) and [spec 002's Clarifications 2026-10-03](../002-org-structure-cohorts/spec.md). For 011, "organisation managers" now includes ALTCs. For SIL, "one organisation" in D2 and D3 now means one Area, so a SIL-wide audience is five (or, with SIL partners, ten) entries, and there is no SIL-wide organisation-only course.
+
 That direction is bigger than events, so this handoff has two parts. Part 1 is the cross-cutting change. Part 2 is what's left to decide for 011 once Part 1 is settled. When you've answered, the 011 plan, data model, contracts and quickstart follow in this PR.
 
 ## Part 1. Open courses, with organisation-only courses as the exception

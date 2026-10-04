@@ -41,6 +41,9 @@ output is hand-edited becomes a liar.
   A setting clicked into the admin UI and not captured there is not done. The test: a new
   server can be rebuilt from the repo plus a data restore.
 - Learner data MUST be exportable.
+- Configuration whose publication would identify at-risk people (the country-to-Area map,
+  organisation protection minimums) is held as Moodle data, not declared in the repo. It is
+  recovered by the data restore, so backups MUST include it.
 - Prefer the reversible choice when two designs are otherwise equal.
 
 *Rationale:* the markdown is the asset; any renderer or LMS is replaceable, and leaving a
@@ -55,6 +58,12 @@ platform must never mean leaving content or learner history behind.
   written into the tree even temporarily.
 - Admin tooling that handles learner data (cohort creation, bulk enrolment) runs against Moodle
   and MUST NOT write learner data into git.
+- An enrolment request is learner data from the moment it is made, even when the person has no
+  account, and MUST NOT be written into the repo.
+- The repo MUST NOT record which countries belong to an organisation's declared region (Area),
+  which region any person belongs to, or which organisations, regions or people are at risk.
+  This covers its history, test fixtures, logs, verification evidence, and GitHub issues, pull
+  requests and comments. The names of an organisation's declared regions are not such a record.
 
 *Rationale:* once committed to a public repo, personal data or a token is published and cannot
 be recalled.
@@ -119,6 +128,9 @@ people, and the learners are spread across many organisations and interface lang
 - One course per session. Per-course or per-partner special cases erode standardisation and
   MUST be justified in the spec that introduces them; the default answer is no. The
   organisation-only course is not one: it is a uniform variant open to every organisation.
+  Nor is declaring an organisation region by region (SIL by Area): each region is an ordinary
+  organisation entry of the one shape. Another organisation could be declared the same way by a
+  reviewed change.
 - Authoring is routed through the stage's agent and how-to so AI-assisted output is consistent
   rather than personal.
 
@@ -235,14 +247,18 @@ is exactly the kind of work this team cannot absorb.
   declare the Moodle branches they were verified on (Principle XI). A pin stops an unreviewed
   *plugin* update; it is never a reason to hold back a Moodle security release.
 - **One instance serves every partner we host.** Today that is `ltuse.net`. Partners on it are
-  identified and scoped by course category, cohort, role and profile field; no spec may stand
+  identified and scoped by course category, cohort, role and profile field. An organisation,
+  in these rules, is one entry in `moodle/site/organisations.yaml`; a partner may be declared as
+  several entries (SIL by Area), and an organisation-only course then belongs to one of them; no spec may stand
   up a separate instance or a bespoke role set per organisation. A partner that runs its own
   Moodle is a second publish target, not a second instance of ours: nothing may hard-code
   `ltuse.net`, and the server always comes from `MOODLE_URL`.
   - Shared delivery courses MUST be open across organisations: no spec may separate
     organisations by groups inside a shared delivery course.
   - Organisation managers MUST be scoped by membership of their organisation's managers cohort,
-    through reporting and our own management pages, never by course groups.
+    through reporting and our own management pages, never by course groups. An Area Language
+    Technology Coordinator is such a manager: the person responsible for developing consultants
+    for an entry, which is an Area for SIL and SIL partners. There is no second kind of scope.
   - The organisation-only course is the one mechanism for keeping a course to one
     organisation. The maintainer declares it in `moodle/site/`, never in course content, and it
     restricts enrolment, not content: the course stays in the public repo.
@@ -283,7 +299,16 @@ is exactly the kind of work this team cannot absorb.
   it touches; NON-NEGOTIABLE principles (III, IV) admit no exception. Complexity or a special
   case must be justified in writing, in the spec or the PR.
 
-**Version**: 2.0.0 | **Ratified**: 2026-09-30 | **Last Amended**: 2026-10-02
+**Version**: 2.1.0 | **Ratified**: 2026-09-30 | **Last Amended**: 2026-10-03
+
+*2.1.0 — follows the parts of the 2026-10-03 `INTENT.md` decision "Learners ask; Area LT
+Coordinators add them" that Doug decided: an Area is an organisation entry and replaces SIL as
+the organisation of record, ALTCs are its managers, and the country-to-Area map stays out of the
+repo. Principle III gains rules for enrolment requests and for at-risk geography; Principle II
+holds such configuration as Moodle data; Platform & Delivery defines an organisation as one
+declared entry, and Principle VII says a region-by-region declaration is not a special case.
+MINOR, because the definition states what "organisation" now means rather than redefining a
+principle. Doug confirmed the amendment and its version level on 2026-10-04.*
 
 *2.0.0 — redefines how partners share the one instance, following the 2026-10-02 `INTENT.md`
 decision "Courses are open across organisations": partners are identified and scoped, no

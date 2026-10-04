@@ -1,5 +1,7 @@
 # Tasks: Partner organisations, cohorts and profiles
 
+> **Amended 2026-10-03 in the spec** (Areas and Area Language Technology Coordinators, [Clarifications 2026-10-03](spec.md)). This file is not yet redone for it; that happens in the plan step, before any build. Where this file disagrees with the 2026-10-03 Clarifications, the spec wins.
+
 **Input**: [plan.md](plan.md), [spec.md](spec.md), [research.md](research.md), [data-model.md](data-model.md), [contracts/declaration.md](contracts/declaration.md)
 
 Verification runs on the temporary 5.2.3+ instance (`ssh ltuse`, `https://ltuse.net`) with test accounts only (constitution X). That host carries other people's live sites, so no task touches anything outside `/home/ltuse`, and nothing runs PHPUnit there.

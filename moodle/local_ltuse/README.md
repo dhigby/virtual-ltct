@@ -189,15 +189,19 @@ run in one delegated transaction, and the stored set is read back after the comm
 
 ### The plugin's own tables
 
-`db/install.xml` (and the matching steps in `db/upgrade.php`) adds three tables, none holding
-user data, so `classes/privacy/provider.php` is a `null_provider`. The first two arrive at
-version `2026100204`; `local_ltuse_course_badge` arrives at `2026100300` and is described under
-[Badges and certificates](#badges-and-certificates-spec-013):
+`db/install.xml` (and the matching steps in `db/upgrade.php`) adds four tables. The first two
+arrive at version `2026100204`; `local_ltuse_course_badge` arrives at `2026100300` and is
+described under [Badges and certificates](#badges-and-certificates-spec-013);
+`local_ltuse_mentor_contact` arrives at `2026100301` and is described under
+[Mentors](#mentors-spec-003). Only the last holds user data, and `classes/privacy/provider.php`
+declares, exports and deletes it:
 
 | Table | Holds | Written by |
 |---|---|---|
 | `local_ltuse_competency` | `name` (unique), `category`, `sortorder`, `retired` | `site_config.py apply`, from `competencies.yaml` (the `Meta` category left out). Rows are retired, never deleted. |
 | `local_ltuse_course_comp` | `courseid`, `competencyid` (unique together) | `set_course_competencies` |
+| `local_ltuse_course_badge` | `courseid` (unique), `badgeid` (unique), `imagehash` | `set_course_recognition` |
+| `local_ltuse_mentor_contact` | `mentorid`, `learnerid` (unique together), `contactid` | the `role_assigned` observer and `cli/mentor_contacts.php` |
 
 ### The per-competency datasource
 
@@ -289,7 +293,7 @@ through the classes above, plus one join to find the activities: `course_modules
 A badge has no idnumber, and a restore or a course copy duplicates its name, so this table is
 its identity: `courseid` (unique), `badgeid` (unique), `imagehash` (the sha256 of the template
 image the badge's image was made from, because core resizes it) and `timecreated`. It holds no
-user data, so the privacy provider stays a `null_provider`. A badge in an `ltct:` course that
+user data, so the privacy provider does not declare it. A badge in an `ltct:` course that
 the map does not name is reported `extra` and never adopted.
 
 ## What the plugin relies on, and why (Principle XI)
@@ -421,7 +425,7 @@ php public/local/ltuse/cli/setup_publishing.php --token-file=/home/ltuse/.ltuse-
 ```
 
 `apply` turns on web services and the mobile app service, sets `mobilecssurl` so published
-callouts render in the Android app, and creates the `ltcpublisher` role with exactly the
+callouts render in the Android app (the app applies it only on the Premium app plan), and creates the `ltcpublisher` role with exactly the
 capabilities the publisher uses. `local/ltuse:publish` is deliberately in no archetype,
 because this token rewrites course content wholesale. `setup_publishing.php` then creates
 the account, authorises it on the restricted *LTC curriculum publishing* service, and writes
@@ -460,7 +464,8 @@ None of them writes another component's table.
 **The profile hook.** `lib.php` defines `local_ltuse_control_view_profile()`, the callback core's `user_can_view_profile()` calls through `user_process_profile_callbacks()`. It refuses an organisation manager the profile of anyone outside the organisations they manage (spec 002, research R9). It never allows anything core would refuse. It reads:
 - `profile_user_record()` for the viewed user's `ltct_org`;
 - `has_coursecontact_role()` and `has_capability('moodle/user:viewalldetails')` at system context, to recognise staff;
-- `has_capability('moodle/user:viewalldetails')` in the viewed user's context, to exempt the site team and mentors.
+- `has_capability('moodle/user:viewalldetails')` in the viewed user's context, to exempt the site team;
+- `has_capability('local/ltuse:viewmenteeprogress')` in the viewed user's context, to exempt their mentor, even one who manages another organisation (spec 003, research R9).
 
 It runs only while `forceloginforprofiles` is on (declared in `moodle/site/settings/groups.yaml`).
 
@@ -512,6 +517,69 @@ each `ltct:<slug>:certificate` activity whose pages differ. `drift` reports a te
 differs, a badge whose text or image differs from its rendering, a mapped badge that is gone
 (`missing`) and an unmapped badge in an `ltct:` course (`extra`). It never judges whether a
 badge should be active: only the publisher knows a course's stage.
+
+## Mentors (spec 003)
+
+A mentor relationship is the declared `mentor` role (`moodle/site/roles.yaml`) held by the
+mentor in a learner's user context. Core gives that role a profile and the Grades overview,
+but no cross-course completion and nothing in the Moodle app, and core's messaging ignores it.
+This plugin fills those three gaps and nothing else.
+
+| Piece | Where | Does |
+|---|---|---|
+| `local/ltuse:viewmenteeprogress` | `db/access.php` | Read, `CONTEXT_USER`, `RISK_PERSONAL`, no archetype. Granted only by the `mentor` role, so it reaches only assigned learners. |
+| Mentoring page | `mentoring.php`, `templates/mentoring.mustache` | The learners you mentor, each with their courses and completion (in progress N%, not started, completed on a date, not tracked), and your own mentors. Links to profile, core Grades overview and Message. Never shows quiz attempts, submissions, logs or hidden profile fields. |
+| Data | `classes/mentoring.php` | `for_user()` feeds both the page and the app, so they cannot differ. Every learner is rechecked with the capability on every call. `progress_status()` and `sort_courses()` are pure, tested by `tests/mentoring_harness.php`. |
+| Navigation | `db/hooks.php`, `classes/hook_callbacks.php`, `lib.php` | A "Mentoring" primary-navigation item (`\core\hook\navigation\primary_extend`) and profile links (`local_ltuse_myprofile_navigation()`), only for someone with a mentor or a learner. |
+| App | `db/mobile.php`, `classes/output/mobile.php`, `templates/mobile_mentoring.mustache` | A `CoreMainMenuDelegate` handler under the app's More menu. Its `init` returns `disabled` for anyone with no relationship. |
+| Message contacts | `db/events.php`, `classes/observer.php`, table `local_ltuse_mentor_contact` | On `role_assigned` of `mentor` in a user context, `\core_message\api::add_contact()` unless the two are already contacts, recorded in the table. On `role_unassigned`, once no mentor assignment links the pair, `remove_contact()`, only while the pair's contact is still the one the plugin made (the table keeps its `message_contacts` id), so a contact the two make again themselves is never removed. On `user_deleted`, the user's rows and those contacts go. A learner's block is never touched, so it still wins. |
+| CLI | `cli/mentor_contacts.php` | `--sync` makes missing contacts for existing assignments (run once after upgrading). `--end-all --mentor=<username>` ends every relationship one mentor holds, through `role_unassign_all()`. Prints counts, never names. |
+| Privacy | `classes/privacy/provider.php` | Declares, exports and deletes `local_ltuse_mentor_contact` rows in each person's user context, and declares the link to `core_message`. The role assignment and the contact are core's. |
+| Course reports | `classes/siteconfig/inspector.php`, `drift.php`, `applier.php` | Drift reports each `ltct:` course whose own "Show activity reports" is on (a mentor would see submissions and logs); apply turns it off with `update_course()`. The publisher also sends `showreports: 0` on every publish. |
+
+**Raw reads added by spec 003.** None is a write; the only table written is this plugin's own.
+
+| Table | Read by | Indexed? | Why there is no API |
+|---|---|---|---|
+| `role_assignments` joined to `context` | `ra.userid`, `ra.roleid`, `ctx.contextlevel = CONTEXT_USER` | `role_assignments.userid` is | Core has no "contexts where this user holds this role" function. `block_mentees` reads the same join. The result only finds candidates; the capability decides. |
+| `course_completions` | `userid`, `timecompleted IS NOT NULL` | `userid` is | Lists a course the learner completed after their enrolment was deleted, which `enrol_get_all_users_courses()` no longer returns (FR-004). |
+| `role_allow_assign` | `(roleid, allowassign)` | unique key | The applier and drift check one declared allow-assign pair. `get_assignable_roles()` answers for a user in a context, not for a pair. |
+
+## Events and office hours (spec 011)
+
+Core's calendar does the rest of spec 011: event levels, export, the app's calendar, and the
+time zone on the profile. This plugin fills four gaps.
+
+| Piece | Where | Does |
+|---|---|---|
+| Change notices | `classes/calendar_notify.php` (pure), `classes/observer.php`, `classes/task/event_change_notice.php`, `db/messages.php` (`eventchange`) | Core sends nothing when an event changes. The observer (`calendar_event_updated` and `_deleted`, `internal => false`) keeps a site, course or group event's change or cancellation. It never keeps a module's, a subscription's or a user's. It buffers by series key (`r<repeatid>` or `e<id>`), and one `\core\shutdown_manager::register_function()` callback queues one adhoc task per key, two minutes ahead, with `reschedule_or_queue_adhoc_task()`. The task tells the event's active audience, except the person who made the change. New events are not announced (plan decision 5). |
+| Booking notices | `classes/booking_notice.php`, `classes/observer.php`, `db/messages.php` (`bookingnotice`), table `local_ltuse_booking` | Every office-hours booking, change of time and cancellation is emailed to the mentee and the mentor. The person who acted gets "You …"; the other side gets a notice. The office-hours scheduler sends none itself (`allownotifications` 0). The observer reads the scheduler's `SSstu:<slotid>` calendar events, which it rewrites on every save, and mod_scheduler's own `slot_deleted`. The table keeps each booking's last notified time, because core's update event carries no old one. So a note edit or spec 016's re-save sends nothing. |
+| Office-hours sync | `classes/officehours.php`, `classes/officehours_plan.php` (pure), `classes/task/officehours_reconcile.php`, `lib.php` `local_ltuse_allow_group_member_remove()` | One group per mentor (`ltct:mentor:<id>`, visibility OWN, a name with no person's name) in `ltct:officehours`, holding the mentor and each mentee. Members are added with component `local_ltuse`, through the course's one manual enrolment instance, and are suspended, never unenrolled. Spec 003's role observers sync a pair as it changes. The hourly task reconciles everything and clears booking records whose event is gone. Logs carry counts only. |
+| Time zone notice | `classes/timezone_notice.php` (pure), `classes/hook_callbacks.php` `top_of_body()`, `db/hooks.php` | On the office-hours scheduler's pages only, a notice through `\core\hook\output\before_standard_top_of_body_html_generation` names the zone their times are in, with a link to change it on the profile. It never redirects. |
+| Site config | `classes/siteconfig/officehours.php`, `classes/siteconfig/dashboard.php` | `apply` creates or updates the office-hours course and its scheduler, the enrolment instance and the group name template, then reconciles. It also adds the declared blocks to the default dashboard. It never deletes anything. |
+| Privacy | `classes/privacy/provider.php` | Declares, exports and deletes `local_ltuse_booking` rows in the learner's and the mentor's user contexts. The appointment is mod_scheduler's, and the events and notifications are core's. |
+
+Discussion checks (spec 012) skip `ltct:officehours`: it is site config's course, not the
+publisher's, and has no forum.
+
+**Principle XI exceptions added by spec 011.** Each is the only route to the behaviour, and
+each is re-checked as stated.
+
+| Exception | Why | Re-checked by |
+|---|---|---|
+| The office-hours privacy rests on mod_scheduler's group filter (`get_slots_available_to_student()`), and the plugin does not check groups when a slot is booked. | The plugin is the booking tool D6 chose. A crafted request can book another mentor's slot; the mentor sees it and can remove it (plan decision 4, accepted). | Quickstart V10 on every scheduler re-pin |
+| Raw read of `scheduler_slots.teacherid` by primary key, and reliance on the `SSstu:<slotid>` eventtype convention (`classes/model/slot.php`). | The plugin has no API that returns a slot's teacher without loading its internal model classes. Its calendar events are the only record of a booking's time that core's events report. | Quickstart V13 on every scheduler re-pin |
+| `update_record('scheduler', …)` for the declared columns of an existing activity (`maxbookings`, `schedulermode`, `guardtime`, `allownotifications`, `defaultslotduration`, `usebookingform`, `scale`), and the read of the same row. The name and group mode go through core's `set_coursemodule_name()` and `set_coursemodule_groupmode()`. | `scheduler_update_instance()` calls the activity form's `save_mod_data()` unconditionally, so `update_moduleinfo()` cannot run without a form. A new activity goes through `add_moduleinfo()`. | Quickstart V1 on every scheduler re-pin |
+
+**Raw reads added by spec 011**, all by indexed columns of stable core tables:
+
+| Table | Read by | Why there is no API |
+|---|---|---|
+| `role_assignments` joined to `context` | `roleid` (the mentor role), `contextlevel = CONTEXT_USER` | Every mentor relationship at once, for the reconcile. Spec 003's Mentoring page reads the same join. |
+| `user_enrolments` | `enrolid` | Every enrolment in the office-hours instance, with its status. `get_enrolled_users()` omits suspended ones. |
+| `groups`, `groups_members` | `courseid` and `idnumber`; `groupid` and `component` | The mentor groups and the memberships this plugin owns. `groups_get_members()` does not return `component` or `itemid`. |
+| `my_pages`, `block_instances` | `userid IS NULL`, `name`, `private`; `blockname`, `parentcontextid`, `pagetypepattern`, `subpagepattern` | Whether a declared block is on the system default dashboard. The block manager reads blocks only for a page being displayed. |
+| `event` left-joined from `local_ltuse_booking` | `id` | Booking records whose calendar event is gone. |
 
 ## Verified against Moodle 5.2.3+ (2026-09-29)
 

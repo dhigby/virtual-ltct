@@ -1,0 +1,18 @@
+<?php
+// Hook callbacks for local_ltuse (Moodle hooks API).
+
+defined('MOODLE_INTERNAL') || die();
+
+$callbacks = [
+    // Spec 003: a "Mentoring" item in the primary navigation, only for someone who has a
+    // mentor or a learner (research, Source results T001).
+    [
+        'hook' => \core\hook\navigation\primary_extend::class,
+        'callback' => \local_ltuse\hook_callbacks::class . '::primary_extend',
+    ],
+    // Spec 011 (R14): the office-hours booking pages say which time zone their times are in.
+    [
+        'hook' => \core\hook\output\before_standard_top_of_body_html_generation::class,
+        'callback' => \local_ltuse\hook_callbacks::class . '::top_of_body',
+    ],
+];

@@ -84,6 +84,9 @@ organisations:
     name: Independent
   - key: fixture-north
     name: Fixture North
+mentors:
+  name: Mentors
+  why: fixture mentor candidates
 """
 with open(REPO / "competencies.yaml", encoding="utf-8") as _fh:
     AREAS = [a for a in yaml.safe_load(_fh) if a != "Meta"]
@@ -535,13 +538,29 @@ class ProfileFields(Base):
         self.assertRejected()
 
 
+# The mentor role. Every roles.yaml must declare it once local_ltuse defines its capability
+# (spec 003 FR-001), so the self-contained role fixtures carry it too.
+MENTOR_ENTRY = """\
+  - shortname: mentor
+    name: Mentor
+    description: fixture
+    archetype: ""
+    contextlevels: [user]
+    capabilities:
+      moodle/user:viewdetails: allow
+      moodle/user:viewuseractivitiesreport: allow
+      local/ltuse:viewmenteeprogress: allow
+    why: fixture
+"""
+
+
 class OrgManager(Base):
     """The orgmanager role's deny list and the one-role-for-every-partner rule (SC-005)."""
     LAST_CAP = "      moodle/site:viewuseridentity: allow\n"
 
     def setUp(self):
         super().setUp()
-        self.write("roles.yaml", ORGMANAGER_ROLES)
+        self.write("roles.yaml", ORGMANAGER_ROLES + MENTOR_ENTRY)
 
     def test_allowed_capabilities(self):
         self.assertAccepted()
@@ -564,10 +583,108 @@ class OrgManager(Base):
         self.assertRejected()
 
     def test_role_named_for_an_organisation(self):
-        self.write("roles.yaml", ORGMANAGER_ROLES + "  - shortname: independent_viewer\n"
+        self.write("roles.yaml", ORGMANAGER_ROLES + MENTOR_ENTRY + "  - shortname: independent_viewer\n"
                    "    name: Independent viewer\n    archetype: \"\"\n    contextlevels: [course]\n"
                    "    why: fixture\n")
         self.assertRejected()
+
+
+# A self-contained roles.yaml for the mentor and allowassign cases (spec 003).
+MENTOR_ROLES = """\
+roles:
+  - shortname: manager
+    archetype: manager
+    allowassign: [mentor]
+    why: fixture
+""" + MENTOR_ENTRY
+
+
+class Mentor(Base):
+    """The mentor role's allowlist (spec 003 research R2) and the allowassign key (R6)."""
+    LAST_CAP = "      local/ltuse:viewmenteeprogress: allow\n"
+
+    def setUp(self):
+        super().setUp()
+        self.write("roles.yaml", MENTOR_ROLES)
+
+    def test_allowed(self):
+        self.assertAccepted()
+
+    def test_tracked_declaration_is_valid(self):
+        self.assertEqual(sc.validate()[1].items, [])
+
+    def test_capability_outside_allowlist(self):
+        for cap in ("moodle/user:editprofile", "moodle/user:viewalldetails",
+                    "moodle/competency:usercompetencyrate", "moodle/grade:viewall",
+                    "moodle/user:readuserposts"):
+            with self.subTest(capability=cap):
+                self.reset()
+                self.edit("roles.yaml", self.LAST_CAP, self.LAST_CAP + "      %s: allow\n" % cap)
+                self.assertRejected()
+
+    def test_prohibit(self):
+        self.edit("roles.yaml", "moodle/user:viewdetails: allow", "moodle/user:viewdetails: prohibit")
+        self.assertRejected()
+
+    def test_contextlevels_user_only(self):
+        for levels in ("[course, user]", "[system]", "[]"):
+            with self.subTest(contextlevels=levels):
+                self.reset()
+                self.edit("roles.yaml", "contextlevels: [user]", "contextlevels: %s" % levels)
+                self.assertRejected()
+
+    def test_archetype_must_be_empty(self):
+        self.edit("roles.yaml", '    archetype: ""\n    contextlevels: [user]',
+                  "    archetype: teacher\n    contextlevels: [user]")
+        self.assertRejected()
+
+    def test_archetype_must_be_declared(self):
+        self.edit("roles.yaml", '    archetype: ""\n    contextlevels: [user]',
+                  "    contextlevels: [user]")
+        self.assertRejected()
+
+    def test_allowassign_unknown_role(self):
+        self.edit("roles.yaml", "allowassign: [mentor]", "allowassign: [nosuchrole]")
+        self.assertRejected()
+
+    def test_allowassign_core_role(self):
+        self.edit("roles.yaml", "allowassign: [mentor]", "allowassign: [mentor, teacher]")
+        self.assertAccepted()
+
+    def test_allowassign_duplicate(self):
+        self.edit("roles.yaml", "allowassign: [mentor]", "allowassign: [mentor, mentor]")
+        self.assertRejected()
+
+    def test_allowassign_not_a_list(self):
+        self.edit("roles.yaml", "allowassign: [mentor]", "allowassign: mentor")
+        self.assertRejected()
+
+    def test_allowassign_denied_on_orgmanager_and_mentor(self):
+        # Asserted by message, so neither passes only because of some other error.
+        self.write("roles.yaml", MENTOR_ROLES.replace(
+            "    contextlevels: [user]\n", "    contextlevels: [user]\n    allowassign: [mentor]\n"))
+        self.assertInvalid("mentor assigns no roles")
+        self.write("roles.yaml", ORGMANAGER_ROLES.replace(
+            "    contextlevels: [course]\n", "    contextlevels: [course]\n    allowassign: [teacher]\n")
+            + MENTOR_ENTRY)
+        self.assertInvalid("orgmanager assigns no roles")
+
+    def test_mentor_role_required_once_the_capability_exists(self):
+        # FR-001: local_ltuse at this pin defines local/ltuse:viewmenteeprogress.
+        self.write("roles.yaml", ORGMANAGER_ROLES)
+        self.assertInvalid("the mentor role is missing")
+
+    def test_allowassign_rendered(self):
+        rc, out, err = self.run_main("render")
+        self.assertEqual(rc, 0, err)
+        roles = {r["shortname"]: r for r in json.loads(out)["roles"]}
+        self.assertEqual(roles["manager"]["allowassign"], ["mentor"])
+        self.assertEqual(roles["mentor"]["allowassign"], [])
+
+    def test_mentoring_settings_file(self):
+        self.write("settings/mentoring.yaml",
+                   (REPO / "moodle" / "site" / "settings" / "mentoring.yaml").read_text())
+        self.assertAccepted()
 
 
 class Expansion(Base):
@@ -601,7 +718,7 @@ class Expansion(Base):
         self.assertEqual(cohorts["ltct:org:fixture-north"]["name"], "Fixture North")
         self.assertEqual(cohorts["ltct:org:fixture-north:managers"]["name"], "Fixture North managers")
         self.assertEqual(len(p["categories"]), 3 + len(keys))
-        self.assertEqual(len(p["cohorts"]), 2 * len(keys))
+        self.assertEqual(len(p["cohorts"]), 2 * len(keys) + 1)   # + ltct:mentors
         self.assertEqual(len(p["cohort_rules"]), len(keys))
 
     def test_org_field_options_in_declaration_order(self):
@@ -618,96 +735,87 @@ class Expansion(Base):
         self.assertRejected()
 
 
-DISCUSSIONS = """\
-# test declaration
-rows: [10]
-shared:
-  - slug: coretech-computer-hardware
-    why: generic hardware Q&A, partners asked to pool answers
+# The orgmanager deny list as of 2026-10-01. The amendment gives managers their actions through
+# local_ltuse's pages, never through the role, so this list must not change (R2, R10).
+ORGMANAGER_DENY_2026_10_01 = frozenset({"moodle/site:accessallgroups", "moodle/user:viewalldetails",
+                                        "moodle/course:managegroups",
+                                        "moodle/course:viewsuspendedusers"})
+
+GROUPS = """\
+rows: [8, 15]
+purpose: fixture group defaults
+settings:
+  - name: moodlecourse/groupmode
+    value: 0
+    why: open courses
 """
+MENTORS = "mentors:\n  name: Mentors\n  why: fixture mentor candidates\n"
 
 
-class Discussions(Base):
-    """moodle/site/course-discussions.yaml (spec 012, FR-015, contracts/site-declaration.md)."""
+class OpenCourses(Base):
+    """Spec 002 amendment 2026-10-02: shared courses are open across organisations (R3, R14)."""
 
-    def setUp(self):
-        super().setUp()
-        self.write("course-discussions.yaml", DISCUSSIONS)
+    def payload(self):
+        rc, out, err = self.run_main("render")
+        self.assertEqual(rc, 0, err)
+        return json.loads(out)
 
-    def test_valid(self):
-        self.assertEqual(self.errors(), [])
-        rc, out, _ = self.run_main("validate")
-        self.assertEqual(rc, 0, out)
+    def test_groupmode_zero_accepted(self):
+        self.write("settings/groups.yaml", GROUPS)
+        self.assertAccepted()
 
-    def test_absent_file_is_valid(self):
-        (self.dir / "course-discussions.yaml").unlink()
-        self.assertEqual(self.errors(), [])
-        shared, problems = sc.load_discussions(self.dir)
-        self.assertEqual(shared, [])
-        self.assertFalse(problems)
+    def test_groupmode_other_than_zero_rejected(self):
+        for value in (1, 2):
+            with self.subTest(groupmode=value):
+                self.reset()
+                self.write("settings/groups.yaml", GROUPS.replace("value: 0", "value: %d" % value))
+                self.assertRejected()
 
-    def test_empty_list_valid(self):
+    def test_course_discussions_file_is_retired(self):
         self.write("course-discussions.yaml", "rows: [10]\nshared: []\n")
-        self.assertEqual(self.errors(), [])
-        self.write("course-discussions.yaml", "rows: [10]\nshared:\n")
-        self.assertEqual(self.errors(), [])
-        self.assertEqual(sc.load_discussions(self.dir)[0], [])
+        self.assertRejected()
+        self.assertFalse(hasattr(sc, "load_discussions"))
 
-    def test_unknown_slug(self):
-        self.edit("course-discussions.yaml", "slug: coretech-computer-hardware", "slug: no-such-course")
-        self.assertInvalid("no-such-course is not a course under modules/")
+    def test_payload_has_no_discussions_block(self):
+        self.assertNotIn("discussions", self.payload())
 
-    def test_slug_uses_branch_slug(self):
-        # A legacy folder with spaces is declared by its branch_slug() form, never its folder name.
-        self.edit("course-discussions.yaml", "slug: coretech-computer-hardware", "slug: paratext-9-advanced-support")
-        self.assertEqual(self.errors(), [])
-        self.edit("course-discussions.yaml", "slug: paratext-9-advanced-support", "slug: Paratext 9 advanced support")
-        self.assertInvalid("write it as paratext-9-advanced-support")
+    def test_mentors_cohort_generated(self):
+        p = self.payload()
+        cohorts = {c["idnumber"]: c for c in p["cohorts"]}
+        self.assertEqual(cohorts["ltct:mentors"]["name"], "Mentors")
+        self.assertEqual(cohorts["ltct:mentors"]["visible"], 0)
+        self.assertEqual([r for r in p["cohort_rules"] if r["cohort_idnumber"] == "ltct:mentors"], [])
 
-    def test_template_is_not_a_course(self):
-        self.edit("course-discussions.yaml", "slug: coretech-computer-hardware", "slug: template")
-        self.assertInvalid("is not a course")
+    def test_mentors_name_follows_declaration(self):
+        self.edit("organisations.yaml", "  name: Mentors", "  name: Fixture mentors")
+        cohorts = {c["idnumber"]: c for c in self.payload()["cohorts"]}
+        self.assertEqual(cohorts["ltct:mentors"]["name"], "Fixture mentors")
 
-    def test_missing_why(self):
-        self.edit("course-discussions.yaml", "    why: generic hardware Q&A, partners asked to pool answers\n", "")
-        self.assertInvalid("missing required key 'why'")
+    def test_mentors_required(self):
+        self.edit("organisations.yaml", MENTORS, "")
+        self.assertRejected()
 
-    def test_blank_why(self):
-        self.edit("course-discussions.yaml", "why: generic hardware Q&A, partners asked to pool answers", "why: ''")
-        self.assertInvalid("why must say")
+    def test_mentors_needs_name_and_why(self):
+        for old, new in (("  name: Mentors\n", ""), ("  why: fixture mentor candidates\n", ""),
+                         ("  name: Mentors", "  name: ''"),
+                         ("  why: fixture mentor candidates", "  why: ''")):
+            with self.subTest(change=old.strip()):
+                self.reset()
+                self.edit("organisations.yaml", old, new)
+                self.assertRejected()
 
-    def test_duplicate_slug(self):
-        self.write("course-discussions.yaml", DISCUSSIONS + "  - slug: coretech-computer-hardware\n    why: again\n")
-        self.assertInvalid("coretech-computer-hardware is declared twice")
+    def test_mentors_unknown_key_rejected(self):
+        self.edit("organisations.yaml", MENTORS, MENTORS + "  idnumber: ltct:fixture\n")
+        self.assertRejected()
 
-    def test_unknown_key(self):
-        self.edit("course-discussions.yaml", "    why:", "    shared: true\n    why:")
-        self.assertInvalid("unknown key 'shared'")
+    def test_orgmanager_deny_list_unchanged(self):
+        self.assertEqual(sc.ORGMANAGER_DENY, ORGMANAGER_DENY_2026_10_01)
 
-    def test_unknown_row(self):
-        self.edit("course-discussions.yaml", "rows: [10]", "rows: [999]")
-        self.assertInvalid("row 999")
-
-    def test_missing_shared(self):
-        self.write("course-discussions.yaml", "rows: [10]\n")
-        self.assertInvalid("missing required key 'shared'")
-
-    def test_load_returns_entries(self):
-        shared, problems = sc.load_discussions(self.dir)
-        self.assertFalse(problems)
-        self.assertEqual([e["slug"] for e in shared], ["coretech-computer-hardware"])
-
-    def test_payload_carries_slugs_not_reasons(self):
-        rc, out, _ = self.run_main("render", "--mode", "drift", environ={"MOODLE_URL": "https://m.example"})
-        self.assertEqual(rc, 0)
-        p = json.loads(out)
-        self.assertEqual(p["discussions"], {"shared": ["coretech-computer-hardware"]})
-        self.assertNotIn("pool answers", out)
-
-    def test_payload_empty_when_absent(self):
-        (self.dir / "course-discussions.yaml").unlink()
-        rc, out, _ = self.run_main("render")
-        self.assertEqual(json.loads(out)["discussions"], {"shared": []})
+    def test_tracked_orgmanager_keeps_viewuseridentity(self):
+        roles = yaml.safe_load(ROLES)["roles"]
+        om = [r for r in roles if r["shortname"] == "orgmanager"]
+        self.assertEqual(len(om), 1)
+        self.assertEqual(om[0]["capabilities"].get("moodle/site:viewuseridentity"), "allow")
 
 
 class Render(Base):
@@ -1248,10 +1356,10 @@ class Reports(ReportsBase):
         self.assertIsNone(prog["schedule"])
         self.assertEqual(prog["audiences"], [{"type": "systemrole", "role": "manager"}])
         self.assertEqual(prog["columns"][3]["aggregation"], "countdistinct")
-        # Spec 004's arrays in apply order, then spec 013's two after reports.
-        self.assertEqual(list(self.payload())[-6:],
+        # Spec 004's arrays in apply order, then spec 013's two after reports, then spec 011's.
+        self.assertEqual(list(self.payload())[-8:],
                          ["course_field_category", "course_fields", "competencies", "reports",
-                          "badge_template", "certificate_template"])
+                          "badge_template", "certificate_template", "officehours", "dashboard"])
 
     def test_summary_counts_reports(self):
         rc, out, _ = self.run_main("validate")
@@ -1668,3 +1776,167 @@ class Recognition(Base):
         self.write("settings/salt.yaml", "rows: [23]\npurpose: x\nsettings:\n"
                    "  - name: badges_badgesalt\n    value: abc\n    why: x\n")
         self.assertInvalid("badges_badgesalt is per site")
+
+
+# --- spec 011: office hours, the dashboard and the calendar ------------------------------
+# specs/011-events-calendar/data-model.md "Declared (repo)" and contracts/declaration.md.
+
+SCHEDULER_PIN = """\
+  - component: mod_scheduler
+    version: 2026080400
+    source: {url: "https://example.org/scheduler.zip", sha256: "%s"}
+    why: "#21"
+""" % ("d" * 64)
+MENTORING_CATEGORY = """\
+  - key: mentoring
+    name: LTC Mentoring
+    why: office hours
+"""
+NO_TIMEZONE_IGNORE = """\
+ignore:
+  - setting: calendar_exportsalt
+    reason: per install
+"""
+
+
+class EventsAbsent(Base):
+    """A site with none of spec 011's files is still valid (T007)."""
+
+    def test_without_any_spec_011_file(self):
+        self.assertAccepted()
+        decl = sc.validate(self.dir)[0]
+        self.assertIsNone(decl["officehours"])
+        self.assertEqual(decl["dashboard"], [])
+        payload = sc.build_payload(decl, "apply", {})
+        self.assertIsNone(payload["officehours"])
+        self.assertEqual(payload["dashboard"], [])
+
+
+class Events(Base):
+    """The tracked spec 011 declaration, then one broken rule at a time."""
+
+    def setUp(self):
+        super().setUp()
+        site = REPO / "moodle" / "site"
+        self.write("site.yaml", SITE.format(ver=VER, sha="a" * 64) + SCHEDULER_PIN)
+        self.write("ignore.yaml", NO_TIMEZONE_IGNORE)
+        self.edit("organisations.yaml", "organisations:\n  - key: independent",
+                  MENTORING_CATEGORY + "organisations:\n  - key: independent")
+        for rel in ("office-hours.yaml", "dashboard.yaml", "settings/calendar.yaml",
+                    "settings/scheduler.yaml"):
+            self.write(rel, (site / rel).read_text(encoding="utf-8"))
+
+    def test_the_tracked_declaration_is_accepted_and_rendered(self):
+        self.assertAccepted()
+        decl = sc.validate(self.dir)[0]
+        hours = decl["officehours"]
+        self.assertEqual(hours["course"]["idnumber"], "ltct:officehours")
+        self.assertEqual(hours["course"]["category_idnumber"], "ltct:mentoring")
+        self.assertEqual(hours["scheduler"]["guardtime"], 12 * 3600)   # decision 3
+        self.assertEqual(hours["scheduler"]["allownotifications"], 0)  # R20
+        self.assertEqual(decl["dashboard"], [{"block": "calendar_upcoming", "region": "side-post"}])
+        payload = sc.build_payload(decl, "apply", {})
+        self.assertEqual(payload["officehours"], hours)
+        self.assertEqual(payload["dashboard"], decl["dashboard"])
+        self.assertNotIn("guardtime_hours", json.dumps(payload))
+
+    def test_office_hours_rules(self):
+        cases = [
+            ("idnumber: ltct:officehours\n", "idnumber: ltct:hours\n"),
+            ("fullname: Mentor office hours", "fullname: " + "x" * 255),
+            ("shortname: ltct-officehours", "shortname: " + "x" * 101),
+            ("category: mentoring", "category: nowhere"),
+            ("  groupmode: 1        #", "  groupmode: 0        #"),
+            ("groupmodeforce: 1", "groupmodeforce: 0"),
+            ("idnumber: ltct:officehours:scheduler", "idnumber: ltct:officehours:other"),
+            ("  maxbookings: 1", "  maxbookings: 6"),
+            ("schedulermode: onetime", "schedulermode: weekly"),
+            ("guardtime_hours: 12", "guardtime_hours: 169"),
+            ("allownotifications: 0", "allownotifications: 1"),
+            ("defaultslotduration: 30", "defaultslotduration: 4"),
+            ("defaultslotduration: 30", "defaultslotduration: 241"),
+            ("usebookingform: 0", "usebookingform: 1"),
+            ("grade: 0 ", "grade: 10 "),
+            ('name_template: "Office hours {n}"', 'name_template: "Office hours"'),
+            ('name_template: "Office hours {n}"', 'name_template: "{name} {n}"'),
+            ('name_template: "Office hours {n}"', 'name_template: "{lastname} hours {n}"'),
+            ("  name: Book time with your mentor", "  name: Certified booking"),
+        ]
+        for old, new in cases:
+            with self.subTest(change=new):
+                self.reset()
+                self.edit("office-hours.yaml", old, new)
+                self.assertRejected()
+
+    def test_scheduler_must_be_pinned(self):
+        self.write("site.yaml", SITE.format(ver=VER, sha="a" * 64))
+        self.assertInvalid("mod_scheduler must be pinned")
+
+    def test_students_never_see_who_booked(self):
+        roles = (self.dir / "roles.yaml").read_text()
+        line = "      mod/scheduler:seeotherstudentsbooking: inherit"
+        self.assertIn(line, roles)
+        for replacement in ("      mod/scheduler:seeotherstudentsbooking: allow", ""):
+            with self.subTest(replacement=replacement):
+                self.reset()
+                self.edit("roles.yaml", line, replacement)
+                self.assertInvalid("mod/scheduler:seeotherstudentsbooking")
+
+    def test_dashboard_rules(self):
+        block = "  - block: calendar_upcoming\n    region: side-post\n    why: >-\n"
+        for old, new in [
+            ("block: calendar_upcoming", "block: not_a_block"),
+            ("region: side-post", "region: footer"),
+            (block, block.replace(">-\n", "upcoming\n") + block),   # the same block twice
+        ]:
+            with self.subTest(change=new):
+                self.reset()
+                self.edit("dashboard.yaml", old, new)
+                self.assertRejected()
+        self.reset()
+        self.write("dashboard.yaml", "rows: [21]\ndefault_blocks: []\n")
+        self.assertRejected()
+
+    def test_time_zone_rules(self):
+        for zone, accepted in (("UTC", True), ("Africa/Nairobi", True), ("America/Bogota", True),
+                               ("Mars/Base", False), ("Nairobi", False)):
+            with self.subTest(zone=zone):
+                self.reset()
+                self.edit("settings/calendar.yaml", "value: UTC", "value: %s" % zone)
+                (self.assertAccepted if accepted else self.assertRejected)()
+
+    def test_forcetimezone_must_be_99(self):
+        self.edit("settings/calendar.yaml", "value: 99", "value: Africa/Nairobi")
+        self.assertInvalid("forcetimezone must be 99")
+
+    def test_calendar_settings_come_together(self):
+        text = (self.dir / "settings" / "calendar.yaml").read_text()
+        head, _, rest = text.partition("  - name: calendar_adminseesall\n")
+        rest = rest[rest.index("  - name: timezone"):]
+        self.write("settings/calendar.yaml", head + rest)
+        self.assertInvalid("calendar_adminseesall must be declared")
+
+    def test_the_profile_always_shows_the_zone(self):
+        self.write("settings/hidden.yaml", "rows: [21]\npurpose: x\nsettings:\n"
+                   "  - name: hiddenuserfields\n    value: \"icqnumber,timezone\"\n    why: x\n")
+        self.assertInvalid("hiddenuserfields must not hide timezone")
+
+
+class OrgManagerCalendar(Base):
+    """D3, R17: orgmanager may hold moodle/calendar:manageentries and no other calendar cap."""
+    LAST_CAP = "      moodle/site:viewuseridentity: allow\n"
+
+    def setUp(self):
+        super().setUp()
+        self.write("roles.yaml", ORGMANAGER_ROLES + MENTOR_ENTRY)
+
+    def test_manageentries_is_allowed(self):
+        self.edit("roles.yaml", self.LAST_CAP, self.LAST_CAP + "      moodle/calendar:manageentries: allow\n")
+        self.assertAccepted()
+
+    def test_no_other_calendar_capability(self):
+        for cap in ("moodle/calendar:managegroupentries", "moodle/calendar:manageownentries"):
+            with self.subTest(capability=cap):
+                self.reset()
+                self.edit("roles.yaml", self.LAST_CAP, self.LAST_CAP + "      %s: allow\n" % cap)
+                self.assertInvalid("orgmanager holds no calendar capability")

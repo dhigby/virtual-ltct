@@ -15,11 +15,24 @@ settings:
     value: 1
     why: Without it the app is refused at sign-in, and a consultant in the field has no offline course.
   - name: mobilecssurl
-    value: env:MOODLE_URL/local/ltuse/styles.css
+    value: env:MOODLE_URL/local/ltuse/styles.css?v=2
     why: >-
       Published pages use callout classes that only local_ltuse's stylesheet styles. Without
-      it the app shows them as plain text. Built from MOODLE_URL so every server points at
-      its own copy.
+      it the app shows them as plain text. The app applies it only on the Premium app plan
+      (moodledev.io "Remote themes"); on the free plan callouts are plain text in the app
+      whatever this says. Built from MOODLE_URL so every server points at its own copy.
+      Raise v= whenever styles.css changes: Cloudflare holds the file for four hours, and a
+      new address makes it fetch again. The app reads this address from the site details it
+      saved at sign-in, so a signed-in learner sees a change only after logging out and back
+      in; "Synchronise now" is not enough (verified 2026-10-02).
+  - name: additionalhtmlhead
+    value: '<meta name="moodle-validation" content="7a36d31e3e409d3ce519c81aa5194935">'
+    why: >-
+      The site-ownership tag the Moodle Apps portal issued for ltuse.net, which the Premium app
+      plan (and so mobilecssurl above) depends on. Not secret: it is in every page's HTML.
+      Declared rather than ignored because this setting is injected into every page head, so
+      drift must catch any other hand edit to it. It is issued per site: a new server gets its
+      own tag from the portal at provisioning (spec 015), and this value changes with it.
   - name: tool_mobile/disabledfeatures
     value: ""
     why: >-

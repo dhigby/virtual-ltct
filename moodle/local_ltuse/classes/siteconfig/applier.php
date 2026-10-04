@@ -19,7 +19,8 @@ defined('MOODLE_INTERNAL') || die();
  *
  *   settings  admin_setting::write_setting(), then post_write_settings() as admin_write_settings() does
  *   plugins   the plugininfo class's enable_plugin()
- *   roles     create_role(), set_role_contextlevels(), assign_capability(), unassign_capability()
+ *   roles     create_role(), set_role_contextlevels(), assign_capability(), unassign_capability(),
+ *             then core_role_set_assign_allowed() for each declared allow-assign pair (spec 003)
  *   discussions  ensure_discussion::apply_groupmode(), the publisher's own path (spec 012)
  *
  * After settings come spec 002's four arrays, each handed to its own class, in the order the
@@ -30,7 +31,10 @@ defined('MOODLE_INTERNAL') || die();
  *   profile_fields  profilefields::apply(): the field category first, then the fields
  *   cohort_rules    cohortrules::apply(), last, because a rule needs its cohort and its field
  *
- * Then each ltct: course's discussion forum (spec 012).
+ * Then each ltct: course's group mode, set to 0 through update_course() (spec 002 R3,
+ * amended 2026-10-02), then each ltct: course's discussion forum (spec 012), set to no
+ * groups, then each ltct: course's "Show activity reports", turned off again through
+ * update_course() where someone turned it on (spec 003).
  *
  * Then spec 004's, last, in the order its contract fixes (specs/004-progress-reporting/contracts/
  * declaration.md "Output additions"):
@@ -44,6 +48,12 @@ defined('MOODLE_INTERNAL') || die();
  *
  *   badge_template        badgetemplate::apply(): store it, then reword every mapped badge
  *   certificate_template  certtemplate::apply(): the site template, then every activity's copy
+ *
+ * Then spec 011's, last (specs/011-events-calendar/contracts/declaration.md):
+ *
+ *   officehours  officehours::apply(): the course, the scheduler, the enrolment instance, the
+ *                group name template, then a reconcile of memberships
+ *   dashboard    dashboard::apply(): every declared block missing from the default dashboard
  *
  * The preflight stops on a run-wide block only (report::has_blocking()). A report-scoped
  * block, such as an audience cohort that does not exist, leaves just that report unwritten:
@@ -93,15 +103,75 @@ class applier {
         foreach ($this->declaration['roles'] ?? [] as $role) {
             $this->apply_role($role);
         }
+        // After every role exists, so a pair naming a role created in this run can be added.
+        foreach ($this->declaration['roles'] ?? [] as $role) {
+            $this->apply_allowassign($role);
+        }
         foreach ($this->declaration['settings'] ?? [] as $setting) {
             $this->apply_setting($setting);
         }
         $this->apply_structure();
+        // The course's group mode before its forum's, so a course never forces separate
+        // groups on a forum this run has just opened (spec 002 R3).
+        $this->apply_course_flags('check_course_groupmodes', 'groupmode', NOGROUPS);
         foreach ($this->inspector->discussion_targets() as $target) {
             $this->apply_discussion($target);
         }
+        $this->apply_course_flags('check_course_reports', 'showreports', 0);
         $this->apply_reporting();
         $this->apply_recognition();
+        $this->apply_events();
+    }
+
+    /**
+     * Apply spec 011's two arrays, last: the office-hours course, its activity, enrolment
+     * instance and group name template, then a reconcile of its memberships; then the default
+     * dashboard's blocks. Never deletes a course, an activity, a group or a block.
+     */
+    protected function apply_events(): void {
+        if ($this->inspector->officehours()) {
+            $this->inspector->officehours()->apply($this->report);
+        }
+        if ($this->inspector->dashboard()) {
+            $this->inspector->dashboard()->apply($this->report);
+        }
+    }
+
+    /**
+     * Set one course setting back in each ltct: course an inspector check lists, through core's
+     * update_course(), as the course settings form does: activity reports off (spec 003,
+     * research R2) and group mode 0 (spec 002 R3, amended 2026-10-02).
+     *
+     * @param string $check the inspector method listing the courses, each item with courseid
+     * @param string $field the course column to write
+     * @param int $value the value to write
+     */
+    protected function apply_course_flags(string $check, string $field, int $value): void {
+        global $CFG;
+        $items = $this->inspector->$check();
+        if (!$items) {
+            return;
+        }
+        require_once($CFG->dirroot . '/course/lib.php');
+        foreach ($items as $item) {
+            try {
+                update_course((object)['id' => $item['courseid'], $field => $value]);
+            } catch (\Throwable $e) {
+                $this->report->add_result($item, 'fail', 'Moodle refused the change: ' . $e->getMessage());
+                continue;
+            }
+            $still = false;
+            foreach ($this->inspector->$check() as $recheck) {
+                if ($recheck['item'] === $item['item']) {
+                    $still = true;
+                }
+            }
+            if ($still) {
+                $this->report->add_result($item, 'fail', 'written, but the server still differs');
+            } else {
+                $this->report->add_result($item, 'changed');
+            }
+        }
     }
 
     /**
@@ -167,8 +237,8 @@ class applier {
      * `differs` is corrected through ensure_discussion::apply_groupmode(), the same code path
      * a publish takes, which writes only the forum's group mode and grouping. A `missing`
      * forum is never created here: that is the publisher's job, with the course's own name
-     * and intro, so it is reported as [skip]. Warnings (forced, allparticipants) cannot be
-     * fixed by a write and are reported as [skip] too. Nothing here writes a post.
+     * and intro, so it is reported as [skip]. The forced warning cannot be fixed by a write
+     * and is reported as [skip] too. Nothing here writes a post.
      *
      * @param array $target one entry of inspector::discussion_targets()
      */
@@ -245,6 +315,31 @@ class applier {
                 }
             }
             $this->report->add_result($item, 'changed');
+        }
+    }
+
+    /**
+     * Add each declared allow-assign pair that is missing (spec 003, R6). Never removes one.
+     *
+     * @param array $role the role declaration
+     */
+    protected function apply_allowassign(array $role): void {
+        global $DB;
+        foreach ($this->inspector->check_allowassign($role) as $item) {
+            if ($item['result'] !== inspector::RESULT_CHANGED) {
+                $this->report->add_result($item);
+                continue;
+            }
+            [, $from, , $to] = explode(':', $item['item'], 4);
+            core_role_set_assign_allowed($DB->get_field('role', 'id', ['shortname' => $from], MUST_EXIST),
+                $DB->get_field('role', 'id', ['shortname' => $to], MUST_EXIST));
+            $after = null;
+            foreach ($this->inspector->check_allowassign($role) as $recheck) {
+                if ($recheck['item'] === $item['item']) {
+                    $after = $recheck;
+                }
+            }
+            $this->report_write($after ?? $item, $item);
         }
     }
 

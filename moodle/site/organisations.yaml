@@ -4,7 +4,8 @@
 # Each organisation entry becomes exactly four items on the server: a course category
 # ltct:org:<key> inside the organisations category, a hidden system cohort ltct:org:<key>, a
 # hidden managers cohort ltct:org:<key>:managers, and a cohort rule that fills the first from
-# the ltct_org profile field. Its key is also the ltct_org menu option, so it never changes once
+# the ltct_org profile field. The `mentors` entry becomes one more hidden cohort, ltct:mentors,
+# which the site team fills by hand and which belongs to no organisation. Its key is also the ltct_org menu option, so it never changes once
 # applied; the name may change, and only display names follow it.
 #
 # Who belongs to an organisation and who manages one live only in Moodle, never here
@@ -15,14 +16,17 @@ rows: [8, 15]
 purpose: >-
   One site hosts every partner organisation. This file lists the shared course categories
   (the published curriculum, the pilots, and the parent that holds every organisation's own
-  category) and the partner organisations themselves. Each organisation gets the same shape,
+  category), the partner organisations themselves, and the one mentors cohort. Shared
+  courses are open across organisations (spec 002 R3, amended 2026-10-02); only a course
+  declared in org-courses.yaml stays with one organisation. Each organisation gets the same shape,
   generated from its key and name, so its learners are grouped by a cohort that fills itself
   from their profile, and its managers are a cohort the site team fills by hand.
 categories:
   - key: published
     name: LTC Published
     why: >-
-      The published curriculum, shared by every organisation (FR-003). Adopted from the
+      The published curriculum, shared by every organisation and open across them (FR-003,
+      R3). Adopted from the
       existing category by name, so its id and the publisher's --category do not change (R6).
   - key: pilots
     name: LTC Pilots
@@ -34,6 +38,11 @@ categories:
     why: >-
       The parent of every organisation's own category, so the category list stays short
       however many partners are added (#15, R6).
+  - key: mentoring
+    name: LTC Mentoring
+    why: >-
+      Holds the one office-hours course every mentor and mentee shares (spec 011, R16). Shared
+      by every organisation, as published and pilots are.
 organisations:
   - key: sil
     name: SIL
@@ -43,3 +52,9 @@ organisations:
     name: Seed Company
   - key: independent
     name: Independent
+mentors:
+  name: Mentors
+  why: >-
+    The one site-wide cohort a manager's mentor picker draws from (spec 002 R10, spec 003 R7
+    Phase B). Mentors may come from any organisation, so it belongs to none; its members are
+    never learners to the organisation access decision, so no manager can manage them.

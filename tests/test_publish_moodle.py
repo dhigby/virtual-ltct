@@ -104,7 +104,7 @@ class FakeClient:
             created = params["idnumber"] not in self.server
             m = self.server.setdefault(params["idnumber"], {
                 "idnumber": params["idnumber"], "cmid": 960, "modname": "forum", "files": []})
-            return {"cmid": m["cmid"], "created": created, "groupmode": 1, "courseforced": False}
+            return {"cmid": m["cmid"], "created": created, "groupmode": 0, "courseforced": False}
         if function == "local_ltuse_import_questions":
             return {"count": 1}
         if function == "local_ltuse_create_quiz":
@@ -171,7 +171,7 @@ class PublishBase(unittest.TestCase):
             "completion": "all", "competencies": list(competencies),
             "target_outcome_level": level,
             "discussion": {"idnumber": COURSE + ":discussion", "name": "Course discussion",
-                           "intro_html": "", "shared": False},
+                           "intro_html": ""},
             "recognition": {"delivery": delivery, **(
                 {"certificate": {"idnumber": "%s:certificate" % COURSE}} if delivery else {})},
             "assets": {n: {"sha1": hashlib.sha1(d).hexdigest(), "bytes": len(d)}
@@ -425,13 +425,13 @@ def course_payload(client, function):
 
 
 class EnsureCourseGroupMode(unittest.TestCase):
-    def test_update_sends_separate_groups(self):
+    def test_update_sends_no_groups(self):
         client = StubClient({"id": 5})
         courseid, created = pm.ensure_course(client, MANIFEST, 3)
         self.assertEqual((courseid, created), (5, False))
         course = course_payload(client, "core_course_update_courses")
         self.assertEqual(course["id"], 5)
-        self.assertEqual(course["groupmode"], 1)
+        self.assertEqual(course["groupmode"], 0)
         self.assertNotIn("core_course_create_courses", [n for n, _ in client.calls])
 
     def test_hidden_sections_hidden_completely_on_create_and_update(self):
@@ -444,18 +444,29 @@ class EnsureCourseGroupMode(unittest.TestCase):
                 self.assertEqual(course["courseformatoptions"],
                                  [{"name": "hiddensections", "value": "1"}])
 
-    def test_create_sends_separate_groups(self):
+    def test_create_sends_no_groups(self):
         client = StubClient(None)
         courseid, created = pm.ensure_course(client, MANIFEST, 3)
         self.assertEqual((courseid, created), (9, True))
         course = course_payload(client, "core_course_create_courses")
-        self.assertEqual(course["groupmode"], 1)
+        self.assertEqual(course["groupmode"], 0)
         self.assertEqual(course["idnumber"], "ltct:fixture-course")
         self.assertEqual(course["categoryid"], 3)
         self.assertNotIn("core_course_update_courses", [n for n, _ in client.calls])
 
+    def test_activity_reports_off_on_create_and_update(self):
+        # Spec 003 (R2): reports on would show a mentor submissions and logs, and the site
+        # default covers new courses only, so every publish resets each course's own setting.
+        for existing, function in (({"id": 5}, "core_course_update_courses"),
+                                   (None, "core_course_create_courses")):
+            with self.subTest(function=function):
+                client = StubClient(existing)
+                pm.ensure_course(client, MANIFEST, 3)
+                self.assertEqual(course_payload(client, function)["showreports"], 0)
+
     def test_groupmode_is_not_forced(self):
-        # Not forced, so a forum can still run across organisations (spec 005, R3).
+        # Shared courses are open (spec 002 R3), so nothing is forced: a teacher may still
+        # use groups for teaching in one activity, and a forced mode would wall the forum.
         for existing in ({"id": 5}, None):
             client = StubClient(existing)
             pm.ensure_course(client, MANIFEST, 3)

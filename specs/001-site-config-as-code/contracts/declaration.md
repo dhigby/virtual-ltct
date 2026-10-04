@@ -38,6 +38,14 @@ Apply still never deletes: a competency no longer declared is kept and marked re
 
 Apply never deactivates, archives or deletes a badge, and never deletes a certificate activity or a site template.
 
+**Spec 011 extends it again.** [Its declaration contract](../../011-events-calendar/contracts/declaration.md) adds:
+- `office-hours.yaml` (the one office-hours course and its `mod_scheduler` activity) and `dashboard.yaml` (blocks the default dashboard carries);
+- `settings/calendar.yaml` and `settings/scheduler.yaml`, ordinary settings files, and one plugin pin, `mod_scheduler`;
+- the `mentoring` category in `organisations.yaml`, and scheduler capabilities for `student` and `teacher` in `roles.yaml`;
+- two payload items the applier handles last: `officehours` (the course, the activity, its enrolment instance and group name template, then a reconcile of memberships) and `dashboard` (each missing block added to the default dashboard).
+
+Apply never deletes the office-hours course, its activity, a group or a dashboard block.
+
 Everything in this contract still holds for them.
 
 The baseline settings files are `content-embeds.yaml` (#3), `mobile.yaml` (#4), `data-export.yaml` (#16), `messaging.yaml` (#19), `notifications.yaml` (#25) and, once a per-server value is needed, `server.yaml` (values from the environment). The first drift run found none, because `debug` and `wwwroot` live in `config.php`. Specs 002–014 add their own file here.
@@ -128,6 +136,6 @@ The full validation rules are in [data-model.md](../data-model.md).
 | #16 | `tool_dataprivacy/automaticdataexportapproval`, `tool_dataprivacy/automaticdatadeletionapproval` | `0`, `0` |
 | #19 | `messaging`, `messagingallusers` | `1`, `0` |
 | #25 | `defaultpreference_maildigest` | `1` |
-| #25 | `message_airnotifier` (plugin) | disabled |
+| #25 | `message_airnotifier` (plugin) | enabled |
 
 `moodle.requires` is `2026042003.03` (R10). Settings that `config.php` sets, such as `wwwroot` and `debug`, are never declared (R6). Google Drive embeds (R9) are settled at T025.

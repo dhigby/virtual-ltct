@@ -18,11 +18,16 @@ the pull request that adds a setting is the record of why it exists.
 | `course-fields.yaml` | The two course fields the publisher fills from each course's frontmatter: the competencies it aims at and the level it aims at. Both are locked, so only the publisher and the site team can change them. |
 | `reports.yaml` | The report builder reports: one learner-progress report per organisation, for its managers, with a weekly email; and three for the site team (completions per course, the competencies published courses aim at, and the pilots). |
 | `settings/completion.yaml` | Completion switched on for the site and for new courses, with each lesson's completion conditions shown on the course page. |
+| `office-hours.yaml` | The one course where mentors offer office hours and learners book them, and its booking activity (spec 011). |
+| `dashboard.yaml` | Blocks every learner's default dashboard carries: Upcoming events (spec 011). |
+| `settings/calendar.yaml` | Calendar export, and the site's default time zone, UTC (spec 011). |
 
 The shapes are specified in
 [`specs/001-site-config-as-code/contracts/declaration.md`](../../specs/001-site-config-as-code/contracts/declaration.md),
 with spec 004's additions in
-[`specs/004-progress-reporting/contracts/declaration.md`](../../specs/004-progress-reporting/contracts/declaration.md).
+[`specs/004-progress-reporting/contracts/declaration.md`](../../specs/004-progress-reporting/contracts/declaration.md)
+and spec 011's in
+[`specs/011-events-calendar/contracts/declaration.md`](../../specs/011-events-calendar/contracts/declaration.md).
 Apply also copies the competency list from the repo-root [`competencies.yaml`](../../competencies.yaml)
 into the plugin, for the competencies report. A competency removed from that file is retired
 there, never deleted.
@@ -102,7 +107,7 @@ Drift skips them, and apply refuses to write them. They belong to whoever writes
 | `pending-upgrade` | Plugin code is newer than the database. | Run `admin/cli/upgrade.php`. |
 | `unknown` | A declared setting or capability does not exist on the server. | Its plugin is missing, or an upgrade renamed it. Fix the declaration. |
 | `forced` | A declared setting is set in `config.php`. | Remove it from the declaration. |
-| `extra` | A plugin is installed but not declared, or an `ltct:` category, cohort or rule, an `ltct_` field, a menu option, a report of ours or a competency is no longer declared. | Declare it again, or retire it by hand. Apply never deletes it. (A competency no longer declared is retired by apply, and leaves the competencies report.) |
+| `extra` | A plugin is installed but not declared (a subplugin of a declared plugin, such as `customcertelement_*`, is covered by its parent's pin), or an `ltct:` category, cohort or rule, an `ltct_` field, a menu option, a report of ours or a competency is no longer declared. | Declare it again, or retire it by hand. Apply never deletes it. (A competency no longer declared is retired by apply, and leaves the competencies report.) |
 | `adopted` | Apply gave an existing category its `ltct:` idnumber instead of creating a duplicate. | Nothing. |
 | `ambiguous`, `wrong-context`, `wrong-datatype` | Two candidates match one declared item, a cohort sits outside system context, or a field has another type. Apply stops before writing anything. | Fix it by hand on the server, then run `apply` again. |
 | `unmanaged` | An undeclared setting differs from Moodle's default. | Someone changed it by hand. Declare it, revert it, or add it to `ignore.yaml` with a reason. |
@@ -179,3 +184,90 @@ These steps change learner data, not configuration, so they are done in Moodle a
 4. **After moving a learner to another organisation,** change their organisation field. Their cohorts follow, and their old enrolment is suspended with its history kept. Then, in each course **both** organisations are enrolled in, unenrol the learner's old, suspended cohort-sync enrolment (Participants > the learner's enrolment > Unenrol). Without this, the old organisation's manager still sees them on that course's participants list. Their grades and completion stay, because they are still enrolled through the new organisation.
 
 An organisation manager only follows their own people. They cannot create accounts, enrol anyone or change anyone's organisation (spec 002).
+
+## Mentors: assigning and ending a relationship
+
+A mentor follows the learners assigned to them across every course those learners take, for as long as the relationship lasts (spec 003). The relationship is the `mentor` role, held by the mentor **in the learner's own profile**, never in a course. Who mentors whom is learner data, so it lives only in Moodle and is never written in this repo.
+
+**To assign a mentor** (site team, or an admin):
+
+1. Open the learner's profile.
+2. Go to **Preferences**.
+3. Under **Roles**, choose **Assign roles relative to this user**.
+4. Choose **Mentor**.
+5. Search for the mentor, select them and click **Add**.
+
+The mentor sees the learner on their **Mentoring** page at once, in the browser and in the Moodle app, with every course the learner takes now or later. The two also become message contacts, so they can message each other with no course in common.
+
+**To end a relationship**, go to the same page, select the mentor on the right and click **Remove**. The mentor loses the view on their next page load, the plugin's message contact goes, and the learner's enrolments, completions and grades are untouched. **To reassign**, remove one mentor and add the other.
+
+**Rules.**
+- A mentor may be from any organisation. The assignment, not the organisation, is what grants the view.
+- A learner may have more than one mentor. Each sees only their own learners.
+- `roles.yaml` lets `manager` assign `mentor` (`allowassign`). That is what offers Mentor on the page above.
+
+**When a mentor leaves the program**, end all their relationships at once on the server:
+
+```bash
+php public/local/ltuse/cli/mentor_contacts.php --end-all --mentor=<username>
+```
+
+It asks first, prints counts only, and leaves every learner's records as they are. After the upgrade that adds mentor contacts, run `php public/local/ltuse/cli/mentor_contacts.php --sync` once, so mentors assigned earlier get their contacts too.
+
+**Feedback on a learner's work** is not this role's job. Where a course asks for work, enrol the mentor as **Course mentor** (`teacher`) with the organisation's group, as in step 2 above (spec 012). Assigning many mentors at once, and enrolling mentors into their learners' courses automatically, are spec 008's.
+
+## Events and live sessions
+
+Row #21 (spec 011). Events are open across organisations: a course's events reach everyone in
+that course, and an organisation-only course's events reach only that organisation, because only
+its people are enrolled. Every learner sees each event time in their own time zone. Changes and
+cancellations are announced automatically, by email and in the app; new events are not.
+
+- **A site-wide event** (site team): **Calendar > New event**, type **Site**. Everyone sees it.
+- **A course event** (course mentors, in their courses): open the course, then **Calendar > New
+  event**, type **Course**. To repeat it, tick **Repeat this event** and give the number of weeks.
+  An organisation manager does the same in their organisation's own course, once spec 002's
+  open-courses change has landed. Managers cannot post site events, or events in a shared
+  course.
+- **A live session**: a course or site event whose **description** holds the meeting link. Never
+  put the link in **Location**, because the Moodle app turns Location into a maps search. After
+  the session, add the notes or the recording link to the same event's description. A live
+  session is never a course's completion condition, because learners who could not attend must
+  still be able to finish (FR-010). BigBlueButton stays disabled: hosts use the meeting tool
+  they already have.
+- **A message to one organisation's people** (there is no organisation-wide event): **Site
+  administration > Users > Bulk user actions**, filter by the cohort `ltct:org:<key>`, select
+  all, then **Send a message**.
+- **A repeating event across a daylight-saving change** keeps its creator's local time. Someone
+  in a zone whose clocks change on a different date sees it an hour earlier or later for those
+  weeks. That is correct, not a fault.
+
+Learners subscribe to or export their own calendar from **Calendar > Import or export calendars**
+without help. Anything already exported stays in their own calendar tool and cannot be recalled.
+
+## Office hours
+
+The course **Mentor office hours** (`office-hours.yaml`) holds one booking activity for every
+mentor. `apply` creates it, and `local_ltuse` keeps it filled.
+
+- **Groups are automatic.** Each mentor has one group, holding them and the learners they
+  mentor. It changes as soon as a mentor relationship starts or ends on the learner's profile
+  (see Mentors above), and an hourly task repairs anything missed. Never add or remove a member
+  by hand: the page refuses it, and the task would undo it anyway. Group names carry no one's
+  name.
+- **A learner sees only their own mentors' free times**, and never who else booked. Mentees of
+  one mentor cannot see one another.
+- **Booking happens in the browser.** In the Moodle app, the course opens the booking page in
+  the browser, and the app's calendar shows the booking.
+- **Both sides are emailed** for every booking, change of time and cancellation, in their own
+  time zone. Whoever acted gets a confirmation, and the other gets a notice.
+- **No booking or cancelling in the last 12 hours** before a slot. Inside that window, a learner
+  messages their mentor instead.
+- **The booking page names the learner's time zone**, with a link to change it on their profile.
+- **A known gap** (spec 011 plan, decision 4): someone who crafts the booking request by hand
+  can book another mentor's slot. That mentor sees the unexpected booking and can remove it,
+  which tells the learner.
+
+A learner or mentor who leaves is suspended in the course, never removed, so their past
+appointments stay. Who booked what is learner data, so it stays in Moodle and its privacy
+export.

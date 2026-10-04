@@ -18,8 +18,8 @@ reads the built review site. Nothing is pushed that has not been read back and v
 WHAT COMES OUT
 
     <out>/<slug>/manifest.json      the structure: sections, modules, quizzes, and the
-                                    course discussion (spec 012; sharing from
-                                    moodle/site/course-discussions.yaml)
+                                    course discussion (spec 012), open across
+                                    organisations (spec 002 R3)
     <out>/<slug>/pages/<name>.html  one rendered page per included markdown file
     <out>/<slug>/assets/<name>      every asset a published page references, as the
                                     LIGHTER copy scripts/image_reduce.py makes of it --
@@ -117,9 +117,9 @@ WITHHELD_HTML = (
     '</div>\n')
 
 # The course discussion (spec 012, FR-015). One forum per course, named and introduced
-# here and set on creation only, so a mentor's later edits survive a republish. The intro
-# stays true whether the course is separated by organisation or declared shared, because
-# sharing can change after the forum exists.
+# here and set on creation only, so a mentor's later edits survive a republish. Shared
+# courses are open across organisations (spec 002 R3, R14), so every learner in the course
+# reads every post; the intro's warning about partner data is what keeps that safe.
 DISCUSSION_NAME = "Course discussion"
 DISCUSSION_INTRO_MD = (
     "Ask questions about this course here, and help each other with the answers. "
@@ -437,22 +437,12 @@ class Payload:
     def _discussion(self):
         """Every course gets one, backfilled courses included (FR-015, contracts/payload.md).
 
-        `shared` comes from moodle/site/course-discussions.yaml through
-        site_config.load_discussions(), the loader drift uses, so the two cannot disagree.
-        An invalid declaration stops the build rather than guessing: separated is the safe
-        default, but a typo that silently un-shares (or a future one that shares) a course
-        is a decision nobody made.
+        No sharing flag: the forum is open to everyone in the course (spec 002 R14).
         """
-        shared, problems = site_config.load_discussions(self.site_dir)
-        if problems:
-            raise SystemExit("moodle/site/%s is invalid; run scripts/site_config.py "
-                             "validate:\n  %s" % (site_config.DISCUSSIONS_FILE,
-                                                  "\n  ".join(problems.items)))
         return {
             "idnumber": idnumber(self.slug, "discussion"),
             "name": DISCUSSION_NAME,
             "intro_html": render(DISCUSSION_INTRO_MD),
-            "shared": self.url_slug in {e["slug"] for e in shared},
         }
 
     def _page(self, path, asset_by_rel, module_ids, excluded_names, used_assets):
@@ -645,10 +635,7 @@ def main():
     print("  quizzes   %d (%d question(s))" % (len(manifest["quizzes"]), n_q))
     print("  assets    %d" % len(assets))
     report_images(manifest)
-    print("  discussion %s (%s)" % (manifest["discussion"]["idnumber"],
-                                    "shared across organisations"
-                                    if manifest["discussion"]["shared"]
-                                    else "separated by organisation"))
+    print("  discussion %s" % manifest["discussion"]["idnumber"])
     for note in manifest["notes"]:
         print("  note      %s" % note)
     if manifest["withheld"]:

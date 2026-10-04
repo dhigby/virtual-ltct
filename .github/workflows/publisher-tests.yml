@@ -21,7 +21,6 @@ on:
       - 'tests/test_publish_moodle.py'
       # Spec 012: the mentor-only marker and the course discussion in the payload.
       - 'scripts/site_config.py'
-      - 'moodle/site/course-discussions.yaml'
       - 'tests/test_disclosure_mentor_only.py'
       - 'tests/test_moodle_payload_discussion.py'
       - 'tests/fixtures/**'
@@ -46,7 +45,6 @@ on:
       - 'tests/test_publish_moodle.py'
       # Spec 012: the mentor-only marker and the course discussion in the payload.
       - 'scripts/site_config.py'
-      - 'moodle/site/course-discussions.yaml'
       - 'tests/test_disclosure_mentor_only.py'
       - 'tests/test_moodle_payload_discussion.py'
       - 'tests/fixtures/**'

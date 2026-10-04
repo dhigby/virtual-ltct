@@ -1,9 +1,9 @@
 {
-  "workflow": "speckit",
+  "workflow": "companion",
   "specName": "Learning Pathways Mapped to CBC",
   "branch": "specs/moodle-requirements",
-  "currentStep": "specify",
-  "status": "specified",
+  "currentStep": "tasks",
+  "status": "ready-to-implement",
   "history": [
     {
       "step": "specify",
@@ -11,7 +11,212 @@
       "kind": "start",
       "by": "extension",
       "at": "2026-09-30T20:47:01.148Z"
+    },
+    {
+      "step": "plan",
+      "substep": null,
+      "kind": "start",
+      "by": "extension",
+      "at": "2026-10-04T21:19:54.287Z"
+    },
+    {
+      "step": "plan",
+      "substep": "research",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-04T21:27:08.265Z"
+    },
+    {
+      "step": "plan",
+      "substep": "design",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-04T21:34:01.259Z"
+    },
+    {
+      "step": "plan",
+      "substep": null,
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-04T21:34:15.766Z"
+    },
+    {
+      "step": "tasks",
+      "substep": null,
+      "kind": "start",
+      "by": "extension",
+      "at": "2026-10-04T21:34:38.786Z"
+    },
+    {
+      "step": "tasks",
+      "substep": "generate",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-04T21:36:00.951Z"
+    },
+    {
+      "step": "tasks",
+      "substep": null,
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-04T21:36:03.450Z"
     }
   ],
-  "telemetryInstanceId": "5e5714d2-f7f1-40c8-b80d-b9ed39584fbc"
+  "telemetryInstanceId": "5e5714d2-f7f1-40c8-b80d-b9ed39584fbc",
+  "decisions": [
+    {
+      "decision": "Pathways are computed at view time by local_ltuse from 004 tables plus local_ltuse_course_pathway",
+      "why": "Nothing to hand-edit (FR-006), no plugin, FR-014 by construction",
+      "rejected": "core tool_lp learning plans (rating/proficient shown, FR-011) and tool_muprog (4 plugins, second enrolment mechanism, no build API)"
+    },
+    {
+      "decision": "Publisher writes delivery + target level via new local_ltuse_set_course_pathway",
+      "why": "course_stage.py is the only stage authority; category is set by hand; a plugin table cannot be hand-edited",
+      "rejected": "published category, badge activation, course custom field"
+    },
+    {
+      "decision": "006 enrols nobody; spec 008 owns enrolment via local_ltuse_pathway_cohort.enrol and pathway_courses_changed",
+      "why": "one enrolment mechanism; manager-assignment-enrols is an unmade product decision",
+      "rejected": "006 enrolling cohorts on assignment"
+    },
+    {
+      "decision": "Meta: Uncategorized has no pathway",
+      "why": "consistent with 004 list and competency site",
+      "rejected": "spec edge case giving it a pathway (flagged to maintainer)"
+    },
+    {
+      "decision": "Role pathways declared in moodle/site/pathways.yaml, shipped with roles: []",
+      "why": "roles are supplied by a human, not invented",
+      "rejected": "inventing roles"
+    }
+  ],
+  "step_summaries": {
+    "plan": {
+      "summary": "Plan, research R1-R13, data model, 4 contracts and quickstart written; 008 seam agreed with the a3 session",
+      "key_finding": "004 already maps courses to competencies in plugin tables; pathways only need delivery + level per course on top"
+    },
+    "tasks": {
+      "summary": "36 tasks: setup 2, foundational 15 in two waves, US1 4, US2 5, US3 1, US4 1, US5 3, polish 5"
+    }
+  },
+  "approach": "local_ltuse computes each pathway at view time from 004's competency map and a new per-course delivery/level row written by the publisher; role pathways are applied from moodle/site/pathways.yaml; pages and an app handler show learner, mentor and manager views; 008 builds enrolment on the assignment table and events.",
+  "coverage": {
+    "FR-001": {
+      "title": "One competency pathway per competency a published course declares",
+      "tasks": [
+        "T004",
+        "T018"
+      ]
+    },
+    "FR-002": {
+      "title": "Pathway contents derived solely from frontmatter and repo data, updated by publish or apply",
+      "tasks": [
+        "T004",
+        "T010",
+        "T013",
+        "T023",
+        "T025"
+      ]
+    },
+    "FR-003": {
+      "title": "Courses ordered by target level, CBC vocabulary only",
+      "tasks": [
+        "T005",
+        "T013",
+        "T019"
+      ]
+    },
+    "FR-004": {
+      "title": "Level with no course shows no course yet and links to the competency site",
+      "tasks": [
+        "T005",
+        "T010",
+        "T013",
+        "T019"
+      ]
+    },
+    "FR-005": {
+      "title": "Only stage-8 Moodle courses appear",
+      "tasks": [
+        "T004",
+        "T023",
+        "T025"
+      ]
+    },
+    "FR-006": {
+      "title": "Hand changes overwritten; pathways are generated",
+      "tasks": [
+        "T013",
+        "T023"
+      ]
+    },
+    "FR-007": {
+      "title": "Role pathways declared in repo and generated in Moodle",
+      "tasks": [
+        "T010",
+        "T011",
+        "T013",
+        "T027"
+      ]
+    },
+    "FR-008": {
+      "title": "Recommend order without locking",
+      "tasks": [
+        "T005",
+        "T019"
+      ]
+    },
+    "FR-009": {
+      "title": "Reach pathways from landing page without orientation",
+      "tasks": [
+        "T018",
+        "T020"
+      ]
+    },
+    "FR-010": {
+      "title": "Progress reads course completion as defined by 004",
+      "tasks": [
+        "T007"
+      ]
+    },
+    "FR-011": {
+      "title": "Never award, record or display a CBC level for a learner",
+      "tasks": [
+        "T005",
+        "T016",
+        "T019"
+      ]
+    },
+    "FR-012": {
+      "title": "Mentors and managers see only their own scope",
+      "tasks": [
+        "T006",
+        "T015",
+        "T018",
+        "T028",
+        "T029"
+      ]
+    },
+    "FR-013": {
+      "title": "Managers assign a pathway to a cohort; new members get it",
+      "tasks": [
+        "T012",
+        "T029",
+        "T031"
+      ]
+    },
+    "FR-014": {
+      "title": "Pathway courses agree with COVERAGE.md",
+      "tasks": [
+        "T004",
+        "T025"
+      ]
+    },
+    "FR-015": {
+      "title": "Usable in the Moodle app",
+      "tasks": [
+        "T021"
+      ]
+    }
+  }
 }

@@ -92,6 +92,16 @@ $functions = [
                         . 'moodle/badges:configurecriteria, moodle/badges:configuredetails, '
                         . 'moodle/badges:configuremessages, mod/customcert:addinstance',
     ],
+    // Spec 006: pathways.
+    'local_ltuse_set_course_pathway' => [
+        'classname'    => 'local_ltuse\external\set_course_pathway',
+        'description'  => 'Record whether a published course is delivered and the level it aims '
+                        . 'at, and announce each pathway it joined or left. Never enrols '
+                        . 'anyone. Idempotent.',
+        'type'         => 'write',
+        'ajax'         => false,
+        'capabilities' => 'local/ltuse:publish',
+    ],
 ];
 
 // One service, so a single token grants exactly these functions and nothing else.
@@ -112,6 +122,8 @@ $services = [
             'local_ltuse_set_course_competencies',
             'local_ltuse_ensure_discussion',
             'local_ltuse_set_course_recognition',
+            // Spec 006: pathways.
+            'local_ltuse_set_course_pathway',
             // Core functions the publisher also needs. Listed here so one token covers
             // the whole publish rather than the operator wiring up several services.
             'core_course_create_courses',

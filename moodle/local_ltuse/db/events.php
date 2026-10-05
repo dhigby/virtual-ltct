@@ -43,4 +43,11 @@ $observers = [
         'eventname' => '\mod_scheduler\event\slot_deleted',
         'callback' => '\local_ltuse\observer::scheduler_slot_deleted',
     ],
+
+    // Spec 006 (contracts/pathway-api.md): a deleted cohort's pathway links go through
+    // assignments::unassign(), so spec 008 sees each removal as pathway_unassigned.
+    [
+        'eventname' => '\core\event\cohort_deleted',
+        'callback' => '\local_ltuse\observer::cohort_deleted',
+    ],
 ];

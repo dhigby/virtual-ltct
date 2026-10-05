@@ -36,6 +36,11 @@ publish (course_stage.py at stage 8) activates the badge and makes the certifica
 a pilot issues nothing. The certificate's idnumber is never offered for retiring, because
 retiring it is a step towards deleting it, which deletes every issued code.
 
+PATHWAYS (spec 006). Straight after the competency map, local_ltuse_set_course_pathway gets
+whether this publish is a delivery and the course's target level; the plugin works out which
+pathways the course is on and announces what it joined or left. A delivered course with no
+target level, or competency pathways that read back differently from the map, exits 1.
+
 Environment:
     MOODLE_URL, MOODLE_TOKEN    see scripts/moodle_client.py
 
@@ -259,6 +264,67 @@ def ensure_competencies(client, manifest, courseid, problems):
                         % ("; ".join(kept) or "(none)", "; ".join(back) or "(none)"))
 
 
+TARGET_LEVEL_RE = re.compile(r"^([1-4]) - ")
+
+
+def target_level(manifest):
+    """The manifest's target_outcome_level as the plugin takes it: 1-4, 0 when absent.
+
+    check_moodle_payload.py has already proved a present label is a course_target_levels
+    label verbatim, so its leading digit is the level (spec 006, contracts/publish.md).
+    """
+    m = TARGET_LEVEL_RE.match(str(manifest.get("target_outcome_level") or ""))
+    return int(m.group(1)) if m else 0
+
+
+def ensure_pathway(client, manifest, courseid, problems):
+    """Tell the plugin the two facts a pathway needs (spec 006, contracts/publish.md).
+
+    Straight after ensure_competencies, so no pathway is computed from a stale map. The
+    plugin decides what the course is on; this only reports it and compares the
+    competency pathways read back with the map it just sent. A refusal is a MoodleError
+    and stops the publish; a difference goes into `problems`, so the publish completes and
+    exits 1.
+    """
+    delivery = 1 if manifest["recognition"]["delivery"] else 0
+    level = target_level(manifest)
+    if delivery and not level:
+        # The plugin refuses this pair, so it is not sent: the course stays as it was.
+        print("  pathways  not sent: delivered with no target_outcome_level")
+        problems.append("delivered but declares no target_outcome_level, so it is in no "
+                        "pathway while COVERAGE.md lists it")
+        return
+    result = client.call("local_ltuse_set_course_pathway",
+                         courseid=courseid, delivery=delivery, targetlevel=level)
+    if client.dry_run:
+        print("  pathways  dry-run: delivery %d, target level %d" % (delivery, level))
+        return
+    result = result or {}
+    kept, _ = split_meta(unique_competencies(manifest))
+    stored = (result.get("delivery"), result.get("targetlevel"))
+    if stored != (delivery, level):
+        problems.append("pathway row reads back as delivery %s, target level %s; sent "
+                        "delivery %d, target level %d" % (stored + (delivery, level)))
+    if not delivery:
+        print("  pathways  pilot: in no pathway until stage 8")
+        return
+    if not result.get("visible"):
+        print("  pathways  hidden: joins %d pathways when the course is shown" % len(kept))
+        return
+    line = "  pathways  in %d" % len(result.get("pathways") or [])
+    if result.get("added"):
+        line += "; joined: %s" % ", ".join(result["added"])
+    if result.get("removed"):
+        line += "; left: %s" % ", ".join(result["removed"])
+    print(line)
+    back = [p.get("competency") for p in result.get("pathways") or []]
+    if set(back) != set(kept):
+        problems.append("competency pathways read back differ from the competencies sent:\n"
+                        "              sent:      %s\n"
+                        "              read back: %s"
+                        % ("; ".join(kept) or "(none)", "; ".join(back) or "(none)"))
+
+
 def note_completion(results, idnumber, source, result):
     """Remember the plugin's completion answer for one module call."""
     value = (result or {}).get("completion", "")
@@ -306,8 +372,9 @@ def publish(client, payload_dir, category_id):
     print("  course    %s (%s)" % (manifest["idnumber"],
                                    "created, hidden" if created else "updated"))
     ensure_competencies(client, manifest, courseid, problems)
+    ensure_pathway(client, manifest, courseid, problems)
 
-    names = {s["number"]: s["name"] for s in manifest["sections"]}
+    names ={s["number"]: s["name"] for s in manifest["sections"]}
     ensure_sections(client, manifest["idnumber"], len(manifest["sections"]),
                     names)
     print("  sections  %d" % len(manifest["sections"]))

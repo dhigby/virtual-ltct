@@ -152,3 +152,45 @@ $string['privacy:metadata:booking:timestart'] = 'The booking\'s start, as last n
 $string['privacy:metadata:booking:timeduration'] = 'The booking\'s length, as last notified.';
 $string['privacy:metadata:booking:timecreated'] = 'When the booking was recorded.';
 $string['privacy:path:bookings'] = 'Office-hours bookings';
+
+// Spec 006: pathways. A pathway lists the courses that aim at a competency, grouped by the
+// CBC level each course aims at. No string here names a level as anyone's, or says a learner
+// reached, achieved or attained anything, or is competent, or certified;
+// tests/test_pathway_wording.py checks every string in this block (R13, SC-004).
+$string['pathways'] = 'Pathways';
+$string['pathway:mine'] = 'Your pathways';
+$string['pathway:none'] = 'No pathway has been given to you yet. You can browse every pathway.';
+$string['pathway:noneforlearner'] = 'No pathway has been given to this learner yet.';
+$string['pathway:donelearner'] = 'The training on this pathway is completed.';
+$string['pathway:nocohorts'] = 'There is no cohort you can give a pathway to.';
+$string['pathway:assignhelp'] = 'Giving a pathway to a cohort shows it to every member, now and when they join. It does not enrol anyone in its courses.';
+$string['pathway:browse'] = 'Browse all pathways';
+$string['pathway:aimsat'] = 'Aims at {$a}';
+$string['pathway:nocourseyet'] = 'No course yet';
+$string['pathway:nocourseyetlink'] = 'See what this competency involves';
+$string['pathway:next'] = 'Next';
+$string['pathway:completed'] = 'Completed';
+$string['pathway:inprogress'] = 'In progress';
+$string['pathway:notstarted'] = 'Not started';
+$string['pathway:done'] = 'You have completed the training on this pathway.';
+$string['pathway:roletotal'] = '{$a->done} of {$a->total} courses completed';
+$string['pathway:unknown'] = 'This pathway does not exist.';
+$string['pathway:manage'] = 'Assign pathways';
+$string['pathway:assign'] = 'Assign';
+$string['pathway:unassign'] = 'Remove';
+$string['pathway:cohortprogress'] = 'Pathway progress: {$a}';
+$string['pathway:nolevels'] = 'Pathways cannot be shown yet: their headings have not been set up on this site. Ask the site team to apply the site configuration.';
+$string['pathway:roles'] = 'Role pathways';
+// End of the spec 006 pathways block.
+
+$string['eventpathwaycourseschanged'] = 'Pathway courses changed';
+$string['eventpathwayassigned'] = 'Pathway assigned to a cohort';
+$string['eventpathwayunassigned'] = 'Pathway removed from a cohort';
+
+$string['privacy:metadata:local_ltuse_pathway_cohort'] = 'Each pathway given to a cohort, with the user who made the link. The link belongs to the cohort, so deleting that user\'s data keeps it and forgets who made it.';
+$string['privacy:metadata:local_ltuse_pathway_cohort:pathwaykey'] = 'The pathway given to the cohort.';
+$string['privacy:metadata:local_ltuse_pathway_cohort:cohortid'] = 'The cohort the pathway was given to.';
+$string['privacy:metadata:local_ltuse_pathway_cohort:usermodified'] = 'The user who made or last changed the link.';
+$string['privacy:metadata:local_ltuse_pathway_cohort:timecreated'] = 'When the link was made.';
+$string['privacy:metadata:local_ltuse_pathway_cohort:timemodified'] = 'When the link was last changed.';
+$string['privacy:path:pathways'] = 'Pathways given to cohorts';

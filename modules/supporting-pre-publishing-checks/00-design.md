@@ -263,8 +263,9 @@
 >    orthography: if the consultant has the orthography statement written by the project's
 >    linguist, the consultant can check the character against it; otherwise the team decides.
 >
-> Also clarified (lesson 04, step 8): **Footnote quotes.** Few teams in Africa quote verse text
-> in footnotes (`\fq`), but teams elsewhere do it enough that Paratext added the check. The
+> Also clarified (lesson 04, step 8): **Footnote quotes.** Quoting verse text in footnotes
+> (`\fq`) is uncommon in the SME's experience (Central Africa), so the lesson makes no claim
+> about how widely it is used. The
 > consultant finds out whether a project uses it from `\fq` markers in the Markers Inventory,
 > with no need to ask the team. If any are present, running the check is essential: any editing
 > of the verse can leave the footnote's quote out of date.
@@ -974,9 +975,9 @@ variation or an error is the team's judgment; the consultant confirms the differ
 reviewed and gets the team to judge each one (the marker's earlier wording is kept as history);
 (2) **Punctuation Inventory** (lesson 04) — if the consultant has the orthography statement
 written by the project's linguist, they can check a flagged character against it; otherwise the
-team decides whether it is valid. Also clarified: **Footnote quotes** (lesson 04, step 8): few
-teams in Africa quote verse text in footnotes (`\fq`), but teams elsewhere do it enough that
-Paratext added the check; `\fq` markers in the Markers Inventory show whether a project uses it,
+team decides whether it is valid. Also clarified: **Footnote quotes** (lesson 04, step 8): quoting
+verse text in footnotes (`\fq`) is uncommon in the SME's experience (Central Africa), so the
+lesson makes no claim about how widely it is used; `\fq` markers in the Markers Inventory show whether a project uses it,
 and if any are present the check must be run, because any editing of the verse can leave the
 quote out of date.
 Seat time, competencies, outcome level and all objectives are

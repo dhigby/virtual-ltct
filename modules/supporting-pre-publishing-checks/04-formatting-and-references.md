@@ -125,11 +125,10 @@ symptoms of a single cause higher up. Work in this order instead:
    - Prompt the team to go through footnote placement book by book, looking at each
      footnote in the text.
    - **Look for `\fq` markers in the Markers Inventory** (step 2). A `\fq` marks text
-     quoted from the verse inside a footnote. Few teams in Africa have used it, but teams
-     elsewhere use it enough that Paratext added a **Footnote quotes** check to Run Basic
-     Checks. If the project has any `\fq` markers, that check must be run: any editing of
-     the verse can leave the quote in its footnote out of date, and the check is how the
-     team confirms it still matches.
+     quoted from the verse inside a footnote. If the project has any, the **Footnote
+     quotes** check in Run Basic Checks must be run: any editing of the verse can leave
+     the quote in its footnote out of date, and the check is how the team confirms it
+     still matches.
 
    Note that an unclosed `\f` footnote marker (opened without its matching `\f*`) has a much narrower effect than the missing-`\p` example
    above: if it's unclosed at the end of a verse, it has no effect at all; if it's

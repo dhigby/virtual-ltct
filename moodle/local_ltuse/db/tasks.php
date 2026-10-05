@@ -15,10 +15,21 @@ $tasks = [
         'month' => '*',
         'dayofweek' => '*',
     ],
+    // Spec 002 (amendment 2026-10-02, R12): repair organisation contacts and old-organisation
+    // enrolments that no cohort event reached, hourly, at a minute Moodle picks per site.
+    [
+        'classname' => '\local_ltuse\task\reconcile_org_contacts',
+        'blocking' => 0,
+        'minute' => 'R',
+        'hour' => '*',
+        'day' => '*',
+        'month' => '*',
+        'dayofweek' => '*',
+    ],
 
     // Spec 008: administration. Hourly, keep every ltct: course's course mentors in step
     // (research R10; nothing while local_ltuse/coursementorsync is 0) and every pathway's
-    // cohort enrolments (research R11; nothing until spec 006 is installed).
+    // cohort enrolments (research R11).
     [
         'classname' => '\local_ltuse\task\course_mentor_reconcile',
         'blocking' => 0,

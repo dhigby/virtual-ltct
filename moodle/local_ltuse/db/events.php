@@ -20,6 +20,18 @@ $observers = [
         'callback' => '\local_ltuse\observer::user_deleted',
     ],
 
+    // Spec 002 (amendment 2026-10-02, R10, R12): an organisation's managers and people are
+    // message contacts, and a person who leaves an organisation is suspended in its own
+    // courses. Fired by cohort_add_member() and cohort_remove_member() (cohort/lib.php:189-224).
+    [
+        'eventname' => '\core\event\cohort_member_added',
+        'callback' => '\local_ltuse\observer::cohort_member_added',
+    ],
+    [
+        'eventname' => '\core\event\cohort_member_removed',
+        'callback' => '\local_ltuse\observer::cohort_member_removed',
+    ],
+
     // Spec 011 (R15, R20): calendar changes and cancellations, and office-hours bookings.
     // Not internal, so a change inside a transaction that rolls back announces nothing.
     [
@@ -44,10 +56,17 @@ $observers = [
         'callback' => '\local_ltuse\observer::scheduler_slot_deleted',
     ],
 
+    // Spec 006 (contracts/pathway-api.md): a deleted cohort's pathway links go through
+    // assignments::unassign(), so spec 008 sees each removal as pathway_unassigned.
+    [
+        'eventname' => '\core\event\cohort_deleted',
+        'callback' => '\local_ltuse\observer::cohort_deleted',
+    ],
+
     // Spec 008: administration. A course joining a learning pathway (spec 006) is enrolled for
     // every cohort that holds the pathway with enrol = 1 (research R11); a course leaving one
-    // unenrols nobody. Not internal, so a change that rolls back enrols no one. Harmless until
-    // spec 006 is installed: the event is never fired.
+    // unenrols nobody. Not internal, so a change that rolls back enrols no one. Spec 006's
+    // set_course_pathway fires it.
     [
         'eventname' => '\local_ltuse\event\pathway_courses_changed',
         'callback' => '\local_ltuse\admin\observer::pathway_courses_changed',

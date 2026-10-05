@@ -14,6 +14,10 @@ COURSE = "ltct:demo"
 URL = "https://moodle.example.org"
 
 
+SHARED = {"org_only": False, "category_idnumber": None}
+ORG_ONLY = {"org_only": True, "category_idnumber": "ltct:org:fixture-north"}
+
+
 def mid(name):
     return "ltct:demo:%s" % name
 
@@ -37,6 +41,12 @@ class FakeClient:
         self.competencies_back = None     # None: the server stores what it was sent
         self.recognition = {"badge": "unchanged", "status": "inactive", "certificate": "none",
                             "warnings": []}
+        self.placed = {"moved": False}    # local_ltuse_place_course's answer (spec 002 R11)
+        # Spec 006: the course's visibility, the pathway keys a call reports joined and
+        # left, and a canned answer (None: computed from the last competencies sent).
+        self.visible = 1
+        self.pathway_added, self.pathway_removed = [], []
+        self.pathway = None
 
     def manifest(self, idnumber):
         return self.call("local_ltuse_get_course_manifest", idnumber=idnumber)
@@ -70,10 +80,23 @@ class FakeClient:
             return dict(self.course_completion)
         if function == "local_ltuse_set_course_recognition":
             return dict(self.recognition)
+        if function == "local_ltuse_place_course":
+            return dict(self.placed)
         if function == "local_ltuse_set_course_competencies":
             sent = list(params["competencies"])
             back = sent if self.competencies_back is None else self.competencies_back
             return {"added": sent, "removed": [], "competencies": back}
+        if function == "local_ltuse_set_course_pathway":
+            if self.pathway is not None:
+                return dict(self.pathway)
+            sent = self.calls_to("local_ltuse_set_course_competencies")
+            names = list(sent[-1]["competencies"]) if sent else []
+            on = params["delivery"] == 1 and params["targetlevel"] > 0 and self.visible
+            return {"delivery": params["delivery"], "targetlevel": params["targetlevel"],
+                    "visible": self.visible,
+                    "pathways": [{"key": "competency:" + n.lower().replace(" ", "-"),
+                                  "competency": n} for n in names] if on else [],
+                    "added": list(self.pathway_added), "removed": list(self.pathway_removed)}
         if function == "local_ltuse_get_course_manifest":
             return {"modules": list(self.server.values())}
         if function == "local_ltuse_create_page":
@@ -151,7 +174,7 @@ class PublishBase(unittest.TestCase):
         self._tmp.cleanup()
 
     def write_manifest(self, quizzes=(), competencies=("Translation Tools",),
-                       level="2 - With Assistance", delivery=False):
+                       level="2 - With Assistance", delivery=False, placement=None):
         sections = []
         for n, (source, (html, assets)) in enumerate(sorted(self.pages.items()), start=1):
             stem = source[:-3]
@@ -176,6 +199,7 @@ class PublishBase(unittest.TestCase):
                 {"certificate": {"idnumber": "%s:certificate" % COURSE}} if delivery else {})},
             "assets": {n: {"sha1": hashlib.sha1(d).hexdigest(), "bytes": len(d)}
                        for n, d in self.images.items()},
+            "placement": placement or SHARED,
         }
         (self.dir / "manifest.json").write_text(json.dumps(manifest), encoding="utf-8")
 
@@ -773,5 +797,248 @@ class Competencies(Main):
         self.assertEqual(rc, 0, out)
 
 
+class Pathways(Main):
+    """Spec 006, US2: a publish tells the plugin the two facts a pathway needs."""
+
+    PATHWAY = "local_ltuse_set_course_pathway"
+
+    def test_pathway_follows_the_map_and_precedes_content(self):
+        client = FakeClient(self.server_as_published())
+        out = self.publish(client)
+        names = [f for f, _ in client.calls]
+        self.assertEqual(names.index(self.PATHWAY),
+                         names.index("local_ltuse_set_course_competencies") + 1)
+        self.assertLess(names.index(self.PATHWAY), names.index("local_ltuse_create_page"))
+        self.assertEqual(client.calls_to(self.PATHWAY),
+                         [{"courseid": 7, "delivery": 0, "targetlevel": 2}])
+        self.assertIn("  pathways  pilot: in no pathway until stage 8", out)
+
+    def test_delivered_and_visible_reports_what_it_joined_and_left(self):
+        self.write_manifest(delivery=True, level="3 - Independent")
+        client = FakeClient(self.server_as_published())
+        client.pathway_added = ["competency:translation-tools", "role:lt-consultant"]
+        client.pathway_removed = ["competency:keyboards"]
+        rc, out = self.run_main(client)
+        self.assertEqual(rc, 0, out)
+        self.assertEqual(client.calls_to(self.PATHWAY),
+                         [{"courseid": 7, "delivery": 1, "targetlevel": 3}])
+        self.assertIn("  pathways  in 1; joined: competency:translation-tools, "
+                      "role:lt-consultant; left: competency:keyboards", out)
+
+    def test_delivered_and_visible_with_nothing_changed_says_only_the_count(self):
+        self.write_manifest(delivery=True)
+        client = FakeClient(self.server_as_published())
+        out = self.publish(client)
+        self.assertIn("  pathways  in 1\n", out)
+        self.assertNotIn("joined:", out)
+        self.assertNotIn("left:", out)
+
+    def test_delivered_but_hidden_says_when_it_joins(self):
+        self.write_manifest(delivery=True, competencies=["Translation Tools", "Keyboards"])
+        client = FakeClient(self.server_as_published())
+        client.visible = 0
+        rc, out = self.run_main(client)
+        self.assertEqual(rc, 0, out)
+        self.assertIn("  pathways  hidden: joins 2 pathways when the course is shown", out)
+
+    def test_pilot_without_a_level_sends_0(self):
+        self.write_manifest(level=None)
+        client = FakeClient(self.server_as_published())
+        rc, out = self.run_main(client)
+        self.assertEqual(rc, 0, out)
+        self.assertEqual(client.calls_to(self.PATHWAY),
+                         [{"courseid": 7, "delivery": 0, "targetlevel": 0}])
+
+    def test_delivered_without_a_level_exits_1_and_completes(self):
+        self.write_manifest(delivery=True, level=None)
+        client = FakeClient(self.server_as_published())
+        rc, out = self.run_main(client)
+        self.assertEqual(rc, 1)
+        tail = out.split("NEEDS A DECISION")[-1]
+        self.assertIn("declares no target_outcome_level", tail)
+        # The web service would refuse it, so it is never sent; the rest of the publish is.
+        self.assertEqual(client.calls_to(self.PATHWAY), [])
+        self.assertEqual(len(client.calls_to("local_ltuse_set_course_completion")), 1)
+
+    def test_read_back_that_differs_prints_both_and_exits_1(self):
+        self.write_manifest(delivery=True)
+        client = FakeClient(self.server_as_published())
+        client.pathway = {"delivery": 1, "targetlevel": 2, "visible": 1,
+                          "pathways": [{"key": "competency:keyboards",
+                                        "competency": "Keyboards"}],
+                          "added": [], "removed": []}
+        rc, out = self.run_main(client)
+        self.assertEqual(rc, 1)
+        tail = out.split("NEEDS A DECISION")[-1]
+        self.assertIn("pathway", tail)
+        self.assertIn("Translation Tools", tail)
+        self.assertIn("Keyboards", tail)
+
+    def test_stored_values_that_differ_exit_1(self):
+        self.write_manifest(delivery=True)
+        client = FakeClient(self.server_as_published())
+        client.pathway = {"delivery": 1, "targetlevel": 3, "visible": 0,
+                          "pathways": [], "added": [], "removed": []}
+        rc, out = self.run_main(client)
+        self.assertEqual(rc, 1)
+        self.assertIn("target level", out.split("NEEDS A DECISION")[-1])
+
+    def test_hidden_course_is_not_compared(self):
+        self.write_manifest(delivery=True)
+        client = FakeClient(self.server_as_published())
+        client.visible = 0
+        rc, out = self.run_main(client)
+        self.assertEqual(rc, 0, out)
+
+    def test_meta_is_not_a_difference(self):
+        self.write_manifest(delivery=True, competencies=["Translation Tools", "Uncategorized"])
+        client = FakeClient(self.server_as_published())
+        rc, out = self.run_main(client)
+        self.assertEqual(rc, 0, out)
+
+    def test_a_refusal_stops_the_publish(self):
+        client = FakeClient(self.server_as_published())
+
+        def refuse(function, **params):
+            if function == self.PATHWAY:
+                raise pm.MoodleError(function, {"message": "error:notltctcourse"})
+            return FakeClient.call(client, function, **params)
+        client.call = refuse
+        rc, out = self.run_main(client)
+        self.assertEqual(rc, 1)
+        self.assertIn("error:notltctcourse", out)
+        self.assertEqual(client.calls_to("local_ltuse_create_page"), [])
+
+    def test_dry_run_names_the_call_and_sends_nothing(self):
+        import urllib.request
+        self.write_manifest(delivery=True, level="4 - Expert")
+        client = pm.MoodleClient(dry_run=True)
+
+        def refuse(*a, **k):
+            raise AssertionError("a dry run must send nothing")
+        saved, urllib.request.urlopen = urllib.request.urlopen, refuse
+        try:
+            rc, out = self.run_main(client, "--dry-run")
+        finally:
+            urllib.request.urlopen = saved
+        self.assertEqual(rc, 0, out)
+        self.assertIn(self.PATHWAY, [f for f, _ in client.calls])
+        self.assertIn("  pathways  dry-run: delivery 1, target level 4", out)
+
+
+class PayloadTargetLevel(unittest.TestCase):
+    """Spec 006: check_moodle_payload refuses a target level outcome-levels.yaml lacks."""
+
+    def problems(self, level, present=True):
+        import check_moodle_payload as cmp
+        manifest = {"slug": "demo", "title": "Demo", "view": "reviewer", "completion": "all",
+                    "sections": [], "quizzes": [], "competencies": [],
+                    "recognition": {"delivery": False}}
+        if present:
+            manifest["target_outcome_level"] = level
+        with tempfile.TemporaryDirectory() as d:
+            (pathlib.Path(d) / "manifest.json").write_text(json.dumps(manifest),
+                                                           encoding="utf-8")
+            problems, _ = cmp.check(d)
+        return [p for p in problems if "target_outcome_level" in p]
+
+    def test_every_course_target_label_passes(self):
+        for level in ("1 - Has Knowledge", "2 - With Assistance", "3 - Independent",
+                      "4 - Expert"):
+            self.assertEqual(self.problems(level), [], level)
+
+    def test_absent_level_passes(self):
+        self.assertEqual(self.problems(None, present=False), [])
+
+    def test_a_label_not_verbatim_is_refused(self):
+        for level in ("2 - with assistance", "With Assistance", "2", "0 - No Competency",
+                      "Practitioner", "5 - Expert", " 2 - With Assistance"):
+            self.assertEqual(len(self.problems(level)), 1, level)
+
+
 if __name__ == "__main__":
     unittest.main()
+
+
+class Placement(Main):
+    """Spec 002 R11: an organisation-only course is placed in its category on every publish."""
+
+    PLACE = "local_ltuse_place_course"
+
+    def test_org_only_course_is_placed_after_update(self):
+        self.write_manifest(placement=ORG_ONLY)
+        client = FakeClient(self.server_as_published())
+        self.publish(client)
+        self.assertEqual(client.calls_to(self.PLACE), [
+            {"courseidnumber": COURSE, "categoryidnumber": "ltct:org:fixture-north"}])
+        names = [f for f, _ in client.calls]
+        self.assertLess(names.index("core_course_update_courses"), names.index(self.PLACE))
+
+    def test_org_only_course_is_placed_after_create(self):
+        self.write_manifest(placement=ORG_ONLY)
+        client = FakeClient([])
+        real = client.call
+
+        def first_publish(function, **params):
+            if function == "core_course_get_courses_by_field" and not any(
+                    f == "core_course_create_courses" for f, _ in client.calls):
+                client.calls.append((function, params))
+                return None
+            return real(function, **params)
+        client.call = first_publish
+        self.publish(client)
+        names = [f for f, _ in client.calls]
+        self.assertIn("core_course_create_courses", names)
+        self.assertNotIn("core_course_update_courses", names)
+        self.assertEqual(client.calls_to(self.PLACE), [
+            {"courseidnumber": COURSE, "categoryidnumber": "ltct:org:fixture-north"}])
+        self.assertLess(names.index("core_course_create_courses"), names.index(self.PLACE))
+
+    def test_placed_before_content(self):
+        self.write_manifest(placement=ORG_ONLY)
+        client = FakeClient(self.server_as_published())
+        self.publish(client)
+        writes = client.writes()
+        self.assertLess(writes.index(self.PLACE), writes.index("local_ltuse_create_page"))
+
+    def test_shared_course_is_never_placed(self):
+        client = FakeClient(self.server_as_published())
+        self.publish(client)
+        self.assertEqual(client.calls_to(self.PLACE), [])
+
+    def test_a_move_is_reported(self):
+        self.write_manifest(placement=ORG_ONLY)
+        client = FakeClient(self.server_as_published())
+        client.placed = {"moved": True}
+        out = self.publish(client)
+        self.assertIn("placement moved to ltct:org:fixture-north", out)
+
+    def test_no_move_is_said_quietly(self):
+        self.write_manifest(placement=ORG_ONLY)
+        out = self.publish(FakeClient(self.server_as_published()))
+        self.assertIn("placement ltct:org:fixture-north (already there)", out)
+
+    def test_a_refusal_stops_the_publish(self):
+        self.write_manifest(placement=ORG_ONLY)
+        client = FakeClient(self.server_as_published())
+
+        def refuse(function, **params):
+            if function == self.PLACE:
+                raise pm.MoodleError(function, {"message": "invalidcategory"})
+            return FakeClient.call(client, function, **params)
+        client.call = refuse
+        rc, out = self.run_main(client)
+        self.assertEqual(rc, 1)
+        self.assertIn("invalidcategory", out)
+        self.assertEqual(client.calls_to("local_ltuse_create_page"), [])
+
+    def test_dry_run_names_the_call(self):
+        self.write_manifest(placement=ORG_ONLY)
+        client = FakeClient(self.server_as_published(), dry_run=True)
+        out = self.publish(client)
+        self.assertEqual(len(client.calls_to(self.PLACE)), 1)
+        self.assertIn("placement dry-run: ltct:org:fixture-north", out)
+
+    def test_client_requires_the_function(self):
+        import moodle_client
+        self.assertIn(self.PLACE, moodle_client.REQUIRED_FUNCTIONS)

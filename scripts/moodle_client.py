@@ -248,6 +248,21 @@ class MoodleClient:
         return self.call("local_ltuse_get_course_manifest", idnumber=idnumber)
 
 
+# Every function scripts/publish_moodle.py calls. Spec 009 added parameters to two of them
+# but no new names; spec 004 added set_course_completion and set_course_competencies, and
+# spec 002 R11 added place_course.
+REQUIRED_FUNCTIONS = (
+    "local_ltuse_get_course_manifest", "local_ltuse_create_page",
+    "local_ltuse_update_sections",
+    "local_ltuse_import_questions", "local_ltuse_create_quiz",
+    "local_ltuse_hide_modules", "local_ltuse_set_course_completion",
+    "local_ltuse_set_course_competencies", "local_ltuse_ensure_discussion",
+    "local_ltuse_set_course_recognition", "local_ltuse_place_course",
+    "core_course_create_courses", "core_course_update_courses",
+    "core_course_get_courses_by_field",
+)
+
+
 def main():
     import argparse
     ap = argparse.ArgumentParser(description=__doc__)
@@ -263,19 +278,9 @@ def main():
         print("release   %s" % info.get("release"))
         print("user      %s (%s)" % (info.get("fullname"), info.get("username")))
         available = {f["name"] for f in info.get("functions", [])}
-        # Every function scripts/publish_moodle.py calls. Spec 009 added parameters to two
-        # of them but no new names; spec 004 added the last two local_ltuse ones.
-        needed = ["local_ltuse_get_course_manifest", "local_ltuse_create_page",
-                  "local_ltuse_update_sections",
-                  "local_ltuse_import_questions", "local_ltuse_create_quiz",
-                  "local_ltuse_hide_modules", "local_ltuse_set_course_completion",
-                  "local_ltuse_set_course_competencies", "local_ltuse_ensure_discussion",
-                  "local_ltuse_set_course_recognition",
-                  "core_course_create_courses", "core_course_update_courses",
-                  "core_course_get_courses_by_field"]
         print("\nfunctions this token can call:")
         missing = False
-        for f in needed:
+        for f in REQUIRED_FUNCTIONS:
             ok = f in available
             missing = missing or not ok
             print("  %s %s" % ("OK " if ok else "-- ", f))

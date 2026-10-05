@@ -539,10 +539,10 @@ Every write fires core's own event with V as the actor; there is no event of our
 
 | Layer | Methods | Checks | Called by |
 |---|---|---|---|
-| Unchecked core | `do_suspend(int $userid)`, `do_reactivate(int $userid)`, `do_enrol(int $userid, int $courseid)`, `do_unenrol(int $userid, int $courseid)` | The per-action rules above that do not depend on who manages P: never a site admin, never the acting user; `may_enrol_into()` for enrolment, `may_unenrol_from()` for unenrolment. `do_suspend` calls `destroy_user_sessions()` then `user_update_user((object)['id' => …, 'suspended' => 1], false)`. | Spec 008's `local_ltuse_admin_*` functions, after `require_capability('local/ltuse:administer')` and their own rules. Never a page. |
+| Unchecked core | `do_suspend(int $userid)`, `do_reactivate(int $userid)`, `do_enrol(int $userid, int $courseid)`, `do_unenrol(int $userid, int $courseid)` | The per-action rules above that do not depend on who manages P: never a site admin, never the acting user, never a deleted account for enrolment; `may_enrol_into()` for enrolment, `may_unenrol_from()` for unenrolment. `do_suspend` calls `destroy_user_sessions()` then `user_update_user((object)['id' => …, 'suspended' => 1], false)`. | Spec 008's `local_ltuse_admin_*` functions, after `require_capability('local/ltuse:administer')` and their own rules. Never a page. |
 | Manager wrapper | `suspend()`, `reactivate()`, `enrol()`, `unenrol()` (and `send_reset()`) | `may_manage_account(V, P)` for the acting user, then the matching `do_*()`. | `organisation.php` only. |
 
-One suspend path for managers and the site team, so spec 016's PHPUnit case (suspending a protected user leaves names unchanged) is written once, against this class. Built first by spec 008 (its T012); 002's T071 adds `send_reset()` and T064's cases to the same file.
+One suspend path for managers and the site team, so spec 016's PHPUnit case (suspending a protected user leaves names unchanged) is written once, against this class. 002's T071 built the class with manager checks only; spec 008 added the unchecked cores to it when it merged main (PR #93). `do_suspend()` and `do_reactivate()` return whether anything changed, as the wrappers do.
 
 ### Organisation-enrolment instance *(2026-10-02)*
 

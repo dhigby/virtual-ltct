@@ -16,7 +16,9 @@ Contracts: specs/001-site-config-as-code/contracts/ (declaration.md, site-config
 output.md); every validation rule is in data-model.md. Spec 012's
 moodle/site/course-discussions.yaml is retired: shared courses are open across
 organisations, so there is nothing to share or separate (spec 002 research R3, R14), and a
-file left behind is refused.
+file left behind is refused. Its place is taken by moodle/site/org-courses.yaml (spec 002
+R11): the courses only one organisation's people may join, read only by load_org_courses(),
+which moodle_payload.py also uses.
 
 ENVIRONMENT (never a file; the repo is public)
 
@@ -67,8 +69,10 @@ RETIRED_FILES = {
     "course-discussions.yaml": "retired, spec 002 R14: shared courses are open across "
                                "organisations, so there is nothing to share; delete it",
 }
+ORG_COURSES_FILE = "org-courses.yaml"        # spec 002 R11
 OFFICEHOURS_FILE = "office-hours.yaml"       # spec 011
 DASHBOARD_FILE = "dashboard.yaml"            # spec 011
+PATHWAYS_FILE = "pathways.yaml"              # spec 006
 REQUIREMENTS = REPO / "moodle" / "REQUIREMENTS.md"
 LTUSE_VERSION = REPO / "moodle" / "local_ltuse" / "version.php"
 CLI_PATH = "public/local/ltuse/cli/site_config.php"   # under $MOODLE_DIR (research R1)
@@ -243,6 +247,9 @@ TOP_FILES = {
     "organisations.yaml": ({"rows", "purpose", "categories", "organisations", "mentors"},
                            set()),
     "profile-fields.yaml": ({"rows", "purpose", "category", "fields"}, set()),
+    # Spec 002 amendment (R11): the organisation-only courses. Optional; validated by
+    # load_org_courses(), not by the loop in validate(), because the publisher reads it too.
+    ORG_COURSES_FILE: ({"rows", "org_only"}, set()),
     # Spec 004: report templates and the two course fields. Both optional, as above
     # (specs/004-progress-reporting/contracts/declaration.md).
     "reports.yaml": ({"rows", "purpose", "reports"}, set()),
@@ -255,6 +262,9 @@ TOP_FILES = {
     # (specs/011-events-calendar/contracts/declaration.md).
     OFFICEHOURS_FILE: ({"rows", "course", "scheduler", "groups", "why"}, {"purpose"}),
     DASHBOARD_FILE: ({"rows", "default_blocks"}, {"purpose"}),
+    # Spec 006: role pathways. Optional; missing is roles: [] (specs/006-learning-pathways/
+    # contracts/declaration.md).
+    PATHWAYS_FILE: ({"rows", "purpose", "roles"}, set()),
 }
 
 # --- spec 002: organisations, categories, cohorts and profile fields ---------------------
@@ -494,9 +504,10 @@ def validate(site_dir=SITE_DIR, modules_dir=None):
     decl = {"moodle": None, "plugins": [], "ignore": [], "roles": [], "settings": [],
             "categories": [], "cohorts": [], "profile_fields": [], "cohort_rules": [],
             "course_field_category": None, "course_fields": [], "competencies": [],
-            "reports": [],
+            "reports": [], "org_courses": [],
             "badge_template": None, "certificate_template": None,
-            "officehours": None, "dashboard": []}
+            "officehours": None, "dashboard": [],
+            "levels": [], "role_pathways": []}
     if not site_dir.is_dir():
         problems.add(_rel(site_dir), "declaration directory not found")
         return decl, problems
@@ -507,12 +518,15 @@ def validate(site_dir=SITE_DIR, modules_dir=None):
         elif path.is_file() and path.suffix in (".yaml", ".yml") and path.name not in TOP_FILES:
             problems.add(_rel(path), "unexpected file; the declaration is site.yaml, "
                          "ignore.yaml, roles.yaml, organisations.yaml, "
-                         "profile-fields.yaml, course-fields.yaml, reports.yaml, "
-                         "badges.yaml, certificate/template.yaml, %s, %s and "
-                         "settings/*.yaml" % (OFFICEHOURS_FILE, DASHBOARD_FILE))
+                         "profile-fields.yaml, %s, course-fields.yaml, reports.yaml, "
+                         "badges.yaml, certificate/template.yaml, %s, %s, %s and "
+                         "settings/*.yaml" % (ORG_COURSES_FILE, OFFICEHOURS_FILE,
+                                              DASHBOARD_FILE, PATHWAYS_FILE))
 
     loaded = {}
     for name, (required, optional) in TOP_FILES.items():
+        if name == ORG_COURSES_FILE:
+            continue   # load_org_courses() below; the publisher reads it through the same loader
         path = site_dir / name
         if not path.exists():
             if name == "site.yaml":
@@ -830,8 +844,21 @@ def validate(site_dir=SITE_DIR, modules_dir=None):
                          "groups never separate organisations (spec 002 R3)" % GROUPMODE_SETTING)
     _expand(decl, orgs, fields)
 
+    # org-courses.yaml (spec 002 R11): the organisation keys are the ones validated above.
+    org_keys = {o["key"] for o in orgs["organisations"]} if orgs is not None else set()
+    org_courses, course_problems = load_org_courses(site_dir, modules_dir, org_keys=org_keys)
+    problems.items.extend(course_problems.items)
+    decl["org_courses"] = [{"slug": c["slug"], "course_idnumber": "ltct:" + c["slug"],
+                            "category_idnumber": "ltct:org:" + c["organisation"]}
+                           for c in org_courses]
+
     # Spec 004: the competency list, the course fields, then the reports, which read both.
     decl["competencies"] = _competency_list(problems)
+    # Spec 006: the four level labels, and the role pathways, which name competencies.
+    decl["levels"] = _pathway_levels(problems)
+    if PATHWAYS_FILE in loaded:
+        path, data = loaded[PATHWAYS_FILE]
+        decl["role_pathways"] = _validate_pathways(_rel(path), data, rows, decl, problems)
     if "course-fields.yaml" in loaded:
         path, data = loaded["course-fields.yaml"]
         cfields = _validate_course_fields(_rel(path), data, rows, problems)
@@ -1333,14 +1360,18 @@ ORG_PLACEHOLDER = "{org}"
 PER_VALUES = ("organisation",)
 # The three select conditions every per-organisation report carries, verbatim (FR-005).
 # A select stores the option key, so apply turns role:name's shortname into the role id.
+# Delivery is any enrolment but a pilot's manual one (spec 002 R10, amending spec 004 R10):
+# cohort sync, and a manager's enrolment through the organisation-enrolment instance
+# (enrol_self). A select condition holds one value, so it is "not manual", never a list.
 SCOPE_CONDITIONS = (
     ("user:profilefield_" + ORG_FIELD, {"operator": "equal", "value": ORG_PLACEHOLDER}),
     ("role:name", {"operator": "equal", "value": "student"}),
-    ("enrol:plugin", {"operator": "equal", "value": "cohort"}),
+    ("enrol:plugin", {"operator": "not_equal", "value": "manual"}),
 )
 SELECT_CONDITIONS = frozenset(name for name, _ in SCOPE_CONDITIONS)
-# Operator words the applier maps to filter constants; only select::EQUAL_TO (1) so far.
-CONDITION_OPERATORS = ("equal",)
+# Operator words the applier maps to filter constants: select::EQUAL_TO (1) and
+# NOT_EQUAL_TO (2), public/reportbuilder/classes/local/filters/select.php on MOODLE_502_STABLE.
+CONDITION_OPERATORS = ("equal", "not_equal")
 MANAGERS_AUDIENCE = {"type": "cohortmember", "cohort": "ltct:org:%s:managers" % ORG_PLACEHOLDER}
 AUDIENCE_KEYS = {"cohortmember": "cohort", "systemrole": "role"}
 SORT_DIRECTIONS = ("asc", "desc")
@@ -1377,7 +1408,9 @@ def _competency_list(problems):
     if not isinstance(data, dict):
         problems.add(where, "must map each category to its competencies")
         return []
-    out, seen = [], set()
+    slugs = _descriptor_slugs(problems)
+    base = _site_url(problems)
+    out, seen, slugs_seen = [], set(), {}
     for category, names in data.items():
         if not isinstance(names, list):
             problems.add(where, "%s must be a list of competency names" % (category,))
@@ -1403,11 +1436,232 @@ def _competency_list(problems):
                     problems.add(where, "%s %r holds a control character, [ or ]; the course "
                                  "field writes names as [Name] [Name]" % (label, value))
                     ok = False
+            # Spec 006 (R3, R4): the descriptor's slug, and the page gen_site.py makes of it.
+            slug = slugs.get(name) if slugs is not None else None
+            if slugs is not None and slug is None:
+                problems.add(where, "%r has no descriptor in competencies/ whose name matches "
+                             "it exactly; a competency pathway links to that page" % name)
+                ok = False
+            elif slug is not None:
+                if not isinstance(slug, str) or not COMPETENCY_SLUG.match(slug) or \
+                        len(slug) > COMPETENCY_SLUG_MAX:
+                    problems.add(where, "%r: descriptor slug %r must match %s and be at most "
+                                 "%d characters, so competency:<slug> fits a pathway key"
+                                 % (name, slug, COMPETENCY_SLUG.pattern, COMPETENCY_SLUG_MAX))
+                    ok = False
+                elif slug in slugs_seen:
+                    problems.add(where, "%r and %r share the slug %r; a slug names one "
+                                 "competency pathway" % (slugs_seen[slug], name, slug))
+                    ok = False
+                else:
+                    slugs_seen[slug] = name
             before = len(problems.items)
             _check_aim_label(where, name, problems)
-            if ok and len(problems.items) == before:
+            if ok and slug is not None and base is not None and len(problems.items) == before:
                 out.append({"name": name, "category": str(category),
-                            "sortorder": len(out) + 1})
+                            "sortorder": len(out) + 1, "slug": slug,
+                            "url": "%s%s/%s/" % (base, site_slugify(str(category)), slug)})
+    return out
+
+
+# --- spec 006: learning pathways ----------------------------------------------------------
+
+DESCRIPTORS = REPO / "competencies"        # one descriptor per competency, frontmatter slug
+MKDOCS = REPO / "mkdocs.yml"                # its site_url is the competency site's host
+OUTCOME_LEVELS = REPO / "outcome-levels.yaml"
+COMPETENCY_SLUG = re.compile(r"^[a-z0-9][a-z0-9-]*$")
+COMPETENCY_SLUG_MAX = 94                    # competency:<slug> fits the 100-character key
+ROLE_KEY_MAX = 95                           # role:<key> fits the 100-character key
+ROLE_NAME_MAX = 255                         # local_ltuse_role_pathway.name
+PATHWAY_LEVELS = [1, 2, 3, 4]               # course_target_levels, exactly
+LEVEL_NUMBER = re.compile(r"\blevel\s*[0-4]\b", re.I)
+
+
+def site_slugify(name):
+    """gen_site.slugify(), copied: gen_site imports mkdocs_gen_files, which validate needs
+    not have. The two must give the same answer, or a competency's url misses its page."""
+    s = name.lower().replace("&", "and")
+    s = re.sub(r"[()]", "", s)
+    return re.sub(r"[^a-z0-9]+", "-", s).strip("-")
+
+
+def _descriptor_slugs(problems):
+    """{name: slug} from competencies/*.md frontmatter, read as gen_site.py reads it (a
+    missing slug is the file's stem), or None when the folder cannot be read."""
+    if not DESCRIPTORS.is_dir():
+        problems.add(_rel(DESCRIPTORS), "not found; a competency's slug comes from its "
+                     "descriptor")
+        return None
+    out = {}
+    for path in sorted(DESCRIPTORS.glob("*.md")):
+        try:
+            text = path.read_text(encoding="utf-8")
+        except OSError as exc:
+            problems.add(_rel(path), "cannot read: %s" % exc)
+            continue
+        if not text.startswith("---"):
+            continue
+        end = text.find("\n---", 3)
+        if end == -1:
+            continue
+        try:
+            fm = yaml.safe_load(text[3:end]) or {}
+        except yaml.YAMLError as exc:
+            problems.add(_rel(path), "frontmatter is not YAML: %s" % exc)
+            continue
+        if isinstance(fm, dict) and isinstance(fm.get("name"), str):
+            out[fm["name"]] = fm.get("slug", path.stem)
+    return out
+
+
+class _MkdocsLoader(yaml.SafeLoader):
+    """safe_load for mkdocs.yml, which carries !ENV and !!python/name tags: read as None."""
+
+
+_MkdocsLoader.add_multi_constructor("", lambda loader, suffix, node: None)
+
+
+def _site_url(problems):
+    """mkdocs.yml's site_url with one trailing /, or None (and a problem) if not https."""
+    where = _rel(MKDOCS)
+    try:
+        with open(MKDOCS, encoding="utf-8") as fh:
+            data = yaml.load(fh, Loader=_MkdocsLoader)
+    except (OSError, yaml.YAMLError) as exc:
+        problems.add(where, "cannot read site_url: %s" % exc)
+        return None
+    url = data.get("site_url") if isinstance(data, dict) else None
+    if not _text(url) or not url.startswith("https://") or \
+            not urllib.parse.urlsplit(url).netloc:
+        problems.add(where, "site_url must be an https URL; a competency's url is built "
+                     "from it")
+        return None
+    return url.rstrip("/") + "/"
+
+
+def _pathway_levels(problems):
+    """The payload's levels: course_target_levels with their labels, verbatim."""
+    where = _rel(OUTCOME_LEVELS)
+    try:
+        with open(OUTCOME_LEVELS, encoding="utf-8") as fh:
+            data = yaml.safe_load(fh)
+        known = cbc_wording.cbc_labels(OUTCOME_LEVELS)
+    except (OSError, yaml.YAMLError, KeyError, TypeError) as exc:
+        problems.add(where, "cannot read the level labels: %s" % exc)
+        return []
+    targets = data.get("course_target_levels") if isinstance(data, dict) else None
+    if targets != PATHWAY_LEVELS:
+        problems.add(where, "course_target_levels must be exactly %s; a pathway has a row "
+                     "for each" % PATHWAY_LEVELS)
+        return []
+    labels = {lv.get("id"): lv.get("label") for lv in data.get("levels") or []
+              if isinstance(lv, dict)}
+    out = []
+    for level in targets:
+        label = labels.get(level)
+        if not _text(label) or label not in known:
+            problems.add(where, "level %d has no CBC label" % level)
+            return []
+        out.append({"level": level, "label": label})
+    return out
+
+
+def _check_role_text(where, label, value, problems):
+    """A role's name or description: CBC wording, and never a level a learner holds."""
+    _check_aim_label(where, value, problems, strict=True)
+    lowered = value.lower()
+    try:
+        labels = cbc_wording.cbc_labels(OUTCOME_LEVELS)
+    except (OSError, yaml.YAMLError, KeyError, TypeError):
+        labels = []
+    for level_label in labels:
+        if level_label.lower() in lowered:
+            problems.add(where, "%s names the CBC level %r; a role names work, never a "
+                         "level a learner holds" % (label, level_label))
+    if LEVEL_NUMBER.search(value):
+        problems.add(where, "%s names a level by number; a role names work, never a level "
+                     "a learner holds" % label)
+
+
+def _validate_pathways(where, data, rows, decl, problems):
+    """Check pathways.yaml. Returns the payload's role_pathways array."""
+    _check_rows(where, data, rows, problems)
+    if not _text(data.get("purpose")):
+        problems.add(where, "purpose must be text")
+    roles = data.get("roles")
+    if not isinstance(roles, list):
+        problems.add(where, "roles must be a list, [] when no role is declared")
+        return []
+    live = {c["name"] for c in decl["competencies"]}
+    meta = set()
+    try:
+        with open(COMPETENCIES, encoding="utf-8") as fh:
+            framework = yaml.safe_load(fh)
+        if isinstance(framework, dict) and isinstance(framework.get(META_CATEGORY), list):
+            meta = {str(n) for n in framework[META_CATEGORY]}
+    except (OSError, yaml.YAMLError):
+        pass   # _competency_list has already said so
+    out, keys = [], set()
+    for i, role in enumerate(roles):
+        rwhere = "%s roles[%d]" % (where, i)
+        if not _check_keys(rwhere, role, {"key", "name", "competencies", "why"},
+                           {"description"}, problems):
+            continue
+        ok = True
+        key = role.get("key")
+        if not isinstance(key, str) or not KEY.match(key) or len(key) > ROLE_KEY_MAX:
+            problems.add(rwhere, "key %r must match %s and be at most %d characters, so "
+                         "role:<key> fits a pathway key" % (key, KEY.pattern, ROLE_KEY_MAX))
+            ok = False
+        else:
+            rwhere = "%s role %s" % (where, key)
+            if key in keys:
+                problems.add(rwhere, "declared twice")
+                ok = False
+            keys.add(key)
+        name = role.get("name")
+        if _check_name(rwhere, "name", name, ROLE_NAME_MAX, problems):
+            _check_role_text(rwhere, "name", name, problems)
+        else:
+            ok = False
+        description = role.get("description")
+        if description is None:
+            description = ""
+        elif not isinstance(description, str):
+            problems.add(rwhere, "description must be text")
+            ok = False
+        elif description:
+            _check_role_text(rwhere, "description", description, problems)
+        if not _text(role.get("why")):
+            problems.add(rwhere, "why must say who supplied the role")
+            ok = False
+        comps = role.get("competencies")
+        if not isinstance(comps, list) or not comps:
+            problems.add(rwhere, "competencies must be a non-empty list of names from "
+                         "competencies.yaml")
+            ok = False
+            comps = []
+        seen = set()
+        for comp in comps:
+            if not isinstance(comp, str):
+                problems.add(rwhere, "competency %r must be text" % (comp,))
+                ok = False
+                continue
+            if comp in seen:
+                problems.add(rwhere, "lists %r twice" % comp)
+                ok = False
+            elif comp in meta:
+                problems.add(rwhere, "%r is in %s, which is not a competency a pathway "
+                             "covers" % (comp, META_CATEGORY))
+                ok = False
+            elif comp not in live:
+                problems.add(rwhere, "%r is not in competencies.yaml (names compare exactly, "
+                             "case, & and spacing included)" % comp)
+                ok = False
+            seen.add(comp)
+        if ok:
+            out.append({"key": key, "name": name, "description": description,
+                        "sortorder": i, "competencies": list(comps)})
     return out
 
 
@@ -1881,6 +2135,102 @@ def _course_slugs(modules_dir):
     except OSError:
         pass
     return slugs
+
+
+def _declared_org_keys(site_dir):
+    """The organisation keys organisations.yaml declares, read leniently.
+
+    Only for load_org_courses() called on its own, by the publisher: validate() checks the
+    file itself and passes the keys it accepted.
+    """
+    path = site_dir / "organisations.yaml"
+    if not path.exists():
+        return set()
+    data = _load(path, Problems())
+    orgs = data.get("organisations") if isinstance(data, dict) else None
+    return {o["key"] for o in orgs or [] if isinstance(o, dict)
+            and isinstance(o.get("key"), str) and KEY.match(o["key"])}
+
+
+def load_org_courses(site_dir=None, modules_dir=None, org_keys=None):
+    """Read moodle/site/org-courses.yaml (spec 002 R11, contracts/declaration.md).
+
+    Returns (courses, Problems): `courses` is a list of {slug, organisation, why}, one per
+    course that only its host organisation's people may join. Every other course is
+    shared, which is also what an absent file or an empty list means.
+
+    This is the only reader of the file. scripts/moodle_payload.py calls it for each
+    course's `placement`, and validate() for the drift payload's `org_courses`, so the
+    publisher and the drift check cannot disagree.
+
+    Rules (the retired course-discussions.yaml's, plus one): rows cite
+    moodle/REQUIREMENTS.md; each slug is a course under modules/, compared with
+    course_stage.branch_slug(); no slug twice; `why` is required; and `organisation` is a
+    key declared in organisations.yaml. An invalid entry is left out of `courses`.
+    """
+    site_dir = pathlib.Path(site_dir) if site_dir is not None else SITE_DIR
+    modules_dir = pathlib.Path(modules_dir) if modules_dir is not None else MODULES
+    problems = Problems()
+    path = site_dir / ORG_COURSES_FILE
+    if not path.exists():
+        return [], problems
+    where = _rel(path)
+    before = len(problems.items)
+    data = _load(path, problems)
+    if data is None:
+        if len(problems.items) == before:
+            problems.add(where, "empty; write `rows: [8, 15]` and `org_only: []`")
+        return [], problems
+    required, optional = TOP_FILES[ORG_COURSES_FILE]
+    if not _check_keys(where, data, required, optional, problems):
+        return [], problems
+    _check_hosts(where, data, problems)
+    _check_rows(where, data, _requirement_rows(), problems)
+
+    entries = data.get("org_only")
+    if entries is None:
+        entries = []                     # `org_only:` with nothing under it: none
+    if not isinstance(entries, list):
+        problems.add(where, "org_only must be a list of {slug, organisation, why}")
+        return [], problems
+    if org_keys is None:
+        org_keys = _declared_org_keys(site_dir)
+
+    courses = _course_slugs(modules_dir)
+    out, seen = [], set()
+    for i, entry in enumerate(entries):
+        ewhere = "%s org_only[%d]" % (where, i)
+        if not _check_keys(ewhere, entry, {"slug", "organisation", "why"}, set(), problems):
+            continue
+        slug = entry.get("slug")
+        if not _text(slug):
+            problems.add(ewhere, "slug must be a course's branch_slug()")
+            continue
+        if slug not in courses:
+            canonical = branch_slug(slug)
+            if canonical in courses:
+                problems.add(ewhere, "%s: write it as %s, the course's branch_slug()"
+                             % (slug, canonical))
+            else:
+                problems.add(ewhere, "%s is not a course under modules/" % slug)
+            continue
+        if slug in seen:
+            problems.add(ewhere, "%s is declared twice; a course has at most one host "
+                         "organisation" % slug)
+            continue
+        seen.add(slug)
+        org = entry.get("organisation")
+        if org not in org_keys:
+            problems.add(ewhere, "%s: organisation %r is not a key in organisations.yaml"
+                         % (slug, org))
+            continue
+        if not _text(entry.get("why")):
+            problems.add(ewhere, "%s: why must record the approval (\"approved by the "
+                         "maintainer, issue #N\"), never the organisation's circumstances"
+                         % slug)
+            continue
+        out.append({"slug": slug, "organisation": org, "why": entry["why"]})
+    return out, problems
 
 
 def _check_source(where, component, version, source, problems):
@@ -2503,11 +2853,18 @@ def build_payload(decl, mode, environ, redact=False):
         "cohorts": decl["cohorts"],
         "profile_fields": decl["profile_fields"],
         "cohort_rules": decl["cohort_rules"],
+        # Spec 002 R11: the organisation-only courses, for placement drift. The `why` stays
+        # in the repo; the server needs only where each course belongs.
+        "org_courses": decl["org_courses"],
         # Spec 004, in application order; reports last (data-model "Rendered payload
         # additions"). Every {org} is already expanded.
         "course_field_category": decl["course_field_category"],
         "course_fields": decl["course_fields"],
         "competencies": decl["competencies"],
+        # Spec 006, after competencies and before reports, so a role pathway is applied
+        # against the competency rows this run has just set (contracts/declaration.md).
+        "levels": decl["levels"],
+        "role_pathways": decl["role_pathways"],
         "reports": decl["reports"],
         # Spec 013, after reports (contracts/declaration.md "Payload arrays"). Images travel
         # as base64, and the badge template carries cbc_wording's deny patterns, so the
@@ -2588,13 +2945,13 @@ def _summary(decl):
     files = len({s["file"] for s in decl["settings"]})
     return ("%d settings in %d files, %d plugins, %d roles, %d ignore entries, "
             "%d categories, %d cohorts, %d profile fields, %d cohort rules, "
-            "%d course fields, %d competencies, %d reports, "
+            "%d organisation-only courses, %d course fields, %d competencies, %d reports, "
             "%d badge template, %d certificate template, %d office-hours course, "
             "%d dashboard blocks"
             % (len(decl["settings"]), files, len(decl["plugins"]), len(decl["roles"]),
                len(decl["ignore"]), len(decl["categories"]), len(decl["cohorts"]),
                len(decl["profile_fields"]), len(decl["cohort_rules"]),
-               len(decl["course_fields"]), len(decl["competencies"]), len(decl["reports"]),
+               len(decl["org_courses"]), len(decl["course_fields"]), len(decl["competencies"]), len(decl["reports"]),
                decl["badge_template"] is not None, decl["certificate_template"] is not None,
                decl["officehours"] is not None, len(decl["dashboard"])))
 

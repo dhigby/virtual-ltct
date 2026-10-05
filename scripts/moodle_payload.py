@@ -19,7 +19,8 @@ WHAT COMES OUT
 
     <out>/<slug>/manifest.json      the structure: sections, modules, quizzes, and the
                                     course discussion (spec 012), open across
-                                    organisations (spec 002 R3)
+                                    organisations (spec 002 R3), and the course's
+                                    placement (spec 002 R11)
     <out>/<slug>/pages/<name>.html  one rendered page per included markdown file
     <out>/<slug>/assets/<name>      every asset a published page references, as the
                                     LIGHTER copy scripts/image_reduce.py makes of it --
@@ -369,6 +370,7 @@ class Payload:
             "sections": sections,
             "quizzes": quizzes,
             "discussion": self._discussion(),
+            "placement": self._placement(),
             "withheld": self.withheld,
             "notes": self.notes,
             "assets": records,
@@ -444,6 +446,25 @@ class Payload:
             "name": DISCUSSION_NAME,
             "intro_html": render(DISCUSSION_INTRO_MD),
         }
+
+    def _placement(self):
+        """Whether only one organisation's people may join this course (spec 002 R11).
+
+        Read from moodle/site/org-courses.yaml through site_config.load_org_courses(), the
+        loader drift uses, so the two cannot disagree. An invalid declaration stops the
+        build rather than guessing: a typo that silently shares an organisation-only course
+        is a decision nobody made.
+        """
+        courses, problems = site_config.load_org_courses(self.site_dir)
+        if problems:
+            raise SystemExit("moodle/site/%s is invalid; run scripts/site_config.py "
+                             "validate:\n  %s" % (site_config.ORG_COURSES_FILE,
+                                                  "\n  ".join(problems.items)))
+        for course in courses:
+            if course["slug"] == self.url_slug:
+                return {"org_only": True,
+                        "category_idnumber": "ltct:org:" + course["organisation"]}
+        return {"org_only": False, "category_idnumber": None}
 
     def _page(self, path, asset_by_rel, module_ids, excluded_names, used_assets):
         raw = path.read_text(encoding="utf-8", errors="replace")
@@ -636,6 +657,9 @@ def main():
     print("  assets    %d" % len(assets))
     report_images(manifest)
     print("  discussion %s" % manifest["discussion"]["idnumber"])
+    placement = manifest["placement"]
+    print("  placement %s" % (placement["category_idnumber"] if placement["org_only"]
+                              else "shared"))
     for note in manifest["notes"]:
         print("  note      %s" % note)
     if manifest["withheld"]:

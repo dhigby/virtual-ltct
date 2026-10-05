@@ -181,7 +181,7 @@ final class admin_test extends \advanced_testcase {
         $accounts = $this->accounts('fixture-learner@example.org');
         $user = reset($accounts);
         $this->assertTrue(is_enrolled(\context_course::instance($this->course->id), $user->id, '', true));
-        $instance = organisation\actions::org_enrol_instance($this->course);
+        $instance = organisation\actions::org_instance($this->course, true);
         $this->assertSame(organisation\access::ENROL_MARKER, $instance->customchar1);
     }
 
@@ -191,7 +191,7 @@ final class admin_test extends \advanced_testcase {
         intake_service::apply_row($row, 'new');
         $accounts = $this->accounts('fixture-learner@example.org');
         $user = reset($accounts);
-        $instance = organisation\actions::org_enrol_instance($this->course);
+        $instance = organisation\actions::org_instance($this->course, true);
         enrol_get_plugin('self')->update_user_enrol($instance, $user->id, ENROL_USER_SUSPENDED);
         $this->assertSame('will_enrol', intake_service::preview([$row], false)['rows'][0]['outcome']);
 

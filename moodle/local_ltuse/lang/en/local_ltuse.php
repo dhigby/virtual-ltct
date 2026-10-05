@@ -73,6 +73,24 @@ $string['mentoring:nottracked'] = 'Completion not tracked';
 $string['mentoring:enrolmentsuspended'] = 'enrolment suspended';
 $string['mentoring:enrolmentremoved'] = 'no longer enrolled';
 $string['mentoring:thislearner'] = 'Mentoring';
+// Spec 003 Phase B: the Manage mentors page, for the site team and a learner's organisation
+// manager. Names in {$a} are escaped by the page.
+$string['mentors:manage'] = 'Manage mentors';
+$string['mentors:heading'] = 'Mentors of {$a}';
+$string['mentors:intro'] = 'A mentor sees this learner\'s courses and progress, and the two become message contacts. This is the learner\'s mentor across all their courses.';
+$string['mentors:mentor'] = 'Mentor';
+$string['mentors:none'] = 'This learner has no mentor yet.';
+$string['mentors:add'] = 'Add a mentor';
+$string['mentors:choose'] = 'Choose a mentor';
+$string['mentors:remove'] = 'Remove';
+$string['mentors:nocandidates'] = 'Nobody is available to add. The site team decides who can be chosen as a mentor.';
+$string['mentors:confirmadd'] = 'Make {$a->mentor} a mentor of {$a->learner}? {$a->mentor} will see {$a->learner}\'s courses and progress, and the two will become message contacts.';
+$string['mentors:confirmremove'] = 'Stop {$a->mentor} mentoring {$a->learner}? {$a->mentor} will no longer see {$a->learner}\'s courses and progress. Nothing of {$a->learner}\'s work or records changes.';
+$string['mentors:added'] = '{$a->mentor} is now a mentor of {$a->learner}.';
+$string['mentors:removed'] = '{$a->mentor} is no longer a mentor of {$a->learner}.';
+$string['mentors:notallowed'] = 'You cannot manage mentors for this person.';
+$string['mentors:invalidmentor'] = 'That person cannot be added or removed as a mentor here.';
+$string['mentors:back'] = 'Back to the profile';
 $string['nomentoring'] = 'Nobody is linked to you as a mentor or learner yet.';
 $string['privacy:metadata:mentor_contact'] = 'The message contacts this plugin made between a mentor and their learner, so that ending the mentor relationship removes them again.';
 $string['privacy:metadata:mentor_contact:mentorid'] = 'The mentor.';
@@ -80,7 +98,7 @@ $string['privacy:metadata:mentor_contact:learnerid'] = 'The learner.';
 $string['privacy:metadata:mentor_contact:timecreated'] = 'When the contact was made.';
 $string['privacy:path:mentorcontacts'] = 'Mentor message contacts';
 $string['privacy:metadata:mentor_contact:contactid'] = 'The message contact this plugin made, so that only that contact is ever removed.';
-$string['privacy:metadata:core_message'] = 'While a mentor relationship lasts, the mentor and the learner are made message contacts of each other. The contact is removed when the relationship ends. Calendar changes and office-hours bookings are sent as notifications.';
+$string['privacy:metadata:core_message'] = 'While a mentor relationship lasts, the mentor and the learner are made message contacts of each other. The contact is removed when the relationship ends. An organisation\'s managers and the people in it are made contacts in the same way while both are in the organisation. Calendar changes and office-hours bookings are sent as notifications.';
 
 // Spec 011: calendar change notices, office-hours booking notices, the time zone notice and
 // the tasks. Times are always shown in the reader's own zone, with the zone named. No string
@@ -135,12 +153,101 @@ $string['privacy:metadata:booking:timeduration'] = 'The booking\'s length, as la
 $string['privacy:metadata:booking:timecreated'] = 'When the booking was recorded.';
 $string['privacy:path:bookings'] = 'Office-hours bookings';
 
+// Spec 002 (amendment 2026-10-02, research R10-R12): the "My organisation" page, its actions,
+// the organisation-enrolment instance, organisation-only course placement and the contacts
+// task. Course completion only; no string here names a CBC level or says "certified".
+$string['organisation'] = 'My organisation';
+$string['organisation:empty'] = 'You do not manage an organisation yet, or its people have not been set up.';
+$string['organisation:nopeople'] = 'Nobody is in this organisation yet.';
+$string['organisation:notmanager'] = 'This page is for organisation managers.';
+$string['organisation:notyours'] = 'You cannot manage this person\'s account: they are not a learner in an organisation you manage. The site team can help.';
+$string['organisation:notthiscourse'] = 'You cannot enrol this person in that course: only published courses, or courses of their own organisation, are open to managers.';
+$string['organisation:notorgenrolment'] = 'This person was not enrolled in that course by a manager, so the enrolment is the site team\'s to change.';
+$string['organisation:selfdisabled'] = 'Organisation enrolment is not available on this site (the self enrolment method is turned off). The site team can turn it on.';
+$string['organisation:siteteam'] = 'Staff, mentors and managers are managed by the site team.';
+$string['organisation:suspended'] = 'Suspended';
+$string['organisation:mentors'] = 'Mentors';
+$string['organisation:enrolin'] = 'Course to enrol them in';
+$string['organisation:action:enrol'] = 'Enrol';
+$string['organisation:action:unenrol'] = 'Unenrol';
+$string['organisation:action:reset'] = 'Send a password reset link';
+$string['organisation:action:suspend'] = 'Suspend account';
+$string['organisation:action:reactivate'] = 'Reactivate account';
+$string['organisation:confirm:enrol'] = 'Enrol {$a->person} in "{$a->course}" as a student? They will see the course on their dashboard.';
+$string['organisation:confirm:unenrol'] = 'Unenrol {$a->person} from "{$a->course}"? If this is their only enrolment in the course, their grades and group places in it are removed. Their activity and completion records are kept.';
+$string['organisation:confirm:reset'] = 'Send {$a->person} a password reset link? It goes to their own email address only; you will not see it.';
+$string['organisation:confirm:suspend'] = 'Suspend {$a->person}\'s account? This applies to the whole site, not just your organisation\'s courses: they are signed out now and cannot sign in until the account is reactivated.';
+$string['organisation:confirm:reactivate'] = 'Reactivate {$a->person}\'s account? They will be able to sign in again.';
+$string['organisation:done:enrol'] = 'Enrolled.';
+$string['organisation:done:unenrol'] = 'Unenrolled.';
+$string['organisation:done:suspend'] = 'The account is suspended.';
+$string['organisation:done:reactivate'] = 'The account is active again.';
+$string['organisation:reset:sent'] = 'A password reset email was sent to their own address.';
+$string['organisation:reset:alreadysent'] = 'Nothing was sent: a reset link was already sent to them twice recently. They can use the last one, or try again later.';
+$string['organisation:reset:notconfirmed'] = 'Nothing was sent: their account has not been confirmed yet. The site team can help.';
+$string['organisation:reset:noemail'] = 'Nothing was sent: their account has no email address. The site team can help.';
+$string['organisation:reset:notfound'] = 'Nothing was sent: no active account could be found for them. The site team can help.';
+$string['organisation:reset:maybesent'] = 'The request was made. This site does not say whether an email was sent; ask them to check their inbox.';
+$string['organisation:reset:suspended'] = 'Nothing was sent: their account is suspended. Reactivate it first.';
+$string['organisation:reset:failed'] = 'The reset email could not be sent. The site team can help.';
+$string['organisation:reset:unknown'] = 'The request was made, but the result is not known. Ask them to check their inbox.';
+$string['orgenrol:name'] = 'Organisation enrolment';
+$string['error:nocategoryidnumber'] = 'No single course category has idnumber "{$a}", or the course could not be moved there.';
+$string['task:reconcileorgcontacts'] = 'Keep organisation managers\' contacts and organisation-only enrolments in step';
+$string['privacy:metadata:org_contact'] = 'The message contacts this plugin made between an organisation\'s manager and a person in that organisation, so that leaving the organisation removes them again.';
+$string['privacy:metadata:org_contact:managerid'] = 'The organisation manager.';
+$string['privacy:metadata:org_contact:memberid'] = 'The person in their organisation.';
+$string['privacy:metadata:org_contact:contactid'] = 'The message contact this plugin made, so that only that contact is ever removed.';
+$string['privacy:metadata:org_contact:timecreated'] = 'When the contact was made.';
+$string['privacy:path:orgcontacts'] = 'Organisation message contacts';
+
+// Spec 006: pathways. A pathway lists the courses that aim at a competency, grouped by the
+// CBC level each course aims at. No string here names a level as anyone's, or says a learner
+// reached, achieved or attained anything, or is competent, or certified;
+// tests/test_pathway_wording.py checks every string in this block (R13, SC-004).
+$string['pathways'] = 'Pathways';
+$string['pathway:mine'] = 'Your pathways';
+$string['pathway:none'] = 'No pathway has been given to you yet. You can browse every pathway.';
+$string['pathway:noneforlearner'] = 'No pathway has been given to this learner yet.';
+$string['pathway:donelearner'] = 'The training on this pathway is completed.';
+$string['pathway:nocohorts'] = 'There is no cohort you can give a pathway to.';
+$string['pathway:assignhelp'] = 'Giving a pathway to a cohort shows it to every member, now and when they join. It does not enrol anyone in its courses.';
+$string['pathway:browse'] = 'Browse all pathways';
+$string['pathway:aimsat'] = 'Aims at {$a}';
+$string['pathway:nocourseyet'] = 'No course yet';
+$string['pathway:nocourseyetlink'] = 'See what this competency involves';
+$string['pathway:next'] = 'Next';
+$string['pathway:completed'] = 'Completed';
+$string['pathway:inprogress'] = 'In progress';
+$string['pathway:notstarted'] = 'Not started';
+$string['pathway:done'] = 'You have completed the training on this pathway.';
+$string['pathway:roletotal'] = '{$a->done} of {$a->total} courses completed';
+$string['pathway:unknown'] = 'This pathway does not exist.';
+$string['pathway:manage'] = 'Assign pathways';
+$string['pathway:assign'] = 'Assign';
+$string['pathway:unassign'] = 'Remove';
+$string['pathway:cohortprogress'] = 'Pathway progress: {$a}';
+$string['pathway:nolevels'] = 'Pathways cannot be shown yet: their headings have not been set up on this site. Ask the site team to apply the site configuration.';
+$string['pathway:roles'] = 'Role pathways';
+// End of the spec 006 pathways block.
+
+$string['eventpathwaycourseschanged'] = 'Pathway courses changed';
+$string['eventpathwayassigned'] = 'Pathway assigned to a cohort';
+$string['eventpathwayunassigned'] = 'Pathway removed from a cohort';
+
+$string['privacy:metadata:local_ltuse_pathway_cohort'] = 'Each pathway given to a cohort, with the user who made the link. The link belongs to the cohort, so deleting that user\'s data keeps it and forgets who made it.';
+$string['privacy:metadata:local_ltuse_pathway_cohort:pathwaykey'] = 'The pathway given to the cohort.';
+$string['privacy:metadata:local_ltuse_pathway_cohort:cohortid'] = 'The cohort the pathway was given to.';
+$string['privacy:metadata:local_ltuse_pathway_cohort:usermodified'] = 'The user who made or last changed the link.';
+$string['privacy:metadata:local_ltuse_pathway_cohort:timecreated'] = 'When the link was made.';
+$string['privacy:metadata:local_ltuse_pathway_cohort:timemodified'] = 'When the link was last changed.';
+$string['privacy:path:pathways'] = 'Pathways given to cohorts';
+
 // Spec 008: administration. The site team's tool and its service; never shown to a learner.
 // No string here names a person, an organisation or a protection level.
 $string['ltuse:administer'] = 'Administer LTC learners through the administration service';
 $string['setting:coursementorsync'] = 'Enrol course mentors automatically';
 $string['setting:coursementorsync_desc'] = 'Keep each learner\'s course mentors enrolled as Course mentor in the courses they take, and remove them as soon as the reason ends. Declared in moodle/site/settings/admin.yaml; change it there.';
-$string['error:actionrefused'] = 'Refused: {$a}. Nothing was changed.';
 
 // Spec 008: why a row or a whole command is refused. Shown by ltct_admin.py to the site team.
 // {$a} is only ever an idnumber, an organisation key or a course idnumber, never a person.

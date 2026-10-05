@@ -13,14 +13,24 @@ $plugin->version   = 2026100801;   // Administration (spec 008): the ltuse_admin
                                    // local/ltuse:administer capability and the coursementorsync
                                    // setting (2026100800); then the course-mentor table
                                    // (local_ltuse_course_mentor, savepoint 2026100801), its sync,
-                                   // observers and hourly reconcile. Agreed stamps: 016 = 2026100500, 006 = 20261006NN;
-                                   // whichever merges second re-bumps above main, renumbers its
+                                   // observers and hourly reconcile. Spec 016 (2026100500)
+                                   // merges after this, so it re-bumps above it, renumbers its
                                    // upgrade.php savepoint and re-pins site.yaml. Before it,
-                                   // events and office hours (spec 011, 2026100400): calendar change
-                                   // notices, the office-hours sync, booking notices and
-                                   // their table (local_ltuse_booking, savepoint 2026100400),
-                                   // the time zone notice. After
-                                   // open courses (spec 002, 2026100302): the course
+                                   // managers' own people (spec 002 amendment 2026-10-02,
+                                   // 2026100602): the "My organisation" page and its actions, the
+                                   // local_ltuse_org_contact table and the hourly
+                                   // reconcile_org_contacts task, the cohort observers, and the
+                                   // local_ltuse_place_course web service. Before it, manage mentors
+                                   // (spec 003 Phase B, 2026100601): mentors.php and the
+                                   // profile link, no schema change; and learning pathways
+                                   // (spec 006, 2026100600): the pathway tables
+                                   // (local_ltuse_course_pathway, _role_pathway,
+                                   // _role_pathway_comp, _pathway_cohort), slug and url on
+                                   // local_ltuse_competency, set_course_pathway. Before them,
+                                   // events and office hours (spec 011, 2026100400): calendar
+                                   // change notices, the office-hours sync, booking notices
+                                   // and their table (local_ltuse_booking), the time zone
+                                   // notice. After open courses (spec 002, 2026100302): the course
                                    // discussion is always open, drift checks each published
                                    // ltct: course's group mode, and a managers cohort synced
                                    // into a shared course blocks apply. Before them: mentor
@@ -47,7 +57,7 @@ $plugin->requires  = 2026042000;   // Moodle 5.2 -- the release this was
 $plugin->supported = [502, 502];
 
 $plugin->maturity  = MATURITY_ALPHA;
-$plugin->release   = '0.10.0';
+$plugin->release   = '0.12.0';   // 0.11.0 is spec 003's mentors page.
 
 // No third-party dependencies, deliberately. Sections were originally going to be
 // local_wsmanagesections' job, but it could not be installed here, so local_ltuse grew an

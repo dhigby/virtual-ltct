@@ -11,9 +11,9 @@ the pull request that adds a setting is the record of why it exists.
 | `site.yaml` | The minimum Moodle release, and each plugin with its pinned version and enabled state. |
 | `roles.yaml` | Roles and their system-context permissions. |
 | `settings/*.yaml` | Settings, one file per topic. Each cites the rows of [`../REQUIREMENTS.md`](../REQUIREMENTS.md) it serves. |
-| `course-discussions.yaml` | Which courses' discussion forums are shared across organisations. Every published course has one, separated by organisation unless listed here (spec 012). |
 | `ignore.yaml` | Undeclared settings that are allowed to differ from Moodle's default, each with its reason. |
-| `organisations.yaml` | The partner organisations we host, and the shared course categories. Each organisation gets a category, a learner cohort and a managers cohort. |
+| `organisations.yaml` | The partner organisations we host, the shared course categories, and the mentors cohort. Each organisation gets a category, a learner cohort and a managers cohort. |
+| `org-courses.yaml` | The courses only one organisation's people may join. Every other course is shared and open to every organisation. Only the maintainer edits it (spec 002). |
 | `profile-fields.yaml` | The profile fields every learner has: organisation, role in the work and areas of expertise. |
 | `course-fields.yaml` | The two course fields the publisher fills from each course's frontmatter: the competencies it aims at and the level it aims at. Both are locked, so only the publisher and the site team can change them. |
 | `reports.yaml` | The report builder reports: one learner-progress report per organisation, for its managers, with a weekly email; and three for the site team (completions per course, the competencies published courses aim at, and the pilots). |
@@ -21,6 +21,7 @@ the pull request that adds a setting is the record of why it exists.
 | `office-hours.yaml` | The one course where mentors offer office hours and learners book them, and its booking activity (spec 011). |
 | `dashboard.yaml` | Blocks every learner's default dashboard carries: Upcoming events (spec 011). |
 | `settings/calendar.yaml` | Calendar export, and the site's default time zone, UTC (spec 011). |
+| `pathways.yaml` | Role pathways: a named set of competencies a role needs (spec 006). Empty until a role is supplied. |
 
 The shapes are specified in
 [`specs/001-site-config-as-code/contracts/declaration.md`](../../specs/001-site-config-as-code/contracts/declaration.md),
@@ -136,6 +137,31 @@ The profile field category, "About your work", is found by its name, because Moo
 
 Each organisation also gets its own learner-progress report and weekly schedule, made from the `per: organisation` entry in `reports.yaml`. Its managers cohort is the report's only audience, and the report shows only that organisation's learners. Apply sets back a report that was edited by hand. It never runs a report, so its output holds no learner names or row counts.
 
+The reports count a learner as delivery however they were enrolled, except manually. Manual enrolment is kept for stage-7 pilots, and the pilots report shows those learners on their own.
+
+## Organisation-only courses
+
+Courses are shared. Everyone enrolled in a course sees everyone else in it, whatever their organisation. A course only for one organisation's people is listed in `org-courses.yaml`:
+
+```yaml
+org_only:
+  - slug: <course slug>         # the course's folder name under modules/, in its branch form
+    organisation: seed-company  # a key in organisations.yaml
+    why: approved by the maintainer, issue #N
+```
+
+**Only the maintainer adds an entry.** The `why` records the approval and nothing else. Never write the organisation's reasons or circumstances in it: this repo is public. Keep the reason privately.
+
+Organisation-only means only that organisation's people are enrolled. It does not hide the content: the course stays in this public repo, and its name shows in the organisation's category in Moodle.
+
+**To make a course organisation-only:**
+
+1. Add the entry, and run `validate`.
+2. Publish the course. The publisher puts it in the organisation's category, `ltct:org:<key>`, and puts it back there on every publish if someone moves it.
+3. Enrol the organisation as in "An organisation-only course" below.
+
+Drift reports a listed course that is outside its organisation's category as `changed`, and an `ltct:` course inside an organisation's category that is not listed as `extra`. Apply never moves a course, because a move changes which category roles the course inherits. Publish it again instead, or move it by hand.
+
 ## Badges and the certificate
 
 Row #23 (spec 013). These are training evidence only. Every text says "training completed",
@@ -159,6 +185,33 @@ Organisation managers follow completion through their reports, not through badge
 **Retire a course by hiding it, never by deleting it.** Deleting a course archives its badges,
 which breaks verification for everyone who holds one, and deleting its certificate activity
 deletes every certificate code already issued. A hidden course keeps both working.
+
+## Pathways
+
+Row #12 (spec 006). A **competency pathway** is never declared or built by hand. Moodle works
+it out when someone opens it, from what the publisher records on every publish: which
+competencies a course aims at, the level it aims at, and whether it is delivered (stage 8). A
+republish with a changed `competencies:` list or `target_outcome_level` moves the course
+between pathways with no other step. Pilots never appear.
+
+`apply` also copies two things in for the pathway pages: the four level labels from
+[`outcome-levels.yaml`](../../outcome-levels.yaml), and each competency's page on the
+competency site, built from the descriptor's `slug` and `mkdocs.yml`'s `site_url`.
+
+**Adding a role pathway.** A role is added only when a person supplies it: the maintainer with
+the department or the CBC programme. Add an entry to `pathways.yaml` with a `key`, a `name`,
+the role's `competencies` (each copied exactly from `competencies.yaml`) and a `why` naming who
+supplied it, then run `validate` and `apply`. A role's name never names a CBC level. A role
+removed from the file is retired by `apply`, never deleted, so cohorts it was given to keep it
+once it is declared again.
+
+**Giving a pathway to a cohort.** The site team, or an organisation manager for their own
+organisation's cohorts, does this on the **Assign pathways** page. It changes what the cohort's
+members see; it enrols nobody. Enrolling a cohort into a pathway's courses is spec 008's
+tooling.
+
+**Taking a course out of pathways.** Hide it. A hidden course leaves every pathway at once and
+its learners keep their completions. Never delete it (see badges above).
 
 ## Report downloads and emailed reports
 
@@ -229,6 +282,8 @@ python scripts/ltct_admin.py managers ~/ltct-private/managers.csv
 
 Columns `email`, `cohort` and `action` (`add` or `remove`). The cohort is an organisation's managers cohort (`ltct:org:<key>:managers`) or `ltct:mentors`. An organisation's learner cohort is refused, because its members follow the organisation field. A manager becomes Organisation manager in every course their organisation is enrolled in, and removing them takes the role away. An ALTC covering several organisations is one row per organisation.
 
+**Course leaders** (Course mentor, `teacher`) are enrolled by hand in each course they lead, with no group. The tool does not do this.
+
 ### Mentors
 
 ```bash
@@ -239,7 +294,7 @@ python scripts/ltct_admin.py course-mentors ~/ltct-private/course-mentors.csv [-
 
 - `mentors assign` (columns `learner_email`, `mentor_email`) gives each learner their mentor, as the page in [Mentors](#mentors-assigning-and-ending-a-relationship) does one at a time. Each mentor must be in `ltct:mentors`.
 - `mentors end` ends all of one mentor's relationships.
-- `course-mentors` (columns `course`, `mentor_email`, and `learner_email` or `cohort`) records who assesses a learner, or a cohort, in one course, in place of their usual mentor (that precedence awaits spec 008 plan decision 2). The automatic course-mentor sync does the enrolling, once it is turned on (decision 11).
+- `course-mentors` (columns `course`, `mentor_email`, and `learner_email` or `cohort`) records who assesses a learner, or a cohort, in one course, in place of their usual mentor (spec 008 plan decision 2). The automatic course-mentor sync does the enrolling once it is turned on, which waits on spec 016 (decision 11).
 
 ### Suspend and reactivate
 
@@ -298,9 +353,25 @@ You never need the site team for those, and you cannot see or change anyone outs
 organisation. Ask the site team only for new accounts, or to move someone to another
 organisation.
 
+## The managers' page
+
+Each organisation manager has a **My organisation** link in their user menu. The page lists their organisation's people, with each person's courses and progress, and their email. For their own learners they can:
+
+- enrol them in a published course, or in their organisation's own course, as Student;
+- unenrol them from a course they enrolled them in;
+- send them a password reset link, which goes only to the learner's own email;
+- suspend their account, which ends their sessions and applies to the whole site, and reactivate it;
+- assign and end their mentors, chosen from the Mentors cohort.
+
+A manager never acts on staff, mentors or other managers, and never on another organisation's people. Those stay with the site team. A manager cannot create accounts or change anyone's organisation. Moodle's log records the manager as the person who made each change.
+
+A manager's enrolments count as delivery in the reports, as cohort sync does. They go through a separate enrolment method in each course, a self enrolment named **Organisation enrolment**, made the first time a manager enrols someone there. Leave it enabled, and leave its new enrolments switched off: learners cannot use it to enrol themselves, and disabling it makes its enrolments inactive.
+
 ## Mentors: assigning and ending a relationship
 
 A mentor follows the learners assigned to them across every course those learners take, for as long as the relationship lasts (spec 003). The relationship is the `mentor` role, held by the mentor **in the learner's own profile**, never in a course. Who mentors whom is learner data, so it lives only in Moodle and is never written in this repo.
+
+An organisation manager can also assign and end mentors for their own learners, from the managers' page above. The steps below are the site team's.
 
 **To assign a mentor** (site team, or an admin):
 
@@ -327,7 +398,7 @@ php public/local/ltuse/cli/mentor_contacts.php --end-all --mentor=<username>
 
 It asks first, prints counts only, and leaves every learner's records as they are. After the upgrade that adds mentor contacts, run `php public/local/ltuse/cli/mentor_contacts.php --sync` once, so mentors assigned earlier get their contacts too.
 
-**Feedback on a learner's work** is not this role's job, but a learner's mentors are also their **course mentors** by default: `local_ltuse` enrols them as Course mentor (`teacher`) in each course the learner takes, in a "Mentor group" with the learners they assess there, and removes them as soon as the reason ends (spec 008 research R10). A one-course or cohort mentor recorded with `ltct_admin.py course-mentors` takes the default mentor's place in that course (spec 012; that precedence awaits spec 008 plan decision 2). To assign many mentors at once, use `ltct_admin.py mentors assign`; to end all of one mentor's relationships, `ltct_admin.py mentors end`. The automatic sync stays off (`local_ltuse/coursementorsync: 0` in `settings/admin.yaml`) until the maintainer decides how far a course mentor may see (spec 008 plan, decision 11). Until then, nobody is enrolled as a course mentor automatically.
+**Feedback on a learner's work** is not this role's job, but a learner's mentors are also their **course mentors** by default: `local_ltuse` enrols them as Course mentor (`teacher`) in each course the learner takes, in a "Mentor group" with the learners they assess there, and removes them as soon as the reason ends (spec 008 research R10). A one-course or cohort mentor recorded with `ltct_admin.py course-mentors` takes the default mentor's place in that course (spec 012; spec 008 plan decision 2). To assign many mentors at once, use `ltct_admin.py mentors assign`; to end all of one mentor's relationships, `ltct_admin.py mentors end`. The automatic sync stays off (`local_ltuse/coursementorsync: 0` in `settings/admin.yaml`) until spec 016 limits what a course mentor sees of protected learners to their own mentor group (spec 008 plan decision 11, approved 2026-10-04). Until then, nobody is enrolled as a course mentor automatically: where a course asks for work, enrol the mentor as **Course mentor** (`teacher`) in that course by hand, with no group.
 
 ## Events and live sessions
 

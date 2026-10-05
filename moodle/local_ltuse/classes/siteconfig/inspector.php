@@ -50,6 +50,13 @@ use core_plugin_manager;
  *   competencies           [{name, category, sortorder}]             competencies
  *   reports                [{area, name, source, columns, ...}]      reports
  *
+ * and, from spec 006 (specs/006-learning-pathways/contracts/declaration.md "Payload arrays"),
+ * a `slug` and `url` on each competency, and two arrays checked after competencies and before
+ * reports, so a role pathway is checked against the competency rows the same run sets:
+ *
+ *   levels                 [{level, label}]                          pathwaylevels
+ *   role_pathways          [{key, name, description, sortorder, competencies}]  rolepathways
+ *
  * and, from spec 013 (specs/013-certificates-badges/contracts/declaration.md "Payload arrays"),
  * two templates, checked after reports:
  *
@@ -61,6 +68,11 @@ use core_plugin_manager;
  *
  *   officehours   {course {...}, scheduler {...}, groups {name_template}}   officehours
  *   dashboard     [{block, region}]                                        dashboard
+ *
+ * and, from spec 002's amendment (2026-10-02, research R11), the organisation-only courses
+ * moodle/site/org-courses.yaml declares, read only by check_course_placement() for drift:
+ *
+ *   org_courses   [{slug, course_idnumber?, category_idnumber}]   course_idnumber defaults to ltct:<slug>
  *
  * A spec 004 result may carry `blocking` => report::BLOCKS_REPORT, which leaves only its own
  * report unwritten; has_blocking() delegates to report::has_blocking() so such a result does
@@ -121,6 +133,8 @@ class inspector {
     const RESULT_DIFFERS = 'differs';
     /** A managers cohort is synced into a shared course (spec 002 R2). Blocking. */
     const RESULT_SHARED_MANAGERS = 'shared-managers';
+    /** Something this site owns that the declaration does not list (spec 002 R11 placement). */
+    const RESULT_EXTRA = 'extra';
 
     /** Course-module idnumber suffix of a course's discussion forum (spec 012, R7). */
     const DISCUSSION_SUFFIX = ':discussion';
@@ -179,6 +193,12 @@ class inspector {
 
     /** @var reports|null checks the payload's custom reports */
     protected $reports = null;
+
+    /** @var pathwaylevels|null checks the payload's level labels (spec 006) */
+    protected $pathwaylevels = null;
+
+    /** @var rolepathways|null checks the payload's role pathways (spec 006) */
+    protected $rolepathways = null;
 
     /** @var badgetemplate|null checks the payload's badge template (spec 013) */
     protected $badgetemplate = null;
@@ -286,6 +306,56 @@ class inspector {
             $this->competencies = new competencies(self::entries($this->declaration['competencies'] ?? []));
         }
         return $this->competencies;
+    }
+
+    // --- spec 006 checkers -----------------------------------------------------------------
+
+    /**
+     * Whether the payload declares the level labels. A payload from before spec 006 has no
+     * `levels`, and an empty array declares nothing, so neither is read as "unset them".
+     *
+     * @return bool
+     */
+    public function declares_levels(): bool {
+        return (bool)self::entries($this->declaration['levels'] ?? []);
+    }
+
+    /**
+     * @return pathwaylevels the checker for the payload's `levels`
+     */
+    public function pathwaylevels(): pathwaylevels {
+        if ($this->pathwaylevels === null) {
+            $this->pathwaylevels = new pathwaylevels(self::entries($this->declaration['levels'] ?? []));
+        }
+        return $this->pathwaylevels;
+    }
+
+    /**
+     * Whether the payload is spec 006's: it always carries `role_pathways`, `[]` when no role
+     * is declared. An empty list is still a declaration, since apply retires every live role
+     * it leaves out; a payload from before 006 has no key at all and manages no role.
+     *
+     * @return bool
+     */
+    public function declares_role_pathways(): bool {
+        return is_array($this->declaration['role_pathways'] ?? null);
+    }
+
+    /**
+     * @return rolepathways the checker for the payload's `role_pathways`, told which
+     *     competency names this run's competency list declares
+     */
+    public function rolepathways(): rolepathways {
+        if ($this->rolepathways === null) {
+            $names = [];
+            if ($this->declares_competencies()) {
+                foreach (self::entries($this->declaration['competencies']) as $competency) {
+                    $names[] = (string)($competency['name'] ?? '');
+                }
+            }
+            $this->rolepathways = new rolepathways(self::entries($this->declaration['role_pathways'] ?? []), $names);
+        }
+        return $this->rolepathways;
     }
 
     /**
@@ -507,6 +577,14 @@ class inspector {
         }
         if ($this->declares_competencies()) {
             $items = array_merge($items, $this->competencies()->check());
+        }
+        // Spec 006, after competencies and before reports (contracts/declaration.md "Payload
+        // arrays"). A role competency the list above creates is not a block.
+        if ($this->declares_levels()) {
+            $items = array_merge($items, $this->pathwaylevels()->check());
+        }
+        if ($this->declares_role_pathways()) {
+            $items = array_merge($items, $this->rolepathways()->check());
         }
         $items = array_merge($items, $this->reports()->check());
         // Spec 013, after reports (contracts/declaration.md "Payload arrays").
@@ -1213,6 +1291,64 @@ class inspector {
                 'shared courses are open across organisations; apply sets no groups');
             $item['courseid'] = (int)$course->id;
             $items[] = $item;
+        }
+        return $items;
+    }
+
+    /**
+     * Where each ltct: course sits, against org-courses.yaml (spec 002 R11, 2026-10-02).
+     *
+     *   changed  a declared organisation-only course outside its organisation's category
+     *   extra    an undeclared ltct: course inside any ltct:org:* category
+     *
+     * Neither blocks, and apply never fixes either: a move changes which category roles a
+     * course inherits, so only the publisher moves a course (local_ltuse_place_course), on its
+     * next publish. A declared course not on the site yet is the publisher's to create and is
+     * not reported. When the payload carries no `org_courses` key at all (a site_config.py from
+     * before R11), nothing is checked, rather than reporting every organisation course as extra.
+     * Reads course and course_categories by idnumber prefix (course_categories.idnumber is not
+     * indexed; README). Names no person. Read only.
+     *
+     * @return array[] item results, keyed 'course:<idnumber>:placement'; none is blocking
+     */
+    public function check_course_placement(): array {
+        global $DB;
+        if (!array_key_exists('org_courses', $this->declaration)) {
+            return [];
+        }
+        $prefix = \local_ltuse\util::IDNUMBER_PREFIX;
+        $declared = [];
+        foreach (self::entries($this->declaration['org_courses']) as $entry) {
+            $entry = (array)$entry;
+            $idnumber = (string)($entry['course_idnumber'] ?? ($prefix . ($entry['slug'] ?? '')));
+            $declared[$idnumber] = (string)($entry['category_idnumber'] ?? '');
+        }
+        $sql = "SELECT c.id, c.idnumber, cc.idnumber AS categoryidnumber
+                  FROM {course} c
+             LEFT JOIN {course_categories} cc ON cc.id = c.category
+                 WHERE " . $DB->sql_like('c.idnumber', ':prefix') . "
+              ORDER BY c.idnumber";
+        $courses = $DB->get_records_sql($sql, ['prefix' => $DB->sql_like_escape($prefix) . '%']);
+        $items = [];
+        foreach ($courses as $course) {
+            $slug = substr((string)$course->idnumber, strlen($prefix));
+            if ($slug === '' || strpos($slug, ':') !== false) {
+                continue; // Not a course identity (ltct:<slug>).
+            }
+            $live = (string)$course->categoryidnumber;
+            $subject = "course:{$course->idnumber}:placement";
+            if (isset($declared[$course->idnumber])) {
+                if ($live !== $declared[$course->idnumber]) {
+                    $items[] = self::result('course', $subject, self::RESULT_CHANGED, $declared[$course->idnumber],
+                        $live === '' ? null : $live,
+                        'declared organisation-only in org-courses.yaml but outside its category; the next '
+                            . 'publish moves it (apply never moves a course)');
+                }
+            } else if (strpos($live, 'ltct:org:') === 0) {
+                $items[] = self::result('course', $subject, self::RESULT_EXTRA, null, $live,
+                    'in an organisation\'s category but not declared in org-courses.yaml; declare it, or '
+                        . 'move it out by hand (apply never moves a course)');
+            }
         }
         return $items;
     }

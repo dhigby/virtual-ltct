@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<XMLDB PATH="local/ltuse/db" VERSION="20261004" COMMENT="XMLDB file for Moodle local/ltuse"
+<XMLDB PATH="local/ltuse/db" VERSION="20261006" COMMENT="XMLDB file for Moodle local/ltuse"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:noNamespaceSchemaLocation="../../../lib/xmldb/xmldb.xsd"
 >
@@ -12,12 +12,15 @@
         <FIELD NAME="sortorder" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="1-based position across the whole framework"/>
         <FIELD NAME="retired" TYPE="int" LENGTH="1" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="1 once the competency is no longer declared"/>
         <FIELD NAME="timemodified" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false"/>
+        <FIELD NAME="slug" TYPE="char" LENGTH="100" NOTNULL="true" SEQUENCE="false" COMMENT="The descriptor's frontmatter slug (spec 006, R3); names the competency pathway competency:slug. Unique among non-empty values, checked by apply"/>
+        <FIELD NAME="url" TYPE="char" LENGTH="255" NOTNULL="true" SEQUENCE="false" COMMENT="The competency's page on the published competency site (spec 006, R4); the host comes from mkdocs.yml, never from PHP"/>
       </FIELDS>
       <KEYS>
         <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
       </KEYS>
       <INDEXES>
         <INDEX NAME="name" UNIQUE="true" FIELDS="name"/>
+        <INDEX NAME="slug" UNIQUE="false" FIELDS="slug"/>
       </INDEXES>
     </TABLE>
     <TABLE NAME="local_ltuse_course_comp" COMMENT="Which competencies each published course aims at, written by local_ltuse_set_course_competencies. Holds no user data.">
@@ -67,6 +70,23 @@
         <INDEX NAME="mentorlearner" UNIQUE="true" FIELDS="mentorid, learnerid"/>
       </INDEXES>
     </TABLE>
+    <TABLE NAME="local_ltuse_org_contact" COMMENT="Message contacts local_ltuse made between an organisation's manager and a person in it (spec 002 amendment 2026-10-02, research R12), so a leave removes only those.">
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
+        <FIELD NAME="managerid" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false" COMMENT="user.id of the manager"/>
+        <FIELD NAME="memberid" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false" COMMENT="user.id of the person in their organisation"/>
+        <FIELD NAME="contactid" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="message_contacts.id of the contact this plugin made, so only that one is ever removed"/>
+        <FIELD NAME="timecreated" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false"/>
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+        <KEY NAME="managerid" TYPE="foreign" FIELDS="managerid" REFTABLE="user" REFFIELDS="id"/>
+        <KEY NAME="memberid" TYPE="foreign" FIELDS="memberid" REFTABLE="user" REFFIELDS="id"/>
+      </KEYS>
+      <INDEXES>
+        <INDEX NAME="managermember" UNIQUE="true" FIELDS="managerid, memberid"/>
+      </INDEXES>
+    </TABLE>
     <TABLE NAME="local_ltuse_booking" COMMENT="Each office-hours booking's last notified time (spec 011, research R20), because core's calendar_event_updated carries no old time. One row per learner booking event.">
       <FIELDS>
         <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
@@ -86,6 +106,72 @@
         <INDEX NAME="eventid" UNIQUE="true" FIELDS="eventid"/>
         <INDEX NAME="slotid" UNIQUE="false" FIELDS="slotid"/>
         <INDEX NAME="mentorid" UNIQUE="false" FIELDS="mentorid"/>
+      </INDEXES>
+    </TABLE>
+    <TABLE NAME="local_ltuse_course_pathway" COMMENT="Each published course's pathway facts (spec 006, R2), written only by local_ltuse_set_course_pathway. A pathway is computed from these at view time and never stored. Holds no user data.">
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
+        <FIELD NAME="courseid" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false"/>
+        <FIELD NAME="delivery" TYPE="int" LENGTH="1" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="1 when the last publish was a delivery (stage 8); only then is the course in a pathway"/>
+        <FIELD NAME="targetlevel" TYPE="int" LENGTH="1" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="The course's target_outcome_level, 1-4; 0 when it declares none"/>
+        <FIELD NAME="pathwaykeys" TYPE="text" NOTNULL="false" SEQUENCE="false" COMMENT="The pathway keys last announced for this course, so the next publish fires pathway_courses_changed for the difference"/>
+        <FIELD NAME="timemodified" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false"/>
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+        <KEY NAME="courseid" TYPE="foreign-unique" FIELDS="courseid" REFTABLE="course" REFFIELDS="id"/>
+      </KEYS>
+    </TABLE>
+    <TABLE NAME="local_ltuse_role_pathway" COMMENT="Role pathways declared in moodle/site/pathways.yaml (spec 006, R5), written only by apply. Rows are retired, never deleted, so cohort assignments keep pointing at something. Holds no user data.">
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
+        <FIELD NAME="rolekey" TYPE="char" LENGTH="95" NOTNULL="true" SEQUENCE="false" COMMENT="The declared key; names the pathway role:rolekey"/>
+        <FIELD NAME="name" TYPE="char" LENGTH="255" NOTNULL="true" SEQUENCE="false"/>
+        <FIELD NAME="description" TYPE="text" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="sortorder" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="Position in pathways.yaml"/>
+        <FIELD NAME="retired" TYPE="int" LENGTH="1" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="1 once the role is no longer declared"/>
+        <FIELD NAME="timemodified" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false"/>
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+      </KEYS>
+      <INDEXES>
+        <INDEX NAME="rolekey" UNIQUE="true" FIELDS="rolekey"/>
+      </INDEXES>
+    </TABLE>
+    <TABLE NAME="local_ltuse_role_pathway_comp" COMMENT="Which competencies each role pathway names, in order (spec 006, R5), written only by apply. Holds no user data.">
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
+        <FIELD NAME="roleid" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false"/>
+        <FIELD NAME="competencyid" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false"/>
+        <FIELD NAME="sortorder" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="1-based position in the role's competencies"/>
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+        <KEY NAME="roleid" TYPE="foreign" FIELDS="roleid" REFTABLE="local_ltuse_role_pathway" REFFIELDS="id"/>
+        <KEY NAME="competencyid" TYPE="foreign" FIELDS="competencyid" REFTABLE="local_ltuse_competency" REFFIELDS="id"/>
+      </KEYS>
+      <INDEXES>
+        <INDEX NAME="roleid-competencyid" UNIQUE="true" FIELDS="roleid, competencyid"/>
+      </INDEXES>
+    </TABLE>
+    <TABLE NAME="local_ltuse_pathway_cohort" COMMENT="A pathway assigned to a cohort (spec 006, R9); the seam with spec 008. usermodified is the only user data, declared by the privacy provider.">
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
+        <FIELD NAME="pathwaykey" TYPE="char" LENGTH="100" NOTNULL="true" SEQUENCE="false" COMMENT="competency:slug or role:key; resolved when assigned"/>
+        <FIELD NAME="cohortid" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false"/>
+        <FIELD NAME="enrol" TYPE="int" LENGTH="1" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="Set to 1 only by spec 008; spec 006 never sets it or acts on it"/>
+        <FIELD NAME="usermodified" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false" COMMENT="user.id of who made or last changed the link; 0 after a privacy deletion"/>
+        <FIELD NAME="timecreated" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false"/>
+        <FIELD NAME="timemodified" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false"/>
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+        <KEY NAME="cohortid" TYPE="foreign" FIELDS="cohortid" REFTABLE="cohort" REFFIELDS="id"/>
+        <KEY NAME="usermodified" TYPE="foreign" FIELDS="usermodified" REFTABLE="user" REFFIELDS="id"/>
+      </KEYS>
+      <INDEXES>
+        <INDEX NAME="pathwaykey-cohortid" UNIQUE="true" FIELDS="pathwaykey, cohortid"/>
       </INDEXES>
     </TABLE>
     <TABLE NAME="local_ltuse_course_mentor" COMMENT="Course mentors who are not a learner's default mentor (spec 008, research R10): one-course mentors (learnerid set) and the mentors of a cohort in a course (cohortid set). Exactly one of learnerid, cohortid is non-zero, and neither is ever NULL, so the unique index holds. The foreign keys on courseid and mentorid are their indexes.">

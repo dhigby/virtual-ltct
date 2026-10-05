@@ -209,7 +209,7 @@ A learner counts when they hold an **active** Student enrolment in C, through co
 - `pathway_courses_changed` carries `other = {pathwaykey, added: int[], removed: int[]}`, one event per key, fired after commit. 008 ensures `added` for every cohort in `cohorts_for($key, true)`, and reports `removed` in the summary without unenrolling.
 - It is not fired when a course is hidden or shown, so a re-shown course is picked up by the hourly reconcile (`course_mentor_reconcile` also runs `cohort_enrolment::reconcile_pathways()`), not by an observer on `course_updated`.
 
-**Until 006 lands**: the pathway commands report "pathways are not installed" (`class_exists` false) and do nothing. Courses are still enrolled one by one.
+**Until 006 landed** (it merged on 2026-10-04, #90): the pathway commands reported "pathways are not installed" (`class_exists` false) and do nothing. Courses are still enrolled one by one.
 
 ## R12. The credential: a second service, per-person tokens
 

@@ -14,6 +14,13 @@
 # The three conditions on a per-organisation report are its scope, not a convenience: report
 # builder has no viewer scoping, so they are what keeps one organisation's learners out of
 # another's report (R7). validate refuses a per-organisation template without all three.
+#
+# Delivery is `enrol:plugin` not equal to `manual` (spec 002 R10, amending spec 004 R10): cohort
+# sync, and a manager's enrolment through the course's organisation-enrolment instance
+# (enrol_self), both count; a pilot's manual enrolment never does. report builder's select
+# condition holds one value (filters\select EQUAL_TO 1, NOT_EQUAL_TO 2), so it cannot say
+# "cohort or self". If enrol_manual were disabled the condition would produce no SQL and the
+# report would widen (MDL-84213); apply and drift refuse that, as for every scope condition.
 
 rows: [7, 16]
 purpose: >-
@@ -22,7 +29,9 @@ purpose: >-
   more: completions per course across every organisation, a table of the competencies
   published courses aim at with how much they are used in delivery, and the pilots, kept
   apart from delivery. Delivery learners are told from pilot learners by how they were
-  enrolled, cohort sync or manual (R10). No report shows any learner at a competency level.
+  enrolled: a pilot learner by the course's manual method, everyone else by any other (cohort
+  sync, or a manager's organisation enrolment). No report shows any learner at a competency
+  level.
 reports:
   - key: progress
     per: organisation
@@ -42,7 +51,7 @@ reports:
     conditions:                                   # the scope; validate requires all three
       - {condition: user:profilefield_ltct_org, values: {operator: equal, value: "{org}"}}
       - {condition: role:name, values: {operator: equal, value: student}}   # a shortname here; stored as the role's id
-      - {condition: enrol:plugin, values: {operator: equal, value: cohort}}
+      - {condition: enrol:plugin, values: {operator: not_equal, value: manual}}   # delivery: anything but a pilot's enrolment
     filters: [course:fullname, user:fullname, completion:completed, completion:timecompleted, access:timeaccess]
     audiences:
       - {type: cohortmember, cohort: "ltct:org:{org}:managers"}
@@ -68,7 +77,7 @@ reports:
       - {column: completion:timecompleted, heading: Completed, aggregation: count}   # counts enrolment rows, see T002 notes
     conditions:
       - {condition: role:name, values: {operator: equal, value: student}}
-      - {condition: enrol:plugin, values: {operator: equal, value: cohort}}
+      - {condition: enrol:plugin, values: {operator: not_equal, value: manual}}
     filters: [user:profilefield_ltct_org, completion:timecompleted, enrolment:timecreated]
     audiences:
       - {type: systemrole, role: manager}

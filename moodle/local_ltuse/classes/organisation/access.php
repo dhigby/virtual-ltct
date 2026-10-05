@@ -29,7 +29,7 @@ defined('MOODLE_INTERNAL') || die();
  *   org_cohorts  array   the keys of the ltct:org:<key> member cohorts P is in
  *   deleted      bool    the user record is deleted
  *   siteadmin    bool    P is a site admin
- *   coursecontact bool   has_coursecontact_role(P): a course teacher
+ *   coursecontact bool   P is staff: holds any role but student in any course
  *   highrole     bool    P holds a role assignment at system or any category context
  *   managers     bool    P is in any ltct:org:<key>:managers cohort
  *   mentor       bool    P is in ltct:mentors
@@ -53,6 +53,9 @@ class access {
 
     /** Prefix of an organisation's own category idnumber, ltct:org:<key>. */
     const ORG_CATEGORY_PREFIX = 'ltct:org:';
+
+    /** The pilots category: the publisher may place a course there, a manager never enrols into it. */
+    const PILOTS_CATEGORY = 'ltct:pilots';
 
     /**
      * Does viewer V manage the organisation person P belongs to?
@@ -122,6 +125,22 @@ class access {
         }
         $org = trim((string)($person['ltct_org'] ?? ''));
         return $org !== '' && $categoryidnumber === self::ORG_CATEGORY_PREFIX . $org;
+    }
+
+    /**
+     * May the publisher place a course in this category (local_ltuse_place_course, R11)? Only
+     * ltct:published, ltct:pilots or one organisation's ltct:org:<key>: never the parent
+     * ltct:organisations, and never a category this repo does not own. Not a manager rule; it
+     * lives here because it reads the same category idnumbers, and is tested with them.
+     *
+     * @param string $categoryidnumber
+     * @return bool
+     */
+    public static function is_placement_category(string $categoryidnumber): bool {
+        if ($categoryidnumber === self::PUBLISHED_CATEGORY || $categoryidnumber === self::PILOTS_CATEGORY) {
+            return true;
+        }
+        return (bool)preg_match('/^ltct:org:[^:]+$/', $categoryidnumber);
     }
 
     /**

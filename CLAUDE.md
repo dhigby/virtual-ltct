@@ -348,6 +348,9 @@ step cost.
 applied with `python scripts/site_config.py apply`. A setting clicked into the admin UI is not done;
 `drift` reports it. Settings `config.php` sets (`wwwroot`, `debug`) are provisioning's, not this folder's.
 
+**Shared courses have no organisation groups**: managers are scoped by their managers cohort through
+`local_ltuse\organisation\access`, never by groups, so never send `groupmode: 1` (spec 002 R3, R10).
+
 `MOODLE_URL` and `MOODLE_TOKEN` come from the environment. **The repo is public — never
 write a token into a file here.** The plugin the publisher depends on is
 [`moodle/local_ltuse/`](moodle/local_ltuse/README.md); Moodle has no core web service that
@@ -389,6 +392,8 @@ constructing it — the host changes when the server moves.
   only with `--apply --confirm <code>`; people are masked unless `--show-people`.
 - `admin_files.py` — `ltct_admin.py`'s offline half: file validation, the path guard that
   refuses any git tree, masking and the confirmation code. Not run directly.
+- `spec_status.py` — spec-kit progress (spec, plan, tasks done) for every spec across every
+  local branch and worktree; `--best` keeps each spec's most advanced state. Read-only.
 - `gen_site.py` — `mkdocs-gen-files` build hook; generates the site pages + nav from
   `competencies.yaml` and `competencies/*.md`. Not run by hand; invoked by `mkdocs`.
 - `check_competency_descriptors.py` — validates descriptors stay in sync with the

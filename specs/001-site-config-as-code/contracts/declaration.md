@@ -48,7 +48,7 @@ Apply never deletes the office-hours course, its activity, a group or a dashboar
 
 **Spec 016 extends it again.** [Its declaration contract](../../016-identity-protection/contracts/declaration.md) adds:
 - `protection.yaml` (the protection levels and the account fields each withholds) and `settings/identity.yaml`;
-- a `text` profile field datatype and the private field `ltct_certname`, protection capabilities in `roles.yaml`, prohibits for `editingteacher` and `teacher`, and a `userfield` certificate element;
+- protection capabilities in `roles.yaml`, and a course-backup prohibit for `editingteacher` and `teacher` (the `text` datatype, `ltct_certname` and the `userfield` certificate element were removed by 016's scope review, 2026-10-05);
 - one payload item, `protection`, which the applier stores after structure and before reporting.
 
 Apply never reads or writes any user's protection or any organisation's minimum: both are Moodle data, never declared.

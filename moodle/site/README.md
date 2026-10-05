@@ -289,9 +289,9 @@ It asks first, prints counts only, and leaves every learner's records as they ar
 
 **Feedback on a learner's work** is not this role's job. Where a course asks for work, enrol the mentor as **Course mentor** (`teacher`) in that course, with no group (spec 012). Assigning many mentors at once, and enrolling mentors into their learners' courses automatically, are spec 008's.
 
-## Protecting a person or an organisation
+## Protecting a person
 
-Some learners work where being identifiable puts them, or the people they work with, at risk. Identity protection lets them take part exactly as before under less of their identity (spec 016). **Who is protected, their pseudonym and their real name live only in Moodle. Never write them here, in an issue, a PR or a screenshot.**
+Some learners work where being identifiable puts them, or the people they work with, at risk. Identity protection lets them take part exactly as before under less of their identity (spec 016). **Who is protected, their pseudonym and their real name live only in Moodle. Never write them here, in an issue, a PR or a screenshot.** Screenshots of `ltct-test-*` accounts only are fine in a PR.
 
 | Level | Others see |
 |---|---|
@@ -299,9 +299,9 @@ Some learners work where being identifiable puts them, or the people they work w
 | First name only | The first name and organisation only: no surname, picture, location, role or expertise |
 | Pseudonym | A chosen name and the organisation only |
 
-Each level includes the ones before it. The organisation shows at every level (decision 2, option a): tell the person so when they are protected. The people who run their courses and their organisation's managers still see the email address, which is why it is checked (below). The site team, the learner's mentors, the course mentor who assesses them in a course, and their own organisation's managers still see the real identity, with a **Protected** marker, on the learner's profile, the Mentoring page and **People I support** (`/local/ltuse/protected.php`). Nobody else ever sees the marker.
+Each level includes the ones before it. The organisation shows at every level: tell the person so when they are protected. The people who run their courses and their organisation's managers still see the email address, which is why it is checked (below). The site team, the learner's mentors, the course mentor who assesses them in a course (whose own mentor group holds them), and their own organisation's managers still see the real identity, with a **Protected** marker, on the learner's profile, the Mentoring page and **People I support** (`/local/ltuse/protected.php`). Nobody else ever sees the marker, and there is no download of protected people.
 
-**Only for someone who asks** (Doug, 2026-10-05 (scope review)). Protection is offered when the person is added, in the welcome message and in site help. Saving a new or higher level records that the person asked, and that you checked their email address identifies neither them nor their organisation. The page warns when the part before the @ looks like their name, or the domain like their organisation's; have the address changed to one that does not identify them before you save.
+**Only for someone who asks** (Doug, 2026-10-05 (scope review)). Protection is offered when the person is added, in the welcome message and in site help. Saving a new or higher level records that the person asked, and that you checked their email address identifies neither them nor their organisation. The page warns when the part before the @ looks like their name, or the domain like their organisation's; have the address changed to one that does not identify them before you save. Nothing changes for anyone who did not ask.
 
 **To protect a person**: set it when the account is made, before they start. An organisation's manager can do this for their own people then. After that, raising it, lowering or removing it, and correcting the real name are the site team's: open `/local/ltuse/protection.php?id=<user id>` (an unprotected profile has no link), pick the level, and save. The learner gets a notice saying what others now see.
 
@@ -309,13 +309,19 @@ Each level includes the ones before it. The organisation shows at every level (d
 
 **Usernames.** Everyone signs in with their email. At First name only or Pseudonym, a username that contains the real first name or surname is replaced with a neutral one automatically; the person keeps signing in with their email.
 
-**There is no organisation-wide protection** (Doug, 2026-10-05 (scope review)): each person is protected only when they ask, and an organisation's own managers always see their people's real identity. A person who does not want their organisation's managers to see it is placed by the site team under a neutral organisation entry with no managers. An organisation that may need protection gets a **neutral key and name from its first commit**, because the key can never change and `organisations.yaml` is public. SIL's Area entries are the one deliberate exception.
+**Names and email are not locked.** Learners change their own. For a protected learner, the plugin puts the protected name back on any edit, and their surname shows as `·`. To correct a protected learner's real name, use their **Identity protection** page (site team).
 
-**Lowering.** Nothing is lowered automatically. Someone who leaves a protected organisation keeps their level until an entitled person lowers it. A picture removed by protection does not come back; the learner uploads it again.
+**There is no organisation-wide protection** (Doug, 2026-10-05 (scope review)): each person is protected only when they ask, and an organisation's own managers always see their people's real identity. A person who does not want their organisation's managers to see it is placed by the site team under a neutral organisation entry with no managers. **Neutral organisation names**: an organisation that asks not to be named publicly gets a neutral key and name from its first commit, because the key can never change and `organisations.yaml` is public. No other organisation needs one.
 
-**Names are locked for everyone** (`settings/identity.yaml`, pending decision 3): learners no longer change their own name or email. The site team changes them in the admin user editor; for a protected learner, use their **Identity protection** page.
+**Lowering.** Nothing is lowered automatically, and moving to another organisation keeps the person's level. A picture removed by protection does not come back; the learner uploads it again.
 
-What protection cannot do, and what to tell the learner, is listed as known gaps in [spec 016's research](../../specs/016-identity-protection/research.md#known-gaps-fr-015): copies already emailed or downloaded, the app's cache for up to 18 hours, and file author names inside uploaded documents.
+**Course logs.** Course staff see each learner's IP address in the course logs, which gives away a rough location. If a protected person asks for that to be hidden, it is a block in the courses they take, which is not built yet (spec 016 task T027): tell them, and raise it with the maintainer.
+
+**Course backups.** Course leaders cannot download backups. Never leave a course backup that includes users in a course's backup area: it carries every enrolled account's details.
+
+**When the hourly task fails.** **Reconcile protection** (`\local_ltuse\task\reconcile_protection`) repairs protected accounts that something else changed. If a repair fails, the run is recorded as failed and core's failed-task alert fires: open the task log, fix the cause, and let the next run repair it. With nobody protected it does nothing. On a core upgrade, while anyone is protected, re-run spec 016's quickstart V7.
+
+What protection cannot do, and what to tell the learner, is listed as known gaps in [spec 016's research](../../specs/016-identity-protection/research.md#known-gaps-fr-015): copies already emailed or downloaded, the app's cache for up to 18 hours, file author names inside uploaded documents, the email address course staff see, and the organisation, which shows at every level.
 
 ## Events and live sessions
 

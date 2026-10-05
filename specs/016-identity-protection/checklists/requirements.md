@@ -33,4 +33,5 @@
 
 - **Naming Moodle is the platform, not an implementation choice.** As in every sibling spec, the platform (Moodle, the Moodle app, `moodle/` configuration) is a given under `INTENT.md`. The spec names no API, setting, plugin or table. Which core settings or plugins deliver each level is left to planning research (Assumptions).
 - **Three clarifications resolved on 2026-10-02** (FR-006, FR-008, FR-010). They are recorded in the spec's Clarifications section.
-- Organisation-level protection (FR-001a) was added on 2026-10-02 at Matthew's request: "we may want to limit that access for a whole org or individual user."
+- Organisation-level protection (FR-001a) was added on 2026-10-02 at Matthew's request: "we may want to limit that access for a whole org or individual user." It was withdrawn on 2026-10-05 (Doug, 2026-10-05 (scope review), change 9): protection is per person, only for someone who asks.
+- **Re-checked after the 2026-10-05 scope review.** The spec's Clarifications record each change (Session 2026-10-05). FR-001, FR-004, FR-006, FR-007, FR-008, FR-010, FR-012, FR-014 and FR-015 are amended, FR-001a is withdrawn, FR-016 (the per-person email check) is added, and US3-3 and US3-4 are withdrawn. The items above still hold.

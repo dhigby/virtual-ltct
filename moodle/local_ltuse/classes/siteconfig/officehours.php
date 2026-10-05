@@ -33,7 +33,7 @@ use moodle_exception;
  *
  * Writes: create_course(), update_course(), util::upsert_module() (add_moduleinfo()) for a new
  * activity, set_coursemodule_name() and set_coursemodule_groupmode() for an existing one, and
- * enrol_manual's add_instance(). The scheduler's other declared columns on an existing activity
+ * enrol_manual's add_instance() or update_instance(). The scheduler's other declared columns on an existing activity
  * are written with one update_record() on `scheduler`: scheduler_update_instance() needs the
  * activity form and cannot be called without one. That write, and the read of the same row,
  * are a Principle XI exception listed in the README, re-checked by quickstart V1 on every
@@ -287,8 +287,20 @@ class officehours {
             $report->add_result($item, 'fail', 'manual enrolment is not installed');
             return;
         }
-        $plugin->add_instance($course, ['name' => sync::ENROL_NAME, 'status' => ENROL_INSTANCE_ENABLED,
-            'roleid' => (int)$DB->get_field('role', 'id', ['shortname' => 'student'])]);
+        $fields = ['name' => sync::ENROL_NAME, 'status' => ENROL_INSTANCE_ENABLED,
+            'roleid' => (int)$DB->get_field('role', 'id', ['shortname' => 'student'])];
+        // enrol_manual allows one instance per course, and create_course() has usually added
+        // it already (enrol_manual/defaultenrol): add_instance() would return null. Adopt it.
+        $existing = $DB->get_record('enrol', ['courseid' => $course->id, 'enrol' => 'manual']);
+        if ($existing) {
+            $plugin->update_instance($existing, (object)$fields);
+            $report->add_result($item, 'changed', 'adopted');
+            return;
+        }
+        if (!$plugin->add_instance($course, $fields)) {
+            $report->add_result($item, 'fail', 'manual enrolment could not be added');
+            return;
+        }
         $report->add_result($item, 'changed', 'added');
     }
 

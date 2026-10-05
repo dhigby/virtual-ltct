@@ -43,8 +43,9 @@ final class admin_test extends \advanced_testcase {
         $this->resetAfterTest();
         $this->setAdminUser();
         $generator = $this->getDataGenerator();
+        // The generator defaults a menu field to 'No'; the applier gives ltct_org no default.
         $generator->create_custom_profile_field(['datatype' => 'menu', 'shortname' => 'ltct_org',
-            'name' => 'Organisation', 'param1' => "fixture-a\nfixture-b"]);
+            'name' => 'Organisation', 'param1' => "fixture-a\nfixture-b", 'defaultdata' => '']);
         $this->cohort = $generator->create_cohort(['idnumber' => 'ltct:org:fixture-a', 'name' => 'Fixture A']);
         $generator->create_cohort(['idnumber' => 'ltct:org:fixture-b', 'name' => 'Fixture B']);
         $published = $generator->create_category(['idnumber' => 'ltct:published', 'name' => 'Published']);

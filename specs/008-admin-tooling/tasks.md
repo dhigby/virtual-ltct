@@ -6,7 +6,7 @@
 **Tests**: Included. Each user story has an Independent Test in spec.md, and plan.md §Testing requires pytest (`tests/test_ltct_admin.py`), a PHP harness (`tests/admin_harness.php`), PHPUnit (`moodle/local_ltuse/tests/admin_test.php`) and instance checks V1–V19. Every test address is `@example.org`; every organisation key is `fixture-*`; no CSV fixture is committed (`.gitignore` ignores `*.csv`; build rows in memory). Instance evidence stays outside the repo and is recorded as counts and outcomes only.
 
 **Blocking markers** — a task carrying one may be written, but is not closed until the blocker clears:
-- ⛔ **D1, D2, D3, D6, D11**: pending maintainer decision (plan.md "Decisions on the plan's limits").
+- **D1, D2, D3, D6, D11**: maintainer decisions (plan.md "Decisions on the plan's limits"). All approved by Doug on 2026-10-04 and cleared, except that D11's approved rule is a change to spec 016, so T067's switch now waits on ⛔ **016**.
 - ⛔ **016**: needs spec 016's `protection\service` / `entitlement` on the branch (agreed names in research R5).
 - ⛔ **006**: needs spec 006's `pathway\catalogue` / `assignments` / `pathway_courses_changed` (research R11).
 - ⛔ **002-A**: needs the amendment to 002's `organisation\actions` contract (`do_<action>()` + manager wrapper, research R6), and either 002's T071 or this spec's T012.
@@ -162,7 +162,7 @@ Code that calls 016 or 006 guards with `class_exists()` and degrades as research
 
 ### Tests for User Story 5
 
-- [ ] T057 [P] [US5] ⛔ **D2** Harness cases for `course_mentor_rules::target(course state)` in `tests/admin_harness.php`: one-course row beats cohort rows beats default mentors; pilot (manual) learners excluded; "active" = `ue.status` active AND `enrol.status` enabled AND within `timestart`/`timeend` AND account not suspended; Student read from the instance `roleid` — *written 2026-10-04 (with cases for `diff()`); open until ⛔ **D2***
+- [X] T057 [P] [US5] Harness cases for `course_mentor_rules::target(course state)` in `tests/admin_harness.php`: one-course row beats cohort rows beats default mentors; pilot (manual) learners excluded; "active" = `ue.status` active AND `enrol.status` enabled AND within `timestart`/`timeend` AND account not suspended; Student read from the instance `roleid` — *written 2026-10-04 (with cases for `diff()`); D2 approved 2026-10-04*
 - [X] T058 [P] [US5] PHPUnit in `moodle/local_ltuse/tests/admin_test.php`: `role_unassign` of a mentor removes the `ltct:coursementor` enrolment, the `local_ltuse` Teacher assignment and the group membership in the same request; disabling a cohort-sync instance does the same for that cohort's course mentors; suspending the learner's account does the same; a mentor also enrolled another way loses Teacher; nothing happens while `local_ltuse/coursementorsync = 0`
 
 ### Implementation for User Story 5
@@ -170,12 +170,12 @@ Code that calls 016 or 006 guards with `class_exists()` and degrades as research
 - [X] T059 [US5] Add table `local_ltuse_course_mentor` to `moodle/local_ltuse/db/install.xml` and an `upgrade.php` step at `2026100800`: `id`; `courseid` int(10) FK `course.id`; `mentorid` int(10) FK `user.id`; `learnerid` int(10) **NOT NULL default 0**; `cohortid` int(10) **NOT NULL default 0**; `usermodified`, `timecreated`, `timemodified` int(10); unique index `(courseid, mentorid, learnerid, cohortid)`; indexes `(courseid)`, `(learnerid)`, `(cohortid)`, `(mentorid)` (data-model §3) — *savepoint and version are `2026100801`, not `2026100800`: the service and capability already shipped at `2026100800` with no schema change, so a site at that stamp would skip a step numbered `2026100800`; `site.yaml` re-pinned*
 - [X] T060 [US5] Extend `moodle/local_ltuse/classes/privacy/provider.php` for `local_ltuse_course_mentor` (export for learner and mentor; delete on user deletion) and the existing `user_deleted` observer to remove that user's rows
 - [X] T061 [US5] Implement `membership_service` mentor part and `local_ltuse_admin_preview_mentors` / `apply_mentors` (one row, or one learner of an end-all list): mentor must be in `ltct:mentors`; `role_assign($mentorroleid, $mentorid, context_user::instance($learnerid)->id)` with component `''`; `endmentoremail` → `role_unassign()` per learner; CLI `mentors assign|end` (research R9)
-- [ ] T062 [US5] ⛔ **D2** Implement `course_mentor_rules::target()` in `moodle/local_ltuse/classes/admin/course_mentor_rules.php` (pure) to data-model §4; makes T057 pass — *written 2026-10-04, with the pure `diff()` the sync applies; open until ⛔ **D2***
-- [ ] T063 [US5] ⛔ **D3** Implement `moodle/local_ltuse/classes/admin/course_mentor_sync.php`: `sync_course($courseid)` under a per-course `\core\lock`, returns counts; no-op when `local_ltuse/coursementorsync` is 0; one `enrol_self` instance per course (`customchar1='ltct:coursementor'`, `customint6=0`) created on first need; enrol with `enrol_user($instance, $uid, null)` then `role_assign($teacherroleid, $uid, $coursectx->id, 'local_ltuse', $instance->id)`; removal `role_unassign(… 'local_ltuse', $instance->id)` then `unenrol_user()`; group per mentor, idnumber `ltct:mentorgroup:<mentor id>`, name "Mentor group <n>" via `groups_create_group()`, membership via `groups_add_member()`/`groups_remove_member()`; `sync_learner()`, `sync_mentor()` (research R10) — *written 2026-10-04; open until ⛔ **D3** (mentor groups)*
+- [X] T062 [US5] Implement `course_mentor_rules::target()` in `moodle/local_ltuse/classes/admin/course_mentor_rules.php` (pure) to data-model §4; makes T057 pass — *written 2026-10-04, with the pure `diff()` the sync applies; D2 approved 2026-10-04*
+- [X] T063 [US5] Implement `moodle/local_ltuse/classes/admin/course_mentor_sync.php`: `sync_course($courseid)` under a per-course `\core\lock`, returns counts; no-op when `local_ltuse/coursementorsync` is 0; one `enrol_self` instance per course (`customchar1='ltct:coursementor'`, `customint6=0`) created on first need; enrol with `enrol_user($instance, $uid, null)` then `role_assign($teacherroleid, $uid, $coursectx->id, 'local_ltuse', $instance->id)`; removal `role_unassign(… 'local_ltuse', $instance->id)` then `unenrol_user()`; group per mentor, idnumber `ltct:mentorgroup:<mentor id>`, name "Mentor group <n>" via `groups_create_group()`, membership via `groups_add_member()`/`groups_remove_member()`; `sync_learner()`, `sync_mentor()` (research R10) — *written 2026-10-04; D3 approved 2026-10-04; 012's re-plan still adopts the groups*
 - [X] T064 [US5] Observers in `moodle/local_ltuse/db/events.php` (block `// Spec 008`) → `classes/admin/observer.php` exactly as contracts/admin-service.md's table: `role_assigned`/`role_unassigned` (mentor role, user context) → `sync_learner($event->contextinstanceid)` + `sync_mentor($event->relateduserid)`; `user_enrolment_created|updated|deleted` filtered on course idnumber and instance (never role) → `sync_course`; `enrol_instance_updated|deleted` → `sync_course`; every `user_updated` → `sync_learner`; ignore the `ltct:coursementor` instance
 - [X] T065 [US5] Scheduled task `moodle/local_ltuse/classes/task/course_mentor_reconcile.php`, hourly in `db/tasks.php`: `sync_course` for every `ltct:` course except `ltct:officehours`; remove `local_ltuse`-component Teacher assignments with no reason; `cohort_enrolment::reconcile_pathways()`; counts only in output
 - [X] T066 [US5] Write `local_ltuse_admin_preview_course_mentors` / `apply_course_mentors` (get-or-create / delete on `local_ltuse_course_mentor`, duplicate-key treated as success, then `sync_course`) and CLI `course-mentors [--remove]`
-- [ ] T067 [US5] ⛔ **D11** Instance: quickstart **V11**, **V12**, **V13** ⛔ **D2**, then **V9** course-mentor half, with `coursementorsync` on in the `--site-dir` copy only; record results. `settings/admin.yaml` keeps `0` until D11 is decided
+- [ ] T067 [US5] Instance: quickstart **V11**, **V12**, **V13**, then **V9** course-mentor half, with `coursementorsync` on in the `--site-dir` copy only; record results. `settings/admin.yaml` keeps `0` until ⛔ **016** narrows its course-mentor path to a shared mentor group (D11, approved 2026-10-04)
 
 **Checkpoint**: mentors assigned in bulk; course mentors appear and disappear with their reason, in the same request.
 
@@ -194,14 +194,14 @@ Code that calls 016 or 006 guards with `class_exists()` and degrades as research
 
 ## Phase 8: Polish & Cross-Cutting Concerns
 
-- [ ] T070 [P] Write `.claude/commands/manage-learners.md` (pattern: `publish-to-moodle.md`): frontmatter `allowed-tools: Bash(python scripts/ltct_admin.py:*)`; numbered steps (check → ask what to do → preview → explain in plain words → apply only on the operator's yes, passing the code); Rules: never Read/open/copy an intake file, never pass `--show-people`, never put files in the repo, never invent keys (offer `list` output), quote refusals verbatim, state 002 R13's production gate (research R16) — ⛔ **D1**
+- [X] T070 [P] Write `.claude/commands/manage-learners.md` (pattern: `publish-to-moodle.md`): frontmatter `allowed-tools: Bash(python scripts/ltct_admin.py:*)`; numbered steps (check → ask what to do → preview → explain in plain words → apply only on the operator's yes, passing the code); Rules: never Read/open/copy an intake file, never pass `--show-people`, never put files in the repo, never invent keys (offer `list` output), quote refusals verbatim, state 002 R13's production gate (research R16) — *D1 approved 2026-10-04*
 - [X] T071 [P] Rewrite `moodle/site/README.md` "The site team's four steps" as `ltct_admin.py` recipes (intake, enrol, mirror then move, managers, mentors, suspend), each stating 002 R13's production gate where it enrols; fix line 217's mentor paragraph to point at `mentors assign` and the automatic sync (drop "with the organisation's group")
 - [X] T072 [P] Update `moodle/local_ltuse/README.md`: new "Administration (008)" section (service, capability, role, token script, observers, task, table, `coursementorsync`); replace "No enrolment, grades or learner records" with "enrolment through the administration service and the organisation page; never grades"; add to the Principle XI section any raw read introduced (e.g. `cohort.component`) and, until `setup_publishing.php` is changed, its two direct `$DB` writes; note that removing `ltuse_admin` from `db/services.php` deletes its tokens
 - [X] T073 [P] Update `CLAUDE.md`: `ltct_admin.py` and `admin_files.py` under "Maintainer scripts"; one line under "Delivery: Moodle" (site-team admin tool, its own token `MOODLE_ADMIN_TOKEN`, files outside every git tree)
 - [X] T074 Update `moodle/REQUIREMENTS.md` rows **#14** (after Phase 3–4), **#8/#15** (after T052–T053), **#11** (after Phase 6) with built/verified status and the quickstart checks run, each in the PR that delivers it (constitution X)
 - [X] T075 Run `python scripts/site_config.py validate`, `pytest -q tests/test_ltct_admin.py tests/test_site_config.py`, `php tests/admin_harness.php`; fix any failure
 - [ ] T076 Instance: quickstart **V19** (no data file in `git status` / `git log --all --name-only --since=<run start>` in the repo and every worktree used; no `example.org` outside `tests/`); record result
-- [ ] T077 ⛔ **D6** Done gate (FR-014, SC-004, SC-006): 2–3 real ALTCs or organisation managers per quickstart "Done gate"; record findings in research.md naming testers only "tester 1/2/3" and role, never an Area/organisation or protection level/count; resolve or accept each. Row #14 is not marked done until this closes
+- [ ] T077 Done gate (FR-014, SC-004, SC-006): 2–3 real ALTCs or organisation managers per quickstart "Done gate"; record findings in research.md naming testers only "tester 1/2/3" and role, never an Area/organisation or protection level/count; resolve or accept each. Row #14 is not marked done until this closes
 
 ---
 
@@ -222,13 +222,13 @@ Code that calls 016 or 006 guards with `class_exists()` and degrades as research
 | Blocker | Tasks | Clears when |
 |---|---|---|
 | 002-A | T012, T035 (courses), T050 | 002's actions contract amended (T012) and `actions.php` exists (002 T071 or T012) |
-| 016 | T015, T034, T038 (V5), T052 (protection reads) | 016 merged to main and rebased in |
+| 016 | T015, T034, T038 (V5), T052 (protection reads), T067 (turning the sync on: D11's narrower course-mentor rule) | 016 merged to main and rebased in |
 | 006 | T045, T046, T047 (V17) | 006 merged to main and rebased in |
-| D1 | T070 | Doug decides plan decision 1 |
-| D2 | T057, T062, T067 (V13) | decision 2 |
-| D3 | T063 | decision 3 (and 012's re-plan adopts it) |
-| D6 | T077 | decision 6 |
-| D11 | T067 (turning the sync on) | decision 11; until then `coursementorsync: 0` |
+| D1 | T070 | Cleared: approved 2026-10-04 |
+| D2 | T057, T062, T067 (V13) | Cleared: approved 2026-10-04 |
+| D3 | T063 | Cleared: approved 2026-10-04 (012's re-plan still adopts it) |
+| D6 | T077 | Cleared: approved 2026-10-04 |
+| D11 | T067 (turning the sync on) | Approved 2026-10-04 as the narrower rule; the sync stays `coursementorsync: 0` until 016 implements it |
 
 ### Within Each User Story
 
@@ -273,7 +273,7 @@ T060 privacy provider                                 (moodle/local_ltuse/classe
 ### Incremental Delivery
 
 4. Phase 5 (routine changes; the `sil` → Area move once 002 declares the Areas).
-5. Phase 6 (mentors), no later than 016's merge; sync stays off until D11.
+5. Phase 6 (mentors), no later than 016's merge; sync stays off until 016 implements D11's narrower rule.
 6. Pathways (T045–T047) once 006 merges.
 7. Polish; the done gate (T077) stays open after merge.
 

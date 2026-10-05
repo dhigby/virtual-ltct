@@ -17,7 +17,9 @@ settings:
   - name: local_ltuse/coursementorsync
     value: 0
     why: >-
-      Off until plan decision 11 (how far a course mentor sees a protected learner) is made.
+      Off until spec 016 narrows its course-mentor path, so that a course mentor sees a
+      protected learner only when they share a mentor group in the course (plan decision 11,
+      approved 2026-10-04).
       At 1, each learner's course mentors are enrolled as Course mentor in the courses they
       take and removed by event (research R10); at 0 the observers and the hourly reconcile do
       nothing, and one-course and cohort mentors can still be recorded. Instance checks turn

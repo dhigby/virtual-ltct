@@ -278,7 +278,7 @@ and send it to you. It holds the column names and nothing else.
 | `lastname` | Their last name. | Yes |
 | `organisation` | Your organisation's key, exactly as the site team gave it to you (for example `seed-company`), not its full name. | Yes |
 | `country` | Their country as two letters, for example `KE` or `PG`. | No |
-| `protection` | Leave empty unless this person's identity needs protecting. Then write `email`, `firstname` or `pseudonym`, and talk to the site team first. | No |
+| `protection` | Leave empty for almost everyone. Fill it in only for a person who has asked for their identity to be protected. Then write `email`, `firstname` or `pseudonym`, and talk to the site team first. | No |
 | `pseudonym` | The name to show instead of theirs. Only with `protection` set to `pseudonym`. | No |
 | `courses` | Courses to start them in, by the course code the site team gave you (`ltct:<name>`), separated by `;`. Leave empty if your organisation's courses are enough. | No |
 

@@ -22,7 +22,7 @@ UTF-8 CSV with a header row; `;` separates multiple values inside one cell. Colu
 | `lastname` | yes | As `firstname`. |
 | `organisation` | yes | A key declared in `moodle/site/organisations.yaml` (`site_config.validate`). |
 | `country` | no | ISO 3166-1 alpha-2, as Moodle's `country` field. New accounts only. |
-| `protection` | no | `none` (default), `email`, `firstname`, `pseudonym` (016's levels). |
+| `protection` | no | `none` (default), `email`, `firstname`, `pseudonym` (016's levels). Set only for a person who has asked for their identity to be protected when they are added; most rows leave it empty (plan decision 1). |
 | `pseudonym` | no | Required when `protection` is `pseudonym`; refused otherwise. |
 | `courses` | no | `ltct:<slug>` idnumbers, `;`-separated, enrolled through the Organisation enrolment (research R7, plan decision 10). |
 
@@ -146,5 +146,5 @@ The sync's target for C is the set of pairs `(mentor, L)`. A mentor is enrolled 
 | `moodle/local_ltuse/db/access.php` | + `local/ltuse:administer`. |
 | `moodle/site/roles.yaml` | + role `ltctadmin` (system) with exactly the capabilities in research R12, each with its `why`, and `allowassign: [mentor, teacher]`. |
 | `scripts/site_config.py` | `PROTECTION_MANAGE_ROLES` (016's allowlist) gains `ltctadmin`, with its reason (research R5). |
-| `moodle/site/settings/admin.yaml` | `allowaccountssameemail: 0`; `local_ltuse/coursementorsync: 0` until plan decision 11; `rows: [14, 11]`. |
+| `moodle/site/settings/admin.yaml` | `allowaccountssameemail: 0`; `local_ltuse/coursementorsync: 0` until 016 narrows its course-mentor path to a shared mentor group (plan decision 11); `rows: [14, 11]`. |
 | `tests/fixtures/admin/*.csv`? | **No.** `.gitignore` ignores `*.csv`; fixtures are built in the test from `example.org` strings, never committed as files. |

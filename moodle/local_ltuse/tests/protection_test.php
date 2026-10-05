@@ -46,6 +46,8 @@ final class protection_test extends \advanced_testcase {
         require_once($CFG->dirroot . '/user/lib.php');
         $this->resetAfterTest();
         $this->setAdminUser();
+        // The service caches reads for a request; a user id is reused after the reset.
+        service::reset_caches();
         // Stored as site_config.py apply would.
         set_config(service::CONFIG, json_encode(['levels' => levels::ORDER, 'withhold' => self::WITHHOLD,
             'neutral_surname' => '·', 'reconcile_minutes' => 60]), 'local_ltuse');

@@ -85,9 +85,6 @@ class service {
     /** @var array<int, true> users this class is writing now: the hook and observer skip them */
     private static $bypass = [];
 
-    /** @var array<int, bool> has_activity() for this request */
-    private static $activity = [];
-
     /** @var array<int, bool> is_protected() for this request; emptied by every write */
     private static $protected = [];
 
@@ -182,11 +179,10 @@ class service {
     }
 
     /**
-     * Forget every cached read: activity and protection flags. Cheap; the next read goes to the
+     * Forget every cached read: protection flags and entitlements. Cheap; the next read goes to the
      * database. Cron runs many tasks in one process, so apply() calls it first.
      */
     public static function reset_caches(): void {
-        self::$activity = [];
         self::$protected = [];
         entitlement::reset_cache();
     }
@@ -217,19 +213,17 @@ class service {
     /**
      * Might others have seen the user under their current name (R13)? True once they have
      * logged in (user.firstaccess) or are enrolled in any course, active or not. A cheap,
-     * cautious signal (scope review change 16): it reads no log and no message. Cached for
-     * the request.
+     * cautious signal (scope review change 16): it reads no log and no message.
      *
      * @param int $userid
      * @return bool
      */
     public static function has_activity(int $userid): bool {
-        if (!array_key_exists($userid, self::$activity)) {
-            $user = core_user::get_user($userid, 'id, firstaccess');
-            self::$activity[$userid] = ($user && (int)$user->firstaccess > 0)
-                || (bool)enrol_get_all_users_courses($userid, false, 'id');
-        }
-        return self::$activity[$userid];
+        // Not cached, like mentoring::role_id(): an enrolment made earlier in the same request,
+        // or a user id reused after a PHPUnit reset, would otherwise read as no activity.
+        $user = core_user::get_user($userid, 'id, firstaccess');
+        return ($user && (int)$user->firstaccess > 0)
+            || (bool)enrol_get_all_users_courses($userid, false, 'id');
     }
 
     // --- changing one person -------------------------------------------------------------------

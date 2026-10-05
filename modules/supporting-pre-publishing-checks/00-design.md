@@ -769,6 +769,15 @@ Observable markers of a competent supporting consultant:
   released name. Jenni will confirm with Doug Higby. Until then, lesson 2's wording that names this
   list stays as drafted; once the name is confirmed, this item is closed by a dated amendment and
   `module-author` updates lesson 2's wording to match.
+- **Resolved, 2026-10-05 (Jenni Beadle):** there is **no Measures list**. "Numbers (2)" is only the
+  name Paratext gave the combined numbers/weights/measures list when Jenni imported it for
+  testing; it is not the released name, and no released Paratext version has the list yet. The
+  course and the new list are expected to be released together, so the "anticipated primary case"
+  framing above stands, and lesson 03 needs no change. Lesson 02 now says Numbers is a separate
+  entry, that there is no Measures list, and that a combined list is replacing Numbers, without
+  naming it. The screenshot `assets/ss-02-bt-choose-list.png` shows Jenni's imported test lists
+  ("Numbers (2) (imported)", "test (imported)"), which learners won't see; re-take or crop it.
+  If the list's release slips past the course's, revisit lesson 03's framing.
 
 ---
 

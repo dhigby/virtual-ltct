@@ -140,7 +140,7 @@ Diagnosing structural-first doesn't mean the team fixes things in that exact ord
 by line — it means *you* look for the highest-leverage cause first, so you're not
 sending a team to manually correct fifty symptoms of one unclosed marker.
 
-There's a second way a Basic Checks result can look clean without being clean. In the
+A Basic Checks result can also look clean without being clean. In the
 wordlist, the shortcut is marking every word Correct (Lesson 2); in Basic Checks, it is
 **denying** flagged errors — a real Paratext action, meant for errors that genuinely
 aren't errors. A documented field case from
@@ -192,8 +192,7 @@ expensive to fix once a project reaches a typesetter.
 Alongside it, under the same **Tools > Checking Inventories** menu, sits a distinct,
 complementary tool: **Unmatched Pairs of Punctuation.** It's its own standalone inventory
 window, listing single unmatched bracket/parenthesis-type characters — an unmatched "}",
-"[", or "(" — each with a count and a per-row **Status** column, using its own
-Status column: checkmark = approved, red X = incorrect, blue "?" = needs review. Where the
+"[", or "(" — each with a count and a per-row **Status** column: checkmark = approved, red X = incorrect, blue "?" = needs review. Where the
 Punctuation Inventory's "Show sequences" option (below) catches multi-character
 punctuation *sequences* — combinations like multiple quotation marks paired with spacing
 or another character such as ")" — Unmatched Pairs of Punctuation instead goes straight

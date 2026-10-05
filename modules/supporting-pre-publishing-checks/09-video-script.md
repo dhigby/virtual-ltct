@@ -6,7 +6,7 @@ lessons and the recurring "false-clean" thread that runs through all of them, so
 learner has the map in their head before working the lessons in detail. It is **not** a
 full read-aloud of the lessons — the click-by-click tool work, the Challenge exercises,
 and the mentor-reviewed scenario bank all happen outside this video. The recording
-happens outside this repo; upload to Cypher for Business is a separate human step.
+happens outside this repo; uploading it (to Vimeo or Google Drive, then linking it from lesson 1) is a separate human step.
 
 **Estimated runtime:** 16-18 minutes (overview companion to five 35-85 minute lessons
 plus the mentor-reviewed scenario bank).

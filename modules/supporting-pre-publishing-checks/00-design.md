@@ -251,7 +251,7 @@
 > level and every other objective are unchanged. `module-author` may revise
 > `03-parallel-passages-and-measures.md`, `04-formatting-and-references.md`, `06-scenario-bank.md`
 > and `07-mentor-guide.md`, and `quiz-writer` may revise `08-quiz.md` (Q12), on this basis.
->
+
 > **Amendment, Stage 4 advisories, 2026-10-05 (Jenni Beadle, course author and SME) — two more
 > places where the LTC could be read as judging target-language text, clarifications within the
 > approved scope, no re-approval needed:**
@@ -270,8 +270,16 @@
 > with no need to ask the team. If any are present, running the check is essential: any editing
 > of the verse can leave the footnote's quote out of date.
 >
+> Also clarified (lessons 02 and 04): the wordlist has no "deny" action, and the course no longer
+> contrasts it with Basic Checks as a point of confusion. Instead it draws the parallel: in the
+> wordlist the false-clean shortcut is marking every word Correct; in Basic Checks it is denying
+> flagged errors. Lesson 02 names the three spelling statuses (Correct, Incorrect, Undecided) in
+> its Content, and its Challenge 1 asks only for those; lesson 04's Challenge 3 is retitled "A
+> denied error is not a resolved one" and asks for the wordlist's equivalent shortcut.
+>
 > Seat time, competencies, outcome level and all objectives are unchanged. `module-author` may
-> revise `04-formatting-and-references.md` and `07-mentor-guide.md` on this basis.
+> revise `02-wordlist-and-biblical-terms.md`, `04-formatting-and-references.md` and
+> `07-mentor-guide.md` on this basis.
 
 ## Outcome-level open question (resolve before approval)
 
@@ -707,6 +715,8 @@ Observable markers of a competent supporting consultant:
 - (d) **Drives the tools correctly** — chooses the sensible list/option (e.g. link
   first-per-section, not every occurrence) and can undo a bad move.
 - (e) **Judges legitimate variation vs. error**, especially in parallel passages.
+  (Clarified 2026-10-05, Jenni Beadle: now **Leaves legitimate variation vs. error to the team**
+  — confirms the differences were reviewed, and gets the team to judge each one.)
 - (f) **Advises the surfaced decisions** (layout, hyphenation, renderings) and defers to the team
   or another consultant where it's genuinely their call, not the LTC's.
 - (g) **Knows when to escalate** — an LT mentor for tooling problems, a Translation Consultant for
@@ -979,7 +989,10 @@ team decides whether it is valid. Also clarified: **Footnote quotes** (lesson 04
 verse text in footnotes (`\fq`) is uncommon in the SME's experience (Central Africa), so the
 lesson makes no claim about how widely it is used; `\fq` markers in the Markers Inventory show whether a project uses it,
 and if any are present the check must be run, because any editing of the verse can leave the
-quote out of date.
-Seat time, competencies, outcome level and all objectives are
-unchanged. `module-author` may revise `04-formatting-and-references.md` and `07-mentor-guide.md`
+quote out of date. Also clarified (lessons 02 and 04): the course no longer contrasts the
+wordlist's lack of a "deny" action with Basic Checks; it draws the parallel instead (marking every
+word Correct vs. denying flagged errors), lesson 02 names the three spelling statuses in its
+Content, and lesson 04's Challenge 3 is retitled "A denied error is not a resolved one". Seat
+time, competencies, outcome level and all objectives are unchanged. `module-author` may revise
+`02-wordlist-and-biblical-terms.md`, `04-formatting-and-references.md` and `07-mentor-guide.md`
 on this basis.

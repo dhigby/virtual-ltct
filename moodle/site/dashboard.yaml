@@ -10,7 +10,7 @@ purpose: >-
   What a learner sees on their dashboard without arranging anything (FR-003).
 default_blocks:
   - block: calendar_upcoming
-    region: side-post
+    region: side-pre
     why: >-
       Upcoming events: site, course and group events in the learner's own time zone. Core
       does not put it on a new site's dashboard, and Timeline never shows hand-made events

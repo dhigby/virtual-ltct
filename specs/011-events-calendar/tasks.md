@@ -85,7 +85,7 @@
 
   Do not declare `calendar_lookahead`, `calendar_maxevents` or `calendar_exportlookahead`.
 - [X] T011 [US1] Validate `settings/calendar.yaml` in `scripts/site_config.py`. The zone list is `zoneinfo.available_timezones()` plus `UTC`, and `forcetimezone` must be `99`.
-- [X] T012 [P] [US1] Create `moodle/site/dashboard.yaml` with `rows: [21]` and `default_blocks: [{block: calendar_upcoming, region: side-post, why: …}]` (R18, FR-003). Validate it in `scripts/site_config.py`: "additive: `apply` never removes a block it did not declare".
+- [X] T012 [P] [US1] Create `moodle/site/dashboard.yaml` with `rows: [21]` and `default_blocks: [{block: calendar_upcoming, region: side-pre, why: …}]` (side-post until 2026-10-05: Boost's dashboard has no such region, and apply was refused) (R18, FR-003). Validate it in `scripts/site_config.py`: "additive: `apply` never removes a block it did not declare".
 - [X] T013 [US1] Implement `moodle/local_ltuse/classes/siteconfig/dashboard.php`:
   - **`apply`**: for each declared block not already on the default dashboard, call `block_manager::add_block($block, $region, 0, false, 'my-index', <default my_pages id>)` at system context. The default page is `my_pages` with `userid null`, `name '__default'` and `private 1`.
   - **`drift`**: report `missing` when the block is absent.

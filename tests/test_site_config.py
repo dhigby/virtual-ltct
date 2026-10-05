@@ -2007,7 +2007,7 @@ class Events(Base):
         self.assertEqual(hours["course"]["category_idnumber"], "ltct:mentoring")
         self.assertEqual(hours["scheduler"]["guardtime"], 12 * 3600)   # decision 3
         self.assertEqual(hours["scheduler"]["allownotifications"], 0)  # R20
-        self.assertEqual(decl["dashboard"], [{"block": "calendar_upcoming", "region": "side-post"}])
+        self.assertEqual(decl["dashboard"], [{"block": "calendar_upcoming", "region": "side-pre"}])
         payload = sc.build_payload(decl, "apply", {})
         self.assertEqual(payload["officehours"], hours)
         self.assertEqual(payload["dashboard"], decl["dashboard"])
@@ -2056,10 +2056,11 @@ class Events(Base):
                 self.assertInvalid("mod/scheduler:seeotherstudentsbooking")
 
     def test_dashboard_rules(self):
-        block = "  - block: calendar_upcoming\n    region: side-post\n    why: >-\n"
+        block = "  - block: calendar_upcoming\n    region: side-pre\n    why: >-\n"
         for old, new in [
             ("block: calendar_upcoming", "block: not_a_block"),
-            ("region: side-post", "region: footer"),
+            ("region: side-pre", "region: footer"),
+            ("region: side-pre", "region: side-post"),
             (block, block.replace(">-\n", "upcoming\n") + block),   # the same block twice
         ]:
             with self.subTest(change=new):

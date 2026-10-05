@@ -19,6 +19,8 @@ ignore:
     reason: The same role-mapping field for role id 10, which is orgmanager here (spec 002). Role ids differ per site, and flat-file enrolment is not used.
   - setting: enrol_flatfile/map_11
     reason: The same role-mapping field for role id 11, which is mentor here (spec 003). Role ids differ per site, and flat-file enrolment is not used.
+  - setting: enrol_flatfile/map_12
+    reason: The same role-mapping field for role id 12, which is ltctadmin here (spec 008). Role ids differ per site, and flat-file enrolment is not used.
   - setting: folder/maxsizetodownload
     reason: Stored as 0 where the default is empty. Both mean no limit.
   - setting: mlbackend_python/port

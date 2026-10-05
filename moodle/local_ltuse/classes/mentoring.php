@@ -103,8 +103,10 @@ class mentoring {
      */
     public static function role_id(): int {
         global $DB;
-        static $id = null;
-        if ($id === null) {
+        static $id = 0;
+        // Only a found id is kept: a 0 kept from before apply made the role would stop every
+        // mentor sync for the rest of the request (or, under PHPUnit, the rest of the run).
+        if (!$id) {
             $id = (int)$DB->get_field('role', 'id', ['shortname' => self::ROLE]);
         }
         return $id;

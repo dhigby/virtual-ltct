@@ -199,14 +199,16 @@ function local_ltuse_managed_organisation_keys(int $userid, bool $reload = false
 /**
  * The facts local_ltuse\organisation\access needs about one person (spec 002 research R10).
  *
- * Gathered on every request, through public APIs except the cohort reads this file lists.
- * Spec 002's organisation pages need exactly these facts for may_manage_account(), so they
- * call this rather than gather their own.
+ * Gathered on every request, through public APIs except the cohort reads this file lists and
+ * the one role_assignments read below. Spec 002's organisation pages need exactly these facts
+ * for may_manage_account(), so they call this rather than gather their own.
  *
  *   ltct_org       profile_user_record() (public/user/profile/lib.php:812)
  *   org_cohorts    local_ltuse_organisation_member_keys()
  *   siteadmin      is_siteadmin() (public/lib/accesslib.php:702)
- *   coursecontact  has_coursecontact_role() (public/lib/accesslib.php:742)
+ *   coursecontact  staff: any role but student in any course context. A read of
+ *                  {role_assignments} by userid, since get_user_roles() takes one context and
+ *                  has_coursecontact_role() sees only $CFG->coursecontact (teachers by default)
  *   highrole       get_user_roles($context, $userid, false) (public/lib/accesslib.php:3097)
  *                  at the system context and at each category from
  *                  core_course_category::get_all(['returnhidden' => true])
@@ -218,7 +220,7 @@ function local_ltuse_managed_organisation_keys(int $userid, bool $reload = false
  * @return array facts, keyed as organisation\access documents them
  */
 function local_ltuse_organisation_person_facts(stdClass $user): array {
-    global $CFG;
+    global $CFG, $DB;
     require_once($CFG->dirroot . '/user/profile/lib.php');
 
     $userid = (int)$user->id;
@@ -240,7 +242,10 @@ function local_ltuse_organisation_person_facts(stdClass $user): array {
         'org_cohorts' => local_ltuse_organisation_member_keys($userid),
         'deleted' => !empty($user->deleted),
         'siteadmin' => is_siteadmin($userid),
-        'coursecontact' => has_coursecontact_role($userid),
+        'coursecontact' => $DB->record_exists_sql("SELECT 1 FROM {role_assignments} ra
+            JOIN {context} ctx ON ctx.id = ra.contextid AND ctx.contextlevel = :courselevel
+            JOIN {role} r ON r.id = ra.roleid AND r.shortname <> :student WHERE ra.userid = :userid",
+            ['courselevel' => CONTEXT_COURSE, 'student' => 'student', 'userid' => $userid]),
         'highrole' => $highrole,
         'managers' => (bool)local_ltuse_managed_organisation_keys($userid),
         'mentor' => local_ltuse_is_mentor_candidate($userid),

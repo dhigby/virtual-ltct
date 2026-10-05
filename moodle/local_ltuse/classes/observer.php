@@ -260,6 +260,26 @@ class observer {
     }
 
     /**
+     * A cohort is gone: unassign each pathway it had (spec 006). Through unassign(), so each
+     * removal fires pathway_unassigned for spec 008. Nobody is unenrolled here.
+     *
+     * @param \core\event\cohort_deleted $event
+     */
+    public static function cohort_deleted(\core\event\cohort_deleted $event): void {
+        try {
+            $cohortid = (int)$event->objectid;
+            // The cohort row is already gone, so its context comes from the event.
+            $context = $event->get_context();
+            foreach (\local_ltuse\pathway\assignments::for_cohort($cohortid) as $row) {
+                \local_ltuse\pathway\assignments::unassign($row['pathwaykey'], $cohortid, $context);
+            }
+        } catch (\Throwable $e) {
+            debugging('local_ltuse: could not unassign a deleted cohort\'s pathways: ' . $e->getMessage(),
+                DEBUG_DEVELOPER);
+        }
+    }
+
+    /**
      * Make the pair contacts if they are not already, and record it. Idempotent.
      *
      * @param int $mentorid

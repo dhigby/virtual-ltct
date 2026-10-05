@@ -15,6 +15,10 @@ class hook_callbacks {
      * Add "Mentoring" to the primary navigation for anyone with a mentor or a learner (spec
      * 003, research R3). Nobody else sees it, so the site gains no item for most users.
      *
+     * Add "Pathways" for every signed-in user (spec 006, R10; FR-009): the dashboard is the
+     * landing page and carries the primary navigation. Add "Assign pathways" only for someone
+     * who may assign a pathway to some cohort (contracts/pages.md "Navigation").
+     *
      * @param \core\hook\navigation\primary_extend $hook
      */
     public static function primary_extend(\core\hook\navigation\primary_extend $hook): void {
@@ -22,12 +26,39 @@ class hook_callbacks {
         if (!isloggedin() || isguestuser() || during_initial_install()) {
             return;
         }
-        if (!mentoring::has_relationship((int)$USER->id)) {
-            return;
+        $primary = $hook->get_primaryview();
+        if (mentoring::has_relationship((int)$USER->id)) {
+            $primary->add(get_string('mentoring', 'local_ltuse'),
+                new moodle_url('/local/ltuse/mentoring.php'), navigation_node::TYPE_CUSTOM, null,
+                'local_ltuse_mentoring');
         }
-        $hook->get_primaryview()->add(get_string('mentoring', 'local_ltuse'),
-            new moodle_url('/local/ltuse/mentoring.php'), navigation_node::TYPE_CUSTOM, null,
-            'local_ltuse_mentoring');
+        $primary->add(get_string('pathways', 'local_ltuse'),
+            new moodle_url('/local/ltuse/pathways.php'), navigation_node::TYPE_CUSTOM, null,
+            'local_ltuse_pathways');
+        if (self::may_assign_pathways((int)$USER->id)) {
+            $primary->add(get_string('pathway:manage', 'local_ltuse'),
+                new moodle_url('/local/ltuse/pathways_manage.php'), navigation_node::TYPE_CUSTOM, null,
+                'local_ltuse_pathways_manage');
+        }
+    }
+
+    /**
+     * Whether the user may assign a pathway to at least one cohort: the cheap form of
+     * pathway\assignments::may_assign() over every cohort, read on every page. The site team
+     * holds moodle/cohort:assign at system context; an organisation manager manages at least
+     * one organisation (spec 002), whose member cohort they may assign to. The Assign page
+     * itself still checks may_assign() for each cohort.
+     *
+     * @param int $userid
+     * @return bool
+     */
+    private static function may_assign_pathways(int $userid): bool {
+        global $CFG;
+        if (has_capability('moodle/cohort:assign', \context_system::instance(), $userid)) {
+            return true;
+        }
+        require_once($CFG->dirroot . '/local/ltuse/lib.php');
+        return (bool)\local_ltuse_managed_organisation_keys($userid);
     }
 
     /**

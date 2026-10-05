@@ -21,6 +21,7 @@ the pull request that adds a setting is the record of why it exists.
 | `office-hours.yaml` | The one course where mentors offer office hours and learners book them, and its booking activity (spec 011). |
 | `dashboard.yaml` | Blocks every learner's default dashboard carries: Upcoming events (spec 011). |
 | `settings/calendar.yaml` | Calendar export, and the site's default time zone, UTC (spec 011). |
+| `pathways.yaml` | Role pathways: a named set of competencies a role needs (spec 006). Empty until a role is supplied. |
 
 The shapes are specified in
 [`specs/001-site-config-as-code/contracts/declaration.md`](../../specs/001-site-config-as-code/contracts/declaration.md),
@@ -184,6 +185,33 @@ Organisation managers follow completion through their reports, not through badge
 **Retire a course by hiding it, never by deleting it.** Deleting a course archives its badges,
 which breaks verification for everyone who holds one, and deleting its certificate activity
 deletes every certificate code already issued. A hidden course keeps both working.
+
+## Pathways
+
+Row #12 (spec 006). A **competency pathway** is never declared or built by hand. Moodle works
+it out when someone opens it, from what the publisher records on every publish: which
+competencies a course aims at, the level it aims at, and whether it is delivered (stage 8). A
+republish with a changed `competencies:` list or `target_outcome_level` moves the course
+between pathways with no other step. Pilots never appear.
+
+`apply` also copies two things in for the pathway pages: the four level labels from
+[`outcome-levels.yaml`](../../outcome-levels.yaml), and each competency's page on the
+competency site, built from the descriptor's `slug` and `mkdocs.yml`'s `site_url`.
+
+**Adding a role pathway.** A role is added only when a person supplies it: the maintainer with
+the department or the CBC programme. Add an entry to `pathways.yaml` with a `key`, a `name`,
+the role's `competencies` (each copied exactly from `competencies.yaml`) and a `why` naming who
+supplied it, then run `validate` and `apply`. A role's name never names a CBC level. A role
+removed from the file is retired by `apply`, never deleted, so cohorts it was given to keep it
+once it is declared again.
+
+**Giving a pathway to a cohort.** The site team, or an organisation manager for their own
+organisation's cohorts, does this on the **Assign pathways** page. It changes what the cohort's
+members see; it enrols nobody. Enrolling a cohort into a pathway's courses is spec 008's
+tooling.
+
+**Taking a course out of pathways.** Hide it. A hidden course leaves every pathway at once and
+its learners keep their completions. Never delete it (see badges above).
 
 ## Report downloads and emailed reports
 

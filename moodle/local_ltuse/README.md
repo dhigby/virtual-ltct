@@ -380,6 +380,55 @@ and the entities `core_reportbuilder\local\entities\base`. Before raising `requi
 against it. Moodle 5.0 to 5.2 changed default entity initialisation, entity order, the
 abstract `get_default_tables()`, custom sort fields and select-filter values (research R15).
 
+**The pathway pages' raw reads (spec 006)**, all read-only, by indexed columns:
+
+| Table | Columns used | For |
+|---|---|---|
+| `{course}` | `id`, `idnumber`, `visible`, `fullname` | A pathway lists visible `ltct:<slug>` courses (`pathway\catalogue::membership_sql()`, the one membership rule). |
+| `{course_completions}` | `course`, `userid`, `timecompleted` | A course is completed for the learner (`pathway\progress`). |
+| `{user_enrolments}`, `{enrol}` | `userid`, `enrolid`, `id`, `courseid` | A course is in progress: the learner holds any enrolment in it. |
+| `{cohort}`, `{cohort_members}` | `id`, `idnumber`, `name`, `contextid`; `cohortid`, `userid` | Which pathways a learner has, and which cohorts a manager may give one to. |
+
+They write only the plugin's own tables.
+
+## Learning pathways (spec 006)
+
+A pathway is never stored as a Moodle object. `classes/pathway/` builds it when it is opened,
+from what the publisher and `site_config.py apply` keep up to date:
+
+- **`local_ltuse_course_pathway`**: one row per published course, written only by
+  `local_ltuse_set_course_pathway`, which the publisher calls on every publish straight after
+  `set_course_competencies`. It holds whether the course is delivered (stage 8, from
+  `course_stage.py`) and the level it aims at (1–4), and the pathway keys last announced, so
+  the next publish fires `pathway_courses_changed` for what changed.
+- **`local_ltuse_role_pathway`, `local_ltuse_role_pathway_comp`**: role pathways from
+  `moodle/site/pathways.yaml`, applied by `classes/siteconfig/rolepathways.php`. Retired,
+  never deleted.
+- **`local_ltuse_pathway_cohort`**: which cohorts have which pathway, set on
+  `pathways_manage.php`. Holds `usermodified`, declared by the privacy provider.
+- **`local_ltuse_competency`** gains `slug` and `url`, the competency's page on the competency
+  site, which a level with no course links to. Plugin config `pathwaylevel1`–`4` holds the
+  level labels from `outcome-levels.yaml`.
+
+| Class | Does |
+|---|---|
+| `pathway\catalogue` | Keys (`competency:<slug>`, `role:<key>`), which courses are on a pathway, every pathway. |
+| `pathway\builder` | Pure: lays out a pathway, marks the next course, totals a role. Tested by `tests/pathway_harness.php`. |
+| `pathway\viewer` | Pure: who may see whose pathways (the learner, their mentor, their organisation's manager, the site team). |
+| `pathway\progress` | One learner's state per course, through `mentoring::progress_status()`. |
+| `pathway\view` | Glue: one key for one learner as a template context. |
+| `pathway\assignments` | Pathway ↔ cohort, and who may assign. |
+
+**006 enrols nobody.** Spec 008 owns enrolment. It codes against
+[`specs/006-learning-pathways/contracts/pathway-api.md`](../../specs/006-learning-pathways/contracts/pathway-api.md):
+`catalogue::courses()`, `assignments::assign($key, $cohortid, true)`, `cohorts_for()`, and
+the events `pathway_courses_changed`, `pathway_assigned` and `pathway_unassigned`. Those names
+are frozen; change them only together with 008.
+
+**No level for a learner, anywhere.** A level appears only as what a course aims at and as a
+row heading. Finishing a pathway says the training is completed. `tests/test_pathway_wording.py`
+holds every pathway string to `scripts/cbc_wording.py`'s strict rule.
+
 ## Identity, and why republishing does not duplicate
 
 Every object the publisher creates carries an idnumber:
@@ -627,7 +676,7 @@ site-wide: an enrolment through a disabled plugin is inactive, and `enrol()` ref
 - `enrol_get_plugin('self')->add_instance()` (`enrol/self/lib.php:1145`, `lib/enrollib.php:2601`), `enrol_plugin::enrol_user()` (`:2112`), `unenrol_user()` (`:2294`), `update_user_enrol()` (`:2214`), `enrol_is_enabled()` (`:205`);
 - `core_login_process_password_reset($username, '')` (`login/lib.php:84`). It prints nothing, applies every guard itself (auth that can reset, `moodle/user:changeownpassword`, confirmed, not suspended, reuse or expiry of a live reset within `$CFG->pwresettime`), emails only the account's own address, and returns a status the page maps (`actions::reset_outcome()`). It reads and writes `user_password_resets` itself, so this plugin never touches that table, which has no public API;
 - `\core\session\manager::destroy_user_sessions()` (`lib/classes/session/manager.php:985`) then `user_update_user()` with a minimal `{id, suspended}` (`user/lib.php:156`), as `admin/user.php:127-138` does;
-- `get_user_roles()` (`lib/accesslib.php:3097`) over `core_course_category::get_all()` (`course/classes/category.php:370`), `has_coursecontact_role()`, `is_siteadmin()`, `cohort_is_member()` (`cohort/lib.php:239`);
+- `get_user_roles()` (`lib/accesslib.php:3097`) over `core_course_category::get_all()` (`course/classes/category.php:370`), `is_siteadmin()`, `cohort_is_member()` (`cohort/lib.php:239`);
 - `\core_message\api::is_contact()`, `add_contact()`, `get_contact()`, `remove_contact()` (`message/classes/api.php:2242-2360`), as spec 003 uses them;
 - `move_courses()` (`course/lib.php:1548`), which fires `course_updated` and hides a course moved into a hidden category;
 - `\core_user\hook\extend_user_menu` (`user/classes/hook/extend_user_menu.php`), dispatched from `user_get_user_navigation_info()` (`user/lib.php:970`).
@@ -648,6 +697,7 @@ own.
 | `course` joined to `course_categories` | `c.idnumber LIKE 'ltct:%'` | `course.idnumber` is | The courses a manager may enrol into, and placement drift. |
 | `enrol` | `courseid`, `enrol = self`, `customchar1` | `courseid` is | Finding the organisation-enrolment instance by its marker; `enrol_get_instances()` has no filter. |
 | `user_enrolments` joined to `enrol` | `ue.userid`; `ue.enrolid`, `status` | both are | Which courses a person is enrolled in through that instance, and active enrolments to suspend. |
+| `role_assignments` joined to `context` and `role` | `ra.userid`; `contextlevel = CONTEXT_COURSE`, `r.shortname <> 'student'` | `ra.userid` is | Whether a person is staff, so not a manager's to manage: any role but student in any course. `get_user_roles()` takes one context, and `has_coursecontact_role()` sees only `$CFG->coursecontact` (teachers by default). |
 
 ## Events and office hours (spec 011)
 

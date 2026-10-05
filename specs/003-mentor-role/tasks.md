@@ -291,7 +291,7 @@ The role and its capability serve every story. No story starts until this phase 
   **Done, to spec 002 T078/R10 where it differs from this task:** authorisation is `may_manage_account` (a learner whose field and cohort agree), not a `$learnerorg` match. Add and Remove each go through a confirmation POSTed with the sesskey; the mentor must be one the page offers; the picker leaves out deleted and suspended accounts. The link from `organisation.php` rows is spec 002 T077's. The spec 016 `can_view_identity` hook point is marked.
 - [ ] T032 [US3] Bump the version, install, and run quickstart B1–B5 on the instance with `ltct-test-orgmgr-a`, B5 being the forged POST. Time B1 against SC-003's two minutes. Record under "Instance results" (FR-008 manager part, US3-1 to US3-4) · specs/003-mentor-role/research.md
 - [X] T033 [US3] Record the Phase B page in the plugin README under its own heading: its authorisation, and that it reads `cohort` ⋈ `cohort_members` through the existing `local_ltuse_managed_organisation_keys()`. File: moodle/local_ltuse/README.md
-  **Done:** README section "Manage mentors: organisation managers (spec 003 Phase B)", with its raw reads. Version 2026100401 in version.php and the site.yaml pin.
+  **Done:** README section "Manage mentors: organisation managers (spec 003 Phase B)", with its raw reads. Version 2026100601 in version.php and the site.yaml pin (2026100401 when built; renumbered above spec 006's 2026100600 on merging main).
 
 **Checkpoint**: relationships are assigned and ended by the site team, and by organisation managers if Phase B was approved.
 

@@ -1,0 +1,86 @@
+{{!
+    @template local_ltuse/pathways_manage
+
+    Assign pathways (spec 006, contracts/pages.md; FR-012, FR-013). Either the list of cohorts
+    the viewer may assign to, or one cohort: its pathways, the assign form and its members'
+    progress. Course completion only; never a level for any learner (FR-011, R13).
+
+    Context variables required for this template:
+    * list view: hascohorts, cohorts: [{name, url, pathways: [{title}]}]
+    * cohort view: cohortname, backurl, haspathways, pathways: [{title, key, unassignurl}],
+        hasoptions, options: [{key, title}], assignurl, cohortid, sesskey,
+        hasmembers, members: [{fullname, url, progress: [{title, progresstext}]}], pagingbar (HTML)
+
+    Example context (json):
+    {
+        "cohortname": "SIL Learners",
+        "backurl": "#",
+        "haspathways": true,
+        "pathways": [{"title": "Keyboards", "key": "competency:keyboards", "unassignurl": "#"}],
+        "hasoptions": true,
+        "options": [{"key": "competency:fonts-and-encoding", "title": "Fonts & Encoding"}],
+        "assignurl": "#",
+        "cohortid": 3,
+        "sesskey": "abc",
+        "hasmembers": true,
+        "members": [{"fullname": "Learner One", "url": "#",
+            "progress": [{"title": "Keyboards", "progresstext": "1 of 2 courses completed"}]}],
+        "pagingbar": ""
+    }
+}}
+<div class="local-ltuse-pathways">
+{{^cohortname}}
+    {{^hascohorts}}<p>{{#str}}pathway:nocohorts, local_ltuse{{/str}}</p>{{/hascohorts}}
+    {{#hascohorts}}
+    <p>{{#str}}pathway:assignhelp, local_ltuse{{/str}}</p>
+    <ul class="list-unstyled">
+        {{#cohorts}}
+        <li class="card mb-2">
+            <div class="card-body">
+                <h4 class="card-title h5"><a href="{{url}}">{{{name}}}</a></h4>
+                {{#pathways}}<span class="badge bg-secondary me-1">{{title}}</span>{{/pathways}}
+            </div>
+        </li>
+        {{/cohorts}}
+    </ul>
+    {{/hascohorts}}
+{{/cohortname}}
+{{#cohortname}}
+    <p><a href="{{backurl}}">{{#str}}back{{/str}}</a></p>
+    <h3>{{{cohortname}}}</h3>
+    <p>{{#str}}pathway:assignhelp, local_ltuse{{/str}}</p>
+    {{#haspathways}}
+    <ul class="list-unstyled">
+        {{#pathways}}
+        <li class="py-1 border-top">
+            {{title}} · <a href="{{unassignurl}}">{{#str}}pathway:unassign, local_ltuse{{/str}}</a>
+        </li>
+        {{/pathways}}
+    </ul>
+    {{/haspathways}}
+    {{#hasoptions}}
+    <form method="post" action="{{assignurl}}" class="d-flex flex-wrap gap-2 align-items-center mb-3">
+        <input type="hidden" name="cohortid" value="{{cohortid}}">
+        <input type="hidden" name="action" value="assign">
+        <input type="hidden" name="sesskey" value="{{sesskey}}">
+        <label class="visually-hidden" for="local-ltuse-pathway-key">{{#str}}pathways, local_ltuse{{/str}}</label>
+        <select class="form-select w-auto" name="key" id="local-ltuse-pathway-key">
+            {{#options}}<option value="{{key}}">{{title}}</option>{{/options}}
+        </select>
+        <button type="submit" class="btn btn-primary">{{#str}}pathway:assign, local_ltuse{{/str}}</button>
+    </form>
+    {{/hasoptions}}
+    {{#hasmembers}}
+    <h4 class="h5">{{#str}}pathway:cohortprogress, local_ltuse, {{{cohortname}}}{{/str}}</h4>
+    <ul class="list-unstyled">
+        {{#members}}
+        <li class="py-1 border-top">
+            <a href="{{url}}">{{fullname}}</a>
+            {{#progress}}<br><span class="text-muted">{{title}}:</span> {{progresstext}}{{/progress}}
+        </li>
+        {{/members}}
+    </ul>
+    {{{pagingbar}}}
+    {{/hasmembers}}
+{{/cohortname}}
+</div>

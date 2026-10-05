@@ -9,17 +9,22 @@
 defined('MOODLE_INTERNAL') || die();
 
 $plugin->component = 'local_ltuse';
-$plugin->version   = 2026100402;   // Managers' own people (spec 002 amendment 2026-10-02):
+$plugin->version   = 2026100602;   // Managers' own people (spec 002 amendment 2026-10-02):
                                    // the "My organisation" page and its actions, the
                                    // local_ltuse_org_contact table and the hourly
                                    // reconcile_org_contacts task, the cohort observers, and the
                                    // local_ltuse_place_course web service. db/upgrade.php saves
-                                   // its savepoint at this stamp. 2026100401 is spec 003's
-                                   // mentors page. Before them: events and office hours (spec
-                                   // 011, 2026100400): calendar change notices, the
-                                   // office-hours sync, booking notices and their table
-                                   // (local_ltuse_booking), the time zone notice. After
-                                   // open courses (spec 002, 2026100302): the course
+                                   // its savepoint at this stamp. Before it, manage mentors
+                                   // (spec 003 Phase B, 2026100601): mentors.php and the
+                                   // profile link, no schema change; and learning pathways
+                                   // (spec 006, 2026100600): the pathway tables
+                                   // (local_ltuse_course_pathway, _role_pathway,
+                                   // _role_pathway_comp, _pathway_cohort), slug and url on
+                                   // local_ltuse_competency, set_course_pathway. Before them,
+                                   // events and office hours (spec 011, 2026100400): calendar
+                                   // change notices, the office-hours sync, booking notices
+                                   // and their table (local_ltuse_booking), the time zone
+                                   // notice. After open courses (spec 002, 2026100302): the course
                                    // discussion is always open, drift checks each published
                                    // ltct: course's group mode, and a managers cohort synced
                                    // into a shared course blocks apply. Before them: mentor

@@ -29,7 +29,7 @@ defined('MOODLE_INTERNAL') || die();
  *   org_cohorts  array   the keys of the ltct:org:<key> member cohorts P is in
  *   deleted      bool    the user record is deleted
  *   siteadmin    bool    P is a site admin
- *   coursecontact bool   has_coursecontact_role(P): a course teacher
+ *   coursecontact bool   P is staff: holds any role but student in any course
  *   highrole     bool    P holds a role assignment at system or any category context
  *   managers     bool    P is in any ltct:org:<key>:managers cohort
  *   mentor       bool    P is in ltct:mentors

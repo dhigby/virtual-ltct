@@ -1066,6 +1066,19 @@ def test_suspend_previews_applies_and_reruns_as_already_done(tmp_path, fixture_o
     assert not [c for c in server.calls[sent:] if c[0] == "local_ltuse_admin_apply_suspension"]
 
 
+def test_suspend_code_never_confirms_a_reactivate(tmp_path, fixture_orgs):
+    server = PeopleServer()
+    server.add(2, suspended=True)
+    path = _suspension_file(tmp_path)
+    code, text = run(["suspend", str(path)], client=server)
+    assert code == 0
+    confirm = _preview_code(text)
+    code, text = run(["reactivate", str(path), "--apply", "--confirm", confirm], client=server)
+    assert code == 1
+    assert not _calls(server, "local_ltuse_admin_apply_suspension")
+    assert server.people["learner2@example.org"]["suspended"]
+
+
 def test_suspend_lost_response_then_rerun_reports_already_done(tmp_path, fixture_orgs):
     server = PeopleServer()
     for n in (2, 3, 4):

@@ -620,6 +620,9 @@ def cmd_suspension(args, client, out, suspend):
     """`suspend` and `reactivate`: one row per call, through spec 002's actions (research R6)."""
     word = "suspend" if suspend else "reactivate"
     source, rows, words = _people_file_or_email(args, "suspension")
+    # The direction is part of what the code covers, as for course-mentors: otherwise a
+    # suspend preview where everyone is already suspended would confirm a reactivate.
+    rows = [dict(r, action=word) for r in rows]
 
     def payload(row):
         return {"row": row["row"], "email": row["email"].strip()}

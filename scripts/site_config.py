@@ -2634,8 +2634,8 @@ GROUP_NAME_PLACEHOLDER = "{n}"
 # (spec 016), so a template may hold no name of anyone.
 GROUP_NAME_FORBIDDEN = ("{name}", "{firstname}", "{lastname}", "{fullname}")
 # Boost's mydashboard layout has one block region, side-pre (theme/boost/config.php,
-# MOODLE_502_STABLE), and my/index.php adds content. side-post is not a region there:
-# apply on ltuse.net was refused with "unknown block region side-post" (2026-10-05).
+# MOODLE_502_STABLE), and my/index.php adds content. (side-post, core's BLOCK_POS_RIGHT, is
+# shown in the default region in Boost; it was never why apply failed: see dashboard.php.)
 DASHBOARD_REGIONS = ("side-pre", "content")
 CALENDAR_SETTINGS = ("enablecalendarexport", "calendar_customexport", "calendar_adminseesall",
                      "timezone", "forcetimezone")

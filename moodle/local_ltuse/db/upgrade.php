@@ -126,9 +126,9 @@ function xmldb_local_ltuse_upgrade($oldversion) {
         $table->add_field('ownlevel', XMLDB_TYPE_CHAR, '20', null, XMLDB_NOTNULL, null, 'none');
         $table->add_field('effectivelevel', XMLDB_TYPE_CHAR, '20', null, XMLDB_NOTNULL, null, 'none');
         $table->add_field('source', XMLDB_TYPE_CHAR, '20', null, XMLDB_NOTNULL, null, 'own');
-        $table->add_field('pseudonym', XMLDB_TYPE_CHAR, '100', null, XMLDB_NOTNULL, null, '');
-        $table->add_field('realfirstname', XMLDB_TYPE_CHAR, '100', null, XMLDB_NOTNULL, null, '');
-        $table->add_field('reallastname', XMLDB_TYPE_CHAR, '100', null, XMLDB_NOTNULL, null, '');
+        $table->add_field('pseudonym', XMLDB_TYPE_CHAR, '100', null, XMLDB_NOTNULL, null, null);
+        $table->add_field('realfirstname', XMLDB_TYPE_CHAR, '100', null, XMLDB_NOTNULL, null, null);
+        $table->add_field('reallastname', XMLDB_TYPE_CHAR, '100', null, XMLDB_NOTNULL, null, null);
         $table->add_field('realfields', XMLDB_TYPE_TEXT, null, null, null, null, null);
         $table->add_field('timecreated', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, '0');
         $table->add_field('timemodified', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, '0');

@@ -330,8 +330,7 @@ PROTECTION_MANAGE_ROLES = frozenset({"manager"})
 PROTECTION_MANAGE_CAPS = ("local/ltuse:manageprotection", "local/ltuse:manageorgprotection")
 REPORT_EDIT_CAPS = ("moodle/reportbuilder:edit", "moodle/reportbuilder:editall")
 COURSE_LEADER_ROLES = ("editingteacher", "teacher")
-COURSE_LEADER_PROHIBIT = ("moodle/course:useremail", "moodle/backup:downloadfile",
-                          "report/log:view", "report/loglive:view")
+COURSE_LEADER_PROHIBIT = ("moodle/backup:downloadfile",)   # R14: email and logs stay (scope review)
 # Roles that must not let anyone assign roles: the follow-only roles (spec 003 contract).
 NO_ALLOWASSIGN = frozenset({ORGMANAGER, MENTOR})
 
@@ -2842,27 +2841,15 @@ CORE_WITHHOLD = ("country", "city", "url", "institution", "department", "phone1"
                  "address", "idnumber")
 SPECIAL_WITHHOLD = ("maildisplay", "picture", "firstname", "lastname")
 NEVER_WITHHELD = (ORG_FIELD, CERT_FIELD, "description", "interests")
-NEUTRAL_SURNAME = re.compile(r"^[^\w\s]?$", re.UNICODE)   # "" or one non-letter character (R4)
-# Settings spec 016 relies on, with the value each must have. [D1] email out of course leaders'
-# views; [D3] names locked and no self-registration (plan decisions 1 and 3).
+NEUTRAL_SURNAME = re.compile(r"^[^\w\s]$", re.UNICODE)   # one non-letter character (R4)
+# The site-wide settings spec 016 requires, with the value each must have: only those that
+# cost nobody anything (Doug, 2026-10-05 (scope review), change 20). protectusernames and the
+# login rules are general account rules in spec 008's admin.yaml.
 PROTECTION_SETTINGS = {
-    "showuseridentity": "",                                   # R8 [D1]
-    "grade_export_customprofilefields": "",                   # R8 [D1]
-    "allowedemaildomains": "",                                # R8
-    "enablegravatar": 0,                                      # R6
+    "allowedemaildomains": "",                                # R8, core default
+    "enablegravatar": 0,                                      # R6, core default
     "forceloginforprofileimage": 1,                           # R6
-    "protectusernames": 1,                                    # R9
-    "core_search/core_user_user_enabled": 0,                  # R9
-    "registerauth": "",                                       # R3 [D3]
-    "authpreventaccountcreation": 1,                          # R3 [D3]
-    "auth_manual/field_lock_firstname": "locked",             # R3 [D3]
-    "auth_manual/field_lock_lastname": "locked",              # R3 [D3]
-    "auth_manual/field_lock_email": "locked",                 # R3 [D3]
 }
-GRADE_EXPORT_FIELDS = "grade_export_userprofilefields"
-GRADE_EXPORT_DENY = ("email", "institution", "department")   # R8 [D1]
-AUTH_SETTING = "auth"
-AUTH_ALLOWED = frozenset({"webservice"})   # manual and nologin are always on; nothing else (R3)
 
 
 def _withhold_allowed(decl):
@@ -2938,8 +2925,9 @@ def _validate_protection(where, data, rows, decl, problems):
                      "pseudonym, which is chosen per person (R12)" % ORG_MINIMUM_MAX)
     neutral = data.get("neutral_surname")
     if not (isinstance(neutral, str) and NEUTRAL_SURNAME.match(neutral)):
-        problems.add(where, "neutral_surname is \"\" or one non-letter character, such as "
-                     "\"\u00b7\" (R4)")
+        problems.add(where, "neutral_surname is one non-letter character, such as \"\u00b7\": "
+                     "names are not locked, so a protected learner's own profile form must "
+                     "save, and core requires a surname there (R4)")
     if data.get("reconcile_minutes") != RECONCILE_MINUTES:
         problems.add(where, "reconcile_minutes is %d: db/tasks.php runs reconcile_protection "
                      "hourly" % RECONCILE_MINUTES)
@@ -2992,8 +2980,7 @@ def _check_protection_site(decl, problems):
         caps = roles.get(short, {}).get("capabilities", {})
         for cap in COURSE_LEADER_PROHIBIT:
             if caps.get(cap) != "prohibit":
-                problems.add("roles.yaml %s" % short, "must prohibit %s (spec 016 R8, R14)"
-                             % cap)
+                problems.add("roles.yaml %s" % short, "must prohibit %s (spec 016 R14)" % cap)
 
     declared = {s["name"]: s for s in decl["settings"]}
     for name, want in PROTECTION_SETTINGS.items():
@@ -3002,26 +2989,6 @@ def _check_protection_site(decl, problems):
             problems.add("settings", "%s must be declared as %r (spec 016)" % (name, want))
         elif str(setting["value"]) != str(want):
             problems.add(setting["file"], "%s must be %r (spec 016)" % (name, want))
-    grade = declared.get(GRADE_EXPORT_FIELDS)
-    if grade is None:
-        problems.add("settings", "%s must be declared without %s (spec 016 R8)"
-                     % (GRADE_EXPORT_FIELDS, ", ".join(GRADE_EXPORT_DENY)))
-    else:
-        listed = {f.strip() for f in str(grade["value"]).split(",") if f.strip()}
-        if listed & set(GRADE_EXPORT_DENY):
-            problems.add(grade["file"], "%s must not list %s (spec 016 R8)"
-                         % (GRADE_EXPORT_FIELDS, ", ".join(sorted(listed & set(GRADE_EXPORT_DENY)))))
-    auth = declared.get(AUTH_SETTING)
-    if auth is None:
-        problems.add("settings", "auth must be declared, so enabling another login method shows "
-                     "as drift (spec 016 R3)")
-    else:
-        enabled = {a.strip() for a in str(auth["value"]).split(",") if a.strip()}
-        if enabled - AUTH_ALLOWED:
-            problems.add(auth["file"], "auth enables %s; only %s, beside manual and nologin: "
-                         "OAuth2 and others overwrite names on every login (spec 016 R3)"
-                         % (", ".join(sorted(enabled - AUTH_ALLOWED)),
-                            ", ".join(sorted(AUTH_ALLOWED))))
 
     if not any(f["shortname"] == CERT_FIELD for f in decl["profile_fields"]):
         problems.add("profile-fields.yaml", "%s must be declared: the certificate's real name "

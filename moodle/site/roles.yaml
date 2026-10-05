@@ -90,17 +90,16 @@ roles:
     archetype: editingteacher
     capabilities:
       moodle/site:trustcontent: inherit
-      moodle/course:useremail: prohibit        # spec 016 R8 [D1]: no learner's email in a course leader's views
-      moodle/backup:downloadfile: prohibit     # spec 016 R14: a backup with users carries every name and field
-      report/log:view: prohibit                # spec 016 R14: course logs show IP addresses and places
-      report/loglive:view: prohibit
+      moodle/backup:downloadfile: prohibit     # spec 016 R14: a backup with users carries every account's fields
     why: >-
       #3 (FR-012): editing teachers lose trusted content at system context, so content they
       edit in Moodle is cleaned of iframes. Only the publisher and managers keep an iframe.
-      #26 (spec 016, R8, R14): course leaders are not entitled to a protected learner's real
-      identity (FR-006), and core shows an email, a backup or a log to them whatever a
-      learner's own settings say. Prohibit, so no course override gives them back. Courses
-      come from the repo, so a course leader has no use for a backup. Messaging stays.
+      #26 (spec 016, R14): no course backup download. The editingteacher archetype allows it
+      (lib/db/access.php, MOODLE_502_STABLE), and a backup with users carries every enrolled
+      account's fields. Courses come from the repo, so a course leader has no use for a
+      backup; prohibit, so no course override gives it back. Email and course logs are not
+      taken away: the scope review rejected hiding them from everyone (Doug, 2026-10-05 (scope
+      review)), and a protected person's address is checked not to identify them instead.
 
   - shortname: orgmanager
     name: Organisation manager
@@ -162,17 +161,16 @@ roles:
       mod/scheduler:canscheduletootherteachers: inherit
       mod/scheduler:canseeotherteachersbooking: inherit
       local/ltuse:viewidentity: allow          # spec 016 R7 path 4: real identities of the course's protected learners
-      moodle/course:useremail: prohibit        # spec 016 R8 [D1], as editingteacher
-      moodle/backup:downloadfile: prohibit     # spec 016 R14
-      report/log:view: prohibit                # spec 016 R14
-      report/loglive:view: prohibit
+      moodle/backup:downloadfile: prohibit     # spec 016 R14: not in the archetype; prohibit so no course override grants it
     why: >-
       #26 (spec 016, FR-006, Doug 2026-10-04): a course mentor sees the real identity of the
       protected learners in an ltct: course they mentor, while both hold their roles. The
       capability counts only in a course whose idnumber is ltct:<slug> and never in the
       office-hours course, where every mentor is a teacher (R7 path 4); it is checked in a
-      course context, which a learner's user context does not inherit from. The prohibits are
-      editingteacher's, for the same reasons.
+      course context, which a learner's user context does not inherit from. The backup
+      prohibit is editingteacher's (R14); the teacher archetype never held
+      moodle/backup:downloadfile (lib/db/access.php, MOODLE_502_STABLE), so it changes nothing
+      today and stops a course override adding it.
       #22 (spec 012): the course-level role that assesses work. Its archetype defaults are what
       FR-010/FR-013 need (assign:grade, workshop allocate/switchphase/overridegrades,
       viewhiddenactivities). Since 2026-10-02 shared courses have no organisation groups, so

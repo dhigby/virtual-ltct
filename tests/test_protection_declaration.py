@@ -117,13 +117,15 @@ class Protection(unittest.TestCase):
         self.edit("protection.yaml", "org_minimum_max: firstname", "org_minimum_max: pseudonym")
         self.assertInvalid("never a pseudonym")
 
-    def test_the_neutral_surname_is_empty_or_one_non_letter(self):
-        self.edit("protection.yaml", 'neutral_surname: ""', 'neutral_surname: "X"')
-        self.assertInvalid("neutral_surname")
+    def test_the_neutral_surname_is_one_non_letter(self):
+        self.edit("protection.yaml", 'neutral_surname: "·"', 'neutral_surname: "X"')
+        self.assertInvalid("neutral_surname is one non-letter character")
 
-    def test_the_placeholder_surname_is_accepted(self):
-        self.edit("protection.yaml", 'neutral_surname: ""', 'neutral_surname: "·"')
-        self.assertValid()
+    def test_an_empty_neutral_surname_is_refused(self):
+        # Names are not locked (scope review, change 3), so core's edit form must accept the
+        # protected learner's own surname (R4).
+        self.edit("protection.yaml", 'neutral_surname: "·"', 'neutral_surname: ""')
+        self.assertInvalid("neutral_surname is one non-letter character")
 
     def test_reconcile_runs_hourly(self):
         self.edit("protection.yaml", "reconcile_minutes: 60", "reconcile_minutes: 5")
@@ -152,13 +154,9 @@ class Protection(unittest.TestCase):
         self.edit("roles.yaml", MENTOR_VIEW + "\n", "")
         self.assertInvalid("roles.yaml mentor: must allow local/ltuse:viewidentity")
 
-    def test_course_leaders_must_not_see_email(self):
-        self.edit("roles.yaml", "      moodle/course:useremail: prohibit        # spec 016 R8 [D1]: no",
-                  "      moodle/course:useremail: inherit        # no")
-        self.assertInvalid("roles.yaml editingteacher: must prohibit moodle/course:useremail")
-
     def test_course_leaders_must_not_download_backups(self):
-        self.edit("roles.yaml", "      moodle/backup:downloadfile: prohibit     # spec 016 R14\n", "")
+        self.edit("roles.yaml", "      moodle/backup:downloadfile: prohibit     # spec 016 R14: not in "
+                  "the archetype; prohibit so no course override grants it\n", "")
         self.assertInvalid("roles.yaml teacher: must prohibit moodle/backup:downloadfile")
 
     def test_report_editing_stays_with_manager(self):
@@ -166,30 +164,22 @@ class Protection(unittest.TestCase):
                   "      moodle/reportbuilder:edit: allow\n      moodle/course:viewparticipants: allow")
         self.assertInvalid("moodle/reportbuilder:edit stays with manager")
 
-    # --- settings (R3, R6, R8, R9) ---------------------------------------------------------------
+    # --- settings (R6, R8) ---------------------------------------------------------------------
 
-    def test_every_identity_setting_is_required(self):
+    def test_the_zero_cost_settings_are_required(self):
         self.edit("settings/identity.yaml", "  - name: enablegravatar\n    value: 0", "  - name: enablegravatar\n    value: 1")
         self.assertInvalid("enablegravatar must be 0")
 
-    def test_grade_exports_carry_no_email(self):
-        self.edit("settings/identity.yaml", "value: firstname,lastname,idnumber",
-                  "value: firstname,lastname,idnumber,email")
-        self.assertInvalid("must not list email")
-
-    def test_oauth2_is_refused(self):
-        self.edit("settings/identity.yaml", "  - name: auth\n    value: webservice",
-                  "  - name: auth\n    value: webservice,oauth2")
-        self.assertInvalid("auth enables oauth2")
-
-    def test_the_search_area_flag_is_core_search(self):
+    def test_email_in_staff_views_is_not_refused(self):
+        # Decision 1 is rejected (scope review, change 1): core's defaults are declared.
         decl = sc.validate(self.dir)[0]
-        names = {s["name"] for s in decl["settings"]}
-        self.assertIn("core_search/core_user_user_enabled", names)
+        declared = {s["name"]: str(s["value"]) for s in decl["settings"]}
+        self.assertEqual(declared["showuseridentity"], "email")
+        self.assertIn("email", declared["grade_export_userprofilefields"].split(","))
 
     def test_missing_identity_file_is_refused(self):
         (self.dir / "settings" / "identity.yaml").unlink()
-        self.assertInvalid("showuseridentity must be declared")
+        self.assertInvalid("enablegravatar must be declared")
 
     # --- profile fields and the certificate (R10) ---------------------------------------------------
 

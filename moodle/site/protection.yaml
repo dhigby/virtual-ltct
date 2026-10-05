@@ -65,7 +65,7 @@ withhold:
     - ltct_exp_education
     - firstname                    # the pseudonym replaces it
 org_minimum_max: firstname         # a pseudonym is chosen per person, never per organisation (R12)
-neutral_surname: ""                # "" unless quickstart V8 shows the edit form refuses it; then "·" (R4)
+neutral_surname: "·"               # mandatory: names are not locked and core's edit form requires a surname (R4)
 reconcile_minutes: 60              # db/tasks.php runs reconcile_protection hourly
 why: >-
   #26 (spec 016, FR-001, FR-014): the levels and what each withholds are configuration and

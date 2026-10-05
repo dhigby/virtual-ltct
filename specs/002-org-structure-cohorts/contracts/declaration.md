@@ -1,6 +1,6 @@
 # Contract: Organisations, profile fields and the manager role
 
-> **Amended 2026-10-03 in the spec** (Areas and Area Language Technology Coordinators, [Clarifications 2026-10-03](../spec.md)). This file is not yet redone for it; that happens in the plan step, before any build. Where this file disagrees with the 2026-10-03 Clarifications, the spec wins.
+> **Amended 2026-10-03 in the spec** (Areas and Area Language Technology Coordinators, [Clarifications 2026-10-03](../spec.md)). This file was not redone for it; ~~that happens in the plan step, before any build~~ *(2026-10-05: what it describes is built and deployed through the 2026-10-02 to 2026-10-05 amendments; FR-014 to FR-019 and SC-006 stay deferred to a later plan step, Doug, 2026-10-05)*. Where this file disagrees with the 2026-10-03 Clarifications, the spec wins.
 
 > **Amended 2026-10-02: open courses** (spec Clarifications 2026-10-02; research R2, R3, R8–R14; plan, "Amendment 2026-10-02"). Organisations are no longer separated inside a course. Text describing current behaviour is rewritten in place and marked *(amended 2026-10-02)*; additions are marked *(2026-10-02)*.
 
@@ -38,7 +38,7 @@ mentors:                          # (2026-10-02) the one hidden cohort ltct:ment
   why: <string>
 ```
 
-**The mentors cohort** *(2026-10-02)*. `mentors` renders one more cohort: `idnumber` `ltct:mentors`, system context, `visible = 0`, no rule. The site team fills it by hand; it belongs to no organisation, because mentors may come from any. It is the only source of candidates on a manager's mentor page, and its members are not learners to the organisation access decision, so no manager can manage them (research R10). It is reported, and checked at the server, exactly like an organisation cohort.
+**The mentors cohort** *(2026-10-02)*. `mentors` renders one more cohort: `idnumber` `ltct:mentors`, system context, `visible = 0`, no rule. The site team fills it, since 2026-10-05 with `ltct_admin.py managers` (spec 008); it belongs to no organisation, because mentors may come from any. It is the only source of candidates on a manager's mentor page, and its members are not learners to the organisation access decision, so no manager can manage them (research R10). It is reported, and checked at the server, exactly like an organisation cohort.
 
 Baseline shared categories (R6):
 
@@ -58,7 +58,7 @@ Every organisation entry produces exactly these four items, and nothing else dif
 |---|---|---|---|---|
 | Course category | `ltct:org:<key>` | `<name>` | parent `ltct:organisations` | Created with `core_course_category::create()`. Holds only the organisation-only courses `org-courses.yaml` declares for it *(2026-10-02)*. |
 | Organisation cohort | `ltct:org:<key>` | `<name>` | system context | `visible = 0`. Filled by a rule (R4). |
-| Managers cohort | `ltct:org:<key>:managers` | `<name> managers` | system context | `visible = 0`. No rule: filled by hand in Moodle (FR-012). |
+| Managers cohort | `ltct:org:<key>:managers` | `<name> managers` | system context | `visible = 0`. No rule: filled by the site team in Moodle (FR-012), since 2026-10-05 with `ltct_admin.py managers` (spec 008). |
 | Cohort rule | on cohort `ltct:org:<key>` | `ltct: ltct:org:<key>` | `tool_dynamic_cohorts` | One condition: profile field `ltct_org` equals `<key>`. |
 
 No country cohorts are declared or created (spec Clarifications 2026-10-01). Country is only Moodle's core profile field.
@@ -225,12 +225,12 @@ All five names are confirmed in `MOODLE_502_STABLE` (`public/admin/settings/cour
 
 ## Organisation access check (`local_ltuse`) *(2026-10-02)*
 
-`local_ltuse\organisation\access` is the one shared check behind every management surface (FR-006a, research R10). It is a pure class, tested without Moodle by `tests/org_access_harness.php` in CI, like `profile_access`. Its inputs and per-action rules are in the data model's "Organisation access decision". It has two predicates:
+`local_ltuse\organisation\access` is the one shared check behind every manager's management surface (FR-006a, research R10). It is a pure class, tested without Moodle by `tests/org_access_harness.php`, like `profile_access` by `tests/profile_access_harness.php`. *(2026-10-05: both harnesses run in CI from `.github/workflows/site-config.yml`, added in the same change as this note; before it, neither ran in CI.)* *(Amended 2026-10-04 for spec 008.)* Spec 008's admin service is not a manager surface and does not use this check: it calls `organisation\actions`' unchecked `do_*()` cores (`actions.php`, docblock "TWO LAYERS"; `classes/admin/intake_service.php:579`, `classes/admin/suspension_service.php:76-78`) after `require_capability('local/ltuse:administer')` (data model, "Management actions: two layers"). Its inputs and per-action rules are in the data model's "Organisation access decision". It has two predicates:
 
 | Predicate | Holds when | Callers |
 |---|---|---|
 | `is_org_member_of_manager(V, P)` | V is not P; P's `ltct_org` is non-empty and one of V's managed keys; P is in the `ltct:org:<that key>` cohort. No role condition. | the profile hook's `FORCE_ALLOW`; the "my organisation" page's list and progress view; spec 016's entitlement, which is asked to call it rather than re-derive it |
-| `may_manage_account(V, P)` | the first, and P is a learner: not deleted, not a site admin, not staff (`has_coursecontact_role()`), no role assignment at system or any category context (`get_user_roles()`), in no managers cohort, not in `ltct:mentors` | every management action: enrol, unenrol, reset link, suspend, reactivate, assign and end mentors |
+| `may_manage_account(V, P)` | the first, and P is a learner: not deleted, not a site admin, not staff (any role but `student` in any course context, amended 2026-10-04 from `has_coursecontact_role()`), no role assignment at system or any category context (`get_user_roles()`), in no managers cohort, not in `ltct:mentors` | every manager's management action: enrol, unenrol, reset link, suspend, reactivate, assign and end mentors (spec 008's `do_*()` cores skip it, after `require_capability('local/ltuse:administer')`, above) |
 
 Pages: `local/ltuse/organisation.php` (the "my organisation" page, linked from the user menu for managers-cohort members only) and `local/ltuse/mentors.php?userid=`. Each page calls `require_login()`, checks a sesskey on every write, and re-runs the check for the person named in the request, so an edited URL or form post naming someone else is refused. It reads managers-cohort and `ltct:mentors` membership on every request, so a removed manager loses everything at once. It shows each person's email, protected people's included (Doug, 2026-10-02).
 

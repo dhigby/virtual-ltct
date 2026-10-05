@@ -77,7 +77,14 @@ and the password Moodle emails them. Someone protected at `firstname` or `pseudo
 email Moodle cannot use as a username, gets a generated username instead, but still signs in
 with their email.
 
-A row that `waits` asked for identity protection, and joins once identity protection is ready for that person.
+A row that `waits` asked for identity protection, and nothing is made for it yet. Quote the
+tool's reason for it verbatim. Usually the reason is about the `email_checked` column: others
+in a course will see the person's email address, so before that row can go ahead someone must
+confirm with the person that the address identifies neither them nor their organisation, and
+then put `yes` in `email_checked` in their own file (or give another address). When the tool
+says the address looks like it names the person or their organisation, a different address
+is usually the answer. Then run the preview again. Never decide for the operator that an
+address is fine.
 
 ## 5. Apply only on the operator's yes
 

@@ -303,8 +303,8 @@ is exactly the kind of work this team cannot absorb.
 
 *2.1.1 — wording only: Principle II's example of at-risk configuration no longer names
 organisation protection minimums, which spec 016's scope review removed (Doug, 2026-10-05
-(scope review), change 9). PATCH, because no rule changes; the maintainer confirms the
-version level in the spec 016 pull request.*
+(scope review), change 9). PATCH, because no rule changes. Doug confirmed the PATCH level on
+2026-10-05.*
 
 *2.1.0 — follows the parts of the 2026-10-03 `INTENT.md` decision "Learners ask; Area LT
 Coordinators add them" that Doug decided: an Area is an organisation entry and replaces SIL as

@@ -289,6 +289,7 @@ The role and its capability serve every story. No story starts until this phase 
 
   Files: moodle/local_ltuse/mentors.php, moodle/local_ltuse/lib.php, moodle/local_ltuse/lang/en/local_ltuse.php
   **Done, to spec 002 T078/R10 where it differs from this task:** authorisation is `may_manage_account` (a learner whose field and cohort agree), not a `$learnerorg` match. Add and Remove each go through a confirmation POSTed with the sesskey; the mentor must be one the page offers; the picker leaves out deleted and suspended accounts. The link from `organisation.php` rows is spec 002 T077's. The spec 016 `can_view_identity` hook point is marked.
+  *(2026-10-05: the hook point is dropped as moot (Doug): everyone the page authorises already passes `can_view_identity`. `mentors.php:51-53` now says no check is made; contract `local-ltuse.md`, Phase B, Identity.)*
 - [ ] T032 [US3] Bump the version, install, and run quickstart B1–B5 on the instance with `ltct-test-orgmgr-a`, B5 being the forged POST. Time B1 against SC-003's two minutes. Record under "Instance results" (FR-008 manager part, US3-1 to US3-4) · specs/003-mentor-role/research.md
 - [X] T033 [US3] Record the Phase B page in the plugin README under its own heading: its authorisation, and that it reads `cohort` ⋈ `cohort_members` through the existing `local_ltuse_managed_organisation_keys()`. File: moodle/local_ltuse/README.md
   **Done:** README section "Manage mentors: organisation managers (spec 003 Phase B)", with its raw reads. Version 2026100601 in version.php and the site.yaml pin (2026100401 when built; renumbered above spec 006's 2026100600 on merging main).
@@ -304,14 +305,19 @@ The role and its capability serve every story. No story starts until this phase 
 **Independent test**: one test course with a submission activity.
 
 - [X] T034 [P] [US4] Correct spec 012's plan. Its "Cross-spec effects" sentence, "Until then the organisation manager enrols the mentor with the cohort", becomes "Until then the site team enrols the mentor as Course mentor with the organisation's group (spec 002 decision 2026-10-01; spec 003 research R8)". File: specs/012-assignments-peer-review/plan.md
-- [ ] T035 [US4] On the instance:
-  - In test course C2, use a hand-made core assignment if spec 012's publisher does not yet ship assignments.
-  - The site team enrols `ltct-test-mentor-1` as Course mentor (`teacher`) in organisation A's group.
+  *(2026-10-05: that corrected sentence is itself superseded by spec 008's course-mentor sync (research R8), and 012's plan marks it so; 012 is parked for re-plan.)*
+- [ ] T035 [US4] On the instance, after A1–A17 are recorded, with the course-mentor sync on (`local_ltuse/coursementorsync: 1`, as `moodle/site/settings/admin.yaml` declares since 2026-10-05):
+  - In test course C2 (an `ltct:<slug>` course, not `ltct:officehours`), use a hand-made core assignment if spec 012's publisher does not yet ship assignments.
+  - Enrol `ltct-test-learner-1` in C2 as Student through cohort sync or the Organisation enrolment. A manual enrolment is a pilot's, and the sync gives it no course mentor (spec 008 research R10).
+  - As `ltct-test-siteteam`, assign `ltct-test-mentor-1` as `ltct-test-learner-1`'s Mentor (A2's steps).
+  - Confirm the sync enrolled `ltct-test-mentor-1` in C2 through the "Course mentors" (`ltct:coursementor`) instance as Course mentor (`teacher`), and put them and `ltct-test-learner-1` in one "Mentor group `<n>`" (idnumber `ltct:mentorgroup:<mentor-1 id>`). C2 stays in group mode 0. Any other default mentor still assigned gets a mentor group of their own.
   - `ltct-test-learner-1` submits.
   - The mentor reads the submission and leaves feedback; the learner sees it (US4-1, US4-2).
-  - The user-context `mentor` role alone still cannot open the submission (A7).
+  - End the relationship: the sync takes away Teacher, the enrolment and the group membership at once, and the feedback stays on the learner's record.
+  - The user-context `mentor` role alone still cannot open the submission: A7 shows this, run with the sync off. With it on, a default mentor is also Course mentor by design.
 
   Record under "Instance results" (FR-011) · specs/003-mentor-role/research.md
+  *(Rewritten 2026-10-05: the old step, "The site team enrols `ltct-test-mentor-1` as Course mentor (`teacher`) in organisation A's group", can no longer be followed. Shared courses have no organisation groups (spec 002, open courses), and course mentors are enrolled by spec 008's sync, on since 2026-10-05 (#97); research R8. Still open: no instance check has run.)*
 
 **Checkpoint**: all four stories are verified.
 

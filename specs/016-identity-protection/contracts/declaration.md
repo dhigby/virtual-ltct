@@ -43,7 +43,7 @@ protection: {
 
 **`roles.yaml`**
 - `local/ltuse:viewidentity` is allowed only on `manager`, `mentor` and `teacher` (R7), and `manager`, `teacher` and (when declared) `mentor` must allow it.
-- `local/ltuse:manageprotection` is allowed only on `manager`.
+- `local/ltuse:manageprotection` is allowed only on `manager` and spec 008's `ltctadmin` (`PROTECTION_MANAGE_ROLES` in `scripts/site_config.py`; `moodle/site/roles.yaml`). Spec 008's intake grants a new account the protection its row asks for, and that account has no organisation yet, so `can_manage_protection()` passes only through the capability (008 research R5, 008 task T015, agreed with 016 on 2026-10-04). Holding it makes `ltctadmin` the site team for granting and changing protection (`entitlement::is_site_team()`), which that role is; not for seeing real identities, since research R7 path 1 needs `local/ltuse:viewidentity`, which it does not hold.
 - `moodle/reportbuilder:edit` and `editall` are allowed only on `manager`.
 - `editingteacher` and `teacher` must prohibit `moodle/backup:downloadfile` (R14). ~~`moodle/course:useremail`, `report/log:view` and `report/loglive:view`~~ are no longer required (changes 1 and 5).
 

@@ -166,5 +166,5 @@ On delivery, the same PR updates these rows' status in moodle/REQUIREMENTS.md (c
 
 ## Dependencies
 
-- None upstream. Every other training-system spec (002–014) depends on this one to apply its configuration.
+- None upstream. Every other training-system spec (002–014, and 016-identity-protection, specified later) depends on this one to apply its configuration; the ones that declare settings, roles or plugins extend [the declaration contract](contracts/declaration.md) (2026-10-05).
 - 015-production-hosting-ops: consumes this spec to build the production VPS and owns backups, scheduling of drift checks and the app-plan decision.

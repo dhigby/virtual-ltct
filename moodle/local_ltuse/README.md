@@ -191,12 +191,15 @@ run in one delegated transaction, and the stored set is read back after the comm
 
 ### The plugin's own tables
 
-`db/install.xml` (and the matching steps in `db/upgrade.php`) adds four tables. The first two
-arrive at version `2026100204`; `local_ltuse_course_badge` arrives at `2026100300` and is
-described under [Badges and certificates](#badges-and-certificates-spec-013);
-`local_ltuse_mentor_contact` arrives at `2026100301` and is described under
-[Mentors](#mentors-spec-003). Only the last holds user data, and `classes/privacy/provider.php`
-declares, exports and deletes it:
+`db/install.xml` (and the matching steps in `db/upgrade.php`) adds 13 tables. The four below
+are the first: the first two arrive at version `2026100204`; `local_ltuse_course_badge` arrives
+at `2026100300` and is described under
+[Badges and certificates](#badges-and-certificates-spec-013); `local_ltuse_mentor_contact`
+arrives at `2026100301` and is described under [Mentors](#mentors-spec-003). The others are
+described with the spec that adds them: organisation contacts (spec 002), bookings (spec 011),
+pathways (spec 006), course mentors (spec 008) and protection (spec 016). Every table that
+holds user data is declared, exported, and deleted or anonymised by
+`classes/privacy/provider.php`.
 
 | Table | Holds | Written by |
 |---|---|---|
@@ -734,7 +737,7 @@ each is re-checked as stated.
 |---|---|---|
 | The office-hours privacy rests on mod_scheduler's group filter (`get_slots_available_to_student()`), and the plugin does not check groups when a slot is booked. | The plugin is the booking tool D6 chose. A crafted request can book another mentor's slot; the mentor sees it and can remove it (plan decision 4, accepted). | Quickstart V10 on every scheduler re-pin |
 | Raw read of `scheduler_slots.teacherid` by primary key, and reliance on the `SSstu:<slotid>` eventtype convention (`classes/model/slot.php`). | The plugin has no API that returns a slot's teacher without loading its internal model classes. Its calendar events are the only record of a booking's time that core's events report. | Quickstart V13 on every scheduler re-pin |
-| `update_record('scheduler', …)` for the declared columns of an existing activity (`maxbookings`, `schedulermode`, `guardtime`, `allownotifications`, `defaultslotduration`, `usebookingform`, `scale`), and the read of the same row. The name and group mode go through core's `set_coursemodule_name()` and `set_coursemodule_groupmode()`. | `scheduler_update_instance()` calls the activity form's `save_mod_data()` unconditionally, so `update_moduleinfo()` cannot run without a form. A new activity goes through `add_moduleinfo()`. | Quickstart V1 on every scheduler re-pin |
+| `update_record('scheduler', …)` for the declared columns of an existing activity (`maxbookings`, `schedulermode`, `guardtime`, `allownotifications`, `defaultslotduration`, `usebookingform`, `scale`), and the read of the same row. The name and group mode go through core's `set_coursemodule_name()` and `\core_courseformat\formatactions::cm()->set_groupmode()` (`set_coursemodule_groupmode()` is deprecated in 5.2, MDL-86857). | `scheduler_update_instance()` calls the activity form's `save_mod_data()` unconditionally, so `update_moduleinfo()` cannot run without a form. A new activity goes through `add_moduleinfo()`. | Quickstart V1 on every scheduler re-pin |
 
 **Raw reads added by spec 011**, all by indexed columns of stable core tables:
 
@@ -764,12 +767,12 @@ contracts are spec 008's
 | Role `ltctadmin` | [`moodle/site/roles.yaml`](../site/roles.yaml) | Holds `local/ltuse:administer` and exactly the core capabilities the functions check, at system level, one assignment per site-team member. `local_ltuse_admin_check` names any the token user lacks. |
 | Token script | `cli/setup_admin_token.php` | `--username=<u> --token-file=<path>` authorises one site-team member for `ltuse_admin` and writes their own token to a mode-600 file. It never prints the token; `--rotate` revokes theirs and issues a new one. It uses core's `webservice::add_ws_authorised_user()`, `\core_external\util::generate_token()` and `webservice::delete_user_ws_token()`. There is no shared admin account, so Moodle's logs show who made each change. |
 | Rules | `classes/admin/*_rules.php` | Pure classes, no Moodle calls: `intake_rules`, `enrolment_rules` (which cohort may be enrolled in which course, and as what), `move_rules` (kept, lost, gained, suspended by rule), `course_mentor_rules`. Tested without Moodle by `tests/admin_harness.php`. |
-| Services | `classes/admin/` | `intake_service`, `cohort_enrolment` (cohort sync added or re-enabled, marked `customchar1 = 'ltct:008'`, disabled and never deleted), `suspension_service`, `move_service`, `membership_service`, `course_mentor_records`, `course_mentor_sync`, `masking`. Suspension and per-row course enrolment call spec 002's `organisation\actions` `do_*()` methods, the same writes an organisation manager's page makes. A new account's username is its email, lowercased; `intake_rules::username()` keeps a neutral `ltc-` code for a `firstname` or `pseudonym` target (spec 016 refuses those levels for a username holding the real name) and for an email `PARAM_USERNAME` would change, longer than 100 characters, or already a username here. Everyone signs in with their email (`authloginviaemail`). |
+| Services | `classes/admin/` | `intake_service`, `cohort_enrolment` (cohort sync added or re-enabled, marked `customchar1 = 'ltct:008'`, disabled and never deleted), `suspension_service`, `move_service`, `membership_service`, `course_mentor_records`, `course_mentor_sync`, `masking`. Suspension and per-row course enrolment call spec 002's `organisation\actions` `do_*()` methods, the same writes an organisation manager's page makes. A new account's username is its email, lowercased; `intake_rules::username()` keeps a neutral `ltc-` code for a `firstname` or `pseudonym` target (spec 016 refuses those levels for a username holding the real name) and for an email `PARAM_USERNAME` would change, longer than 100 characters, or already the username of a deleted account. A row whose email is a live account's username is refused as `login_clash`, never given a code. Everyone signs in with their email (`authloginviaemail`). |
 | Observers | `db/events.php`, `classes/admin/observer.php` | `role_assigned` and `role_unassigned` (the mentor role in a user context), `user_enrolment_created`, `_updated` and `_deleted`, `enrol_instance_updated` and `_deleted`, and `user_updated` keep course mentors in step: internal, so a course mentor whose reason ends loses Teacher, their enrolment and their group in the same request (spec 016 relies on it). `pathway_courses_changed` (spec 006) enrols each enrolling cohort in a course that joins a pathway; never internal, so a rolled-back change enrols no one. |
 | Task | `db/tasks.php`, `classes/task/course_mentor_reconcile.php` | Hourly. Recomputes every `ltct:` course's course mentors, removes stray `local_ltuse` Teacher assignments and orphaned records, and re-syncs pathway cohort enrolments. The backstop, not the mechanism. |
 | Table | `db/install.xml`, `local_ltuse_course_mentor` | One-course mentors (learner, course) and the mentors of a cohort in a course. Default mentors are never copied in; they are read from spec 003's role assignments. Declared, exported and deleted by `classes/privacy/provider.php`; the database backup must include it (spec 015). |
 | Course-mentor enrolment | `classes/admin/course_mentor_sync.php` | One `enrol_self` instance per course, `customchar1 = 'ltct:coursementor'`, closed to self-enrolment. A course mentor is enrolled with no role, then given Teacher with component `local_ltuse`, so the role goes with the reason even when they are enrolled another way too. Each has a "Mentor group <n>" (idnumber `ltct:mentorgroup:<mentor id>`) holding them and the learners they assess there. |
-| Setting `local_ltuse/coursementorsync` | `settings.php` | The switch for everything in the three rows above. Declared **0** in [`moodle/site/settings/admin.yaml`](../site/settings/admin.yaml) until spec 008's plan decision 11 (how far a course mentor may see); at 0 the observers and the reconcile do nothing, and course-mentor records can still be written. `local_ltuse_admin_check` reports it. |
+| Setting `local_ltuse/coursementorsync` | `settings.php` | The switch for everything in the three rows above. Declared **1** in [`moodle/site/settings/admin.yaml`](../site/settings/admin.yaml) since #97 (2026-10-05), after spec 016's narrowed course-mentor path merged in #84 (spec 008 plan decision 11). At 0 the observers and the reconcile do nothing, and course-mentor records can still be written. `local_ltuse_admin_check` reports it. |
 
 **Removing `ltuse_admin` from `db/services.php` deletes every token issued for it** on the
 next upgrade, with its authorised users (`lib/upgradelib.php`, `external_update_descriptions()`),
@@ -828,7 +831,8 @@ minimum for its members (Doug, 2026-10-05 (scope review)). Moodle 5.2 has no hoo
 `fullname()`, and every view renders names live from the user record, so this plugin writes
 the protected display into the account itself and keeps the real values in its own table
 (research R1, R5). **Who is protected, their pseudonym and their real identity are Moodle
-data, never the repo's.** Not yet run on a server; quickstart V1–V17 are the instance checks.
+data, never the repo's.** Installed on ltuse.net on 2026-10-05 (version `2026100900`); not
+yet verified: spec 016 quickstart V1–V18 are the instance checks.
 
 | Piece | Where | Does |
 |---|---|---|

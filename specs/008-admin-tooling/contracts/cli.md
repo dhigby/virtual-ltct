@@ -15,7 +15,7 @@ A missing variable stops the tool before any call, naming the variable, never pr
 
 - **Paths.** Every file argument (`<file>`, `--out`) is refused if it, or its nearest existing ancestor, is inside any git working tree (a `.git` directory or file in any ancestor) or under the repo root. The check is pure Python, needs no `git`, and refuses if it cannot run (research R14). The refusal suggests `~/ltct-private/` and, for an input inside this repository, says whether git already has it.
 - **Two steps.** A changing command without `--apply` previews and prints a confirmation code computed over each row's normalised inputs and outcome class, never the masked display (research R15). `--apply --confirm <code>` re-reads the file, previews again, recomputes the code, and refuses on a mismatch. It then applies row by row, sending each row's fresh outcome. A row already applied reports `already done`; a row whose outcome moved off its path is refused. Nothing is stored between the two runs.
-- **Waiting rows.** A row that `waits` joins once identity protection is ready for that person. There is no production-gate reminder: intake holds back only a person who asked for protection (002 R13 as narrowed; research R16; Doug, 2026-10-05 (scope review)).
+- **Waiting rows.** A row that `waits` joins once identity protection is ready for that person. There is no production-gate reminder: intake holds back only a person who asked for protection (002 R13 as narrowed; research R16; Doug, 2026-10-05 (scope review)). Since 016 is installed (2026-10-05), such a row usually waits for its `email_checked` column to say `yes` (`email_unchecked`, or `email_reveals` when the address looks like it names the person or their organisation; research R5 step 0b), and the preview prints that reason.
 - **`--site-dir <path>`** (hidden, as in `site_config.py`): read organisation keys from a copy of `moodle/site/` outside the repo, for instance checks with fixture organisations. The repo's own declaration is never edited for a check.
 - **People are masked** unless `--show-people` (research R14).
 - **No files are written** except by `--out` and `template`; never a log.
@@ -25,7 +25,7 @@ A missing variable stops the tool before any call, naming the variable, never pr
 
 | Command | Changes Moodle | What it does | FR |
 |---|---|---|---|
-| `check` | no | Connects, names the site, release and user, confirms the service's functions are present and the settings in research R13 are right. | FR-009, FR-011 |
+| `check` | no | Connects, names the site, release and user, confirms the service's functions are present, and refuses unless `enrol_cohort/unenrolaction` and `tool_dynamic_cohorts/realtime` are right; shows `allowaccountssameemail` and `local_ltuse/coursementorsync`. The general account rules are left to `site_config.py drift` (research R13). | FR-009, FR-011 |
 | `list organisations \| cohorts \| courses [--org K]` | no | Lists declared organisation keys (from the repo) and the cohorts and `ltct:` courses in Moodle the operator may name. | FR-011 |
 | `template --kind intake\|move\|mentors\|course-mentors\|managers\|suspension --out <path>` | no | Writes a blank file with headers, outside the repo. | US4, FR-011 |
 | `intake <file> [--apply --confirm C]` | yes | Brings on new learners (data-model §1). | FR-001–FR-004, FR-019 |

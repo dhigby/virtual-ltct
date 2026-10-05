@@ -1,7 +1,14 @@
 # Design: How assignments are authored, disclosed and published
 
+> **Parked for re-plan (Doug, 2026-10-05).** Open courses (spec 002, 2026-10-02) and spec 008
+> plan decision 3's mentor groups change this spec's basis; Phases B and C, and the design
+> approval (tasks T014), wait on the re-plan. Do not fill in the decision record below against
+> this text. D6 (peer review) rests on organisation and cohort groups that shared courses no
+> longer have, and is marked in place; D1-D5, D7 and D8 do not depend on groups. See
+> [spec.md, Re-plan inputs](spec.md#re-plan-inputs).
+
 **For**: the maintainer's decision under spec 012 User Story 1 and constitution X ("a change to the course content model MUST have an approved design before any build").
-**Status**: **Awaiting decision.** Until the decision record below is filled in, no `*-assignment.md` may be committed (CI enforces this, [research R8](research.md#r8-where-the-design-gate-is-enforced-fr-001-sc-001)), and nothing in Phase B or C of [plan.md](plan.md) is built.
+**Status**: ~~**Awaiting decision.**~~ **Parked for re-plan** (Doug, 2026-10-05); the decision waits on the re-plan. Until the decision record below is filled in, no `*-assignment.md` may be committed (CI enforces this, [research R8](research.md#r8-where-the-design-gate-is-enforced-fr-001-sc-001)), and nothing in Phase B or C of [plan.md](plan.md) is built.
 
 This document answers FR-001 to FR-008a. Moodle facts are cited by research number ([research.md](research.md)).
 
@@ -116,6 +123,7 @@ Guide criteria keep their ids across republishes by matching on shortname. The i
   - instructions to authors that include the FR-012a reminder not to put their name in the work
 - Allocation is the `workshopallocation_orgcohort` subplugin (R4): cohort first, then the same organisation, never across.
 - If fewer than two learners in an organisation submit, it allocates no peers. The mentor assesses through the workshop's own "Assess" (FR-013).
+- *(2026-10-05: the two points above key allocation to organisation and cohort groups, which shared courses have not had since 2026-10-02 (spec 002). "Separate groups" would now mean 008's mentor groups (`ltct:mentorgroup:<mentor id>`). The re-plan needs the cross-organisation rule spec 002 left to 012 and Doug. Re-plan inputs 1 and 4.)*
 - **Limit stated plainly**: a workshop runs in phases for everyone in it, and its grades reach completion only when the mentor closes it (R4). So a **required** peer-review assignment completes for a cohort when its mentor closes the workshop, not when each learner finishes. A self-paced course that needs per-learner completion should use mentor review.
 
 ## D7. Review-site views (FR-007)
@@ -136,7 +144,7 @@ Structural criteria changes after grading stop and need `--allow-criteria-change
 
 ## What this design changes, so the decision is informed
 
-`disclosure.py`, a new `assignment_parse.py`, `moodle_payload.py`, `check_moodle_payload.py`, `publish_moodle.py`, `gen_course_site.py`, `check_learner_view.py`, `check_course_package.py`, `course_stage.py` (`is_lesson` only), `local_ltuse` (three web-service functions), a new `workshopallocation_orgcohort` plugin, `moodle/site/roles.yaml`, `moodle/site/site.yaml` (lists the new plugin), a new `moodle/site/course-discussions.yaml`, the `quiz-writer` and `alignment-reviewer` agents, `process/stages/03-draft.md` and `04-alignment.md`, CLAUDE.md's file-naming convention, and the course-package CI workflow.
+`disclosure.py`, a new `assignment_parse.py`, `moodle_payload.py`, `check_moodle_payload.py`, `publish_moodle.py`, `gen_course_site.py`, `check_learner_view.py`, `check_course_package.py`, `course_stage.py` (`is_lesson` only), `local_ltuse` (three web-service functions), a new `workshopallocation_orgcohort` plugin, `moodle/site/roles.yaml`, `moodle/site/site.yaml` (lists the new plugin), a new `moodle/site/course-discussions.yaml` (shipped in Phase A, retired 2026-10-02 by spec 002 R14), the `quiz-writer` and `alignment-reviewer` agents, `process/stages/03-draft.md` and `04-alignment.md`, CLAUDE.md's file-naming convention, and the course-package CI workflow.
 
 ---
 

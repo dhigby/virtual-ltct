@@ -11,7 +11,9 @@ covered with no further step. Ending it takes effect on the mentor's next page l
 R1).
 
 Core grants the role very little, and that is deliberate. It holds three read capabilities, and
-`site_config.py validate` enforces them as an allowlist (R2). Core's own mentor pages cannot meet
+`site_config.py validate` enforces them as an allowlist (R2). *(Since spec 016 it holds a
+fourth, `local/ltuse:viewidentity`, so an assigned mentor sees a protected learner's real
+identity (016 R7 path 2); a reviewed widening, R2.)* Core's own mentor pages cannot meet
 SC-001 for three reasons:
 - they show completion one course at a time, behind a link nothing in the interface offers;
 - they show nothing at all in the Moodle app;
@@ -29,11 +31,17 @@ learner's block still wins (R5).
 
 The site team assigns and ends relationships on core's own "Assign roles relative to this user"
 page, once `roles.yaml` declares that `manager` may assign `mentor` (R6). **Organisation
-managers assigning mentors (FR-008's second half) is Phase B.** It is gated on a maintainer
-decision, because spec 002 declined manager self-service on 2026-10-01 (R7).
+managers assigning mentors (FR-008's second half) is Phase B.** ~~It is gated on a maintainer
+decision, because spec 002 declined manager self-service on 2026-10-01 (R7).~~ *(Updated
+2026-10-05: approved 2026-10-02 (R7) and built, narrowed to an organisation's learners by spec
+002 R10 (T027, T031). The site team also assigns in bulk with spec 008's
+`ltct_admin.py mentors assign` and ends with `mentors end`.)*
 
-Story 4 (feedback on work) is delivered by spec 012's course-level Course mentor role. Syncing a
-learner's mentor into their courses is deferred to spec 008 (R8).
+Story 4 (feedback on work) is delivered by spec 012's course-level Course mentor role. ~~Syncing a
+learner's mentor into their courses is deferred to spec 008 (R8).~~ *(Updated 2026-10-05: spec
+008 delivered the sync (008 research R10), on since 2026-10-05 (#97). A learner's mentor is, by
+default, their course mentor in each course they take, enrolled as `teacher` in their own
+"Mentor group `<n>`" (`ltct:mentorgroup:<mentor id>`) and removed when the reason ends; R8.)*
 
 ## Technical Context
 
@@ -97,13 +105,13 @@ end of [research.md](research.md), not assumed.
 | VII. One shape | PASS. One mentor role for every partner, with no per-organisation variant. |
 | VIII. Language data | Not applicable. |
 | IX. Flat cost, field-ready | PASS. Core plus our plugin. Site plugins are in the free app, and the app handler is what makes the view field-ready. No push dependency: messages arrive whenever the app syncs. |
-| X. Traceable and verified | PASS, with gates. Cites row #11, whose status is updated in the delivering PR. Every API was confirmed on `MOODLE_502_STABLE`, and six behaviours are instance tasks. SC-005 needs real mentors and managers before "done". New recurring operation: the site team assigns mentors (until spec 008's bulk tool and, if approved, Phase B). There is a one-off `--sync` after upgrade. No new hosting cost. |
+| X. Traceable and verified | PASS, with gates. Cites row #11, whose status is updated in the delivering PR. Every API was confirmed on `MOODLE_502_STABLE`, and six behaviours are instance tasks. SC-005 needs real mentors and managers before "done". New recurring operation: the site team assigns mentors ~~(until spec 008's bulk tool and, if approved, Phase B)~~ *(updated 2026-10-05: in bulk through spec 008's `ltct_admin.py mentors assign` and `mentors end`; organisation managers assign their own learners' mentors through Phase B, approved 2026-10-02 and built)*. There is a one-off `--sync` after upgrade. No new hosting cost. |
 | XI. Survives an upgrade | PASS. Configuration plus `local_ltuse` on supported extension points: capability, pages, event observers, `myprofile_navigation`, `control_view_profile`, the mobile handler, CLI and privacy provider. Writes only through `role_assign`/`role_unassign`/`role_unassign_all`, `core_role_set_assign_allowed`, `api::add_contact`/`remove_contact`, and the plugin's own table. Raw reads: `role_assignments` ⋈ `context` by `userid`, and `course_completions` by `userid`. Both are stable core tables read by indexed columns, and both are listed in the README regardless. The plugin's `version` is bumped. `requires` and `supported` are unchanged at 5.2. |
 | Platform: core first | PASS, with justified own code (Complexity Tracking). The role, assignment page, messaging, completion and Course mentor are all core. Our code fills only the gaps core leaves: a cross-course view in browser and app, contacts across no shared course, and (Phase B) organisation scoping. |
 
 Re-checked after Phase 1 design: no change. Two points are raised for the maintainer, not
 routed around: the Phase B decision (R7), and the reading of FR-007 that a block still wins
-(R5).
+(R5). *(Updated 2026-10-05: Phase B was approved on 2026-10-02, R7.)*
 
 ## Project Structure
 
@@ -178,13 +186,14 @@ siteconfig classes because it is a property of a role declaration, not a new ite
 
 ## Cross-spec effects
 
-- **Spec 002 (decision needed)**: Phase B reverses the 2026-10-01 decline of manager
-  self-service, for mentor assignment only. If it is declined, FR-008's manager part and SC-003
-  move to spec 008, and this spec's FR-008 is amended in the same PR. The profile hook gains a
-  mentor exemption (R9) and still only takes access away.
+- **Spec 002 (decision needed; decided 2026-10-02, approved, R7)**: Phase B reverses the
+  2026-10-01 decline of manager self-service, for mentor assignment only. If it is declined,
+  FR-008's manager part and SC-003 move to spec 008, and this spec's FR-008 is amended in the
+  same PR. The profile hook gains a mentor exemption (R9) and still only takes access away.
 - **Spec 012**: story 4 relies on its Course mentor role, and its cross-spec note is corrected:
-  the site team, not the organisation manager, enrols a mentor as Course mentor (R8). 012's
-  `teacher` declaration is untouched.
+  ~~the site team, not the organisation manager, enrols a mentor as Course mentor (R8).~~ 012's
+  `teacher` declaration is untouched. *(Updated 2026-10-05: nobody enrols a course mentor by
+  hand; spec 008's sync does (R8). Spec 012 is parked for re-plan (Doug, 2026-10-05).)*
 - **Spec 004**: consolidated mentor and organisation reporting can build on
   `\local_ltuse\mentoring::for_user()` or replace the browser page with a Report builder source.
   Its scope rule is the same capability.
@@ -192,6 +201,11 @@ siteconfig classes because it is a property of a role declaration, not a new ite
   `moodle/competency:planview` only, in 006's change (R11).
 - **Spec 008**: owns bulk assignment (via `core_role_assign_roles` with `contextlevel: user`),
   a UI for ending all of a mentor's relationships, and auto-enrolling mentors as Course mentor.
+  *(Updated 2026-10-05: delivered. `ltct_admin.py mentors assign` and `mentors end`, and the
+  course-mentor sync (008 research R10), on since 2026-10-05 (`local_ltuse/coursementorsync: 1`,
+  #97). A course mentor holds Teacher and so sees the whole course; accepted (Doug, 2026-10-05),
+  spec FR-005's note. Also accepted: the sync stays on before 008's instance checks V9 and
+  V11–V13 (T067) have run.)*
 - **Spec 001**: the role declaration gains the `allowassign` key ([contracts/declaration.md](contracts/declaration.md)),
   and the settings folder gains `mentoring.yaml`.
 - **Spec 015**: no new scheduled operation. Drift covers the new declarations under its

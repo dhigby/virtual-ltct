@@ -74,7 +74,7 @@ The maintainer stands up a fresh instance and every badge design, criterion and 
 
 - A course is republished with changed activities after some learners hold its badge: their badge stands; new criteria apply only to learners completing afterwards.
 - A course is retired: issued badges and certificates remain valid and verifiable.
-- A learner's name changes: the certificate reflects the name on the account at download time.
+- A learner's name changes: the certificate reflects the name on the account at download time. For a protected learner (spec 016) that is the protected display name; a real-name certificate is issued by hand on request (016 R10).
 - A backfilled legacy course that learners completed in Cypher: no badge is issued retroactively from Cypher records (no such data is imported).
 - Someone asks for a badge that says "CBC certified" or "Level 3 – Independent": refused by rule; the wording check fails.
 - A learner is offline when they complete the course in the app: the badge issues when completion syncs.

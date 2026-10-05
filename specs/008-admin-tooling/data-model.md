@@ -78,7 +78,7 @@ Returned by each `preview_*` function, one per row, and hashed into the confirma
 | `flagged_other_org` | Account exists under another organisation. | nothing; use `move` (spec edge case) |
 | `flagged_suspended` | Account exists and is suspended. | nothing; reactivate deliberately (plan decision 9) |
 | `flagged_protection` | Account exists with an organisation and its effective protection is below the row's target. | nothing; raise it on 016's page (research R5) |
-| `waits` | Target protection above `none`, and 016 is absent or `level_available()` is false. | nothing; no account is created (INTENT 2026-10-03) |
+| `waits` | Target protection above `none`, and 016 is absent (`protection_absent`) or `level_available()` is false (`protection_unavailable`), or the row needs a grant and its `email_checked` is not `yes` (`email_reveals` when 016's `levels::email_reveals()` flags the address, else `email_unchecked`; research R5 step 0b). | nothing; no account is created (INTENT 2026-10-03) |
 | `rejected` | Two live accounts share the email; a listed course is not one the organisation may be enrolled into; and similar. | nothing |
 
 **Progress paths** (research R15): `new → will_set_org → will_enrol → unchanged`. On apply, a row whose current state lies further along its previewed outcome's path is finished or reported `already done`. Any other change refuses that row.
@@ -147,5 +147,5 @@ The sync's target for C is the set of pairs `(mentor, L)`. A mentor is enrolled 
 | `moodle/local_ltuse/db/access.php` | + `local/ltuse:administer`. |
 | `moodle/site/roles.yaml` | + role `ltctadmin` (system) with exactly the capabilities in research R12, each with its `why`, and `allowassign: [mentor, teacher]`. |
 | `scripts/site_config.py` | `PROTECTION_MANAGE_ROLES` (016's allowlist) gains `ltctadmin`, with its reason (research R5). |
-| `moodle/site/settings/admin.yaml` | `allowaccountssameemail: 0`; `local_ltuse/coursementorsync: 1` since 016 narrowed its course-mentor path to a shared mentor group (plan decision 11; 0 until 2026-10-05); `rows: [14, 11]`. |
+| `moodle/site/settings/admin.yaml` | `allowaccountssameemail: 0`; the general account rules, since 2026-10-05: `authloginviaemail: 1`, `protectusernames: 1`, `registerauth: ""`, `authpreventaccountcreation: 1` (research R13; the login methods are `auth_webservice`/`auth_email` plugin entries in `site.yaml`); `local_ltuse/coursementorsync: 1` since 016 narrowed its course-mentor path to a shared mentor group (plan decision 11; 0 until 2026-10-05, #97); `rows: [14, 11]`. |
 | `tests/fixtures/admin/*.csv`? | **No.** `.gitignore` ignores `*.csv`; fixtures are built in the test from `example.org` strings, never committed as files. |

@@ -13,7 +13,7 @@ Run these checks on the temporary 5.2.3+ instance, with **test accounts only** (
 
 | # | Check | How | Expected |
 |---|---|---|---|
-| V1 | Config applies and is idempotent (US4) | `python scripts/site_config.py validate`, then `apply`, then `drift` | `apply` creates the template, the site certificate template and the settings. `drift` says `No differences.` A second `apply` changes nothing. |
+| V1 | Config applies and is idempotent (US4) | `python scripts/site_config.py validate`, then `apply`, then `drift` | `apply` creates the template, the site certificate template and the settings. `drift` reports no differences other than the expected ones (below). A second `apply` changes nothing. |
 | V2 | The wording gate fails closed (FR-006, SC-002) | Put `Certified` in `badges.yaml`'s name, then `Level 3 - Independent achieved` in the description, then a course title of `Certification prep`; run `validate` and `check_moodle_payload` | Each one fails before anything is sent. Revert. |
 | V3 | A pilot issues nothing (edge case) | Publish the stage-7 course. A test learner, enrolled manually, completes it. | The badge is INACTIVE, and there is no certificate activity. After 10 minutes, no badge has been issued. |
 | V4 | Delivery and automatic issue (US1, SC-001) | Suspend the V3 learner's manual enrolment. Publish the course at stage 8. Learner A1, enrolled through the cohort, completes it in the browser. | The badge is ACTIVE. A1 holds it within 2 minutes and gets a notification. The V3 learner does not hold it (R4). Time it. |
@@ -27,6 +27,14 @@ Run these checks on the temporary 5.2.3+ instance, with **test accounts only** (
 | V12 | Retirement (edge case, R14) | Hide the course | A1's badge hash and certificate code both still verify, and A1 can still download from My certificates. |
 | V13 | Rebuild (SC-004) | Apply to an empty test instance, then republish both test courses | Every badge and the certificate template exist, with identical wording (compare `drift --json` output). |
 | V14 | Export (FR-013) | A1 downloads their badges and requests a privacy export | A baked PNG, the zip, and an export that contains the badge and the certificate. |
+
+**Expected drift on ltuse.net (2026-10-05).** After `site_config.py apply` on 2026-10-05, `drift` reported "16 differences, 250 ok", all expected, none a group-mode or forum-group item:
+
+- 12 leftovers of the test-a/test-b fixtures, kept on purpose for spec 002 T081 and for this spec's open checks: 2 `ltct_org` menu options, 2 categories, 4 cohorts (learner and managers for each), 2 dynamic-cohort rules and 2 organisation progress reports;
+- 3 discussion forums missing, in courses published before spec 002's open-courses change (`coretech-computer-hardware`, `paratext-quotation-rules`, `software-support-and-troubleshooting-for-translation-teams`). Republishing a course creates its forum; `apply` never does;
+- 1 env-missing, `badges_defaultissuercontact`, because `MOODLE_BADGE_CONTACT` was not set in the shell that ran drift. Set it (Prerequisites) before V1, and this one goes.
+
+V1 passes when `drift` shows only these, or fewer. None of V1–V14 has been run yet.
 
 ## The criterion for real users
 

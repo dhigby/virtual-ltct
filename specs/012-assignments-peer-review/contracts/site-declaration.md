@@ -4,6 +4,8 @@ These additions extend spec 001's declaration. They are validated, applied and d
 
 ## `moodle/site/course-discussions.yaml` (new)
 
+*(Retired 2026-10-02 by spec 002 R14: every course forum runs with no groups, `load_discussions()` is removed, and `scripts/site_config.py` refuses the file. Drift still reports a forum whose group mode is not "no groups" (`differs`) and a course without one (`missing`). Kept as the record of the Phase A contract; spec 012 is parked for re-plan (Doug, 2026-10-05).)*
+
 ```yaml
 # Row #10: which courses' discussion spaces are shared across organisations.
 # Every published course has one; it is separated by organisation unless listed here.
@@ -50,6 +52,7 @@ Drift (`site_config.py drift`) reads, for every course with an `ltct:` idnumber,
       moodle/site:accessallgroups: inherit   # the archetype default; listed so drift manages it.
                         # Defaults already give assign:grade, workshop allocate/switchphase/overridegrades
                         # and viewhiddenactivities (R3). Only listed capabilities are drift-checked.
+    # Superseded 2026-10-05, this why: see the note below this block.
     why: >-
       #22: the course-level role that assesses work. Its archetype defaults are exactly what
       FR-010/FR-013 need, and lacking accessallgroups is what keeps a mentor inside their
@@ -61,6 +64,8 @@ Drift (`site_config.py drift`) reads, for every course with an `ltct:` idnumber,
       moodle/role:safeoverride: allow         # create_page prohibits mod/page:view on mentor notes
       moodle/course:managegroups: allow       # read-only use: drift reads group ids; no group is written
 ```
+
+*(2026-10-05: the `teacher` block's `why` is superseded. There are no organisation groups (spec 002, 2026-10-02), so lacking `accessallgroups` keeps a mentor inside nothing course-wide. Separate groups on an assessed activity limit grading there to spec 008's mentor groups, and the course itself is open to a course mentor: Teacher's Moodle 5.2 defaults reach every learner in a group-mode-0 course. Accepted (Doug, 2026-10-05): we trust people who are in the system. Re-plan inputs 1 and 3. The live declaration, with its current `why`, is the `teacher` entry in `moodle/site/roles.yaml` (:154).)*
 
 The `ltcpublisher` additions are reviewed against least privilege when this is implemented. `moodle/role:safeoverride` is granted, not `moodle/role:override`: it lets the account override only capabilities with no risk bit, and `mod/page:view` has none (MOODLE_502_STABLE `mod/page/db/access.php`). The rejected alternative to granting it is relying on `visible = 0` alone. Both locks are kept, because the cost of one capability is small next to a model answer reaching learners.
 

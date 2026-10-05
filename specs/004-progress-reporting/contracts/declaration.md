@@ -103,6 +103,37 @@ reports:
     # audience systemrole manager; no schedule (R10).
 ```
 
+The block above is the contract as planned on 2026-10-02, kept as provenance. It differs from what was merged in four places: the `ltct_org` condition and the Organisation column (spec 016 decision 2 option (a), Doug, 2026-10-05 (scope review); d395494, PR #84), the `group:name` column (spec 002 open courses: shared courses have no organisation groups; fe7e77c, PR #86, which reached main through PR #85, d8c1d5b, because spec 011's branch was built on it; spec 002's later open-courses commits, R10's among them, are PR #92), `enrol:plugin = cohort` (spec 002 R10: not equal to `manual`; a0389bc, PR #92), and `pilots`, which is no longer "as progress": it has been declared in full since it was first merged (d43a49a, PR #75), and it keeps the Organisation column (`user:profilefield_ltct_org`) that `progress` dropped (d395494).
+
+**Current** (as merged in `moodle/site/reports.yaml`, main a0dccef). The `progress` template:
+
+```yaml
+  - key: progress
+    per: organisation
+    name: "{org}: learner progress"
+    source: core_course\reportbuilder\datasource\participants
+    uniquerows: 1
+    columns:
+      - {column: user:fullnamewithlink, heading: Learner}
+      - {column: course:coursefullnamewithlink, heading: Course}
+      - {column: enrolment:timecreated, heading: Enrolled}
+      - {column: completion:timestarted, heading: Started}
+      - {column: completion:progresspercent, heading: Progress}
+      - {column: completion:grade, heading: Quiz result}   # the course total grade (grade_items itemtype course)
+      - {column: completion:timecompleted, heading: Completed}
+      - {column: access:timeaccess, heading: Last active in course}
+    conditions:                                   # the scope; validate requires all three
+      - {condition: cohort:idnumber, values: {operator: equal, value: "ltct:org:{org}"}}   # the member cohort; text equal
+      - {condition: role:name, values: {operator: equal, value: student}}   # a shortname here; stored as the role's id
+      - {condition: enrol:plugin, values: {operator: not_equal, value: manual}}   # delivery: anything but a pilot's enrolment
+    filters: [course:fullname, user:fullname, completion:completed, completion:timecompleted, access:timeaccess]
+    audiences:
+      - {type: cohortmember, cohort: "ltct:org:{org}:managers"}
+    schedule: …                                   # unchanged from the block above
+```
+
+`programme` has the same `enrol:plugin` `not_equal` `manual` condition. `pilots` is declared in full in `reports.yaml`; it keeps a `user:profilefield_ltct_org` **column** (Organisation) for the site team, has no `ltct_org` condition, and its conditions are `role:name = student` and `enrol:plugin = manual`. `validate` refuses a `user:profilefield_ltct_org` condition on any report (`ORG_FIELD_CONDITION`, `scripts/site_config.py`).
+
 The `entity:name` identifiers are report builder's unique identifiers. Each is confirmed against the instance's datasource at quickstart V5 before the task that writes it is closed. A wrong one is a server-side `[fail] unknown` that blocks apply, as an unknown setting does in spec 001.
 
 ### Source of each entity (T002)
@@ -119,7 +150,8 @@ Checked against `MOODLE_502_STABLE` (5.2.3+). An entity's name is its class's sh
 | `enrol` | `core_enrol\reportbuilder\local\entities\enrol` | `enrol/classes/reportbuilder/local/entities/enrol.php` | condition `plugin` |
 | `enrolment` | `core_course\reportbuilder\local\entities\enrolment` | `course/classes/reportbuilder/local/entities/enrolment.php` | column and filter `timecreated` |
 | `role` | `core_role\reportbuilder\local\entities\role` | `admin/roles/classes/reportbuilder/local/entities/role.php` | condition `name` |
-| `group` | `core_group\reportbuilder\local\entities\group` | `group/classes/reportbuilder/local/entities/group.php` | column `name` |
+| `group` | `core_group\reportbuilder\local\entities\group` | `group/classes/reportbuilder/local/entities/group.php` | column `name`. *No longer used: `group:name` was removed with spec 002's open courses (fe7e77c, spec 002 open courses, PR #86; first reached main through PR #85, d8c1d5b).* |
+| `cohort` | `core_cohort\reportbuilder\local\entities\cohort` | `cohort/classes/reportbuilder/local/entities/cohort.php`; the participants datasource joins it through `cohort_members` on the user (`course/classes/reportbuilder/datasource/participants.php:117-125`) | condition `idnumber` (text), the organisation scope. *Added 2026-10-05 by spec 016 decision 2 option (a) (016 R11, T034–T035, d395494, PR #84).* |
 | `completion` | `core_course\reportbuilder\local\entities\completion` | `course/classes/reportbuilder/local/entities/completion.php` | columns `timestarted`, `progresspercent`, `grade`, `timecompleted`; filters `completed`, `timecompleted` |
 | `access` | `core_course\reportbuilder\local\entities\access` | `course/classes/reportbuilder/local/entities/access.php` | column and filter `timeaccess` |
 | `competency`, `coverage` | `local_ltuse\reportbuilder\local\entities\competency`, `…\coverage` | ours, not yet written (data-model "Per-competency report") | `competency-coverage`. The class names must be exactly `competency` and `coverage`, since `get_default_entity_name()` is private |
@@ -143,7 +175,7 @@ Confirmed as written: every other column, filter and condition above. In particu
 | `user:username` | text | `countdistinct` | yes: `count` and `countdistinct` take every type, and none is disabled |
 | `completion:timecompleted` | timestamp | `count` | yes. `COUNT()` counts non-null values, one per joined row. A learner with two cohort-sync enrolments in one course counts twice |
 | `enrolment:timecreated` | timestamp | `min` (T039's fallback) | yes. `min` takes integer, float, timestamp and boolean, and none is disabled |
-| `group:name` | text (the default) | `groupconcatdistinct` (T039's fallback) | yes on Postgres and MySQL only (`groupconcatdistinct.php:51-60`), and on no timestamp. We run Postgres |
+| `group:name` | text (the default) | `groupconcatdistinct` (T039's fallback) | yes on Postgres and MySQL only (`groupconcatdistinct.php:51-60`), and on no timestamp. We run Postgres. *Moot since `group:name` was removed (fe7e77c, spec 002 open courses, PR #86; first reached main through PR #85, d8c1d5b); T039's fallback is `enrolment:timecreated` `min` alone.* |
 
 **Report creation.** `helpers\report::create_report($data, $default = true)` adds the datasource's default columns, filters and conditions (`helpers/report.php:55-62`). For `participants` those are `enrolment:status`, `user:suspended` and `user:confirmed`, with `enrolment:status` set to active (`participants.php:186-242`). `apply` creates with `$default = false`, or drift would report those as extra.
 
@@ -156,6 +188,9 @@ Confirmed as written: every other column, filter and condition above. In particu
 | `user:profilefield_ltct_org` | `select` (menu field) | `user:profilefield_ltct_org_operator: 1`, `user:profilefield_ltct_org_value: "<org key>"` | the field's menu options, keyed by option text (`user/profile/field/menu/field.class.php:58-64`) |
 | `role:name` | `select` | `role:name_operator: 1`, `role:name_value: <student role id>` | `role_get_names(null, ROLENAME_ORIGINAL, true)`, keyed by role **id** (`role.php:166-176`) |
 | `enrol:plugin` | `select` | `enrol:plugin_operator: 1`, `enrol:plugin_value: "cohort"` (`"manual"` for `pilots`) | `enrol_get_plugins(true)`, **enabled** plugins only, keyed by plugin name (`enrol.php:171-183`) |
+| `cohort:idnumber` *(added 2026-10-05)* | `text` | `cohort:idnumber_operator: 3` (`text::IS_EQUAL_TO`), `cohort:idnumber_value: "ltct:org:<org key>"` | none: a text filter with `IS_EQUAL_TO` produces SQL for any non-empty value (an empty or blank one produces none, `text::validate_filter_values()`, `local/filters/text.php:123-124, 188-200`), and the declared value `ltct:org:<org key>` is never empty. A cohort that does not exist matches nobody, so the scope fails closed (`reports.php` `OPERATORS['text']`; `SCOPE_CONDITIONS`, `scripts/site_config.py`) |
+
+> **Amended 2026-10-05.** The `user:profilefield_ltct_org` row is no longer used as a condition: the organisation scope is the `cohort:idnumber` row (spec 016 decision 2 option (a), Doug, 2026-10-05 (scope review); d395494, PR #84). For `progress` and `programme`, `enrol:plugin` is stored as `enrol:plugin_operator: 2` (`select::NOT_EQUAL_TO`), `enrol:plugin_value: "manual"` (spec 002 R10; a0389bc, PR #92); `pilots` keeps operator `1` with `"manual"`. So of the three scoping conditions, two are selects, and the not-equal one vanishes if `enrol_manual` is disabled.
 
 If the value is not among the options, `select::get_sql_filter()` returns `['', []]` (`local/filters/select.php:137-155`). The table then skips that condition with no error (`table/base_report_table.php:81-89`), which widens the report. Conditions apply whether or not they are available to the viewer (`get_active_conditions(false)`).
 
@@ -186,7 +221,7 @@ As [data-model.md](../data-model.md) "Report". Summarised:
 - every column's aggregation is one that column allows (the "Aggregation" table above);
 - every expanded, encoded area matches the `PARAM_AREA` pattern. An org key with `--` or a trailing `-` fails, because it encodes to `__` or a trailing `_`;
 - encoded areas are unique and at most 100 characters. Uniqueness is checked after encoding: org `a-b` with template `c` and org `a` with template `b-c` both encode to `org_a_b_c`, and `validate` fails on that;
-- `apply` and `drift` build each scoping condition's filter on the server and require `get_sql_filter($values)[0] !== ''`. If it is empty, that report fails, because the condition would be skipped. This happens when the student role is missing, when `enrol_cohort` (or `enrol_manual` for `pilots`) is disabled, or when the org key is not an `ltct_org` option.
+- `apply` and `drift` build each scoping condition's filter on the server and require `get_sql_filter($values)[0] !== ''`. If it is empty, that report fails, because the condition would be skipped. This happens when the student role is missing, when `enrol_cohort` (or `enrol_manual` for `pilots`) is disabled, or when the org key is not an `ltct_org` option. *Amended 2026-10-05: with the merged conditions it happens when the student role is missing or when `enrol_manual` is disabled (which empties both the delivery `not_equal manual` condition and `pilots`' `equal manual`). The `cohort:idnumber` text condition always yields SQL; a missing member cohort matches nobody, so it fails closed instead. A missing managers cohort still blocks the report through its audience.*
 
 ### Validation rules for `competency-coverage`
 
@@ -252,6 +287,8 @@ settings:
 ```
 
 `orgmanager` still holds no `moodle/site:accessallgroups`, which is what keeps both reports to the manager's group. `site_config.py`'s existing `ORGMANAGER_DENY` check is unchanged and still applies.
+
+> **Amended 2026-10-05 (spec 002 open courses, PR #86; 002 R2).** There are no organisation groups now. `orgmanager` is enrolled, by its managers cohort, only in organisation-only courses, where every learner is the organisation's, so the course-wide reach of these two capabilities is already scoped. It is never enrolled in a shared course. The "own group" comments above describe the 2026-10-02 design.
 
 ## Output additions
 

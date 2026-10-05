@@ -61,6 +61,7 @@ Removed from this file (Doug, 2026-10-05 (scope review)): `showuseridentity = ""
 | `editingteacher`, `teacher` | `moodle/backup:downloadfile: prohibit` (R14). ~~`moodle/course:useremail`, `report/log:view` and `report/loglive:view`, each `prohibit`~~ (removed, changes 1 and 5). |
 | `manager` | `local/ltuse:viewidentity` and `local/ltuse:manageprotection`, both `allow` (system context) |
 | `mentor` (003) | `local/ltuse:viewidentity: allow`. `MENTOR_ALLOW` gains this one capability. |
+| `ltctadmin` (spec 008) | `local/ltuse:manageprotection: allow`, not `viewidentity`. Declared by spec 008 (008 research R5; `roles.yaml` by 008 T014, the allowlist by T015): intake grants protection to an account that has no organisation yet, which `can_manage_protection()` allows only through this capability. It makes the role the site team for granting and changing protection (`is_site_team()`), not for seeing real identities (R7 path 1 needs `viewidentity`, which it does not hold). `site_config.py` allows `manageprotection` only on `manager` and `ltctadmin` (`PROTECTION_MANAGE_ROLES`). |
 | `teacher` ("Course mentor") | `local/ltuse:viewidentity: allow` (R7 path 4). Counted only in `ltct:<slug>` courses, never `ltct:officehours`, and only for learners in the mentor's own group `ltct:mentorgroup:<mentor id>` there (change 22). |
 
 No organisation-manager role is added or changed. Own-organisation managers are recognised by managers-cohort membership (R7). `moodle/reportbuilder:edit` and `editall` stay with `manager` only.

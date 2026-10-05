@@ -1,5 +1,11 @@
 # Tasks: Assignments and peer review in courses
 
+> **Parked for re-plan (Doug, 2026-10-05).** Open courses (spec 002, 2026-10-02) and spec 008
+> plan decision 3's mentor groups change this spec's basis; Phases B and C (Phases 5 and 6
+> below) and the design approval (T014) wait on the re-plan. Ticked tasks stay ticked as
+> history; where what they built has since been retired, a note says so. See
+> [spec.md, Re-plan inputs](spec.md#re-plan-inputs).
+
 **Input**: [spec.md](spec.md), [plan.md](plan.md), [research.md](research.md), [design.md](design.md), [data-model.md](data-model.md), [contracts/](contracts/), [quickstart.md](quickstart.md)
 
 **Tests**: the plan asks for `pytest` over the parser, the disclosure rules and the payload checks. Each test task is written to fail first. Moodle behaviour is verified with the quickstart scenarios on the temporary 5.2.3+ instance, with test accounts only (constitution III, X).
@@ -63,6 +69,7 @@ Files: specs/012-assignments-peer-review/design.md, specs/012-assignments-peer-r
 **⟶ Wait for Wave 1 to finish, then:**
 
 - [ ] **T014** [US1] **Maintainer**: fill in the decision record (decision, changes requested, name, date). If rejected, stop here: Phases 5 and 6 are not built, and Phase 4 still ships · specs/012-assignments-peer-review/design.md
+  *(2026-10-05: waits on the re-plan (Doug, 2026-10-05); not to be decided against the 2026-10-01 design. Still open.)*
 
 **Checkpoint**: the decision is recorded. Approved → Phase 5 may start. Rejected → the guard stays and the spec delivers US4 only.
 
@@ -70,24 +77,27 @@ Files: specs/012-assignments-peer-review/design.md, specs/012-assignments-peer-r
 
 ## Phase 4: User Story 4 — Learners discuss a course inside it (Priority: P3, outside the gate)
 
-**Goal**: every published course, backfilled ones included, has one discussion forum, separated by organisation unless declared shared.
+**Goal**: every published course, backfilled ones included, has one discussion forum, ~~separated by organisation unless declared shared~~. *(Superseded 2026-10-02: the forum runs with no groups and is open to everyone in the course; there is no sharing to declare (spec 002 R14). Re-plan input 5.)*
 
-**Independent Test**: publish a test course; test learners in one organisation post and reply; a learner in another organisation cannot read the thread (quickstart A3–A5).
+**Independent Test**: publish a test course; test learners in one organisation post and reply; a learner in another organisation cannot read the thread (quickstart A3–A5). *(Superseded in part 2026-10-02: a learner in another organisation can read it (spec 002 R14); see T025. Re-plan input 5.)*
 
-Files: moodle/site/course-discussions.yaml, scripts/site_config.py, moodle/local_ltuse/classes/external/ensure_discussion.php, moodle/local_ltuse/classes/siteconfig/inspector.php, moodle/local_ltuse/classes/siteconfig/drift.php, moodle/local_ltuse/classes/siteconfig/applier.php, scripts/moodle_payload.py, moodle/REQUIREMENTS.md · handed on from Phase 2: scripts/publish_moodle.py, scripts/moodle_client.py, moodle/local_ltuse/db/services.php, version.php, README.md
+Files: ~~moodle/site/course-discussions.yaml~~ (retired 2026-10-02 by spec 002 R14; `scripts/site_config.py` refuses it), scripts/site_config.py, moodle/local_ltuse/classes/external/ensure_discussion.php, moodle/local_ltuse/classes/siteconfig/inspector.php, moodle/local_ltuse/classes/siteconfig/drift.php, moodle/local_ltuse/classes/siteconfig/applier.php, scripts/moodle_payload.py, moodle/REQUIREMENTS.md · handed on from Phase 2: scripts/publish_moodle.py, scripts/moodle_client.py, moodle/local_ltuse/db/services.php, version.php, README.md
 
 ### Tests
 
 **Wave 1 — independent (different files):**
 
 - [x] **T015** [P] [US4] Failing tests for `course-discussions.yaml` validation: unknown slug, missing `why`, duplicate slug, empty list valid · tests/test_site_config.py
+  *(Superseded 2026-10-02 by spec 002 R14: the tests now assert that the file is refused and `load_discussions` is gone (`test_course_discussions_file_is_retired`). Re-plan input 5.)*
 - [x] **T016** [P] [US4] Failing tests that every course's payload, a backfilled one included, carries a `discussion` block with `ltct:<slug>:discussion`, and that `shared` follows the declaration · tests/test_moodle_payload_discussion.py
+  *(Superseded 2026-10-02 by spec 002 R14: the `discussion` block test stands, but the payload has no `shared`; `test_block_carries_no_sharing_flag` asserts the block is only `{idnumber, name, intro_html}`. Re-plan input 5.)*
 
 ### Implementation
 
 **Wave 1 — independent (different files):**
 
 - [x] **T017** [P] [US4] Create the declaration with its header comment, `rows: [10]` and an empty `shared:` list (FR-015) · moodle/site/course-discussions.yaml
+  *(Superseded 2026-10-02: the file no longer exists. Spec 002 R14 retired it when every course forum went to no groups, and `scripts/site_config.py` now refuses it. Re-plan input 5.)*
 - [x] **T018** [P] [US4] Add `local_ltuse_ensure_discussion`: create a `general` forum in section 0 if absent (name and intro on create only); otherwise set only its group mode, `groupingid = 0`; read and write no discussion or post; report `courseforced`; return `{cmid, created, groupmode}` (R5) · moodle/local_ltuse/classes/external/ensure_discussion.php
 - [x] **T019** [P] [US4] Report discussion drift for every `ltct:` course: `differs`, `missing`, `forced`, and `allparticipants` as a count only, never content or names (R5, Principle III) · moodle/local_ltuse/classes/siteconfig/inspector.php, moodle/local_ltuse/classes/siteconfig/drift.php
 
@@ -96,6 +106,7 @@ Files: moodle/site/course-discussions.yaml, scripts/site_config.py, moodle/local
 **Wave 2 — independent (different files):**
 
 - [x] **T020** [P] [US4] Add `load_discussions()`, the validation rules (slugs checked with `course_stage.branch_slug()`), and carry the declaration into the remote drift/apply payload. T015 passes · scripts/site_config.py
+  *(Superseded 2026-10-02: `load_discussions()` and the sharing payload were removed by spec 002 R14; the forum is NOGROUPS everywhere.)*
 - [x] **T021** [P] [US4] `apply` corrects `differs` through ensure_discussion's code path and never creates a missing forum · moodle/local_ltuse/classes/siteconfig/applier.php
 - [x] **T022** [P] [US4] Register `local_ltuse_ensure_discussion`, bump the version, document it · moodle/local_ltuse/db/services.php, moodle/local_ltuse/version.php, moodle/local_ltuse/README.md
 
@@ -104,6 +115,7 @@ Files: moodle/site/course-discussions.yaml, scripts/site_config.py, moodle/local
 **Wave 3 — independent (different files):**
 
 - [x] **T023** [P] [US4] Write the `discussion` block for every course from `site_config.load_discussions()`. T016 passes · scripts/moodle_payload.py
+  *(Superseded 2026-10-02 by spec 002 R14: the block is still written for every course, but with no sharing flag and without `load_discussions()`, which no longer exists. Re-plan input 5.)*
 - [x] **T024** [P] [US4] Call `local_ltuse_ensure_discussion` on every publish, keep its idnumber out of the hide step, print `created`/`updated`/`courseforced`, and add it to the `--whoami` needed list · scripts/publish_moodle.py, scripts/moodle_client.py
 
 **⟶ Wait for Wave 3 to finish, then:**
@@ -111,6 +123,7 @@ Files: moodle/site/course-discussions.yaml, scripts/site_config.py, moodle/local
 **Wave 4 — independent (different files):**
 
 - [ ] **T025** [P] [US4] Run quickstart A3–A5 on the instance: forum created, posts survive republish, org B cannot read org A, a declared share opens it, a hand change shows as `differs` and `apply` restores it (US4-1 to US4-4, SC-004 for discussion) · (verification only)
+  *(Superseded in part 2026-10-02: "org B cannot read org A" and "a declared share opens it" no longer apply; the forum is open across organisations (spec 002 R14), and spec 002's own check covers that. Forum created, posts surviving republish, and `differs` plus `apply` still stand. Evidence 2026-10-05: `site_config.py drift` on ltuse.net after `apply` reported 3 discussion forums missing, in courses published before spec 002's open-courses change (coretech-computer-hardware, paratext-quotation-rules, software-support-and-troubleshooting-for-translation-teams); republishing a course creates its forum, and `apply` never does. Still open: no instance check has run.)*
 - [x] **T026** [P] [US4] Update row #10's in-course part · moodle/REQUIREMENTS.md
 
 **Checkpoint**: US4 works on its own and can merge before the design decision.
@@ -181,15 +194,16 @@ Files: scripts/assignment_parse.py, scripts/course_stage.py, scripts/check_cours
 
 **Starts after Phase 5 is merged and research task 1 is settled (T006).**
 
-**Goal**: a `**Review:** peer` assignment publishes as a workshop whose reviewers come from the author's cohort, then organisation, never across, anonymous both ways.
+**Goal**: a `**Review:** peer` assignment publishes as a workshop whose reviewers come from the author's cohort, then organisation, never across, anonymous both ways. *(Basis withdrawn 2026-10-02: shared courses have no organisation or cohort groups (spec 002). The allocation rule waits on re-plan input 4; anonymity stands, with re-plan input 6 for protected learners.)*
 
-**Independent Test**: four test learners across two test organisations; each assesses only peers in their own organisation and receives their comments (quickstart C1–C3).
+**Independent Test**: four test learners across two test organisations; each assesses only peers in their own organisation and receives their comments (quickstart C1–C3). *(2026-10-05: the organisation half waits on re-plan input 4.)*
 
 Files: moodle/workshopallocation_orgcohort/ (version.php, lib.php, db/install.xml, db/events.php, classes/observer.php, lang/en/workshopallocation_orgcohort.php, README.md), moodle/local_ltuse/classes/external/upsert_workshop.php, moodle/site/site.yaml · handed on from Phase 5: scripts/publish_moodle.py, scripts/moodle_client.py, moodle/local_ltuse/db/services.php, version.php, README.md, moodle/REQUIREMENTS.md (from Phase 4)
 
 **Wave 1 — independent (different files):**
 
 - [ ] **T047** [P] [US3] Build the allocator: per submission, `peers` reviewers holding `mod/workshop:peerassess` from the author's `ltct:cohort:` group, then other groups of the same `ltct:org:`, never across; balanced load, no self-review, `workshop::add_allocation()` only; "Allocate within organisation" on the Allocation page; report authors short of reviewers (FR-011, FR-013, R4). Own table `(workshopid, peers, autoallocate)`; `requires` and `supported` declared · moodle/workshopallocation_orgcohort/version.php, lib.php, db/install.xml, lang/en/workshopallocation_orgcohort.php, README.md
+  *(2026-10-05: waits on the re-plan. The `ltct:cohort:` and `ltct:org:` groups it reads do not exist in shared courses; re-plan inputs 1 and 4.)*
 - [ ] **T048** [P] [US3] Add `local_ltuse_upsert_workshop`: `upsert_module` with `strategy = comments`, separate groups, never `phase`; instructions through fresh `file_get_unused_draft_itemid()` areas; `save_edit_strategy_form()` keeping dimension ids; completion on grade when required; never touch allocations, submissions or assessments (R4) · moodle/local_ltuse/classes/external/upsert_workshop.php
 
 **⟶ Wait for Wave 1 to finish, then:**
@@ -220,7 +234,9 @@ Files: moodle/workshopallocation_orgcohort/ (version.php, lib.php, db/install.xm
 **Wave 1 — independent (different files):**
 
 - [ ] **T055** [P] Document course discussions for the maintainer and mentors: the sharing declaration, that only managers and editing teachers can post to "All participants" and why mentors must not, and what an accidental delete loses (research task 6) · moodle/site/README.md
+  *(2026-10-05: the sharing declaration is gone. Spec 002 R14 retired `course-discussions.yaml` on 2026-10-02 (the forum is no groups in every course), and `scripts/site_config.py` refuses the file. The rest of the task, posting to "All participants" and what an accidental delete loses, still stands. Re-plan input 5.)*
 - [x] **T056** [P] Raise the cross-spec effects: spec 002 must guarantee "every course group is within exactly one organisation" and the `ltct:org:`/`ltct:cohort:` idnumbers; spec 009 notes the free app plan's 2-offline-courses limit · specs/002-org-structure-cohorts/spec.md, specs/009-low-bandwidth-delivery/spec.md
+  *(2026-10-05: spec 002 withdrew the group invariant and idnumbers on 2026-10-02 (002 spec, Dependencies, the 012 entry). Re-plan input 1.)*
 
 **⟶ Wait for Wave 1 to finish, then:**
 

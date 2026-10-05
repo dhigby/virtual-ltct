@@ -25,7 +25,7 @@ The spec's four key entities map onto these: **Configuration declaration** is th
 
 ## Configuration declaration
 
-The single statement of what a correctly configured server looks like (FR-001). It is the union of `site.yaml`, `roles.yaml` and every file in `settings/`. It has no identity of its own beyond the git commit it is read from.
+The single statement of what a correctly configured server looks like (FR-001). It is the union of `site.yaml`, `ignore.yaml`, `roles.yaml`, every file in `settings/`, and the top-level files later specs add (`organisations.yaml`, `profile-fields.yaml`, `org-courses.yaml`, `reports.yaml`, `course-fields.yaml`, `pathways.yaml`, `badges.yaml` with `certificate/`, `office-hours.yaml`, `dashboard.yaml`, `protection.yaml`). [The declaration contract's Extensions table](contracts/declaration.md#extensions) says which spec adds each, and the fields each adds are in that spec's contract. It has no identity of its own beyond the git commit it is read from.
 
 ### Fields
 
@@ -107,7 +107,7 @@ Apply never installs, upgrades or downgrades code; a blocking plugin state is fi
 
 ## Ignore entry
 
-An undeclared setting that drift should not flag even though it differs from Moodle's default (R5). Typically an install-time value such as `supportemail`, `timezone` or `siteidentifier`.
+An undeclared setting that drift should not flag even though it differs from Moodle's default (R5). Typically an install-time value such as `supportemail` or `siteidentifier`. (`timezone` was an example here until spec 011 declared it in `settings/calendar.yaml`; a declared setting cannot be ignored.)
 
 ### Fields
 
@@ -138,7 +138,7 @@ One topic's worth of settings, each file citing the `moodle/REQUIREMENTS.md` row
 ### Validation rules
 
 - Every cited row exists in `moodle/REQUIREMENTS.md`.
-- File name is lowercase-hyphenated `.yaml`; one topic per file. Specs 002–014 add their own file rather than editing another spec's (plan, cross-spec effects).
+- File name is lowercase-hyphenated `.yaml`; one topic per file. Later specs add their own file rather than editing another spec's (plan, cross-spec effects); [the contract's Extensions table](contracts/declaration.md#extensions) lists every one.
 
 The baseline files and their rows: `content-embeds.yaml` (#3), `mobile.yaml` (#4), `data-export.yaml` (#16), `messaging.yaml` (#19), `notifications.yaml` (#25), `server.yaml` (per-server values only, all `env:`).
 

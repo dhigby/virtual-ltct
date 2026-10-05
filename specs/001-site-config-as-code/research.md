@@ -28,7 +28,7 @@ Every Moodle API below was looked up in Context7 (`/websites/moodledev_io_5_2_ap
 
 ## R5. Undeclared settings changed from default
 
-- **Decision**: drift walks every `admin_setting` in the tree. A setting that is not declared, whose `get_setting()` differs from `get_defaultsetting()`, and that is not on the `ignore` list in `ignore.yaml` is reported `unmanaged`. Each `ignore` entry carries a reason. Install-time values such as `supportemail`, `timezone` and `siteidentifier` are expected there.
+- **Decision**: drift walks every `admin_setting` in the tree. A setting that is not declared, whose `get_setting()` differs from `get_defaultsetting()`, and that is not on the `ignore` list in `ignore.yaml` is reported `unmanaged`. Each `ignore` entry carries a reason. Install-time values such as `supportemail`, `timezone` and `siteidentifier` are expected there. (*2026-10-05*: not `timezone` any more. Spec 011 declares it, `UTC`, in `settings/calendar.yaml`, and `validate` refuses an `ignore` entry for a declared setting.)
 - **Rationale**: it is the same comparison core uses to find new settings, and it needs no stored snapshot.
 - **Open, verify on instance**: the first drift run on `ltuse.net` produces the real list of install-time values. Each one is then declared, sent to `server.yaml` as `env:`, or ignored with a reason. That run is the first implementation task.
 

@@ -109,6 +109,7 @@ Files: `moodle/site/settings/content-embeds.yaml`, `moodle/site/settings/mobile.
 **⟶ Wait for Wave 1 to finish, then:**
 
 - [x] **T024** [US4] Apply the baseline to the instance, and drift clean. No files
+  - *2026-10-05*: drift on ltuse.net after `site_config.py apply` reported `16 differences, 250 ok`. All 16 are expected, and none is a baseline item: 12 leftovers of the test-a/test-b fixtures, kept on purpose for spec 002 T081 and spec 013's open instance checks (2 `ltct_org` menu options, 2 categories, 4 cohorts, 2 dynamic-cohort rules, 2 organisation progress reports); 3 discussion forums missing in courses published before spec 002's open-courses change (`coretech-computer-hardware`, `paratext-quotation-rules`, `software-support-and-troubleshooting-for-translation-teams`), which a republish creates and apply never does; and 1 `env-missing`, `badges_defaultissuercontact`, because `MOODLE_BADGE_CONTACT` was not set in the shell that ran drift (Doug, 2026-10-05).
 
 **⟶ Wait for T024, then (verification, independent):**
 
@@ -128,7 +129,8 @@ Files: `moodle/local_ltuse/README.md`, `CLAUDE.md`, `moodle/REQUIREMENTS.md`
 
 - [x] **T030** [P] Replace install steps 1, 2 and 5 with "run `site_config.py apply`". Document `cli/site_config.php`, and list the `role_capabilities` raw read with its reason (constitution XI) · moodle/local_ltuse/README.md
 - [x] **T031** [P] Add `site_config.py` to the maintainer-scripts list. Name `moodle/site/` in the Delivery section as where every Moodle setting lives · CLAUDE.md
-- [x] **T032** [P] Update the status of rows 3, 4, 16, 19 and 25, citing the verification from T025–T029 (constitution X) · moodle/REQUIREMENTS.md
+- [x] **T032** [P] Update the status of rows 3, 4, 16, 19 and 25 ~~, citing the verification from T025–T029~~ (constitution X) · moodle/REQUIREMENTS.md
+  - *2026-10-05*: what was done is the status update: each row reads **Configured (spec 001), 2026-10-01**, applied to the build host. Only T026 (#4) has run; T025 and T027–T029 are still to run. Rows 3, 16, 19 and 25 each say their learner-facing checks are still to run. Row 4 adds "verified live 2026-10-02" and cites that check as spec 009 quickstart V7: a learner on the Moodle app (5.2.1, Samsung S24+) used `paratext-quotation-rules` offline with its callouts styled. Commit 6b2c99a recorded it there and closed T026. Citing the others' verification waits on them.
 
 **⟶ Wait for Wave 1 to finish, then:**
 

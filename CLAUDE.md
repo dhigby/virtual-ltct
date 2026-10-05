@@ -382,6 +382,12 @@ constructing it — the host changes when the server moves.
   `--check-all` is a CI gate over every quiz in `modules/`.
 - `moodle_payload.py` — renders one course into a publish payload (the platform boundary).
 - `check_moodle_payload.py` — proves that payload leaks nothing, before it is pushed.
+- `image_reduce.py` — makes the lighter copy of each committed image that goes into a
+  payload (fit to a width, palette PNG; `.full`/`.small` suffixes override). Never writes
+  to the repo. Not run directly.
+- `cbc_wording.py` — the CBC wording rules, defined once: report labels name a level only
+  as an aim, and badge and certificate text never says "certified" or a CBC level held.
+  Imported by `site_config.py validate` and `check_moodle_payload.py`. Not run directly.
 - `moodle_xml.py` — serialises parsed questions to Moodle XML.
 - `moodle_client.py` — thin Moodle REST client; `--whoami` checks a server and token.
 - `publish_moodle.py` — build → verify → push. `--dry-run` sends nothing.

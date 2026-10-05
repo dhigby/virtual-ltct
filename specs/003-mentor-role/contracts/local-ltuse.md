@@ -119,5 +119,5 @@ mentor; a mentor for one course is spec 008's (`INTENT.md`, 2026-10-04).
 | Inputs | gathered on every request by `local_ltuse_may_manage_mentors()` in `lib.php`: `$canassigncore` as above; `$managedkeys` from `local_ltuse_managed_organisation_keys()`; `$person` read only when the viewer is not the site team |
 | Writes | `role_assign($mentorroleid, $mentorid, $learnerctx->id)` and `role_unassign(...)`, after a confirmation posted with the sesskey. Every GET and POST rechecks the decision, and the mentor must be one the page would offer. |
 | Picker | members of the cohort `ltct:mentors` only, not deleted or suspended, excluding the learner and existing mentors |
-| Identity | spec 016 adds `can_view_identity(V, P)` to this page once it lands (spec 002 R10) |
+| Identity | ~~spec 016 adds `can_view_identity(V, P)` to this page once it lands (spec 002 R10)~~ Not added, and dropped as moot (Doug, 2026-10-05): after `managers_see_identity` was cut, everyone this page authorises already passes `can_view_identity`, the site team by 016 R7 path 1 and an own-organisation manager by path 3. `mentors.php:51-53` records the same ruling in a comment |
 | Target | two minutes, unaided (SC-003) |

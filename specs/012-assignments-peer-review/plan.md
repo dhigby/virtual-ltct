@@ -2,15 +2,24 @@
 
 **Branch**: `012-assignments-peer-review` | **Date**: 2026-10-01 | **Spec**: [spec.md](spec.md)
 
+> **Parked for re-plan (Doug, 2026-10-05).** Open courses (spec 002, 2026-10-02) and spec 008
+> plan decision 3's mentor groups change this spec's basis; Phases B and C, and the design
+> approval (tasks T014), wait on the re-plan. What the re-plan must address is listed in
+> [spec.md, Re-plan inputs](spec.md#re-plan-inputs). Below, the organisation and cohort group
+> invariant and the hand-enrolled Course mentor are marked superseded in place; the rest of
+> this plan is unchanged and is the starting point for the re-plan. Phase A shipped, with its
+> discussion forum since reworked by spec 002 R14 (no groups; `course-discussions.yaml`
+> retired).
+
 ## Summary
 
 Courses gain an optional **assignment file**, `NN-<topic>-assignment.md`. It is plain markdown with a short header (`**Completion:**`, `**Review:**`, `**Submit:**`), learner-visible criteria, and mentor-only grading notes and model answer under a `## Mentor only` H2.
 
 The publisher turns each file into either:
 - a core **assignment**, assessed by the learner's Course mentor with a core **marking guide**, whose per-criterion "description for markers" holds the grading notes; or
-- a core **workshop** for peer review, with reviewers allocated by our own small allocation subplugin: cohort first, then the same organisation, never across.
+- a core **workshop** for peer review, with reviewers allocated by our own small allocation subplugin: cohort first, then the same organisation, never across. *(Basis withdrawn 2026-10-02: shared courses have no organisation or cohort groups (spec 002). The allocation rule waits on re-plan input 4.)*
 
-The model answer goes to a hidden mentor-notes page. Every published course, backfilled ones included, also gains one **discussion forum**, separated by organisation unless the site declaration shares it.
+The model answer goes to a hidden mentor-notes page. Every published course, backfilled ones included, also gains one **discussion forum**, separated by organisation unless the site declaration shares it. *(Since 2026-10-02 the forum runs with no groups in every course and the declaration is retired (spec 002 R14).)*
 
 Three choices here are not obvious from the existing code:
 
@@ -108,7 +117,7 @@ scripts/
 ├── check_learner_view.py       # Phase B: positive mentor-only assertion
 └── site_config.py              # Phase A: course-discussions.yaml validate/drift/apply
 moodle/
-├── site/course-discussions.yaml        # Phase A: new
+├── site/course-discussions.yaml        # Phase A: new. Retired 2026-10-02 (spec 002 R14); site_config.py now refuses it
 ├── site/roles.yaml                     # Phase A: teacher declared; ltcpublisher additions. Phase C: student override
 ├── site/site.yaml                      # Phase C: lists workshopallocation_orgcohort
 ├── local_ltuse/
@@ -146,8 +155,8 @@ CLAUDE.md                                              # Phase B: assignment fil
 
 ## Cross-spec effects
 
-- **Spec 003 (conflict, needs the maintainer)**: 003 FR-006 forbids a mentor changing grades, but assessing with a marking guide writes a grade. Recommendation (R3): restrict 003 FR-006 to the user-context mentor role; assignment feedback is given through the course-level Course mentor role, which can never award a CBC level. Syncing a learner's 003 mentor into the courses they take as Course mentor is deferred to spec 003's or 008's plan. Until then the site team enrols the mentor as Course mentor with the organisation's group (spec 002 decision 2026-10-01; spec 003 research R8).
-- **Spec 002**: this plan depends on two things from it: the invariant that **every course group is within exactly one organisation**, and group idnumbers `ltct:org:<key>` and `ltct:cohort:<key>`. 002's plan must adopt both or tell this spec.
+- **Spec 003 (conflict, needs the maintainer)**: 003 FR-006 forbids a mentor changing grades, but assessing with a marking guide writes a grade. Recommendation (R3): restrict 003 FR-006 to the user-context mentor role; assignment feedback is given through the course-level Course mentor role, which can never award a CBC level. ~~Syncing a learner's 003 mentor into the courses they take as Course mentor is deferred to spec 003's or 008's plan. Until then the site team enrols the mentor as Course mentor with the organisation's group (spec 002 decision 2026-10-01; spec 003 research R8).~~ *(Superseded 2026-10-05: spec 008's course-mentor sync enrols each learner's course mentor (008 plan decision 2) as `teacher` in their own "Mentor group `<n>`", idnumber `ltct:mentorgroup:<mentor id>` (008 research R10, plan decision 3), on since 2026-10-05 (`local_ltuse/coursementorsync: 1`, #97). Nobody enrols a Course mentor by hand. Re-plan input 2.)* The FR-006 conflict itself was decided on 2026-10-02 as recommended (tasks T013).
+- **Spec 002**: ~~this plan depends on two things from it: the invariant that **every course group is within exactly one organisation**, and group idnumbers `ltct:org:<key>` and `ltct:cohort:<key>`. 002's plan must adopt both or tell this spec.~~ *(Withdrawn by spec 002 on 2026-10-02: shared courses have no organisation groups and stay in group mode 0 (002 FR-011). The re-plan adopts 008's mentor groups as the assessor scope, and needs the cross-organisation peer-review rule 002 left to 012 and Doug. Re-plan inputs 1 and 4.)*
 - **Spec 004**: assignment grades and "awaiting feedback" appear in organisation reports. The grade items carry `ltct:` idnumbers (synced from `cmidnumber`, R2), which reports can key on.
 - **Spec 009**: the free app plan allows 2 offline courses per device per site (R6, DOC).
 - **Spec 015**: no new operation. `site_config.py drift` gains discussion items under its existing schedule.

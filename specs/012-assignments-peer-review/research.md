@@ -28,15 +28,19 @@ Every Moodle API below was looked up in Context7 (`/websites/moodledev_io_5_2_ap
 
 ## R3. Who assesses: the mentor role and grading capability
 
-- **Decision**: the assessor is a **course-level** role, the core non-editing `teacher` role (called "Course mentor" in our docs; the Moodle role is not renamed, since that would relabel it on every course). It is enrolled in the course and placed in the learner's cohort group. It does not hold `moodle/site:accessallgroups`, so in separate-groups mode it sees and grades only its own groups. Spec 003's user-context mentor role stays the long-running relationship. It cannot grade, because `mod/assign:grade` and every `mod/workshop:*` capability are module-context (`assign/db/access.php` L49–58; `workshop/db/access.php`). **VIS**.
+- **Decision**: the assessor is a **course-level** role, the core non-editing `teacher` role (called "Course mentor" in our docs; the Moodle role is not renamed, since that would relabel it on every course). It is enrolled in the course and placed in ~~the learner's cohort group~~ *(2026-10-05: its own mentor group, `ltct:mentorgroup:<mentor id>`, by spec 008's course-mentor sync; re-plan inputs 1 and 2)*. It does not hold `moodle/site:accessallgroups`, so in separate-groups mode it sees and grades only its own groups. Spec 003's user-context mentor role stays the long-running relationship. It cannot grade, because `mod/assign:grade` and every `mod/workshop:*` capability are module-context (`assign/db/access.php` L49–58; `workshop/db/access.php`). **VIS**.
 - **Cross-spec conflict, raised and not routed around**:
   - Spec 003 FR-006 says a mentor "MUST NOT be able to change a learner's grades". In Moodle, assessing with a marking guide *is* writing a grade.
   - Recommendation: amend 003 FR-006 to cover only the user-context mentor role, and record that assignment feedback is given through the course-level role. The same rule must also never let it award a CBC level.
-  - Keeping the two in step automatically is deferred. That means enrolling a learner's spec-003 mentor as Course mentor in each course the learner takes. It would be our own code (a sync task) and belongs with spec 003's plan or spec 008's tooling.
-  - Until then, the organisation manager enrols the Course mentor together with the cohort.
+  - ~~Keeping the two in step automatically is deferred. That means enrolling a learner's spec-003 mentor as Course mentor in each course the learner takes. It would be our own code (a sync task) and belongs with spec 003's plan or spec 008's tooling.~~
+  - ~~Until then, the organisation manager enrols the Course mentor together with the cohort.~~
+  - *(Superseded 2026-10-05: spec 008's course-mentor sync does it (008 research R10), on since 2026-10-05 (`local_ltuse/coursementorsync: 1`, #97). The course mentor is a one-course mentor, else a cohort mentor, else the learner's spec-003 mentor (008 plan decision 2), enrolled as `teacher` in their own mentor group and removed when the reason ends. Nobody enrols one by hand. The FR-006 conflict was decided as recommended on 2026-10-02 (tasks T013). Re-plan input 2.)*
 - **Alternatives considered**: granting `mod/assign:grade` to the user-context role (impossible, wrong context level); `editingteacher` (has `accessallgroups`, so it would see other organisations' work, against FR-011 and SC-004).
+- *(2026-10-05: in a shared course, which stays in group mode 0, `teacher`'s course-level defaults (grader report, progress and completion reports, user identity) reach every learner, not only the mentor's group. Accepted (Doug, 2026-10-05): we trust people who are in the system. Re-plan input 3.)*
 
 ## R4. Peer review engine and allocation (FR-011)
+
+*(2026-10-05: the allocation rule below, keyed to cohort and organisation groups, lost its basis on 2026-10-02 when spec 002 gave shared courses no organisation or cohort groups. The facts about `mod_workshop` still hold; the rule waits on re-plan input 4.)*
 
 - **Decision**:
   - Peer review uses core **`mod_workshop`**, with the **comments** grading strategy. Peers write a comment against each learner-visible criterion and score nothing.
@@ -60,6 +64,8 @@ Every Moodle API below was looked up in Context7 (`/websites/moodledev_io_5_2_ap
   - A third-party allocator. None found in the plugins directory with organisation scoping.
 
 ## R5. In-course discussion and organisation separation (FR-015)
+
+*(Superseded 2026-10-02 by spec 002 R14: every course forum runs with no groups, so posts are open across organisations; `course-discussions.yaml`, `load_discussions()` and the payload's `discussion.shared` are removed, and `scripts/site_config.py` refuses the file. The "every group belongs to one organisation" invariant below was withdrawn by spec 002 the same day. Kept as the record of the 2026-10-01 decision. Re-plan input 5.)*
 
 - **Decision**:
   - Every published course gets one `forum` of type `general`, identity `ltct:<slug>:discussion`, in section 0, created by the publish if absent. Its name and intro are set on creation only, and its posts are never touched.

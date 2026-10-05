@@ -776,7 +776,7 @@ Observable markers of a competent supporting consultant:
   framing above stands, and lesson 03 needs no change. Lesson 02 now says Numbers is a separate
   entry, that there is no Measures list, and that a combined list is replacing Numbers, without
   naming it. The screenshot `assets/ss-02-bt-choose-list.png` shows Jenni's imported test lists
-  ("Numbers (2) (imported)", "test (imported)"), which learners won't see; re-take or crop it.
+  ("Numbers (2) (imported)", "test (imported)"), which learners won't see; those two rows were cropped out on 2026-10-05.
   If the list's release slips past the course's, revisit lesson 03's framing.
 
 ---

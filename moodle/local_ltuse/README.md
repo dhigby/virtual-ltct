@@ -44,6 +44,9 @@ not idempotent without it: `core_course_get_contents` does not reliably return a
 idnumber, so there is otherwise no way to ask Moodle which modules a previous publish
 created. With it, republishing is a diff rather than a blind re-create.
 
+The site team's administration functions (`local_ltuse_admin_*`, spec 008) are a separate
+service with its own token; see [Administration (spec 008)](#administration-spec-008).
+
 ## A module the repo no longer has is retired, never deleted
 
 Rename, renumber or remove a lesson in the repo, and its old module is still in Moodle
@@ -381,6 +384,14 @@ and the entities `core_reportbuilder\local\entities\base`. Before raising `requi
 against it. Moodle 5.0 to 5.2 changed default entity initialisation, entity order, the
 abstract `get_default_tables()`, custom sort fields and select-filter values (research R15).
 
+**Later specs list theirs with their own pieces**: spec 003 under
+[Mentors](#mentors-spec-003), spec 011 under
+[Events and office hours](#events-and-office-hours-spec-011), and spec 008 under
+[Administration](#administration-spec-008). Spec 008's include raw reads of `cohort` with
+its `component` (to refuse a cohort a plugin owns), of `user` by email, and of
+`role_assignments` with `component` and `itemid`, and the two direct `$DB` writes
+`cli/setup_publishing.php` still makes.
+
 ## Identity, and why republishing does not duplicate
 
 Every object the publisher creates carries an idnumber:
@@ -581,8 +592,44 @@ each is re-checked as stated.
 | `my_pages`, `block_instances` | `userid IS NULL`, `name`, `private`; `blockname`, `parentcontextid`, `pagetypepattern`, `subpagepattern` | Whether a declared block is on the system default dashboard. The block manager reads blocks only for a page being displayed. |
 | `event` left-joined from `local_ltuse_booking` | `id` | Booking records whose calendar event is gone. |
 
-**Raw reads added by spec 008** (the administration service), all read-only. The full
-"Administration (008)" section follows with spec 008's polish task (T072).
+## Administration (spec 008)
+
+The site team brings learners on, enrols cohorts, suspends, moves and assigns mentors with
+[`scripts/ltct_admin.py`](../../scripts/ltct_admin.py), which talks only to this plugin's
+second web service. The recipes are in
+[`moodle/site/README.md`](../site/README.md#the-site-teams-administration-tool); the
+contracts are spec 008's
+[`contracts/admin-service.md`](../../specs/008-admin-tooling/contracts/admin-service.md) and
+[`contracts/cli.md`](../../specs/008-admin-tooling/contracts/cli.md).
+
+| Piece | Where | Does |
+|---|---|---|
+| Service `ltuse_admin` ("LTC administration") | `db/services.php` | A second external service, separate from the publisher's, so the admin tool has its own credential (FR-009). `restrictedusers = 1`, `requiredcapability` `local/ltuse:administer`, no file uploads. It lists only the `local_ltuse_admin_*` functions and `core_webservice_get_site_info`; spec 016's `local_ltuse_set_protection` is not listed, because intake calls the PHP method. |
+| Functions `local_ltuse_admin_*` | `classes/external/admin_*.php` | `check` and `list`; a `preview_*` and an `apply_*` for intake, cohort enrolment, suspension, move, cohort members, mentors and course mentors; `apply_pathway_assignment`; `summary`. Every preview is read-only and returns outcomes with masked people. Every apply takes one row and its expected outcome, classifies it again, and refuses if it moved off its path, so a repeat reports `already done`. Each re-checks `local/ltuse:administer` and then the core capability for its write. |
+| Capability `local/ltuse:administer` | `db/access.php` | System context, `RISK_PERSONAL \| RISK_DATALOSS \| RISK_SPAM` (it creates accounts that receive email), no archetype. |
+| Role `ltctadmin` | [`moodle/site/roles.yaml`](../site/roles.yaml) | Holds `local/ltuse:administer` and exactly the core capabilities the functions check, at system level, one assignment per site-team member. `local_ltuse_admin_check` names any the token user lacks. |
+| Token script | `cli/setup_admin_token.php` | `--username=<u> --token-file=<path>` authorises one site-team member for `ltuse_admin` and writes their own token to a mode-600 file. It never prints the token; `--rotate` revokes theirs and issues a new one. It uses core's `webservice::add_ws_authorised_user()`, `\core_external\util::generate_token()` and `webservice::delete_user_ws_token()`. There is no shared admin account, so Moodle's logs show who made each change. |
+| Rules | `classes/admin/*_rules.php` | Pure classes, no Moodle calls: `intake_rules`, `enrolment_rules` (which cohort may be enrolled in which course, and as what), `move_rules` (kept, lost, gained, suspended by rule), `course_mentor_rules`. Tested without Moodle by `tests/admin_harness.php`. |
+| Services | `classes/admin/` | `intake_service`, `cohort_enrolment` (cohort sync added or re-enabled, marked `customchar1 = 'ltct:008'`, disabled and never deleted), `suspension_service`, `move_service`, `membership_service`, `course_mentor_records`, `course_mentor_sync`, `masking`. Suspension and per-row course enrolment call spec 002's `organisation\actions` `do_*()` methods, the same writes an organisation manager's page makes. |
+| Observers | `db/events.php`, `classes/admin/observer.php` | `role_assigned` and `role_unassigned` (the mentor role in a user context), `user_enrolment_created`, `_updated` and `_deleted`, `enrol_instance_updated` and `_deleted`, and `user_updated` keep course mentors in step: internal, so a course mentor whose reason ends loses Teacher, their enrolment and their group in the same request (spec 016 relies on it). `pathway_courses_changed` (spec 006) enrols each enrolling cohort in a course that joins a pathway; never internal, so a rolled-back change enrols no one. |
+| Task | `db/tasks.php`, `classes/task/course_mentor_reconcile.php` | Hourly. Recomputes every `ltct:` course's course mentors, removes stray `local_ltuse` Teacher assignments and orphaned records, and re-syncs pathway cohort enrolments. The backstop, not the mechanism. |
+| Table | `db/install.xml`, `local_ltuse_course_mentor` | One-course mentors (learner, course) and the mentors of a cohort in a course. Default mentors are never copied in; they are read from spec 003's role assignments. Declared, exported and deleted by `classes/privacy/provider.php`; the database backup must include it (spec 015). |
+| Course-mentor enrolment | `classes/admin/course_mentor_sync.php` | One `enrol_self` instance per course, `customchar1 = 'ltct:coursementor'`, closed to self-enrolment. A course mentor is enrolled with no role, then given Teacher with component `local_ltuse`, so the role goes with the reason even when they are enrolled another way too. Each has a "Mentor group <n>" (idnumber `ltct:mentorgroup:<mentor id>`) holding them and the learners they assess there. |
+| Setting `local_ltuse/coursementorsync` | `settings.php` | The switch for everything in the three rows above. Declared **0** in [`moodle/site/settings/admin.yaml`](../site/settings/admin.yaml) until spec 008's plan decision 11 (how far a course mentor may see); at 0 the observers and the reconcile do nothing, and course-mentor records can still be written. `local_ltuse_admin_check` reports it. |
+
+**Removing `ltuse_admin` from `db/services.php` deletes every token issued for it** on the
+next upgrade, with its authorised users (`lib/upgradelib.php`, `external_update_descriptions()`),
+and each site-team member then needs a new token. The entry is keyed by its name, "LTC
+administration", so renaming that key does the same. Retire or rename it deliberately.
+
+**Principle XI exceptions added by spec 008.** `cli/setup_publishing.php` still makes two
+direct `$DB` writes, which predate spec 008: it inserts the publisher's
+`external_services_users` row and deletes its `external_tokens` rows itself, where
+`cli/setup_admin_token.php` uses `webservice::add_ws_authorised_user()` and
+`webservice::delete_user_ws_token()`. They stay listed here until the publisher's script is
+moved onto the same core APIs.
+
+**Raw reads added by spec 008** (the administration service), all read-only.
 
 | Table | Read by | Why there is no API |
 |---|---|---|
@@ -619,11 +666,6 @@ each is re-checked as stated.
 `enrol_get_all_users_courses()`, `enrol_get_course_users()` and `enrol_get_instances()`, and
 `admin\membership_service` writes with `cohort_add_member()` / `cohort_remove_member()` after
 `cohort_is_member()`; none of these is a raw read.
-
-`cli/setup_publishing.php` still writes `external_services_users` and deletes
-`external_tokens` with `$DB` directly; `cli/setup_admin_token.php` uses
-`webservice::add_ws_authorised_user()`, `\core_external\util::generate_token()` and
-`webservice::delete_user_ws_token()` instead, and the publisher script should follow.
 
 ## Verified against Moodle 5.2.3+ (2026-09-29)
 
@@ -672,10 +714,12 @@ and this plugin.
 - **No Moodle → repo sync.** One-way only. Editing in Moodle and syncing back would break
   the source-of-truth split the whole repo rests on. Content edited in Moodle is
   overwritten by the next publish; change the markdown instead.
-- **No enrolment, grades or learner records.** This plugin publishes content and creates no
-  learner data. Learner data is Moodle's alone (`INTENT.md`: *"Learner data lives in
-  Moodle, never in this repo"*); admin tooling that works with it is a separate concern.
-  Spec 004 comes closest, and stops here: `set_course_completion` flags incomplete course
+- **Enrolment through the administration service and the organisation page; never grades.**
+  The publish functions create no learner data. Accounts, cohort membership and enrolments
+  are written only by the administration service (spec 008) and spec 002's organisation
+  page, through core's APIs, and never stored in the repo. Learner data is Moodle's alone
+  (`INTENT.md`: *"Learner data lives in Moodle, never in this repo"*). Nothing here writes a
+  grade, an attempt or a completion. Spec 004 comes closest, and stops here: `set_course_completion` flags incomplete course
   completions for Moodle to re-check, through core's own data object, and never alters or
   deletes a completion; the per-competency datasource counts enrolments and completions at
   query time and stores none of them; nothing returns a user.

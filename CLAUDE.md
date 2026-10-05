@@ -353,6 +353,11 @@ write a token into a file here.** The plugin the publisher depends on is
 [`moodle/local_ltuse/`](moodle/local_ltuse/README.md); Moodle has no core web service that
 writes a quiz, which is why it exists.
 
+The site team's admin tool, `scripts/ltct_admin.py` (`/manage-learners`), brings learners on,
+enrols, suspends, moves and assigns mentors through its own `ltuse_admin` service, with each
+operator's own `MOODLE_ADMIN_TOKEN`, never `MOODLE_TOKEN`; it refuses any file inside a git
+tree, so learner files stay outside every repo and worktree.
+
 A course reports stage 8 once its `README.md` frontmatter carries `external_links: moodle:`
 (or, for the legacy Cypher-delivered courses, `cypher:`). `course_stage.py` is still the only
 implementation of that, and reports the Moodle URL verbatim from frontmatter rather than
@@ -379,6 +384,11 @@ constructing it — the host changes when the server moves.
 - `publish_moodle.py` — build → verify → push. `--dry-run` sends nothing.
 - `site_config.py` — `validate` · `drift` · `apply` the Moodle site declaration in `moodle/site/`
   (settings, plugin pins, roles). `drift` is read-only; `apply` changes only what differs.
+- `ltct_admin.py` — the site team's Moodle admin tool (spec 008): intake, cohort enrolment,
+  suspension, moves, managers, mentors, summaries. Every change previews first and applies
+  only with `--apply --confirm <code>`; people are masked unless `--show-people`.
+- `admin_files.py` — `ltct_admin.py`'s offline half: file validation, the path guard that
+  refuses any git tree, masking and the confirmation code. Not run directly.
 - `gen_site.py` — `mkdocs-gen-files` build hook; generates the site pages + nav from
   `competencies.yaml` and `competencies/*.md`. Not run by hand; invoked by `mkdocs`.
 - `check_competency_descriptors.py` — validates descriptors stay in sync with the

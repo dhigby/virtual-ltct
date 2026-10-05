@@ -23,8 +23,9 @@ use stdClass;
  * The granting page, the web service, the hook, the observer and both tasks call this class, so
  * a level is applied one way whatever triggered it:
  *
- *   set_protection()      one person's level, pseudonym and corrections (no permission check:
- *                         callers check entitlement::can_manage_protection() first)
+ *   set_protection()      one person's level, pseudonym and corrections (callers check
+ *                         entitlement::can_manage_protection() first; this checks only what
+ *                         a manager who is not the site team may change)
  *   apply()               re-apply one protected user's level after drift: the adhoc and
  *                         reconcile tasks
  *   effective_level(), is_settled(), is_protected(), real_identity(): read only, named for
@@ -35,9 +36,8 @@ use stdClass;
  * (R2). The set is emptied in a finally block, so an exception never leaves it open.
  *
  * Core writes go through core APIs: user_update_user(), profile_save_data(),
- * core_user::update_picture(), message_send(). Two reads by indexed columns decide "has
- * activity" (R13), and mod_scheduler's slot class re-saves calendar names (R15); the plugin
- * README lists all three as Principle XI exceptions.
+ * core_user::update_picture(), message_send(). mod_scheduler's slot class re-saves calendar
+ * names (R15); the plugin README lists it as a Principle XI exception.
  */
 class service {
 
@@ -55,10 +55,15 @@ class service {
     const LOCKTYPE = 'local_ltuse_protection';
     const LOCKWAIT = 10;
 
-    /** Events that are not "activity" (R13). */
-    const NOT_ACTIVITY = ['\\core\\event\\user_loggedin', '\\core\\event\\user_loggedout',
-        '\\core\\event\\user_profile_viewed', '\\core\\event\\user_updated',
-        '\\core\\event\\user_password_updated', '\\core\\event\\dashboard_viewed'];
+    /**
+     * Neutral usernames: this prefix and USERNAME_LENGTH characters of USERNAME_ALPHABET. The
+     * format to match is spec 008's intake_service::new_username() (ltc- and 8 lowercase base32
+     * characters), so an account made at intake and one renamed here look alike; when both
+     * specs are merged, one of them calls the other's.
+     */
+    const USERNAME_PREFIX = 'ltc-';
+    const USERNAME_LENGTH = 8;
+    const USERNAME_ALPHABET = 'abcdefghijklmnopqrstuvwxyz234567';
 
     /** @var array<int, true> users this class is writing now: the hook and observer skip them */
     private static $bypass = [];
@@ -85,7 +90,7 @@ class service {
      * The stored protection.yaml, or null when site_config.py apply has never stored it. Until
      * then nothing but none can be applied.
      *
-     * @return array|null {levels, withhold, neutral_surname, reconcile_minutes, orgscope_ready}
+     * @return array|null {levels, withhold, neutral_surname, reconcile_minutes}
      */
     public static function config(): ?array {
         $json = get_config('local_ltuse', self::CONFIG);
@@ -94,18 +99,9 @@ class service {
     }
 
     /**
-     * May firstname and pseudonym be applied yet (R11)?
-     *
-     * @return bool
-     */
-    public static function orgscope_ready(): bool {
-        return !empty(self::config()['orgscope_ready']);
-    }
-
-    /**
      * Can this level be applied on this site now? Read only and needs no user, so spec 008's
      * intake preview can say "waits" before any account exists. False for every level until
-     * apply has stored protection.yaml, except none.
+     * apply has stored protection.yaml, except none; then true for every level.
      *
      * @param string $level
      * @return bool
@@ -114,7 +110,7 @@ class service {
         if ($level === levels::NONE) {
             return true;
         }
-        return self::config() !== null && levels::available($level, self::orgscope_ready());
+        return self::config() !== null && levels::is_level($level);
     }
 
     /**
@@ -202,21 +198,19 @@ class service {
     }
 
     /**
-     * Has the user done anything others may have seen under their current name (R13)? Any
-     * create or update in the standard log other than logins, profile views and profile
-     * saves, or any message they sent. Indexed reads; cached for the request.
+     * Might others have seen the user under their current name (R13)? True once they have
+     * logged in (user.firstaccess) or are enrolled in any course, active or not. A cheap,
+     * cautious signal (scope review change 16): it reads no log and no message. Cached for
+     * the request.
      *
      * @param int $userid
      * @return bool
      */
     public static function has_activity(int $userid): bool {
-        global $DB;
         if (!array_key_exists($userid, self::$activity)) {
-            [$notin, $params] = $DB->get_in_or_equal(self::NOT_ACTIVITY, SQL_PARAMS_NAMED, 'ev', false);
-            $params['userid'] = $userid;
-            $logged = $DB->get_manager()->table_exists('logstore_standard_log') && $DB->record_exists_select(
-                'logstore_standard_log', "userid = :userid AND crud IN ('c', 'u') AND eventname $notin", $params);
-            self::$activity[$userid] = $logged || $DB->record_exists('messages', ['useridfrom' => $userid]);
+            $user = core_user::get_user($userid, 'id, firstaccess');
+            self::$activity[$userid] = ($user && (int)$user->firstaccess > 0)
+                || (bool)enrol_get_all_users_courses($userid, false, 'id');
         }
         return self::$activity[$userid];
     }
@@ -226,12 +220,22 @@ class service {
     /**
      * Set one user's level (contracts/protection-service.md, "local_ltuse_set_protection").
      * NO PERMISSION CHECK: callers check entitlement::can_manage_protection(), and accept
-     * corrections only from someone who can_view_identity().
+     * corrections only from someone who can_view_identity(). What the actor may do once there
+     * is checked here, so the page, the web service and spec 008 agree: anyone but the site
+     * team may only grant at intake (levels::manager_may(), scope review change 14).
+     *
+     * A raise needs two recorded facts (scope review changes 13 and 2): `requested`, the person
+     * asked for it, and `emailchecked`, the granter confirmed the account's email address
+     * identifies neither the person nor their organisation. Both go on the log row.
+     *
+     * At firstname or pseudonym a username that holds the real name is replaced with a neutral
+     * one (neutral_username()); the person still signs in with their email (change 15).
      *
      * @param int $userid
      * @param string $level none, email, firstname or pseudonym
-     * @param array $options pseudonym, realfirstname, reallastname, realfields (field => value),
-     *                       newusername, acknowledgehistory
+     * @param array $options requested, emailchecked (both required for a raise), pseudonym,
+     *                       realfirstname, reallastname, realfields (field => value),
+     *                       acknowledgehistory
      * @param int|null $actorid who is making the change; the current user when null
      * @return array {effectivelevel, warnings: string[]}
      * @throws moodle_exception protection:err:* when refused
@@ -239,7 +243,7 @@ class service {
     public static function set_protection(int $userid, string $level, array $options = [], ?int $actorid = null): array {
         global $DB, $USER;
         $actorid = $actorid ?? (int)$USER->id;
-        $config = self::require_config();
+        self::require_config();
         if (!levels::is_level($level)) {
             throw new moodle_exception('protection:err:level', 'local_ltuse');
         }
@@ -248,16 +252,26 @@ class service {
             throw new moodle_exception('protection:err:nouser', 'local_ltuse');
         }
         $row = self::row($userid);
-        $effective = $level;
-        if (!levels::available($effective, !empty($config['orgscope_ready']))) {
-            throw new moodle_exception('protection:err:notready', 'local_ltuse');
+        $from = $row ? (string)$row->effectivelevel : levels::NONE;
+        $requested = !empty($options['requested']);
+        $emailchecked = !empty($options['emailchecked']);
+        if (levels::is_raise($from, $level) && !$requested) {
+            throw new moodle_exception('protection:err:notrequested', 'local_ltuse');
+        }
+        if (levels::is_raise($from, $level) && !$emailchecked) {
+            throw new moodle_exception('protection:err:emailnotchecked', 'local_ltuse');
         }
 
         [$basefirst, $baselast] = self::base_real_names($user, $row);
         $realfirst = self::option_text($options, 'realfirstname') ?? $basefirst;
         $reallast = self::option_text($options, 'reallastname') ?? $baselast;
+        $corrections = isset($options['realfields']) && is_array($options['realfields']) ? $options['realfields'] : [];
+        if (!entitlement::is_site_team($actorid, $userid) && !levels::manager_may($from, $level,
+                self::has_activity($userid), $realfirst !== $basefirst || $reallast !== $baselast || $corrections)) {
+            throw new moodle_exception('protection:err:siteteam', 'local_ltuse');
+        }
         $pseudonym = self::option_text($options, 'pseudonym') ?? ($row ? (string)$row->pseudonym : '');
-        if ($effective === levels::PSEUDONYM) {
+        if ($level === levels::PSEUDONYM) {
             $others = $DB->get_fieldset_select(self::TABLE, 'pseudonym', "userid <> :userid AND pseudonym <> ''",
                 ['userid' => $userid]);
             $problems = levels::pseudonym_problems($pseudonym, $realfirst, $reallast, $others);
@@ -268,43 +282,35 @@ class service {
                     }, $problems)));
             }
         }
-        $newusername = self::option_text($options, 'newusername');
-        if ($newusername !== null) {
-            self::check_username($newusername, $userid, $realfirst, $reallast);
-        }
-        if (levels::rank($effective) >= levels::rank(levels::FIRSTNAME) &&
-                levels::username_reveals($newusername ?? (string)$user->username, $realfirst, $reallast)) {
-            throw new moodle_exception('protection:err:username', 'local_ltuse');
-        }
-        $from = $row ? (string)$row->effectivelevel : levels::NONE;
-        if (levels::needs_acknowledgement($from, $effective, self::has_activity($userid)) &&
+        if (levels::needs_acknowledgement($from, $level, self::has_activity($userid)) &&
                 empty($options['acknowledgehistory'])) {
             throw new moodle_exception('protection:err:needsack', 'local_ltuse');
         }
+        $newusername = levels::rank($level) >= levels::rank(levels::FIRSTNAME) &&
+            levels::username_reveals((string)$user->username, $realfirst, $reallast) ? self::neutral_username() : null;
 
         $target = [
             'ownlevel' => $level,
-            'effectivelevel' => $effective,
+            'effectivelevel' => $level,
             'pseudonym' => trim($pseudonym),
             'realfirstname' => $realfirst,
             'reallastname' => $reallast,
-            'corrections' => isset($options['realfields']) && is_array($options['realfields']) ? $options['realfields'] : [],
+            'corrections' => $corrections,
+            'requested' => $requested,
+            'emailchecked' => $emailchecked,
         ];
         // FR-008: every change is recorded. Same level, but a corrected name or held value, a new
         // pseudonym or a new username, is a correction.
-        $corrected = $row && ($realfirst !== $basefirst || $reallast !== $baselast || $target['corrections']
+        $corrected = $row && ($realfirst !== $basefirst || $reallast !== $baselast || $corrections
             || trim($pseudonym) !== (string)$row->pseudonym) || $newusername !== null;
-        $logsource = $from !== $effective ? levels::SOURCE_OWN : ($corrected ? levels::SOURCE_CORRECTION : null);
+        $logsource = $from !== $level ? levels::SOURCE_OWN : ($corrected ? levels::SOURCE_CORRECTION : null);
         self::write($user, $row, $target, $actorid, $logsource, $newusername);
 
         $warnings = [];
-        if ($from !== $effective && self::has_activity($userid)) {
+        if ($from !== $level && self::has_activity($userid)) {
             $warnings[] = get_string('protection:warn:norecall', 'local_ltuse');
         }
-        if ($newusername !== null) {
-            $warnings[] = get_string('protection:warn:newlogin', 'local_ltuse');
-        }
-        return ['effectivelevel' => $effective, 'warnings' => $warnings];
+        return ['effectivelevel' => $level, 'warnings' => $warnings];
     }
 
     /**
@@ -409,10 +415,11 @@ class service {
      *
      * @param stdClass $user the account as it is now
      * @param stdClass|null $row the protection row, null when the user has none
-     * @param array $target ownlevel, effectivelevel, pseudonym, realfirstname, reallastname, corrections
+     * @param array $target ownlevel, effectivelevel, pseudonym, realfirstname, reallastname, corrections,
+     *                      and for the log, requested and emailchecked
      * @param int $actorid
      * @param string|null $logsource null to write no log row (a repair)
-     * @param string|null $newusername
+     * @param string|null $newusername a neutral username to apply, or null to keep the username
      */
     protected static function write(stdClass $user, ?stdClass $row, array $target, int $actorid,
             ?string $logsource, ?string $newusername): void {
@@ -543,7 +550,9 @@ class service {
             // 6. The log (FR-008). A repair writes none.
             if ($logsource !== null) {
                 $DB->insert_record(self::LOGTABLE, (object)['userid' => $userid, 'actorid' => $actorid,
-                    'fromlevel' => $from, 'tolevel' => $level, 'source' => $logsource, 'timecreated' => $now]);
+                    'fromlevel' => $from, 'tolevel' => $level, 'source' => $logsource,
+                    'requested' => (int)!empty($target['requested']),
+                    'emailchecked' => (int)!empty($target['emailchecked']), 'timecreated' => $now]);
             }
             $transaction->allow_commit();
         } catch (\Throwable $e) {
@@ -559,8 +568,8 @@ class service {
         // 7. After the commit: caches, calendar names, the learner's notice.
         \cache_helper::purge_by_definition('core', 'coursecontacts');
         self::resave_scheduler_slots($userid);
-        if ($from !== $level || $newusername !== null) {
-            self::notify($userid, $level, $newusername, $from !== levels::NONE || self::has_activity($userid));
+        if ($from !== $level) {
+            self::notify($userid, $level, $from !== levels::NONE || self::has_activity($userid));
         }
     }
 
@@ -658,39 +667,41 @@ class service {
     }
 
     /**
-     * Refuse a username that is invalid, taken or gives away the real name (R13).
-     *
-     * @param string $username
-     * @param int $userid
-     * @param string $realfirst
-     * @param string $reallast
-     */
-    protected static function check_username(string $username, int $userid, string $realfirst, string $reallast): void {
-        global $DB, $CFG;
-        if ($username === '' || $username !== \core_text::strtolower($username) ||
-                $username !== core_user::clean_field($username, 'username')) {
-            throw new moodle_exception('protection:err:badusername', 'local_ltuse');
-        }
-        if ($DB->record_exists_select('user', 'username = :username AND mnethostid = :host AND id <> :id',
-                ['username' => $username, 'host' => $CFG->mnet_localhost_id, 'id' => $userid])) {
-            throw new moodle_exception('protection:err:usernametaken', 'local_ltuse');
-        }
-        if (levels::username_reveals($username, $realfirst, $reallast)) {
-            throw new moodle_exception('protection:err:username', 'local_ltuse');
-        }
-    }
-
-    /**
-     * A neutral username to offer on the granting page: never derived from a name.
+     * A username nobody has: ltc- and 8 lowercase base32 characters, never derived from the
+     * person (R13). The same format as spec 008's intake_service::new_username(), which is the
+     * one to match. The unique index is (mnethostid, username) over every row, deleted ones
+     * included, so the check counts deleted accounts too.
      *
      * @return string
      */
-    public static function suggest_username(): string {
+    public static function neutral_username(): string {
         global $DB, $CFG;
+        $alphabet = self::USERNAME_ALPHABET;
         do {
-            $candidate = 'ltc-' . random_int(100000, 999999);
-        } while ($DB->record_exists('user', ['username' => $candidate, 'mnethostid' => $CFG->mnet_localhost_id]));
-        return $candidate;
+            $name = self::USERNAME_PREFIX;
+            for ($i = 0; $i < self::USERNAME_LENGTH; $i++) {
+                $name .= $alphabet[random_int(0, strlen($alphabet) - 1)];
+            }
+        } while ($DB->record_exists('user', ['username' => $name, 'mnethostid' => $CFG->mnet_localhost_id]));
+        return $name;
+    }
+
+    /**
+     * What the account's email address may give away, for the granting page's warning
+     * (levels::email_reveals(), scope review change 2). Callers show it only to someone who
+     * may see the real identity.
+     *
+     * @param int $userid
+     * @return string[] name, organisation
+     */
+    public static function email_warnings(int $userid): array {
+        $user = core_user::get_user($userid, 'id, email, firstname, lastname');
+        if (!$user) {
+            return [];
+        }
+        $row = self::table_exists() ? self::row($userid) : null;
+        [$first, $last] = self::base_real_names($user, $row);
+        return levels::email_reveals((string)$user->email, $first, $last, self::user_org($userid));
     }
 
     /**
@@ -724,14 +735,14 @@ class service {
     }
 
     /**
-     * Tell the learner what others now see (US3-1). No real name, no actor.
+     * Tell the learner what others now see (US3-1). No real name, no actor, and no username:
+     * the learner signs in with their email whatever the username is.
      *
      * @param int $userid
      * @param string $level
-     * @param string|null $newusername
      * @param bool $history copies already sent cannot be recalled
      */
-    protected static function notify(int $userid, string $level, ?string $newusername, bool $history): void {
+    protected static function notify(int $userid, string $level, bool $history): void {
         try {
             $user = core_user::get_user($userid);
             $a = (object)['level' => get_string('protection:level:' . $level, 'local_ltuse'),
@@ -739,9 +750,6 @@ class service {
             $body = get_string('protection:notice:body', 'local_ltuse', $a);
             if ($history) {
                 $body .= "\n\n" . get_string('protection:notice:history', 'local_ltuse');
-            }
-            if ($newusername !== null) {
-                $body .= "\n\n" . get_string('protection:notice:newlogin', 'local_ltuse', s($newusername));
             }
             $message = new \core\message\message();
             $message->component = 'local_ltuse';

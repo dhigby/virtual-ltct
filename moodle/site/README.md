@@ -295,25 +295,25 @@ Some learners work where being identifiable puts them, or the people they work w
 
 | Level | Others see |
 |---|---|
-| Email hidden | The name and profile, not the email address |
-| First name only | The first name only: no surname, email, picture, location, organisation, role or expertise |
-| Pseudonym | A chosen name only |
+| Email hidden | The name and profile; classmates do not see the email address |
+| First name only | The first name and organisation only: no surname, picture, location, role or expertise |
+| Pseudonym | A chosen name and the organisation only |
 
-Each level includes the ones before it. The site team, the learner's mentors, the course mentors of the courses they take, and their own organisation's managers still see the real identity, with a **Protected** marker, on the learner's profile, the Mentoring page and **People I support** (`/local/ltuse/protected.php`). Nobody else ever sees the marker.
+Each level includes the ones before it. The organisation shows at every level (decision 2, option a): tell the person so when they are protected. The people who run their courses and their organisation's managers still see the email address, which is why it is checked (below). The site team, the learner's mentors, the course mentor who assesses them in a course, and their own organisation's managers still see the real identity, with a **Protected** marker, on the learner's profile, the Mentoring page and **People I support** (`/local/ltuse/protected.php`). Nobody else ever sees the marker.
 
-**To protect a person**: open their profile, choose **Identity protection**, pick the level, and save. A manager of the person's own organisation can do this too. The learner gets a notice saying what others now see.
+**Only for someone who asks** (Doug, 2026-10-05 (scope review)). Protection is offered when the person is added, in the welcome message and in site help. Saving a new or higher level records that the person asked, and that you checked their email address identifies neither them nor their organisation. The page warns when the part before the @ looks like their name, or the domain like their organisation's; have the address changed to one that does not identify them before you save.
 
-**Protect early.** Set protection when the account is made, before the person is enrolled anywhere. Later, a rename links their earlier posts to the new name, so the page asks you to acknowledge that first, and recommends a fresh account instead.
+**To protect a person**: set it when the account is made, before they start. An organisation's manager can do this for their own people then. After that, raising it, lowering or removing it, and correcting the real name are the site team's: open `/local/ltuse/protection.php?id=<user id>` (an unprotected profile has no link), pick the level, and save. The learner gets a notice saying what others now see.
 
-**Usernames.** For First name only or Pseudonym, the username must not contain the real first name or surname. The page offers a neutral one and tells the learner their new login. Give every new account a neutral username from the start.
+**Protect early.** Later, a rename links what they already did to the new name, so the page asks you to acknowledge that first. A fresh account is one option to talk through with the person, not the default.
+
+**Usernames.** Everyone signs in with their email. At First name only or Pseudonym, a username that contains the real first name or surname is replaced with a neutral one automatically; the person keeps signing in with their email.
 
 **There is no organisation-wide protection** (Doug, 2026-10-05 (scope review)): each person is protected only when they ask, and an organisation's own managers always see their people's real identity. A person who does not want their organisation's managers to see it is placed by the site team under a neutral organisation entry with no managers. An organisation that may need protection gets a **neutral key and name from its first commit**, because the key can never change and `organisations.yaml` is public. SIL's Area entries are the one deliberate exception.
 
 **Lowering.** Nothing is lowered automatically. Someone who leaves a protected organisation keeps their level until an entitled person lowers it. A picture removed by protection does not come back; the learner uploads it again.
 
 **Names are locked for everyone** (`settings/identity.yaml`, pending decision 3): learners no longer change their own name or email. The site team changes them in the admin user editor; for a protected learner, use their **Identity protection** page.
-
-**Not yet available**: First name only and Pseudonym wait until the organisation field is hidden from everyone, which needs spec 004's report to be scoped by cohort first (decision 2). Until then only Email hidden can be set.
 
 What protection cannot do, and what to tell the learner, is listed as known gaps in [spec 016's research](../../specs/016-identity-protection/research.md#known-gaps-fr-015): copies already emailed or downloaded, the app's cache for up to 18 hours, and file author names inside uploaded documents.
 

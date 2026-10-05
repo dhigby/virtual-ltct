@@ -1362,17 +1362,27 @@ COLUMN_TYPE_PATTERNS = (
 )
 ORG_PLACEHOLDER = "{org}"
 PER_VALUES = ("organisation",)
-# The three select conditions every per-organisation report carries, verbatim (FR-005).
+# The three conditions every per-organisation report carries, verbatim (FR-005).
+# The organisation is its member cohort, ltct:org:<key>, matched on cohort:idnumber (a text
+# condition, filters	ext IS_EQUAL_TO 3; the participants datasource joins the cohort entity
+# through cohort_members, course/classes/reportbuilder/datasource/participants.php on
+# MOODLE_502_STABLE). A cohort that does not exist matches nobody, so the scope fails closed,
+# and it does not depend on ltct_org's visibility (spec 016 T034-T035, Doug, 2026-10-05 (scope
+# review), decision 2 option a).
 # A select stores the option key, so apply turns role:name's shortname into the role id.
 # Delivery is any enrolment but a pilot's manual one (spec 002 R10, amending spec 004 R10):
 # cohort sync, and a manager's enrolment through the organisation-enrolment instance
 # (enrol_self). A select condition holds one value, so it is "not manual", never a list.
 SCOPE_CONDITIONS = (
-    ("user:profilefield_" + ORG_FIELD, {"operator": "equal", "value": ORG_PLACEHOLDER}),
+    ("cohort:idnumber", {"operator": "equal", "value": "ltct:org:" + ORG_PLACEHOLDER}),
     ("role:name", {"operator": "equal", "value": "student"}),
     ("enrol:plugin", {"operator": "not_equal", "value": "manual"}),
 )
-SELECT_CONDITIONS = frozenset(name for name, _ in SCOPE_CONDITIONS)
+# Never a report condition: report builder offers a profile field's condition only while the
+# field is visible (user_profile_fields.php L214) and silently skips an unavailable one
+# (datasource.php L288-315), so a scope on ltct_org would widen the moment the field was
+# hidden (spec 016 R11).
+ORG_FIELD_CONDITION = "user:profilefield_" + ORG_FIELD
 # Operator words the applier maps to filter constants: select::EQUAL_TO (1) and
 # NOT_EQUAL_TO (2), public/reportbuilder/classes/local/filters/select.php on MOODLE_502_STABLE.
 CONDITION_OPERATORS = ("equal", "not_equal")
@@ -2009,9 +2019,11 @@ def _check_conditions(where, conditions, per, role_names, problems):
             problems.add(cwhere, "role %r is neither core nor in roles.yaml" % (value,))
         elif ident == "enrol:plugin" and value not in STANDARD["enrol"]:
             problems.add(cwhere, "enrol plugin %r is not a core enrolment method" % (value,))
-        elif ident == SCOPE_CONDITIONS[0][0] and per is None:
-            problems.add(cwhere, "%s is the organisation scope; it belongs on a per: "
-                         "organisation report, as %s" % (ident, ORG_PLACEHOLDER))
+        elif ident == ORG_FIELD_CONDITION:
+            problems.add(cwhere, "%s is never a condition: report builder drops a profile "
+                         "field's condition once the field is hidden, and the report widens; "
+                         "scope by the organisation's cohort, %s (spec 016 R11)"
+                         % (ident, SCOPE_CONDITIONS[0][0]))
         out.append({"condition": ident, "values": {"operator": operator, "value": value}})
     if per is not None:
         declared = {c["condition"]: c["values"] for c in out}
@@ -2903,22 +2915,7 @@ def _validate_protection(where, data, rows, decl, problems):
         return None
     return {"levels": list(PROTECTION_LEVELS), "withhold": out_withhold,
             "neutral_surname": neutral,
-            "reconcile_minutes": RECONCILE_MINUTES,
-            "orgscope_ready": _orgscope_ready(decl)}
-
-
-def _orgscope_ready(decl):
-    """R11: firstname and pseudonym may be applied only once ltct_org is private and no
-    report scopes by it (a hidden field's condition is silently skipped, widening the report)."""
-    org = next((f for f in decl["profile_fields"] if f["shortname"] == ORG_FIELD), None)
-    if org is None or org["visible"] != VISIBILITY["private"]:
-        return False
-    return not _reports_scoped_by_org(decl)
-
-
-def _reports_scoped_by_org(decl):
-    return [r["area"] for r in decl["reports"]
-            if any(c["condition"] == SCOPE_CONDITIONS[0][0] for c in r["conditions"])]
+            "reconcile_minutes": RECONCILE_MINUTES}
 
 
 def _check_protection_site(decl, problems):
@@ -2957,13 +2954,6 @@ def _check_protection_site(decl, problems):
             problems.add("settings", "%s must be declared as %r (spec 016)" % (name, want))
         elif str(setting["value"]) != str(want):
             problems.add(setting["file"], "%s must be %r (spec 016)" % (name, want))
-
-    org = next((f for f in decl["profile_fields"] if f["shortname"] == ORG_FIELD), None)
-    scoped = _reports_scoped_by_org(decl)
-    if org is not None and org["visible"] == VISIBILITY["private"] and scoped:
-        problems.add("profile-fields.yaml", "%s can be private only once no report scopes by it; "
-                     "report builder silently drops a hidden field's condition, so %s would show "
-                     "every organisation (spec 016 R11)" % (ORG_FIELD, ", ".join(scoped)))
 
 
 def _literal(value):

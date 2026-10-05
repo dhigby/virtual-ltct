@@ -15,7 +15,7 @@ use local_ltuse\protection\service;
  * scripts/site_config.py:
  *
  *   protection {levels, withhold {email, firstname, pseudonym}, neutral_surname,
- *               reconcile_minutes, orgscope_ready}
+ *               reconcile_minutes}
  *
  * It is kept in the plugin's config, `local_ltuse/protection`, as JSON, where the service reads
  * it. Apply never reads or writes any user's protection: that is Moodle data
@@ -25,9 +25,8 @@ use local_ltuse\protection\service;
  * Items:
  *   protection config   missing (never applied), changed or ok; blocking when the plugin's
  *                       tables are missing (run the upgrade first)
- *   protection accounts drift only, counts only: accounts that differ from their protected
- *                       state (a reconcile backlog) and protected users still waiting for a
- *                       neutral username. Never a name or an id (FR-013).
+ *   protection accounts drift only, a count only: accounts that differ from their protected
+ *                       state (a reconcile backlog). Never a name or an id (FR-013).
  */
 class protection {
 
@@ -59,7 +58,6 @@ class protection {
             'withhold' => [],
             'neutral_surname' => (string)($this->declared['neutral_surname'] ?? ''),
             'reconcile_minutes' => (int)($this->declared['reconcile_minutes'] ?? 60),
-            'orgscope_ready' => !empty($this->declared['orgscope_ready']),
         ];
         foreach ((array)($this->declared['withhold'] ?? []) as $level => $fields) {
             $out['withhold'][(string)$level] = array_values(array_map('strval', (array)$fields));
@@ -120,8 +118,9 @@ class protection {
     }
 
     /**
-     * Drift's counts: accounts waiting for the reconcile run, and protected users at firstname
-     * or above whose username gives away their real name. Counts only. WRITES NOTHING.
+     * Drift's count: accounts waiting for the reconcile run. A count only. WRITES NOTHING.
+     * Usernames are not counted: the service gives a neutral one whenever it applies First
+     * name only or Pseudonym (Doug, 2026-10-05 (scope review), change 15).
      *
      * @return array[] item results; empty when there is nothing to report
      */
@@ -131,26 +130,17 @@ class protection {
             return [];
         }
         $backlog = 0;
-        $usernames = 0;
         foreach ($DB->get_records_select(service::TABLE, 'effectivelevel <> :none', ['none' => levels::NONE]) as $row) {
             if (service::drifted((int)$row->userid, $row)) {
                 $backlog++;
             }
-            if (levels::rank((string)$row->effectivelevel) >= levels::rank(levels::FIRSTNAME)) {
-                $username = (string)$DB->get_field('user', 'username', ['id' => $row->userid]);
-                if (levels::username_reveals($username, (string)$row->realfirstname, (string)$row->reallastname)) {
-                    $usernames++;
-                }
-            }
         }
-        if (!$backlog && !$usernames) {
+        if (!$backlog) {
             return [];
         }
-        // A warning ([skip]): apply cannot fix either; the reconcile task and the granting page do.
-        return [['warning' => true] + self::result(self::ACCOUNTS, 'extra', null,
-            "{$backlog} to repair, {$usernames} usernames",
-            "{$backlog} protected accounts differ from their protected state (the next reconcile run " .
-            "repairs them); {$usernames} protected users still have a username built from their name")];
+        // A warning ([skip]): apply cannot fix it; the reconcile task does.
+        return [['warning' => true] + self::result(self::ACCOUNTS, 'extra', null, "{$backlog} to repair",
+            "{$backlog} protected accounts differ from their protected state (the next reconcile run repairs them)")];
     }
 
     /**
@@ -162,8 +152,7 @@ class protection {
         foreach ((array)($config['withhold'] ?? []) as $level => $fields) {
             $counts[] = "{$level} " . count((array)$fields);
         }
-        return 'withholds ' . implode(', ', $counts) . ', organisation scope ' .
-            (!empty($config['orgscope_ready']) ? 'ready' : 'not ready');
+        return 'withholds ' . implode(', ', $counts);
     }
 
     /**

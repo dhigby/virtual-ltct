@@ -102,6 +102,8 @@ class provider implements
             'actorid' => 'privacy:metadata:protectionlog:actorid',
             'fromlevel' => 'privacy:metadata:protectionlog:fromlevel',
             'tolevel' => 'privacy:metadata:protectionlog:tolevel',
+            'requested' => 'privacy:metadata:protectionlog:requested',
+            'emailchecked' => 'privacy:metadata:protectionlog:emailchecked',
             'timecreated' => 'privacy:metadata:protectionlog:timecreated',
         ], 'privacy:metadata:protectionlog');
         $collection->add_message_provider('protectionchanged', 'privacy:metadata:protectionchanged');
@@ -324,6 +326,8 @@ class provider implements
         $changes = [];
         foreach ($DB->get_records(self::PROTECTIONLOG, ['userid' => $userid], 'timecreated, id') as $log) {
             $changes[] = (object)['from' => $log->fromlevel, 'to' => $log->tolevel, 'source' => $log->source,
+                'requested' => transform::yesno((int)$log->requested === 1),
+                'emailchecked' => transform::yesno((int)$log->emailchecked === 1),
                 'bysomeoneelse' => transform::yesno((int)$log->actorid !== $userid && (int)$log->actorid !== 0),
                 'time' => transform::datetime($log->timecreated)];
         }

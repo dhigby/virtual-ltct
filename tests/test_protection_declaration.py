@@ -12,7 +12,7 @@ import site_config as sc
 
 
 TEACHER_VIEW = ("      local/ltuse:viewidentity: allow          # spec 016 R7 path 4: real identities "
-                "of the course's protected learners")
+                "of the protected learners in the mentor's own group")
 MENTOR_VIEW = "      local/ltuse:viewidentity: allow                # spec 016 R7 path 2: the learner's real identity"
 
 
@@ -57,15 +57,27 @@ class Protection(unittest.TestCase):
         self.assertEqual(payload["protection"], protection)
         self.assertEqual(list(payload)[-1], "protection")
 
-    def test_orgscope_is_not_ready_while_ltct_org_is_visible(self):
-        # Decision 2 has not landed: ltct_org is visible and the progress report scopes by it,
-        # so the plugin refuses firstname and pseudonym (R11).
-        self.assertFalse(sc.validate(self.dir)[0]["protection"]["orgscope_ready"])
+    def test_no_level_waits_for_the_organisation(self):
+        # Decision 2, option a (Doug, 2026-10-05 (scope review)): the organisation stays
+        # visible at every level, so the payload carries no organisation-scope gate.
+        self.assertNotIn("orgscope_ready", sc.validate(self.dir)[0]["protection"])
 
-    def test_a_private_ltct_org_with_a_report_scoped_by_it_is_refused(self):
-        self.edit("profile-fields.yaml", "    name: Organisation\n    visible: all",
-                  "    name: Organisation\n    visible: private")
-        self.assertInvalid("can be private only once no report scopes by it")
+    def test_the_progress_report_is_scoped_by_the_member_cohort(self):
+        # T034-T035: the scope holds whatever ltct_org's visibility (R11).
+        decl = sc.validate(self.dir)[0]
+        progress = [r for r in decl["reports"] if r["area"].endswith("_progress")]
+        self.assertTrue(progress)
+        for report in progress:
+            conditions = {c["condition"]: c["values"] for c in report["conditions"]}
+            self.assertNotIn("user:profilefield_ltct_org", conditions)
+            self.assertTrue(conditions["cohort:idnumber"]["value"].startswith("ltct:org:"))
+            self.assertNotIn("user:profilefield_ltct_org", [c["column"] for c in report["columns"]])
+
+    def test_an_organisation_field_condition_is_refused(self):
+        self.edit("reports.yaml",
+                  '{condition: cohort:idnumber, values: {operator: equal, value: "ltct:org:{org}"}}',
+                  '{condition: user:profilefield_ltct_org, values: {operator: equal, value: "{org}"}}')
+        self.assertInvalid("is never a condition")
 
     def test_the_payload_names_no_one(self):
         decl = sc.validate(self.dir)[0]

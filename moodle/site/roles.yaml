@@ -159,11 +159,13 @@ roles:
       mod/scheduler:manageallappointments: inherit
       mod/scheduler:canscheduletootherteachers: inherit
       mod/scheduler:canseeotherteachersbooking: inherit
-      local/ltuse:viewidentity: allow          # spec 016 R7 path 4: real identities of the course's protected learners
+      local/ltuse:viewidentity: allow          # spec 016 R7 path 4: real identities of the protected learners in the mentor's own group
       moodle/backup:downloadfile: prohibit     # spec 016 R14: not in the archetype; prohibit so no course override grants it
     why: >-
       #26 (spec 016, FR-006, Doug 2026-10-04): a course mentor sees the real identity of the
-      protected learners in an ltct: course they mentor, while both hold their roles. The
+      protected learners they assess in an ltct: course, while both hold their roles: only a
+      learner in the mentor's own group there, idnumber ltct:mentorgroup:<mentor id> (spec
+      008), never the rest of the course (Doug, 2026-10-05 (scope review), change 22). The
       capability counts only in a course whose idnumber is ltct:<slug> and never in the
       office-hours course, where every mentor is a teacher (R7 path 4); it is checked in a
       course context, which a learner's user context does not inherit from. The backup

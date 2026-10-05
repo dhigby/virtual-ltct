@@ -14,6 +14,11 @@
 # The three conditions on a per-organisation report are its scope, not a convenience: report
 # builder has no viewer scoping, so they are what keeps one organisation's learners out of
 # another's report (R7). validate refuses a per-organisation template without all three.
+# The organisation is its member cohort, ltct:org:<key>, by cohort:idnumber: a cohort that
+# does not exist matches nobody, and it holds whatever ltct_org's visibility. validate refuses
+# a user:profilefield_ltct_org condition anywhere, because report builder silently drops a
+# profile field's condition once the field is hidden (spec 016 R11, T034-T035; Doug,
+# 2026-10-05 (scope review), decision 2 option a).
 #
 # Delivery is `enrol:plugin` not equal to `manual` (spec 002 R10, amending spec 004 R10): cohort
 # sync, and a manager's enrolment through the course's organisation-enrolment instance
@@ -40,7 +45,6 @@ reports:
     uniquerows: 1
     columns:
       - {column: user:fullnamewithlink, heading: Learner}
-      - {column: user:profilefield_ltct_org, heading: Organisation}
       - {column: course:coursefullnamewithlink, heading: Course}
       - {column: enrolment:timecreated, heading: Enrolled}
       - {column: completion:timestarted, heading: Started}
@@ -49,7 +53,7 @@ reports:
       - {column: completion:timecompleted, heading: Completed}
       - {column: access:timeaccess, heading: Last active in course}
     conditions:                                   # the scope; validate requires all three
-      - {condition: user:profilefield_ltct_org, values: {operator: equal, value: "{org}"}}
+      - {condition: cohort:idnumber, values: {operator: equal, value: "ltct:org:{org}"}}   # the member cohort; text equal
       - {condition: role:name, values: {operator: equal, value: student}}   # a shortname here; stored as the role's id
       - {condition: enrol:plugin, values: {operator: not_equal, value: manual}}   # delivery: anything but a pilot's enrolment
     filters: [course:fullname, user:fullname, completion:completed, completion:timecompleted, access:timeaccess]

@@ -24,10 +24,16 @@ check(L::ORDER === ['none', 'email', 'firstname', 'pseudonym'], 'four levels, lo
 check(L::is_level('email') && !L::is_level('Email') && !L::is_level('') && !L::is_level(null), 'is_level is exact');
 check(L::rank('none') === 0 && L::rank('pseudonym') === 3 && L::rank('bogus') === -1, 'rank');
 
-// --- availability before the organisation is hidden (R11) -------------------------------------
-check(L::available('email', false) && L::available('none', false), 'email and none need nothing');
-check(!L::available('firstname', false) && !L::available('pseudonym', false), 'firstname and pseudonym wait for orgscope');
-check(L::available('pseudonym', true), 'available once orgscope is ready');
+// --- raises, and what a manager may do (scope review changes 13 and 14) ----------------------
+check(!method_exists(L::class, 'available') && !defined(L::class . '::NEED_ORGSCOPE'),
+    'no level waits for the organisation to be hidden (decision 2, option a)');
+check(L::is_raise('none', 'email') && L::is_raise('email', 'pseudonym'), 'a raise');
+check(!L::is_raise('email', 'email') && !L::is_raise('firstname', 'none'), 'no change and a lowering are not raises');
+check(L::manager_may('none', 'firstname', false, false), 'a manager grants at intake');
+check(!L::manager_may('none', 'firstname', true, false), 'not after activity');
+check(!L::manager_may('email', 'none', false, false) && !L::manager_may('email', 'email', false, false),
+    'never a lowering, a removal or a same-level change');
+check(!L::manager_may('none', 'email', false, true), 'never a correction');
 
 // --- withheld fields (R6) ---------------------------------------------------------------------
 $withhold = [
@@ -91,6 +97,15 @@ check(!L::username_reveals('joker99', 'Jo', 'Li'), 'a short name inside another 
 check(!L::username_reveals('ltct-u4821', 'Fixfirst', 'Fixlast'), 'a neutral username');
 check(L::username_reveals('van.fixlast', 'Ann', "van Fixlast"), 'each part of a multi-part name');
 check(!L::username_reveals('', 'Fixfirst', 'Fixlast'), 'an empty username reveals nothing');
+
+// --- email addresses (scope review change 2) --------------------------------------------------------
+check(L::email_reveals('fixfirst.fixlast@example.com', 'Fixfirst', 'Fixlast', '') === ['name'], 'the name before the @');
+check(L::email_reveals('kestrel77@fixture-org.example', 'Fixfirst', 'Fixlast', 'fixture-org') === ['organisation'],
+    'the organisation key in the domain');
+check(L::email_reveals('kestrel77@example.com', 'Fixfirst', 'Fixlast', 'fixture-org') === [], 'a neutral address');
+check(L::email_reveals('kestrel77@ab.example', 'Fixfirst', 'Fixlast', 'ab') === [], 'a key part under three characters is not looked for');
+check(L::email_reveals('fixlast@fixture.example', 'Fixfirst', 'Fixlast', 'fixture-org') === ['name', 'organisation'],
+    'both, in order');
 
 // --- acknowledgement (R13) ---------------------------------------------------------------------------
 check(L::needs_acknowledgement('none', 'pseudonym', true), 'a raise with activity');

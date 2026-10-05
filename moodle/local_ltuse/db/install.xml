@@ -196,7 +196,7 @@
         <INDEX NAME="usermodified" UNIQUE="false" FIELDS="usermodified"/>
       </INDEXES>
     </TABLE>
-    <TABLE NAME="local_ltuse_protection_log" COMMENT="Every change of a user's protection: who, when, from and to which level (spec 016, FR-008). Moodle only.">
+    <TABLE NAME="local_ltuse_protection_log" COMMENT="Every change of a user's protection: who, when, from and to which level, and for a raise that the person asked and the email was checked (spec 016, FR-008). Moodle only.">
       <FIELDS>
         <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
         <FIELD NAME="userid" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false"/>
@@ -204,6 +204,8 @@
         <FIELD NAME="fromlevel" TYPE="char" LENGTH="20" NOTNULL="true" DEFAULT="none" SEQUENCE="false"/>
         <FIELD NAME="tolevel" TYPE="char" LENGTH="20" NOTNULL="true" DEFAULT="none" SEQUENCE="false"/>
         <FIELD NAME="source" TYPE="char" LENGTH="20" NOTNULL="true" DEFAULT="own" SEQUENCE="false" COMMENT="own (a change of level) or correction (the same level, corrected values)"/>
+        <FIELD NAME="requested" TYPE="int" LENGTH="1" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="1 when the person asked for this change; required for a raise"/>
+        <FIELD NAME="emailchecked" TYPE="int" LENGTH="1" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="1 when the granter confirmed the account email identifies neither the person nor their organisation; required for a raise"/>
         <FIELD NAME="timecreated" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false"/>
       </FIELDS>
       <KEYS>

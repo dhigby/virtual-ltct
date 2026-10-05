@@ -255,12 +255,22 @@ function xmldb_local_ltuse_upgrade($oldversion) {
         $table->add_field('fromlevel', XMLDB_TYPE_CHAR, '20', null, XMLDB_NOTNULL, null, 'none');
         $table->add_field('tolevel', XMLDB_TYPE_CHAR, '20', null, XMLDB_NOTNULL, null, 'none');
         $table->add_field('source', XMLDB_TYPE_CHAR, '20', null, XMLDB_NOTNULL, null, 'own');
+        $table->add_field('requested', XMLDB_TYPE_INTEGER, '1', null, XMLDB_NOTNULL, null, '0');
+        $table->add_field('emailchecked', XMLDB_TYPE_INTEGER, '1', null, XMLDB_NOTNULL, null, '0');
         $table->add_field('timecreated', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, '0');
         $table->add_key('primary', XMLDB_KEY_PRIMARY, ['id']);
         $table->add_index('userid', XMLDB_INDEX_NOTUNIQUE, ['userid']);
         $table->add_index('actorid', XMLDB_INDEX_NOTUNIQUE, ['actorid']);
         if (!$dbman->table_exists($table)) {
             $dbman->create_table($table);
+        }
+        // Scope review changes 13 and 2: a raise records that the person asked and that the
+        // email was checked. Added where an earlier 016 build made the table without them.
+        foreach (['requested' => 'source', 'emailchecked' => 'requested'] as $name => $after) {
+            $field = new xmldb_field($name, XMLDB_TYPE_INTEGER, '1', null, XMLDB_NOTNULL, null, '0', $after);
+            if (!$dbman->field_exists($table, $field)) {
+                $dbman->add_field($table, $field);
+            }
         }
 
         upgrade_plugin_savepoint(true, 2026100900, 'local', 'ltuse');

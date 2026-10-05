@@ -19,7 +19,8 @@ class surfaces {
      * are few, so each row is checked; nothing is said about anyone the viewer may not see.
      *
      * @param int $viewerid
-     * @return array[] {id, realname, display, level, levelname, org, canmanage}, by real name
+     * @return array[] {id, realname, display, level, levelname, org, canmanage}, by real name; the
+     *                 page shows them and offers no download (scope review change 14)
      */
     public static function supported(int $viewerid): array {
         global $DB;
@@ -54,11 +55,19 @@ class surfaces {
 
     /**
      * Does the viewer support anyone protected? Decides whether the profile offers the page.
+     * Cheap first (scope review change 12): nobody protected on the site, or a viewer who could
+     * be entitled to no one, ends it before any per-person check.
      *
      * @param int $viewerid
      * @return bool
      */
     public static function supports_anyone(int $viewerid): bool {
+        global $DB;
+        if (!service::table_exists()
+                || !$DB->record_exists_select(service::TABLE, 'effectivelevel <> :none', ['none' => levels::NONE])
+                || !entitlement::may_be_entitled($viewerid)) {
+            return false;
+        }
         return (bool)self::supported($viewerid);
     }
 
@@ -82,7 +91,9 @@ class surfaces {
     }
 
     /**
-     * The learner's own view: their level, what others see, and how to ask (FR-012, FR-008).
+     * A protected learner's own view: their level, what others see, and who to ask for a
+     * change (FR-012, FR-008). The profile shows it only to someone protected; everyone else
+     * is offered protection at intake, in the welcome message and in site help.
      *
      * @param int $userid
      * @return string HTML

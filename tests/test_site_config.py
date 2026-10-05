@@ -1148,7 +1148,7 @@ PROGRESS = """\
       - {column: completion:progresspercent, heading: Progress}
       - {column: completion:timecompleted, heading: Completed}
     conditions:
-      - {condition: user:profilefield_ltct_org, values: {operator: equal, value: "{org}"}}
+      - {condition: cohort:idnumber, values: {operator: equal, value: "ltct:org:{org}"}}
       - {condition: role:name, values: {operator: equal, value: student}}
       - {condition: enrol:plugin, values: {operator: not_equal, value: manual}}
     filters: [course:fullname, user:fullname]
@@ -1263,8 +1263,8 @@ class Reports(ReportsBase):
                 r = reports["org_%s_progress" % key.replace("-", "_")]
                 self.assertEqual(r["name"], "%s: learner progress" % name)
                 conds = {c["condition"]: c["values"] for c in r["conditions"]}
-                self.assertEqual(conds["user:profilefield_ltct_org"],
-                                 {"operator": "equal", "value": key})
+                self.assertEqual(conds["cohort:idnumber"],
+                                 {"operator": "equal", "value": "ltct:org:%s" % key})
                 self.assertEqual(r["audiences"], [{"type": "cohortmember",
                                                    "cohort": "ltct:org:%s:managers" % key}])
         progress = sorted(a for a in reports if a.startswith("org_"))
@@ -1277,8 +1277,8 @@ class Reports(ReportsBase):
         self.assertNotIn("{org}", json.dumps(self.payload()["reports"]))
 
     def test_scope_conditions_required(self):
-        for line in ('      - {condition: user:profilefield_ltct_org, values: {operator: equal, '
-                     'value: "{org}"}}\n',
+        for line in ('      - {condition: cohort:idnumber, values: {operator: equal, '
+                     'value: "ltct:org:{org}"}}\n',
                      "      - {condition: role:name, values: {operator: equal, value: student}}\n",
                      "      - {condition: enrol:plugin, values: {operator: not_equal, value: manual}}\n"):
             with self.subTest(removed=line.strip()):
@@ -1287,7 +1287,8 @@ class Reports(ReportsBase):
                 self.assertRejected()
 
     def test_scope_condition_values_verbatim(self):
-        for old, new in (('value: "{org}"}}', "value: fixture-a}}"),
+        for old, new in (('value: "ltct:org:{org}"}}', "value: ltct:org:fixture-a}}"),
+                         ('value: "ltct:org:{org}"}}', 'value: "ltct:org:{org}:managers"}}'),
                          ("value: student}}", "value: editingteacher}}"),
                          # Spec 002 R10: delivery is any enrolment but a pilot's, so the
                          # 2026-10-01 form (cohort sync only) is refused, as is any other.
@@ -1313,6 +1314,15 @@ class Reports(ReportsBase):
 
     def test_condition_role_unknown(self):
         self.only(PROGRAMME.replace("value: student}}", "value: fixture-nobody}}"))
+        self.assertRejected()
+
+    def test_organisation_field_condition_refused(self):
+        # Spec 016 R11: report builder drops a profile field's condition once the field is
+        # hidden, so the organisation is never a condition, on any report.
+        line = "      - {condition: role:name, values: {operator: equal, value: student}}\n"
+        self.assertIn(line, PROGRAMME)
+        self.only(PROGRAMME.replace(line, line + "      - {condition: user:profilefield_ltct_org, "
+                                    "values: {operator: equal, value: fixture-a}}\n"))
         self.assertRejected()
 
     def test_second_audience(self):
@@ -1478,7 +1488,7 @@ class Reports(ReportsBase):
         self.assertEqual(r["columns"][0], {"column": "user:fullnamewithlink", "heading": "Learner",
                                            "aggregation": None})
         self.assertEqual([c["condition"] for c in r["conditions"]],
-                         ["user:profilefield_ltct_org", "role:name", "enrol:plugin"])
+                         ["cohort:idnumber", "role:name", "enrol:plugin"])
         self.assertEqual(r["conditions"][1], {"condition": "role:name",
                                               "values": {"operator": "equal", "value": "student"}})
         self.assertEqual(r["filters"], ["course:fullname", "user:fullname"])

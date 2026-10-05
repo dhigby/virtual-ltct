@@ -7,10 +7,13 @@
  * Only someone who may manage this person's protection reaches it: the site team, or a manager
  * of the person's own organisation (entitlement::can_manage_protection). Anyone else is
  * refused, the person themselves included: their own level and preview are on their profile.
+ * A manager grants at intake only: a raise for someone with no activity yet. Corrections,
+ * later raises, lowering and removal are the site team's (Doug, 2026-10-05 (scope review),
+ * change 14), and the page says so to a manager who cannot change anything.
  *
  * Writes go through local_ltuse\protection\service::set_protection(), the same code as the
- * web service, so the refusals (not ready, pseudonym, username, acknowledgement) are the same
- * everywhere.
+ * web service, so the refusals (not requested, email not checked, site team only, pseudonym,
+ * acknowledgement) are the same everywhere.
  */
 
 require(__DIR__ . '/../../config.php');
@@ -40,18 +43,16 @@ if (!entitlement::can_manage_protection((int)$USER->id, $userid)) {
     throw new required_capability_exception($usercontext, 'local/ltuse:manageprotection', 'nopermissions', '');
 }
 $seeidentity = entitlement::can_view_identity((int)$USER->id, $userid);
+$siteteam = entitlement::is_site_team((int)$USER->id, $userid);
 $configured = service::config() !== null;
 $row = $configured ? service::row($userid) : null;
+$current = $row ? (string)$row->effectivelevel : levels::NONE;
 $real = $seeidentity ? service::real_identity($userid) : null;
-$ready = service::orgscope_ready();
-$available = [];
-foreach (levels::ORDER as $level) {
-    $available[$level] = $configured && levels::available($level, $ready);
-}
+$hasactivity = service::has_activity($userid);
 $realfirst = $real['firstname'] ?? (string)$user->firstname;
 $reallast = $real['lastname'] ?? (string)$user->lastname;
 $held = [];
-if ($seeidentity && $row && $row->realfields) {
+if ($seeidentity && $siteteam && $row && $row->realfields) {
     foreach ((array)json_decode($row->realfields, true) as $field => $entry) {
         if ($field !== levels::MAILDISPLAY) {
             $held[$field] = (string)($entry['value'] ?? '');
@@ -61,14 +62,11 @@ if ($seeidentity && $row && $row->realfields) {
 
 $form = new \local_ltuse\form\protection_form($url, [
     'userid' => $userid,
+    'current' => $current,
+    'siteteam' => $siteteam,
     'seeidentity' => $seeidentity,
-    'available' => $available,
-    'hasactivity' => service::has_activity($userid),
-    // From the real names on the server.
-    'needsusername' => levels::username_reveals((string)$user->username,
-        $row ? (string)$row->realfirstname : (string)$user->firstname,
-        $row ? (string)$row->reallastname : (string)$user->lastname),
-    'suggested' => service::suggest_username(),
+    'hasactivity' => $hasactivity,
+    'emailwarnings' => $seeidentity ? service::email_warnings($userid) : [],
     'held' => $held,
 ]);
 $form->set_data([
@@ -84,15 +82,13 @@ if ($form->is_cancelled()) {
 }
 $error = null;
 if ($data = $form->get_data()) {
-    // The suggested username is only for First name only and Pseudonym; at a looser level the
-    // hidden field still submits it, and the account must not be renamed for nothing.
-    $renames = levels::rank((string)$data->level) >= levels::rank(levels::FIRSTNAME);
     $options = [
         'pseudonym' => (string)($data->pseudonym ?? ''),
-        'newusername' => $renames ? (string)($data->newusername ?? '') : '',
+        'requested' => !empty($data->requested),
+        'emailchecked' => !empty($data->emailchecked),
         'acknowledgehistory' => !empty($data->acknowledgehistory),
     ];
-    if ($seeidentity) {
+    if ($seeidentity && $siteteam) {
         // Only what was changed counts as a correction (FR-008 records every change).
         if (trim((string)$data->realfirstname) !== $realfirst) {
             $options['realfirstname'] = (string)$data->realfirstname;
@@ -130,14 +126,14 @@ if (!$configured) {
 if ($error !== null) {
     echo $OUTPUT->notification(s($error), 'error');
 }
-$current = $row ? (string)$row->effectivelevel : levels::NONE;
 $summary = get_string('protection:current', 'local_ltuse', get_string('protection:level:' . $current, 'local_ltuse'));
 echo html_writer::tag('p', $summary . ' ' . entitlement::marker((int)$USER->id, $userid));
 if ($real) {
     echo html_writer::tag('p', get_string('protection:realname', 'local_ltuse', s(trim($realfirst . ' ' . $reallast))));
 }
-if (!$ready) {
-    echo $OUTPUT->notification(get_string('protection:notready', 'local_ltuse'), 'info');
+if (!$siteteam) {
+    echo $OUTPUT->notification(get_string($hasactivity ? 'protection:siteteamonly' : 'protection:intakeonly',
+        'local_ltuse'), 'info');
 }
 $form->display();
 echo $OUTPUT->footer();

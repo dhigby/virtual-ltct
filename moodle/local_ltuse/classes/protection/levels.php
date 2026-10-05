@@ -14,9 +14,17 @@ defined('MOODLE_INTERNAL') || die();
  *   withheld     which account fields a level withholds, from the declared config (R6)
  *   pseudonym    unique among protected users and not containing the real name, after NFC and
  *                case folding (data-model)
- *   username     must not contain the real first name or surname at firstname+ (R13)
+ *   username     must not contain the real first name or surname at firstname+ (R13); the
+ *                service replaces one that does with a neutral one
+ *   email        a warning when the address before the @ holds the real name, or its domain
+ *                the organisation's key (scope review change 2); the granter confirms
+ *   managers     an organisation's manager grants only at intake: a raise, for someone with no
+ *                activity, with no correction; the rest is the site team's (change 14)
  *   courses      a course mentor counts only in a published or pilot ltct:<slug> course, never
  *                the office-hours course, which enrols every mentor (R7 path 4)
+ *
+ * Every level is available once protection.yaml is stored: the organisation stays visible at
+ * every level, so no level waits for it (Doug, 2026-10-05 (scope review), decision 2 option a).
  */
 class levels {
 
@@ -26,9 +34,6 @@ class levels {
     const FIRSTNAME = 'firstname';
     const PSEUDONYM = 'pseudonym';
     const ORDER = [self::NONE, self::EMAIL, self::FIRSTNAME, self::PSEUDONYM];
-
-    /** The levels that need ltct_org private and a cohort-scoped report first (R11). */
-    const NEED_ORGSCOPE = [self::FIRSTNAME, self::PSEUDONYM];
 
     /** A log row's source (data-model): a change of level, or a correction at the same level. */
     const SOURCE_OWN = 'own';
@@ -78,14 +83,14 @@ class levels {
     }
 
     /**
-     * Is this level available yet? firstname and pseudonym need the organisation hidden (R11).
+     * Is a change from one level to another a raise?
      *
-     * @param string $level
-     * @param bool $orgscopeready
+     * @param string $from
+     * @param string $to
      * @return bool
      */
-    public static function available(string $level, bool $orgscopeready): bool {
-        return self::is_level($level) && ($orgscopeready || !in_array($level, self::NEED_ORGSCOPE, true));
+    public static function is_raise(string $from, string $to): bool {
+        return self::rank($to) > self::rank($from);
     }
 
     /**
@@ -264,6 +269,57 @@ class levels {
             }
         }
         return false;
+    }
+
+    /**
+     * What an email address may give away, for the granting page's warning (scope review
+     * change 2). Others in a course still see a protected person's address (core's
+     * showuseridentity), so the granter confirms it identifies no one. A heuristic: it only
+     * warns, and an organisation with a neutral key gives no signal.
+     *
+     *   name          the part before the @ holds the real first name or surname, by the
+     *                 username rule (username_reveals)
+     *   organisation  the domain holds a part of three characters or more of the person's
+     *                 organisation key
+     *
+     * @param string $email
+     * @param string $realfirst
+     * @param string $reallast
+     * @param string $orgkey the person's ltct_org, '' when none
+     * @return string[] the codes that apply, in that order
+     */
+    public static function email_reveals(string $email, string $realfirst, string $reallast, string $orgkey): array {
+        $at = strrpos($email, '@');
+        $local = $at === false ? $email : substr($email, 0, $at);
+        $domain = $at === false ? '' : self::fold(substr($email, $at + 1));
+        $out = [];
+        if (self::username_reveals($local, $realfirst, $reallast)) {
+            $out[] = 'name';
+        }
+        foreach (preg_split('/[^\p{L}\p{N}]+/u', self::fold($orgkey), -1, PREG_SPLIT_NO_EMPTY) ?: [] as $part) {
+            $length = function_exists('mb_strlen') ? mb_strlen($part, 'UTF-8') : strlen($part);
+            if ($domain !== '' && $length >= self::SURNAME_MIN && strpos($domain, $part) !== false) {
+                $out[] = 'organisation';
+                break;
+            }
+        }
+        return $out;
+    }
+
+    /**
+     * May a manager of the person's own organisation make this change (scope review change
+     * 14)? Managers grant at intake: a raise, for someone with no activity yet, with no
+     * correction to the real name or a held value. Corrections, raises after activity,
+     * lowering and removal are the site team's.
+     *
+     * @param string $from the level applied now
+     * @param string $to
+     * @param bool $hasactivity
+     * @param bool $corrects the change corrects the real name or a held value
+     * @return bool
+     */
+    public static function manager_may(string $from, string $to, bool $hasactivity, bool $corrects): bool {
+        return self::is_raise($from, $to) && !$hasactivity && !$corrects;
     }
 
     /**

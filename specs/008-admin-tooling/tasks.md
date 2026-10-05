@@ -6,7 +6,7 @@
 **Tests**: Included. Each user story has an Independent Test in spec.md, and plan.md §Testing requires pytest (`tests/test_ltct_admin.py`), a PHP harness (`tests/admin_harness.php`), PHPUnit (`moodle/local_ltuse/tests/admin_test.php`) and instance checks V1–V19. Every test address is `@example.org`; every organisation key is `fixture-*`; no CSV fixture is committed (`.gitignore` ignores `*.csv`; build rows in memory). Instance evidence stays outside the repo and is recorded as counts and outcomes only.
 
 **Blocking markers** — a task carrying one may be written, but is not closed until the blocker clears:
-- **D1, D2, D3, D6, D11**: maintainer decisions (plan.md "Decisions on the plan's limits"). All approved by Doug on 2026-10-04 and cleared, except that D11's approved rule is a change to spec 016, so T067's switch now waits on ⛔ **016**.
+- **D1, D2, D3, D6, D11**: maintainer decisions (plan.md "Decisions on the plan's limits"). All approved by Doug on 2026-10-04 and cleared, D11's approved rule was a change to spec 016, which merged with it (#84), so T067's switch is on since 2026-10-05.
 - ⛔ **016**: needs spec 016's `protection\service` / `entitlement` on the branch (agreed names in research R5).
 - **006**: spec 006's `pathway\catalogue` / `assignments` / `pathway_courses_changed` (research R11). Cleared 2026-10-04: 006 merged (#90).
 - **002-A**: the amendment to 002's `organisation\actions` contract (`do_<action>()` + manager wrapper, research R6). Cleared 2026-10-04: 002's T071 merged and the cores were added on this branch (T012).
@@ -177,7 +177,7 @@ Code that calls 016 or 006 guards with `class_exists()` and degrades as research
 - [X] T064 [US5] Observers in `moodle/local_ltuse/db/events.php` (block `// Spec 008`) → `classes/admin/observer.php` exactly as contracts/admin-service.md's table: `role_assigned`/`role_unassigned` (mentor role, user context) → `sync_learner($event->contextinstanceid)` + `sync_mentor($event->relateduserid)`; `user_enrolment_created|updated|deleted` filtered on course idnumber and instance (never role) → `sync_course`; `enrol_instance_updated|deleted` → `sync_course`; every `user_updated` → `sync_learner`; ignore the `ltct:coursementor` instance
 - [X] T065 [US5] Scheduled task `moodle/local_ltuse/classes/task/course_mentor_reconcile.php`, hourly in `db/tasks.php`: `sync_course` for every `ltct:` course except `ltct:officehours`; remove `local_ltuse`-component Teacher assignments with no reason; `cohort_enrolment::reconcile_pathways()`; counts only in output
 - [X] T066 [US5] Write `local_ltuse_admin_preview_course_mentors` / `apply_course_mentors` (get-or-create / delete on `local_ltuse_course_mentor`, duplicate-key treated as success, then `sync_course`) and CLI `course-mentors [--remove]`
-- [ ] T067 [US5] Instance: quickstart **V11**, **V12**, **V13**, then **V9** course-mentor half, with `coursementorsync` on in the `--site-dir` copy only; record results. `settings/admin.yaml` keeps `0` until ⛔ **016** narrows its course-mentor path to a shared mentor group (D11, approved 2026-10-04)
+- [ ] T067 [US5] Instance: quickstart **V11**, **V12**, **V13**, then **V9** course-mentor half, with `coursementorsync` on in the `--site-dir` copy only; record results. `settings/admin.yaml` declares `1` since 2026-10-05, when 016's narrowed course-mentor path merged (#84); the instance checks remain
 
 **Checkpoint**: mentors assigned in bulk; course mentors appear and disappear with their reason, in the same request.
 
@@ -230,7 +230,7 @@ Code that calls 016 or 006 guards with `class_exists()` and degrades as research
 | D2 | T057, T062, T067 (V13) | Cleared: approved 2026-10-04 |
 | D3 | T063 | Cleared: approved 2026-10-04 (012's re-plan still adopts it) |
 | D6 | T077 | Cleared: approved 2026-10-04 |
-| D11 | T067 (turning the sync on) | Approved 2026-10-04 as the narrower rule; the sync stays `coursementorsync: 0` until 016 implements it |
+| D11 | T067 (turning the sync on) | Approved 2026-10-04 as the narrower rule; 016 implemented it (#84) and the sync is `coursementorsync: 1` since 2026-10-05 |
 
 ### Within Each User Story
 
@@ -275,7 +275,7 @@ T060 privacy provider                                 (moodle/local_ltuse/classe
 ### Incremental Delivery
 
 4. Phase 5 (routine changes; the `sil` → Area move once 002 declares the Areas).
-5. Phase 6 (mentors), no later than 016's merge; sync stays off until 016 implements D11's narrower rule.
+5. Phase 6 (mentors), no later than 016's merge; sync on since 2026-10-05, after 016 implemented D11's narrower rule.
 6. Pathways (T045–T047); 006 merged on 2026-10-04.
 7. Polish; the done gate (T077) stays open after merge.
 

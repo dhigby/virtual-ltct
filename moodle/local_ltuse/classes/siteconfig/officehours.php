@@ -250,6 +250,11 @@ class officehours {
                 'usebookingform' => (int)$declared['usebookingform'], 'grade' => (int)$declared['grade'],
                 'bookingrouping' => -1, 'usenotes' => 1,
             ]);
+            // The new module does not keep the group mode it was created with (the first apply on
+            // ltuse.net left it 0, 2026-10-05), so set it now rather than on the next apply.
+            $cm = util::cm_by_idnumber((int)$course->id, $declared['idnumber']);
+            \core_courseformat\formatactions::cm((int)$course->id)->set_groupmode((int)$cm->id,
+                (int)$declared['groupmode']);
             $report->add_result($item, 'changed', 'created');
             return;
         }
@@ -260,7 +265,10 @@ class officehours {
             unset($changes['name']);
         }
         if (isset($changes['groupmode'])) {
-            set_coursemodule_groupmode((int)$cm->id, (int)$declared['groupmode']);
+            // set_coursemodule_groupmode() is deprecated in 5.2 (MDL-86857); cmactions replaces it
+            // (course/format/classes/local/cmactions.php, MOODLE_502_STABLE).
+            \core_courseformat\formatactions::cm((int)$course->id)->set_groupmode((int)$cm->id,
+                (int)$declared['groupmode']);
             unset($changes['groupmode']);
         }
         if ($changes) {

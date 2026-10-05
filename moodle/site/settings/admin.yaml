@@ -49,11 +49,11 @@ settings:
       account comes from intake, matched by email (research R2). Not core's default, which is 0
       (admin/settings/plugins.php, MOODLE_502_STABLE) (Doug, 2026-10-05 (scope review)).
   - name: local_ltuse/coursementorsync
-    value: 0
+    value: 1
     why: >-
-      Off until spec 016 narrows its course-mentor path, so that a course mentor sees a
-      protected learner only when they share a mentor group in the course (plan decision 11,
-      approved 2026-10-04).
+      On since 2026-10-05: spec 016 (#84, merged) narrowed its course-mentor path, so a course
+      mentor sees a protected learner only when they share a mentor group in the course (plan
+      decision 11, approved 2026-10-04).
       At 1, each learner's course mentors are enrolled as Course mentor in the courses they
       take and removed by event (research R10); at 0 the observers and the hourly reconcile do
       nothing, and one-course and cohort mentors can still be recorded. Instance checks turn

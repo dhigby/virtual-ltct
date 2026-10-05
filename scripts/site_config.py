@@ -2633,7 +2633,10 @@ GROUP_NAME_PLACEHOLDER = "{n}"
 # A group's name is shown to its members; a mentor's name may be a protected identity
 # (spec 016), so a template may hold no name of anyone.
 GROUP_NAME_FORBIDDEN = ("{name}", "{firstname}", "{lastname}", "{fullname}")
-DASHBOARD_REGIONS = ("side-pre", "side-post", "content")
+# Boost's mydashboard layout has one block region, side-pre (theme/boost/config.php,
+# MOODLE_502_STABLE), and my/index.php adds content. side-post is not a region there:
+# apply on ltuse.net was refused with "unknown block region side-post" (2026-10-05).
+DASHBOARD_REGIONS = ("side-pre", "content")
 CALENDAR_SETTINGS = ("enablecalendarexport", "calendar_customexport", "calendar_adminseesall",
                      "timezone", "forcetimezone")
 NO_FORCED_TIMEZONE = "99"                  # forcetimezone: each learner's own zone wins (R5)

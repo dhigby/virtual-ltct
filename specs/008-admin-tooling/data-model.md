@@ -147,5 +147,5 @@ The sync's target for C is the set of pairs `(mentor, L)`. A mentor is enrolled 
 | `moodle/local_ltuse/db/access.php` | + `local/ltuse:administer`. |
 | `moodle/site/roles.yaml` | + role `ltctadmin` (system) with exactly the capabilities in research R12, each with its `why`, and `allowassign: [mentor, teacher]`. |
 | `scripts/site_config.py` | `PROTECTION_MANAGE_ROLES` (016's allowlist) gains `ltctadmin`, with its reason (research R5). |
-| `moodle/site/settings/admin.yaml` | `allowaccountssameemail: 0`; `local_ltuse/coursementorsync: 0` until 016 narrows its course-mentor path to a shared mentor group (plan decision 11); `rows: [14, 11]`. |
+| `moodle/site/settings/admin.yaml` | `allowaccountssameemail: 0`; `local_ltuse/coursementorsync: 1` since 016 narrowed its course-mentor path to a shared mentor group (plan decision 11; 0 until 2026-10-05); `rows: [14, 11]`. |
 | `tests/fixtures/admin/*.csv`? | **No.** `.gitignore` ignores `*.csv`; fixtures are built in the test from `example.org` strings, never committed as files. |

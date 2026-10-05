@@ -152,7 +152,7 @@ moodle/local_ltuse/
 └── README.md                               # changed: administration section; "does no enrolment" corrected; XI reads
 moodle/site/
 ├── roles.yaml                              # changed: + ltctadmin
-├── settings/admin.yaml                     # new: allowaccountssameemail 0; the general account rules (email login, protectusernames, registerauth, authpreventaccountcreation); local_ltuse/coursementorsync 0 until 016 narrows (decision 11)
+├── settings/admin.yaml                     # new: allowaccountssameemail 0; the general account rules (email login, protectusernames, registerauth, authpreventaccountcreation); local_ltuse/coursementorsync 1 since 016 narrowed it (decision 11; 0 until 2026-10-05)
 └── README.md                               # changed: "The site team's four steps" become the ltct_admin.py recipes; a row that waits joins once identity protection is ready for that person
 tests/
 ├── test_ltct_admin.py                      # new
@@ -228,7 +228,7 @@ These are for the maintainer (Doug). `/speckit-tasks` may generate tasks as draf
   - **Organisation minimums are gone** (Doug, 2026-10-05 (scope review)). 008 no longer calls `org_minimum()`: an intake row's target is its own `protection` level, and a move neither reads nor sets protection, so `move_rules` has no `flagged_protection` and `move_service` no post-move `is_settled()`/`apply()` step. The per-person check stays: a row asking for a level 016 cannot set yet `waits`, and an existing account below its row's level is `flagged_protection`.
   - `registerauth`, `authpreventaccountcreation` and `protectusernames` move from 016's `identity.yaml` to 008's `settings/admin.yaml`, as general account rules beside `authloginviaemail`; 016's `auth` setting becomes `auth_webservice` enabled and `auth_email` disabled as plugin entries in `site.yaml`, because `$CFG->auth` is not in the admin tree and the applier could not check it.
   - 008's PR adds `ltctadmin` to 016's `PROTECTION_MANAGE_ROLES` allowlist in `site_config.py`, with its reason (R5, agreed with 016).
-  - Decision 11, about how far a course mentor sees, is settled by 016's scope review: its course-mentor path is narrowed to the viewer's own mentor group. `local_ltuse/coursementorsync` stays 0 until it is merged.
+  - Decision 11, about how far a course mentor sees, is settled by 016's scope review: its course-mentor path is narrowed to the viewer's own mentor group. `local_ltuse/coursementorsync` was 0 until it merged (#84), and is 1 since 2026-10-05.
 - **Spec 017**: when an ALTC may create an account by approving a request, it should create it through `intake_service`, so that ordering, the username rule and protection stay in one place.
 - **Publisher**: decision 4 (Pilots → Published). `setup_publishing.php`'s two direct `$DB` writes should move to the same core APIs as `setup_admin_token.php`; until they do, they go in the plugin README's XI list (R12).
 - **`local_ltuse` README**: its line "No enrolment, grades or learner records" is already untrue after 002's R10, and becomes "enrolment through the administration service and the organisation page; never grades".

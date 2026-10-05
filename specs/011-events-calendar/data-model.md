@@ -35,7 +35,7 @@ There are two kinds of data:
 | Field | Value | Rule |
 |---|---|---|
 | `rows` | `[21]` | |
-| `default_blocks` | `[{block: calendar_upcoming, region: side-post, why: …}]` | `block` must be a core block name. Additive: `apply` never removes a block it did not declare (R18). |
+| `default_blocks` | `[{block: calendar_upcoming, region: side-pre, why: …}]` | `block` must be a core block name. Additive: `apply` never removes a block it did not declare (R18). |
 
 ### Settings
 

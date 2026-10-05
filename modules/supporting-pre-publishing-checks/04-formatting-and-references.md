@@ -53,7 +53,7 @@ miscount because the checker is reading swallowed verse content as part of the h
 In Run Basic Checks it has a recognisable signature: **two errors for every swallowed
 verse** — "Verse number in heading" and "Marker cannot occur here: \v".
 
-![A section heading with a \p marker correctly in place before verse 21, so verses 19-22 render as normal body text below the heading.](assets/ss-04-p-marker-in-place.png)
+![A section heading followed by a \p marker before verse 19, and another before verse 21, so verses 19-22 render as normal body text below the heading.](assets/ss-04-p-marker-in-place.png)
 
 ![The same passage with the \p marker missing: verses 19 and 20 have been swallowed into the \s1 heading style, rendered in bold as if they were part of the heading title.](assets/ss-04-p-marker-missing.png)
 *One missing paragraph marker, and the verse numbers disappear into the heading.*
@@ -226,7 +226,7 @@ Four things to do with these inventories:
   **"Punctuation"** and only checks individual characters, so the review can look
   complete while a whole class of problems goes unseen.
 
-  ![The Punctuation (sequences) inventory's Inventory menu, with "Show sequences" checked and highlighted.](assets/ss-04-punctuation-inventory-show-sequences.png)
+  ![The Punctuation Inventory's Inventory menu, with "Show sequences" checked and highlighted.](assets/ss-04-punctuation-inventory-show-sequences.png)
   *This checkbox is what makes "Punctuation (sequences)" mean anything.*
 
   A flagged result under "Punctuation (sequences)" looks like this — each combination
@@ -297,7 +297,7 @@ to find the gaps here, not halfway through a support session.
    state which of the two cascades into other markers elsewhere in the chapter and
    which does not — this is the distinction that keeps you from over-reading a small
    error.
-3. **A resolved error can disappear from the list two different ways.** Write one line
+3. **A denied error is not a resolved one.** Write one line
    on how a denied error actually displays when it's visible (what marks it as denied,
    not resolved), and one line on the View menu setting that controls whether it shows
    up at all. Then say in one line why "deny" is a real, correct action in Basic Checks

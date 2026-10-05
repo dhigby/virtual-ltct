@@ -168,7 +168,7 @@ before their files go to the typesetter. In one sitting you spot: an orphan word
 alone at the top of a column, a footnote that has shifted two pages from its reference,
 and a heading that lands awkwardly at a column break on a spread.
 
-**Context:** The team is verified on PTXprint 3.0.38. They're eager to sign off and move
+**Context:** The team is on PTXprint 3.0.38. They're eager to sign off and move
 on, and are inclined to treat all three as "typesetting's problem now."
 
 **Your task:**

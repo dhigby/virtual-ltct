@@ -78,6 +78,11 @@ class dashboard {
             try {
                 $page = new \moodle_page();
                 $page->set_context(context_system::instance());
+                // A bare page has no layout, so its block manager knows no region until one is
+                // added, and add_block() refuses every region as unknown. Core adds a block to
+                // the default dashboard the same way (blocks/timeline/db/install.php,
+                // MOODLE_502_STABLE).
+                $page->blocks->add_region((string)$entry['region']);
                 $page->blocks->add_block((string)$entry['block'], (string)$entry['region'], 0, false,
                     self::PAGETYPE, (string)$pageid);
                 $report->add_result($item, 'changed', 'added');

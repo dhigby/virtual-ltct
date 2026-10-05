@@ -48,7 +48,9 @@ $learner = core_user::get_user($userid);
 if (!local_ltuse_may_manage_mentors($learner)) {
     throw new moodle_exception('mentors:notallowed', 'local_ltuse');
 }
-// Spec 016 adds can_view_identity(V, P) here: a mentor sees a protected learner's real identity.
+// No can_view_identity(V, P) check here: spec 002's ask for one was dropped as moot (Doug,
+// 2026-10-05). Everyone this page authorises already passes it: the site team by path 1, an
+// own-organisation manager by path 3 (protection\entitlement).
 
 $roleid = \local_ltuse\mentoring::role_id();
 $learnerctx = context_user::instance((int)$learner->id);

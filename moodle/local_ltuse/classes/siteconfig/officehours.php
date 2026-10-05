@@ -32,7 +32,8 @@ use moodle_exception;
  *                           mentor relationships, as counts only (constitution III)
  *
  * Writes: create_course(), update_course(), util::upsert_module() (add_moduleinfo()) for a new
- * activity, set_coursemodule_name() and set_coursemodule_groupmode() for an existing one, and
+ * activity, set_coursemodule_name() for an existing one, formatactions::cm()->set_groupmode()
+ * at creation and on update (set_coursemodule_groupmode() is deprecated in 5.2, MDL-86857), and
  * enrol_manual's add_instance() or update_instance(). The scheduler's other declared columns on an existing activity
  * are written with one update_record() on `scheduler`: scheduler_update_instance() needs the
  * activity form and cannot be called without one. That write, and the read of the same row,

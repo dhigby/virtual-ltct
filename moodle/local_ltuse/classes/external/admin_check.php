@@ -17,7 +17,8 @@ use core_external\external_value;
  * a wrong enrol_cohort/unenrolaction turns "remove" into data loss and realtime off leaves a
  * new learner outside their organisation's cohort. It returns:
  *
- *   - each setting of research R13 with its value, and whether it is set at all;
+ *   - the settings research R13 lists as read by check, each with its value, and whether it
+ *     is set at all;
  *   - the capabilities of the declared ltctadmin role (research R12) the caller lacks at
  *     system context, by name. A capability this server does not define yet (spec 016's
  *     local/ltuse:manageprotection before 016 is installed) is left out, not reported missing;

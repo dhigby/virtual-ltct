@@ -587,7 +587,10 @@ class service {
             }
             $transaction->allow_commit();
         } catch (\Throwable $e) {
-            if (isset($transaction)) {
+            // A rollback deeper down (inside a core call) disposes this transaction too, and
+            // rollback() on a disposed one throws "Transactions already disposed"
+            // (lib/dml/moodle_transaction.php), hiding the real error. Only roll back a live one.
+            if (isset($transaction) && !$transaction->is_disposed()) {
                 $transaction->rollback($e);   // Rethrows $e.
             }
             throw $e;

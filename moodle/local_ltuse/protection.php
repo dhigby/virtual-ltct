@@ -67,11 +67,13 @@ $form = new \local_ltuse\form\protection_form($url, [
     'seeidentity' => $seeidentity,
     'hasactivity' => $hasactivity,
     'emailwarnings' => $seeidentity ? service::email_warnings($userid) : [],
+    'picturelevels' => service::picture_levels($userid),
     'held' => $held,
 ]);
 $form->set_data([
     'level' => $row ? (string)$row->ownlevel : levels::NONE,
     'pseudonym' => $row ? (string)$row->pseudonym : '',
+    'hidelogs' => $row ? (int)$row->hidelogs : 0,
     'realfirstname' => $seeidentity ? $realfirst : '',
     'reallastname' => $seeidentity ? $reallast : '',
 ]);
@@ -87,6 +89,7 @@ if ($data = $form->get_data()) {
         'requested' => !empty($data->requested),
         'emailchecked' => !empty($data->emailchecked),
         'acknowledgehistory' => !empty($data->acknowledgehistory),
+        'hidelogs' => !empty($data->hidelogs),
     ];
     if ($seeidentity && $siteteam) {
         // Only what was changed counts as a correction (FR-008 records every change).

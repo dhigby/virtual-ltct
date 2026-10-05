@@ -95,6 +95,7 @@ class provider implements
             'realfirstname' => 'privacy:metadata:protection:realfirstname',
             'reallastname' => 'privacy:metadata:protection:reallastname',
             'realfields' => 'privacy:metadata:protection:realfields',
+            'hidelogs' => 'privacy:metadata:protection:hidelogs',
             'usermodified' => 'privacy:metadata:protection:usermodified',
         ], 'privacy:metadata:protection');
         $collection->add_database_table(self::PROTECTIONLOG, [
@@ -319,6 +320,7 @@ class provider implements
                 'realfirstname' => $row->realfirstname,
                 'reallastname' => $row->reallastname,
                 'realfields' => $row->realfields ? json_decode($row->realfields, true) : [],
+                'hidelogs' => transform::yesno($row->hidelogs),
                 'timecreated' => transform::datetime($row->timecreated),
                 'timemodified' => transform::datetime($row->timemodified),
             ];

@@ -2827,8 +2827,9 @@ SPECIAL_WITHHOLD = ("maildisplay", "picture", "firstname", "lastname")
 NEVER_WITHHELD = (ORG_FIELD, "description", "interests")
 NEUTRAL_SURNAME = re.compile(r"^[^\w\s]$", re.UNICODE)   # one non-letter character (R4)
 # The site-wide settings spec 016 requires, with the value each must have: only those that
-# cost nobody anything (Doug, 2026-10-05 (scope review), change 20). protectusernames and the
-# login rules are general account rules in spec 008's admin.yaml.
+# cost nobody anything (Doug, 2026-10-05 (scope review), change 20). protectusernames,
+# registerauth and authpreventaccountcreation are general account rules in spec 008's admin.yaml,
+# and the login methods are its site.yaml plugin entries.
 PROTECTION_SETTINGS = {
     "allowedemaildomains": "",                                # R8, core default
     "enablegravatar": 0,                                      # R6, core default

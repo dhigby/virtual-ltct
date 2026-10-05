@@ -93,7 +93,8 @@ class surfaces {
     /**
      * A protected learner's own view: their level, what others see, and who to ask for a
      * change (FR-012, FR-008). The profile shows it only to someone protected; everyone else
-     * is offered protection at intake, in the welcome message and in site help.
+     * is to be offered protection at intake, in the welcome message and in site help (spec 016
+     * task T047, not yet in place).
      *
      * @param int $userid
      * @return string HTML

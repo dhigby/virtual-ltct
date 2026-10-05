@@ -28,6 +28,7 @@ use stdClass;
  *                         a manager who is not the site team may change)
  *   apply()               re-apply one protected user's level after drift: the adhoc and
  *                         reconcile tasks
+ *   sync_log_blocks()     the course-log block, in the courses of those who asked for it
  *   effective_level(), is_settled(), is_protected(), real_identity(): read only, named for
  *                         specs 006 and 008
  *
@@ -64,6 +65,22 @@ class service {
     const USERNAME_PREFIX = 'ltc-';
     const USERNAME_LENGTH = 8;
     const USERNAME_ALPHABET = 'abcdefghijklmnopqrstuvwxyz234567';
+
+    /**
+     * The login methods a protected account may have (scope review change 4, R3): the site's
+     * own, or none. Any other is an outside login that may write the real name back, so write()
+     * and the hook set it to AUTH, and drifted() reports it.
+     */
+    const AUTH = 'manual';
+    const SAFE_AUTH = ['manual', 'nologin'];
+
+    /**
+     * The course-log block a protected person may ask for (scope review change 5, R14): these
+     * roles are prohibited these capabilities in each course the person is enrolled in.
+     * local_ltuse owns every course-level prohibit of them for these roles (sync_log_blocks()).
+     */
+    const LOG_ROLES = ['editingteacher', 'teacher'];
+    const LOG_CAPABILITIES = ['report/log:view', 'report/log:viewtoday', 'report/loglive:view'];
 
     /** @var array<int, true> users this class is writing now: the hook and observer skip them */
     private static $bypass = [];
@@ -231,11 +248,15 @@ class service {
      * At firstname or pseudonym a username that holds the real name is replaced with a neutral
      * one (neutral_username()); the person still signs in with their email (change 15).
      *
+     * `hidelogs`, when the person asks for their location to be hidden from course staff,
+     * blocks course logs in the courses they take (sync_log_blocks(), change 5). Absent, the
+     * current choice is kept. Changing it at the same level is a correction, so the site team's.
+     *
      * @param int $userid
      * @param string $level none, email, firstname or pseudonym
      * @param array $options requested, emailchecked (both required for a raise), pseudonym,
      *                       realfirstname, reallastname, realfields (field => value),
-     *                       acknowledgehistory
+     *                       acknowledgehistory, hidelogs
      * @param int|null $actorid who is making the change; the current user when null
      * @return array {effectivelevel, warnings: string[]}
      * @throws moodle_exception protection:err:* when refused
@@ -288,6 +309,9 @@ class service {
         }
         $newusername = levels::rank($level) >= levels::rank(levels::FIRSTNAME) &&
             levels::username_reveals((string)$user->username, $realfirst, $reallast) ? self::neutral_username() : null;
+        $hadlogblock = $row && !empty($row->hidelogs);
+        $hidelogs = $level !== levels::NONE
+            && (array_key_exists('hidelogs', $options) ? !empty($options['hidelogs']) : $hadlogblock);
 
         $target = [
             'ownlevel' => $level,
@@ -296,19 +320,29 @@ class service {
             'realfirstname' => $realfirst,
             'reallastname' => $reallast,
             'corrections' => $corrections,
+            'hidelogs' => $hidelogs,
             'requested' => $requested,
             'emailchecked' => $emailchecked,
         ];
         // FR-008: every change is recorded. Same level, but a corrected name or held value, a new
-        // pseudonym or a new username, is a correction.
+        // pseudonym, a changed log block or a new username, is a correction.
         $corrected = $row && ($realfirst !== $basefirst || $reallast !== $baselast || $corrections
-            || trim($pseudonym) !== (string)$row->pseudonym) || $newusername !== null;
+            || trim($pseudonym) !== (string)$row->pseudonym || $hidelogs !== $hadlogblock) || $newusername !== null;
         $logsource = $from !== $level ? levels::SOURCE_OWN : ($corrected ? levels::SOURCE_CORRECTION : null);
         self::write($user, $row, $target, $actorid, $logsource, $newusername);
 
         $warnings = [];
         if ($from !== $level && self::has_activity($userid)) {
             $warnings[] = get_string('protection:warn:norecall', 'local_ltuse');
+        }
+        if ($hidelogs || $hadlogblock) {
+            try {
+                self::sync_log_blocks();
+            } catch (\Throwable $e) {
+                // The level is saved; the hourly reconcile applies the block.
+                debugging('local_ltuse: could not sync course-log blocks: ' . $e->getMessage(), DEBUG_DEVELOPER);
+                $warnings[] = get_string('protection:warn:logblock', 'local_ltuse');
+            }
         }
         return ['effectivelevel' => $level, 'warnings' => $warnings];
     }
@@ -372,8 +406,8 @@ class service {
     }
 
     /**
-     * Does the account differ from its protected state? Names and user columns, the withheld
-     * profile fields, and the picture.
+     * Does the account differ from its protected state? Names and user columns, the login
+     * guard (R3), the withheld profile fields, and the picture.
      *
      * @param int $userid
      * @param stdClass|null $row
@@ -392,6 +426,9 @@ class service {
             if ((string)($user->$column ?? '') !== (string)$value) {
                 return true;
             }
+        }
+        if (!in_array((string)$user->auth, self::SAFE_AUTH, true) || self::linked_logins($userid)) {
+            return true;
         }
         $config = self::config();
         $split = levels::split(levels::withheld((array)($config['withhold'] ?? []), (string)$row->effectivelevel));
@@ -416,7 +453,7 @@ class service {
      * @param stdClass $user the account as it is now
      * @param stdClass|null $row the protection row, null when the user has none
      * @param array $target ownlevel, effectivelevel, pseudonym, realfirstname, reallastname, corrections,
-     *                      and for the log, requested and emailchecked
+     *                      hidelogs, and for the log, requested and emailchecked
      * @param int $actorid
      * @param string|null $logsource null to write no log row (a repair)
      * @param string|null $newusername a neutral username to apply, or null to keep the username
@@ -511,6 +548,10 @@ class service {
             if ($newusername !== null) {
                 $update->username = $newusername;
             }
+            // The login guard (R3): a protected account signs in only through the site itself.
+            if ($level !== levels::NONE && !in_array((string)$user->auth, self::SAFE_AUTH, true)) {
+                $update->auth = self::AUTH;
+            }
             self::$bypass[$userid] = true;
             try {
                 user_update_user($update, false, true);
@@ -518,6 +559,11 @@ class service {
                 // 4. The picture, only when entering firstname or pseudonym (R6).
                 if ($split['picture'] && !empty($user->picture)) {
                     core_user::update_picture((object)['id' => $userid, 'deletepicture' => 1]);
+                }
+                if ($level !== levels::NONE) {
+                    foreach (self::linked_logins($userid) as $login) {
+                        $login->delete();
+                    }
                 }
             } finally {
                 unset(self::$bypass[$userid]);
@@ -532,6 +578,7 @@ class service {
                 'realfirstname' => \core_text::substr($realfirst, 0, 100),
                 'reallastname' => \core_text::substr($reallast, 0, 100),
                 'realfields' => $held ? json_encode($held) : null,
+                'hidelogs' => (int)!empty($target['hidelogs']),
                 'timemodified' => $now,
                 'usermodified' => $actorid,
             ];
@@ -630,13 +677,14 @@ class service {
      * The state apply() repairs a user to: the level already applied, unchanged.
      *
      * @param stdClass $row
-     * @return array ownlevel, effectivelevel, pseudonym, realfirstname, reallastname, corrections
+     * @return array ownlevel, effectivelevel, pseudonym, realfirstname, reallastname, corrections, hidelogs
      */
     protected static function target(stdClass $row): array {
         // No real names here: write() takes them from the account or the row.
         return ['ownlevel' => (string)$row->ownlevel, 'effectivelevel' => (string)$row->effectivelevel,
             'pseudonym' => (string)$row->pseudonym,
-            'realfirstname' => '', 'reallastname' => '', 'corrections' => []];
+            'realfirstname' => '', 'reallastname' => '', 'corrections' => [],
+            'hidelogs' => !empty($row->hidelogs)];
     }
 
     /**
@@ -702,6 +750,110 @@ class service {
         $row = self::table_exists() ? self::row($userid) : null;
         [$first, $last] = self::base_real_names($user, $row);
         return levels::email_reveals((string)$user->email, $first, $last, self::user_org($userid));
+    }
+
+    /**
+     * The levels that would delete this user's profile picture (R6), for the granting page's
+     * warning: none when they have no picture, or their applied level already withholds it.
+     *
+     * @param int $userid
+     * @return string[] levels, in order
+     */
+    public static function picture_levels(int $userid): array {
+        $config = self::config();
+        $user = core_user::get_user($userid, 'id, picture');
+        if (!$config || !$user || empty($user->picture)) {
+            return [];
+        }
+        $withhold = (array)$config['withhold'];
+        if (levels::split(levels::withheld($withhold, self::effective_level($userid)))['picture']) {
+            return [];
+        }
+        return array_values(array_filter(levels::ORDER, function($level) use ($withhold) {
+            return levels::split(levels::withheld($withhold, $level))['picture'];
+        }));
+    }
+
+    /**
+     * The account's links to an outside login (R3). Linked logins work whatever the account's
+     * auth is (auth/oauth2/classes/auth.php complete_login() on MOODLE_502_STABLE), so a
+     * protected account keeps none. Read and deleted through auth_oauth2's own persistent
+     * class (auth/oauth2/classes/linked_login.php), never the table directly.
+     *
+     * @param int $userid
+     * @return \auth_oauth2\linked_login[]
+     */
+    protected static function linked_logins(int $userid): array {
+        if (!class_exists('\auth_oauth2\linked_login')) {
+            return [];
+        }
+        return \auth_oauth2\linked_login::get_records(['userid' => $userid]);
+    }
+
+    /**
+     * Put the course-log block exactly where it is asked for (scope review change 5, R14):
+     * LOG_ROLES are prohibited LOG_CAPABILITIES in every course where a protected person who
+     * asked (hidelogs) is enrolled, active or not, and nowhere else. local_ltuse owns every
+     * course-level prohibit of those capabilities for those roles, so one set by hand where
+     * nobody asked is removed. Called after a change and by the hourly reconcile, which also
+     * covers a course the person joins later.
+     *
+     * Core APIs only: assign_capability() and unassign_capability() (lib/accesslib.php on
+     * MOODLE_502_STABLE), which clear the role cache themselves.
+     */
+    public static function sync_log_blocks(): void {
+        global $DB;
+        if (!self::table_exists()) {
+            return;
+        }
+        $roleids = array_map('intval', array_keys($DB->get_records_list('role', 'shortname', self::LOG_ROLES, '', 'id')));
+        if (!$roleids) {
+            return;
+        }
+        $want = array_map('intval', $DB->get_fieldset_sql("
+            SELECT DISTINCT e.courseid
+              FROM {" . self::TABLE . "} p
+              JOIN {user_enrolments} ue ON ue.userid = p.userid
+              JOIN {enrol} e ON e.id = ue.enrolid
+             WHERE p.hidelogs = 1 AND p.effectivelevel <> :none", ['none' => levels::NONE]));
+        [$capsql, $capparams] = $DB->get_in_or_equal(self::LOG_CAPABILITIES, SQL_PARAMS_NAMED, 'cap');
+        [$rolesql, $roleparams] = $DB->get_in_or_equal($roleids, SQL_PARAMS_NAMED, 'role');
+        $have = array_map('intval', $DB->get_fieldset_sql("
+            SELECT DISTINCT ctx.instanceid
+              FROM {role_capabilities} rc
+              JOIN {context} ctx ON ctx.id = rc.contextid AND ctx.contextlevel = :courselevel
+             WHERE rc.capability $capsql AND rc.roleid $rolesql AND rc.permission = :prohibit",
+            ['courselevel' => CONTEXT_COURSE, 'prohibit' => CAP_PROHIBIT] + $capparams + $roleparams));
+
+        foreach ($want as $courseid) {
+            $context = \context_course::instance($courseid, IGNORE_MISSING);
+            if (!$context) {
+                continue;
+            }
+            foreach ($roleids as $roleid) {
+                foreach (self::LOG_CAPABILITIES as $capability) {
+                    $now = $DB->get_field('role_capabilities', 'permission',
+                        ['contextid' => $context->id, 'roleid' => $roleid, 'capability' => $capability]);
+                    if ((int)$now !== CAP_PROHIBIT) {
+                        assign_capability($capability, CAP_PROHIBIT, $roleid, $context->id, true);
+                    }
+                }
+            }
+        }
+        foreach (array_diff($have, $want) as $courseid) {
+            $context = \context_course::instance($courseid, IGNORE_MISSING);
+            if (!$context) {
+                continue;
+            }
+            foreach ($roleids as $roleid) {
+                foreach (self::LOG_CAPABILITIES as $capability) {
+                    if ($DB->record_exists('role_capabilities', ['contextid' => $context->id, 'roleid' => $roleid,
+                            'capability' => $capability, 'permission' => CAP_PROHIBIT])) {
+                        unassign_capability($capability, $roleid, $context->id);
+                    }
+                }
+            }
+        }
     }
 
     /**
@@ -818,9 +970,13 @@ class service {
         if (!self::table_exists()) {
             return;
         }
+        $hadlogblock = $DB->record_exists(self::TABLE, ['userid' => $userid, 'hidelogs' => 1]);
         $DB->delete_records(self::TABLE, ['userid' => $userid]);
         $DB->delete_records(self::LOGTABLE, ['userid' => $userid]);
         $DB->set_field(self::LOGTABLE, 'actorid', 0, ['actorid' => $userid]);
         $DB->set_field(self::TABLE, 'usermodified', 0, ['usermodified' => $userid]);
+        if ($hadlogblock) {
+            self::sync_log_blocks();   // Their courses no longer need the block.
+        }
     }
 }

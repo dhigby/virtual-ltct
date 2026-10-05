@@ -52,7 +52,7 @@ Only settings that cost nobody anything (change 20). All but `forceloginforprofi
 | `enablegravatar` | `0` (core default) | R6 | yes |
 | `forceloginforprofileimage` | `1` | R6 | yes |
 
-Removed from this file (Doug, 2026-10-05 (scope review)): `showuseridentity = ""` and the trimmed grade-export list (change 1); the `core_user` global search area flag (change 7); `auth_manual/field_lock_firstname`, `field_lock_lastname`, `field_lock_email` (change 3). `auth`, `registerauth`, `authpreventaccountcreation` and `protectusernames` are general account rules in spec 008's `moodle/site/settings/admin.yaml` (change 4).
+Removed from this file (Doug, 2026-10-05 (scope review)): `showuseridentity = ""` and the trimmed grade-export list (change 1); the `core_user` global search area flag (change 7); `auth_manual/field_lock_firstname`, `field_lock_lastname`, `field_lock_email` (change 3). `registerauth`, `authpreventaccountcreation` and `protectusernames` are general account rules in spec 008's `moodle/site/settings/admin.yaml`, and the login methods are 008's `moodle/site/site.yaml` plugin entries (`auth_webservice` on, `auth_email` off), not an `auth` setting (change 4).
 
 ### Roles (repo: `moodle/site/roles.yaml`, changed)
 
@@ -88,6 +88,7 @@ The `progress` report's scope condition `user:profilefield_ltct_org = {org}` bec
 | `pseudonym` | char(100) | Required at `pseudonym` |
 | `realfirstname`, `reallastname` | char(100) | Correctable on the granting page by the site team (R12) |
 | `realfields` | text (JSON) | `{field: {value, taken}}`, one entry per withheld field, taken when that field first became withheld (R5). There is no picture: a deleted picture is not restored (R6). |
+| `hidelogs` | int (0/1) | 1 when the person asked for their location to be hidden: course logs are blocked for course staff in the courses they take (R14, change 5). |
 | `timecreated`, `timemodified`, `usermodified` | int | |
 
 **Validation**:
@@ -107,7 +108,7 @@ Removed (Doug, 2026-10-05 (scope review), changes 9 and 10). It held each organi
 | `id`, `userid`, `timecreated` | int | |
 | `actorid` | int | The person who made the change; 0 once that person is deleted. |
 | `fromlevel`, `tolevel` | char | |
-| `source` | char | `own` (a change of level) or `correction` (same level, but a corrected real value, pseudonym, or a username replaced). ~~`organisation`, `organisation-kept`, `orgminimum`~~ removed (change 9). |
+| `source` | char | `own` (a change of level) or `correction` (same level, but a corrected real value, pseudonym, course-log block, or a username replaced). ~~`organisation`, `organisation-kept`, `orgminimum`~~ removed (change 9). |
 | `requested` | int (0/1) | 1 when the person asked for this change; required for a raise (change 13). |
 | `emailchecked` | int (0/1) | 1 when the granter confirmed the account's email identifies neither the person nor their organisation; required for a raise (change 2). |
 
@@ -126,7 +127,7 @@ The reconcile task writes no log rows. It reports counts only.
 | picture | unchanged | deleted | deleted |
 | `description`, interests | unchanged | unchanged (learner told) | unchanged (learner told) |
 | username | unchanged | replaced with a neutral one if it holds the real name (R13) | as `firstname` |
-| `auth` | `manual`, with no OAuth2 linked login (R3, T042, not built) | as `email` | as `email` |
+| `auth` | `manual` (or `nologin`), with no OAuth2 linked login (R3, T042) | as `email` | as `email` |
 | `ltct_org` | unchanged, visible | unchanged, visible (decision 2, option a) | as `firstname` |
 
 ### State transitions
@@ -156,4 +157,3 @@ A repair (the observer or the reconcile task) re-applies the level already set, 
 - A per-user auth plugin (R2, held back).
 - Organisation-named groups (removed by the open-courses change).
 - Organisation minimums and an organisation's withholding setting (removed 2026-10-05, changes 9 and 10).
-- A per-course block of course logs for a protected person who asks (R14, not built).

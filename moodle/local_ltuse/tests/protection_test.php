@@ -308,4 +308,80 @@ final class protection_test extends \advanced_testcase {
         delete_user(\core_user::get_user($user->id));
         $this->assertFalse($DB->record_exists(service::TABLE, ['userid' => $user->id]));
     }
+
+    /**
+     * Change 4 (R3): a protected account signs in only through the site. An outside login is
+     * set back to manual and its linked logins are removed: by the grant, the hook and a repair.
+     */
+    public function test_a_protected_account_has_no_outside_login(): void {
+        global $DB;
+        $user = $this->getDataGenerator()->create_user(['auth' => 'oauth2', 'firstname' => 'Fixfirst',
+            'lastname' => 'Fixlast']);
+        $link = (object)['userid' => $user->id, 'issuerid' => 1, 'username' => 'fixture-external',
+            'email' => 'kestrel77@example.com', 'confirmtoken' => '', 'confirmtokenexpires' => 0,
+            'timecreated' => time(), 'timemodified' => time(), 'usermodified' => 0];
+        $DB->insert_record('auth_oauth2_linked_login', $link);
+        service::set_protection((int)$user->id, 'email', self::GRANT);
+        $this->assertSame('manual', \core_user::get_user($user->id)->auth);
+        $this->assertFalse($DB->record_exists('auth_oauth2_linked_login', ['userid' => $user->id]));
+
+        user_update_user((object)['id' => $user->id, 'auth' => 'oauth2'], false, true);
+        $this->assertSame('manual', \core_user::get_user($user->id)->auth, 'the hook sets it back');
+
+        $DB->set_field('user', 'auth', 'oauth2', ['id' => $user->id]);   // A writer the hook misses.
+        $DB->insert_record('auth_oauth2_linked_login', $link);
+        $this->assertFalse(service::is_settled((int)$user->id));
+        service::apply((int)$user->id);
+        $this->assertTrue(service::is_settled((int)$user->id));
+        $this->assertSame('manual', \core_user::get_user($user->id)->auth);
+        $this->assertFalse($DB->record_exists('auth_oauth2_linked_login', ['userid' => $user->id]));
+    }
+
+    /**
+     * Change 5 (R14): course staff lose course logs only in the courses of a protected person
+     * who asked, and get them back once nobody there needs the block.
+     */
+    public function test_the_course_log_block_follows_the_person_who_asked(): void {
+        global $DB;
+        $generator = $this->getDataGenerator();
+        $user = $this->learner();
+        $course = \context_course::instance($generator->create_course()->id);
+        $later = \context_course::instance($generator->create_course()->id);
+        $generator->enrol_user($user->id, $course->instanceid, 'student');
+        $teacher = (int)$DB->get_field('role', 'id', ['shortname' => 'teacher']);
+        $prohibits = function(\context $context) use ($DB, $teacher): int {
+            return $DB->count_records('role_capabilities', ['contextid' => $context->id, 'roleid' => $teacher,
+                'permission' => CAP_PROHIBIT]);
+        };
+        service::set_protection((int)$user->id, 'email', self::GRANT + ['acknowledgehistory' => true]);
+        $this->assertSame(0, $prohibits($course), 'not asked for');
+
+        service::set_protection((int)$user->id, 'email', ['hidelogs' => true]);
+        $this->assertSame(count(service::LOG_CAPABILITIES), $prohibits($course));
+        $this->assertSame(0, $prohibits($later));
+        $this->assertSame('correction', $DB->get_field(service::LOGTABLE, 'source',
+            ['userid' => $user->id, 'tolevel' => 'email', 'fromlevel' => 'email']));
+
+        $generator->enrol_user($user->id, $later->instanceid, 'student');
+        service::sync_log_blocks();   // What the hourly reconcile runs.
+        $this->assertSame(count(service::LOG_CAPABILITIES), $prohibits($later));
+
+        service::set_protection((int)$user->id, 'none', ['acknowledgehistory' => true]);
+        $this->assertSame(0, $prohibits($course));
+        $this->assertSame(0, $prohibits($later));
+    }
+
+    /**
+     * The scope review's "Keep" list: the granting page warns before a level deletes the
+     * picture, which is never restored (R6).
+     */
+    public function test_the_picture_warning_names_the_levels_that_delete_it(): void {
+        global $DB;
+        $user = $this->learner();
+        $this->assertSame([], service::picture_levels((int)$user->id), 'no picture');
+        $DB->set_field('user', 'picture', 1, ['id' => $user->id]);
+        $this->assertSame(['firstname', 'pseudonym'], service::picture_levels((int)$user->id));
+        service::set_protection((int)$user->id, 'email', self::GRANT);
+        $this->assertSame(['firstname', 'pseudonym'], service::picture_levels((int)$user->id), 'email keeps it');
+    }
 }

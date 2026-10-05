@@ -12,8 +12,9 @@ use local_ltuse\protection\service;
  *
  * Reads only the protection rows above none, and returns at once when there are none, so a
  * site with nobody protected does nothing (Doug, 2026-10-05 (scope review)). Each drifted
- * account is re-applied at its own level. It writes no log rows; the task log gets counts only,
- * never a name (FR-013).
+ * account is re-applied at its own level, and the course-log block is brought into line with
+ * the courses of those who asked for it (service::sync_log_blocks()). It writes no log rows;
+ * the task log gets counts only, never a name (FR-013).
  *
  * When any account could not be repaired it throws after the loop, so core records the run as
  * failed (lib/classes/cron.php run_inner_scheduled_task() calls
@@ -57,6 +58,12 @@ class reconcile_protection extends \core\task\scheduled_task {
             } catch (\Throwable $e) {
                 $failed++;
             }
+        }
+        // The course-log block (R14): follows those who asked into courses they joined since.
+        try {
+            service::sync_log_blocks();
+        } catch (\Throwable $e) {
+            $failed++;
         }
         $checked = count($users);
         mtrace("local_ltuse: protection reconcile checked {$checked}, repaired {$repaired}, failed {$failed}.");

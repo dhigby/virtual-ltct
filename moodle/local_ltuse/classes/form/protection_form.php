@@ -10,7 +10,8 @@ use local_ltuse\protection\levels;
 
 /**
  * The granting page's form (spec 016, research R12): one person's level, pseudonym, the two
- * facts a raise records, corrections to the real name, and the history acknowledgement.
+ * facts a raise records, the course-log block when asked for, a warning before the picture is
+ * deleted, corrections to the real name, and the history acknowledgement.
  *
  * A raise records that the person asked (`requested`, scope review change 13) and that the
  * granter checked the account's email address identifies neither the person nor their
@@ -26,6 +27,7 @@ use local_ltuse\protection\levels;
  *   seeidentity     the viewer may see (and so correct) the real identity
  *   hasactivity     the person has activity, so a change needs the acknowledgement (R13)
  *   emailwarnings   service::email_warnings(): name, organisation
+ *   picturelevels   service::picture_levels(): the levels that would delete the picture (R6)
  *   held            field => value, the held real values (only when seeidentity)
  */
 class protection_form extends \moodleform {
@@ -54,6 +56,19 @@ class protection_form extends \moodleform {
                 \html_writer::span(get_string('protection:emailwarn:' . $code, 'local_ltuse'), 'text-danger'));
         }
         $mform->addElement('advcheckbox', 'emailchecked', '', get_string('protection:emailchecked', 'local_ltuse'));
+
+        // Only when the person asks for it (scope review change 5, R14).
+        $mform->addElement('advcheckbox', 'hidelogs', '', get_string('protection:hidelogs', 'local_ltuse'));
+        $mform->hideIf('hidelogs', 'level', 'eq', levels::NONE);
+
+        // The picture is deleted for good, so say so before it happens (scope review, "Keep" list).
+        if (!empty($data['picturelevels'])) {
+            $names = array_map(function($level) {
+                return get_string('protection:level:' . $level, 'local_ltuse');
+            }, (array)$data['picturelevels']);
+            $mform->addElement('static', 'picturewarn', '', \html_writer::span(
+                get_string('protection:picturewarn', 'local_ltuse', implode(' / ', $names)), 'text-danger'));
+        }
 
         if (!empty($data['seeidentity']) && !empty($data['siteteam'])) {
             $mform->addElement('header', 'realheader', get_string('protection:realidentity', 'local_ltuse'));

@@ -39,6 +39,10 @@ class hook_callbacks {
             foreach (service::protected_columns($row) as $column => $value) {
                 $hook->user->$column = $value;
             }
+            // The login guard (R3): no outside login for a protected account.
+            if (isset($hook->user->auth) && !in_array((string)$hook->user->auth, service::SAFE_AUTH, true)) {
+                $hook->user->auth = service::AUTH;
+            }
         } catch (\Throwable $e) {
             debugging('local_ltuse: protection hook failed: ' . $e->getMessage(), DEBUG_DEVELOPER);
         }

@@ -4,8 +4,9 @@
 # review)). All but forceloginforprofileimage are core's defaults, declared so drift catches
 # one being changed. site_config.py validate requires enablegravatar, forceloginforprofileimage
 # and allowedemaildomains once protection.yaml is declared; the rest are declared for drift
-# only. The general account rules (auth, registerauth, authpreventaccountcreation,
-# protectusernames) are spec 008's, in admin.yaml.
+# only. The general account rules (registerauth, authpreventaccountcreation, protectusernames)
+# are spec 008's, in admin.yaml; the login methods are 008's site.yaml plugin entries
+# (auth_webservice on, auth_email off), not an auth setting.
 
 rows: [26]
 purpose: >-

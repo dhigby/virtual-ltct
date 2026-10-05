@@ -259,7 +259,7 @@ Builds on spec 002's organisations, managers cohorts and `ltct_org` field. It do
 
 - [X] T032 [P] [US3] Write `reports.yaml` validation and expansion cases on `fixture-*` organisations:
   - **Expansion**: one `per: organisation` template with two organisations gives two reports. Their areas are `org:fixture-a:progress` and `org:fixture-b:progress`. `{org}` becomes the organisation's name in `name`, and its key in condition values and the audience cohort.
-  - **Scope**: a template missing any of `user:profilefield_ltct_org = {org}`, `role:name = student` and `enrol:plugin = cohort` fails. So does a second audience.
+  - **Scope**: a template missing any of `user:profilefield_ltct_org = {org}`, `role:name = student` and `enrol:plugin = cohort` fails. So does a second audience. *(**Amended by spec 016 decision 2 option (a) (Doug, 2026-10-05 (scope review)):** the scope condition is `cohort:idnumber = ltct:org:{org}`, a text condition; the Organisation column is dropped; `validate` refuses `user:profilefield_ltct_org` conditions.)*
   - **Audiences**: an `allusers` audience on any report fails.
   - **Names**: an area over 100 characters fails, as does a duplicate area or a key not matching `[a-z][a-z0-9-]*`.
   - **Keys**: a missing `why`, a missing `source` or an unknown key fails.

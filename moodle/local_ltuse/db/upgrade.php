@@ -218,7 +218,9 @@ function xmldb_local_ltuse_upgrade($oldversion) {
     // change log, both Moodle data, never the repo's. Protection is per person (Doug,
     // 2026-10-05 (scope review)), so an earlier 016 build's organisation table and the
     // protection row's source column are dropped where they exist; every step here checks
-    // first, so it runs cleanly on a fresh site and on a test site that had that build.
+    // first, so it runs cleanly on a fresh site and on a test site that had that build. That
+    // build is PR #84's, at stamp 2026100500, below this one, so this step runs there; no
+    // build at 2026100900 without these steps was ever pushed.
     if ($oldversion < 2026100900) {
         $table = new xmldb_table('local_ltuse_protection');
         $table->add_field('id', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, XMLDB_SEQUENCE, null);
@@ -229,6 +231,7 @@ function xmldb_local_ltuse_upgrade($oldversion) {
         $table->add_field('realfirstname', XMLDB_TYPE_CHAR, '100', null, XMLDB_NOTNULL, null, null);
         $table->add_field('reallastname', XMLDB_TYPE_CHAR, '100', null, XMLDB_NOTNULL, null, null);
         $table->add_field('realfields', XMLDB_TYPE_TEXT, null, null, null, null, null);
+        $table->add_field('hidelogs', XMLDB_TYPE_INTEGER, '1', null, XMLDB_NOTNULL, null, '0');
         $table->add_field('timecreated', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, '0');
         $table->add_field('timemodified', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, '0');
         $table->add_field('usermodified', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, '0');
@@ -241,6 +244,11 @@ function xmldb_local_ltuse_upgrade($oldversion) {
         $field = new xmldb_field('source');
         if ($dbman->field_exists($table, $field)) {
             $dbman->drop_field($table, $field);
+        }
+        // Scope review change 5: the course-log block a protected person may ask for (R14).
+        $field = new xmldb_field('hidelogs', XMLDB_TYPE_INTEGER, '1', null, XMLDB_NOTNULL, null, '0', 'realfields');
+        if (!$dbman->field_exists($table, $field)) {
+            $dbman->add_field($table, $field);
         }
 
         $table = new xmldb_table('local_ltuse_org_protection');

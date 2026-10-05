@@ -38,15 +38,26 @@ Amended by the scope review (Doug, 2026-10-05 (scope review)): protection is per
 
 Named for the 006 and 008 sessions (2026-10-04); they are stable.
 
-- `set_protection(int $userid, string $level, array $options = [], ?int $actorid = null): array`: the logic below, **without** a permission check. Callers check `can_manage_protection()` first, and accept corrections only from someone who `can_view_identity()`. It does check what the actor may change once there: anyone but the site team may only raise, before any activity, with no correction (change 14). Returns `{effectivelevel, warnings}`; refuses with `moodle_exception` (`protection:err:*`). `$options`: `requested`, `emailchecked` (both required for a raise), `pseudonym`, `realfirstname`, `reallastname`, `realfields`, `acknowledgehistory`.
+- `set_protection(int $userid, string $level, array $options = [], ?int $actorid = null): array`: the logic below, **without** a permission check. Callers check `can_manage_protection()` first, and accept corrections only from someone who `can_view_identity()`. It does check what the actor may change once there: anyone but the site team may only raise, before any activity, with no correction (change 14). Returns `{effectivelevel, warnings}`; refuses with `moodle_exception` (`protection:err:*`). `$options`: `requested`, `emailchecked` (both required for a raise), `pseudonym`, `realfirstname`, `reallastname`, `realfields`, `acknowledgehistory`, `hidelogs` (absent keeps the current choice; changing it at the same level is a correction, so the site team's).
 - `apply(int $userid): string`: re-apply one protected user's level where the account has drifted from it, under the lock. A repair: it changes no level and logs nothing. The adhoc and reconcile tasks and the observer call it.
 - `effective_level(int $userid): string`: the level set for the user (`none` when there is no row). ~~The maximum of the user's own level and their organisation's minimum~~ (change 9).
 - `is_settled(int $userid): bool`: the account shows its protected state. Spec 008 holds an enrolment back on it.
 - `level_available(string $level): bool`: can this level be applied on this site now; true for every level once `protection.yaml` is stored. Spec 008's intake preview asks it before any account exists.
 - `is_protected(int $userid): bool`, and `real_identity(int $userid): ?array` (`{firstname, lastname, level}`), which callers read only after `can_view_identity()`.
 - `has_activity(int $userid): bool`: `user.firstaccess > 0`, or enrolled in any course (change 16).
-- `email_warnings(int $userid): array`: why the account's email address may identify the person (`levels::email_reveals()`: the part before the @ holds the real first name or surname, or the domain holds the organisation's key) (change 2).
+- `email_warnings(int $userid): array`: why the account's email address may identify the person (`levels::email_reveals()`: the part before the @ holds the real first name or surname, or the domain holds a part of the organisation entry's key, a heuristic that cannot recognise a SIL partner's or an independent learner's employer domain; the granter's `emailchecked` is the control) (change 2).
+- `picture_levels(int $userid): array`: the levels that would delete the user's picture, for the granting page's warning; empty when they have none or it is already withheld.
+- `sync_log_blocks(): void`: the course-log block (R14), below.
 - `neutral_username(): string`: `ltc-` and 8 lowercase base32 characters, unused, in spec 008's `intake_service::new_username()` format (change 15).
+
+### Spec 008's intake (the main grant path)
+
+008's `intake_service::protect()` calls `set_protection()` directly. A raise is refused without both recorded facts, so intake MUST pass:
+
+- `requested => true` when the row's protection column asks for a level: the row is the person's request;
+- `emailchecked => true` only after intake has checked the row's email itself and the operator has confirmed, or swapped, the address. Intake runs `levels::email_reveals($email, $first, $last, $orgkey)` with the **row's** organisation key, because `ltct_org` is not yet set when `protect()` runs, so `service::email_warnings()` would miss the organisation half. A row whose address is flagged and not confirmed waits.
+
+Without them every intake row that asks for protection stops as `protection_failed` (tasks T043, 008's side). 008's intake contract names the same two options.
 
 ## Web service `local_ltuse_set_protection`
 
@@ -58,6 +69,8 @@ Named for the 006 and 008 sessions (2026-10-04); they are stable.
 - `pseudonym`, required for `pseudonym`;
 - `realfirstname`, `reallastname` and `realfields`, all optional corrections, accepted only from the site team, and only when `can_view_identity()` also holds;
 - `acknowledgehistory`, a bool, default false.
+
+There is no `hidelogs` parameter: the course-log block is asked for on the granting page, and a web-service call keeps the current choice.
 
 ~~`newusername`~~ is removed: a neutral username is applied automatically (change 15).
 
@@ -75,10 +88,13 @@ Named for the 006 and 008 sessions (2026-10-04); they are stable.
 1. Validate the request and the actor's limits.
 2. Snapshot every field that becomes withheld now and is not already held (per field, R5). Apply corrections. Never overwrite a held value with an empty one.
 3. Add the user ID to the service's private bypass set. Call `user_update_user($user, false, true)` to write names, the alternate names, `maildisplay`, the withheld core fields and, at `firstname` and above, a neutral username when the current one holds the real name. Call `profile_save_data()` to write `ltct_role` and `ltct_exp_*`. Remove the ID in `finally`.
-4. If the level entered `firstname` or `pseudonym`, call `core_user::update_picture(deletepicture = 1)`.
+   The same write sets `auth` to `manual` when it is not `manual` or `nologin` (R3).
+4. If the level entered `firstname` or `pseudonym`, call `core_user::update_picture(deletepicture = 1)`. Above `none`, delete the user's `\auth_oauth2\linked_login` records (R3).
 5. Write or delete the protection row (deleted at `none`).
 6. Write a log row, with `requested` and `emailchecked`.
-7. After the commit: purge `core/coursecontacts`; re-save the user's `mod_scheduler` slots, if that plugin is installed (R15); send `protectionchanged` when the level changed.
+7. After the commit: purge `core/coursecontacts`; re-save the user's `mod_scheduler` slots, if that plugin is installed (R15); send `protectionchanged` when the level changed; when the person has or had `hidelogs`, run `sync_log_blocks()`, and on failure warn that the hourly reconcile will apply it.
+
+**The course-log block** (`sync_log_blocks()`, R14, change 5): `editingteacher` and `teacher` are prohibited `report/log:view`, `report/log:viewtoday` and `report/loglive:view` with `assign_capability()` in the context of every course where a protected person with `hidelogs` is enrolled, active or not, and the prohibit is removed with `unassign_capability()` from every other course that has it. local_ltuse owns those course-level prohibits, so one set by hand where nobody asked is removed. It runs after a change, in the hourly reconcile (which covers a course the person joins later, within the hour) and when a person with `hidelogs` is deleted.
 
 **`protectionchanged` notification**:
 - It is sent to the learner only. It names the level and lists what others now see, with no real name and no actor.
@@ -96,7 +112,7 @@ Removed (Doug, 2026-10-05 (scope review), changes 9 and 10), with the organisati
 
 ## Hook callback (`db/hooks.php`)
 
-`core_user\hook\before_user_updated`: if the user has a protection row and is not in the bypass set, the callback overwrites the protected fields on the hook's `$user` with the protected values. Nothing else. It is wrapped in `try`/`catch (\Throwable)` and reports a failure through `debugging()`, so it never blocks an account edit (change 17). It is listed in the plugin README as an upgrade risk (R2).
+`core_user\hook\before_user_updated`: if the user has a protection row and is not in the bypass set, the callback overwrites the protected fields on the hook's `$user` with the protected values, and sets an `auth` other than `manual` or `nologin` back to `manual` (R3). Nothing else. It is wrapped in `try`/`catch (\Throwable)` and reports a failure through `debugging()`, so it never blocks an account edit (change 17). It is listed in the plugin README as an upgrade risk (R2).
 
 ## Observers (`db/events.php`, in the file spec 003 adds)
 
@@ -110,7 +126,7 @@ Removed (Doug, 2026-10-05 (scope review), changes 9 and 10), with the organisati
 ## Tasks (`db/tasks.php`)
 
 - **`apply_protection`** (adhoc, one class): re-applies one user's level. Queued by the observer when it cannot apply at once.
-- **`reconcile_protection`** (scheduled, every `reconcile_minutes`): reads only the protection rows above `none`, returns when there are none, and re-applies each account that drifted. It logs counts to the task log and writes no log rows. When any repair fails it throws `protection:err:reconcile`, so core records the run as failed (change 19). ~~Every member of every organisation whose minimum is above `none`, and every user's `ltct_certname`~~ (removed, changes 8, 9).
+- **`reconcile_protection`** (scheduled, every `reconcile_minutes`): reads only the protection rows above `none`, returns when there are none, re-applies each account that drifted (a non-site `auth` and linked logins included), and runs `sync_log_blocks()`. It logs counts to the task log and writes no log rows. When any repair fails it throws `protection:err:reconcile`, so core records the run as failed (change 19). ~~Every member of every organisation whose minimum is above `none`, and every user's `ltct_certname`~~ (removed, changes 8, 9).
 
 ## Surfaces
 
@@ -122,7 +138,7 @@ The real identity and the **Protected** marker are shown only where `can_view_id
    - someone who may manage sees a link to the granting page. An unprotected profile carries no link: a first grant is made at intake.
 2. **003 Mentoring page and its app handler**: the marker and the real name for entitled viewers.
 3. **"People I support"** (`/local/ltuse/protected.php`): the protected people the viewer is entitled to see, with level, real name and display name. ~~A CSV download carrying the marker per row~~ (removed, change 14). It lives in our own plugin, because core report datasources cannot take our column (R7).
-4. **Granting page** (`/local/ltuse/protection.php?id=`): the web-service logic above, with the `requested` and `emailchecked` checkboxes, the email warnings, and, for the site team only, corrections and the history acknowledgement. ~~**Organisation page** (`/local/ltuse/orgprotection.php`)~~ (removed, change 9).
+4. **Granting page** (`/local/ltuse/protection.php?id=`): the web-service logic above, with the `requested` and `emailchecked` checkboxes, the email warnings, the `hidelogs` checkbox, a warning naming the levels that would delete the person's picture when they have one, and, for the site team only, corrections and the history acknowledgement. ~~**Organisation page** (`/local/ltuse/orgprotection.php`)~~ (removed, change 9).
 
 ## Privacy provider
 

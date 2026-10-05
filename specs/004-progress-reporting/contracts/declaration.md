@@ -22,6 +22,7 @@ purpose: >-
 reports:
   - key: progress
     per: organisation
+    # Amended by spec 016 decision 2 option (a) (Doug, 2026-10-05 (scope review)): the scope condition is `cohort:idnumber = ltct:org:{org}`, a text condition; the Organisation column is dropped; `validate` refuses `user:profilefield_ltct_org` conditions.
     name: "{org}: learner progress"
     source: core_course\reportbuilder\datasource\participants
     uniquerows: 1

@@ -1,0 +1,99 @@
+{{!
+    @template local_ltuse/pathway
+
+    One pathway in full (spec 006, R6; contracts/pages.md "One pathway"). Phone-width first.
+
+    A competency pathway is four level rows, each headed by its CBC label and nothing else
+    (FR-003); a role pathway is its competencies in declared order, each with its rows beneath
+    it. Every course links to its course page, never locked (FR-008). The next course carries
+    cx-pathway-next and the "Next" label (US1.2). A level appears only as a row heading and as
+    what a course aims at; nothing here says a learner is at, or reached, a level (FR-011, R13).
+
+    Context variables required for this template (builder output plus view::display()):
+    * key, title, kind, isrole, total, completed, done, progresstext
+    * hasdescription, description: a role's description
+    * nextcourse: {courseid, fullname, url, statustext} or null
+    * parts: [{key, title, showtitle, levels: [{level, label, nocourseyet, competencyurl,
+        hascompetencyurl, courses: [{courseid, fullname (format_string, so unescaped), url,
+        status, statustext, iscompleted, next, aimsattext}]}]}]
+    * learnername: fullname() of the learner viewed, or null when it is the viewer
+    * listurl, browseurl
+
+    Example context (json):
+    {
+        "key": "competency:keyboards", "title": "Keyboards", "kind": "competency",
+        "isrole": false, "total": 2, "completed": 1, "done": false,
+        "progresstext": "1 of 2 courses completed",
+        "nextcourse": {"courseid": 13, "fullname": "Keyboards 2", "url": "#", "statustext": "Not started"},
+        "parts": [{"key": "competency:keyboards", "title": "Keyboards", "showtitle": false,
+            "levels": [
+                {"level": 1, "label": "1 - Has Knowledge", "nocourseyet": false,
+                 "competencyurl": null, "hascompetencyurl": false,
+                 "courses": [{"courseid": 12, "fullname": "Keyboards 1", "url": "#",
+                    "status": "completed", "statustext": "Completed", "iscompleted": true, "next": false,
+                    "aimsattext": "Aims at 1 - Has Knowledge"}]},
+                {"level": 2, "label": "2 - With Assistance", "nocourseyet": false,
+                 "competencyurl": null, "hascompetencyurl": false,
+                 "courses": [{"courseid": 13, "fullname": "Keyboards 2", "url": "#",
+                    "status": "notstarted", "statustext": "Not started", "iscompleted": false, "next": true,
+                    "aimsattext": "Aims at 2 - With Assistance"}]},
+                {"level": 3, "label": "3 - Independent", "nocourseyet": true,
+                 "competencyurl": "https://example.org/keyboards/", "hascompetencyurl": true, "courses": []},
+                {"level": 4, "label": "4 - Expert", "nocourseyet": true,
+                 "competencyurl": "https://example.org/keyboards/", "hascompetencyurl": true, "courses": []}
+            ]}],
+        "learnername": null,
+        "listurl": "#",
+        "browseurl": "#"
+    }
+}}
+<div class="local-ltuse-pathway">
+{{#learnername}}
+    <p class="text-muted mb-1">{{learnername}}</p>
+{{/learnername}}
+    <h3>{{title}}</h3>
+    {{#hasdescription}}
+    <p>{{description}}</p>
+    {{/hasdescription}}
+    <p class="mb-1">{{progresstext}}</p>
+    {{#done}}
+    <div class="alert alert-success">{{#learnername}}{{#str}}pathway:donelearner, local_ltuse{{/str}}{{/learnername}}{{^learnername}}{{#str}}pathway:done, local_ltuse{{/str}}{{/learnername}}</div>
+    {{/done}}
+    {{#parts}}
+    <section class="mb-4">
+        {{#showtitle}}
+        <h4 class="h5 mt-3">{{title}}</h4>
+        {{/showtitle}}
+        {{#levels}}
+        <div class="card mb-2">
+            <div class="card-body py-2">
+                <h5 class="card-title h6 mb-2">{{label}}</h5>
+                {{#nocourseyet}}
+                <p class="mb-0 text-muted">
+                    {{#str}}pathway:nocourseyet, local_ltuse{{/str}}{{#hascompetencyurl}} ·
+                    <a href="{{competencyurl}}">{{#str}}pathway:nocourseyetlink, local_ltuse{{/str}}</a>{{/hascompetencyurl}}
+                </p>
+                {{/nocourseyet}}
+                {{^nocourseyet}}
+                <ul class="list-unstyled mb-0">
+                    {{#courses}}
+                    <li class="py-1 border-top{{#next}} cx-pathway-next font-weight-bold{{/next}}">
+                        {{#next}}<span class="badge bg-primary">{{#str}}pathway:next, local_ltuse{{/str}}</span>{{/next}}
+                        <a href="{{url}}">{{{fullname}}}</a>
+                        <br>
+                        <span class="{{#iscompleted}}text-success{{/iscompleted}}">{{statustext}}</span>
+                        <span class="text-muted"> · {{aimsattext}}</span>
+                    </li>
+                    {{/courses}}
+                </ul>
+                {{/nocourseyet}}
+            </div>
+        </div>
+        {{/levels}}
+    </section>
+    {{/parts}}
+    <p>
+        <a href="{{listurl}}">{{#learnername}}{{#str}}pathways, local_ltuse{{/str}}{{/learnername}}{{^learnername}}{{#str}}pathway:mine, local_ltuse{{/str}}{{/learnername}}</a> ·
+        <a href="{{browseurl}}">{{#str}}pathway:browse, local_ltuse{{/str}}</a>
+    </p>
+</div>

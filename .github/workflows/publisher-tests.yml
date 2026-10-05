@@ -12,6 +12,9 @@ on:
       - 'scripts/cbc_wording.py'
       - 'moodle/site/badges.yaml'
       - 'moodle/site/settings/badges.yaml'
+      # Spec 002 R11: the payload's placement reads these.
+      - 'moodle/site/org-courses.yaml'
+      - 'moodle/site/organisations.yaml'
       - 'publish-requirements.txt'
       - 'tests/test_image_reduce.py'
       - 'tests/test_payload_assets.py'
@@ -36,6 +39,9 @@ on:
       - 'scripts/cbc_wording.py'
       - 'moodle/site/badges.yaml'
       - 'moodle/site/settings/badges.yaml'
+      # Spec 002 R11: the payload's placement reads these.
+      - 'moodle/site/org-courses.yaml'
+      - 'moodle/site/organisations.yaml'
       - 'publish-requirements.txt'
       - 'tests/test_image_reduce.py'
       - 'tests/test_payload_assets.py'

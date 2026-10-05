@@ -8,7 +8,7 @@
     {
         "haslearners": true,
         "learners": [{"id": 1, "fullname": "Learner One", "profileurl": "#", "gradesurl": "#",
-            "messageurl": "#", "hascourses": true,
+            "messageurl": "#", "pathwaysurl": "#", "hascourses": true,
             "courses": [{"fullname": "Course A", "statustext": "In progress, 40%",
                 "inprogress": true, "hidden": false, "notactive": false, "enrolmenttext": ""}]}],
         "hasmentors": true,
@@ -31,7 +31,8 @@
             <p>
                 <a href="<% profileurl %>" core-link capture="true"><%#str%>mentoring:profile, local_ltuse<%/str%></a> ·
                 <a href="<% gradesurl %>" core-link capture="true"><%#str%>mentoring:grades, local_ltuse<%/str%></a> ·
-                <a href="<% messageurl %>" core-link capture="true"><%#str%>mentoring:message, local_ltuse<%/str%></a>
+                <a href="<% messageurl %>" core-link capture="true"><%#str%>mentoring:message, local_ltuse<%/str%></a> ·
+                <a href="<% pathwaysurl %>" core-link capture="true"><%#str%>pathways, local_ltuse<%/str%></a>
             </p>
         </ion-label>
     </ion-item>

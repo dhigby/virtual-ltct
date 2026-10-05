@@ -1,4 +1,4 @@
-"""Unit tests for scripts/site_config.py (specs 001, 002, 004 and 013). Run: python -m pytest tests/"""
+"""Unit tests for scripts/site_config.py (specs 001, 002, 004, 006 and 013). Run: python -m pytest tests/"""
 import contextlib, io, json, pathlib, shutil, sys, tempfile, textwrap, unittest
 from unittest import mock
 import yaml
@@ -818,6 +818,131 @@ class OpenCourses(Base):
         self.assertEqual(om[0]["capabilities"].get("moodle/site:viewuseridentity"), "allow")
 
 
+ORG_COURSE_ENTRY = """\
+  - slug: coretech-computer-hardware
+    organisation: fixture-north
+    why: approved by the maintainer, fixture issue
+"""
+ORG_COURSES = "rows: [8, 15]\norg_only:\n" + ORG_COURSE_ENTRY
+
+
+class OrgCourses(Base):
+    """org-courses.yaml (spec 002 R11, contracts/declaration.md, data-model.md)."""
+
+    def setUp(self):
+        super().setUp()
+        self.write("org-courses.yaml", ORG_COURSES)
+
+    def payload(self):
+        rc, out, err = self.run_main("render")
+        self.assertEqual(rc, 0, err)
+        return json.loads(out)
+
+    def test_valid(self):
+        self.assertAccepted()
+        rc, out, _ = self.run_main("validate")
+        self.assertEqual(rc, 0, out)
+
+    def test_absent_file_is_valid(self):
+        (self.dir / "org-courses.yaml").unlink()
+        self.assertAccepted()
+        courses, problems = sc.load_org_courses(self.dir)
+        self.assertEqual(courses, [])
+        self.assertFalse(problems)
+
+    def test_empty_list_valid(self):
+        for text in ("rows: [8, 15]\norg_only: []\n", "rows: [8, 15]\norg_only:\n"):
+            with self.subTest(text=text):
+                self.write("org-courses.yaml", text)
+                self.assertAccepted()
+                self.assertEqual(sc.load_org_courses(self.dir)[0], [])
+
+    def test_load_returns_entries(self):
+        courses, problems = sc.load_org_courses(self.dir)
+        self.assertFalse(problems, problems.items)
+        self.assertEqual(courses, [{"slug": "coretech-computer-hardware",
+                                    "organisation": "fixture-north",
+                                    "why": "approved by the maintainer, fixture issue"}])
+
+    def test_each_key_required(self):
+        for entry in ("  - organisation: fixture-north\n    why: fixture\n",
+                      "  - slug: coretech-computer-hardware\n    why: fixture\n",
+                      "  - slug: coretech-computer-hardware\n    organisation: fixture-north\n"):
+            with self.subTest(entry=entry):
+                self.write("org-courses.yaml", "rows: [8, 15]\norg_only:\n" + entry)
+                self.assertRejected()
+
+    def test_blank_why(self):
+        self.edit("org-courses.yaml", "why: approved by the maintainer, fixture issue", "why: ''")
+        self.assertRejected()
+
+    def test_unknown_key_in_entry(self):
+        self.edit("org-courses.yaml", "    why:", "    hidden: true\n    why:")
+        self.assertRejected()
+
+    def test_unknown_top_key(self):
+        self.write("org-courses.yaml", ORG_COURSES + "shared: []\n")
+        self.assertRejected()
+
+    def test_rows_required_and_known(self):
+        self.write("org-courses.yaml", ORG_COURSES.replace("rows: [8, 15]\n", ""))
+        self.assertRejected()
+        self.write("org-courses.yaml", ORG_COURSES.replace("rows: [8, 15]", "rows: [999]"))
+        self.assertRejected()
+
+    def test_org_only_required(self):
+        self.write("org-courses.yaml", "rows: [8, 15]\n")
+        self.assertRejected()
+
+    def test_unknown_slug(self):
+        self.edit("org-courses.yaml", "slug: coretech-computer-hardware", "slug: no-such-course")
+        self.assertRejected()
+
+    def test_slug_uses_branch_slug(self):
+        self.edit("org-courses.yaml", "slug: coretech-computer-hardware",
+                  "slug: paratext-9-advanced-support")
+        self.assertAccepted()
+        self.edit("org-courses.yaml", "slug: paratext-9-advanced-support",
+                  "slug: Paratext 9 advanced support")
+        self.assertInvalid("paratext-9-advanced-support")
+
+    def test_template_is_not_a_course(self):
+        self.edit("org-courses.yaml", "slug: coretech-computer-hardware", "slug: template")
+        self.assertRejected()
+
+    def test_duplicate_slug(self):
+        self.write("org-courses.yaml", ORG_COURSES + ORG_COURSE_ENTRY.replace(
+            "fixture-north", "independent"))
+        self.assertRejected()
+
+    def test_organisation_must_be_declared(self):
+        self.edit("org-courses.yaml", "organisation: fixture-north", "organisation: fixture-south")
+        self.assertRejected()
+        self.assertEqual(sc.load_org_courses(self.dir)[0], [])
+
+    def test_organisation_needs_organisations_file(self):
+        (self.dir / "organisations.yaml").unlink()
+        (self.dir / "profile-fields.yaml").unlink()
+        self.assertRejected()
+
+    def test_payload_carries_category_not_reason(self):
+        p = self.payload()
+        self.assertEqual(p["org_courses"], [{
+            "slug": "coretech-computer-hardware",
+            "course_idnumber": "ltct:coretech-computer-hardware",
+            "category_idnumber": "ltct:org:fixture-north"}])
+        self.assertNotIn("fixture issue", json.dumps(p))
+
+    def test_payload_empty_when_absent(self):
+        (self.dir / "org-courses.yaml").unlink()
+        self.assertEqual(self.payload()["org_courses"], [])
+
+    def test_tracked_declaration_loads(self):
+        # The committed file is what moodle_payload.py and publish_moodle.py use.
+        courses, problems = sc.load_org_courses()
+        self.assertFalse(problems, problems.items)
+
+
 class Render(Base):
     def test_redacts(self):
         env = {"SMTP_PASS": "s3cr3t-value", "MOODLE_NOREPLY": "noreply@x", "MOODLE_URL": "https://m.example"}
@@ -1025,7 +1150,7 @@ PROGRESS = """\
     conditions:
       - {condition: user:profilefield_ltct_org, values: {operator: equal, value: "{org}"}}
       - {condition: role:name, values: {operator: equal, value: student}}
-      - {condition: enrol:plugin, values: {operator: equal, value: cohort}}
+      - {condition: enrol:plugin, values: {operator: not_equal, value: manual}}
     filters: [course:fullname, user:fullname]
     audiences:
       - {type: cohortmember, cohort: "ltct:org:{org}:managers"}
@@ -1052,7 +1177,7 @@ PROGRAMME = """\
       - {column: completion:timecompleted, heading: Completed, aggregation: count}
     conditions:
       - {condition: role:name, values: {operator: equal, value: student}}
-      - {condition: enrol:plugin, values: {operator: equal, value: cohort}}
+      - {condition: enrol:plugin, values: {operator: not_equal, value: manual}}
     filters: [user:profilefield_ltct_org, completion:timecompleted]
     audiences:
       - {type: systemrole, role: manager}
@@ -1155,7 +1280,7 @@ class Reports(ReportsBase):
         for line in ('      - {condition: user:profilefield_ltct_org, values: {operator: equal, '
                      'value: "{org}"}}\n',
                      "      - {condition: role:name, values: {operator: equal, value: student}}\n",
-                     "      - {condition: enrol:plugin, values: {operator: equal, value: cohort}}\n"):
+                     "      - {condition: enrol:plugin, values: {operator: not_equal, value: manual}}\n"):
             with self.subTest(removed=line.strip()):
                 self.assertIn(line, PROGRESS)
                 self.only(PROGRESS.replace(line, ""))
@@ -1164,9 +1289,14 @@ class Reports(ReportsBase):
     def test_scope_condition_values_verbatim(self):
         for old, new in (('value: "{org}"}}', "value: fixture-a}}"),
                          ("value: student}}", "value: editingteacher}}"),
-                         ("value: cohort}}", "value: manual}}"),
+                         # Spec 002 R10: delivery is any enrolment but a pilot's, so the
+                         # 2026-10-01 form (cohort sync only) is refused, as is any other.
+                         ("{operator: not_equal, value: manual}", "{operator: equal, value: cohort}"),
+                         ("{operator: not_equal, value: manual}", "{operator: equal, value: manual}"),
+                         ("{operator: not_equal, value: manual}", "{operator: not_equal, value: guest}"),
                          ("{operator: equal, value: student}", "{operator: notequal, value: student}"),
-                         ("{operator: equal, value: cohort}", "{value: cohort}")):
+                         ("{operator: equal, value: student}", "{operator: not_equal, value: student}"),
+                         ("{operator: not_equal, value: manual}", "{value: manual}")):
             with self.subTest(old=old, new=new):
                 self.assertIn(old, PROGRESS)
                 self.only(PROGRESS.replace(old, new, 1))
@@ -1174,8 +1304,9 @@ class Reports(ReportsBase):
 
     def test_condition_values_shape(self):
         for old, new in (("{operator: equal, value: student}", "{operator: 1, value: student}"),
-                         ("{operator: equal, value: cohort}", "{operator: equal, value: cohort, x: 1}"),
-                         ("{operator: equal, value: cohort}", "cohort")):
+                         ("{operator: not_equal, value: manual}", "{operator: not_equal, value: manual, x: 1}"),
+                         ("{operator: not_equal, value: manual}", "{operator: notequal, value: manual}"),
+                         ("{operator: not_equal, value: manual}", "manual")):
             with self.subTest(new=new):
                 self.only(PROGRAMME.replace(old, new))
                 self.assertRejected()
@@ -1356,12 +1487,32 @@ class Reports(ReportsBase):
         self.assertIsNone(prog["schedule"])
         self.assertEqual(prog["audiences"], [{"type": "systemrole", "role": "manager"}])
         self.assertEqual(prog["columns"][3]["aggregation"], "countdistinct")
+        delivery = {"condition": "enrol:plugin",
+                    "values": {"operator": "not_equal", "value": "manual"}}
+        self.assertEqual(r["conditions"][2], delivery)
+        self.assertIn(delivery, prog["conditions"])
         # Spec 004's arrays in apply order, then spec 013's two after reports, then spec 011's,
-        # then spec 016's protection last.
-        self.assertEqual(list(self.payload())[-9:],
-                         ["course_field_category", "course_fields", "competencies", "reports",
+        # then spec 016's protection last. Spec 006 puts levels and role_pathways between
+        # competencies and reports.
+        self.assertEqual(list(self.payload())[-11:],
+                         ["course_field_category", "course_fields", "competencies", "levels",
+                          "role_pathways", "reports",
                           "badge_template", "certificate_template", "officehours", "dashboard",
                           "protection"])
+
+    def test_tracked_delivery_condition(self):
+        # Spec 002 R10: a manager's enrolment (the organisation-enrolment instance, enrol_self)
+        # is delivery, so delivery is any enrolment but a pilot's manual one. report builder's
+        # select condition holds one value (filters\select EQUAL_TO 1, NOT_EQUAL_TO 2).
+        tracked = yaml.safe_load((REPO / "moodle" / "site" / "reports.yaml")
+                                 .read_text(encoding="utf-8"))["reports"]
+        enrol = {r["key"]: [c["values"] for c in r["conditions"]
+                            if c["condition"] == "enrol:plugin"] for r in tracked}
+        for key in ("progress", "programme"):
+            self.assertEqual(enrol[key], [{"operator": "not_equal", "value": "manual"}], key)
+        self.assertEqual(enrol["pilots"], [{"operator": "equal", "value": "manual"}])
+        self.assertEqual(sc.SCOPE_CONDITIONS[2],
+                         ("enrol:plugin", {"operator": "not_equal", "value": "manual"}))
 
     def test_summary_counts_reports(self):
         rc, out, _ = self.run_main("validate")
@@ -1562,7 +1713,7 @@ class CompetencyList(ReportsBase):
             data = yaml.safe_load(fh)
         expected = [(cat, n) for cat, names in data.items() if cat != "Meta" for n in names]
         self.assertEqual([(c["category"], c["name"]) for c in comps], expected)
-        self.assertEqual(set(comps[0]), {"name", "category", "sortorder"})
+        self.assertEqual(set(comps[0]), {"name", "category", "sortorder", "slug", "url"})
         self.assertIn("Fonts & Encoding", {c["name"] for c in comps})
 
     def test_duplicate_name(self):
@@ -1584,11 +1735,21 @@ class CompetencyList(ReportsBase):
             self.assertRejected()
 
     def test_synthetic_valid(self):
-        with self.synthetic(lambda d: d["Core"].append("Fixture Extra")):
+        # Spec 006: a competency needs a descriptor, so the fixture gets one beside the real ones.
+        descriptors = self.dir / "fixture-repo" / "competencies"
+        shutil.copytree(REPO / "competencies", descriptors)
+        (descriptors / "fixture-extra.md").write_text(
+            "---\nname: Fixture Extra\ncategory: Core\nslug: fixture-extra\n---\n",
+            encoding="utf-8")
+        with self.synthetic(lambda d: d["Core"].append("Fixture Extra")), \
+                mock.patch.object(sc, "DESCRIPTORS", descriptors):
             self.assertAccepted()
             comps = self.payload()["competencies"]
         self.assertEqual(len(comps), 43)
         self.assertEqual([c["sortorder"] for c in comps], list(range(1, 44)))
+        extra = next(c for c in comps if c["name"] == "Fixture Extra")
+        self.assertEqual(extra["slug"], "fixture-extra")
+        self.assertTrue(extra["url"].endswith("/core/fixture-extra/"))
 
     def test_rendered_without_reports(self):
         (self.dir / "reports.yaml").unlink()
@@ -1947,3 +2108,298 @@ class OrgManagerCalendar(Base):
                 self.reset()
                 self.edit("roles.yaml", self.LAST_CAP, self.LAST_CAP + "      %s: allow\n" % cap)
                 self.assertInvalid("orgmanager holds no calendar capability")
+
+
+# --- spec 006: learning pathways (T014) ---------------------------------------------------
+
+PATHWAYS_HEAD = """\
+rows: [12]
+purpose: Role pathways.
+roles:
+"""
+
+
+def role(key="fixture-role", name="Fixture support consultant",
+         comps=("Translation Tools", "Keyboards"), extra=""):
+    """One roles[] entry of pathways.yaml, as YAML text."""
+    text = "  - key: %s\n    name: %s\n" % (key, name)
+    if comps:
+        text += "    competencies:\n" + "".join("      - %s\n" % c for c in comps)
+    else:
+        text += "    competencies: []\n"
+    return text + '    why: "Fixture, 2026-10-04."\n' + extra
+
+
+class CompetencySlugUrl(Base):
+    """Each competency's slug and url (contracts/declaration.md "Competency slug and url")."""
+
+    def comps(self):
+        self.assertAccepted()
+        return sc.build_payload(sc.validate(self.dir)[0], "apply", {})["competencies"]
+
+    def site_url(self):
+        with open(REPO / "mkdocs.yml", encoding="utf-8") as fh:
+            for line in fh:
+                if line.startswith("site_url:"):
+                    return line.split(":", 1)[1].strip().rstrip("/") + "/"
+        self.fail("mkdocs.yml has no site_url")
+
+    def test_real_descriptors(self):
+        comps = self.comps()
+        self.assertEqual(len(comps), 42)
+        self.assertEqual(len({c["slug"] for c in comps}), 42, "slugs are not unique")
+        self.assertEqual(len({c["url"] for c in comps}), 42, "urls are not unique")
+        base = self.site_url()
+        self.assertTrue(base.startswith("https://"))
+        for c in comps:
+            with self.subTest(name=c["name"]):
+                self.assertRegex(c["slug"], r"^[a-z0-9][a-z0-9-]*$")
+                self.assertLessEqual(len("competency:" + c["slug"]), 100)
+                self.assertEqual(c["url"], "%s%s/%s/" % (
+                    base, sc.site_slugify(c["category"]), c["slug"]))
+        keyboards = next(c for c in comps if c["name"] == "Keyboards")
+        self.assertEqual(keyboards["url"], base + "core-technical/" + keyboards["slug"] + "/")
+
+    def test_slug_matches_descriptor(self):
+        comps = {c["name"]: c["slug"] for c in self.comps()}
+        matched = 0
+        for path in sorted((REPO / "competencies").glob("*.md")):
+            text = path.read_text(encoding="utf-8")
+            if not text.startswith("---"):
+                continue        # a README, not a descriptor
+            fm = yaml.safe_load(text[3:text.find("\n---", 3)])
+            if fm.get("name") in comps:
+                matched += 1
+                self.assertEqual(comps[fm["name"]], fm.get("slug", path.stem), path.name)
+        self.assertEqual(matched, 42)
+
+    def test_slugify_matches_gen_site(self):
+        # gen_site builds the site when imported, so its slugify is lifted out of the source.
+        import ast, re
+        tree = ast.parse((REPO / "scripts" / "gen_site.py").read_text(encoding="utf-8"))
+        fn = next(n for n in tree.body if isinstance(n, ast.FunctionDef) and n.name == "slugify")
+        ns = {"re": re}
+        exec(compile(ast.Module(body=[fn], type_ignores=[]), "gen_site.py", "exec"), ns)
+        with open(REPO / "competencies.yaml", encoding="utf-8") as fh:
+            categories = list(yaml.safe_load(fh))
+        for cat in categories + ["Fonts & Encoding", "A (B) c", "  Odd -- Spacing "]:
+            self.assertEqual(sc.site_slugify(cat), ns["slugify"](cat), cat)
+
+    def descriptors(self):
+        d = self.dir / "fixture-repo" / "competencies"
+        shutil.copytree(REPO / "competencies", d)
+        return d
+
+    def set_slug(self, d, name, slug):
+        for path in d.glob("*.md"):
+            text = path.read_text(encoding="utf-8")
+            if not text.startswith("---"):
+                continue        # a README, not a descriptor
+            end = text.find("\n---", 3)
+            fm = yaml.safe_load(text[3:end])
+            if fm.get("name") == name:
+                lines = [ln for ln in text[:end].split("\n") if not ln.startswith("slug:")]
+                lines.append("slug: %s" % (yaml.safe_dump(slug).split("\n")[0],))
+                path.write_text("\n".join(lines) + text[end:], encoding="utf-8")
+                return
+        self.fail("no descriptor named %r" % name)
+
+    def test_fixture_copy_is_valid(self):
+        d = self.descriptors()
+        self.set_slug(d, "Keyboards", "keyboards-fixture")
+        with mock.patch.object(sc, "DESCRIPTORS", d):
+            comps = {c["name"]: c for c in self.comps()}
+        self.assertEqual(comps["Keyboards"]["slug"], "keyboards-fixture")
+        self.assertTrue(comps["Keyboards"]["url"].endswith("/core-technical/keyboards-fixture/"))
+
+    def test_missing_descriptor(self):
+        d = self.descriptors()
+        for path in d.glob("*.md"):
+            if "\nname: Keyboards\n" in path.read_text(encoding="utf-8"):
+                path.unlink()
+        with mock.patch.object(sc, "DESCRIPTORS", d):
+            self.assertInvalid("no descriptor")
+
+    def test_duplicate_slug(self):
+        d = self.descriptors()
+        keyboards = next(c["slug"] for c in self.comps() if c["name"] == "Keyboards")
+        self.set_slug(d, "Malware", keyboards)
+        with mock.patch.object(sc, "DESCRIPTORS", d):
+            self.assertInvalid("share the slug")
+
+    def test_bad_slug(self):
+        for bad in ("Keyboards", "-keyboards", "key_boards", "k" * 95, 7):
+            with self.subTest(slug=bad):
+                d = self.descriptors()
+                self.set_slug(d, "Keyboards", bad)
+                with mock.patch.object(sc, "DESCRIPTORS", d):
+                    self.assertInvalid("descriptor slug")
+                shutil.rmtree(self.dir / "fixture-repo")
+
+    def test_slug_at_limit(self):
+        d = self.descriptors()
+        self.set_slug(d, "Keyboards", "k" * 94)
+        with mock.patch.object(sc, "DESCRIPTORS", d):
+            self.assertEqual(len(self.comps()), 42)
+
+    def test_site_url_must_be_https(self):
+        (self.dir / "fixture-repo").mkdir()
+        path = self.dir / "fixture-repo" / "mkdocs.yml"
+        for text in ("site_name: x\n", "site_url: http://example.org/\n",
+                     "site_url: https://\n", "site_url: ''\n"):
+            with self.subTest(mkdocs=text):
+                path.write_text(text, encoding="utf-8")
+                with mock.patch.object(sc, "MKDOCS", path):
+                    self.assertInvalid("site_url")
+
+    def test_site_url_host_is_read(self):
+        (self.dir / "fixture-repo").mkdir()
+        path = self.dir / "fixture-repo" / "mkdocs.yml"
+        path.write_text("site_url: https://fixture.example.org\nx: !ENV [A, b]\n",
+                        encoding="utf-8")
+        with mock.patch.object(sc, "MKDOCS", path):
+            comps = self.comps()
+        for c in comps:
+            self.assertTrue(c["url"].startswith("https://fixture.example.org/"), c["url"])
+            self.assertNotIn("//", c["url"][len("https://"):])
+
+
+class PathwayLevels(Base):
+    """The payload's levels array, from outcome-levels.yaml, verbatim."""
+
+    def levels_file(self, mutate):
+        with open(REPO / "outcome-levels.yaml", encoding="utf-8") as fh:
+            data = yaml.safe_load(fh)
+        mutate(data)
+        (self.dir / "fixture-repo").mkdir(exist_ok=True)
+        path = self.dir / "fixture-repo" / "outcome-levels.yaml"
+        path.write_text(yaml.safe_dump(data, allow_unicode=True, sort_keys=False),
+                        encoding="utf-8")
+        return mock.patch.object(sc, "OUTCOME_LEVELS", path)
+
+    def test_real_file(self):
+        self.assertAccepted()
+        levels = sc.build_payload(sc.validate(self.dir)[0], "apply", {})["levels"]
+        with open(REPO / "outcome-levels.yaml", encoding="utf-8") as fh:
+            data = yaml.safe_load(fh)
+        labels = {lv["id"]: lv["label"] for lv in data["levels"]}
+        self.assertEqual(levels, [{"level": n, "label": labels[n]} for n in (1, 2, 3, 4)])
+        self.assertEqual([lv["label"] for lv in levels],
+                         ["1 - Has Knowledge", "2 - With Assistance", "3 - Independent",
+                          "4 - Expert"])
+
+    def test_targets_exactly_one_to_four(self):
+        for targets in ([0, 1, 2, 3, 4], [1, 2, 3], [4, 3, 2, 1], [1, 2, 3, 4, 4], None):
+            with self.subTest(targets=targets):
+                with self.levels_file(
+                        lambda d: d.__setitem__("course_target_levels", targets)):
+                    self.assertInvalid("course_target_levels")
+
+    def test_label_missing(self):
+        def blank(d):
+            for lv in d["levels"]:
+                if lv["id"] == 2:
+                    lv["label"] = ""
+        with self.levels_file(blank):
+            self.assertInvalid("no CBC label")
+
+
+class Pathways(Base):
+    """pathways.yaml (contracts/declaration.md "pathways.yaml")."""
+
+    def roles(self):
+        self.assertAccepted()
+        return sc.build_payload(sc.validate(self.dir)[0], "apply", {})["role_pathways"]
+
+    def pathways(self, *blocks):
+        body = "".join(blocks)
+        self.write("pathways.yaml", PATHWAYS_HEAD.replace("roles:\n", "roles: []\n")
+                   if not body else PATHWAYS_HEAD + body)
+
+    def test_missing_file_is_empty(self):
+        self.assertFalse((self.dir / "pathways.yaml").exists())
+        self.assertEqual(self.roles(), [])
+
+    def test_tracked_file(self):
+        shutil.copy(REPO / "moodle" / "site" / "pathways.yaml", self.dir / "pathways.yaml")
+        self.assertEqual(self.roles(), [])
+
+    def test_empty_roles(self):
+        self.pathways()
+        self.assertEqual(self.roles(), [])
+
+    def test_valid_roles(self):
+        self.pathways(role(extra="    description: Supports a team's tools day to day.\n"),
+                      role(key="second-role", name="Archive helper",
+                           comps=('"Fonts & Encoding"',)))
+        out = self.roles()
+        self.assertEqual(out, [
+            {"key": "fixture-role", "name": "Fixture support consultant",
+             "description": "Supports a team's tools day to day.", "sortorder": 0,
+             "competencies": ["Translation Tools", "Keyboards"]},
+            {"key": "second-role", "name": "Archive helper", "description": "",
+             "sortorder": 1, "competencies": ["Fonts & Encoding"]}])
+
+    def test_required_keys(self):
+        for text in ("rows: [12]\npurpose: x\n", "purpose: x\nroles: []\n",
+                     "rows: [12]\nroles: []\n"):
+            with self.subTest(text=text):
+                self.write("pathways.yaml", text)
+                self.assertRejected()
+        self.write("pathways.yaml", "rows: [12]\npurpose: x\nroles: {}\n")
+        self.assertInvalid("roles must be a list")
+
+    def test_bad_key(self):
+        for key in ("Fixture", "1role", "-role", "role_x", "role.x", "r" * 96, '""'):
+            with self.subTest(key=key):
+                self.pathways(role(key=key))
+                self.assertInvalid("key")
+
+    def test_key_at_limit(self):
+        self.pathways(role(key="r" * 95))
+        self.assertEqual(len(self.roles()), 1)
+
+    def test_duplicate_key(self):
+        self.pathways(role(), role(name="Another name"))
+        self.assertInvalid("declared twice")
+
+    def test_unknown_competency(self):
+        for comp in ("Fixture Nonesuch", "keyboards", "Fonts and Encoding",
+                     "Fonts &  Encoding", "Keyboards "):
+            with self.subTest(comp=comp):
+                self.pathways(role(comps=("Keyboards", '"%s"' % comp)))
+                self.assertInvalid("not in competencies.yaml")
+
+    def test_meta_competency(self):
+        self.pathways(role(comps=("Keyboards", "Uncategorized")))
+        self.assertInvalid("Meta")
+
+    def test_competency_twice(self):
+        self.pathways(role(comps=("Keyboards", "Translation Tools", "Keyboards")))
+        self.assertInvalid("twice")
+
+    def test_no_competencies(self):
+        self.pathways(role(comps=()))
+        self.assertInvalid("non-empty")
+
+    def test_missing_why(self):
+        self.pathways(role().replace('    why: "Fixture, 2026-10-04."\n', ""))
+        self.assertRejected()
+
+    def test_level_in_name(self):
+        for name in ("3 - Independent consultant", '"Consultant, 4 - Expert"',
+                     "Level 2 consultant", "Consultant at level3"):
+            with self.subTest(name=name):
+                self.pathways(role(name=name))
+                self.assertRejected()
+
+    def test_level_in_description(self):
+        for text in ("Reaches 2 - With Assistance on keyboards.",
+                     "Aims at level 4 for fonts."):
+            with self.subTest(description=text):
+                self.pathways(role(extra="    description: %s\n" % text))
+                self.assertRejected()
+
+    def test_long_name(self):
+        self.pathways(role(name="N" * 256))
+        self.assertRejected()

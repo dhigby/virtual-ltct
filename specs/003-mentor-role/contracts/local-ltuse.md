@@ -104,13 +104,20 @@ logs (research R2). So:
 
 ## Phase B: Manage mentors (`/local/ltuse/mentors.php?userid=<learner>`)
 
-Built only after the maintainer approves (research R7).
+Approved by the maintainer's decision of 2026-10-02, "Courses are open across organisations"
+(`INTENT.md` Decisions; research R7). That decision also amended the authorisation: spec 002
+research R10 and task T078 describe this same page, and a manager's branch is spec 002's
+shared check, `may_manage_account()`, not a bare organisation match. The contract below
+follows spec 002 R10. It manages the user-context relationship only, the learner's default
+mentor; a mentor for one course is spec 008's (`INTENT.md`, 2026-10-04).
 
 | | |
 |---|---|
-| Decision | `\local_ltuse\mentor_admin::decide(bool $isself, bool $learnerexists, bool $canassigncore, array $managedkeys, string $learnerorg): bool`. It is pure, and `tests/mentor_admin_harness.php` tests it. |
-| Allows | the site team (`moodle/role:assign` in the learner's context and `mentor` in `get_assignable_roles()`), or a manager whose managed keys contain the learner's `ltct_org` |
-| Refuses | self, a deleted or missing learner, an empty `ltct_org`, any other organisation |
-| Writes | `role_assign($mentorroleid, $mentorid, $learnerctx->id)` and `role_unassign(...)`. Sesskey required. Each write rechecks the decision. |
-| Picker | members of the cohort `ltct:mentors` only, excluding the learner and existing mentors |
+| Decision | `\local_ltuse\mentor_admin::decide(int $viewerid, bool $learnerexists, bool $canassigncore, array $managedkeys, array $person): bool`. It is pure, and `tests/mentor_admin_harness.php` tests it. `$person` holds the facts `\local_ltuse\organisation\access` documents, from `local_ltuse_organisation_person_facts()`. |
+| Allows | the site team (`moodle/role:assign` in the learner's context and `mentor` in `get_assignable_roles()`), any learner; or an organisation manager when `\local_ltuse\organisation\access::may_manage_account($viewerid, $managedkeys, $person)` holds (spec 002 R10) |
+| Refuses | self and a deleted or missing learner, for everyone. For a manager, also: an empty `ltct_org`, any other organisation, a field the member cohort does not match, and anyone who is not a learner (a site admin, a course contact, a system or category role, another manager, an `ltct:mentors` member). A missing fact refuses. |
+| Inputs | gathered on every request by `local_ltuse_may_manage_mentors()` in `lib.php`: `$canassigncore` as above; `$managedkeys` from `local_ltuse_managed_organisation_keys()`; `$person` read only when the viewer is not the site team |
+| Writes | `role_assign($mentorroleid, $mentorid, $learnerctx->id)` and `role_unassign(...)`, after a confirmation posted with the sesskey. Every GET and POST rechecks the decision, and the mentor must be one the page would offer. |
+| Picker | members of the cohort `ltct:mentors` only, not deleted or suspended, excluding the learner and existing mentors |
+| Identity | spec 016 adds `can_view_identity(V, P)` to this page once it lands (spec 002 R10) |
 | Target | two minutes, unaided (SC-003) |

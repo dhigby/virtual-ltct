@@ -9,7 +9,7 @@ moodle:
 
 plugins:
   - component: local_ltuse
-    version: 2026100500
+    version: 2026100900
     source:
       path: moodle/local_ltuse
     why: The publish endpoint and this applier. Pinned to the version.php stamp in this repo.
@@ -70,4 +70,10 @@ plugins:
     why: "#21 office-hour booking, v5.2-r1 (supported = [500, 502]), the maintained scheduler; core has no booking module (spec 011 R9). Browser-only: it has no app support (D6). local_ltuse relies on its group filter, its SSstu: calendar events and scheduler_slots.teacherid (R16, R20), so re-run quickstart V10 and V13 on every re-pin."
   - component: enrol_cohort
     enabled: 1
-    why: "#8 #15 cohort sync enrols an organisation, and its managers, into a course with its group."
+    why: "#8 #15 cohort sync enrols an organisation into a course as Student, with no group; in an organisation-only course its managers cohort too, as orgmanager (spec 002 R3, R8)."
+  - component: enrol_manual
+    enabled: 1
+    why: "#7 stage 7 enrols pilot learners manually, and every delivery report is scoped by enrol:plugin not equal to manual. Disabled, that condition would produce no SQL and the reports would widen to pilots (spec 004 R10, MDL-84213)."
+  - component: enrol_self
+    enabled: 1
+    why: "#11 #15 a manager enrols their own learners through each course's organisation-enrolment instance, an enrol_self instance with self-enrolment off. Disabled, those enrolments go inactive (spec 002 R10)."

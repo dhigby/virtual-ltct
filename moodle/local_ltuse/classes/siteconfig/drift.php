@@ -18,7 +18,8 @@ defined('MOODLE_INTERNAL') || die();
  *   4. items this site owns that are no longer declared (extra, spec 002): an `ltct:`
  *      category or cohort, an `ltct_` profile field, and an `ltct: `-named cohort rule;
  *      and, from spec 004, an `ltct_` course field, a live competency row, and a
- *      `local_ltuse` custom report.
+ *      `local_ltuse` custom report; and, from spec 006, a live role pathway.
+ *      A level label and a competency's slug and url are compared in pass 1.
  *   5. the discussion forum of every ltct: course (spec 012): differs when it is not open
  *      to the whole course (spec 002 R14), missing, and the warning forced.
  *   6. each ltct: course with activity reports on (spec 003) or a group mode other than 0
@@ -100,6 +101,13 @@ class drift {
         }
         if ($this->inspector->declares_competencies()) {
             foreach ($this->inspector->competencies()->extras() as $item) {
+                $this->report->add_result($item);
+            }
+        }
+        // Spec 006: a live role pathway pathways.yaml no longer declares, by key only; never
+        // a cohort assigned to it.
+        if ($this->inspector->declares_role_pathways()) {
+            foreach ($this->inspector->rolepathways()->extras() as $item) {
                 $this->report->add_result($item);
             }
         }

@@ -103,11 +103,10 @@ class mentoring {
      */
     public static function role_id(): int {
         global $DB;
-        static $id = null;
-        if ($id === null) {
-            $id = (int)$DB->get_field('role', 'id', ['shortname' => self::ROLE]);
-        }
-        return $id;
+        // Not cached: one indexed read on role.shortname. A static kept a 0 from before apply
+        // made the role, or an id from before a PHPUnit reset, and silently stopped every
+        // mentor and office-hours sync after it.
+        return (int)$DB->get_field('role', 'id', ['shortname' => self::ROLE]);
     }
 
     /**
@@ -216,6 +215,8 @@ class mentoring {
             'gradesurl' => (new moodle_url('/grade/report/overview/index.php',
                 ['id' => SITEID, 'userid' => $learner->id]))->out(false),
             'messageurl' => (new moodle_url('/message/index.php', ['id' => $learner->id]))->out(false),
+            // Spec 006 (US4): the learner's pathways, behind pathway\viewer::may_view().
+            'pathwaysurl' => (new moodle_url('/local/ltuse/pathways.php', ['userid' => $learner->id]))->out(false),
             'courses' => $courses,
             'hascourses' => !empty($courses),
         ];

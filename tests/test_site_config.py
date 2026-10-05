@@ -1,4 +1,4 @@
-"""Unit tests for scripts/site_config.py (specs 001, 002, 004 and 013). Run: python -m pytest tests/"""
+"""Unit tests for scripts/site_config.py (specs 001, 002, 004, 006 and 013). Run: python -m pytest tests/"""
 import contextlib, io, json, pathlib, shutil, sys, tempfile, textwrap, unittest
 from unittest import mock
 import yaml
@@ -1357,8 +1357,10 @@ class Reports(ReportsBase):
         self.assertEqual(prog["audiences"], [{"type": "systemrole", "role": "manager"}])
         self.assertEqual(prog["columns"][3]["aggregation"], "countdistinct")
         # Spec 004's arrays in apply order, then spec 013's two after reports, then spec 011's.
-        self.assertEqual(list(self.payload())[-8:],
-                         ["course_field_category", "course_fields", "competencies", "reports",
+        # Spec 006 puts levels and role_pathways between competencies and reports.
+        self.assertEqual(list(self.payload())[-10:],
+                         ["course_field_category", "course_fields", "competencies", "levels",
+                          "role_pathways", "reports",
                           "badge_template", "certificate_template", "officehours", "dashboard"])
 
     def test_summary_counts_reports(self):
@@ -1560,7 +1562,7 @@ class CompetencyList(ReportsBase):
             data = yaml.safe_load(fh)
         expected = [(cat, n) for cat, names in data.items() if cat != "Meta" for n in names]
         self.assertEqual([(c["category"], c["name"]) for c in comps], expected)
-        self.assertEqual(set(comps[0]), {"name", "category", "sortorder"})
+        self.assertEqual(set(comps[0]), {"name", "category", "sortorder", "slug", "url"})
         self.assertIn("Fonts & Encoding", {c["name"] for c in comps})
 
     def test_duplicate_name(self):
@@ -1582,11 +1584,21 @@ class CompetencyList(ReportsBase):
             self.assertRejected()
 
     def test_synthetic_valid(self):
-        with self.synthetic(lambda d: d["Core"].append("Fixture Extra")):
+        # Spec 006: a competency needs a descriptor, so the fixture gets one beside the real ones.
+        descriptors = self.dir / "fixture-repo" / "competencies"
+        shutil.copytree(REPO / "competencies", descriptors)
+        (descriptors / "fixture-extra.md").write_text(
+            "---\nname: Fixture Extra\ncategory: Core\nslug: fixture-extra\n---\n",
+            encoding="utf-8")
+        with self.synthetic(lambda d: d["Core"].append("Fixture Extra")), \
+                mock.patch.object(sc, "DESCRIPTORS", descriptors):
             self.assertAccepted()
             comps = self.payload()["competencies"]
         self.assertEqual(len(comps), 43)
         self.assertEqual([c["sortorder"] for c in comps], list(range(1, 44)))
+        extra = next(c for c in comps if c["name"] == "Fixture Extra")
+        self.assertEqual(extra["slug"], "fixture-extra")
+        self.assertTrue(extra["url"].endswith("/core/fixture-extra/"))
 
     def test_rendered_without_reports(self):
         (self.dir / "reports.yaml").unlink()
@@ -1940,3 +1952,298 @@ class OrgManagerCalendar(Base):
                 self.reset()
                 self.edit("roles.yaml", self.LAST_CAP, self.LAST_CAP + "      %s: allow\n" % cap)
                 self.assertInvalid("orgmanager holds no calendar capability")
+
+
+# --- spec 006: learning pathways (T014) ---------------------------------------------------
+
+PATHWAYS_HEAD = """\
+rows: [12]
+purpose: Role pathways.
+roles:
+"""
+
+
+def role(key="fixture-role", name="Fixture support consultant",
+         comps=("Translation Tools", "Keyboards"), extra=""):
+    """One roles[] entry of pathways.yaml, as YAML text."""
+    text = "  - key: %s\n    name: %s\n" % (key, name)
+    if comps:
+        text += "    competencies:\n" + "".join("      - %s\n" % c for c in comps)
+    else:
+        text += "    competencies: []\n"
+    return text + '    why: "Fixture, 2026-10-04."\n' + extra
+
+
+class CompetencySlugUrl(Base):
+    """Each competency's slug and url (contracts/declaration.md "Competency slug and url")."""
+
+    def comps(self):
+        self.assertAccepted()
+        return sc.build_payload(sc.validate(self.dir)[0], "apply", {})["competencies"]
+
+    def site_url(self):
+        with open(REPO / "mkdocs.yml", encoding="utf-8") as fh:
+            for line in fh:
+                if line.startswith("site_url:"):
+                    return line.split(":", 1)[1].strip().rstrip("/") + "/"
+        self.fail("mkdocs.yml has no site_url")
+
+    def test_real_descriptors(self):
+        comps = self.comps()
+        self.assertEqual(len(comps), 42)
+        self.assertEqual(len({c["slug"] for c in comps}), 42, "slugs are not unique")
+        self.assertEqual(len({c["url"] for c in comps}), 42, "urls are not unique")
+        base = self.site_url()
+        self.assertTrue(base.startswith("https://"))
+        for c in comps:
+            with self.subTest(name=c["name"]):
+                self.assertRegex(c["slug"], r"^[a-z0-9][a-z0-9-]*$")
+                self.assertLessEqual(len("competency:" + c["slug"]), 100)
+                self.assertEqual(c["url"], "%s%s/%s/" % (
+                    base, sc.site_slugify(c["category"]), c["slug"]))
+        keyboards = next(c for c in comps if c["name"] == "Keyboards")
+        self.assertEqual(keyboards["url"], base + "core-technical/" + keyboards["slug"] + "/")
+
+    def test_slug_matches_descriptor(self):
+        comps = {c["name"]: c["slug"] for c in self.comps()}
+        matched = 0
+        for path in sorted((REPO / "competencies").glob("*.md")):
+            text = path.read_text(encoding="utf-8")
+            if not text.startswith("---"):
+                continue        # a README, not a descriptor
+            fm = yaml.safe_load(text[3:text.find("\n---", 3)])
+            if fm.get("name") in comps:
+                matched += 1
+                self.assertEqual(comps[fm["name"]], fm.get("slug", path.stem), path.name)
+        self.assertEqual(matched, 42)
+
+    def test_slugify_matches_gen_site(self):
+        # gen_site builds the site when imported, so its slugify is lifted out of the source.
+        import ast, re
+        tree = ast.parse((REPO / "scripts" / "gen_site.py").read_text(encoding="utf-8"))
+        fn = next(n for n in tree.body if isinstance(n, ast.FunctionDef) and n.name == "slugify")
+        ns = {"re": re}
+        exec(compile(ast.Module(body=[fn], type_ignores=[]), "gen_site.py", "exec"), ns)
+        with open(REPO / "competencies.yaml", encoding="utf-8") as fh:
+            categories = list(yaml.safe_load(fh))
+        for cat in categories + ["Fonts & Encoding", "A (B) c", "  Odd -- Spacing "]:
+            self.assertEqual(sc.site_slugify(cat), ns["slugify"](cat), cat)
+
+    def descriptors(self):
+        d = self.dir / "fixture-repo" / "competencies"
+        shutil.copytree(REPO / "competencies", d)
+        return d
+
+    def set_slug(self, d, name, slug):
+        for path in d.glob("*.md"):
+            text = path.read_text(encoding="utf-8")
+            if not text.startswith("---"):
+                continue        # a README, not a descriptor
+            end = text.find("\n---", 3)
+            fm = yaml.safe_load(text[3:end])
+            if fm.get("name") == name:
+                lines = [ln for ln in text[:end].split("\n") if not ln.startswith("slug:")]
+                lines.append("slug: %s" % (yaml.safe_dump(slug).split("\n")[0],))
+                path.write_text("\n".join(lines) + text[end:], encoding="utf-8")
+                return
+        self.fail("no descriptor named %r" % name)
+
+    def test_fixture_copy_is_valid(self):
+        d = self.descriptors()
+        self.set_slug(d, "Keyboards", "keyboards-fixture")
+        with mock.patch.object(sc, "DESCRIPTORS", d):
+            comps = {c["name"]: c for c in self.comps()}
+        self.assertEqual(comps["Keyboards"]["slug"], "keyboards-fixture")
+        self.assertTrue(comps["Keyboards"]["url"].endswith("/core-technical/keyboards-fixture/"))
+
+    def test_missing_descriptor(self):
+        d = self.descriptors()
+        for path in d.glob("*.md"):
+            if "\nname: Keyboards\n" in path.read_text(encoding="utf-8"):
+                path.unlink()
+        with mock.patch.object(sc, "DESCRIPTORS", d):
+            self.assertInvalid("no descriptor")
+
+    def test_duplicate_slug(self):
+        d = self.descriptors()
+        keyboards = next(c["slug"] for c in self.comps() if c["name"] == "Keyboards")
+        self.set_slug(d, "Malware", keyboards)
+        with mock.patch.object(sc, "DESCRIPTORS", d):
+            self.assertInvalid("share the slug")
+
+    def test_bad_slug(self):
+        for bad in ("Keyboards", "-keyboards", "key_boards", "k" * 95, 7):
+            with self.subTest(slug=bad):
+                d = self.descriptors()
+                self.set_slug(d, "Keyboards", bad)
+                with mock.patch.object(sc, "DESCRIPTORS", d):
+                    self.assertInvalid("descriptor slug")
+                shutil.rmtree(self.dir / "fixture-repo")
+
+    def test_slug_at_limit(self):
+        d = self.descriptors()
+        self.set_slug(d, "Keyboards", "k" * 94)
+        with mock.patch.object(sc, "DESCRIPTORS", d):
+            self.assertEqual(len(self.comps()), 42)
+
+    def test_site_url_must_be_https(self):
+        (self.dir / "fixture-repo").mkdir()
+        path = self.dir / "fixture-repo" / "mkdocs.yml"
+        for text in ("site_name: x\n", "site_url: http://example.org/\n",
+                     "site_url: https://\n", "site_url: ''\n"):
+            with self.subTest(mkdocs=text):
+                path.write_text(text, encoding="utf-8")
+                with mock.patch.object(sc, "MKDOCS", path):
+                    self.assertInvalid("site_url")
+
+    def test_site_url_host_is_read(self):
+        (self.dir / "fixture-repo").mkdir()
+        path = self.dir / "fixture-repo" / "mkdocs.yml"
+        path.write_text("site_url: https://fixture.example.org\nx: !ENV [A, b]\n",
+                        encoding="utf-8")
+        with mock.patch.object(sc, "MKDOCS", path):
+            comps = self.comps()
+        for c in comps:
+            self.assertTrue(c["url"].startswith("https://fixture.example.org/"), c["url"])
+            self.assertNotIn("//", c["url"][len("https://"):])
+
+
+class PathwayLevels(Base):
+    """The payload's levels array, from outcome-levels.yaml, verbatim."""
+
+    def levels_file(self, mutate):
+        with open(REPO / "outcome-levels.yaml", encoding="utf-8") as fh:
+            data = yaml.safe_load(fh)
+        mutate(data)
+        (self.dir / "fixture-repo").mkdir(exist_ok=True)
+        path = self.dir / "fixture-repo" / "outcome-levels.yaml"
+        path.write_text(yaml.safe_dump(data, allow_unicode=True, sort_keys=False),
+                        encoding="utf-8")
+        return mock.patch.object(sc, "OUTCOME_LEVELS", path)
+
+    def test_real_file(self):
+        self.assertAccepted()
+        levels = sc.build_payload(sc.validate(self.dir)[0], "apply", {})["levels"]
+        with open(REPO / "outcome-levels.yaml", encoding="utf-8") as fh:
+            data = yaml.safe_load(fh)
+        labels = {lv["id"]: lv["label"] for lv in data["levels"]}
+        self.assertEqual(levels, [{"level": n, "label": labels[n]} for n in (1, 2, 3, 4)])
+        self.assertEqual([lv["label"] for lv in levels],
+                         ["1 - Has Knowledge", "2 - With Assistance", "3 - Independent",
+                          "4 - Expert"])
+
+    def test_targets_exactly_one_to_four(self):
+        for targets in ([0, 1, 2, 3, 4], [1, 2, 3], [4, 3, 2, 1], [1, 2, 3, 4, 4], None):
+            with self.subTest(targets=targets):
+                with self.levels_file(
+                        lambda d: d.__setitem__("course_target_levels", targets)):
+                    self.assertInvalid("course_target_levels")
+
+    def test_label_missing(self):
+        def blank(d):
+            for lv in d["levels"]:
+                if lv["id"] == 2:
+                    lv["label"] = ""
+        with self.levels_file(blank):
+            self.assertInvalid("no CBC label")
+
+
+class Pathways(Base):
+    """pathways.yaml (contracts/declaration.md "pathways.yaml")."""
+
+    def roles(self):
+        self.assertAccepted()
+        return sc.build_payload(sc.validate(self.dir)[0], "apply", {})["role_pathways"]
+
+    def pathways(self, *blocks):
+        body = "".join(blocks)
+        self.write("pathways.yaml", PATHWAYS_HEAD.replace("roles:\n", "roles: []\n")
+                   if not body else PATHWAYS_HEAD + body)
+
+    def test_missing_file_is_empty(self):
+        self.assertFalse((self.dir / "pathways.yaml").exists())
+        self.assertEqual(self.roles(), [])
+
+    def test_tracked_file(self):
+        shutil.copy(REPO / "moodle" / "site" / "pathways.yaml", self.dir / "pathways.yaml")
+        self.assertEqual(self.roles(), [])
+
+    def test_empty_roles(self):
+        self.pathways()
+        self.assertEqual(self.roles(), [])
+
+    def test_valid_roles(self):
+        self.pathways(role(extra="    description: Supports a team's tools day to day.\n"),
+                      role(key="second-role", name="Archive helper",
+                           comps=('"Fonts & Encoding"',)))
+        out = self.roles()
+        self.assertEqual(out, [
+            {"key": "fixture-role", "name": "Fixture support consultant",
+             "description": "Supports a team's tools day to day.", "sortorder": 0,
+             "competencies": ["Translation Tools", "Keyboards"]},
+            {"key": "second-role", "name": "Archive helper", "description": "",
+             "sortorder": 1, "competencies": ["Fonts & Encoding"]}])
+
+    def test_required_keys(self):
+        for text in ("rows: [12]\npurpose: x\n", "purpose: x\nroles: []\n",
+                     "rows: [12]\nroles: []\n"):
+            with self.subTest(text=text):
+                self.write("pathways.yaml", text)
+                self.assertRejected()
+        self.write("pathways.yaml", "rows: [12]\npurpose: x\nroles: {}\n")
+        self.assertInvalid("roles must be a list")
+
+    def test_bad_key(self):
+        for key in ("Fixture", "1role", "-role", "role_x", "role.x", "r" * 96, '""'):
+            with self.subTest(key=key):
+                self.pathways(role(key=key))
+                self.assertInvalid("key")
+
+    def test_key_at_limit(self):
+        self.pathways(role(key="r" * 95))
+        self.assertEqual(len(self.roles()), 1)
+
+    def test_duplicate_key(self):
+        self.pathways(role(), role(name="Another name"))
+        self.assertInvalid("declared twice")
+
+    def test_unknown_competency(self):
+        for comp in ("Fixture Nonesuch", "keyboards", "Fonts and Encoding",
+                     "Fonts &  Encoding", "Keyboards "):
+            with self.subTest(comp=comp):
+                self.pathways(role(comps=("Keyboards", '"%s"' % comp)))
+                self.assertInvalid("not in competencies.yaml")
+
+    def test_meta_competency(self):
+        self.pathways(role(comps=("Keyboards", "Uncategorized")))
+        self.assertInvalid("Meta")
+
+    def test_competency_twice(self):
+        self.pathways(role(comps=("Keyboards", "Translation Tools", "Keyboards")))
+        self.assertInvalid("twice")
+
+    def test_no_competencies(self):
+        self.pathways(role(comps=()))
+        self.assertInvalid("non-empty")
+
+    def test_missing_why(self):
+        self.pathways(role().replace('    why: "Fixture, 2026-10-04."\n', ""))
+        self.assertRejected()
+
+    def test_level_in_name(self):
+        for name in ("3 - Independent consultant", '"Consultant, 4 - Expert"',
+                     "Level 2 consultant", "Consultant at level3"):
+            with self.subTest(name=name):
+                self.pathways(role(name=name))
+                self.assertRejected()
+
+    def test_level_in_description(self):
+        for text in ("Reaches 2 - With Assistance on keyboards.",
+                     "Aims at level 4 for fonts."):
+            with self.subTest(description=text):
+                self.pathways(role(extra="    description: %s\n" % text))
+                self.assertRejected()
+
+    def test_long_name(self):
+        self.pathways(role(name="N" * 256))
+        self.assertRejected()

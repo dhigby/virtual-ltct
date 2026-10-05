@@ -1,0 +1,29 @@
+# Row #12: role pathways (spec 006, research R5).
+#
+# Read only by scripts/site_config.py (contract: specs/006-learning-pathways/contracts/
+# declaration.md). A competency pathway is never declared here: local_ltuse builds it from the
+# courses the publisher has delivered, one per competency in competencies.yaml. This file
+# declares only role pathways, each a named set of those competencies in the order a learner
+# sees them. Who is assigned which pathway, and anyone's progress on it, are Moodle data and
+# are never declared here (constitution III).
+#
+# apply creates or updates each role and its competencies, and never deletes one: a role
+# removed from this file is retired, and shows again if it is declared again with the same key.
+# This file is optional; a missing file is the same as roles: [].
+
+rows: [12]
+purpose: >-
+  Role pathways: a named set of competencies a role needs. Each competency carries its
+  competency pathway, which is generated from published courses and never declared here.
+roles: []
+# A role is added only when a human (the maintainer with the department or the CBC
+# programme) supplies it. None is invented. The shape, for reference:
+#
+#  - key: translation-support          # ^[a-z][a-z0-9-]*$, at most 95 characters, unique
+#    name: Translation team support consultant   # names work, never a CBC level
+#    description: >-                   # optional
+#      Supports a translation team's tools day to day.
+#    competencies:                     # verbatim from competencies.yaml, in the order shown;
+#      - Translation Tools             # none from Meta, none twice
+#      - Keyboards
+#    why: "Supplied by <who>, <date>." # who supplied the role, on what authority; not sent

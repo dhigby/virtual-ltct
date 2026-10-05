@@ -14,7 +14,14 @@ use stdClass;
  * scripts/site_config.py from the repo-root competencies.yaml, with the `Meta` category left
  * out (specs/004-progress-reporting/data-model.md "Competency list"):
  *
- *   competencies [{name, category, sortorder}]
+ *   competencies [{name, category, sortorder, slug, url}]
+ *
+ * `slug` and `url` are spec 006's (specs/006-learning-pathways/contracts/declaration.md
+ * "Competency slug and url"): the descriptor's slug, which names the competency pathway
+ * `competency:<slug>`, and the competency's page on the published competency site. Both are
+ * compared and set back like `category` and `sortorder`. A payload from before 006 carries
+ * neither, and a plugin older than 2026100600 has no column for them; in either case they are
+ * left out of the comparison and the write, so this class still serves spec 004 alone.
  *
  * Identity: a row of `local_ltuse_competency` by its `name`, compared case-sensitively in PHP,
  * because a database collation may fold case. A renamed competency is therefore a new row and
@@ -24,7 +31,8 @@ use stdClass;
  * Lifecycle (subject `competency <name>`):
  *   absent                        inserted; reported changed/missing 'created' (report::KINDS
  *                                 has no `created`, as profilefields.php reports a creation);
- *   category or sortorder differs set back, reported `changed`;
+ *   category, sortorder, slug or url differs
+ *                                 set back, reported `changed`, the message naming which;
  *   declared but retired          un-retired, reported `changed`;
  *   live but not declared         `extra`: kept, and set to retired = 1 by apply, so it leaves
  *                                 the per-competency report. Its course map rows are kept.
@@ -44,11 +52,26 @@ class competencies {
     /** The longest name or category the table's char(255) columns hold. */
     const MAX_LENGTH = 255;
 
+    /** A slug, as the pathway key pattern takes it (pathway\catalogue::KEY_PATTERN). */
+    const SLUG_PATTERN = '/^[a-z0-9][a-z0-9-]*$/';
+
+    /** The longest slug: `competency:<slug>` must fit the 100-character pathway key. */
+    const SLUG_MAX_LENGTH = 94;
+
+    /** The longest url the table's char(255) column holds. */
+    const URL_MAX_LENGTH = 255;
+
+    /** Spec 006's fields, compared and written only when declared and the columns exist. */
+    const PATHWAY_FIELDS = ['slug', 'url'];
+
     /** @var array[] the declared competencies */
     protected $declared;
 
     /** @var stdClass[]|null the live rows, keyed by id; read once per check or apply step */
     protected $live = null;
+
+    /** @var bool|null whether the table has spec 006's slug and url columns; read once */
+    protected $pathwaycolumns = null;
 
     /**
      * @param array $competencies the payload's `competencies` array
@@ -125,6 +148,9 @@ class competencies {
         if ($problem === null && $index !== null && $this->declared_twice($name, $index)) {
             $problem = 'declared more than once';
         }
+        if ($problem === null && $index !== null && $this->slug_declared_twice($competency, $index)) {
+            $problem = "slug '{$competency['slug']}' is declared for another competency too";
+        }
         if ($problem !== null) {
             return self::result($subject, 'unknown', self::summary($competency), null, $problem, true);
         }
@@ -141,7 +167,7 @@ class competencies {
             return self::result($subject, 'missing', self::summary($competency), null, 'apply will create it');
         }
 
-        $differences = self::differences($competency, $row);
+        $differences = self::differences($this->comparable($competency), $row);
         if ($differences) {
             return self::result($subject, 'changed', self::summary($competency), self::row_summary($row),
                 'differs: ' . implode(', ', $differences));
@@ -189,7 +215,7 @@ class competencies {
 
         $name = (string)$competency['name'];
         $row = self::find_exact($this->live_rows(), $name);
-        $record = self::save_data($competency, $row, time());
+        $record = self::save_data($this->comparable($competency), $row, time());
         if ($row === null) {
             $DB->insert_record(self::TABLE, $record);
         } else {
@@ -231,9 +257,10 @@ class competencies {
     }
 
     /**
-     * The record to insert or update: the declared category and sortorder, not retired.
+     * The record to insert or update: the declared category and sortorder, and the slug and
+     * url when the competency carries them, not retired.
      *
-     * @param array $competency the declared competency
+     * @param array $competency the declared competency, as comparable() leaves it
      * @param stdClass|null $row the live row, or null to insert
      * @param int $now
      * @return stdClass
@@ -246,6 +273,11 @@ class competencies {
         $record->name = (string)$competency['name'];
         $record->category = (string)$competency['category'];
         $record->sortorder = (int)$competency['sortorder'];
+        foreach (self::PATHWAY_FIELDS as $field) {
+            if (array_key_exists($field, $competency)) {
+                $record->$field = (string)$competency[$field];
+            }
+        }
         $record->retired = 0;
         $record->timemodified = $now;
         return $record;
@@ -285,15 +317,36 @@ class competencies {
         if ((int)$sortorder < 1) {
             return 'sortorder must be a positive whole number';
         }
+        if (array_key_exists('slug', $competency)) {
+            $slug = $competency['slug'];
+            if (!is_string($slug) || !preg_match(self::SLUG_PATTERN, $slug)) {
+                return 'slug must match ' . self::SLUG_PATTERN;
+            }
+            if (strlen($slug) > self::SLUG_MAX_LENGTH) {
+                return 'slug is longer than ' . self::SLUG_MAX_LENGTH . ' characters';
+            }
+        }
+        if (array_key_exists('url', $competency)) {
+            $url = $competency['url'];
+            if (!is_string($url) || strpos($url, 'https://') !== 0 || preg_match('/[\s\x00-\x1F\x7F]/', $url)) {
+                return 'url must be an https address';
+            }
+            if (strlen($url) > self::URL_MAX_LENGTH) {
+                return 'url is longer than ' . self::URL_MAX_LENGTH . ' characters';
+            }
+        }
         return null;
     }
 
     /**
      * The properties of a live row that differ from the declaration, in a fixed order.
      *
+     * `slug` and `url` are compared only when the competency carries them and the row was
+     * read with them, so a 004 payload, or a plugin without the columns, compares as before.
+     *
      * @param array $competency
      * @param stdClass $row
-     * @return string[] of category, sortorder, retired
+     * @return string[] of category, sortorder, slug, url, retired
      */
     public static function differences(array $competency, stdClass $row): array {
         $diff = [];
@@ -302,6 +355,12 @@ class competencies {
         }
         if ((int)$competency['sortorder'] !== (int)$row->sortorder) {
             $diff[] = 'sortorder';
+        }
+        foreach (self::PATHWAY_FIELDS as $field) {
+            if (array_key_exists($field, $competency) && property_exists($row, $field)
+                    && (string)$competency[$field] !== (string)$row->$field) {
+                $diff[] = $field;
+            }
         }
         if ((int)$row->retired !== 0) {
             $diff[] = 'retired';
@@ -349,8 +408,14 @@ class competencies {
      * @return string
      */
     public static function summary(array $competency): string {
-        return 'category ' . self::display($competency['category'] ?? null)
+        $text = 'category ' . self::display($competency['category'] ?? null)
             . ', sortorder ' . self::display($competency['sortorder'] ?? null);
+        foreach (self::PATHWAY_FIELDS as $field) {
+            if (array_key_exists($field, $competency)) {
+                $text .= ", {$field} " . self::display($competency[$field]);
+            }
+        }
+        return $text;
     }
 
     /**
@@ -361,6 +426,11 @@ class competencies {
      */
     public static function row_summary(stdClass $row): string {
         $text = "category {$row->category}, sortorder " . (int)$row->sortorder;
+        foreach (self::PATHWAY_FIELDS as $field) {
+            if (property_exists($row, $field)) {
+                $text .= ", {$field} " . ((string)$row->$field === '' ? '(none)' : (string)$row->$field);
+            }
+        }
         return (int)$row->retired !== 0 ? $text . ', retired' : $text;
     }
 
@@ -383,17 +453,70 @@ class competencies {
     }
 
     /**
-     * Every row of the list, retired ones included, keyed by id. 42 rows today.
+     * Is the declared slug held by another declared competency too?
+     *
+     * @param array $competency
+     * @param int $index
+     * @return bool
+     */
+    protected function slug_declared_twice(array $competency, int $index): bool {
+        $slug = (string)($competency['slug'] ?? '');
+        if ($slug === '') {
+            return false;
+        }
+        foreach ($this->declared as $other => $declared) {
+            if ($other !== $index && (string)($declared['slug'] ?? '') === $slug) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * The declared competency with spec 006's fields dropped when the table cannot hold them
+     * (a plugin older than 2026100600), so the comparison and the write match what is stored.
+     *
+     * @param array $competency
+     * @return array
+     */
+    protected function comparable(array $competency): array {
+        if (!$this->has_pathway_columns()) {
+            foreach (self::PATHWAY_FIELDS as $field) {
+                unset($competency[$field]);
+            }
+        }
+        return $competency;
+    }
+
+    /**
+     * Every row of the list, retired ones included, keyed by id. 42 rows today. The slug and
+     * url are read when the table has them.
      *
      * @return stdClass[]
      */
     protected function live_rows(): array {
         global $DB;
         if ($this->live === null) {
-            $this->live = $DB->get_records(self::TABLE, null, 'sortorder ASC, id ASC',
-                'id, name, category, sortorder, retired');
+            $fields = 'id, name, category, sortorder, retired';
+            if ($this->has_pathway_columns()) {
+                $fields .= ', ' . implode(', ', self::PATHWAY_FIELDS);
+            }
+            $this->live = $DB->get_records(self::TABLE, null, 'sortorder ASC, id ASC', $fields);
         }
         return $this->live;
+    }
+
+    /**
+     * @return bool whether the table has spec 006's slug and url (local_ltuse 2026100600 on)
+     */
+    public function has_pathway_columns(): bool {
+        global $DB;
+        if ($this->pathwaycolumns === null) {
+            $manager = $DB->get_manager();
+            $this->pathwaycolumns = $manager->table_exists(self::TABLE)
+                && $manager->field_exists(self::TABLE, 'slug') && $manager->field_exists(self::TABLE, 'url');
+        }
+        return $this->pathwaycolumns;
     }
 
     /**

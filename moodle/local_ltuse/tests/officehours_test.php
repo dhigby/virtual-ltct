@@ -40,8 +40,10 @@ final class officehours_test extends \advanced_testcase {
         set_role_contextlevels($this->mentorrole, [CONTEXT_USER]);
         $this->course = $this->getDataGenerator()->create_course(['idnumber' => officehours::COURSE,
             'fullname' => 'Fixture office hours', 'groupmode' => SEPARATEGROUPS, 'groupmodeforce' => 1]);
+        // create_course() has already added the course's one manual instance; name it, as apply does.
         $plugin = enrol_get_plugin('manual');
-        $plugin->add_instance($this->course, ['name' => officehours::ENROL_NAME, 'status' => ENROL_INSTANCE_ENABLED,
+        $plugin->update_instance($DB->get_record('enrol', ['courseid' => $this->course->id, 'enrol' => 'manual'],
+            '*', MUST_EXIST), (object)['name' => officehours::ENROL_NAME, 'status' => ENROL_INSTANCE_ENABLED,
             'roleid' => (int)$DB->get_field('role', 'id', ['shortname' => 'student'])]);
         $this->instance = officehours::enrol_instance((int)$this->course->id);
         set_config(officehours::TEMPLATE_CONFIG, 'Office hours {n}', 'local_ltuse');
@@ -69,7 +71,7 @@ final class officehours_test extends \advanced_testcase {
      * @param int $userid
      * @return int|null ENROL_USER_ACTIVE, ENROL_USER_SUSPENDED or null when not enrolled
      */
-    private function status(int $userid): ?int {
+    private function enrolstatus(int $userid): ?int {
         global $DB;
         $ue = $DB->get_record('user_enrolments', ['enrolid' => $this->instance->id, 'userid' => $userid]);
         return $ue ? (int)$ue->status : null;
@@ -89,8 +91,8 @@ final class officehours_test extends \advanced_testcase {
         $learner = $this->getDataGenerator()->create_user();
         $this->relate($mentor, $learner);
 
-        $this->assertSame(ENROL_USER_ACTIVE, $this->status((int)$mentor->id));
-        $this->assertSame(ENROL_USER_ACTIVE, $this->status((int)$learner->id));
+        $this->assertSame(ENROL_USER_ACTIVE, $this->enrolstatus((int)$mentor->id));
+        $this->assertSame(ENROL_USER_ACTIVE, $this->enrolstatus((int)$learner->id));
         $context = \context_course::instance($this->course->id);
         $teacher = (int)$DB->get_field('role', 'id', ['shortname' => 'teacher']);
         $student = (int)$DB->get_field('role', 'id', ['shortname' => 'student']);
@@ -119,8 +121,8 @@ final class officehours_test extends \advanced_testcase {
         $group = $this->group((int)$mentor->id);
         $this->assertNotEmpty($group, 'the group is kept, so its slots keep their history');
         $this->assertFalse(groups_is_member($group->id, $learner->id));
-        $this->assertSame(ENROL_USER_SUSPENDED, $this->status((int)$learner->id));
-        $this->assertSame(ENROL_USER_SUSPENDED, $this->status((int)$mentor->id));
+        $this->assertSame(ENROL_USER_SUSPENDED, $this->enrolstatus((int)$learner->id));
+        $this->assertSame(ENROL_USER_SUSPENDED, $this->enrolstatus((int)$mentor->id));
     }
 
     public function test_one_of_two_mentees_leaving_touches_only_them(): void {
@@ -134,9 +136,9 @@ final class officehours_test extends \advanced_testcase {
         $group = $this->group((int)$mentor->id);
         $this->assertTrue(groups_is_member($group->id, $stay->id));
         $this->assertFalse(groups_is_member($group->id, $leave->id));
-        $this->assertSame(ENROL_USER_ACTIVE, $this->status((int)$stay->id));
-        $this->assertSame(ENROL_USER_ACTIVE, $this->status((int)$mentor->id));
-        $this->assertSame(ENROL_USER_SUSPENDED, $this->status((int)$leave->id));
+        $this->assertSame(ENROL_USER_ACTIVE, $this->enrolstatus((int)$stay->id));
+        $this->assertSame(ENROL_USER_ACTIVE, $this->enrolstatus((int)$mentor->id));
+        $this->assertSame(ENROL_USER_SUSPENDED, $this->enrolstatus((int)$leave->id));
     }
 
     public function test_a_learner_with_two_mentors_is_in_two_groups(): void {

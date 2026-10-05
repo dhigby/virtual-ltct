@@ -93,7 +93,7 @@ $functions = [
                         . 'moodle/badges:configuremessages, mod/customcert:addinstance',
     ],
 
-    // Spec 016 (R12): not in the publishing service. Each checks
+    // Spec 016 (R12): not in the publishing service. It checks
     // local_ltuse\protection\entitlement itself; the capability listed is the site team's.
     'local_ltuse_set_protection' => [
         'classname'    => 'local_ltuse\external\set_protection',
@@ -103,13 +103,24 @@ $functions = [
         'ajax'         => false,
         'capabilities' => 'local/ltuse:manageprotection',
     ],
-    'local_ltuse_set_org_protection' => [
-        'classname'    => 'local_ltuse\external\set_org_protection',
-        'description'  => 'Set an organisation\'s minimum identity protection level. Site team '
-                        . 'only.',
+    'local_ltuse_place_course' => [
+        'classname'    => 'local_ltuse\external\place_course',
+        'description'  => 'Move a published course into its category by idnumber (ltct:org:<key>, '
+                        . 'ltct:pilots or ltct:published), only when it is elsewhere. Spec 002 '
+                        . 'organisation-only courses. Idempotent.',
         'type'         => 'write',
         'ajax'         => false,
-        'capabilities' => 'local/ltuse:manageorgprotection',
+        'capabilities' => 'local/ltuse:publish',
+    ],
+    // Spec 006: pathways.
+    'local_ltuse_set_course_pathway' => [
+        'classname'    => 'local_ltuse\external\set_course_pathway',
+        'description'  => 'Record whether a published course is delivered and the level it aims '
+                        . 'at, and announce each pathway it joined or left. Never enrols '
+                        . 'anyone. Idempotent.',
+        'type'         => 'write',
+        'ajax'         => false,
+        'capabilities' => 'local/ltuse:publish',
     ],
 ];
 
@@ -131,6 +142,9 @@ $services = [
             'local_ltuse_set_course_competencies',
             'local_ltuse_ensure_discussion',
             'local_ltuse_set_course_recognition',
+            'local_ltuse_place_course',
+            // Spec 006: pathways.
+            'local_ltuse_set_course_pathway',
             // Core functions the publisher also needs. Listed here so one token covers
             // the whole publish rather than the operator wiring up several services.
             'core_course_create_courses',

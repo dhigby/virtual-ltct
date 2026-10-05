@@ -40,7 +40,11 @@ defined('MOODLE_INTERNAL') || die();
  * declaration.md "Output additions"):
  *
  *   course_field_category, course_fields  coursefields::apply(): the category, then the fields
- *   competencies                          competencies::apply(): retires, never deletes
+ *   competencies                          competencies::apply(): retires, never deletes;
+ *                                         from spec 006, sets each one's slug and url too
+ *   levels                                pathwaylevels::apply(): config pathwaylevel1-4 (spec 006)
+ *   role_pathways                         rolepathways::apply(), after competencies, whose rows
+ *                                         it names; retires, never deletes (spec 006)
  *   reports                               reports::apply(), last, because a report's columns and
  *                                         audiences need the fields and cohorts made above
  *
@@ -222,9 +226,9 @@ class applier {
 
     /**
      * Apply spec 004's arrays, after spec 002's: the course field category and course fields,
-     * the competency list, then reports. Each is skipped when the payload does not declare it,
-     * by the same gates the preflight used (inspector::declares_*()), so apply never writes
-     * what the preflight did not check.
+     * the competency list, then spec 006's level labels and role pathways, then reports. Each
+     * is skipped when the payload does not declare it, by the same gates the preflight used
+     * (inspector::declares_*()), so apply never writes what the preflight did not check.
      */
     protected function apply_reporting(): void {
         if ($this->inspector->declares_course_fields()) {
@@ -232,6 +236,12 @@ class applier {
         }
         if ($this->inspector->declares_competencies()) {
             $this->inspector->competencies()->apply($this->report);
+        }
+        if ($this->inspector->declares_levels()) {
+            $this->inspector->pathwaylevels()->apply($this->report);
+        }
+        if ($this->inspector->declares_role_pathways()) {
+            $this->inspector->rolepathways()->apply($this->report);
         }
         $this->inspector->reports()->apply($this->report);
     }

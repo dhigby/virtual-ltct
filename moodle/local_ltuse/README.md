@@ -22,17 +22,16 @@ shape and Moodle's.
 | `local_ltuse_import_questions` | write | Imports Moodle XML into a category in the course question bank, creating the `mod_qbank` instance and category if needed. |
 | `local_ltuse_create_quiz` | write | Creates or updates a `mod_quiz` and rebuilds its slots as references into that category. |
 | `local_ltuse_hide_modules` | write | Retires modules the course no longer has, by course-module idnumber: hides them and moves them into the hidden Retired section. Never deletes. |
-| `local_ltuse_ensure_discussion` | write | Spec 012, row #10. Creates the course's one `general` forum, `ltct:<slug>:discussion`, in section 0 if it is absent; its name and intro are set only then. On every call it sets only the forum's group mode: separate groups, or visible groups when [`moodle/site/course-discussions.yaml`](../site/course-discussions.yaml) lists the course as shared, always with no grouping. It never writes a discussion or post. Returns `{cmid, created, groupmode, courseforced}`; `courseforced` means the course's own forced group mode overrides the forum's. |
+| `local_ltuse_ensure_discussion` | write | Spec 012, row #10. Creates the course's one `general` forum, `ltct:<slug>:discussion`, in section 0 if it is absent; its name and intro are set only then. On every call it sets only the forum's group mode: no groups, with no grouping, for every course (spec 002 R14, 2026-10-02). It never writes a discussion or post. Returns `{cmid, created, groupmode, courseforced}`; `courseforced` means the course's own forced group mode overrides the forum's. |
 | `local_ltuse_set_course_completion` | write | Makes a course's activity completion criteria exactly its visible, tracked `ltct:` modules, one criterion at a time. Never clears a learner's course completion (spec 004). |
 | `local_ltuse_set_course_competencies` | write | Replaces the competencies a published course aims at, by name, in the plugin's own map table. Fails closed on a name the site does not have (spec 004). |
 | `local_ltuse_set_course_recognition` | write | Creates or rewords a published course's completion badge, activates it on a delivery publish, and on delivery makes its certificate activity. Never deactivates a badge or deletes a certificate (spec 013). |
+| `local_ltuse_place_course` | write | Spec 002 R11 (2026-10-02). Moves a published course into the category with a given idnumber, only when it is elsewhere, with `move_courses()`. Accepts only `ltct:org:<key>`, `ltct:pilots` or `ltct:published`, and checks `local/ltuse:publish` in the course and the target category. Returns `{moved}`. The publisher calls it on every publish of a course `moodle/site/org-courses.yaml` declares organisation-only. |
 
-**The discussion forum and organisations.** Separate groups hides a group's discussions from
-anyone without `moodle/site:accessallgroups`, and every group in a course belongs to one
-organisation (spec 002), so with no grouping no organisation reads another's posts. The one
-way round it is a discussion posted to "All participants", which only a user with
-`accessallgroups` can do (editing teachers and managers, never the Course mentor or a learner).
-`site_config.py drift` reports such discussions as `allparticipants`, as a count only.
+**The discussion forum is open to the whole course** (spec 002, amended 2026-10-02). Shared
+courses are open across organisations, so the forum has no groups, and a post written while it
+had them shows to everyone whatever `groupid` it carries (`mod/forum/lib.php:6790-6795`). An
+organisation that needs a private forum has an organisation-only course instead (R11).
 
 Course create/update stays on core (`core_course_create_courses`,
 `core_course_update_courses`, `core_course_get_courses_by_field`) and section handling on
@@ -381,6 +380,55 @@ and the entities `core_reportbuilder\local\entities\base`. Before raising `requi
 against it. Moodle 5.0 to 5.2 changed default entity initialisation, entity order, the
 abstract `get_default_tables()`, custom sort fields and select-filter values (research R15).
 
+**The pathway pages' raw reads (spec 006)**, all read-only, by indexed columns:
+
+| Table | Columns used | For |
+|---|---|---|
+| `{course}` | `id`, `idnumber`, `visible`, `fullname` | A pathway lists visible `ltct:<slug>` courses (`pathway\catalogue::membership_sql()`, the one membership rule). |
+| `{course_completions}` | `course`, `userid`, `timecompleted` | A course is completed for the learner (`pathway\progress`). |
+| `{user_enrolments}`, `{enrol}` | `userid`, `enrolid`, `id`, `courseid` | A course is in progress: the learner holds any enrolment in it. |
+| `{cohort}`, `{cohort_members}` | `id`, `idnumber`, `name`, `contextid`; `cohortid`, `userid` | Which pathways a learner has, and which cohorts a manager may give one to. |
+
+They write only the plugin's own tables.
+
+## Learning pathways (spec 006)
+
+A pathway is never stored as a Moodle object. `classes/pathway/` builds it when it is opened,
+from what the publisher and `site_config.py apply` keep up to date:
+
+- **`local_ltuse_course_pathway`**: one row per published course, written only by
+  `local_ltuse_set_course_pathway`, which the publisher calls on every publish straight after
+  `set_course_competencies`. It holds whether the course is delivered (stage 8, from
+  `course_stage.py`) and the level it aims at (1–4), and the pathway keys last announced, so
+  the next publish fires `pathway_courses_changed` for what changed.
+- **`local_ltuse_role_pathway`, `local_ltuse_role_pathway_comp`**: role pathways from
+  `moodle/site/pathways.yaml`, applied by `classes/siteconfig/rolepathways.php`. Retired,
+  never deleted.
+- **`local_ltuse_pathway_cohort`**: which cohorts have which pathway, set on
+  `pathways_manage.php`. Holds `usermodified`, declared by the privacy provider.
+- **`local_ltuse_competency`** gains `slug` and `url`, the competency's page on the competency
+  site, which a level with no course links to. Plugin config `pathwaylevel1`–`4` holds the
+  level labels from `outcome-levels.yaml`.
+
+| Class | Does |
+|---|---|
+| `pathway\catalogue` | Keys (`competency:<slug>`, `role:<key>`), which courses are on a pathway, every pathway. |
+| `pathway\builder` | Pure: lays out a pathway, marks the next course, totals a role. Tested by `tests/pathway_harness.php`. |
+| `pathway\viewer` | Pure: who may see whose pathways (the learner, their mentor, their organisation's manager, the site team). |
+| `pathway\progress` | One learner's state per course, through `mentoring::progress_status()`. |
+| `pathway\view` | Glue: one key for one learner as a template context. |
+| `pathway\assignments` | Pathway ↔ cohort, and who may assign. |
+
+**006 enrols nobody.** Spec 008 owns enrolment. It codes against
+[`specs/006-learning-pathways/contracts/pathway-api.md`](../../specs/006-learning-pathways/contracts/pathway-api.md):
+`catalogue::courses()`, `assignments::assign($key, $cohortid, true)`, `cohorts_for()`, and
+the events `pathway_courses_changed`, `pathway_assigned` and `pathway_unassigned`. Those names
+are frozen; change them only together with 008.
+
+**No level for a learner, anywhere.** A level appears only as what a course aims at and as a
+row heading. Finishing a pathway says the training is completed. `tests/test_pathway_wording.py`
+holds every pathway string to `scripts/cbc_wording.py`'s strict rule.
+
 ## Identity, and why republishing does not duplicate
 
 Every object the publisher creates carries an idnumber:
@@ -461,7 +509,7 @@ The applier also handles four item types after settings. They are applied in thi
 
 None of them writes another component's table.
 
-**The profile hook.** `lib.php` defines `local_ltuse_control_view_profile()`, the callback core's `user_can_view_profile()` calls through `user_process_profile_callbacks()`. It refuses an organisation manager the profile of anyone outside the organisations they manage (spec 002, research R9). It never allows anything core would refuse. It reads:
+**The profile hook.** `lib.php` defines `local_ltuse_control_view_profile()`, the callback core's `user_can_view_profile()` calls through `user_process_profile_callbacks()`. It lets an organisation manager see the profile of each person in the organisations they manage, with `VIEWPROFILE_FORCE_ALLOW`, the one case it grants anything; core lets any plugin's refusal win over it. It refuses a manager anyone else they would reach only as a manager, and leaves the site team, a mentor and a fellow participant in a course to core (spec 002, research R9, amended 2026-10-02). It reads:
 - `profile_user_record()` for the viewed user's `ltct_org`;
 - `has_coursecontact_role()` and `has_capability('moodle/user:viewalldetails')` at system context, to recognise staff;
 - `has_capability('moodle/user:viewalldetails')` in the viewed user's context, to exempt the site team;
@@ -491,14 +539,23 @@ calls and reads is listed under [What the plugin relies on](#what-the-plugin-rel
 
 ### Course discussions (spec 012)
 
-Spec 012 adds course discussions. Drift lists every course whose idnumber starts `ltct:` (a
-lookup by that column, as `util::course_by_idnumber()` does) and compares its
-`ltct:<slug>:discussion` forum with `course-discussions.yaml`: `differs`, `missing`, and the
-warnings `forced` (the course forces a group mode) and `allparticipants`. The last is a
-count through mod_forum's `discussion_list_vault::get_total_discussion_count_from_forum_id_and_group_id()`,
-which runs `SELECT COUNT(1)`: no subject, post or author is read. `apply` corrects `differs`
-through `ensure_discussion::apply_groupmode()`, the publisher's own path, and never creates a
-missing forum. Warnings print as `[skip]`.
+Spec 012 adds course discussions; spec 002's amendment (2026-10-02, R14) opens them. Drift
+lists every course whose idnumber starts `ltct:` (a lookup by that column, as
+`util::course_by_idnumber()` does) and checks its `ltct:<slug>:discussion` forum against the
+one mode every forum has, no groups and no grouping: `differs`, `missing`, and the warning
+`forced` (the course forces a group mode, which would wall the forum). No discussion, post or
+author is read. `course-discussions.yaml` is retired, and `site_config.py` refuses it if it
+comes back. `apply` corrects `differs` through `ensure_discussion::apply_groupmode()`, the
+publisher's own path, and never creates a missing forum. Warnings print as `[skip]`.
+
+Drift also reports each `ltct:` course whose group mode is not 0 (`changed`; apply sets it
+through `update_course()`), and, as a blocking count that names nothing, any managers cohort
+synced into a course outside the `ltct:org:*` categories (R2). Placement (R11, 2026-10-02):
+a course `org-courses.yaml` declares that sits outside its organisation's category is
+`changed`, and an undeclared `ltct:` course inside an `ltct:org:*` category is `extra`.
+Neither blocks, and apply never moves a course, because a move changes which category roles
+it inherits; the next publish re-places a declared one through `local_ltuse_place_course`.
+Placement is checked only when the payload carries `org_courses`.
 
 `ensure_discussion` writes no table directly. Group mode goes through
 `\core_courseformat\formatactions::cm()->set_groupmode()`, the 5.2 replacement for the
@@ -545,6 +602,103 @@ This plugin fills those three gaps and nothing else.
 | `course_completions` | `userid`, `timecompleted IS NOT NULL` | `userid` is | Lists a course the learner completed after their enrolment was deleted, which `enrol_get_all_users_courses()` no longer returns (FR-004). |
 | `role_allow_assign` | `(roleid, allowassign)` | unique key | The applier and drift check one declared allow-assign pair. `get_assignable_roles()` answers for a user in a context, not for a pair. |
 
+### Manage mentors: organisation managers (spec 003 Phase B)
+
+`mentors.php?userid=<learner>` shows one learner's current mentors, each with Remove, and an
+Add picker. It manages the user-context relationship only, the learner's default mentor; a
+mentor for one course is spec 008's. It is linked from the learner's profile
+(`local_ltuse_myprofile_navigation()`) whenever the same decision allows it. The site team
+can still use core's "Assign roles relative to this user" page instead.
+
+**Authorisation**, recomputed on every GET and POST, so a forged POST naming another learner
+is refused like a direct visit. `local_ltuse_may_manage_mentors()` in `lib.php` gathers the
+inputs, and `\local_ltuse\mentor_admin::decide()` decides. It is pure, and
+`tests/mentor_admin_harness.php` tests it. It allows:
+
+- **the site team**: `moodle/role:assign` in the learner's user context, with `mentor` among
+  `get_assignable_roles()` there. Any learner.
+- **an organisation manager**: `\local_ltuse\organisation\access::may_manage_account()`, the
+  shared check of spec 002 (research R10). The learner's `ltct_org` is one of the manager's
+  organisations, read through the existing `local_ltuse_managed_organisation_keys()` (`cohort`
+  ⋈ `cohort_members`), and the learner is in that organisation's member cohort. The person
+  must also be a learner: staff, mentors and other managers stay with the site team.
+
+It refuses everyone, the site team included, for themselves and for a missing or deleted
+user, with the same message as any other refusal. The facts about the person come from
+`local_ltuse_organisation_person_facts()`, which spec 002's organisation pages also use.
+
+**Picker**: members of the hidden system cohort `ltct:mentors` only, which the site team fills
+(`moodle/site/organisations.yaml`), never a site-wide user search. It leaves out the learner,
+their existing mentors, and deleted or suspended accounts. An Add or Remove names a mentor
+the page would itself offer, or it is refused.
+
+**Writes**: after a confirmation, as a POST with the sesskey, `role_assign()` or
+`role_unassign()` of `mentor` in the learner's user context. Neither checks a capability, so
+the decision is the only gate. Core's `role_assigned` and `role_unassigned` events record the
+viewer as the actor, and the observers above add or remove the message contacts.
+
+**Raw reads added by Phase B**, both read-only:
+
+| Table | Read by | Indexed? | Why there is no API |
+|---|---|---|---|
+| `cohort` | `idnumber = 'ltct:mentors'`, `contextid` (system) | no (`cohort.idnumber`) | No cohort API looks a cohort up by idnumber. One query per request, cached. |
+| `cohort_members` joined to `user` | `cm.cohortid`; `u.deleted = 0`, `u.suspended = 0` | `cohort_members.cohortid` is | Core has no function that lists one cohort's members. |
+
+Membership of `ltct:mentors` for one person is `cohort_is_member()`.
+
+## Managers and their own people (spec 002, 2026-10-02)
+
+Shared courses are open across organisations, so an organisation manager is not enrolled with
+their people and core gives them nothing for them. This plugin gives a manager one page and a
+few actions over their own learners, all decided by one pure, tested class.
+
+| Piece | Where | Does |
+|---|---|---|
+| The decision | `classes/organisation/access.php` (pure), `tests/org_access_harness.php` | `is_org_member_of_manager()`: the person's `ltct_org` is a key the viewer manages and the person is in that key's member cohort. `may_manage_account()`: that, and the person is a learner (not a site admin, course contact, system or category role holder, manager or `ltct:mentors` member, nor deleted). The per-action rules `may_enrol_into()` and `may_unenrol_from()`, and `is_placement_category()` for `place_course`. |
+| The facts | `classes/organisation/people.php`, `lib.php` | `people::facts()` gathers the decision's inputs through `local_ltuse_organisation_person_facts()`; actions read them afresh (`$reload`) before every write. `for_manager()` lists each managed organisation's people with email, courses and completion (`mentoring::courses()`, the Mentoring page's reading). |
+| The page | `organisation.php`, `templates/organisation.mustache` | Managers-cohort members only. Per learner: enrol, unenrol, a password reset link, suspend, reactivate, and a link to `mentors.php?userid=` (spec 003). Each opens a confirmation that says what it does; only the confirmed POST, with a sesskey, writes. |
+| The actions | `classes/organisation/actions.php` | Every method acts as the signed-in user and re-checks `may_manage_account()` and its own rule; none of the core calls below checks a capability. |
+| User menu | `db/hooks.php`, `classes/hook_callbacks.php` `user_menu()` | "My organisation", through `\core_user\hook\extend_user_menu`, for managers-cohort members only. |
+| Contacts and leavers | `classes/organisation/contacts.php`, `classes/observer.php`, `db/events.php`, table `local_ltuse_org_contact`, `classes/task/reconcile_org_contacts.php` | On `cohort_member_added` to `ltct:org:<key>` or its managers cohort, managers and members become message contacts, recorded as spec 003 records mentors'. On `cohort_member_removed`, only the contacts this plugin made go, and only when no other organisation or mentoring links the pair; a person leaving a member cohort has their organisation-enrolment enrolments in that organisation's `ltct:org:<key>` courses suspended (shared courses stand). The hourly task repairs both ways, for changes that fire no event. Counts only. |
+| Placement | `classes/external/place_course.php`, `classes/siteconfig/inspector.php`, `drift.php` | See [Course discussions](#course-discussions-spec-012) and the function table. |
+| Privacy | `classes/privacy/provider.php` | Declares, exports and deletes `local_ltuse_org_contact` rows in each person's user context, removing the contact each stands for. |
+| Migration | `cli/open_courses.php` | One-off: `--dry-run` (default) or `--execute`. For every `ltct:` course it sets each cohort sync's group to none, deletes the organisation groups, and, outside the `ltct:org:*` categories, deletes managers-cohort syncs. Counts only, idempotent. Run `site_config.py apply` after it for course and forum group modes (R13). |
+
+**The organisation-enrolment instance.** A manager enrols through a separate instance of core's
+`enrol_self` in each course, made on first use and found by `customchar1 = ltct:orgenrol`:
+named "Organisation enrolment", new self-enrolments off (`customint6 = 0`), a random key, no
+welcome message, no inactivity unenrolment, no expiry, role Student. It is never the manual
+(pilot) instance, so spec 004 tells it from pilots by method. `enrol_self` must stay enabled
+site-wide: an enrolment through a disabled plugin is inactive, and `enrol()` refuses then.
+
+**Core APIs this adds**, each confirmed on `MOODLE_502_STABLE` (research R10-R13):
+
+- `enrol_get_plugin('self')->add_instance()` (`enrol/self/lib.php:1145`, `lib/enrollib.php:2601`), `enrol_plugin::enrol_user()` (`:2112`), `unenrol_user()` (`:2294`), `update_user_enrol()` (`:2214`), `enrol_is_enabled()` (`:205`);
+- `core_login_process_password_reset($username, '')` (`login/lib.php:84`). It prints nothing, applies every guard itself (auth that can reset, `moodle/user:changeownpassword`, confirmed, not suspended, reuse or expiry of a live reset within `$CFG->pwresettime`), emails only the account's own address, and returns a status the page maps (`actions::reset_outcome()`). It reads and writes `user_password_resets` itself, so this plugin never touches that table, which has no public API;
+- `\core\session\manager::destroy_user_sessions()` (`lib/classes/session/manager.php:985`) then `user_update_user()` with a minimal `{id, suspended}` (`user/lib.php:156`), as `admin/user.php:127-138` does;
+- `get_user_roles()` (`lib/accesslib.php:3097`) over `core_course_category::get_all()` (`course/classes/category.php:370`), `is_siteadmin()`, `cohort_is_member()` (`cohort/lib.php:239`);
+- `\core_message\api::is_contact()`, `add_contact()`, `get_contact()`, `remove_contact()` (`message/classes/api.php:2242-2360`), as spec 003 uses them;
+- `move_courses()` (`course/lib.php:1548`), which fires `course_updated` and hides a course moved into a hidden category;
+- `\core_user\hook\extend_user_menu` (`user/classes/hook/extend_user_menu.php`), dispatched from `user_get_user_navigation_info()` (`user/lib.php:970`).
+
+**5.3 note.** `user_update_user()` is deprecated on `main` for 5.3 (MDL-82650) in favour of
+`\core\user::update_user()`. It is current in 5.2 and sits in one method,
+`actions::write_suspended()`. Spec 016 relies on the `before_user_updated` hook it dispatches,
+so both specs' user writes move to the 5.3 API together, once 016's hook test passes on it.
+
+**Raw reads added by the amendment.** None is a write; the only table written is this plugin's
+own.
+
+| Table | Read by | Indexed? | Why there is no API |
+|---|---|---|---|
+| `cohort` | `idnumber`, `contextid` (`ltct:org:%`, `ltct:mentors`) | `cohort.idnumber` is not (Principle XI exception) | `cohort_get_cohort()` takes an id, and `cohort_get_user_cohorts()` skips hidden cohorts; every organisation cohort is hidden. |
+| `cohort_members` | `cohortid`; `userid` | both are | Core has no function that lists one cohort's members. |
+| `course_categories` | `idnumber` (`ltct:published`, `ltct:org:<key>`) | not indexed (Principle XI exception) | No core function finds a category by `idnumber`; `core_course_get_categories` by idnumber needs `moodle/category:manage` at system context. |
+| `course` joined to `course_categories` | `c.idnumber LIKE 'ltct:%'` | `course.idnumber` is | The courses a manager may enrol into, and placement drift. |
+| `enrol` | `courseid`, `enrol = self`, `customchar1` | `courseid` is | Finding the organisation-enrolment instance by its marker; `enrol_get_instances()` has no filter. |
+| `user_enrolments` joined to `enrol` | `ue.userid`; `ue.enrolid`, `status` | both are | Which courses a person is enrolled in through that instance, and active enrolments to suspend. |
+| `role_assignments` joined to `context` and `role` | `ra.userid`; `contextlevel = CONTEXT_COURSE`, `r.shortname <> 'student'` | `ra.userid` is | Whether a person is staff, so not a manager's to manage: any role but student in any course. `get_user_roles()` takes one context, and `has_coursecontact_role()` sees only `$CFG->coursecontact` (teachers by default). |
+
 ## Events and office hours (spec 011)
 
 Core's calendar does the rest of spec 011: event levels, export, the app's calendar, and the
@@ -584,37 +738,35 @@ each is re-checked as stated.
 ## Identity protection (spec 016)
 
 Some learners need to take part under less of their identity: email hidden, first name only,
-or a pseudonym, for one person or as an organisation's minimum. Moodle 5.2 has no hook into
+or a pseudonym. Protection is per person, only for someone who asks; no organisation sets a
+minimum for its members (Doug, 2026-10-05 (scope review)). Moodle 5.2 has no hook into
 `fullname()`, and every view renders names live from the user record, so this plugin writes
 the protected display into the account itself and keeps the real values in its own table
-(research R1, R5). **Who is protected, their pseudonym, their real identity and every
-organisation's minimum are Moodle data, never the repo's.** Not yet run on a server; quickstart
-V1–V17 are the instance checks.
+(research R1, R5). **Who is protected, their pseudonym and their real identity are Moodle
+data, never the repo's.** Not yet run on a server; quickstart V1–V17 are the instance checks.
 
 | Piece | Where | Does |
 |---|---|---|
-| Rules | `classes/protection/levels.php` (pure, `tests/protection_harness.php`) | The four levels, effective level, the withheld fields per level, pseudonym and username rules (NFC and case folding), the member-cohort match, and which courses count for a course mentor. |
-| Entitlement | `classes/protection/entitlement.php` | `can_view_identity()`: the site team, an assigned mentor, a course mentor in an `ltct:<slug>` course the learner takes (never `ltct:officehours`), and a manager of the learner's own organisation unless it withholds. `can_manage_protection()`, `marker()`. Every surface asks it; none checks a capability alone. |
-| Service | `classes/protection/service.php` | The one place a level is applied: `set_protection()`, `set_org_protection()`, `apply()`, `effective_level()`, `is_settled()`, `level_available()`, `real_identity()`. Each write runs under a per-user lock and one transaction, with the user in a private bypass set the hook and observers skip. It snapshots each newly withheld field, rewrites the account through `user_update_user()` and `profile_save_data()`, deletes the picture at `firstname`+, logs, purges `core/coursecontacts`, re-saves office-hours slots and sends `protectionchanged`. It never lowers anyone automatically. |
-| Enforcement | `classes/protection/hook_callbacks.php`, `classes/protection/observer.php`, `classes/task/apply_protection.php`, `classes/task/reconcile_protection.php` | `before_user_updated` re-applies the protected values on every `user_update_user()`. Observers catch account creation, profile saves, organisation cohort joins (priority 1000, before cohort sync enrols) and leaves, and deletion. The hourly task repairs the rest and fills `ltct_certname` for everyone; its log has counts only. |
-| Surfaces | `lib.php` (profile node), `classes/mentoring.php` and its templates, `protected.php`, `protection.php`, `orgprotection.php`, `classes/protection/surfaces.php` | The real identity and the **Protected** marker appear only here, only to the entitled: the profile, the Mentoring page (web and app), "People I support" with a CSV, and the granting pages. A non-entitled viewer never sees the marker. |
-| Web services | `local_ltuse_set_protection`, `local_ltuse_set_org_protection` | The granting pages' logic for scripts and spec 008. Not in the publishing service. Never return a real identity. |
-| Site config | `classes/siteconfig/protection.php` | `apply` stores `protection.yaml` in `local_ltuse/protection`; `drift` reports counts only (accounts awaiting repair, usernames still built from a name). |
-| Privacy | `classes/privacy/provider.php` | The three tables: a user's own rows in full, changes they made to others as a count and dates, deletion shared with the `user_deleted` observer. |
+| Rules | `classes/protection/levels.php` (pure, `tests/protection_harness.php`) | The four levels, the withheld fields per level, pseudonym and username rules (NFC and case folding), the email-address warning, what a manager who is not the site team may change, and which courses count for a course mentor. Every level is available once `protection.yaml` is stored: the organisation stays visible at every level (decision 2, option a). |
+| Entitlement | `classes/protection/entitlement.php` | `can_view_identity()`: the site team, an assigned mentor, a course mentor in an `ltct:<slug>` course the learner takes (never `ltct:officehours`) whose own group there, `ltct:mentorgroup:<mentor id>` (spec 008), holds the learner, and a manager of the learner's own organisation. `can_manage_protection()`, `is_site_team()`, `may_be_entitled()` (the cheap test before "People I support"), `marker()`. Every surface asks it; none checks a capability alone. |
+| Service | `classes/protection/service.php` | The one place a level is applied: `set_protection()`, `apply()` (a repair at the level already set), `effective_level()`, `is_settled()`, `level_available()`, `real_identity()`, `email_warnings()`, `picture_levels()` (the granting page's warning before a picture is deleted), `neutral_username()`, `sync_log_blocks()`. A raise needs `requested` (the person asked) and `emailchecked` (the address identifies neither them nor their organisation), and the log row records both. Anyone but the site team grants only at intake: a raise, before any activity (`user.firstaccess`, or an enrolment), with no correction. At `firstname`+ a username that holds the real name becomes `ltc-` and 8 base32 characters, spec 008's `intake_service::new_username()` format; the person still signs in with their email. Each write runs under a per-user lock and one transaction, with the user in a private bypass set the hook and observer skip. It snapshots each newly withheld field, rewrites the account through `user_update_user()` and `profile_save_data()`, deletes the picture at `firstname`+, keeps the account on a site login (`auth` `manual` or `nologin`, no `auth_oauth2` linked login, R3), logs, purges `core/coursecontacts`, re-saves office-hours slots and sends `protectionchanged`. It never lowers anyone automatically. A person who asks for their location to be hidden (`hidelogs`) gets `editingteacher` and `teacher` prohibited `report/log:view`, `report/log:viewtoday` and `report/loglive:view` in each course they are enrolled in, through `assign_capability()`; this plugin owns those course-level prohibits, so one set by hand where nobody asked is removed (R14). |
+| Enforcement | `classes/protection/hook_callbacks.php`, `classes/protection/observer.php`, `classes/task/apply_protection.php`, `classes/task/reconcile_protection.php` | `before_user_updated` re-applies the protected values and the site login on every `user_update_user()`, and never throws: a failure goes to `debugging()`. The `user_updated` observer returns at once for anyone with no protection row and re-applies a protected account that drifted; `user_deleted` runs the shared deletion. The hourly task reads only the protected rows, does nothing when there are none, repairs drift (a non-site login and linked logins included), brings the course-log block into line with the courses of those who asked, and fails the run when any repair fails, so core's failed-task handling flags it; its log has counts only. |
+| Surfaces | `lib.php` (profile node), `classes/mentoring.php` and its templates, `protected.php`, `protection.php`, `classes/protection/surfaces.php` | The real identity and the **Protected** marker appear only here, only to the entitled: the profile, the Mentoring page (web and app), "People I support" (no download), and the granting page. A non-entitled viewer never sees the marker. The profile section appears only on a protected person's profile, and on your own only when you are protected or support someone who is; a first grant is made at intake, so an unprotected profile has no granting link. |
+| Web services | `local_ltuse_set_protection` | The granting page's logic for scripts and spec 008. `requested` is a required parameter; `emailchecked` is needed for a raise. Not in the publishing service. Never returns a real identity. |
+| Site config | `classes/siteconfig/protection.php` | `apply` stores `protection.yaml` in `local_ltuse/protection`; `drift` reports a count only (accounts awaiting repair). |
+| Privacy | `classes/privacy/provider.php` | The two tables: a user's own rows in full, changes they made to others as a count and dates, deletion shared with the `user_deleted` observer. |
 
 **Principle XI exceptions added by spec 016.** Each is the only route to the behaviour.
 
 | Exception | Why | Re-checked by |
 |---|---|---|
-| Mutating the object `before_user_updated` carries. The hook is a notification; the change persists because `user_update_user()` keeps using the same object after dispatch (`user/lib.php`, `MOODLE_502_STABLE`). | No 5.2 hook overrides a display name, and every view renders from the record (R1, R2). | `tests/protection_test.php` `test_the_hook_reapplies_the_protected_record`, and quickstart V7 on every core upgrade |
+| Mutating the object `before_user_updated` carries. The hook is a notification; the change persists because `user_update_user()` keeps using the same object after dispatch (`user/lib.php`, `MOODLE_502_STABLE`). | No 5.2 hook overrides a display name, and every view renders from the record (R1, R2). | `tests/protection_test.php` `test_the_hook_reapplies_the_protected_record`, and quickstart V7 on every core upgrade while anyone is protected. `user_update_user()`, which dispatches it, is deprecated for 5.3 (MDL-82650): re-check the hook on the 5.3 API before widening `$plugin->supported` |
 | `mod_scheduler`'s `\mod_scheduler\model\slot::load_by_id()->save()` to re-save a protected user's future slots, which re-runs its private `update_calendar()` and renames the calendar events it names from `fullname()`. | The scheduler stores names in `{event}.name`; nothing else rewrites them (R15). Re-saving changes no time, so spec 011's booking notice stays silent. | Quickstart V17 on every scheduler re-pin |
-| Reading `logstore_standard_log` (`userid`, `crud`, `eventname`) and `messages` (`useridfrom`) to decide whether a user "has activity". | A rename links earlier activity to the new name, so a change needs an acknowledgement only when there is some (R13). No API answers "has this user done anything". | Quickstart V12 |
 
-**Raw reads added by spec 016**, all by indexed columns: `user_info_data` joined to
-`user_info_field` by `shortname` (an organisation's members by `ltct_org`), `cohort` and
-`cohort_members` by `idnumber` (an organisation's member cohort), `scheduler_slots` and
-`scheduler_appointment` by `teacherid` and `studentid`, and `user_info_field.param1` for the
-declared organisation keys.
+**Raw reads added by spec 016**: `user_info_field` (`shortname`, `datatype`, every row, a few
+dozen) to blank the withheld profile fields, and, by indexed columns, `scheduler_slots` and
+`scheduler_appointment` by `teacherid` and `studentid`, and `user` by its unique
+(`mnethostid`, `username`) index to keep a generated username unused, as spec 008's intake does. For the course-log block: `user_enrolments` joined to `enrol` for the courses of the protected rows with `hidelogs`, and `role_capabilities` joined to `context` for the course-level prohibits of the three log capabilities. Linked logins are read and deleted through `\auth_oauth2\linked_login`, never the table.
 
 ## Verified against Moodle 5.2.3+ (2026-09-29)
 

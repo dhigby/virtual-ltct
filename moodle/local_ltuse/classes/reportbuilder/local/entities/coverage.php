@@ -9,6 +9,7 @@ use core_reportbuilder\local\entities\base;
 use core_reportbuilder\local\helpers\database;
 use core_reportbuilder\local\report\column;
 use lang_string;
+use local_ltuse\organisation\access;
 
 /**
  * Five counts per competency, each one correlated subquery on competencyid = {c}.id.
@@ -22,17 +23,20 @@ use lang_string;
  * WHAT COUNTS AS DELIVERY is fixed here, in our SQL, not in a report condition, so nobody
  * can widen it by editing the report:
  *  - a course counts only if it exists and its idnumber starts with ltct: (the publisher's);
- *  - delivery is an enabled (status 0) cohort-sync instance, enrol = 'cohort', whose role
- *    is the one with shortname 'student', looked up by shortname and never by id. That
- *    leaves out each organisation's managers cohort, synced as orgmanager (002 R2), and
- *    every manual enrolment, which is how pilots are enrolled (R10, FR-012);
+ *  - delivery is an enabled (status 0) instance whose role is the one with shortname
+ *    'student', looked up by shortname and never by id, and that is either cohort sync
+ *    (enrol = 'cohort') or the course's organisation-enrolment instance, through which a
+ *    manager enrols their own learners (enrol = 'self' and customchar1 =
+ *    access::ENROL_MARKER, spec 002 R10). That leaves out each organisation's managers
+ *    cohort, synced as orgmanager (002 R2), any other self-enrolment, and every manual
+ *    enrolment, which is how pilots are enrolled (R10, FR-012);
  *  - enrolments are active (ue.status 0) user enrolments on those instances, of users not
  *    deleted. They are enrolments, not people: one learner in two cohorts, or in two
  *    courses aiming at one competency, counts twice. Learners counts the same rows by
  *    distinct user;
  *  - completions are course_completions rows with timecompleted set, in a mapped course,
- *    for a user holding a cohort/student enrolment in that course in any status. EXISTS,
- *    not a join, so a learner in two cohorts still counts once.
+ *    for a user holding a delivery enrolment in that course in any status. EXISTS, not a
+ *    join, so a learner in two cohorts still counts once.
  *
  * No column shows a level or names a person or a course (Principle V, FR-013). No column
  * can be aggregated: each is already a count, and grouping would separate the subquery
@@ -79,18 +83,21 @@ class coverage extends base {
     }
 
     /**
-     * SQL matching an enrol instance that is cohort sync with the student role.
+     * SQL matching a delivery enrol instance: the student role, and either cohort sync or the
+     * organisation-enrolment instance. Never manual, so never a pilot.
      *
      * @param string $e the enrol table alias
      * @param bool $enabledonly whether the instance must also be enabled
      * @return array [string $sql, array $params]
      */
-    private static function student_cohort_instance(string $e, bool $enabledonly): array {
+    private static function delivery_instance(string $e, bool $enabledonly): array {
         $r = database::generate_alias();
-        [$pcohort, $pstudent, $penabled] = database::generate_param_names(3);
-        $sql = "{$e}.enrol = :{$pcohort}
+        [$pcohort, $pself, $pmarker, $pstudent, $penabled] = database::generate_param_names(5);
+        $sql = "({$e}.enrol = :{$pcohort}
+                 OR ({$e}.enrol = :{$pself} AND {$e}.customchar1 = :{$pmarker}))
                 AND {$e}.roleid IN (SELECT {$r}.id FROM {role} {$r} WHERE {$r}.shortname = :{$pstudent})";
-        $params = [$pcohort => 'cohort', $pstudent => 'student'];
+        $params = [$pcohort => 'cohort', $pself => access::ENROL_PLUGIN, $pmarker => access::ENROL_MARKER,
+            $pstudent => 'student'];
         if ($enabledonly) {
             $sql .= " AND {$e}.status = :{$penabled}";
             $params[$penabled] = ENROL_INSTANCE_ENABLED;
@@ -133,10 +140,10 @@ class coverage extends base {
         [$from, $where, $params] = self::mapped_courses($c, $m, $co);
         $columns[] = $this->count_column('courses', "SELECT COUNT(1) FROM {$from} WHERE {$where}", $params);
 
-        // Of which in delivery: an enabled cohort-sync instance with the student role.
+        // Of which in delivery: an enabled delivery instance with the student role.
         [$m, $co, $e] = database::generate_aliases(3);
         [$from, $where, $params] = self::mapped_courses($c, $m, $co);
-        [$inst, $instparams] = self::student_cohort_instance($e, true);
+        [$inst, $instparams] = self::delivery_instance($e, true);
         $columns[] = $this->count_column('indelivery',
             "SELECT COUNT(1) FROM {$from}
               WHERE {$where}
@@ -147,7 +154,7 @@ class coverage extends base {
         foreach (['enrolments' => 'COUNT(1)', 'learners' => 'COUNT(DISTINCT %s.userid)'] as $name => $count) {
             [$m, $co, $e, $ue, $u] = database::generate_aliases(5);
             [$from, $where, $params] = self::mapped_courses($c, $m, $co);
-            [$inst, $instparams] = self::student_cohort_instance($e, true);
+            [$inst, $instparams] = self::delivery_instance($e, true);
             [$pactive, $pnotdeleted] = database::generate_param_names(2);
             $select = sprintf($count, $ue);
             $columns[] = $this->count_column($name,
@@ -165,7 +172,7 @@ class coverage extends base {
         // Delivery course completions: in any enrolment status, counted once per row.
         [$m, $co, $cc, $e, $ue] = database::generate_aliases(5);
         [$from, $where, $params] = self::mapped_courses($c, $m, $co);
-        [$inst, $instparams] = self::student_cohort_instance($e, false);
+        [$inst, $instparams] = self::delivery_instance($e, false);
         $columns[] = $this->count_column('completions',
             "SELECT COUNT(1) FROM {$from}
                JOIN {course_completions} {$cc} ON {$cc}.course = {$co}.id

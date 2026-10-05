@@ -219,6 +219,8 @@ class mentoring {
             'gradesurl' => (new moodle_url('/grade/report/overview/index.php',
                 ['id' => SITEID, 'userid' => $learner->id]))->out(false),
             'messageurl' => (new moodle_url('/message/index.php', ['id' => $learner->id]))->out(false),
+            // Spec 006 (US4): the learner's pathways, behind pathway\viewer::may_view().
+            'pathwaysurl' => (new moodle_url('/local/ltuse/pathways.php', ['userid' => $learner->id]))->out(false),
             'courses' => $courses,
             'hascourses' => !empty($courses),
         ];
@@ -227,11 +229,13 @@ class mentoring {
     /**
      * A learner's courses with their status: every course they are enrolled in, active or
      * suspended, and every course they completed even if the enrolment is gone (FR-004).
+     * Public for spec 002's organisation page (organisation\people), so both pages show a
+     * learner's progress the same way.
      *
      * @param int $learnerid
      * @return array[]
      */
-    protected static function courses(int $learnerid): array {
+    public static function courses(int $learnerid): array {
         global $CFG, $DB;
         require_once($CFG->libdir . '/completionlib.php');
 

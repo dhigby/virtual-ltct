@@ -93,6 +93,9 @@ A report template in `reports.yaml`. One template becomes one Moodle report, or 
 | `why` | string | Required. |
 
 **Validation rules** (`validate`):
+
+> **Amended by spec 016 decision 2 option (a) (Doug, 2026-10-05 (scope review)):** the scope condition is `cohort:idnumber = ltct:org:{org}`, a text condition; the Organisation column is dropped; `validate` refuses `user:profilefield_ltct_org` conditions. The two rules below are kept as written for the record; read `cohort:idnumber` for `user:profilefield_ltct_org`, and the select-filter rule for the two remaining select conditions only.
+
 - A `per: organisation` report has, verbatim, the conditions `user:profilefield_ltct_org = {org}`, `role:name = student` and `enrol:plugin = cohort`, and exactly one audience, `cohortmember ltct:org:{org}:managers`. A missing one is a hard failure: it is the scope (FR-005).
 - All three scoping conditions are select filters, and a select whose value is not among its options produces no SQL and is silently skipped (MDL-84213), which would widen the report to every participant. So the stored values are what the options are keyed by: `role:name` is the student role's **id**, resolved by shortname at apply; `enrol:plugin` is `cohort`, which must be an enabled enrol plugin; `user:profilefield_ltct_org` is the organisation key, which must be one of the field's menu options. `apply` and `drift` build each scoping condition's filter and require `get_sql_filter($values)[0] !== ''`. If one is empty (student role missing, `enrol_cohort` disabled, the key not an `ltct_org` option), that report fails hard.
 - No report has an `allusers` audience.

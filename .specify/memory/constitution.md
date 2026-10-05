@@ -41,9 +41,9 @@ output is hand-edited becomes a liar.
   A setting clicked into the admin UI and not captured there is not done. The test: a new
   server can be rebuilt from the repo plus a data restore.
 - Learner data MUST be exportable.
-- Configuration whose publication would identify at-risk people (the country-to-Area map,
-  organisation protection minimums) is held as Moodle data, not declared in the repo. It is
-  recovered by the data restore, so backups MUST include it.
+- Configuration whose publication would identify at-risk people (the country-to-Area map) is
+  held as Moodle data, not declared in the repo. It is recovered by the data restore, so
+  backups MUST include it.
 - Prefer the reversible choice when two designs are otherwise equal.
 
 *Rationale:* the markdown is the asset; any renderer or LMS is replaceable, and leaving a
@@ -299,7 +299,12 @@ is exactly the kind of work this team cannot absorb.
   it touches; NON-NEGOTIABLE principles (III, IV) admit no exception. Complexity or a special
   case must be justified in writing, in the spec or the PR.
 
-**Version**: 2.1.0 | **Ratified**: 2026-09-30 | **Last Amended**: 2026-10-03
+**Version**: 2.1.1 | **Ratified**: 2026-09-30 | **Last Amended**: 2026-10-05
+
+*2.1.1 — wording only: Principle II's example of at-risk configuration no longer names
+organisation protection minimums, which spec 016's scope review removed (Doug, 2026-10-05
+(scope review), change 9). PATCH, because no rule changes; the maintainer confirms the
+version level in the spec 016 pull request.*
 
 *2.1.0 — follows the parts of the 2026-10-03 `INTENT.md` decision "Learners ask; Area LT
 Coordinators add them" that Doug decided: an Area is an organisation entry and replaces SIL as

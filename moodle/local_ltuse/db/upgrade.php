@@ -115,21 +115,123 @@ function xmldb_local_ltuse_upgrade($oldversion) {
         upgrade_plugin_savepoint(true, 2026100400, 'local', 'ltuse');
     }
 
-    // Identity protection (spec 016, research R5, R12): a protected user's real identity, each
-    // organisation's minimum level, and the change log. All three are Moodle data, never the
-    // repo's. Then ltct_certname, the certificate's name field, is filled for every existing
-    // user (R10), so no learner's certificate prints the field's label instead of a name.
-    if ($oldversion < 2026100500) {
+    // Learning pathways (spec 006): slug and url on each competency, so a competency pathway
+    // has a key and a link to its page on the competency site; each published course's
+    // pathway facts; role pathways and their competencies; and pathway-to-cohort assignments,
+    // the seam with spec 008. Only local_ltuse_pathway_cohort touches a user (usermodified).
+    if ($oldversion < 2026100600) {
+        $table = new xmldb_table('local_ltuse_competency');
+        $field = new xmldb_field('slug', XMLDB_TYPE_CHAR, '100', null, XMLDB_NOTNULL, null, null, 'timemodified');
+        if (!$dbman->field_exists($table, $field)) {
+            $dbman->add_field($table, $field);
+        }
+        $field = new xmldb_field('url', XMLDB_TYPE_CHAR, '255', null, XMLDB_NOTNULL, null, null, 'slug');
+        if (!$dbman->field_exists($table, $field)) {
+            $dbman->add_field($table, $field);
+        }
+        $index = new xmldb_index('slug', XMLDB_INDEX_NOTUNIQUE, ['slug']);
+        if (!$dbman->index_exists($table, $index)) {
+            $dbman->add_index($table, $index);
+        }
+
+        $table = new xmldb_table('local_ltuse_course_pathway');
+        $table->add_field('id', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, XMLDB_SEQUENCE, null);
+        $table->add_field('courseid', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, null);
+        $table->add_field('delivery', XMLDB_TYPE_INTEGER, '1', null, XMLDB_NOTNULL, null, '0');
+        $table->add_field('targetlevel', XMLDB_TYPE_INTEGER, '1', null, XMLDB_NOTNULL, null, '0');
+        $table->add_field('pathwaykeys', XMLDB_TYPE_TEXT, null, null, null, null, null);
+        $table->add_field('timemodified', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, '0');
+        $table->add_key('primary', XMLDB_KEY_PRIMARY, ['id']);
+        $table->add_key('courseid', XMLDB_KEY_FOREIGN_UNIQUE, ['courseid'], 'course', ['id']);
+        if (!$dbman->table_exists($table)) {
+            $dbman->create_table($table);
+        }
+
+        $table = new xmldb_table('local_ltuse_role_pathway');
+        $table->add_field('id', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, XMLDB_SEQUENCE, null);
+        $table->add_field('rolekey', XMLDB_TYPE_CHAR, '95', null, XMLDB_NOTNULL, null, null);
+        $table->add_field('name', XMLDB_TYPE_CHAR, '255', null, XMLDB_NOTNULL, null, null);
+        $table->add_field('description', XMLDB_TYPE_TEXT, null, null, null, null, null);
+        $table->add_field('sortorder', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, '0');
+        $table->add_field('retired', XMLDB_TYPE_INTEGER, '1', null, XMLDB_NOTNULL, null, '0');
+        $table->add_field('timemodified', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, '0');
+        $table->add_key('primary', XMLDB_KEY_PRIMARY, ['id']);
+        $table->add_index('rolekey', XMLDB_INDEX_UNIQUE, ['rolekey']);
+        if (!$dbman->table_exists($table)) {
+            $dbman->create_table($table);
+        }
+
+        $table = new xmldb_table('local_ltuse_role_pathway_comp');
+        $table->add_field('id', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, XMLDB_SEQUENCE, null);
+        $table->add_field('roleid', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, null);
+        $table->add_field('competencyid', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, null);
+        $table->add_field('sortorder', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, '0');
+        $table->add_key('primary', XMLDB_KEY_PRIMARY, ['id']);
+        $table->add_key('roleid', XMLDB_KEY_FOREIGN, ['roleid'], 'local_ltuse_role_pathway', ['id']);
+        $table->add_key('competencyid', XMLDB_KEY_FOREIGN, ['competencyid'], 'local_ltuse_competency', ['id']);
+        $table->add_index('roleid-competencyid', XMLDB_INDEX_UNIQUE, ['roleid', 'competencyid']);
+        if (!$dbman->table_exists($table)) {
+            $dbman->create_table($table);
+        }
+
+        $table = new xmldb_table('local_ltuse_pathway_cohort');
+        $table->add_field('id', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, XMLDB_SEQUENCE, null);
+        $table->add_field('pathwaykey', XMLDB_TYPE_CHAR, '100', null, XMLDB_NOTNULL, null, null);
+        $table->add_field('cohortid', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, null);
+        $table->add_field('enrol', XMLDB_TYPE_INTEGER, '1', null, XMLDB_NOTNULL, null, '0');
+        $table->add_field('usermodified', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, null);
+        $table->add_field('timecreated', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, '0');
+        $table->add_field('timemodified', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, '0');
+        $table->add_key('primary', XMLDB_KEY_PRIMARY, ['id']);
+        $table->add_key('cohortid', XMLDB_KEY_FOREIGN, ['cohortid'], 'cohort', ['id']);
+        $table->add_key('usermodified', XMLDB_KEY_FOREIGN, ['usermodified'], 'user', ['id']);
+        $table->add_index('pathwaykey-cohortid', XMLDB_INDEX_UNIQUE, ['pathwaykey', 'cohortid']);
+        if (!$dbman->table_exists($table)) {
+            $dbman->create_table($table);
+        }
+
+        upgrade_plugin_savepoint(true, 2026100600, 'local', 'ltuse');
+    }
+
+    // Open courses, managers' own people (spec 002 amendment 2026-10-02, research R12): the
+    // message contacts this plugin makes between an organisation's managers and its people, so
+    // a leave removes only those.
+    if ($oldversion < 2026100602) {
+        $table = new xmldb_table('local_ltuse_org_contact');
+        $table->add_field('id', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, XMLDB_SEQUENCE, null);
+        $table->add_field('managerid', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, null);
+        $table->add_field('memberid', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, null);
+        $table->add_field('contactid', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, '0');
+        $table->add_field('timecreated', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, '0');
+        $table->add_key('primary', XMLDB_KEY_PRIMARY, ['id']);
+        $table->add_key('managerid', XMLDB_KEY_FOREIGN, ['managerid'], 'user', ['id']);
+        $table->add_key('memberid', XMLDB_KEY_FOREIGN, ['memberid'], 'user', ['id']);
+        $table->add_index('managermember', XMLDB_INDEX_UNIQUE, ['managerid', 'memberid']);
+        if (!$dbman->table_exists($table)) {
+            $dbman->create_table($table);
+        }
+
+        upgrade_plugin_savepoint(true, 2026100602, 'local', 'ltuse');
+    }
+
+    // Identity protection (spec 016, research R5): a protected user's real identity and the
+    // change log, both Moodle data, never the repo's. Protection is per person (Doug,
+    // 2026-10-05 (scope review)), so an earlier 016 build's organisation table and the
+    // protection row's source column are dropped where they exist; every step here checks
+    // first, so it runs cleanly on a fresh site and on a test site that had that build. That
+    // build is PR #84's, at stamp 2026100500, below this one, so this step runs there; no
+    // build at 2026100900 without these steps was ever pushed.
+    if ($oldversion < 2026100900) {
         $table = new xmldb_table('local_ltuse_protection');
         $table->add_field('id', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, XMLDB_SEQUENCE, null);
         $table->add_field('userid', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, null);
         $table->add_field('ownlevel', XMLDB_TYPE_CHAR, '20', null, XMLDB_NOTNULL, null, 'none');
         $table->add_field('effectivelevel', XMLDB_TYPE_CHAR, '20', null, XMLDB_NOTNULL, null, 'none');
-        $table->add_field('source', XMLDB_TYPE_CHAR, '20', null, XMLDB_NOTNULL, null, 'own');
         $table->add_field('pseudonym', XMLDB_TYPE_CHAR, '100', null, XMLDB_NOTNULL, null, null);
         $table->add_field('realfirstname', XMLDB_TYPE_CHAR, '100', null, XMLDB_NOTNULL, null, null);
         $table->add_field('reallastname', XMLDB_TYPE_CHAR, '100', null, XMLDB_NOTNULL, null, null);
         $table->add_field('realfields', XMLDB_TYPE_TEXT, null, null, null, null, null);
+        $table->add_field('hidelogs', XMLDB_TYPE_INTEGER, '1', null, XMLDB_NOTNULL, null, '0');
         $table->add_field('timecreated', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, '0');
         $table->add_field('timemodified', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, '0');
         $table->add_field('usermodified', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, '0');
@@ -139,19 +241,19 @@ function xmldb_local_ltuse_upgrade($oldversion) {
         if (!$dbman->table_exists($table)) {
             $dbman->create_table($table);
         }
+        $field = new xmldb_field('source');
+        if ($dbman->field_exists($table, $field)) {
+            $dbman->drop_field($table, $field);
+        }
+        // Scope review change 5: the course-log block a protected person may ask for (R14).
+        $field = new xmldb_field('hidelogs', XMLDB_TYPE_INTEGER, '1', null, XMLDB_NOTNULL, null, '0', 'realfields');
+        if (!$dbman->field_exists($table, $field)) {
+            $dbman->add_field($table, $field);
+        }
 
         $table = new xmldb_table('local_ltuse_org_protection');
-        $table->add_field('id', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, XMLDB_SEQUENCE, null);
-        $table->add_field('orgkey', XMLDB_TYPE_CHAR, '30', null, XMLDB_NOTNULL, null, null);
-        $table->add_field('minlevel', XMLDB_TYPE_CHAR, '20', null, XMLDB_NOTNULL, null, 'none');
-        $table->add_field('managers_see_identity', XMLDB_TYPE_INTEGER, '1', null, XMLDB_NOTNULL, null, '1');
-        $table->add_field('timemodified', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, '0');
-        $table->add_field('usermodified', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, '0');
-        $table->add_key('primary', XMLDB_KEY_PRIMARY, ['id']);
-        $table->add_index('orgkey', XMLDB_INDEX_UNIQUE, ['orgkey']);
-        $table->add_index('usermodified', XMLDB_INDEX_NOTUNIQUE, ['usermodified']);
-        if (!$dbman->table_exists($table)) {
-            $dbman->create_table($table);
+        if ($dbman->table_exists($table)) {
+            $dbman->drop_table($table);
         }
 
         $table = new xmldb_table('local_ltuse_protection_log');
@@ -161,6 +263,8 @@ function xmldb_local_ltuse_upgrade($oldversion) {
         $table->add_field('fromlevel', XMLDB_TYPE_CHAR, '20', null, XMLDB_NOTNULL, null, 'none');
         $table->add_field('tolevel', XMLDB_TYPE_CHAR, '20', null, XMLDB_NOTNULL, null, 'none');
         $table->add_field('source', XMLDB_TYPE_CHAR, '20', null, XMLDB_NOTNULL, null, 'own');
+        $table->add_field('requested', XMLDB_TYPE_INTEGER, '1', null, XMLDB_NOTNULL, null, '0');
+        $table->add_field('emailchecked', XMLDB_TYPE_INTEGER, '1', null, XMLDB_NOTNULL, null, '0');
         $table->add_field('timecreated', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, '0');
         $table->add_key('primary', XMLDB_KEY_PRIMARY, ['id']);
         $table->add_index('userid', XMLDB_INDEX_NOTUNIQUE, ['userid']);
@@ -168,12 +272,16 @@ function xmldb_local_ltuse_upgrade($oldversion) {
         if (!$dbman->table_exists($table)) {
             $dbman->create_table($table);
         }
+        // Scope review changes 13 and 2: a raise records that the person asked and that the
+        // email was checked. Added where an earlier 016 build made the table without them.
+        foreach (['requested' => 'source', 'emailchecked' => 'requested'] as $name => $after) {
+            $field = new xmldb_field($name, XMLDB_TYPE_INTEGER, '1', null, XMLDB_NOTNULL, null, '0', $after);
+            if (!$dbman->field_exists($table, $field)) {
+                $dbman->add_field($table, $field);
+            }
+        }
 
-        // The field itself is made by site_config.py apply (profile-fields.yaml). Where it does
-        // not exist yet this fills nothing, and the reconcile task fills it once it does.
-        \local_ltuse\protection\service::backfill_certnames();
-
-        upgrade_plugin_savepoint(true, 2026100500, 'local', 'ltuse');
+        upgrade_plugin_savepoint(true, 2026100900, 'local', 'ltuse');
     }
 
     return true;

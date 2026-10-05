@@ -17,7 +17,7 @@ use context_user;
  * (spec 016, research R7; FR-006, FR-008).
  *
  * Every surface asks this class: the profile node, the Mentoring page and its app handler,
- * "People I support", the granting pages and both web services. None checks a capability
+ * "People I support", the granting page and the web service. None checks a capability
  * alone, because the organisation-manager path is not a capability.
  *
  * can_view_identity(V, P) holds when V is P, or when any of these holds:
@@ -25,21 +25,35 @@ use context_user;
  *   1  site team       local/ltuse:viewidentity at system context (manager archetype)
  *   2  mentor          local/ltuse:viewidentity in P's user context: the declared mentor role,
  *                      assigned there by spec 003, so it ends with the assignment
- *   3  own-org manager V is in ltct:org:<key>:managers, P's ltct_org is <key>, P is in
- *                      ltct:org:<key> (organisation\access::is_org_member_of_manager), and the
- *                      organisation has not withheld identity from its managers (R12)
+ *   3  own-org manager V is in ltct:org:<key>:managers, P's ltct_org is <key>, and P is in
+ *                      ltct:org:<key> (organisation\access::is_org_member_of_manager). No
+ *                      organisation withholds identity from its own managers: a person who does
+ *                      not trust them is placed under a neutral organisation entry with no
+ *                      managers (Doug, 2026-10-05 (scope review))
  *   4  course mentor   P is actively enrolled in an ltct:<slug> course, never ltct:officehours,
- *                      where V holds local/ltuse:viewidentity: the declared teacher role
- *                      ("Course mentor"). Ends with V's role or P's enrolment.
+ *                      where V holds local/ltuse:viewidentity (the declared teacher role,
+ *                      "Course mentor"), and P is in V's own mentor group there: the group
+ *                      with idnumber ltct:mentorgroup:<V's id>, which spec 008 keeps for the
+ *                      learners V assesses in that course. A course mentor of the same course
+ *                      who is not P's sees nothing (Doug, 2026-10-04, spec 008 plan decision
+ *                      11; kept by the scope review, change 22). Ends with V's role, P's
+ *                      enrolment or P's place in the group.
  *
  * can_manage_protection(V, P): local/ltuse:manageprotection in P's user context (the site
- * team), or path 3 without the withholding check: a manager manages their own people even when
- * the organisation withholds identity from them, and then sees only the protected display.
+ * team), or path 3: a manager manages their own people, and so also sees their real identity.
+ * A manager who is not the site team only grants at intake (is_site_team(),
+ * levels::manager_may(); scope review change 14).
  *
  * Read only. Decisions are cached for the request; a changed role, enrolment or cohort shows on
  * the next page load.
  */
 class entitlement {
+
+    /**
+     * A course mentor's group in a course, then their user id: the idnumber spec 008's
+     * admin\course_mentor_sync gives each one (its GROUP_PREFIX).
+     */
+    const MENTORGROUP_PREFIX = 'ltct:mentorgroup:';
 
     /** @var array<string, bool> can_view_identity results for this request, "viewer:user" */
     protected static $cache = [];
@@ -76,21 +90,23 @@ class entitlement {
         if ($viewerid <= 0 || $userid <= 0 || $viewerid === $userid) {
             return false;
         }
-        $context = context_user::instance($userid, IGNORE_MISSING);
-        if ($context && has_capability('local/ltuse:manageprotection', $context, $viewerid)) {
-            return true;
-        }
-        return self::manages_organisation_of($viewerid, $userid) !== null;
+        return self::is_site_team($viewerid, $userid) || self::manages_organisation_of($viewerid, $userid) !== null;
     }
 
     /**
-     * May the viewer set organisation minimums? The site team only (R12).
+     * Does the viewer change this user's protection as the site team: may they correct, lower,
+     * remove and raise after activity? local/ltuse:manageprotection in the user's context.
      *
      * @param int $viewerid
+     * @param int $userid
      * @return bool
      */
-    public static function can_manage_organisations(int $viewerid): bool {
-        return $viewerid > 0 && has_capability('local/ltuse:manageorgprotection', context_system::instance(), $viewerid);
+    public static function is_site_team(int $viewerid, int $userid): bool {
+        if ($viewerid <= 0 || $userid <= 0) {
+            return false;
+        }
+        $context = context_user::instance($userid, IGNORE_MISSING);
+        return $context && has_capability('local/ltuse:manageprotection', $context, $viewerid);
     }
 
     /**
@@ -108,6 +124,33 @@ class entitlement {
         }
         return \html_writer::span(get_string('protection:marker', 'local_ltuse'),
             'badge bg-warning text-dark local-ltuse-protected');
+    }
+
+    /**
+     * Could the viewer be entitled to anyone at all? A cheap test that is never false for an
+     * entitled viewer while viewidentity is held only through assigned roles, which validate
+     * enforces (manager, teacher and mentor, roles.yaml): a site admin, a manager of some
+     * organisation (path 3), or someone with a role assignment, in any context, of a role that
+     * allows local/ltuse:viewidentity anywhere (paths 1, 2 and 4). surfaces::supports_anyone() asks it before the per-person
+     * checks, so a learner's own profile costs a few small reads (scope review change 12).
+     * get_roles_with_capability() and user_has_role_assignment() are lib/accesslib.php's.
+     *
+     * @param int $viewerid
+     * @return bool
+     */
+    public static function may_be_entitled(int $viewerid): bool {
+        if ($viewerid <= 0) {
+            return false;
+        }
+        if (is_siteadmin($viewerid) || local_ltuse_managed_organisation_keys($viewerid)) {
+            return true;
+        }
+        foreach (get_roles_with_capability('local/ltuse:viewidentity', CAP_ALLOW) as $role) {
+            if (user_has_role_assignment($viewerid, (int)$role->id)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     /**
@@ -132,9 +175,8 @@ class entitlement {
         if ($context && has_capability('local/ltuse:viewidentity', $context, $viewerid)) {
             return true; // 2: an assigned mentor.
         }
-        $orgkey = self::manages_organisation_of($viewerid, $userid);
-        if ($orgkey !== null && service::managers_see_identity($orgkey)) {
-            return true; // 3: a manager of their own organisation, which does not withhold it.
+        if (self::manages_organisation_of($viewerid, $userid) !== null) {
+            return true; // 3: a manager of their own organisation.
         }
         return self::is_course_mentor_of($viewerid, $userid); // 4.
     }
@@ -164,7 +206,9 @@ class entitlement {
     }
 
     /**
-     * Path 4: is the viewer a course mentor in a course this user is actively enrolled in?
+     * Path 4: is the viewer this user's course mentor, in a course the user is actively
+     * enrolled in? The viewer holds viewidentity there, and the user is in the viewer's own
+     * mentor group in that course (groups_get_group_by_idnumber(), groups_is_member()).
      *
      * @param int $viewerid
      * @param int $userid
@@ -175,7 +219,11 @@ class entitlement {
             if (!levels::course_counts((string)$course->idnumber)) {
                 continue;
             }
-            if (has_capability('local/ltuse:viewidentity', context_course::instance((int)$course->id), $viewerid)) {
+            if (!has_capability('local/ltuse:viewidentity', context_course::instance((int)$course->id), $viewerid)) {
+                continue;
+            }
+            $group = groups_get_group_by_idnumber((int)$course->id, self::MENTORGROUP_PREFIX . $viewerid);
+            if ($group && groups_is_member((int)$group->id, $userid)) {
                 return true;
             }
         }

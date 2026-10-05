@@ -1,79 +1,53 @@
-# Row #26: what leaves the site, and who can change a name (spec 016, research R3, R6, R8, R9).
+# Row #26: what leaves the site about a person (spec 016, research R6, R8).
 #
-# Settings for every user, not only protected ones: core has no per-user exception for any of
-# them. Two groups wait on the maintainer (plan "Decisions on the plan's limits"): email out of
-# course leaders' views, decision 1 [D1]; names locked and no self-registration, decision 3
-# [D3]. site_config.py validate requires every value here once protection.yaml is declared.
+# Settings for every user, kept only where they cost nobody anything (Doug, 2026-10-05 (scope
+# review)). All but forceloginforprofileimage are core's defaults, declared so drift catches
+# one being changed. site_config.py validate requires enablegravatar, forceloginforprofileimage
+# and allowedemaildomains once protection.yaml is declared; the rest are declared for drift
+# only. The general account rules (registerauth, authpreventaccountcreation, protectusernames)
+# are spec 008's, in admin.yaml; the login methods are 008's site.yaml plugin entries
+# (auth_webservice on, auth_email off), not an auth setting.
 
 rows: [26]
 purpose: >-
-  A protected learner's email, real name and picture must not leave through a course leader's
-  views, a grade export, an outgoing email header, a Gravatar, the user search index or a name
-  the learner or an outside login overwrites. Learners and course leaders still reach each
-  other through Moodle messaging, which hides no one.
+  A protected learner's email, real name and picture must not leave the site through an
+  outgoing email header, a Gravatar or a picture URL fetched without a login. Email stays in
+  staff views for everyone: a protected person's own address is checked, when they are
+  protected, not to reveal their name or organisation.
 settings:
   - name: showuseridentity
-    value: ""
+    value: email
     why: >-
-      [D1] No identity field on participants, the bulk download, user selectors or activity
-      reports. Course leaders hold moodle/site:viewuseridentity, which shows these fields
-      whatever a learner's email display says (R8).
+      Core's default (admin/settings/users.php, MOODLE_502_STABLE): staff views show email.
+      Never add username: most usernames are the email a person had at intake (spec 008),
+      which may be the identifying address a protected person's email was changed away from
+      (R8). Email is no longer hidden from everyone (decision 1 rejected, Doug, 2026-10-05
+      (scope review)).
   - name: grade_export_userprofilefields
-    value: firstname,lastname,idnumber
+    value: firstname,lastname,idnumber,institution,department,email
     why: >-
-      [D1] Core's default without email, institution and department: a grade export ignores
-      the email display setting (grade_helper::get_user_profile_fields, R8).
+      Core's default (admin/settings/grades.php, MOODLE_502_STABLE). With email as everyone's
+      login and idnumber empty, email is the only column an export can be matched on
+      (decision 1 rejected, Doug, 2026-10-05 (scope review)).
   - name: grade_export_customprofilefields
     value: ""
-    why: "[D1] No custom profile field in a grade export (R8)."
+    why: >-
+      Core's default: no custom profile field in a grade export, so no ltct_ field a protected
+      learner's level withholds leaves through one (R8).
   - name: allowedemaildomains
     value: ""
     why: >-
-      Empty, so no email is ever sent from a person's own address: From is the no-reply
-      address and FromName the display name, "(via site)" (email_to_user, R8).
+      Core's default. Empty, so no email is ever sent from a person's own address: From is the
+      no-reply address and FromName the display name, "(via site)" (email_to_user, R8).
   - name: enablegravatar
     value: 0
     why: >-
-      Gravatar would publish an unsalted MD5 of the real email as the default picture of
-      anyone with no picture, which is every protected learner (R6).
+      Core's default. Gravatar would publish an unsalted MD5 of the real email as the default
+      picture of anyone with no picture, which is every protected learner (R6).
   - name: forceloginforprofileimage
     value: 1
-    why: "Profile pictures need a login, so a picture URL cannot be fetched from outside (R6)."
-  - name: protectusernames
-    value: 1
     why: >-
-      Core's default: "forgotten password" never says whether a username or email exists, so
-      it cannot be used to check a guessed identity (R9).
-  - name: core_search/core_user_user_enabled
-    value: 0
-    why: >-
-      The core_user global search area indexes all six name fields, so a real name would stay
-      findable until the next index run. Only this area is off; global search itself stays on
-      for spec 014 (plan decision 9, R9). Name confirmed in core_search\base::get_config_var_name.
-  - name: registerauth
-    value: ""
-    why: >-
-      [D3] No self-registration. Accounts are made by the site team (spec 002), so nobody
-      creates an account under a real name before protection is set (R3).
-  - name: authpreventaccountcreation
-    value: 1
-    why: "[D3] No account is created by an outside login on first use (R3)."
-  - name: auth
-    value: webservice
-    why: >-
-      [D3] Enabled login methods beside manual and nologin, which are always on: only
-      webservice, for the publisher's account. OAuth2 would overwrite firstname, lastname and
-      email from the provider on every login, wiping a pseudonym, so enabling it shows as
-      drift (R3).
-  - name: auth_manual/field_lock_firstname
-    value: locked
-    why: >-
-      [D3] Learners no longer edit their own first name; the site team does, and for a
-      protected learner the granting page does. "locked", not "unlockedifempty", which leaves
-      an empty field editable (R3).
-  - name: auth_manual/field_lock_lastname
-    value: locked
-    why: "[D3] As the first name (R3)."
-  - name: auth_manual/field_lock_email
-    value: locked
-    why: "[D3] As the first name (R3)."
+      Not core's default, which is 0 (admin/settings/security.php): profile pictures need a
+      login, so a picture URL cannot be fetched from outside. It covers the hour before
+      reconcile deletes a picture uploaded from the app, and the email level keeps its
+      picture (R6).

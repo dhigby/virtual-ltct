@@ -11,9 +11,9 @@ the pull request that adds a setting is the record of why it exists.
 | `site.yaml` | The minimum Moodle release, and each plugin with its pinned version and enabled state. |
 | `roles.yaml` | Roles and their system-context permissions. |
 | `settings/*.yaml` | Settings, one file per topic. Each cites the rows of [`../REQUIREMENTS.md`](../REQUIREMENTS.md) it serves. |
-| `course-discussions.yaml` | Which courses' discussion forums are shared across organisations. Every published course has one, separated by organisation unless listed here (spec 012). |
 | `ignore.yaml` | Undeclared settings that are allowed to differ from Moodle's default, each with its reason. |
-| `organisations.yaml` | The partner organisations we host, and the shared course categories. Each organisation gets a category, a learner cohort and a managers cohort. |
+| `organisations.yaml` | The partner organisations we host, the shared course categories, and the mentors cohort. Each organisation gets a category, a learner cohort and a managers cohort. |
+| `org-courses.yaml` | The courses only one organisation's people may join. Every other course is shared and open to every organisation. Only the maintainer edits it (spec 002). |
 | `profile-fields.yaml` | The profile fields every learner has: organisation, role in the work and areas of expertise. |
 | `course-fields.yaml` | The two course fields the publisher fills from each course's frontmatter: the competencies it aims at and the level it aims at. Both are locked, so only the publisher and the site team can change them. |
 | `reports.yaml` | The report builder reports: one learner-progress report per organisation, for its managers, with a weekly email; and three for the site team (completions per course, the competencies published courses aim at, and the pilots). |
@@ -21,6 +21,7 @@ the pull request that adds a setting is the record of why it exists.
 | `office-hours.yaml` | The one course where mentors offer office hours and learners book them, and its booking activity (spec 011). |
 | `dashboard.yaml` | Blocks every learner's default dashboard carries: Upcoming events (spec 011). |
 | `settings/calendar.yaml` | Calendar export, and the site's default time zone, UTC (spec 011). |
+| `pathways.yaml` | Role pathways: a named set of competencies a role needs (spec 006). Empty until a role is supplied. |
 
 The shapes are specified in
 [`specs/001-site-config-as-code/contracts/declaration.md`](../../specs/001-site-config-as-code/contracts/declaration.md),
@@ -136,6 +137,31 @@ The profile field category, "About your work", is found by its name, because Moo
 
 Each organisation also gets its own learner-progress report and weekly schedule, made from the `per: organisation` entry in `reports.yaml`. Its managers cohort is the report's only audience, and the report shows only that organisation's learners. Apply sets back a report that was edited by hand. It never runs a report, so its output holds no learner names or row counts.
 
+The reports count a learner as delivery however they were enrolled, except manually. Manual enrolment is kept for stage-7 pilots, and the pilots report shows those learners on their own.
+
+## Organisation-only courses
+
+Courses are shared. Everyone enrolled in a course sees everyone else in it, whatever their organisation. A course only for one organisation's people is listed in `org-courses.yaml`:
+
+```yaml
+org_only:
+  - slug: <course slug>         # the course's folder name under modules/, in its branch form
+    organisation: seed-company  # a key in organisations.yaml
+    why: approved by the maintainer, issue #N
+```
+
+**Only the maintainer adds an entry.** The `why` records the approval and nothing else. Never write the organisation's reasons or circumstances in it: this repo is public. Keep the reason privately.
+
+Organisation-only means only that organisation's people are enrolled. It does not hide the content: the course stays in this public repo, and its name shows in the organisation's category in Moodle.
+
+**To make a course organisation-only:**
+
+1. Add the entry, and run `validate`.
+2. Publish the course. The publisher puts it in the organisation's category, `ltct:org:<key>`, and puts it back there on every publish if someone moves it.
+3. Enrol the organisation as in "An organisation-only course" below.
+
+Drift reports a listed course that is outside its organisation's category as `changed`, and an `ltct:` course inside an organisation's category that is not listed as `extra`. Apply never moves a course, because a move changes which category roles the course inherits. Publish it again instead, or move it by hand.
+
 ## Badges and the certificate
 
 Row #23 (spec 013). These are training evidence only. Every text says "training completed",
@@ -160,34 +186,81 @@ Organisation managers follow completion through their reports, not through badge
 which breaks verification for everyone who holds one, and deleting its certificate activity
 deletes every certificate code already issued. A hidden course keeps both working.
 
+## Pathways
+
+Row #12 (spec 006). A **competency pathway** is never declared or built by hand. Moodle works
+it out when someone opens it, from what the publisher records on every publish: which
+competencies a course aims at, the level it aims at, and whether it is delivered (stage 8). A
+republish with a changed `competencies:` list or `target_outcome_level` moves the course
+between pathways with no other step. Pilots never appear.
+
+`apply` also copies two things in for the pathway pages: the four level labels from
+[`outcome-levels.yaml`](../../outcome-levels.yaml), and each competency's page on the
+competency site, built from the descriptor's `slug` and `mkdocs.yml`'s `site_url`.
+
+**Adding a role pathway.** A role is added only when a person supplies it: the maintainer with
+the department or the CBC programme. Add an entry to `pathways.yaml` with a `key`, a `name`,
+the role's `competencies` (each copied exactly from `competencies.yaml`) and a `why` naming who
+supplied it, then run `validate` and `apply`. A role's name never names a CBC level. A role
+removed from the file is retired by `apply`, never deleted, so cohorts it was given to keep it
+once it is declared again.
+
+**Giving a pathway to a cohort.** The site team, or an organisation manager for their own
+organisation's cohorts, does this on the **Assign pathways** page. It changes what the cohort's
+members see; it enrols nobody. Enrolling a cohort into a pathway's courses is spec 008's
+tooling.
+
+**Taking a course out of pathways.** Hide it. A hidden course leaves every pathway at once and
+its learners keep their completions. Never delete it (see badges above).
+
 ## Report downloads and emailed reports
 
 Reports hold real people. So does the weekly email's attachment. Save every report download and every emailed attachment **outside this repository folder**, as you would the upload CSV below, and delete it once you are done with it. GitDoc pushes anything left in this folder to the public repo. `.gitignore` refuses `*.csv`, `*.xlsx`, `*.xls` and `*.ods` only as a backstop.
 
-## The site team's four steps
+## The site team's steps
 
-These steps change learner data, not configuration, so they are done in Moodle and never recorded in this repo. Spec 008 will script them. Until then, the site team does them by hand:
+These steps change learner data, not configuration, so they are done in Moodle and never recorded in this repo. Spec 008 will script them. Until then, the site team does them by hand.
 
-1. **Create accounts.** Use **Site administration > Users > Upload users** with a CSV file. Put each learner's organisation key in a `profile_field_ltct_org` column, for example `seed-company`. Their cohort and the courses it is enrolled in follow automatically.
+**Create accounts.** Use **Site administration > Users > Upload users** with a CSV file. Put each learner's organisation key in a `profile_field_ltct_org` column, for example `seed-company`. Their cohort and the courses it is enrolled in follow automatically.
 
-   The CSV holds real people, so make it and keep it **outside this repository folder**, then delete it once the upload is done. GitDoc pushes anything left in this folder to the public repo. `.gitignore` refuses `*.csv` only as a backstop.
+The CSV holds real people, so make it and keep it **outside this repository folder**, then delete it once the upload is done. GitDoc pushes anything left in this folder to the public repo. `.gitignore` refuses `*.csv` only as a backstop.
 
-2. **Enrol an organisation into a course.**
-   1. Check the course is in **separate groups** (Course settings > Groups). New courses are, but an older or hand-made course may not be.
-   2. Create a group named for the organisation.
-   3. Add two **cohort sync** enrolment methods, both into that group:
-      - the organisation's learner cohort, as Student;
-      - its managers cohort, as Organisation manager.
+**Enrol an organisation in a course.** There are two recipes. Never use groups to keep organisations apart: a course may use groups for its own teaching, but never for that.
 
-3. **Make someone an organisation manager.** Add them to that organisation's managers cohort (**Site administration > Users > Cohorts**). They become a manager in every course their organisation is enrolled in. Remove them from the cohort and the role goes.
+- **A shared course** (any course not in `org-courses.yaml`): add one **cohort sync** enrolment method for the organisation's learner cohort, `ltct:org:<key>`, as **Student**, with no group. Do this once for each organisation. **Never** add a managers cohort to a shared course: managers would see every organisation's people in it. Drift fails if one is there.
+- **An organisation-only course** (listed in `org-courses.yaml`): add two **cohort sync** enrolment methods, both with no group:
+  - the organisation's learner cohort, `ltct:org:<key>`, as **Student**;
+  - its managers cohort, `ltct:org:<key>:managers`, as **Organisation manager**.
 
-4. **After moving a learner to another organisation,** change their organisation field. Their cohorts follow, and their old enrolment is suspended with its history kept. Then, in each course **both** organisations are enrolled in, unenrol the learner's old, suspended cohort-sync enrolment (Participants > the learner's enrolment > Unenrol). Without this, the old organisation's manager still sees them on that course's participants list. Their grades and completion stay, because they are still enrolled through the new organisation.
+  Enrol only the organisation the course is listed for. Nothing stops you enrolling another, so check the key.
 
-An organisation manager only follows their own people. They cannot create accounts, enrol anyone or change anyone's organisation (spec 002).
+**Make someone an organisation manager.** Add them to that organisation's managers cohort (**Site administration > Users > Cohorts**). They get the managers' page at once, and become Organisation manager in their organisation's own courses. Remove them from the cohort and all of it ends at once.
+
+**Move a learner to another organisation** by changing their organisation field. Their cohorts follow. Their enrolments in shared courses stay. Their enrolments in the old organisation's own courses are suspended, with their history kept.
+
+**Enrol course leaders** (Course mentor, `teacher`) in each course they lead, by hand, with no group.
+
+**Fill the mentors cohort.** Add each person who may mentor to the **Mentors** cohort, `ltct:mentors`. A mentor may come from any organisation. Managers pick their learners' mentors only from this cohort.
+
+## The managers' page
+
+Each organisation manager has a **My organisation** link in their user menu. The page lists their organisation's people, with each person's courses and progress, and their email. For their own learners they can:
+
+- enrol them in a published course, or in their organisation's own course, as Student;
+- unenrol them from a course they enrolled them in;
+- send them a password reset link, which goes only to the learner's own email;
+- suspend their account, which ends their sessions and applies to the whole site, and reactivate it;
+- assign and end their mentors, chosen from the Mentors cohort.
+
+A manager never acts on staff, mentors or other managers, and never on another organisation's people. Those stay with the site team. A manager cannot create accounts or change anyone's organisation. Moodle's log records the manager as the person who made each change.
+
+A manager's enrolments count as delivery in the reports, as cohort sync does. They go through a separate enrolment method in each course, a self enrolment named **Organisation enrolment**, made the first time a manager enrols someone there. Leave it enabled, and leave its new enrolments switched off: learners cannot use it to enrol themselves, and disabling it makes its enrolments inactive.
 
 ## Mentors: assigning and ending a relationship
 
 A mentor follows the learners assigned to them across every course those learners take, for as long as the relationship lasts (spec 003). The relationship is the `mentor` role, held by the mentor **in the learner's own profile**, never in a course. Who mentors whom is learner data, so it lives only in Moodle and is never written in this repo.
+
+An organisation manager can also assign and end mentors for their own learners, from the managers' page above. The steps below are the site team's.
 
 **To assign a mentor** (site team, or an admin):
 
@@ -214,35 +287,41 @@ php public/local/ltuse/cli/mentor_contacts.php --end-all --mentor=<username>
 
 It asks first, prints counts only, and leaves every learner's records as they are. After the upgrade that adds mentor contacts, run `php public/local/ltuse/cli/mentor_contacts.php --sync` once, so mentors assigned earlier get their contacts too.
 
-**Feedback on a learner's work** is not this role's job. Where a course asks for work, enrol the mentor as **Course mentor** (`teacher`) with the organisation's group, as in step 2 above (spec 012). Assigning many mentors at once, and enrolling mentors into their learners' courses automatically, are spec 008's.
+**Feedback on a learner's work** is not this role's job. Where a course asks for work, enrol the mentor as **Course mentor** (`teacher`) in that course, with no group (spec 012). Assigning many mentors at once, and enrolling mentors into their learners' courses automatically, are spec 008's.
 
-## Protecting a person or an organisation
+## Protecting a person
 
-Some learners work where being identifiable puts them, or the people they work with, at risk. Identity protection lets them take part exactly as before under less of their identity (spec 016). **Who is protected, their pseudonym and their real name live only in Moodle. Never write them here, in an issue, a PR or a screenshot.**
+Some learners work where being identifiable puts them, or the people they work with, at risk. Identity protection lets them take part exactly as before under less of their identity (spec 016). **Who is protected, their pseudonym and their real name live only in Moodle. Never write them here, in an issue, a PR or a screenshot.** Screenshots of `ltct-test-*` accounts only are fine in a PR.
 
 | Level | Others see |
 |---|---|
-| Email hidden | The name and profile, not the email address |
-| First name only | The first name only: no surname, email, picture, location, organisation, role or expertise |
-| Pseudonym | A chosen name only |
+| Email hidden | The name and profile; classmates do not see the email address |
+| First name only | The first name and organisation only: no surname, picture, location, role or expertise |
+| Pseudonym | A chosen name and the organisation only |
 
-Each level includes the ones before it. The site team, the learner's mentors, the course mentors of the courses they take, and their own organisation's managers still see the real identity, with a **Protected** marker, on the learner's profile, the Mentoring page and **People I support** (`/local/ltuse/protected.php`). Nobody else ever sees the marker.
+Each level includes the ones before it. The organisation shows at every level: tell the person so when they are protected. The people who run their courses and their organisation's managers still see the email address, which is why it is checked (below). The site team, the learner's mentors, the course mentor who assesses them in a course (whose own mentor group holds them), and their own organisation's managers still see the real identity, with a **Protected** marker, on the learner's profile, the Mentoring page and **People I support** (`/local/ltuse/protected.php`). Nobody else ever sees the marker, and there is no download of protected people.
 
-**To protect a person**: open their profile, choose **Identity protection**, pick the level, and save. A manager of the person's own organisation can do this too. The learner gets a notice saying what others now see.
+**Only for someone who asks** (Doug, 2026-10-05 (scope review)). Protection is to be offered when the person is added, in the welcome message and in site help; none of those says so yet (spec 016 task T047, on spec 008's intake and welcome message). Until it does, tell each person you add that they can ask, and who would still see their real identity. Saving a new or higher level records that the person asked, and that you checked their email address identifies neither them nor their organisation. The page warns when the part before the @ looks like their name, or the domain contains part of their organisation entry's key. That second warning is only a hint: it cannot recognise the employer of a SIL partner or an independent learner, so look at the address yourself; your confirmation is what counts. Have the address changed to one that does not identify them before you save. Nothing changes for anyone who did not ask.
 
-**Protect early.** Set protection when the account is made, before the person is enrolled anywhere. Later, a rename links their earlier posts to the new name, so the page asks you to acknowledge that first, and recommends a fresh account instead.
+**To protect a person**: set it when the account is made, before they start. An organisation's manager can do this for their own people then. After that, raising it, lowering or removing it, and correcting the real name are the site team's: open `/local/ltuse/protection.php?id=<user id>` (an unprotected profile has no link), pick the level, and save. The learner gets a notice saying what others now see.
 
-**Usernames.** For First name only or Pseudonym, the username must not contain the real first name or surname. The page offers a neutral one and tells the learner their new login. Give every new account a neutral username from the start.
+**Protect early.** Later, a rename links what they already did to the new name, so the page asks you to acknowledge that first. A fresh account is one option to talk through with the person, not the default.
 
-**To protect a whole organisation** (site team only): `/local/ltuse/orgprotection.php`. Choose the organisation, its minimum level (Email hidden or First name only), and whether its own managers see real identities. Every member is protected at least at that level, and a new member is protected from the moment they join. **Never declare a minimum in this repo**: `organisations.yaml` is public, and its history keeps what was ever written there. An organisation that may need protection gets a **neutral key and name from its first commit**, because the key can never change. SIL's Area entries are the one deliberate exception, and none of them carries a minimum; a group within an Area that needs organisation-wide protection gets its own neutral entry.
+**Usernames.** Everyone signs in with their email. At First name only or Pseudonym, a username that contains the real first name or surname is replaced with a neutral one automatically; the person keeps signing in with their email.
 
-**Lowering.** Nothing is lowered automatically. Someone who leaves a protected organisation keeps their level until an entitled person lowers it. A picture removed by protection does not come back; the learner uploads it again.
+**Names and email are not locked.** Learners change their own. For a protected learner, the plugin puts the protected name back on any edit, and their surname shows as `·`. To correct a protected learner's real name, use their **Identity protection** page (site team).
 
-**Names are locked for everyone** (`settings/identity.yaml`, pending decision 3): learners no longer change their own name or email. The site team changes them in the admin user editor; for a protected learner, use their **Identity protection** page.
+**There is no organisation-wide protection** (Doug, 2026-10-05 (scope review)): each person is protected only when they ask, and an organisation's own managers always see their people's real identity. A person who does not want their organisation's managers to see it is placed by the site team under a neutral organisation entry with no managers. **Neutral organisation names**: an organisation that asks not to be named publicly gets a neutral key and name from its first commit, because the key can never change and `organisations.yaml` is public. No other organisation needs one.
 
-**Not yet available**: First name only and Pseudonym wait until the organisation field is hidden from everyone, which needs spec 004's report to be scoped by cohort first (decision 2). Until then only Email hidden can be set.
+**Lowering.** Nothing is lowered automatically, and moving to another organisation keeps the person's level. A picture removed by protection does not come back; the learner uploads it again.
 
-What protection cannot do, and what to tell the learner, is listed as known gaps in [spec 016's research](../../specs/016-identity-protection/research.md#known-gaps-fr-015): copies already emailed or downloaded, the app's cache for up to 18 hours, and file author names inside uploaded documents.
+**Course logs.** Course staff see each learner's IP address in the course logs, which gives away a rough location. If a protected person asks for that to be hidden, tick **block course logs** on their **Identity protection** page: course staff then lose the course log, today's log and the live log in every course they take, for every learner there, which is the cost. A course they join later is covered within the hour. The plugin owns those course-level prohibits, so do not set them by hand.
+
+**Course backups.** Course leaders cannot download backups. Never leave a course backup that includes users in a course's backup area: it carries every enrolled account's details.
+
+**When the hourly task fails.** **Reconcile protection** (`\local_ltuse\task\reconcile_protection`) repairs protected accounts that something else changed. If a repair fails, the run is recorded as failed and core's failed-task alert fires: open the task log, fix the cause, and let the next run repair it. With nobody protected it does nothing. On a core upgrade, while anyone is protected, re-run spec 016's quickstart V7.
+
+What protection cannot do, and what to tell the learner, is listed as known gaps in [spec 016's research](../../specs/016-identity-protection/research.md#known-gaps-fr-015): copies already emailed or downloaded, the app's cache for up to 18 hours, file author names inside uploaded documents, the email address course staff see, and the organisation, which shows at every level.
 
 ## Events and live sessions
 

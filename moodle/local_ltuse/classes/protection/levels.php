@@ -11,15 +11,20 @@ defined('MOODLE_INTERNAL') || die();
  * and ask this class; none of them decides a rule itself.
  *
  *   levels       none < email < firstname < pseudonym, each including the ones before it (FR-001)
- *   effective    the stricter of a user's own level and their organisation's minimum (FR-001a)
  *   withheld     which account fields a level withholds, from the declared config (R6)
  *   pseudonym    unique among protected users and not containing the real name, after NFC and
  *                case folding (data-model)
- *   username     must not contain the real first name or surname at firstname+ (R13)
- *   cohorts      an organisation's member cohort is exactly ltct:org:<key> for a declared key,
- *                never ltct:org:<key>:managers (R2)
+ *   username     must not contain the real first name or surname at firstname+ (R13); the
+ *                service replaces one that does with a neutral one
+ *   email        a warning when the address before the @ holds the real name, or its domain
+ *                the organisation's key (scope review change 2); the granter confirms
+ *   managers     an organisation's manager grants only at intake: a raise, for someone with no
+ *                activity, with no correction; the rest is the site team's (change 14)
  *   courses      a course mentor counts only in a published or pilot ltct:<slug> course, never
  *                the office-hours course, which enrols every mentor (R7 path 4)
+ *
+ * Every level is available once protection.yaml is stored: the organisation stays visible at
+ * every level, so no level waits for it (Doug, 2026-10-05 (scope review), decision 2 option a).
  */
 class levels {
 
@@ -30,18 +35,9 @@ class levels {
     const PSEUDONYM = 'pseudonym';
     const ORDER = [self::NONE, self::EMAIL, self::FIRSTNAME, self::PSEUDONYM];
 
-    /** The strictest level an organisation minimum may take: a pseudonym is chosen per person (R12). */
-    const ORG_MAX = self::FIRSTNAME;
-
-    /** The levels that need ltct_org private and a cohort-scoped report first (R11). */
-    const NEED_ORGSCOPE = [self::FIRSTNAME, self::PSEUDONYM];
-
-    /** Where an effective level comes from (data-model). */
+    /** A log row's source (data-model): a change of level, or a correction at the same level. */
     const SOURCE_OWN = 'own';
-    const SOURCE_ORG = 'organisation';
-    const SOURCE_KEPT = 'organisation-kept';
     const SOURCE_CORRECTION = 'correction';
-    const SOURCE_ORGMINIMUM = 'orgminimum';   // A log row for an organisation's minimum (userid 0).
 
     /** The account's alternate-name columns, blanked from firstname (R1). */
     const ALTNAMES = ['firstnamephonetic', 'lastnamephonetic', 'middlename', 'alternatename'];
@@ -56,9 +52,9 @@ class levels {
     const FIRSTNAME_FIELD = 'firstname';
     const LASTNAME_FIELD = 'lastname';
 
-    /** Custom profile fields we own, by shortname; ltct_org and ltct_certname never withheld (R10, R11). */
+    /** Custom profile fields we own, by shortname; ltct_org is never withheld (R11). */
     const PROFILE_FIELD = '/^ltct_[a-z0-9_]+$/';
-    const NEVER_WITHHELD = ['ltct_org', 'ltct_certname', 'description', 'interests'];
+    const NEVER_WITHHELD = ['ltct_org', 'description', 'interests'];
 
     /** The pseudonym column's width (local_ltuse_protection.pseudonym). */
     const PSEUDONYM_MAX = 100;
@@ -87,55 +83,14 @@ class levels {
     }
 
     /**
-     * The stricter of two levels. An unknown level counts as none.
+     * Is a change from one level to another a raise?
      *
-     * @param string $a
-     * @param string $b
-     * @return string
-     */
-    public static function stricter(string $a, string $b): string {
-        $a = self::is_level($a) ? $a : self::NONE;
-        $b = self::is_level($b) ? $b : self::NONE;
-        return self::rank($a) >= self::rank($b) ? $a : $b;
-    }
-
-    /**
-     * A user's effective level and where it comes from (FR-001a, R13).
-     *
-     * @param string $own the user's own level
-     * @param string $orgminimum their current organisation's minimum, none when there is none
-     * @param bool $kept the row was marked organisation-kept after leaving a protected organisation
-     * @return array [level, source]
-     */
-    public static function effective(string $own, string $orgminimum, bool $kept = false): array {
-        $own = self::is_level($own) ? $own : self::NONE;
-        $orgminimum = self::is_level($orgminimum) ? $orgminimum : self::NONE;
-        if (self::rank($orgminimum) > self::rank($own)) {
-            return [$orgminimum, self::SOURCE_ORG];
-        }
-        return [$own, $kept ? self::SOURCE_KEPT : self::SOURCE_OWN];
-    }
-
-    /**
-     * May an own level be set, given the organisation minimum? Never looser (US3-4).
-     *
-     * @param string $level
-     * @param string $orgminimum
+     * @param string $from
+     * @param string $to
      * @return bool
      */
-    public static function allowed_own(string $level, string $orgminimum): bool {
-        return self::is_level($level) && self::rank($level) >= self::rank(self::is_level($orgminimum) ? $orgminimum : self::NONE);
-    }
-
-    /**
-     * Is this level available yet? firstname and pseudonym need the organisation hidden (R11).
-     *
-     * @param string $level
-     * @param bool $orgscopeready
-     * @return bool
-     */
-    public static function available(string $level, bool $orgscopeready): bool {
-        return self::is_level($level) && ($orgscopeready || !in_array($level, self::NEED_ORGSCOPE, true));
+    public static function is_raise(string $from, string $to): bool {
+        return self::rank($to) > self::rank($from);
     }
 
     /**
@@ -317,6 +272,57 @@ class levels {
     }
 
     /**
+     * What an email address may give away, for the granting page's warning (scope review
+     * change 2). Others in a course still see a protected person's address (core's
+     * showuseridentity), so the granter confirms it identifies no one. A heuristic: it only
+     * warns, and an organisation with a neutral key gives no signal.
+     *
+     *   name          the part before the @ holds the real first name or surname, by the
+     *                 username rule (username_reveals)
+     *   organisation  the domain holds a part of three characters or more of the person's
+     *                 organisation key
+     *
+     * @param string $email
+     * @param string $realfirst
+     * @param string $reallast
+     * @param string $orgkey the person's ltct_org, '' when none
+     * @return string[] the codes that apply, in that order
+     */
+    public static function email_reveals(string $email, string $realfirst, string $reallast, string $orgkey): array {
+        $at = strrpos($email, '@');
+        $local = $at === false ? $email : substr($email, 0, $at);
+        $domain = $at === false ? '' : self::fold(substr($email, $at + 1));
+        $out = [];
+        if (self::username_reveals($local, $realfirst, $reallast)) {
+            $out[] = 'name';
+        }
+        foreach (preg_split('/[^\p{L}\p{N}]+/u', self::fold($orgkey), -1, PREG_SPLIT_NO_EMPTY) ?: [] as $part) {
+            $length = function_exists('mb_strlen') ? mb_strlen($part, 'UTF-8') : strlen($part);
+            if ($domain !== '' && $length >= self::SURNAME_MIN && strpos($domain, $part) !== false) {
+                $out[] = 'organisation';
+                break;
+            }
+        }
+        return $out;
+    }
+
+    /**
+     * May a manager of the person's own organisation make this change (scope review change
+     * 14)? Managers grant at intake: a raise, for someone with no activity yet, with no
+     * correction to the real name or a held value. Corrections, raises after activity,
+     * lowering and removal are the site team's.
+     *
+     * @param string $from the level applied now
+     * @param string $to
+     * @param bool $hasactivity
+     * @param bool $corrects the change corrects the real name or a held value
+     * @return bool
+     */
+    public static function manager_may(string $from, string $to, bool $hasactivity, bool $corrects): bool {
+        return self::is_raise($from, $to) && !$hasactivity && !$corrects;
+    }
+
+    /**
      * Does a change of effective level need the "history" acknowledgement (R13)? Any change
      * for a user who already has activity, raise or lowering, because a rename links the two
      * identities either way.
@@ -328,26 +334,6 @@ class levels {
      */
     public static function needs_acknowledgement(string $from, string $to, bool $hasactivity): bool {
         return $hasactivity && self::rank($from) !== self::rank($to);
-    }
-
-    /**
-     * The organisation key of a member cohort, or null. Exactly ltct:org:<key> for a declared
-     * key; ltct:org:<key>:managers and undeclared keys are not member cohorts (R2).
-     *
-     * @param string $idnumber the cohort's idnumber
-     * @param string[] $declaredkeys the organisation keys declared in organisations.yaml
-     * @return string|null
-     */
-    public static function member_cohort_key(string $idnumber, array $declaredkeys): ?string {
-        $prefix = 'ltct:org:';
-        if (strpos($idnumber, $prefix) !== 0) {
-            return null;
-        }
-        $key = substr($idnumber, strlen($prefix));
-        if ($key === '' || strpos($key, ':') !== false) {
-            return null;
-        }
-        return in_array($key, array_map('strval', $declaredkeys), true) ? $key : null;
     }
 
     /**

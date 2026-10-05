@@ -7,7 +7,8 @@
 // tests/profile_access_harness.php, and whether the viewer manages the viewed person is
 // local_ltuse\organisation\access::is_org_member_of_manager(), tested by
 // tests/org_access_harness.php. And, from spec 003, local_ltuse_myprofile_navigation(), which
-// links the Mentoring page from profiles.
+// links the Mentoring page from profiles, and the inputs of the Manage mentors page's
+// decision, local_ltuse\mentor_admin::decide(), tested by tests/mentor_admin_harness.php.
 
 defined('MOODLE_INTERNAL') || die();
 
@@ -105,18 +106,17 @@ function local_ltuse_control_view_profile($user, $course = null, $usercontext = 
  * cohort.idnumber is not indexed in core; moodle/local_ltuse/README.md lists this read.
  *
  * @param int $userid
- * @param bool $fresh read again even if cached: spec 016's protection service, which runs in
- *                    cron next to tasks that change memberships
+ * @param bool $reload read afresh and refresh the cache: organisation actions do, before a write
  * @return string[] organisation keys, empty when the user is in none
  */
-function local_ltuse_organisation_member_keys(int $userid, bool $fresh = false): array {
+function local_ltuse_organisation_member_keys(int $userid, bool $reload = false): array {
     global $DB;
     static $cache = [];
 
     if ($userid <= 0) {
         return [];
     }
-    if (!$fresh && array_key_exists($userid, $cache)) {
+    if (!$reload && array_key_exists($userid, $cache)) {
         return $cache[$userid];
     }
 
@@ -155,16 +155,17 @@ function local_ltuse_organisation_member_keys(int $userid, bool $fresh = false):
  * hidden (spec 002, R1). moodle/local_ltuse/README.md lists this direct read.
  *
  * @param int $userid
+ * @param bool $reload read afresh and refresh the cache: organisation actions do, before a write
  * @return string[] organisation keys, empty when the user manages none
  */
-function local_ltuse_managed_organisation_keys(int $userid): array {
+function local_ltuse_managed_organisation_keys(int $userid, bool $reload = false): array {
     global $DB;
     static $cache = [];
 
     if ($userid <= 0) {
         return [];
     }
-    if (array_key_exists($userid, $cache)) {
+    if (!$reload && array_key_exists($userid, $cache)) {
         return $cache[$userid];
     }
 
@@ -196,11 +197,163 @@ function local_ltuse_managed_organisation_keys(int $userid): array {
 }
 
 /**
+ * The facts local_ltuse\organisation\access needs about one person (spec 002 research R10).
+ *
+ * Gathered on every request, through public APIs except the cohort reads this file lists and
+ * the one role_assignments read below. Spec 002's organisation pages need exactly these facts
+ * for may_manage_account(), so they call this rather than gather their own.
+ *
+ *   ltct_org       profile_user_record() (public/user/profile/lib.php:812)
+ *   org_cohorts    local_ltuse_organisation_member_keys()
+ *   siteadmin      is_siteadmin() (public/lib/accesslib.php:702)
+ *   coursecontact  staff: any role but student in any course context. A read of
+ *                  {role_assignments} by userid, since get_user_roles() takes one context and
+ *                  has_coursecontact_role() sees only $CFG->coursecontact (teachers by default)
+ *   highrole       get_user_roles($context, $userid, false) (public/lib/accesslib.php:3097)
+ *                  at the system context and at each category from
+ *                  core_course_category::get_all(['returnhidden' => true])
+ *                  (public/course/classes/category.php:370); hidden categories count too
+ *   managers       local_ltuse_managed_organisation_keys()
+ *   mentor         local_ltuse_is_mentor_candidate()
+ *
+ * @param stdClass $user a user record with id and deleted
+ * @return array facts, keyed as organisation\access documents them
+ */
+function local_ltuse_organisation_person_facts(stdClass $user): array {
+    global $CFG, $DB;
+    require_once($CFG->dirroot . '/user/profile/lib.php');
+
+    $userid = (int)$user->id;
+    $fields = profile_user_record($userid);
+
+    $highrole = (bool)get_user_roles(context_system::instance(), $userid, false);
+    if (!$highrole) {
+        foreach (core_course_category::get_all(['returnhidden' => true]) as $category) {
+            if (get_user_roles($category->get_context(), $userid, false)) {
+                $highrole = true;
+                break;
+            }
+        }
+    }
+
+    return [
+        'id' => $userid,
+        'ltct_org' => isset($fields->ltct_org) ? trim((string)$fields->ltct_org) : '',
+        'org_cohorts' => local_ltuse_organisation_member_keys($userid),
+        'deleted' => !empty($user->deleted),
+        'siteadmin' => is_siteadmin($userid),
+        'coursecontact' => $DB->record_exists_sql("SELECT 1 FROM {role_assignments} ra
+            JOIN {context} ctx ON ctx.id = ra.contextid AND ctx.contextlevel = :courselevel
+            JOIN {role} r ON r.id = ra.roleid AND r.shortname <> :student WHERE ra.userid = :userid",
+            ['courselevel' => CONTEXT_COURSE, 'student' => 'student', 'userid' => $userid]),
+        'highrole' => $highrole,
+        'managers' => (bool)local_ltuse_managed_organisation_keys($userid),
+        'mentor' => local_ltuse_is_mentor_candidate($userid),
+    ];
+}
+
+/**
+ * The id of the hidden ltct:mentors cohort, or 0 before site_config.py has applied it.
+ * Cached for the request.
+ *
+ * A read of {cohort} by idnumber in the system context: no cohort API looks a cohort up by
+ * idnumber (cohort_get_cohort(), public/cohort/lib.php:386, takes an id). cohort.idnumber is
+ * not indexed in core; moodle/local_ltuse/README.md lists this read.
+ *
+ * @return int
+ */
+function local_ltuse_mentors_cohort_id(): int {
+    global $DB;
+    static $id = null;
+    if ($id === null) {
+        $id = (int)$DB->get_field('cohort', 'id', ['idnumber' => \local_ltuse\mentor_admin::MENTORS_COHORT,
+            'contextid' => context_system::instance()->id]);
+    }
+    return $id;
+}
+
+/**
+ * Whether a user is in the ltct:mentors cohort, and so may be offered as a mentor (spec 003 R7).
+ *
+ * cohort_is_member() (public/cohort/lib.php:239), which reads hidden cohorts too.
+ *
+ * @param int $userid
+ * @return bool
+ */
+function local_ltuse_is_mentor_candidate(int $userid): bool {
+    global $CFG;
+    require_once($CFG->dirroot . '/cohort/lib.php');
+    $cohortid = local_ltuse_mentors_cohort_id();
+    return $cohortid && $userid > 0 && cohort_is_member($cohortid, $userid);
+}
+
+/**
+ * Everyone in the ltct:mentors cohort who can sign in: not deleted, not suspended.
+ *
+ * One read of {cohort_members} joined to {user}, by the indexed cohortid. Core has no function
+ * that lists one cohort's members. Name fields come from \core_user\fields::for_name(), as
+ * get_role_users() builds them (public/lib/accesslib.php:4062). moodle/local_ltuse/README.md
+ * lists this read.
+ *
+ * @return stdClass[] user records with id and the name fields fullname() needs, keyed by id
+ */
+function local_ltuse_mentor_candidates(): array {
+    global $DB;
+    $cohortid = local_ltuse_mentors_cohort_id();
+    if (!$cohortid) {
+        return [];
+    }
+    $names = \core_user\fields::for_name()->get_sql('u', false, '', '', false)->selects;
+    $sql = "SELECT u.id, $names
+              FROM {cohort_members} cm
+              JOIN {user} u ON u.id = cm.userid
+             WHERE cm.cohortid = :cohortid
+               AND u.deleted = 0
+               AND u.suspended = 0
+          ORDER BY u.lastname, u.firstname, u.id";
+    return $DB->get_records_sql($sql, ['cohortid' => $cohortid]);
+}
+
+/**
+ * May the current user assign and end this learner's mentors? (spec 003 R7 Phase B, under
+ * spec 002 R10.) Gathers local_ltuse\mentor_admin::decide()'s inputs on every call.
+ *
+ * The cheap reads come first: a viewer who manages no organisation and cannot assign the role
+ * in the learner's context never reaches the person-facts reads.
+ *
+ * @param stdClass|false|null $learner the learner's user record, as core_user::get_user() gives it
+ * @return bool
+ */
+function local_ltuse_may_manage_mentors($learner): bool {
+    global $USER;
+    $viewerid = isset($USER->id) ? (int)$USER->id : 0;
+    $roleid = \local_ltuse\mentoring::role_id();
+    if (!$learner || !empty($learner->deleted) || !$roleid || $viewerid <= 0) {
+        return false;
+    }
+    $context = context_user::instance((int)$learner->id, IGNORE_MISSING);
+    if (!$context) {
+        return false;
+    }
+    // The site team: core's own assign permission, with mentor allowed by role_allow_assign
+    // (get_assignable_roles(), public/lib/accesslib.php:3252).
+    $canassigncore = has_capability('moodle/role:assign', $context)
+        && array_key_exists($roleid, get_assignable_roles($context));
+    $managedkeys = local_ltuse_managed_organisation_keys($viewerid);
+    if (!$canassigncore && !$managedkeys) {
+        return false;
+    }
+    $person = $canassigncore ? ['id' => (int)$learner->id] : local_ltuse_organisation_person_facts($learner);
+    return \local_ltuse\mentor_admin::decide($viewerid, true, $canassigncore, $managedkeys, $person);
+}
+
+/**
  * Link the Mentoring page from profiles (spec 003, research R3; FR-010).
  *
  * On your own profile, when you have a mentor or a learner. On a learner's profile, for their
  * mentor only, straight to that learner's entry. It adds links and grants nothing: the page
- * checks local/ltuse:viewmenteeprogress itself.
+ * checks local/ltuse:viewmenteeprogress itself. And, on someone else's profile, "Manage
+ * mentors" when local_ltuse_may_manage_mentors() allows it.
  *
  * @param \core_user\output\myprofile\tree $tree
  * @param stdClass $user the profile's owner
@@ -227,17 +380,28 @@ function local_ltuse_myprofile_navigation(\core_user\output\myprofile\tree $tree
         $tree->add_node(new \core_user\output\myprofile\node('miscellaneous', 'local_ltuse_mentoring_learner',
             get_string('mentoring:thislearner', 'local_ltuse'), null, $url));
     }
+    // Manage mentors (spec 003 R7 Phase B): the site team, and the learner's organisation
+    // manager. mentors.php recomputes the same decision on every request.
+    if (local_ltuse_may_manage_mentors($user)) {
+        $tree->add_node(new \core_user\output\myprofile\node('miscellaneous', 'local_ltuse_mentors',
+            get_string('mentors:manage', 'local_ltuse'), null,
+            new moodle_url('/local/ltuse/mentors.php', ['userid' => (int)$user->id])));
+    }
 }
 
 /**
  * Identity protection on profiles (spec 016, research R7 surface 1; FR-007, FR-008, FR-012).
  * Web only; in the app, the Mentoring handler is the entitled surface.
  *
- * On your own profile: your level, a preview of what others see, who sees your real identity,
- * how to ask, and "People I support" when you support anyone protected. On someone else's: the
- * real identity and the Protected marker, only for an entitled viewer, and a link to the
- * granting page for someone who may change it. A non-entitled viewer gets nothing, not even the
- * category, so the profile never says whether a person is protected.
+ * Only protected people and the people who support them see anything here (Doug, 2026-10-05
+ * (scope review), change 12). On your own profile: your level, a preview of what others see
+ * and who sees your real identity, only when you are protected; and "People I support" when
+ * you support anyone protected, behind a cheap check. On someone else's, only when they are
+ * protected: the real identity and the Protected marker for an entitled viewer, and a link to
+ * the granting page for someone who may change it. A first grant is made at intake, so no
+ * unprotected profile carries the link; the site team opens /local/ltuse/protection.php?id=<id>
+ * for a late one. A non-entitled viewer gets nothing, not even the category, so the profile
+ * never says whether a person is protected.
  *
  * @param \core_user\output\myprofile\tree $tree
  * @param stdClass $user the profile's owner
@@ -250,16 +414,19 @@ function local_ltuse_protection_profile_nodes(\core_user\output\myprofile\tree $
     }
     $viewerid = (int)$USER->id;
     $userid = (int)$user->id;
+    $protected = \local_ltuse\protection\service::is_protected($userid);
     $nodes = [];
     if ($iscurrentuser) {
-        $nodes[] = new \core_user\output\myprofile\node('local_ltuse_protection', 'local_ltuse_protection_own',
-            get_string('protection:yourprotection', 'local_ltuse'), null, null,
-            \local_ltuse\protection\surfaces::own_summary($userid));
+        if ($protected) {
+            $nodes[] = new \core_user\output\myprofile\node('local_ltuse_protection', 'local_ltuse_protection_own',
+                get_string('protection:yourprotection', 'local_ltuse'), null, null,
+                \local_ltuse\protection\surfaces::own_summary($userid));
+        }
         if (\local_ltuse\protection\surfaces::supports_anyone($viewerid)) {
             $nodes[] = new \core_user\output\myprofile\node('local_ltuse_protection', 'local_ltuse_protection_supported',
                 get_string('protection:supported', 'local_ltuse'), null, new moodle_url('/local/ltuse/protected.php'));
         }
-    } else {
+    } else if ($protected) {
         $summary = \local_ltuse\protection\surfaces::entitled_summary($viewerid, $userid);
         if ($summary !== '') {
             $nodes[] = new \core_user\output\myprofile\node('local_ltuse_protection', 'local_ltuse_protection_identity',

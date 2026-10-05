@@ -10,6 +10,7 @@ namespace local_ltuse;
 use core_reportbuilder_generator;
 use core_reportbuilder\manager;
 use core_reportbuilder\tests\core_reportbuilder_testcase;
+use local_ltuse\organisation\access;
 use local_ltuse\reportbuilder\datasource\competency_coverage;
 use stdClass;
 
@@ -19,7 +20,8 @@ use stdClass;
  * The fixture is one delivery course and one pilot-only course that aim at "Fixture Alpha",
  * plus a course outside the publisher's ltct: idnumbers. Expected counts for Alpha:
  *  - courses 2: the delivery course and the pilot-only course, not the outside one;
- *  - in delivery 1: only the delivery course has a cohort-sync instance with the student role;
+ *  - in delivery 1: only the delivery course has a cohort-sync instance with the student role
+ *    (test_organisation_enrolment_is_delivery adds the other delivery instance, spec 002 R10);
  *  - enrolments 2: one learner in two student cohorts. A suspended enrolment, an orgmanager
  *    cohort enrolment and a manual (pilot) enrolment are not counted;
  *  - learners 1: the same learner, counted once;
@@ -303,6 +305,54 @@ final class competency_coverage_test extends core_reportbuilder_testcase {
         // Retiring Alpha drops its row, though its map rows stay.
         $DB->set_field('local_ltuse_competency', 'retired', 1, ['id' => $ids['Fixture Alpha']]);
         $this->assertCount(2, $this->get_custom_report_content($report->get('id')));
+    }
+
+    /**
+     * A manager's enrolment through the organisation-enrolment instance is delivery (spec 002
+     * R10); any other self-enrolment, and a manual one, still is not.
+     */
+    public function test_organisation_enrolment_is_delivery(): void {
+        global $DB;
+        $this->resetAfterTest();
+        $this->create_fixture();
+        $this->assertTrue(enrol_is_enabled(access::ENROL_PLUGIN), 'enrol_self must be enabled for this test');
+
+        $gen = $this->getDataGenerator();
+        $studentid = (int) $DB->get_field('role', 'id', ['shortname' => 'student'], MUST_EXIST);
+        $pilotonly = $DB->get_record('course', ['idnumber' => 'ltct:fixture-pilot'], '*', MUST_EXIST);
+        $self = enrol_get_plugin(access::ENROL_PLUGIN);
+
+        // The organisation-enrolment instance, as organisation\actions makes it: self-enrolment
+        // off, the student role, and the marker in customchar1.
+        $orgid = $self->add_instance($pilotonly, ['status' => ENROL_INSTANCE_ENABLED, 'roleid' => $studentid,
+            'customint6' => 0, 'customchar1' => access::ENROL_MARKER]);
+        // An ordinary self-enrolment instance, enabled, with no marker.
+        $plainid = $self->add_instance($pilotonly, ['status' => ENROL_INSTANCE_ENABLED, 'roleid' => $studentid,
+            'customint6' => 1]);
+
+        $orglearner = $gen->create_user(['username' => 'fixture-orgenrolled']);
+        $selflearner = $gen->create_user(['username' => 'fixture-selfenrolled']);
+        $self->enrol_user($DB->get_record('enrol', ['id' => $orgid], '*', MUST_EXIST), $orglearner->id, $studentid);
+        $self->enrol_user($DB->get_record('enrol', ['id' => $plainid], '*', MUST_EXIST), $selflearner->id, $studentid);
+        $now = time();
+        $this->completion((int) $orglearner->id, (int) $pilotonly->id, $now);
+        $this->completion((int) $selflearner->id, (int) $pilotonly->id, $now);
+
+        $report = $this->create_report(true, true);
+        $rows = array_map('array_values', $this->get_custom_report_content($report->get('id')));
+
+        // Beta is aimed at only by that course: now in delivery, with the one org-enrolled
+        // learner. The plain self-enrolment and the pilot's manual one are not counted.
+        $this->assertEquals(['Fixture Category Two', 'Fixture Beta', 1, 1, 1, 1, 1], $rows[1]);
+        // Alpha gains the course and that learner: in delivery 2, enrolments 3, learners 2,
+        // completions 2.
+        $this->assertEquals(['Fixture Category One', 'Fixture Alpha', 2, 2, 3, 2, 2], $rows[2]);
+
+        // A disabled organisation-enrolment instance takes its course out of delivery, and its
+        // enrolment out of the enrolment counts; the completion still counts, as for cohort sync.
+        $DB->set_field('enrol', 'status', ENROL_INSTANCE_DISABLED, ['id' => $orgid]);
+        $rows = array_map('array_values', $this->get_custom_report_content($report->get('id')));
+        $this->assertEquals(['Fixture Category Two', 'Fixture Beta', 1, 0, 0, 0, 1], $rows[1]);
     }
 
     /**

@@ -79,7 +79,25 @@ itself is automated: the markdown here is the source, and Moodle is a render of 
    completed, never a certification (spec 013). Learners who finish the course get the
    badge automatically and can download the certificate from the course page.
 
-8. Open a small PR with those changes and merge it.
+8. **Enrol the organisations.** This is the site team's job, done in Moodle. Learner data
+   never goes in this repo. Never use groups to keep organisations apart. Which recipe
+   depends on whether the course is listed in
+   [`moodle/site/org-courses.yaml`](../../moodle/site/org-courses.yaml):
+
+   - **A shared course** (not listed, which is most courses): for each organisation, add a
+     **cohort sync** enrolment for its learner cohort, `ltct:org:<key>`, as **Student**, with
+     no group. Never add a managers cohort: managers would see every organisation's people.
+   - **An organisation-only course** (listed): the publish has already put it in that
+     organisation's category. Add two **cohort sync** enrolments, both with no group: the
+     organisation's learner cohort, `ltct:org:<key>`, as **Student**, and its managers
+     cohort, `ltct:org:<key>:managers`, as **Organisation manager**. Enrol no other
+     organisation.
+
+   Managers can also enrol their own learners one at a time, from their **My organisation**
+   page. Making a course organisation-only is the maintainer's decision, and is done before
+   the publish. The steps are in [`moodle/site/README.md`](../../moodle/site/README.md).
+
+9. Open a small PR with those changes and merge it.
 
 ## Exit criteria
 

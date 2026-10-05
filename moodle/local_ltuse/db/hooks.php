@@ -21,4 +21,10 @@ $callbacks = [
         'hook' => \core_user\hook\before_user_updated::class,
         'callback' => \local_ltuse\protection\hook_callbacks::class . '::before_user_updated',
     ],
+    // Spec 002 (amendment 2026-10-02, R10): a "My organisation" item in the user menu, only for
+    // a member of an organisation's managers cohort.
+    [
+        'hook' => \core_user\hook\extend_user_menu::class,
+        'callback' => \local_ltuse\hook_callbacks::class . '::user_menu',
+    ],
 ];

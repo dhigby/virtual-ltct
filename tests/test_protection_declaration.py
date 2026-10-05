@@ -12,7 +12,7 @@ import site_config as sc
 
 
 TEACHER_VIEW = ("      local/ltuse:viewidentity: allow          # spec 016 R7 path 4: real identities "
-                "of the course's protected learners")
+                "of the protected learners in the mentor's own group")
 MENTOR_VIEW = "      local/ltuse:viewidentity: allow                # spec 016 R7 path 2: the learner's real identity"
 
 
@@ -49,7 +49,7 @@ class Protection(unittest.TestCase):
         decl = sc.validate(self.dir)[0]
         protection = decl["protection"]
         self.assertEqual(protection["levels"], ["none", "email", "firstname", "pseudonym"])
-        self.assertEqual(protection["org_minimum_max"], "firstname")
+        self.assertNotIn("org_minimum_max", protection)
         self.assertIn("ltct_role", protection["withhold"]["firstname"])
         self.assertNotIn("firstname", protection["withhold"]["firstname"])
         self.assertIn("firstname", protection["withhold"]["pseudonym"])
@@ -57,15 +57,27 @@ class Protection(unittest.TestCase):
         self.assertEqual(payload["protection"], protection)
         self.assertEqual(list(payload)[-1], "protection")
 
-    def test_orgscope_is_not_ready_while_ltct_org_is_visible(self):
-        # Decision 2 has not landed: ltct_org is visible and the progress report scopes by it,
-        # so the plugin refuses firstname and pseudonym (R11).
-        self.assertFalse(sc.validate(self.dir)[0]["protection"]["orgscope_ready"])
+    def test_no_level_waits_for_the_organisation(self):
+        # Decision 2, option a (Doug, 2026-10-05 (scope review)): the organisation stays
+        # visible at every level, so the payload carries no organisation-scope gate.
+        self.assertNotIn("orgscope_ready", sc.validate(self.dir)[0]["protection"])
 
-    def test_a_private_ltct_org_with_a_report_scoped_by_it_is_refused(self):
-        self.edit("profile-fields.yaml", "    name: Organisation\n    visible: all",
-                  "    name: Organisation\n    visible: private")
-        self.assertInvalid("can be private only once no report scopes by it")
+    def test_the_progress_report_is_scoped_by_the_member_cohort(self):
+        # T034-T035: the scope holds whatever ltct_org's visibility (R11).
+        decl = sc.validate(self.dir)[0]
+        progress = [r for r in decl["reports"] if r["area"].endswith("_progress")]
+        self.assertTrue(progress)
+        for report in progress:
+            conditions = {c["condition"]: c["values"] for c in report["conditions"]}
+            self.assertNotIn("user:profilefield_ltct_org", conditions)
+            self.assertTrue(conditions["cohort:idnumber"]["value"].startswith("ltct:org:"))
+            self.assertNotIn("user:profilefield_ltct_org", [c["column"] for c in report["columns"]])
+
+    def test_an_organisation_field_condition_is_refused(self):
+        self.edit("reports.yaml",
+                  '{condition: cohort:idnumber, values: {operator: equal, value: "ltct:org:{org}"}}',
+                  '{condition: user:profilefield_ltct_org, values: {operator: equal, value: "{org}"}}')
+        self.assertInvalid("is never a condition")
 
     def test_the_payload_names_no_one(self):
         decl = sc.validate(self.dir)[0]
@@ -97,10 +109,6 @@ class Protection(unittest.TestCase):
         self.edit("protection.yaml", "  email: [maildisplay]", "  email: [maildisplay, ltct_org]")
         self.assertInvalid("ltct_org is never withheld")
 
-    def test_the_certificate_name_is_never_withheld(self):
-        self.edit("protection.yaml", "  email: [maildisplay]", "  email: [maildisplay, ltct_certname]")
-        self.assertInvalid("ltct_certname is never withheld")
-
     def test_the_learners_own_words_are_never_withheld(self):
         self.edit("protection.yaml", "  email: [maildisplay]", "  email: [maildisplay, description]")
         self.assertInvalid("the learner's own words are theirs")
@@ -113,17 +121,23 @@ class Protection(unittest.TestCase):
         self.edit("protection.yaml", "    - firstname                    # the pseudonym replaces it\n", "")
         self.assertInvalid("must withhold firstname")
 
-    def test_an_organisation_minimum_is_never_a_pseudonym(self):
-        self.edit("protection.yaml", "org_minimum_max: firstname", "org_minimum_max: pseudonym")
-        self.assertInvalid("never a pseudonym")
+    def test_no_organisation_minimum_is_declared(self):
+        # Organisation minimums are cut (Doug, 2026-10-05 (scope review), change 9).
+        self.edit("protection.yaml", "reconcile_minutes: 60", "org_minimum_max: firstname\nreconcile_minutes: 60")
+        self.assertInvalid("org_minimum_max")
 
-    def test_the_neutral_surname_is_empty_or_one_non_letter(self):
-        self.edit("protection.yaml", 'neutral_surname: ""', 'neutral_surname: "X"')
-        self.assertInvalid("neutral_surname")
+    def test_manageorgprotection_is_gone(self):
+        self.assertNotIn("local/ltuse:manageorgprotection", sc.PROTECTION_MANAGE_CAPS)
 
-    def test_the_placeholder_surname_is_accepted(self):
-        self.edit("protection.yaml", 'neutral_surname: ""', 'neutral_surname: "·"')
-        self.assertValid()
+    def test_the_neutral_surname_is_one_non_letter(self):
+        self.edit("protection.yaml", 'neutral_surname: "·"', 'neutral_surname: "X"')
+        self.assertInvalid("neutral_surname is one non-letter character")
+
+    def test_an_empty_neutral_surname_is_refused(self):
+        # Names are not locked (scope review, change 3), so core's edit form must accept the
+        # protected learner's own surname (R4).
+        self.edit("protection.yaml", 'neutral_surname: "·"', 'neutral_surname: ""')
+        self.assertInvalid("neutral_surname is one non-letter character")
 
     def test_reconcile_runs_hourly(self):
         self.edit("protection.yaml", "reconcile_minutes: 60", "reconcile_minutes: 5")
@@ -152,13 +166,9 @@ class Protection(unittest.TestCase):
         self.edit("roles.yaml", MENTOR_VIEW + "\n", "")
         self.assertInvalid("roles.yaml mentor: must allow local/ltuse:viewidentity")
 
-    def test_course_leaders_must_not_see_email(self):
-        self.edit("roles.yaml", "      moodle/course:useremail: prohibit        # spec 016 R8 [D1]: no",
-                  "      moodle/course:useremail: inherit        # no")
-        self.assertInvalid("roles.yaml editingteacher: must prohibit moodle/course:useremail")
-
     def test_course_leaders_must_not_download_backups(self):
-        self.edit("roles.yaml", "      moodle/backup:downloadfile: prohibit     # spec 016 R14\n", "")
+        self.edit("roles.yaml", "      moodle/backup:downloadfile: prohibit     # spec 016 R14: not in "
+                  "the archetype; prohibit so no course override grants it\n", "")
         self.assertInvalid("roles.yaml teacher: must prohibit moodle/backup:downloadfile")
 
     def test_report_editing_stays_with_manager(self):
@@ -166,61 +176,32 @@ class Protection(unittest.TestCase):
                   "      moodle/reportbuilder:edit: allow\n      moodle/course:viewparticipants: allow")
         self.assertInvalid("moodle/reportbuilder:edit stays with manager")
 
-    # --- settings (R3, R6, R8, R9) ---------------------------------------------------------------
+    # --- settings (R6, R8) ---------------------------------------------------------------------
 
-    def test_every_identity_setting_is_required(self):
+    def test_the_zero_cost_settings_are_required(self):
         self.edit("settings/identity.yaml", "  - name: enablegravatar\n    value: 0", "  - name: enablegravatar\n    value: 1")
         self.assertInvalid("enablegravatar must be 0")
 
-    def test_grade_exports_carry_no_email(self):
-        self.edit("settings/identity.yaml", "value: firstname,lastname,idnumber",
-                  "value: firstname,lastname,idnumber,email")
-        self.assertInvalid("must not list email")
-
-    def test_oauth2_is_refused(self):
-        self.edit("settings/identity.yaml", "  - name: auth\n    value: webservice",
-                  "  - name: auth\n    value: webservice,oauth2")
-        self.assertInvalid("auth enables oauth2")
-
-    def test_the_search_area_flag_is_core_search(self):
+    def test_email_in_staff_views_is_not_refused(self):
+        # Decision 1 is rejected (scope review, change 1): core's defaults are declared.
         decl = sc.validate(self.dir)[0]
-        names = {s["name"] for s in decl["settings"]}
-        self.assertIn("core_search/core_user_user_enabled", names)
+        declared = {s["name"]: str(s["value"]) for s in decl["settings"]}
+        self.assertEqual(declared["showuseridentity"], "email")
+        self.assertIn("email", declared["grade_export_userprofilefields"].split(","))
 
     def test_missing_identity_file_is_refused(self):
         (self.dir / "settings" / "identity.yaml").unlink()
-        self.assertInvalid("showuseridentity must be declared")
+        self.assertInvalid("enablegravatar must be declared")
 
-    # --- profile fields and the certificate (R10) ---------------------------------------------------
+    # --- the certificate (R10) -------------------------------------------------------------------
 
-    def test_certname_is_a_private_locked_text_field(self):
-        self.edit("profile-fields.yaml", "    name: Name on certificate\n    visible: private",
-                  "    name: Name on certificate\n    visible: all")
-        self.assertInvalid("ltct_certname is a text field, visible: private")
-
-    def test_a_text_field_takes_no_options(self):
-        self.edit("profile-fields.yaml", "    name: Name on certificate\n",
-                  "    name: Name on certificate\n    options: [a, b]\n")
-        self.assertInvalid("only a menu has options")
-
-    def test_certname_must_be_declared(self):
-        text = (self.dir / "profile-fields.yaml").read_text(encoding="utf-8")
-        cut = text[text.index("  - shortname: ltct_certname"):]
-        (self.dir / "profile-fields.yaml").write_text(text.replace(cut, ""), encoding="utf-8")
-        self.assertInvalid("ltct_certname is not declared")
-
-    def test_the_certificate_never_prints_studentname_under_protection(self):
-        self.edit("certificate/template.yaml", "{type: userfield, field: ltct_certname,", "{type: studentname,")
-        self.assertInvalid("studentname would print a protected learner's pseudonym")
-
-    def test_a_userfield_prints_only_certname(self):
-        self.edit("certificate/template.yaml", "field: ltct_certname", "field: ltct_role")
-        self.assertInvalid("prints ltct_certname, the real name for the certificate, and nothing else")
-
-    def test_one_name_element_only(self):
-        self.edit("certificate/template.yaml", "      - {type: coursename,",
-                  "      - {type: studentname, x: 1, y: 1}\n      - {type: coursename,")
-        self.assertInvalid("needs exactly one name element, not 2")
+    def test_the_certificate_prints_core_studentname(self):
+        # ltct_certname is cut (Doug, 2026-10-05 (scope review), change 8): the certificate
+        # prints core's studentname, and the site team issues a real-name one on request.
+        decl = sc.validate(self.dir)[0]
+        kinds = [e["type"] for page in decl["certificate_template"]["pages"] for e in page["elements"]]
+        self.assertIn("studentname", kinds)
+        self.assertFalse(any(f["shortname"] == "ltct_certname" for f in decl["profile_fields"]))
 
     def test_without_protection_yaml_nothing_is_required(self):
         (self.dir / "protection.yaml").unlink()

@@ -19,7 +19,8 @@ class surfaces {
      * are few, so each row is checked; nothing is said about anyone the viewer may not see.
      *
      * @param int $viewerid
-     * @return array[] {id, realname, display, level, levelname, org, canmanage}, by real name
+     * @return array[] {id, realname, display, level, levelname, org, canmanage}, by real name; the
+     *                 page shows them and offers no download (scope review change 14)
      */
     public static function supported(int $viewerid): array {
         global $DB;
@@ -38,7 +39,7 @@ class surfaces {
             }
             $out[] = [
                 'id' => $userid,
-                'realname' => service::certname((string)$row->realfirstname, (string)$row->reallastname),
+                'realname' => service::real_fullname((string)$row->realfirstname, (string)$row->reallastname),
                 'display' => fullname($user),
                 'level' => (string)$row->effectivelevel,
                 'levelname' => get_string('protection:level:' . $row->effectivelevel, 'local_ltuse'),
@@ -54,11 +55,19 @@ class surfaces {
 
     /**
      * Does the viewer support anyone protected? Decides whether the profile offers the page.
+     * Cheap first (scope review change 12): nobody protected on the site, or a viewer who could
+     * be entitled to no one, ends it before any per-person check.
      *
      * @param int $viewerid
      * @return bool
      */
     public static function supports_anyone(int $viewerid): bool {
+        global $DB;
+        if (!service::table_exists()
+                || !$DB->record_exists_select(service::TABLE, 'effectivelevel <> :none', ['none' => levels::NONE])
+                || !entitlement::may_be_entitled($viewerid)) {
+            return false;
+        }
         return (bool)self::supported($viewerid);
     }
 
@@ -76,13 +85,16 @@ class surfaces {
         $real = $entitled ? service::real_identity($learnerid) : null;
         return [
             'protected' => $entitled,
-            'realname' => $real ? service::certname($real['firstname'], $real['lastname']) : '',
+            'realname' => $real ? service::real_fullname($real['firstname'], $real['lastname']) : '',
             'protectedlabel' => $entitled ? get_string('protection:marker', 'local_ltuse') : '',
         ];
     }
 
     /**
-     * The learner's own view: their level, what others see, and how to ask (FR-012, FR-008).
+     * A protected learner's own view: their level, what others see, and who to ask for a
+     * change (FR-012, FR-008). The profile shows it only to someone protected; everyone else
+     * is to be offered protection at intake, in the welcome message and in site help (spec 016
+     * task T047, not yet in place).
      *
      * @param int $userid
      * @return string HTML
@@ -116,7 +128,7 @@ class surfaces {
             return '';
         }
         $real = service::real_identity($userid);
-        $name = $real ? service::certname($real['firstname'], $real['lastname']) : '';
+        $name = $real ? service::real_fullname($real['firstname'], $real['lastname']) : '';
         return $marker . ' ' . get_string('protection:realname', 'local_ltuse', s($name)) . ' (' .
             get_string('protection:level:' . ($real['level'] ?? levels::NONE), 'local_ltuse') . ')';
     }

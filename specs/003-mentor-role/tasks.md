@@ -249,31 +249,35 @@ The role and its capability serve every story. No story starts until this phase 
 
 ### Phase B: organisation managers (GATED)
 
-- [ ] T027 [US3] **Gate.** Ask the maintainer to decide whether organisation managers may assign mentors for their own organisation's learners. Give the context:
+- [X] T027 [US3] **Gate.** Ask the maintainer to decide whether organisation managers may assign mentors for their own organisation's learners. Give the context:
   - it reverses, for mentors only, spec 002's 2026-10-01 decline of manager self-service;
   - the recommended design is research R7.
 
   Record the decision, dated, in `INTENT.md` Decisions, and update the "Should partner managers enrol their own learners?" open question. **If declined**: skip T028–T033, amend spec FR-008 and SC-003 to the site team, and add the manager case to spec 008's scope in the same PR. Files: INTENT.md, specs/003-mentor-role/spec.md
+  **Done 2026-10-04:** decided 2026-10-02 (INTENT.md Decisions, "Courses are open across organisations": managers assign and end mentors through our own pages). Spec 002 had already folded the open question into "Who approves and enrols an organisation-only course…", so INTENT.md is unchanged. Recorded in research R7 with spec 002 R10's narrowing: learners only, through `may_manage_account()`. The page manages the default mentor only; a one-course mentor (2026-10-04) is spec 008's. FR-008 already says "their own organisation's learners", so spec.md is unchanged.
 
 **⟶ Only if T027 approves:**
 
-- [ ] T028 [P] [US3] Write a failing-first harness for `\local_ltuse\mentor_admin::decide(bool $isself, bool $learnerexists, bool $canassigncore, array $managedkeys, string $learnerorg): bool`, covering the contract's cases:
+- [X] T028 [P] [US3] Write a failing-first harness for `\local_ltuse\mentor_admin::decide(bool $isself, bool $learnerexists, bool $canassigncore, array $managedkeys, string $learnerorg): bool`, covering the contract's cases:
   - the site team is allowed;
   - a manager of the learner's organisation is allowed;
   - self, a missing or deleted learner, an empty `ltct_org` and another organisation are each refused.
 
   File: tests/mentor_admin_harness.php
-- [ ] T029 [P] [US3] Declare the `ltct:mentors` cohort (`mentors_cohort: {idnumber: ltct:mentors, name: Mentors, visible: false}`):
+  **Done:** the signature follows spec 002 R10: `decide(int $viewerid, bool $learnerexists, bool $canassigncore, array $managedkeys, array $person)`, whose manager branch is `organisation\access::may_manage_account()`. The harness failed first, then passed; it also covers the not-a-learner and missing-fact refusals.
+- [X] T029 [P] [US3] Declare the `ltct:mentors` cohort (`mentors_cohort: {idnumber: ltct:mentors, name: Mentors, visible: false}`):
   - teach `site_config.py` to validate the key and render it with spec 002's cohort item type;
   - add a test case;
   - confirm that `apply` and `drift` need no PHP change.
 
   Files: moodle/site/organisations.yaml, scripts/site_config.py, tests/test_site_config.py
+  **Done by spec 002 T050/T051:** `organisations.yaml` `mentors: {name, why}`, generated as the hidden `ltct:mentors` cohort by `site_config.py` (`MENTORS_COHORT`) and tested in `tests/test_site_config.py`. The idnumber is fixed in code, not declared as `mentors_cohort`.
 
 **⟶ Wait for T028, then:**
 
-- [ ] T030 [US3] Create `classes/mentor_admin.php` with the pure `decide()` that makes T028 pass. Its inputs are gathered in the page, not in the class. File: moodle/local_ltuse/classes/mentor_admin.php
-- [ ] T031 [US3] Build the "Manage mentors" page, `mentors.php?userid=<learner>`:
+- [X] T030 [US3] Create `classes/mentor_admin.php` with the pure `decide()` that makes T028 pass. Its inputs are gathered in the page, not in the class. File: moodle/local_ltuse/classes/mentor_admin.php
+  **Done:** pure. Its inputs are gathered by `local_ltuse_may_manage_mentors()` in lib.php (shared by the page and the profile link), with person facts from `local_ltuse_organisation_person_facts()`, which spec 002's organisation pages reuse.
+- [X] T031 [US3] Build the "Manage mentors" page, `mentors.php?userid=<learner>`:
   - **Access**: `require_login()`. Recompute `decide()` on every GET and POST:
     - `$canassigncore`: `has_capability('moodle/role:assign', $learnerctx)` and `mentor` is in `get_assignable_roles($learnerctx)`;
     - `$managedkeys`: `local_ltuse_managed_organisation_keys($USER->id)`;
@@ -284,8 +288,10 @@ The role and its capability serve every story. No story starts until this phase 
   - **Strings**: add them to the lang file.
 
   Files: moodle/local_ltuse/mentors.php, moodle/local_ltuse/lib.php, moodle/local_ltuse/lang/en/local_ltuse.php
+  **Done, to spec 002 T078/R10 where it differs from this task:** authorisation is `may_manage_account` (a learner whose field and cohort agree), not a `$learnerorg` match. Add and Remove each go through a confirmation POSTed with the sesskey; the mentor must be one the page offers; the picker leaves out deleted and suspended accounts. The link from `organisation.php` rows is spec 002 T077's. The spec 016 `can_view_identity` hook point is marked.
 - [ ] T032 [US3] Bump the version, install, and run quickstart B1–B5 on the instance with `ltct-test-orgmgr-a`, B5 being the forged POST. Time B1 against SC-003's two minutes. Record under "Instance results" (FR-008 manager part, US3-1 to US3-4) · specs/003-mentor-role/research.md
-- [ ] T033 [US3] Record the Phase B page in the plugin README under its own heading: its authorisation, and that it reads `cohort` ⋈ `cohort_members` through the existing `local_ltuse_managed_organisation_keys()`. File: moodle/local_ltuse/README.md
+- [X] T033 [US3] Record the Phase B page in the plugin README under its own heading: its authorisation, and that it reads `cohort` ⋈ `cohort_members` through the existing `local_ltuse_managed_organisation_keys()`. File: moodle/local_ltuse/README.md
+  **Done:** README section "Manage mentors: organisation managers (spec 003 Phase B)", with its raw reads. Version 2026100601 in version.php and the site.yaml pin (2026100401 when built; renumbered above spec 006's 2026100600 on merging main).
 
 **Checkpoint**: relationships are assigned and ended by the site team, and by organisation managers if Phase B was approved.
 
@@ -333,13 +339,14 @@ The role and its capability serve every story. No story starts until this phase 
   - FR-008 and SC-003, if T027 declined.
 
   File: specs/003-mentor-role/spec.md
-- [ ] T039 Run every repo check, and fix anything they trip:
+- [X] T039 Run every repo check, and fix anything they trip:
   - `python scripts/site_config.py validate`;
   - `python -m pytest tests -q`;
   - each PHP harness (`php tests/profile_access_harness.php`, `php tests/mentoring_harness.php`, and, if Phase B shipped, `php tests/mentor_admin_harness.php`);
   - the CI gates in the constitution (`gen_coverage.py`, `check_competency_descriptors.py`, `quiz_parse.py --check-all`).
 
   (verification only)
+  **Done 2026-10-04 (Phase B shipped in code):** validate, pytest, all eleven PHP harnesses including `mentor_admin_harness.php`, `gen_coverage.py`, `check_competency_descriptors.py`, `quiz_parse.py --check-all` and `check_course_package.py` all pass.
 - [ ] T040 Clean up the instance:
   - Delete every `ltct-test-*` account, which also exercises the `user_deleted` observer, and test courses C1–C3.
   - Run `drift` and confirm it is clean.

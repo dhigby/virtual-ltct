@@ -9,17 +9,25 @@ require_once($CFG->libdir . '/formslib.php');
 use local_ltuse\protection\levels;
 
 /**
- * The granting page's form (spec 016, research R12): one person's level, pseudonym, a
- * neutral username, corrections to the real name, and the history acknowledgement.
+ * The granting page's form (spec 016, research R12): one person's level, pseudonym, the two
+ * facts a raise records, the course-log block when asked for, a warning before the picture is
+ * deleted, corrections to the real name, and the history acknowledgement.
+ *
+ * A raise records that the person asked (`requested`, scope review change 13) and that the
+ * granter checked the account's email address identifies neither the person nor their
+ * organisation (`emailchecked`, change 2); the page shows a warning where the address looks
+ * as if it does. There is no username field: the service replaces a username that holds the
+ * real name by itself (change 15). Corrections and the acknowledgement are offered only to the
+ * site team: a manager grants at intake, for someone with no activity (change 14).
  *
  * Custom data:
  *   userid          the person
+ *   current         the level applied now
+ *   siteteam        the viewer is the site team (entitlement::is_site_team)
  *   seeidentity     the viewer may see (and so correct) the real identity
- *   available       level => bool, from levels::available()
- *   orgminimum      the organisation's minimum, which no own level may be looser than
  *   hasactivity     the person has activity, so a change needs the acknowledgement (R13)
- *   needsusername   their username gives away their real name (R13)
- *   suggested       a neutral username to offer
+ *   emailwarnings   service::email_warnings(): name, organisation
+ *   picturelevels   service::picture_levels(): the levels that would delete the picture (R6)
  *   held            field => value, the held real values (only when seeidentity)
  */
 class protection_form extends \moodleform {
@@ -33,34 +41,36 @@ class protection_form extends \moodleform {
 
         $options = [];
         foreach (levels::ORDER as $level) {
-            $label = get_string('protection:level:' . $level, 'local_ltuse');
-            if (empty($data['available'][$level])) {
-                $label .= ' ' . get_string('protection:notyet', 'local_ltuse');
-            }
-            $options[$level] = $label;
+            $options[$level] = get_string('protection:level:' . $level, 'local_ltuse');
         }
         $mform->addElement('select', 'level', get_string('protection:level', 'local_ltuse'), $options);
         $mform->addHelpButton('level', 'protection:level', 'local_ltuse');
-        if (($data['orgminimum'] ?? levels::NONE) !== levels::NONE) {
-            $mform->addElement('static', 'orgminimum', '', get_string('protection:orgminimumnote', 'local_ltuse',
-                get_string('protection:level:' . $data['orgminimum'], 'local_ltuse')));
-        }
 
         $mform->addElement('text', 'pseudonym', get_string('protection:pseudonym', 'local_ltuse'), ['maxlength' => 100]);
         $mform->setType('pseudonym', PARAM_TEXT);
         $mform->hideIf('pseudonym', 'level', 'neq', levels::PSEUDONYM);
 
-        if (!empty($data['needsusername'])) {
-            $mform->addElement('text', 'newusername', get_string('protection:newusername', 'local_ltuse'));
-            $mform->setType('newusername', PARAM_USERNAME);
-            $mform->setDefault('newusername', (string)$data['suggested']);
-            $note = !empty($data['seeidentity']) ? 'protection:usernamenote' : 'protection:usernamenote:neutral';
-            $mform->addElement('static', 'usernamenote', '', get_string($note, 'local_ltuse'));
-            $mform->hideIf('newusername', 'level', 'in', [levels::NONE, levels::EMAIL]);
-            $mform->hideIf('usernamenote', 'level', 'in', [levels::NONE, levels::EMAIL]);
+        $mform->addElement('advcheckbox', 'requested', '', get_string('protection:requested', 'local_ltuse'));
+        foreach ((array)($data['emailwarnings'] ?? []) as $code) {
+            $mform->addElement('static', 'emailwarn_' . $code, '',
+                \html_writer::span(get_string('protection:emailwarn:' . $code, 'local_ltuse'), 'text-danger'));
+        }
+        $mform->addElement('advcheckbox', 'emailchecked', '', get_string('protection:emailchecked', 'local_ltuse'));
+
+        // Only when the person asks for it (scope review change 5, R14).
+        $mform->addElement('advcheckbox', 'hidelogs', '', get_string('protection:hidelogs', 'local_ltuse'));
+        $mform->hideIf('hidelogs', 'level', 'eq', levels::NONE);
+
+        // The picture is deleted for good, so say so before it happens (scope review, "Keep" list).
+        if (!empty($data['picturelevels'])) {
+            $names = array_map(function($level) {
+                return get_string('protection:level:' . $level, 'local_ltuse');
+            }, (array)$data['picturelevels']);
+            $mform->addElement('static', 'picturewarn', '', \html_writer::span(
+                get_string('protection:picturewarn', 'local_ltuse', implode(' / ', $names)), 'text-danger'));
         }
 
-        if (!empty($data['seeidentity'])) {
+        if (!empty($data['seeidentity']) && !empty($data['siteteam'])) {
             $mform->addElement('header', 'realheader', get_string('protection:realidentity', 'local_ltuse'));
             $mform->addElement('text', 'realfirstname', get_string('protection:realfirstname', 'local_ltuse'));
             $mform->setType('realfirstname', PARAM_TEXT);
@@ -74,7 +84,7 @@ class protection_form extends \moodleform {
             }
         }
 
-        if (!empty($data['hasactivity'])) {
+        if (!empty($data['hasactivity']) && !empty($data['siteteam'])) {
             $mform->addElement('header', 'historyheader', get_string('protection:history', 'local_ltuse'));
             $mform->setExpanded('historyheader');
             $mform->addElement('static', 'historynote', '', get_string('protection:historynote', 'local_ltuse'));
@@ -87,16 +97,21 @@ class protection_form extends \moodleform {
 
     public function validation($data, $files) {
         $errors = parent::validation($data, $files);
-        if (!levels::is_level($data['level'] ?? '')) {
+        $level = $data['level'] ?? '';
+        if (!levels::is_level($level)) {
             $errors['level'] = get_string('protection:err:level', 'local_ltuse');
-        } else if (empty($this->_customdata['available'][$data['level']])) {
-            $errors['level'] = get_string('protection:err:notready', 'local_ltuse');
-        } else if (!levels::allowed_own($data['level'], (string)($this->_customdata['orgminimum'] ?? levels::NONE))) {
-            $errors['level'] = get_string('protection:err:looser', 'local_ltuse',
-                get_string('protection:level:' . $this->_customdata['orgminimum'], 'local_ltuse'));
+            return $errors;
         }
-        if (($data['level'] ?? '') === levels::PSEUDONYM && trim((string)($data['pseudonym'] ?? '')) === '') {
+        if ($level === levels::PSEUDONYM && trim((string)($data['pseudonym'] ?? '')) === '') {
             $errors['pseudonym'] = get_string('required');
+        }
+        if (levels::is_raise((string)$this->_customdata['current'], $level)) {
+            if (empty($data['requested'])) {
+                $errors['requested'] = get_string('protection:err:notrequested', 'local_ltuse');
+            }
+            if (empty($data['emailchecked'])) {
+                $errors['emailchecked'] = get_string('protection:err:emailnotchecked', 'local_ltuse');
+            }
         }
         return $errors;
     }

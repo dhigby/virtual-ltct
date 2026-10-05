@@ -4,11 +4,10 @@ namespace local_ltuse\task;
 defined('MOODLE_INTERNAL') || die();
 
 /**
- * Apply one user's effective protection level and ltct_certname (spec 016, research R2, R10).
+ * Re-apply one protected user's level (spec 016, research R2).
  *
- * Queued by the user_created observer, which fires before the upload tool saves profile data,
- * so this runs once ltct_org is known; by an observer whose user was already being written; and
- * by set_org_protection for every member. Custom data: {userid}.
+ * Queued by service::apply_or_queue() when the user_updated observer finds a drifted account
+ * inside someone else's transaction, or the user's lock busy. Custom data: {userid}.
  */
 class apply_protection extends \core\task\adhoc_task {
 

@@ -6,7 +6,8 @@
 
     Context variables required for this template:
     * haslearners, learners: [{id, fullname, protected, protectedlabel, realname (spec 016: set only
-        for a viewer entitled to the real identity), profileurl, gradesurl, messageurl, hascourses,
+        for a viewer entitled to the real identity), profileurl, gradesurl, messageurl, pathwaysurl,
+        hascourses,
         courses: [{fullname (format_string, so unescaped), statustext, completed, inprogress, notstarted, nottracked,
                    hidden, notactive, enrolmenttext}]}]
     * hasmentors, mentors: [{fullname, messageurl}]
@@ -16,7 +17,7 @@
     {
         "haslearners": true,
         "learners": [{"fullname": "Learner One", "profileurl": "#", "gradesurl": "#",
-            "messageurl": "#", "hascourses": true,
+            "messageurl": "#", "pathwaysurl": "#", "hascourses": true,
             "courses": [{"fullname": "Course A", "statustext": "In progress, 40%",
                 "inprogress": true, "hidden": false, "notactive": false, "enrolmenttext": ""}]}],
         "hasmentors": true,
@@ -40,7 +41,8 @@
             <p class="mb-2">
                 <a href="{{profileurl}}">{{#str}}mentoring:profile, local_ltuse{{/str}}</a> ·
                 <a href="{{gradesurl}}">{{#str}}mentoring:grades, local_ltuse{{/str}}</a> ·
-                <a href="{{messageurl}}">{{#str}}mentoring:message, local_ltuse{{/str}}</a>
+                <a href="{{messageurl}}">{{#str}}mentoring:message, local_ltuse{{/str}}</a> ·
+                <a href="{{pathwaysurl}}">{{#str}}pathways, local_ltuse{{/str}}</a>
             </p>
             {{#hascourses}}
             <ul class="list-unstyled mb-0">

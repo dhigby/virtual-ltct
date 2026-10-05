@@ -333,6 +333,13 @@ COURSE_LEADER_PROHIBIT = ("moodle/backup:downloadfile",)   # R14: email and logs
 # Roles that must not let anyone assign roles: the follow-only roles (spec 003 contract).
 NO_ALLOWASSIGN = frozenset({ORGMANAGER, MENTOR})
 
+# Spec 008 (research R12): the site team's administration role, held by each site-team
+# member's own account at system level. Spec 016's PROTECTION_MANAGE_ROLES allowlist gains
+# this role when 016 lands (008 task T015, agreed with 016 on 2026-10-04), because
+# can_manage_protection for a new account needs local/ltuse:manageprotection; until then
+# roles.yaml leaves that capability out, since an unknown capability blocks apply.
+ADMIN_ROLE = "ltctadmin"
+
 
 # ---------------------------------------------------------------------------------------
 # A strict YAML loader. YAML 1.1 turns an unquoted `off` into False, which a reviewer
@@ -837,6 +844,8 @@ def validate(site_dir=SITE_DIR, modules_dir=None):
             _check_orgmanager(role, problems)
         elif role["shortname"] == MENTOR:
             _check_mentor(role, problems)
+        elif role["shortname"] == ADMIN_ROLE:
+            _check_admin_role(role, problems)
     # FR-001 (spec 003): once local_ltuse defines the mentor capability, the role that holds
     # it must be declared, or the Mentoring page has nobody to show.
     ltuse = next((p for p in decl["plugins"] if p.get("component") == "local_ltuse"), None)
@@ -1271,6 +1280,17 @@ def _check_mentor(role, problems):
         if cap not in MENTOR_ALLOW:
             problems.add(where, "%s is not on the mentor allowlist: a mentor follows "
                          "progress and changes nothing (FR-006, FR-013)" % cap)
+
+
+def _check_admin_role(role, problems):
+    """The site team's administration role (spec 008, research R12)."""
+    where = "roles.yaml %s" % ADMIN_ROLE
+    if role.get("contextlevels") != ["system"]:
+        problems.add(where, "contextlevels must be exactly [system]; each site-team member "
+                     "holds it once, at system level (R12)")
+    if role.get("archetype") != "":
+        problems.add(where, 'archetype must be "", so it is never granted by default and a '
+                     "capability added by hand shows as drift")
 
 
 def _expand(decl, orgs, fields):

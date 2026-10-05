@@ -93,9 +93,13 @@ itself is automated: the markdown here is the source, and Moodle is a render of 
      cohort, `ltct:org:<key>:managers`, as **Organisation manager**. Enrol no other
      organisation.
 
-   Managers can also enrol their own learners one at a time, from their **My organisation**
-   page. Making a course organisation-only is the maintainer's decision, and is done before
-   the publish. The steps are in [`moodle/site/README.md`](../../moodle/site/README.md).
+   The site team adds each cohort with `python scripts/ltct_admin.py enrol course --cohort
+   <cohort> --course ltct:<slug>` (or `/manage-learners`), which previews first and
+   refuses any enrolment the rules above do not allow. Managers can also enrol their own
+   learners one at a time, from their **My organisation** page. Making a course
+   organisation-only is the maintainer's decision, and is done before the publish. The steps
+   are in [`moodle/site/README.md`](../../moodle/site/README.md), under "The site team's
+   administration tool".
 
 9. Open a small PR with those changes and merge it.
 

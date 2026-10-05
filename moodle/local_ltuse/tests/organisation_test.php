@@ -205,6 +205,55 @@ final class organisation_test extends \advanced_testcase {
         $this->assertSame(0, (int)$DB->get_field('user', 'suspended', ['id' => $this->learner->id]));
     }
 
+    public function test_the_unchecked_cores_ask_no_manager_but_keep_their_rules(): void {
+        // Spec 008 research R6: the site team act on people no manager may, such as a mentor.
+        $siteteam = $this->getDataGenerator()->create_user();
+        $mentor = $this->person('fixture-a');
+        cohort_add_member($this->cohorts['ltct:mentors']->id, $mentor->id);
+        $this->setUser($siteteam);
+
+        try {
+            actions::suspend((int)$mentor->id);
+            $this->fail('the manager wrapper let a non-manager act');
+        } catch (\moodle_exception $e) {
+            $this->assertSame('organisation:notyours', $e->errorcode);
+        }
+
+        $shared = $this->course('ltct:published');
+        actions::do_enrol((int)$mentor->id, (int)$shared->id);
+        $this->assertSame(ENROL_USER_ACTIVE, $this->org_status((int)$shared->id, (int)$mentor->id));
+        foreach (['ltct:pilots', 'ltct:org:fixture-b'] as $idnumber) {
+            try {
+                actions::do_enrol((int)$mentor->id, (int)$this->course($idnumber)->id);
+                $this->fail("enrolled into a course in $idnumber");
+            } catch (\moodle_exception $e) {
+                $this->assertSame('organisation:notthiscourse', $e->errorcode);
+            }
+        }
+        actions::do_unenrol((int)$mentor->id, (int)$shared->id);
+        $this->assertNull($this->org_status((int)$shared->id, (int)$mentor->id));
+
+        $this->assertTrue(actions::do_suspend((int)$mentor->id));
+        $this->assertFalse(actions::do_suspend((int)$mentor->id), 'already suspended');
+        $this->assertTrue(actions::do_reactivate((int)$mentor->id));
+
+        $deleted = $this->person('fixture-a');
+        delete_user($deleted);
+        $refused = ['the site administrator' => [get_admin()->id, 'do_suspend'],
+            'the acting user' => [$siteteam->id, 'do_suspend'],
+            'the acting user, enrolling' => [$siteteam->id, 'do_enrol'],
+            'a deleted account' => [$deleted->id, 'do_enrol']];
+        foreach ($refused as $who => [$userid, $method]) {
+            try {
+                $method === 'do_enrol' ? actions::do_enrol((int)$userid, (int)$shared->id)
+                    : actions::do_suspend((int)$userid);
+                $this->fail("$method acted on $who");
+            } catch (\moodle_exception $e) {
+                $this->assertSame('organisation:notyours', $e->errorcode, $who);
+            }
+        }
+    }
+
     public function test_reset_returns_a_mapped_status(): void {
         $this->setUser($this->manager);
         $sink = $this->redirectEmails();

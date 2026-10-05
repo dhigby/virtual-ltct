@@ -13,15 +13,20 @@ $plugin->version   = 2026100900;   // Identity protection (spec 016): two tables
                                    // (local_ltuse_protection, _protection_log), two
                                    // capabilities, the before_user_updated hook, two
                                    // observers, two tasks, one web service and the
-                                   // protectionchanged message.
-                                   // db/upgrade.php saves its savepoint at this stamp. It
-                                   // sits above administration (spec 008, 2026100801), which
-                                   // merges first. Before them, managers' own people (spec 002
-                                   // amendment 2026-10-02, 2026100602): the "My organisation"
-                                   // page and its actions, the local_ltuse_org_contact table
-                                   // and the hourly reconcile_org_contacts task, the cohort
-                                   // observers, and the local_ltuse_place_course web service.
-                                   // Before it, manage mentors (spec 003 Phase B, 2026100601):
+                                   // protectionchanged message. db/upgrade.php saves its
+                                   // savepoint at this stamp, after administration's.
+                                   // Before it, administration (spec 008, 2026100801): the
+                                   // ltuse_admin service, the local/ltuse:administer
+                                   // capability and the coursementorsync setting
+                                   // (2026100800); then the course-mentor table
+                                   // (local_ltuse_course_mentor, savepoint 2026100801), its
+                                   // sync, observers and hourly reconcile. Before them,
+                                   // managers' own people (spec 002 amendment 2026-10-02,
+                                   // 2026100602): the "My organisation" page and its actions,
+                                   // the local_ltuse_org_contact table and the hourly
+                                   // reconcile_org_contacts task, the cohort observers, and
+                                   // the local_ltuse_place_course web service. Before it,
+                                   // manage mentors (spec 003 Phase B, 2026100601):
                                    // mentors.php and the profile link, no schema change; and
                                    // learning pathways (spec 006, 2026100600): the pathway
                                    // tables (local_ltuse_course_pathway, _role_pathway,

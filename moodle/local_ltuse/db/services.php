@@ -122,6 +122,157 @@ $functions = [
         'ajax'         => false,
         'capabilities' => 'local/ltuse:publish',
     ],
+
+    // Spec 008: administration. The site team's functions, called by scripts/ltct_admin.py
+    // through the 'LTC administration' service below and no other. Each checks
+    // local/ltuse:administer, then the core capability for the write it makes. Entries are
+    // added as each function lands (specs/008-admin-tooling/contracts/admin-service.md).
+    'local_ltuse_admin_check' => [
+        'classname'    => 'local_ltuse\external\admin_check',
+        'description'  => 'Report what the administration tool relies on: the settings it '
+                        . 'needs, the capabilities the caller lacks, and whether learning '
+                        . 'pathways and identity protection are installed. Changes nothing.',
+        'type'         => 'read',
+        'ajax'         => false,
+        'capabilities' => 'local/ltuse:administer',
+    ],
+    'local_ltuse_admin_list' => [
+        'classname'    => 'local_ltuse\external\admin_list',
+        'description'  => 'List the ltct: cohorts or ltct: courses the site team may name, '
+                        . 'optionally for one organisation. Changes nothing.',
+        'type'         => 'read',
+        'ajax'         => false,
+        'capabilities' => 'local/ltuse:administer, moodle/cohort:view',
+    ],
+    'local_ltuse_admin_preview_intake' => [
+        'classname'    => 'local_ltuse\external\admin_preview_intake',
+        'description'  => 'Preview an intake file: what applying each row would do, with '
+                        . 'people masked unless asked. Changes nothing.',
+        'type'         => 'read',
+        'ajax'         => false,
+        'capabilities' => 'local/ltuse:administer, moodle/user:create',
+    ],
+    'local_ltuse_admin_apply_intake_row' => [
+        'classname'    => 'local_ltuse\external\admin_apply_intake_row',
+        'description'  => 'Apply one intake row as previewed: create the account, protect it, '
+                        . 'set its organisation and enrol it in the row\'s courses.',
+        'type'         => 'write',
+        'ajax'         => false,
+        'capabilities' => 'local/ltuse:administer, moodle/user:create',
+    ],
+    'local_ltuse_admin_preview_cohort_enrolment' => [
+        'classname'    => 'local_ltuse\external\admin_preview_cohort_enrolment',
+        'description'  => 'Preview enrolling a cohort into a course or a pathway by cohort '
+                        . 'sync, or disabling that enrolment. Changes nothing.',
+        'type'         => 'read',
+        'ajax'         => false,
+        'capabilities' => 'local/ltuse:administer, enrol/cohort:config',
+    ],
+    'local_ltuse_admin_apply_cohort_enrolment' => [
+        'classname'    => 'local_ltuse\external\admin_apply_cohort_enrolment',
+        'description'  => 'Enrol one cohort into one course by cohort sync, or disable that '
+                        . 'enrolment, as previewed. Never deletes an enrolment method.',
+        'type'         => 'write',
+        'ajax'         => false,
+        'capabilities' => 'local/ltuse:administer, enrol/cohort:config',
+    ],
+    'local_ltuse_admin_apply_pathway_assignment' => [
+        'classname'    => 'local_ltuse\external\admin_apply_pathway_assignment',
+        'description'  => 'Give a cohort a learning pathway that enrols, if the cohort may be '
+                        . 'enrolled into every course on it.',
+        'type'         => 'write',
+        'ajax'         => false,
+        'capabilities' => 'local/ltuse:administer, moodle/cohort:assign',
+    ],
+    'local_ltuse_admin_preview_suspension' => [
+        'classname'    => 'local_ltuse\external\admin_preview_suspension',
+        'description'  => 'Preview suspending or reactivating accounts, with people masked '
+                        . 'unless asked. Changes nothing.',
+        'type'         => 'read',
+        'ajax'         => false,
+        'capabilities' => 'local/ltuse:administer, moodle/user:update',
+    ],
+    'local_ltuse_admin_apply_suspension' => [
+        'classname'    => 'local_ltuse\external\admin_apply_suspension',
+        'description'  => 'Suspend or reactivate one account as previewed. Sessions end on '
+                        . 'suspension; enrolments, grades and completion are kept.',
+        'type'         => 'write',
+        'ajax'         => false,
+        'capabilities' => 'local/ltuse:administer, moodle/user:update',
+    ],
+    'local_ltuse_admin_preview_move' => [
+        'classname'    => 'local_ltuse\external\admin_preview_move',
+        'description'  => 'The counted dry run before moving learners between organisations: '
+                        . 'per learner and course, what is kept, gained, suspended or lost. '
+                        . 'Changes nothing.',
+        'type'         => 'read',
+        'ajax'         => false,
+        'capabilities' => 'local/ltuse:administer, moodle/user:update',
+    ],
+    'local_ltuse_admin_apply_move' => [
+        'classname'    => 'local_ltuse\external\admin_apply_move',
+        'description'  => 'Move one learner to another organisation as previewed, by setting '
+                        . 'their organisation field only. Refused if any course would be lost.',
+        'type'         => 'write',
+        'ajax'         => false,
+        'capabilities' => 'local/ltuse:administer, moodle/user:update',
+    ],
+    'local_ltuse_admin_preview_cohort_members' => [
+        'classname'    => 'local_ltuse\external\admin_preview_cohort_members',
+        'description'  => 'Preview adding people to, or removing them from, managers cohorts '
+                        . 'and the mentors cohort. Changes nothing.',
+        'type'         => 'read',
+        'ajax'         => false,
+        'capabilities' => 'local/ltuse:administer, moodle/cohort:assign',
+    ],
+    'local_ltuse_admin_apply_cohort_members' => [
+        'classname'    => 'local_ltuse\external\admin_apply_cohort_members',
+        'description'  => 'Add one person to, or remove them from, a managers cohort or the '
+                        . 'mentors cohort, as previewed.',
+        'type'         => 'write',
+        'ajax'         => false,
+        'capabilities' => 'local/ltuse:administer, moodle/cohort:assign',
+    ],
+    'local_ltuse_admin_summary' => [
+        'classname'    => 'local_ltuse\external\admin_summary',
+        'description'  => 'One organisation\'s cohort membership and cohort enrolments: counts, '
+                        . 'and people masked unless asked. Changes nothing.',
+        'type'         => 'read',
+        'ajax'         => false,
+        'capabilities' => 'local/ltuse:administer, moodle/cohort:view',
+    ],
+    'local_ltuse_admin_preview_mentors' => [
+        'classname'    => 'local_ltuse\external\admin_preview_mentors',
+        'description'  => 'Preview mentor relationships made in bulk, or all of one mentor\'s '
+                        . 'relationships ended, with people masked unless asked. Changes nothing.',
+        'type'         => 'read',
+        'ajax'         => false,
+        'capabilities' => 'local/ltuse:administer, moodle/role:assign',
+    ],
+    'local_ltuse_admin_apply_mentors' => [
+        'classname'    => 'local_ltuse\external\admin_apply_mentors',
+        'description'  => 'Make one mentor relationship, or end one of a mentor\'s '
+                        . 'relationships, as previewed.',
+        'type'         => 'write',
+        'ajax'         => false,
+        'capabilities' => 'local/ltuse:administer, moodle/role:assign',
+    ],
+    'local_ltuse_admin_preview_course_mentors' => [
+        'classname'    => 'local_ltuse\external\admin_preview_course_mentors',
+        'description'  => 'Preview recording or removing one-course and cohort mentors. '
+                        . 'Changes nothing.',
+        'type'         => 'read',
+        'ajax'         => false,
+        'capabilities' => 'local/ltuse:administer, moodle/role:assign, moodle/course:managegroups',
+    ],
+    'local_ltuse_admin_apply_course_mentors' => [
+        'classname'    => 'local_ltuse\external\admin_apply_course_mentors',
+        'description'  => 'Record or remove one one-course or cohort mentor as previewed, then '
+                        . 'bring the course\'s course mentors into step.',
+        'type'         => 'write',
+        'ajax'         => false,
+        'capabilities' => 'local/ltuse:administer, moodle/role:assign, moodle/course:managegroups',
+    ],
 ];
 
 // One service, so a single token grants exactly these functions and nothing else.
@@ -162,5 +313,40 @@ $services = [
         // create_page. Without this the images never reach the course and the Android
         // app shows a lesson full of broken pictures.
         'uploadfiles'        => 1,
+    ],
+
+    // Spec 008: administration. A second service, so the site team's tool has a credential
+    // distinct from the publisher's, holding only administration's functions (FR-009,
+    // research R12). Each site-team member gets their own token on their own account
+    // (cli/setup_admin_token.php), so Moodle's logs show who made each change. Removing this
+    // entry deletes every token issued for it on the next upgrade.
+    'LTC administration' => [
+        'functions' => [
+            'local_ltuse_admin_check',
+            'local_ltuse_admin_list',
+            'local_ltuse_admin_preview_intake',
+            'local_ltuse_admin_apply_intake_row',
+            'local_ltuse_admin_preview_cohort_enrolment',
+            'local_ltuse_admin_apply_cohort_enrolment',
+            'local_ltuse_admin_apply_pathway_assignment',
+            'local_ltuse_admin_preview_suspension',
+            'local_ltuse_admin_apply_suspension',
+            'local_ltuse_admin_preview_move',
+            'local_ltuse_admin_apply_move',
+            'local_ltuse_admin_preview_cohort_members',
+            'local_ltuse_admin_apply_cohort_members',
+            'local_ltuse_admin_summary',
+            'local_ltuse_admin_preview_mentors',
+            'local_ltuse_admin_apply_mentors',
+            'local_ltuse_admin_preview_course_mentors',
+            'local_ltuse_admin_apply_course_mentors',
+            'core_webservice_get_site_info',
+        ],
+        'requiredcapability' => 'local/ltuse:administer',
+        'restrictedusers'    => 1,
+        'enabled'            => 1,
+        'shortname'          => 'ltuse_admin',
+        'downloadfiles'      => 0,
+        'uploadfiles'        => 0,
     ],
 ];

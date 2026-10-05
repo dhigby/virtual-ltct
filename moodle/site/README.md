@@ -217,30 +217,140 @@ its learners keep their completions. Never delete it (see badges above).
 
 Reports hold real people. So does the weekly email's attachment. Save every report download and every emailed attachment **outside this repository folder**, as you would the upload CSV below, and delete it once you are done with it. GitDoc pushes anything left in this folder to the public repo. `.gitignore` refuses `*.csv`, `*.xlsx`, `*.xls` and `*.ods` only as a backstop.
 
-## The site team's steps
+## The site team's administration tool
 
-These steps change learner data, not configuration, so they are done in Moodle and never recorded in this repo. Spec 008 will script them. Until then, the site team does them by hand.
+These steps change learner data, not configuration, so they are done in Moodle and never recorded in this repo. They are done with `scripts/ltct_admin.py` (spec 008), or with the `/manage-learners` command, which runs the same tool for you. Its contract is [`specs/008-admin-tooling/contracts/cli.md`](../../specs/008-admin-tooling/contracts/cli.md).
 
-**Create accounts.** Use **Site administration > Users > Upload users** with a CSV file. Put each learner's organisation key in a `profile_field_ltct_org` column, for example `seed-company`. Their cohort and the courses it is enrolled in follow automatically.
+**Before the first run.**
 
-The CSV holds real people, so make it and keep it **outside this repository folder**, then delete it once the upload is done. GitDoc pushes anything left in this folder to the public repo. `.gitignore` refuses `*.csv` only as a backstop.
+- Each member of the site team has their **own** token, on their own account holding the `ltctadmin` role (`roles.yaml`). It is made on the server with `php public/local/ltuse/cli/setup_admin_token.php --username=<you> --token-file=<a file outside the repo>`, which writes the token to that file and never prints it. There is no shared admin account, so Moodle's logs show who made each change.
+- Set `MOODLE_URL`, and `MOODLE_ADMIN_TOKEN` to that token, in your terminal. It is never the publisher's `MOODLE_TOKEN`; the tool refuses if the two are the same.
+- Run `python scripts/ltct_admin.py check`. It names the site and your account, and refuses to go on if a function, a capability or a setting the tool relies on is missing, naming it.
 
-**Enrol an organisation in a course.** There are two recipes. Never use groups to keep organisations apart: a course may use groups for its own teaching, but never for that.
+**Every changing command is two steps.** Run it once: Moodle works out what each row would do and changes nothing, and the tool prints counts and a confirmation code. Run the line it prints, with `--apply --confirm <code>`, to make exactly those changes. If anything changed in between, the second run refuses and you preview again. A run cut off by a bad connection is finished by running the same line again; rows already done say `already done`.
 
-- **A shared course** (any course not in `org-courses.yaml`): add one **cohort sync** enrolment method for the organisation's learner cohort, `ltct:org:<key>`, as **Student**, with no group. Do this once for each organisation. **Never** add a managers cohort to a shared course: managers would see every organisation's people in it. Drift fails if one is there.
-- **An organisation-only course** (listed in `org-courses.yaml`): add two **cohort sync** enrolment methods, both with no group:
-  - the organisation's learner cohort, `ltct:org:<key>`, as **Student**;
-  - its managers cohort, `ltct:org:<key>:managers`, as **Organisation manager**.
+**Files.** Every file the tool reads or writes holds real people, so it must be **outside every repository folder**. The tool refuses a path inside any git working tree, this repo's sibling worktrees included, and suggests `~/ltct-private/`. Delete each file once you are done with it. `python scripts/ltct_admin.py template --kind <intake|move|mentors|course-mentors|managers|suspension> --out ~/ltct-private/<name>.csv` writes a blank one with its column names. People are shown masked (`a***@example.org`) unless you add `--show-people` in your own terminal.
 
-  Enrol only the organisation the course is listed for. Nothing stops you enrolling another, so check the key.
+**Names.** `--org` takes an organisation key; `--cohort` and `--course` take idnumbers (`ltct:org:<key>`, `ltct:<slug>`). `python scripts/ltct_admin.py list organisations|cohorts|courses [--org <key>]` prints the ones you may use.
 
-**Make someone an organisation manager.** Add them to that organisation's managers cohort (**Site administration > Users > Cohorts**). They get the managers' page at once, and become Organisation manager in their organisation's own courses. Remove them from the cohort and all of it ends at once.
+A row that `waits` asked for identity protection, and joins once identity protection is ready for that person.
 
-**Move a learner to another organisation** by changing their organisation field. Their cohorts follow. Their enrolments in shared courses stay. Their enrolments in the old organisation's own courses are suspended, with their history kept.
+### Bring learners on
 
-**Enrol course leaders** (Course mentor, `teacher`) in each course they lead, by hand, with no group.
+```bash
+python scripts/ltct_admin.py intake ~/ltct-private/intake.csv
+python scripts/ltct_admin.py intake ~/ltct-private/intake.csv --apply --confirm <code>
+```
 
-**Fill the mentors cohort.** Add each person who may mentor to the **Mentors** cohort, `ltct:mentors`. A mentor may come from any organisation. Managers pick their learners' mentors only from this cohort.
+One row per person, in the form managers send (see [Asking for new accounts](#asking-for-new-accounts)). A new address gets an account, an emailed password and their organisation. They sign in with their email address. Their organisation's cohort, and the courses it is enrolled in, follow in the same request. An address that already exists is matched, never duplicated. Someone already in another organisation, or suspended, is flagged and left alone: run `move` or `reactivate` deliberately. A row's `courses` column enrols them through the organisation's own enrolment, as a manager would.
+
+### Enrol an organisation in a course
+
+```bash
+python scripts/ltct_admin.py enrol course --cohort ltct:org:<key> --course ltct:<slug>
+```
+
+This adds, or turns back on, one cohort sync into the course, so every current and future member is enrolled as Student. The tool decides who may go where:
+
+- an organisation's cohort, into a published course or its own organisation-only course;
+- its managers cohort, as Organisation manager, into its own organisation-only course only;
+- anything else, including any course in Pilots, is refused.
+
+`enrol pathway --cohort ltct:org:<key> --pathway <key>` does the same for every course in a pathway (spec 006), and keeps it in step as courses join the pathway.
+
+To take a cohort out of a course, run `unenrol --cohort ltct:org:<key> --course ltct:<slug>`. It disables the cohort sync, never deletes it, so learners keep their grades and completion. `enrol course` turns it back on.
+
+### Move learners to another organisation: mirror, then move
+
+```bash
+python scripts/ltct_admin.py enrol mirror --from <old key> --to <new key>
+python scripts/ltct_admin.py move ~/ltct-private/move.csv
+```
+
+1. `enrol mirror` enrols the new organisation's cohort in every shared course the old one is in.
+2. `move` (columns `email`, `organisation`) previews, per learner and course, what is **kept**, **gained**, **lost** and **suspended by rule** (an organisation-only course of the old organisation). A learner who would lose a shared course is refused, which is why the mirror comes first.
+
+On apply, the learner's organisation field changes. Their cohorts follow, and the old cohort-sync enrolment is suspended with its history kept. There is nothing to unenrol by hand afterwards.
+
+### Managers and the mentors cohort
+
+```bash
+python scripts/ltct_admin.py managers ~/ltct-private/managers.csv
+```
+
+Columns `email`, `cohort` and `action` (`add` or `remove`). The cohort is an organisation's managers cohort (`ltct:org:<key>:managers`) or `ltct:mentors`. An organisation's learner cohort is refused, because its members follow the organisation field. A manager becomes Organisation manager in every course their organisation is enrolled in, and removing them takes the role away. An ALTC covering several organisations is one row per organisation.
+
+**Course leaders** (Course mentor, `teacher`) are enrolled by hand in each course they lead, with no group. The tool does not do this.
+
+### Mentors
+
+```bash
+python scripts/ltct_admin.py mentors assign ~/ltct-private/mentors.csv
+python scripts/ltct_admin.py mentors end --mentor <address>
+python scripts/ltct_admin.py course-mentors ~/ltct-private/course-mentors.csv [--remove]
+```
+
+- `mentors assign` (columns `learner_email`, `mentor_email`) gives each learner their mentor, as the page in [Mentors](#mentors-assigning-and-ending-a-relationship) does one at a time. Each mentor must be in `ltct:mentors`.
+- `mentors end` ends all of one mentor's relationships.
+- `course-mentors` (columns `course`, `mentor_email`, and `learner_email` or `cohort`) records who assesses a learner, or a cohort, in one course, in place of their usual mentor (spec 008 plan decision 2). The automatic course-mentor sync does the enrolling once it is turned on, which waits on spec 016 (decision 11).
+
+### Suspend and reactivate
+
+```bash
+python scripts/ltct_admin.py suspend ~/ltct-private/suspension.csv
+python scripts/ltct_admin.py reactivate --email <address>
+```
+
+A file (column `email`), or one `--email`. Suspending ends the person's sessions and refuses their login. Their enrolments, grades and completion stay, and `reactivate` gives them back. This works for anyone but a site administrator, including staff, mentors and managers, whom an organisation manager cannot act on.
+
+### See an organisation
+
+`python scripts/ltct_admin.py summary --org <key>` prints its cohort membership and enrolments, masked. Add `--out ~/ltct-private/<name>.csv` to write it to a file instead.
+
+An organisation manager only follows their own people. They cannot create accounts or change anyone's organisation. They enrol, suspend and reactivate their own people on their organisation page (spec 002).
+
+Core's **Site administration > Users > Upload users** stays a fallback for when the tool cannot be used. It enrols through the manual method, which counts as a pilot, and saves the organisation field after the account exists, so use it only for accounts with no courses and no protection.
+
+## Asking for new accounts
+
+*For organisation managers. Spec 008, user story 4.*
+
+Only the site team creates accounts. To ask for some, send the site team a list in the form
+below. They preview it, check it with you if anything is unclear, and apply it unchanged.
+
+**1. Get a blank file.** Ask the site team for an intake file. They make it with
+`python scripts/ltct_admin.py template --kind intake --out <a folder outside the repo>/intake.csv`
+and send it to you. It holds the column names and nothing else.
+
+**2. Fill in one person per row.** Open it in a spreadsheet and keep the first row as it is.
+
+| Column | Fill in | Must you? |
+|---|---|---|
+| `email` | The person's own email address. Each address once only. Moodle sends their password to it. | Yes |
+| `firstname` | Their first name, as they want it shown. | Yes |
+| `lastname` | Their last name. | Yes |
+| `organisation` | Your organisation's key, exactly as the site team gave it to you (for example `seed-company`), not its full name. | Yes |
+| `country` | Their country as two letters, for example `KE` or `PG`. | No |
+| `protection` | Optional, and blank for nearly everyone. Fill it in only for a person who asked, when you added them, for their identity to be protected. Then write `email`, `firstname` or `pseudonym`, and talk to the site team first. | No |
+| `pseudonym` | The name to show instead of theirs. Only with `protection` set to `pseudonym`. | No |
+| `email_checked` | Only for a protected person. Others in a course still see their email address, so it must not give them away. If the site team tells you the address looks like it names them or your organisation, check it with them, then write `yes` here, or give them another address. | No |
+| `courses` | Courses to start them in, by the course code the site team gave you (`ltct:<name>`), separated by `;`. Leave empty if your organisation's courses are enough. | No |
+
+There is no column for a username, a password or a role. Everyone signs in with their email
+address and the password Moodle emails them; their organisation decides their cohort and
+courses. A column the form does not have is refused, so do not add any.
+
+**3. Keep it private.** The list names real people. Save it in a folder only you can open, and
+**never inside a repository folder or a folder that syncs to one**: anything there can be
+published. Send it to the site team the way you would send any personal data, and delete your
+copy once they confirm the accounts exist.
+
+**What you do yourself.** Once the accounts exist, everything else about your own people is on
+your **organisation page** (spec 002): enrolling them in a course, unenrolling them, suspending
+and reactivating their accounts, sending a password reset link, and assigning their mentors.
+You never need the site team for those, and you cannot see or change anyone outside your
+organisation. Ask the site team only for new accounts, or to move someone to another
+organisation.
 
 ## The managers' page
 
@@ -287,7 +397,7 @@ php public/local/ltuse/cli/mentor_contacts.php --end-all --mentor=<username>
 
 It asks first, prints counts only, and leaves every learner's records as they are. After the upgrade that adds mentor contacts, run `php public/local/ltuse/cli/mentor_contacts.php --sync` once, so mentors assigned earlier get their contacts too.
 
-**Feedback on a learner's work** is not this role's job. Where a course asks for work, enrol the mentor as **Course mentor** (`teacher`) in that course, with no group (spec 012). Assigning many mentors at once, and enrolling mentors into their learners' courses automatically, are spec 008's.
+**Feedback on a learner's work** is not this role's job, but a learner's mentors are also their **course mentors** by default: `local_ltuse` enrols them as Course mentor (`teacher`) in each course the learner takes, in a "Mentor group" with the learners they assess there, and removes them as soon as the reason ends (spec 008 research R10). A one-course or cohort mentor recorded with `ltct_admin.py course-mentors` takes the default mentor's place in that course (spec 012; spec 008 plan decision 2). To assign many mentors at once, use `ltct_admin.py mentors assign`; to end all of one mentor's relationships, `ltct_admin.py mentors end`. The automatic sync stays off (`local_ltuse/coursementorsync: 0` in `settings/admin.yaml`) until spec 016 limits what a course mentor sees of protected learners to their own mentor group (spec 008 plan decision 11, approved 2026-10-04). Until then, nobody is enrolled as a course mentor automatically: where a course asks for work, enrol the mentor as **Course mentor** (`teacher`) in that course by hand, with no group.
 
 ## Protecting a person
 

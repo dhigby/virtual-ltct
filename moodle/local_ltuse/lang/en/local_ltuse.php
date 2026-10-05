@@ -351,3 +351,83 @@ $string['privacy:metadata:protectionlog:emailchecked'] = 'Whether the person gra
 $string['privacy:metadata:protectionlog:timecreated'] = 'When it changed.';
 $string['privacy:metadata:protectionchanged'] = 'Tells a user that their own identity protection changed.';
 $string['privacy:path:protection'] = 'Identity protection';
+
+// Spec 008: administration. The site team's tool and its service; never shown to a learner.
+// No string here names a person, an organisation or a protection level.
+$string['ltuse:administer'] = 'Administer LTC learners through the administration service';
+$string['setting:coursementorsync'] = 'Enrol course mentors automatically';
+$string['setting:coursementorsync_desc'] = 'Keep each learner\'s course mentors enrolled as Course mentor in the courses they take, and remove them as soon as the reason ends. Declared in moodle/site/settings/admin.yaml; change it there.';
+
+// Spec 008: why a row or a whole command is refused. Shown by ltct_admin.py to the site team.
+// {$a} is only ever an idnumber, an organisation key or a course idnumber, never a person.
+$string['admin:refusal:missing'] = 'not found in Moodle: {$a}. Check the names with "ltct_admin.py list", or apply the site declaration first';
+$string['admin:refusal:nopathways'] = 'learning pathways are not installed on this site (spec 006), so nothing was done';
+$string['admin:refusal:pathwaykey'] = '"{$a}" is not a pathway that can be assigned';
+$string['admin:refusal:target'] = 'name exactly one course or one pathway, with ensure or remove; a pathway can only be enrolled';
+$string['admin:reason:bad_email'] = 'the email is not an address Moodle can send to; nothing was done';
+$string['admin:reason:facts'] = 'the server could not read everything it needs about this row; nothing was done';
+$string['admin:reason:duplicate_accounts'] = 'two accounts already share this email; the site team must merge or change one by hand first';
+$string['admin:reason:login_clash'] = 'another account uses this email as its username, so this person could not sign in with it; the site team must change that account\'s username first';
+$string['admin:reason:suspended'] = 'the account exists and is suspended; reactivate it deliberately if that is right';
+$string['admin:reason:other_org'] = 'the account is already in {$a}; use "move" if this is right';
+$string['admin:reason:course_not_allowed'] = 'a listed course is not one this organisation may be enrolled into';
+$string['admin:reason:protection_absent'] = 'protection is asked for, and identity protection (spec 016) is not installed; the row waits';
+$string['admin:reason:email_reveals'] = 'the email address looks like it names this person or their organisation, and others in a course will see it; use another address, or put yes in email_checked once you have confirmed it does not identify them';
+$string['admin:reason:protection_unavailable'] = 'the protection this row needs cannot be set on this site yet; the row waits';
+$string['admin:reason:protection_below'] = 'the account\'s protection is below what this row needs; raise it on the protection page first';
+$string['admin:reason:course_not_ltct'] = 'the course is not one this repository publishes (ltct:<slug>), or is the office-hours course';
+$string['admin:reason:course_category'] = 'the course is neither shared (ltct:published) nor an organisation\'s own; pilot courses are never enrolled this way';
+$string['admin:reason:other_org_course'] = 'the course belongs to another organisation';
+$string['admin:reason:managers_shared'] = 'a managers cohort is never enrolled into a shared course';
+$string['admin:reason:mentors_cohort'] = 'the mentors cohort is never enrolled into a course; course mentors are enrolled automatically';
+$string['admin:reason:cohort_kind'] = 'only an organisation\'s cohort, or its managers cohort in its own course, can be enrolled';
+$string['admin:reason:role_mismatch'] = 'this cohort already has an enrolment method in the course with another role; the site team decides by hand';
+$string['admin:reason:changed'] = 'changed since the preview; preview again';
+$string['admin:reason:busy'] = 'another run is working on this row now; run the same command again in a minute';
+$string['admin:reason:protection_not_permitted'] = 'your account may not set protection for a new account; the account was made, and the row resumes once you may';
+$string['admin:reason:protection_failed'] = 'identity protection refused the level; the account was made, is in no organisation, and the row resumes when run again';
+$string['admin:reason:protection_unsettled'] = 'protection has not settled yet; the account is in no organisation, and the row resumes when run again';
+$string['admin:reason:org_not_saved'] = 'the organisation field did not accept this key; check the site declaration has been applied';
+$string['admin:reason:enrol_unavailable'] = 'course enrolment through the Organisation enrolment is not installed (spec 002)';
+$string['admin:reason:enrol_failed'] = 'a listed course could not be enrolled; the rest of the row is done';
+$string['admin:reason:not_in_pathway'] = 'the course is no longer on that pathway';
+$string['admin:reason:pathway_course_refused'] = 'the cohort may not be enrolled into {$a}, which is on the pathway, so the pathway was not assigned';
+$string['admin:reason:pathway_unavailable'] = 'the pathway cannot be used now';
+
+// Spec 008: routine changes (user story 3): suspension, moves, enrol mirror, managers cohorts.
+$string['admin:refusal:mirror'] = 'a mirror goes from one organisation key to another organisation\'s cohort (ltct:org:<key>), never to itself';
+$string['admin:reason:no_account'] = 'no account has this email';
+$string['admin:reason:site_admin'] = 'the account is a site administrator; this tool never changes one';
+$string['admin:reason:own_account'] = 'this is your own account; ask another member of the site team';
+$string['admin:reason:actions_unavailable'] = 'the organisation actions (spec 002) are not installed, so nothing was done';
+$string['admin:reason:action_refused'] = 'Moodle refused the change for this account; nothing was done';
+$string['admin:reason:no_org'] = 'the account has no organisation yet; bring it on with "intake", not "move"';
+$string['admin:reason:lost'] = 'the move would leave them without access to {$a}; run "enrol mirror" first';
+$string['admin:reason:org_cohort_members'] = 'an organisation\'s own cohort follows the organisation field; change that with "move", never by hand';
+$string['admin:reason:cohort_not_managed'] = 'only a managers cohort (ltct:org:<key>:managers) or ltct:mentors can be changed this way';
+$string['admin:reason:cohort_component'] = 'a plugin manages this cohort\'s members, so it cannot be changed by hand';
+$string['admin:reason:manages_own'] = 'note: this person is in {$a}, the organisation they will manage; from now on only the site team can manage their account';
+
+// Spec 008: mentors (user story 5): mentor relationships in bulk, one-course and cohort mentors,
+// and the course-mentor sync.
+$string['admin:refusal:mentorsmode'] = 'give either a mentors file or one mentor whose relationships all end, not both';
+$string['admin:refusal:mentornone'] = 'no account has the mentor\'s email';
+$string['admin:refusal:mentorduplicate'] = 'two accounts share the mentor\'s email; the site team must merge or change one by hand first';
+$string['admin:reason:mentor_no_account'] = 'no account has the mentor\'s email';
+$string['admin:reason:mentor_duplicate_accounts'] = 'two accounts share the mentor\'s email; the site team must merge or change one by hand first';
+$string['admin:reason:own_mentor'] = 'a learner cannot be their own mentor';
+$string['admin:reason:not_a_mentor'] = 'the mentor is not in ltct:mentors; add them with "managers" first';
+$string['admin:reason:learner_or_cohort'] = 'give exactly one of a learner or a cohort';
+$string['admin:reason:cohort_not_enrolled'] = 'note: this cohort is not enrolled in the course yet; its mentors are enrolled once it is';
+$string['admin:reason:coursementorsync_off'] = 'recorded; course mentors are not enrolled automatically on this site yet (local_ltuse/coursementorsync is off)';
+$string['task:coursementorreconcile'] = 'Keep course mentors and pathway enrolments in step';
+
+$string['privacy:metadata:course_mentor'] = 'Course mentors recorded by the site team who are not a learner\'s default mentor: a mentor for one learner in one course, or the mentors of a cohort in a course. Course mentors are enrolled in those courses as Course mentor while their learners are.';
+$string['privacy:metadata:course_mentor:courseid'] = 'The course.';
+$string['privacy:metadata:course_mentor:mentorid'] = 'The course mentor.';
+$string['privacy:metadata:course_mentor:learnerid'] = 'The learner, for a mentor of one learner in one course.';
+$string['privacy:metadata:course_mentor:cohortid'] = 'The cohort, for the mentors of a cohort.';
+$string['privacy:metadata:course_mentor:usermodified'] = 'Who recorded it.';
+$string['privacy:metadata:course_mentor:timecreated'] = 'When it was recorded.';
+$string['privacy:metadata:course_mentor:timemodified'] = 'When it last changed.';
+$string['privacy:path:coursementors'] = 'Course mentors';

@@ -77,3 +77,13 @@ plugins:
   - component: enrol_self
     enabled: 1
     why: "#11 #15 a manager enrols their own learners through each course's organisation-enrolment instance, an enrol_self instance with self-enrolment off. Disabled, those enrolments go inactive (spec 002 R10)."
+
+  # Row #14: the login methods beside manual and nologin, which core always enables. They
+  # live in $CFG->auth, which no admin setting writes, so they are declared here and set
+  # through core's auth::enable_plugin(). Moved from spec 016's identity.yaml (auth: webservice).
+  - component: auth_webservice
+    enabled: 1
+    why: "#14 the publisher's account (local_ltuse/cli/setup_publishing.php) is auth=webservice; everyone else is a manual account made by the site team (Doug, 2026-10-05 (scope review))."
+  - component: auth_email
+    enabled: 0
+    why: "#14 no self-registration: accounts come from intake (spec 002, spec 008). Not core's default, which enables it (auth = email, lib/db/install.php). drift does not report another core login method being enabled, OAuth2 say, because it checks only the plugins declared here; enabling one is a decision of its own (Doug, 2026-10-05 (scope review))."

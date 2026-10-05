@@ -254,22 +254,22 @@ function local_ltuse_organisation_person_facts(stdClass $user): array {
 
 /**
  * The id of the hidden ltct:mentors cohort, or 0 before site_config.py has applied it.
- * Cached for the request.
  *
  * A read of {cohort} by idnumber in the system context: no cohort API looks a cohort up by
  * idnumber (cohort_get_cohort(), public/cohort/lib.php:386, takes an id). cohort.idnumber is
- * not indexed in core; moodle/local_ltuse/README.md lists this read.
+ * not indexed in core, but the table holds tens of rows; moodle/local_ltuse/README.md lists
+ * this read.
+ *
+ * Not cached, like mentoring::role_id(): a static kept an id from before a PHPUnit reset (008's
+ * admin_test makes its own ltct:mentors), so organisation_test then took a mentor for a plain
+ * learner, and a manager could enrol them.
  *
  * @return int
  */
 function local_ltuse_mentors_cohort_id(): int {
     global $DB;
-    static $id = null;
-    if ($id === null) {
-        $id = (int)$DB->get_field('cohort', 'id', ['idnumber' => \local_ltuse\mentor_admin::MENTORS_COHORT,
-            'contextid' => context_system::instance()->id]);
-    }
-    return $id;
+    return (int)$DB->get_field('cohort', 'id', ['idnumber' => \local_ltuse\mentor_admin::MENTORS_COHORT,
+        'contextid' => context_system::instance()->id]);
 }
 
 /**

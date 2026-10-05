@@ -206,3 +206,43 @@ roles:
       it to this allowlist (research R2). Left out on purpose: moodle/user:viewalldetails
       (hidden profile fields), readuserposts, editprofile. Course feedback is the Course
       mentor role's (teacher, spec 012), not this one's (research R8).
+
+  # Spec 008: administration.
+  - shortname: ltctadmin
+    name: LTC site administrator
+    description: >-
+      A site-team member who runs scripts/ltct_admin.py: brings learners on, enrols cohorts,
+      suspends, moves and assigns mentors, through the 'LTC administration' web service with
+      their own token. Declared in moodle/site/roles.yaml and applied by
+      scripts/site_config.py -- edit that file rather than this role.
+    archetype: ""            # every capability is managed, so one granted by hand shows as drift
+    contextlevels: [system]  # one assignment per site-team member, at system level (R12)
+    allowassign: [mentor, teacher]   # mentor relationships (R9) and Course mentor enrolments (R10)
+    capabilities:
+      local/ltuse:administer: allow          # the service's requiredcapability, re-checked by every function
+      webservice/rest:use: allow             # without it every call fails as an access exception that reads like a bad token
+      moodle/user:create: allow              # intake creates accounts (R2)
+      moodle/user:update: allow              # suspension and the organisation field (R3, R6)
+      moodle/user:viewdetails: allow         # matching by email, summaries
+      moodle/user:viewhiddendetails: allow   # ... including fields hidden from other users
+      moodle/site:viewuseridentity: allow    # ... and the identity fields, email among them
+      moodle/cohort:view: allow              # reading organisation cohorts
+      moodle/cohort:assign: allow            # managers cohorts and ltct:mentors (R9)
+      moodle/course:enrolconfig: allow       # cohort-sync and enrol_self instances (R7, R10)
+      enrol/cohort:config: allow             # ... cohort sync
+      enrol/self:config: allow               # ... the Course mentor instance
+      enrol/self:manage: allow               # ... and its enrolments
+      moodle/role:assign: allow              # mentor (user context) and Course mentor (course context)
+      moodle/course:managegroups: allow      # mentor groups (R10)
+      # local/ltuse:manageprotection: allow  # spec 016's can_manage_protection for new accounts
+      #   (R5). Added with spec 016 (008 task T015): until 016 defines the capability, naming
+      #   it here would block apply ("no such capability on this server").
+    why: >-
+      #14 (spec 008, research R12): the site team's administration account, one per person so
+      Moodle's logs show who made each change (plan decision 7). Exactly the capabilities the
+      ltuse_admin functions check, each beside its reason; local_ltuse_admin_check names any a
+      token's user lacks. RISK_PERSONAL, RISK_DATALOSS and RISK_SPAM come with
+      local/ltuse:administer: it creates accounts that receive email. Never an archetype:
+      assigned by hand at system level to each site-team member, never to a manager. The
+      Organisation manager role holds none of this; managers act on spec 002's organisation
+      page.

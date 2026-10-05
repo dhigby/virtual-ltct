@@ -35,8 +35,17 @@ use moodle_exception;
  * user_enrolment_deleted, user_updated), so the standard log records who did what. There is
  * no event of our own. All APIs confirmed on MOODLE_502_STABLE (research R10).
  *
+ * TWO LAYERS (spec 008 research R6). enrol, unenrol, suspend and reactivate each have an
+ * unchecked core, do_<action>(), that keeps the action's own rules (never a site admin, never
+ * the acting user, may_enrol_into() and may_unenrol_from()) but does not ask who manages the
+ * person. Spec 008's administration service calls only the cores, after
+ * require_capability('local/ltuse:administer') and its own rules, because the site team manage
+ * people no manager may: staff, mentors, managers and holding-entry learners. The methods
+ * above are the manager wrappers: require_manageable(), then the core. The organisation page
+ * calls only the wrappers.
+ *
  * 5.3 note: user_update_user() is deprecated on main for 5.3 (MDL-82650) in favour of
- * \core\user::update_user(). Both calls are in write_suspended(), moved with spec 016's hook.
+ * \core\user::update_user(). Both calls are in do_write_suspended(), moved with spec 016's hook.
  */
 class actions {
 
@@ -71,7 +80,36 @@ class actions {
      * @param int $courseid
      */
     public static function enrol(int $userid, int $courseid): void {
-        $course = self::enrol_target(self::require_manageable($userid), $courseid);
+        self::enrol_course(self::require_manageable($userid), $userid, $courseid);
+    }
+
+    /**
+     * enrol() without the manager check (spec 008). The person's facts are read afresh here.
+     *
+     * @param int $userid P
+     * @param int $courseid
+     */
+    public static function do_enrol(int $userid, int $courseid): void {
+        self::refuse_special($userid);
+        $facts = people::facts($userid, true);
+        if (!empty($facts['deleted'])) {
+            // may_manage_account() refuses this for the wrapper; may_enrol_into() does not look.
+            throw new moodle_exception('organisation:notyours', 'local_ltuse');
+        }
+        self::enrol_course($facts, $userid, $courseid);
+    }
+
+    /**
+     * The enrolment enrol() and do_enrol() both make, once the caller's own check has passed.
+     * The explicit active status makes a suspended enrolment there active again; without it,
+     * enrol_user() keeps it suspended.
+     *
+     * @param array $facts P's facts
+     * @param int $userid P
+     * @param int $courseid
+     */
+    protected static function enrol_course(array $facts, int $userid, int $courseid): void {
+        $course = self::enrol_target($facts, $courseid);
         // An enrolment through a plugin turned off site-wide is inactive (enrol_get_instances()).
         if (!enrol_is_enabled(access::ENROL_PLUGIN)) {
             throw new moodle_exception('organisation:selfdisabled', 'local_ltuse');
@@ -91,6 +129,18 @@ class actions {
      */
     public static function unenrol(int $userid, int $courseid): void {
         self::require_manageable($userid);
+        $instance = self::unenrol_instance($userid, $courseid);
+        enrol_get_plugin(access::ENROL_PLUGIN)->unenrol_user($instance, $userid);
+    }
+
+    /**
+     * unenrol() without the manager check (spec 008).
+     *
+     * @param int $userid P
+     * @param int $courseid
+     */
+    public static function do_unenrol(int $userid, int $courseid): void {
+        self::refuse_special($userid);
         $instance = self::unenrol_instance($userid, $courseid);
         enrol_get_plugin(access::ENROL_PLUGIN)->unenrol_user($instance, $userid);
     }
@@ -202,6 +252,26 @@ class actions {
     }
 
     /**
+     * suspend() without the manager check (spec 008).
+     *
+     * @param int $userid P
+     * @return bool false when P was already suspended
+     */
+    public static function do_suspend(int $userid): bool {
+        return self::do_write_suspended($userid, true);
+    }
+
+    /**
+     * reactivate() without the manager check (spec 008).
+     *
+     * @param int $userid P
+     * @return bool false when P was not suspended
+     */
+    public static function do_reactivate(int $userid): bool {
+        return self::do_write_suspended($userid, false);
+    }
+
+    /**
      * Set P's suspended flag, as admin/user.php:127-138 does, with a minimal object: never a
      * reloaded full record, so a concurrent change to another field cannot be overwritten.
      *
@@ -210,13 +280,22 @@ class actions {
      * @return bool whether anything changed
      */
     protected static function write_suspended(int $userid, bool $suspend): bool {
-        global $CFG, $DB, $USER;
         self::require_manageable($userid);
+        return self::do_write_suspended($userid, $suspend);
+    }
+
+    /**
+     * write_suspended() without the manager check.
+     *
+     * @param int $userid P
+     * @param bool $suspend
+     * @return bool whether anything changed
+     */
+    protected static function do_write_suspended(int $userid, bool $suspend): bool {
+        global $CFG, $DB;
         require_once($CFG->dirroot . '/user/lib.php');
         // access already refuses both; admin/user.php checks them at the write, and so do we.
-        if (is_siteadmin($userid) || $userid === (int)$USER->id) {
-            throw new moodle_exception('organisation:notyours', 'local_ltuse');
-        }
+        self::refuse_special($userid);
         $user = $DB->get_record('user', ['id' => $userid, 'mnethostid' => $CFG->mnet_localhost_id, 'deleted' => 0],
             'id, suspended', MUST_EXIST);
         if ((bool)$user->suspended === $suspend) {
@@ -269,6 +348,19 @@ class actions {
             'customchar1' => access::ENROL_MARKER,
         ]);
         return $DB->get_record('enrol', ['id' => $id], '*', MUST_EXIST);
+    }
+
+    /**
+     * Rules every action keeps, whoever calls it: never a site administrator, never oneself.
+     * The manager wrappers' access check refuses both already; the unchecked cores rely on this.
+     *
+     * @param int $userid P
+     */
+    protected static function refuse_special(int $userid): void {
+        global $USER;
+        if (is_siteadmin($userid) || $userid === (int)($USER->id ?? 0)) {
+            throw new moodle_exception('organisation:notyours', 'local_ltuse');
+        }
     }
 
     /**

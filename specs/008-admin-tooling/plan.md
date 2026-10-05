@@ -88,7 +88,7 @@
 | Principle | Assessment |
 |---|---|
 | I. Source of truth | PASS. Nothing flows from Moodle to the repo. Summaries go to the screen, or to `--out` outside every git tree (R14). Organisation keys come from the repo's declaration (`site_config.validate`). Memberships, enrolments and the course-mentor table live only in Moodle. Stage detection is untouched; moving Pilots → Published is left to the publisher (R17). |
-| II. Portability / config as code | PASS. The service, capability, role, `allowaccountssameemail`, the general account rules (`authloginviaemail`, `protectusernames`, `auth`, `registerauth`, `authpreventaccountcreation`) and the reconcile task are all declared in the plugin or `moodle/site/` and applied by script (R12, R13). Identity is by idnumber (`ltct:org:<key>`, `ltct:<slug>`) and email, never a database id typed by a person. The new table is in the plugin's install XML and in the database backup. Learner data stays exportable: the privacy provider covers the new table. |
+| II. Portability / config as code | PASS. The service, capability, role, `allowaccountssameemail`, the general account rules (`authloginviaemail`, `protectusernames`, `registerauth`, `authpreventaccountcreation`, and the login methods as `auth_webservice` and `auth_email` plugin entries in `site.yaml`) and the reconcile task are all declared in the plugin or `moodle/site/` and applied by script (R12, R13). Identity is by idnumber (`ltct:org:<key>`, `ltct:<slug>`) and email, never a database id typed by a person. The new table is in the plugin's install XML and in the database backup. Learner data stays exportable: the privacy provider covers the new table. |
 | III. Public repo, private people (NON-NEGOTIABLE) | PASS. Paths inside any git working tree are refused, and an operator is told if git already has a file (R14). Nothing is written by default and there are no log files. People are masked by default, so guided runs send the assistant row numbers only. The token comes from `MOODLE_ADMIN_TOKEN` only. Tests build `example.org` and `fixture-*` data in memory, with no CSV fixtures. Quickstart evidence is counts and outcomes only. |
 | IV. Disclosure boundary (NON-NEGOTIABLE) | PASS, not touched. No course content, quiz or page HTML. |
 | V. CBC fidelity | PASS. Accounts, cohorts, enrolments and mentors only. No level is read, recorded or changed (FR-012). Course mentors grade course work, which is training evidence (002 Clarifications). |
@@ -152,7 +152,7 @@ moodle/local_ltuse/
 └── README.md                               # changed: administration section; "does no enrolment" corrected; XI reads
 moodle/site/
 ├── roles.yaml                              # changed: + ltctadmin
-├── settings/admin.yaml                     # new: allowaccountssameemail 0; the general account rules (email login, protectusernames, auth, registerauth, authpreventaccountcreation); local_ltuse/coursementorsync 0 until 016 narrows (decision 11)
+├── settings/admin.yaml                     # new: allowaccountssameemail 0; the general account rules (email login, protectusernames, registerauth, authpreventaccountcreation); local_ltuse/coursementorsync 0 until 016 narrows (decision 11)
 └── README.md                               # changed: "The site team's four steps" become the ltct_admin.py recipes; a row that waits joins once identity protection is ready for that person
 tests/
 ├── test_ltct_admin.py                      # new
@@ -226,7 +226,7 @@ These are for the maintainer (Doug). `/speckit-tasks` may generate tasks as draf
   - 008 never writes 016's never-send fields.
   - 008 also calls `level_available()` (agreed and exposed by 016 on 2026-10-04), and relies on nothing about observer order.
   - **Organisation minimums are gone** (Doug, 2026-10-05 (scope review)). 008 no longer calls `org_minimum()`: an intake row's target is its own `protection` level, and a move neither reads nor sets protection, so `move_rules` has no `flagged_protection` and `move_service` no post-move `is_settled()`/`apply()` step. The per-person check stays: a row asking for a level 016 cannot set yet `waits`, and an existing account below its row's level is `flagged_protection`.
-  - `auth`, `registerauth`, `authpreventaccountcreation` and `protectusernames` move from 016's `identity.yaml` to 008's `settings/admin.yaml`, as general account rules beside `authloginviaemail`.
+  - `registerauth`, `authpreventaccountcreation` and `protectusernames` move from 016's `identity.yaml` to 008's `settings/admin.yaml`, as general account rules beside `authloginviaemail`; 016's `auth` setting becomes `auth_webservice` enabled and `auth_email` disabled as plugin entries in `site.yaml`, because `$CFG->auth` is not in the admin tree and the applier could not check it.
   - 008's PR adds `ltctadmin` to 016's `PROTECTION_MANAGE_ROLES` allowlist in `site_config.py`, with its reason (R5, agreed with 016).
   - Decision 11, about how far a course mentor sees, is settled by 016's scope review: its course-mentor path is narrowed to the viewer's own mentor group. `local_ltuse/coursementorsync` stays 0 until it is merged.
 - **Spec 017**: when an ALTC may create an account by approving a request, it should create it through `intake_service`, so that ordering, the username rule and protection stay in one place.

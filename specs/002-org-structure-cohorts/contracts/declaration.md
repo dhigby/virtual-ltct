@@ -158,7 +158,7 @@ Only the maintainer edits this file. A course is never made organisation-only in
 - No `slug` appears twice.
 - `organisation` is a key declared in `organisations.yaml`.
 - `why` is non-empty. It records only the approval, never the organisation's circumstances; the reason itself is kept privately, and `moodle/site/README.md` says so (research R11).
-- The file names a course and its host organisation, which are already public. An organisation spec 016 protects is named only by the neutral key 016 gives it (016 R12).
+- The file names a course and its host organisation, which are already public. An organisation that asks not to be named publicly appears only under a neutral key from its first commit (016, Doug, 2026-10-05 (scope review)).
 
 ### What one entry becomes
 

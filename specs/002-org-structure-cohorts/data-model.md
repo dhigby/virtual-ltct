@@ -430,7 +430,7 @@ One course restricted by enrolment to one organisation. Its content stays in the
 - `organisation` is a declared organisation key.
 - `why` is non-empty.
 - It is the only reader of the file: `moodle_payload.py` calls it for each course's `placement`, and `validate` for the drift payload, so the publisher and drift cannot disagree.
-- The file names a course and its host organisation, both already public. An organisation spec 016 protects appears only under the neutral key 016 gives it (016 R12; constitution III).
+- The file names a course and its host organisation, both already public. An organisation that asks not to be named publicly appears only under a neutral key from its first commit (016, Doug, 2026-10-05 (scope review); constitution III).
 
 ### Derived
 
@@ -499,7 +499,7 @@ The decision is a pure function in `classes/profile_access.php`, with the inputs
 
 Not declared and not stored: `local_ltuse\organisation\access`, a pure class tested by `tests/org_access_harness.php`, decides on every request what viewer V may do for person P (FR-006a). It holds two predicates:
 
-- **`is_org_member_of_manager(V, P)`**: V is not P; P's `ltct_org` is non-empty and is one of V's managed keys; and P is a member of the `ltct:org:<that key>` cohort, so the field and the cohort agree. It says nothing about P's role. The profile decision's case 2 (FORCE_ALLOW) and the "my organisation" page's list use it, and spec 016's entitlement is asked to call it rather than re-derive it, with its own `managers_see_identity` layer on top.
+- **`is_org_member_of_manager(V, P)`**: V is not P; P's `ltct_org` is non-empty and is one of V's managed keys; and P is a member of the `ltct:org:<that key>` cohort, so the field and the cohort agree. It says nothing about P's role. The profile decision's case 2 (FORCE_ALLOW) and the "my organisation" page's list use it, and spec 016's entitlement is asked to call it rather than re-derive it.
 - **`may_manage_account(V, P)`**: the first predicate, and P is a **learner** (below). Every management action uses it. Staff, mentors and other managers are listed on the page but are the site team's to manage.
 
 | Input | Read with | Used by | Notes |

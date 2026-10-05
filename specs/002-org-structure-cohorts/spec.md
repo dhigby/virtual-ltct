@@ -37,7 +37,7 @@ The maintainer (Doug) reversed the in-course separation of 2026-10-01 (relayed b
 - Q: Who sees a person's email? → A: Managers see the email of every person in their organisation, protected people included, and a mentor sees their mentee's. Classmates never see a protected person's email. `orgmanager` keeps `moodle/site:viewuseridentity`; the protected case is spec 016's to implement (Doug, 2026-10-02).
 - Q: Can production enrol learners before identity protection exists? → A: Yes. Only a person who asked for protection waits, until spec 016 can set their level (Doug, 2026-10-05 (scope review); research R13). This replaces the 2026-10-02 answer, which held back every learner of an organisation that might need protection.
 - Q: Which people may a manager act on? → A: A manager sees every member of their organisation, but the management actions apply to its learners only; staff, mentors and other managers stay with the site team (Doug, confirmed 2026-10-02; research R10).
-- Q: Does the organisation field become private in this change? → A: No. Making `ltct_org` private and moving spec 004's report scope from the field to cohort membership are left to spec 016's decision 2. Until then a classmate can see a learner's organisation on their profile.
+- Q: Does the organisation field become private in this change? → A: No. Only spec 004's report scope moves from the field to cohort membership, and that is spec 016's work (decision 2, T034–T035); `ltct_org` stays visible to classmates, because 016's protection levels no longer promise to hide the organisation (Doug, 2026-10-05 (scope review), option (a)).
 
 ### Session 2026-10-03
 
@@ -139,7 +139,7 @@ A learner's profile carries the few facts that matter across courses and years �
 - Profile field values are personal data: they live only in Moodle; the repo declares the fields and their allowed values, never any learner's value.
 - An ALTC covers SIL and SIL partners in one Area, or acts across several Areas: they are a member of each Area managers cohort they cover, and nothing else changes. **(recommended; confirmed by Doug 2026-10-04)** A SIL-wide lead in all five SIL Area managers cohorts sees every SIL learner's real identity (spec 016 FR-006), so that membership is given only to a named person who needs it.
 - A learner's Area is not yet known: **(recommended; confirmed by Doug 2026-10-04)** they stay in the `sil` or `sil-partner` holding entry, managed by the site team only, until the site team moves them (FR-017).
-- A learner's Area shows on their profile: until spec 016's decision 2 makes `ltct_org` private, a learner's Area shows on their profile next to their country, so anyone who can log in could piece the country-to-Area map together. FR-016 keeps the map out of the public repo; it does not hide it from people with accounts. **(Doug, 2026-10-04)** The move to Areas does not wait for that: there will be no real users for a while.
+- A learner's Area shows on their profile next to their country, and stays visible (016 decision 2 option (a), Doug, 2026-10-05 (scope review)), so anyone who can log in could piece the country-to-Area map together. FR-016 keeps the map out of the public repo; it does not hide it from people with accounts. **(Doug, 2026-10-04)** The move to Areas does not wait for that: there will be no real users for a while.
 - Going live before spec 016: a person who asked for identity protection waits until spec 016 can set their level (research R13). No Area entry or organisation is marked for it (Doug, 2026-10-05 (scope review)). Who asked is never recorded here (constitution III).
 - A learner moves from one Area to another: it is an ordinary move between organisations (US3-2). The new Area's ALTC gains them at once and the old one loses them.
 - A country spans two Areas, or a learner works in several countries: the Area of record is one entry, chosen by the site team. How a request is routed in that case, and where it goes when the person cannot or will not give their country, is spec 017's.
@@ -212,7 +212,7 @@ A learner's profile carries the few facts that matter across courses and years �
 - An "independent" organisation holds consultants with no partner organisation.
 - Automatic cohort filling from profile fields may need a maintained free plugin if core cannot do it on 5.2; that choice and its verification belong in the plan.
 - Real multi-tenancy (per-partner branding and isolation) is out of scope. Organisations are identified by category, cohort and profile field, and managers are scoped by cohort membership; that is enough (Clarifications 2026-10-02).
-- Until spec 016 makes `ltct_org` private, a learner's organisation is visible to their classmates on their profile (Clarifications 2026-10-02).
+- A learner's organisation is visible to their classmates on their profile (Clarifications 2026-10-02); 016 does not make `ltct_org` private (Doug, 2026-10-05 (scope review)).
 - INTENT's data-protection position (privacy notice, consent, retention) is still open; profile fields are kept to the minimum above until it is settled, and no sensitive categories of data are collected.
 
 ## Requirements Traceability

@@ -133,7 +133,7 @@ Out of scope, by decision: making `ltct_org` private and moving spec 004's repor
 |---|---|
 | I. Source of truth | PASS. Group mode, the forum mode, the organisation-only list and the `ltct:mentors` cohort are declared. Drift reports a course whose group mode or placement differs, and never writes back. Enrolments, suspensions and mentor assignments a manager makes are learner data and stay in Moodle. |
 | II. Portability | PASS. Every new item is found by `idnumber`. `apply` and a republish rebuild them on a fresh instance; manager actions move with the data restore. |
-| III. Public repo (NON-NEGOTIABLE) | PASS. `org-courses.yaml` names a course and its host organisation, which are already public. An at-risk organisation hosts one only under the neutral key spec 016 gives it. The migration CLI and drift report counts, never names. |
+| III. Public repo (NON-NEGOTIABLE) | PASS. `org-courses.yaml` names a course and its host organisation, which are already public. An organisation that asks not to be named publicly hosts one only under a neutral key (Doug, 2026-10-05 (scope review)). The migration CLI and drift report counts, never names. |
 | IV. Disclosure boundary (NON-NEGOTIABLE) | PASS. Untouched. The payload's new placement field is checked by `check_moodle_payload.py` like any other. |
 | V. CBC fidelity | PASS. Not touched. |
 | VI. No LMS orientation | PASS with a gate. Learners do nothing new. Managers get one page for everything they do. Proven simple only by SC-004. |
@@ -219,7 +219,7 @@ Steps 2–3 are the minimum spec 016 needs. Step 4 closes the profile reach 016 
 - **012**: no organisation groups to rely on. `course-discussions.yaml` is gone; the organisation-cohort workshop allocator (T047–T051) is withdrawn; 012 settles assignment group mode before T032 and adds a rule for partner data in cross-organisation peer review.
 - **013**: R10's rationale now rests on `badges:viewotherbadges` alone; quickstart V9 is re-run (co-enrol B1 with A1; Manager A opens their own learner through R9's allow and sees no badges; Manager B is refused).
 - **016**: lands after this. Until it can set a person's level, a person who asked for protection waits; nobody else is held back (R13; Doug, 2026-10-05 (scope review)). Asked of 016, to record in its own docs:
-  - its entitlement calls `access::is_org_member_of_manager()` rather than re-deriving the managers-cohort rule, with `managers_see_identity` as its own layer on top;
+  - its entitlement calls `access::is_org_member_of_manager()` rather than re-deriving the managers-cohort rule. `managers_see_identity` was cut (Doug, 2026-10-05 (scope review)); a person who does not trust their managers is placed by the site team under a neutral entry with no managers;
   - `organisation.php` may show 016's marker and real name for a manager's own people, only through 016's `can_view_identity`; 016 keeps its own `protected.php` for mentors and the site team, and the two may share a listing component;
   - `mentors.php` gains 016's check that assigning a mentor to a protected learner needs `can_view_identity` (R10);
   - `org-courses.yaml` joins the public files its neutral-key guidance covers (R11);

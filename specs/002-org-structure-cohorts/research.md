@@ -230,10 +230,10 @@ Core's `user_process_profile_callbacks()` lets any PREVENT win over any FORCE_AL
 **Decision**: One shared check and one page. Every management surface calls `local_ltuse\organisation\access`, a pure class tested by `tests/org_access_harness.php`, as `profile_access` is.
 
 **Two predicates, one class.**
-- **`is_org_member_of_manager(V, P)`**: V is not P; P's `ltct_org`, read with `profile_user_record()`, is non-empty and is one of V's managed keys from `local_ltuse_managed_organisation_keys()`, the one existing read of `ltct:org:%:managers` membership (R9); and P is a member of the `ltct:org:<that key>` cohort, so the field and the cohort agree. It is read on every request, so leaving the managers cohort ends everything at once. It says nothing about P's role. R9's profile allow and the "my organisation" page's list use it, and it is the rule spec 016's entitlement needs; 016 is asked to call it rather than re-derive it, with its own `managers_see_identity` layer on top.
+- **`is_org_member_of_manager(V, P)`**: V is not P; P's `ltct_org`, read with `profile_user_record()`, is non-empty and is one of V's managed keys from `local_ltuse_managed_organisation_keys()`, the one existing read of `ltct:org:%:managers` membership (R9); and P is a member of the `ltct:org:<that key>` cohort, so the field and the cohort agree. It is read on every request, so leaving the managers cohort ends everything at once. It says nothing about P's role. R9's profile allow and the "my organisation" page's list use it, and it is the rule spec 016's entitlement needs; 016 is asked to call it rather than re-derive it.
 - **`may_manage_account(V, P)`**: the first predicate, and P is a **learner**: not deleted, not a site admin, not staff (`has_coursecontact_role($P)`, the same staff test as R9, or any role assignment at system context, or at any category context, checked with `get_user_roles()` for the system context and each category from `core_course_category::get_all()`, public APIs only), in no managers cohort and not in `ltct:mentors`. Every management action uses it. Staff, mentors and other managers are listed but are the site team's to manage.
 
-The cohort-membership condition matters for spec 016: it applies an organisation's minimum protection when the person joins the member cohort, so a learner whose field is set but who has not yet joined cannot be enrolled anywhere by a manager before their protection is settled.
+The cohort-membership condition keeps the field and the cohort in agreement: a learner whose field is set but who has not yet joined the member cohort is not yet one of the manager's people. Protection is per person and is set before enrolment by spec 008's intake, and an organisation has no minimum (Doug, 2026-10-05 (scope review)).
 
 **Per-action rules**, each re-checked on the server for every request, with `require_login()`, a sesskey on every write, and the shared check:
 
@@ -293,7 +293,7 @@ Core's own route needs more than the publisher should hold: `core_course_get_cat
 
 **Moving into a hidden category hides the course** (`move_courses`). Organisation categories are visible (R6), so this matters only if one is hidden by hand.
 
-**Public**: the file names the host organisation. That is consistent with spec 016 R12's rule that an organisation that may need protection has a neutral key from its first commit, but 016 does not consider this file; it is asked to list it. `why` records only the approval ("approved by the maintainer, issue #N"), never the organisation's circumstances; the README says so, and the reason itself is kept privately.
+**Public**: the file names the host organisation. That is consistent with spec 016's rule that an organisation which asks not to be named publicly gets a neutral key from its first commit (Doug, 2026-10-05 (scope review)), but 016 does not consider this file; it is asked to list it. `why` records only the approval ("approved by the maintainer, issue #N"), never the organisation's circumstances; the README says so, and the reason itself is kept privately.
 
 **Alternatives considered**: A frontmatter key (`host_organisation:`): who may enrol a partner's people is delivery policy, not content (B4). Granting the publisher `category:manage`: far too broad.
 

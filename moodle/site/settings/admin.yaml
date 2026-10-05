@@ -8,7 +8,9 @@ purpose: >-
   tool_dynamic_cohorts/realtime in cohorts.yaml), and "ltct_admin.py check" refuses to run if
   any of them is wrong (research R13). It also holds the site's general account rules (who
   can make an account, and how people sign in), which spec 016 first declared and its scope
-  review moved here as rules for everyone, not protection measures (Doug, 2026-10-05).
+  review moved here as rules for everyone, not protection measures (Doug, 2026-10-05). The login
+  methods themselves are plugin entries in site.yaml (auth_webservice, auth_email), because
+  core keeps them in $CFG->auth, which no admin setting writes.
 settings:
   - name: allowaccountssameemail
     value: 0
@@ -33,15 +35,6 @@ settings:
       must never confirm whether an address has an account here. Core's default
       (admin/settings/security.php, MOODLE_502_STABLE); declared beside authloginviaemail so
       drift catches it being turned off (Doug, 2026-10-05 (scope review)).
-  - name: auth
-    value: webservice
-    why: >-
-      A general account rule: the login methods enabled beside manual and nologin, which are
-      always on. Only webservice, for the publisher's account (local_ltuse/cli/
-      setup_publishing.php); everyone else is a manual account made by the site team. Not
-      core's default: a new site enables email self-registration's plugin (auth = email,
-      lib/db/install.php). Enabling another method, OAuth2 say, shows as drift and is a
-      decision of its own (Doug, 2026-10-05 (scope review)).
   - name: registerauth
     value: ""
     why: >-

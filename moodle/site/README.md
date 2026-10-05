@@ -239,7 +239,7 @@ python scripts/ltct_admin.py course-mentors ~/ltct-private/course-mentors.csv [-
 
 - `mentors assign` (columns `learner_email`, `mentor_email`) gives each learner their mentor, as the page in [Mentors](#mentors-assigning-and-ending-a-relationship) does one at a time. Each mentor must be in `ltct:mentors`.
 - `mentors end` ends all of one mentor's relationships.
-- `course-mentors` (columns `course`, `mentor_email`, and `learner_email` or `cohort`) records who assesses a learner, or a cohort, in one course, in place of their usual mentor. The automatic course-mentor sync does the enrolling.
+- `course-mentors` (columns `course`, `mentor_email`, and `learner_email` or `cohort`) records who assesses a learner, or a cohort, in one course, in place of their usual mentor (that precedence awaits spec 008 plan decision 2). The automatic course-mentor sync does the enrolling, once it is turned on (decision 11).
 
 ### Suspend and reactivate
 
@@ -327,7 +327,7 @@ php public/local/ltuse/cli/mentor_contacts.php --end-all --mentor=<username>
 
 It asks first, prints counts only, and leaves every learner's records as they are. After the upgrade that adds mentor contacts, run `php public/local/ltuse/cli/mentor_contacts.php --sync` once, so mentors assigned earlier get their contacts too.
 
-**Feedback on a learner's work** is not this role's job, but a learner's mentors are also their **course mentors** by default: `local_ltuse` enrols them as Course mentor (`teacher`) in each course the learner takes, in a "Mentor group" with the learners they assess there, and removes them as soon as the reason ends (spec 008 research R10). A one-course or cohort mentor recorded with `ltct_admin.py course-mentors` takes the default mentor's place in that course (spec 012). To assign many mentors at once, use `ltct_admin.py mentors assign`; to end all of one mentor's relationships, `ltct_admin.py mentors end`. The automatic sync stays off (`local_ltuse/coursementorsync: 0` in `settings/admin.yaml`) until the maintainer decides how far a course mentor may see (spec 008 plan, decision 11). Until then, nobody is enrolled as a course mentor automatically.
+**Feedback on a learner's work** is not this role's job, but a learner's mentors are also their **course mentors** by default: `local_ltuse` enrols them as Course mentor (`teacher`) in each course the learner takes, in a "Mentor group" with the learners they assess there, and removes them as soon as the reason ends (spec 008 research R10). A one-course or cohort mentor recorded with `ltct_admin.py course-mentors` takes the default mentor's place in that course (spec 012; that precedence awaits spec 008 plan decision 2). To assign many mentors at once, use `ltct_admin.py mentors assign`; to end all of one mentor's relationships, `ltct_admin.py mentors end`. The automatic sync stays off (`local_ltuse/coursementorsync: 0` in `settings/admin.yaml`) until the maintainer decides how far a course mentor may see (spec 008 plan, decision 11). Until then, nobody is enrolled as a course mentor automatically.
 
 ## Events and live sessions
 

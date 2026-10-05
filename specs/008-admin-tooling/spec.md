@@ -167,7 +167,7 @@ An organisation or cohort manager from a partner organisation brings on their ow
 - The operator prepares the intake list from their organisation's own records; the tooling does not collect learner data from anywhere else.
 - Consent, a privacy notice and "delete my data" belong to the undecided data-protection position (INTENT open questions); this spec neither implements nor precludes them.
 - Account matching is by email address, as the one identifier every partner can supply.
-- Learners sign in with an account and password Moodle issues; single sign-on is out of scope.
+- Learners sign in with their email address and a password Moodle issues (`authloginviaemail`, declared on; Doug, 2026-10-05). Nobody needs to know their username. Single sign-on is out of scope.
 - Everything is built and verified on the temporary instance with test accounts; real intakes wait for the dedicated VPS (015).
 - Manager findings are recorded without names, emails or other identifying detail.
 

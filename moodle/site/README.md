@@ -242,7 +242,7 @@ python scripts/ltct_admin.py intake ~/ltct-private/intake.csv
 python scripts/ltct_admin.py intake ~/ltct-private/intake.csv --apply --confirm <code>
 ```
 
-One row per person, in the form managers send (see [Asking for new accounts](#asking-for-new-accounts)). A new address gets an account with a neutral username, an emailed password and their organisation. Their organisation's cohort, and the courses it is enrolled in, follow in the same request. An address that already exists is matched, never duplicated. Someone already in another organisation, or suspended, is flagged and left alone: run `move` or `reactivate` deliberately. A row's `courses` column enrols them through the organisation's own enrolment, as a manager would. **Mind the production gate** when it does.
+One row per person, in the form managers send (see [Asking for new accounts](#asking-for-new-accounts)). A new address gets an account, an emailed password and their organisation. They sign in with their email address. Their organisation's cohort, and the courses it is enrolled in, follow in the same request. An address that already exists is matched, never duplicated. Someone already in another organisation, or suspended, is flagged and left alone: run `move` or `reactivate` deliberately. A row's `courses` column enrols them through the organisation's own enrolment, as a manager would. **Mind the production gate** when it does.
 
 ### Enrol an organisation in a course
 
@@ -337,8 +337,8 @@ and send it to you. It holds the column names and nothing else.
 | `pseudonym` | The name to show instead of theirs. Only with `protection` set to `pseudonym`. | No |
 | `courses` | Courses to start them in, by the course code the site team gave you (`ltct:<name>`), separated by `;`. Leave empty if your organisation's courses are enough. | No |
 
-There is no column for a username, a password or a role. Moodle makes a neutral username and
-emails each person a password; their organisation decides their cohort and courses. A column
+There is no column for a username, a password or a role. Each person signs in with their
+email address and the password Moodle emails them; their organisation decides their cohort and courses. A column
 the form does not have is refused, so do not add any.
 
 **3. Keep it private.** The list names real people. Save it in a folder only you can open, and

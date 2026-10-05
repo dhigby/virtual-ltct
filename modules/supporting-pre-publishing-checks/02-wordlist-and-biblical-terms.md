@@ -65,8 +65,6 @@ review and correction.
 > ask the team directly whether blanket approval happened, and if there's any
 > uncertainty, reset the whole wordlist to Undecided and re-review it together rather
 > than trying to isolate "the relevant entries."
-> (Note: a word's spelling status is only ever Correct, Incorrect, or Undecided — there's
-> no "deny" action here. That's a Basic Checks concept, covered in Lesson 4.)
 
 **Biblical Terms: blank renderings are the default starting state.** Every term in
 Paratext's Biblical Terms tool starts out with a gloss (in English, or the source
@@ -176,9 +174,7 @@ you've seen behave one way in one project will exist or behave the same way in a
 answer first, then verify it against the Content section above.
 
 1. **Name the only three statuses** a word's spelling can carry in Paratext's
-   wordlist. Then say in one sentence why "denied" is not one of them, and which
-   check area that word actually belongs to. If you wrote down four statuses, re-read
-   the warning box in the wordlist section.
+   wordlist.
 2. **Two rows, two different problems.** Row A shows a highlighted rendering carrying
    the placeholder text "Double click to enter rendering(s) from project text." Row B
    shows five renderings on one term, most of them no longer found in the current

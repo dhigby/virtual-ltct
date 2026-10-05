@@ -136,9 +136,10 @@ Diagnosing structural-first doesn't mean the team fixes things in that exact ord
 by line — it means *you* look for the highest-leverage cause first, so you're not
 sending a team to manually correct fifty symptoms of one unclosed marker.
 
-There's a second way a Basic Checks result can look clean without being clean: unlike
-the wordlist's spelling status (Correct/Incorrect/Undecided only), Basic Checks results
-do carry a real accept/deny mechanism for flagged errors. A documented field case from
+There's a second way a Basic Checks result can look clean without being clean. In the
+wordlist, the shortcut is marking every word Correct (Lesson 2); in Basic Checks, it is
+**denying** flagged errors — a real Paratext action, meant for errors that genuinely
+aren't errors. A documented field case from
 the SME interview behind this course found a team that had **denied errors they didn't
 understand**, rather than resolving them — simply clearing the check's flags instead of
 dealing with what was underneath. When a denied error is shown, it appears in the list
@@ -300,8 +301,8 @@ to find the gaps here, not halfway through a support session.
 3. **A denied error is not a resolved one.** Write one line
    on how a denied error actually displays when it's visible (what marks it as denied,
    not resolved), and one line on the View menu setting that controls whether it shows
-   up at all. Then say in one line why "deny" is a real, correct action in Basic Checks
-   but has no equivalent in the wordlist's spelling status.
+   up at all. Then say in one line what the wordlist's equivalent shortcut is — the move
+   that makes a spelling list look clean without anyone reviewing it.
 4. **Open Tools > Checking Inventories > Punctuation Inventory** in a project you
    already support, then open its **Inventory** menu and confirm whether **"Show
    sequences"** is selected. Write down what you found. Then, in one sentence, say how

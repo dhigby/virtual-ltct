@@ -17,7 +17,7 @@ pages:
     elements:
       - {type: image, file: logo.png, x: 20, y: 15, width: 40}
       - {type: text, text: "Training completed", x: 148, y: 50, size: 28, align: C}
-      - {type: userfield, field: ltct_certname, x: 148, y: 80, size: 24, align: C}   # spec 016 R10: the real name, never a pseudonym
+      - {type: studentname, x: 148, y: 80, size: 24, align: C}
       - {type: text, text: "has completed the course", x: 148, y: 98, size: 14, align: C}
       - {type: coursename, x: 148, y: 112, size: 18, align: C}
       - {type: date, date: completion, format: strftimedate, x: 148, y: 130, size: 12, align: C}

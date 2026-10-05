@@ -51,7 +51,7 @@ class profilefields {
     ];
 
     /** The datatypes the declaration contract allows. */
-    const DATATYPES = ['menu', 'checkbox', 'text'];   // text: spec 016's ltct_certname (R10)
+    const DATATYPES = ['menu', 'checkbox'];
 
     /** @var array[] the declared fields */
     protected $fields;
@@ -137,7 +137,7 @@ class profilefields {
 
         if (!in_array($datatype, self::DATATYPES, true)) {
             return [self::result('profilefield', $subject, 'unknown', $datatype, null,
-                'datatype must be ' . implode(', ', self::DATATYPES), true)];
+                'datatype must be ' . implode(' or ', self::DATATYPES), true)];
         }
         if (self::visible_code($field['visible'] ?? null) === null) {
             return [self::result('profilefield', $subject, 'unknown', self::display($field['visible'] ?? null),
@@ -290,15 +290,6 @@ class profilefields {
         if ($field['datatype'] === 'menu') {
             $liveoptions = $live !== null ? self::menu_options((string)$live->param1) : [];
             $data->param1 = implode("\n", self::merged_options(self::declared_options($field), $liveoptions));
-        } else if ($field['datatype'] === 'text' && $live === null) {
-            // A new text field (profile_define_text::define_form_specific): core's display size
-            // 30, at most 255 characters (core's default is 2048; this holds a name), not a
-            // password, no link.
-            $data->param1 = 30;
-            $data->param2 = 255;
-            $data->param3 = 0;
-            $data->param4 = '';
-            $data->param5 = '';
         }
         return $data;
     }

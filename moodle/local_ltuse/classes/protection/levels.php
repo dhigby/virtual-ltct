@@ -11,13 +11,10 @@ defined('MOODLE_INTERNAL') || die();
  * and ask this class; none of them decides a rule itself.
  *
  *   levels       none < email < firstname < pseudonym, each including the ones before it (FR-001)
- *   effective    the stricter of a user's own level and their organisation's minimum (FR-001a)
  *   withheld     which account fields a level withholds, from the declared config (R6)
  *   pseudonym    unique among protected users and not containing the real name, after NFC and
  *                case folding (data-model)
  *   username     must not contain the real first name or surname at firstname+ (R13)
- *   cohorts      an organisation's member cohort is exactly ltct:org:<key> for a declared key,
- *                never ltct:org:<key>:managers (R2)
  *   courses      a course mentor counts only in a published or pilot ltct:<slug> course, never
  *                the office-hours course, which enrols every mentor (R7 path 4)
  */
@@ -30,18 +27,12 @@ class levels {
     const PSEUDONYM = 'pseudonym';
     const ORDER = [self::NONE, self::EMAIL, self::FIRSTNAME, self::PSEUDONYM];
 
-    /** The strictest level an organisation minimum may take: a pseudonym is chosen per person (R12). */
-    const ORG_MAX = self::FIRSTNAME;
-
     /** The levels that need ltct_org private and a cohort-scoped report first (R11). */
     const NEED_ORGSCOPE = [self::FIRSTNAME, self::PSEUDONYM];
 
-    /** Where an effective level comes from (data-model). */
+    /** A log row's source (data-model): a change of level, or a correction at the same level. */
     const SOURCE_OWN = 'own';
-    const SOURCE_ORG = 'organisation';
-    const SOURCE_KEPT = 'organisation-kept';
     const SOURCE_CORRECTION = 'correction';
-    const SOURCE_ORGMINIMUM = 'orgminimum';   // A log row for an organisation's minimum (userid 0).
 
     /** The account's alternate-name columns, blanked from firstname (R1). */
     const ALTNAMES = ['firstnamephonetic', 'lastnamephonetic', 'middlename', 'alternatename'];
@@ -56,9 +47,9 @@ class levels {
     const FIRSTNAME_FIELD = 'firstname';
     const LASTNAME_FIELD = 'lastname';
 
-    /** Custom profile fields we own, by shortname; ltct_org and ltct_certname never withheld (R10, R11). */
+    /** Custom profile fields we own, by shortname; ltct_org is never withheld (R11). */
     const PROFILE_FIELD = '/^ltct_[a-z0-9_]+$/';
-    const NEVER_WITHHELD = ['ltct_org', 'ltct_certname', 'description', 'interests'];
+    const NEVER_WITHHELD = ['ltct_org', 'description', 'interests'];
 
     /** The pseudonym column's width (local_ltuse_protection.pseudonym). */
     const PSEUDONYM_MAX = 100;
@@ -84,47 +75,6 @@ class levels {
     public static function rank(string $level): int {
         $i = array_search($level, self::ORDER, true);
         return $i === false ? -1 : (int)$i;
-    }
-
-    /**
-     * The stricter of two levels. An unknown level counts as none.
-     *
-     * @param string $a
-     * @param string $b
-     * @return string
-     */
-    public static function stricter(string $a, string $b): string {
-        $a = self::is_level($a) ? $a : self::NONE;
-        $b = self::is_level($b) ? $b : self::NONE;
-        return self::rank($a) >= self::rank($b) ? $a : $b;
-    }
-
-    /**
-     * A user's effective level and where it comes from (FR-001a, R13).
-     *
-     * @param string $own the user's own level
-     * @param string $orgminimum their current organisation's minimum, none when there is none
-     * @param bool $kept the row was marked organisation-kept after leaving a protected organisation
-     * @return array [level, source]
-     */
-    public static function effective(string $own, string $orgminimum, bool $kept = false): array {
-        $own = self::is_level($own) ? $own : self::NONE;
-        $orgminimum = self::is_level($orgminimum) ? $orgminimum : self::NONE;
-        if (self::rank($orgminimum) > self::rank($own)) {
-            return [$orgminimum, self::SOURCE_ORG];
-        }
-        return [$own, $kept ? self::SOURCE_KEPT : self::SOURCE_OWN];
-    }
-
-    /**
-     * May an own level be set, given the organisation minimum? Never looser (US3-4).
-     *
-     * @param string $level
-     * @param string $orgminimum
-     * @return bool
-     */
-    public static function allowed_own(string $level, string $orgminimum): bool {
-        return self::is_level($level) && self::rank($level) >= self::rank(self::is_level($orgminimum) ? $orgminimum : self::NONE);
     }
 
     /**
@@ -328,26 +278,6 @@ class levels {
      */
     public static function needs_acknowledgement(string $from, string $to, bool $hasactivity): bool {
         return $hasactivity && self::rank($from) !== self::rank($to);
-    }
-
-    /**
-     * The organisation key of a member cohort, or null. Exactly ltct:org:<key> for a declared
-     * key; ltct:org:<key>:managers and undeclared keys are not member cohorts (R2).
-     *
-     * @param string $idnumber the cohort's idnumber
-     * @param string[] $declaredkeys the organisation keys declared in organisations.yaml
-     * @return string|null
-     */
-    public static function member_cohort_key(string $idnumber, array $declaredkeys): ?string {
-        $prefix = 'ltct:org:';
-        if (strpos($idnumber, $prefix) !== 0) {
-            return null;
-        }
-        $key = substr($idnumber, strlen($prefix));
-        if ($key === '' || strpos($key, ':') !== false) {
-            return null;
-        }
-        return in_array($key, array_map('strval', $declaredkeys), true) ? $key : null;
     }
 
     /**

@@ -35,11 +35,10 @@ use core_privacy\local\request\writer;
  * made the link (usermodified). The link belongs to the cohort, so a deletion request keeps it
  * and sets usermodified to 0. Cohort membership is core_cohort's to export.
  *
- * Spec 016 adds three: local_ltuse_protection (a protected user's level, pseudonym and real
- * values), local_ltuse_protection_log (every change, with who made it) and
- * local_ltuse_org_protection (an organisation's minimum, with the site-team member who set
- * it). A user's own rows are exported in full; changes they made to someone else are exported
- * as a count and dates only, never naming that person. Deletion is the one routine the
+ * Spec 016 adds two: local_ltuse_protection (a protected user's level, pseudonym and real
+ * values) and local_ltuse_protection_log (every change, with who made it). A user's own rows
+ * are exported in full; changes they made to someone else are exported as a count and dates
+ * only, never naming that person. Deletion is the one routine the
  * user_deleted observer also runs: the user's own rows go, and wherever they acted their id is
  * set to 0. The protectionchanged notification is core messaging's.
  *
@@ -62,7 +61,6 @@ class provider implements
     /** Spec 016: identity protection. */
     const PROTECTION = 'local_ltuse_protection';
     const PROTECTIONLOG = 'local_ltuse_protection_log';
-    const ORGPROTECTION = 'local_ltuse_org_protection';
 
     /** Spec 002: the organisation contacts it made (research R12). */
     const ORGCONTACT = 'local_ltuse_org_contact';
@@ -106,10 +104,6 @@ class provider implements
             'tolevel' => 'privacy:metadata:protectionlog:tolevel',
             'timecreated' => 'privacy:metadata:protectionlog:timecreated',
         ], 'privacy:metadata:protectionlog');
-        $collection->add_database_table(self::ORGPROTECTION, [
-            'usermodified' => 'privacy:metadata:orgprotection:usermodified',
-            'timemodified' => 'privacy:metadata:orgprotection:timemodified',
-        ], 'privacy:metadata:orgprotection');
         $collection->add_message_provider('protectionchanged', 'privacy:metadata:protectionchanged');
         $collection->add_database_table(self::ORGCONTACT, [
             'managerid' => 'privacy:metadata:org_contact:managerid',
@@ -150,14 +144,11 @@ class provider implements
                         OR EXISTS (SELECT 1 FROM {" . self::PROTECTION . "} p
                                     WHERE p.userid = :puserid OR p.usermodified = :pmodified)
                         OR EXISTS (SELECT 1 FROM {" . self::PROTECTIONLOG . "} pl
-                                    WHERE pl.userid = :pluserid OR pl.actorid = :plactor)
-                        OR EXISTS (SELECT 1 FROM {" . self::ORGPROTECTION . "} op
-                                    WHERE op.usermodified = :opmodified))";
+                                    WHERE pl.userid = :pluserid OR pl.actorid = :plactor))";
         $contextlist->add_from_sql($sql, ['level' => CONTEXT_USER, 'userid' => $userid,
             'mentorid' => $userid, 'learnerid' => $userid, 'bmentorid' => $userid, 'blearnerid' => $userid,
             'omanagerid' => $userid, 'omemberid' => $userid, 'pcuserid' => $userid,
-            'puserid' => $userid, 'pmodified' => $userid, 'pluserid' => $userid, 'plactor' => $userid,
-            'opmodified' => $userid]);
+            'puserid' => $userid, 'pmodified' => $userid, 'pluserid' => $userid, 'plactor' => $userid]);
         return $contextlist;
     }
 
@@ -302,8 +293,7 @@ class provider implements
             return false;
         }
         return $DB->record_exists_select(self::PROTECTION, 'userid = :a OR usermodified = :b', ['a' => $userid, 'b' => $userid])
-            || $DB->record_exists_select(self::PROTECTIONLOG, 'userid = :a OR actorid = :b', ['a' => $userid, 'b' => $userid])
-            || $DB->record_exists(self::ORGPROTECTION, ['usermodified' => $userid]);
+            || $DB->record_exists_select(self::PROTECTIONLOG, 'userid = :a OR actorid = :b', ['a' => $userid, 'b' => $userid]);
     }
 
     /**
@@ -323,7 +313,6 @@ class provider implements
             $data->protection = (object)[
                 'ownlevel' => $row->ownlevel,
                 'effectivelevel' => $row->effectivelevel,
-                'source' => $row->source,
                 'pseudonym' => $row->pseudonym,
                 'realfirstname' => $row->realfirstname,
                 'reallastname' => $row->reallastname,
@@ -346,10 +335,6 @@ class provider implements
         if ($made) {
             $data->changesmadetoothers = (object)['count' => count($made),
                 'dates' => array_map([transform::class, 'datetime'], $made)];
-        }
-        $orgs = $DB->count_records(self::ORGPROTECTION, ['usermodified' => $userid]);
-        if ($orgs) {
-            $data->organisationsettingsmade = $orgs;
         }
         if ((array)$data) {
             writer::with_context($context)->export_data([get_string('privacy:path:protection', 'local_ltuse')], $data);

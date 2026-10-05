@@ -7,11 +7,10 @@
  * Only someone who may manage this person's protection reaches it: the site team, or a manager
  * of the person's own organisation (entitlement::can_manage_protection). Anyone else is
  * refused, the person themselves included: their own level and preview are on their profile.
- * A manager whose organisation withholds identity sees and changes only the protected display.
  *
  * Writes go through local_ltuse\protection\service::set_protection(), the same code as the
- * web service, so the refusals (looser than the organisation, not ready, pseudonym, username,
- * acknowledgement) are the same everywhere.
+ * web service, so the refusals (not ready, pseudonym, username, acknowledgement) are the same
+ * everywhere.
  */
 
 require(__DIR__ . '/../../config.php');
@@ -44,7 +43,6 @@ $seeidentity = entitlement::can_view_identity((int)$USER->id, $userid);
 $configured = service::config() !== null;
 $row = $configured ? service::row($userid) : null;
 $real = $seeidentity ? service::real_identity($userid) : null;
-$orgminimum = $configured ? service::user_org_minimum($userid) : levels::NONE;
 $ready = service::orgscope_ready();
 $available = [];
 foreach (levels::ORDER as $level) {
@@ -65,10 +63,8 @@ $form = new \local_ltuse\form\protection_form($url, [
     'userid' => $userid,
     'seeidentity' => $seeidentity,
     'available' => $available,
-    'orgminimum' => $orgminimum,
     'hasactivity' => service::has_activity($userid),
-    // From the real names on the server, whoever is looking: a manager who may not see them
-    // still needs the field, and its note then says nothing about why (FR-006).
+    // From the real names on the server.
     'needsusername' => levels::username_reveals((string)$user->username,
         $row ? (string)$row->realfirstname : (string)$user->firstname,
         $row ? (string)$row->reallastname : (string)$user->lastname),
@@ -136,14 +132,9 @@ if ($error !== null) {
 }
 $current = $row ? (string)$row->effectivelevel : levels::NONE;
 $summary = get_string('protection:current', 'local_ltuse', get_string('protection:level:' . $current, 'local_ltuse'));
-if ($row && $row->source !== levels::SOURCE_OWN) {
-    $summary .= ' ' . get_string('protection:source:' . $row->source, 'local_ltuse');
-}
 echo html_writer::tag('p', $summary . ' ' . entitlement::marker((int)$USER->id, $userid));
 if ($real) {
     echo html_writer::tag('p', get_string('protection:realname', 'local_ltuse', s(trim($realfirst . ' ' . $reallast))));
-} else if (!$seeidentity && $current !== levels::NONE) {
-    echo html_writer::tag('p', get_string('protection:withheldfromyou', 'local_ltuse'));
 }
 if (!$ready) {
     echo $OUTPUT->notification(get_string('protection:notready', 'local_ltuse'), 'info');

@@ -13,7 +13,7 @@ use local_ltuse\protection\service;
 
 /**
  * The service writes the protected display into the account and keeps the real values; the
- * hook and the observers hold it against other writers; entitlement decides who sees what.
+ * hook and the observer hold it against other writers; entitlement decides who sees what.
  *
  * @package    local_ltuse
  * @category   test
@@ -51,7 +51,7 @@ final class protection_test extends \advanced_testcase {
      */
     private function configure(bool $ready): void {
         set_config(service::CONFIG, json_encode(['levels' => levels::ORDER, 'withhold' => self::WITHHOLD,
-            'org_minimum_max' => 'firstname', 'neutral_surname' => '', 'reconcile_minutes' => 60,
+            'neutral_surname' => '', 'reconcile_minutes' => 60,
             'orgscope_ready' => $ready]), 'local_ltuse');
     }
 
@@ -195,18 +195,20 @@ final class protection_test extends \advanced_testcase {
     }
 
     /**
-     * Review finding 1: changing only the minimum must never re-open identities the site team
-     * withheld from the organisation's managers.
+     * Scope review (Doug, 2026-10-05), changes 18 and 19: an account change for someone with no
+     * protection writes nothing, and the reconcile task does nothing on a site where nobody is
+     * protected.
      */
-    public function test_changing_a_minimum_keeps_withheld_identity_withheld(): void {
+    public function test_an_unprotected_user_is_left_alone(): void {
         global $DB;
-        $field = (object)['shortname' => service::ORGFIELD, 'name' => 'Organisation', 'datatype' => 'menu',
-            'param1' => "fixture-a\nfixture-b", 'categoryid' => 1, 'visible' => 2, 'locked' => 1];
-        $DB->insert_record('user_info_field', $field);
-        service::set_org_protection('fixture-a', 'email', false);
-        service::set_org_protection('fixture-a', 'none');
-        $this->assertFalse(service::managers_see_identity('fixture-a'));
-        $this->assertEquals(2, $DB->count_records(service::LOGTABLE, ['userid' => 0, 'source' => 'orgminimum']));
+        $user = $this->learner();
+        user_update_user((object)['id' => $user->id, 'lastname' => 'Fixother'], false, true);
+        $this->assertSame('Fixother', \core_user::get_user($user->id)->lastname);
+        $this->assertFalse($DB->record_exists(service::TABLE, ['userid' => $user->id]));
+        $this->assertTrue(service::is_settled((int)$user->id));
+        $this->assertSame('none', service::apply((int)$user->id));
+        (new \local_ltuse\task\reconcile_protection())->execute();
+        $this->assertEquals(0, $DB->count_records(service::LOGTABLE));
     }
 
     public function test_deleting_a_user_removes_their_rows_and_clears_them_as_an_actor(): void {

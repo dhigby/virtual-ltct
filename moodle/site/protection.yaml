@@ -3,9 +3,9 @@
 # Read only by scripts/site_config.py (contract: specs/016-identity-protection/contracts/
 # declaration.md). This file declares the levels and which account fields each one withholds
 # from people who are not entitled. It never names who is protected, their pseudonym or real
-# identity, or which organisations have a minimum level: all of that is Moodle data, set on
-# the site and recovered by the data restore, because declaring it would publish who is at
-# risk (constitution III, FR-014). Apply stores this file in local_ltuse's config and touches
+# identity: that is Moodle data, set on the site for each person who asks and recovered by the
+# data restore, because declaring it would publish who is at risk (constitution III, FR-014).
+# No organisation has a minimum level (Doug, 2026-10-05 (scope review)). Apply stores this file in local_ltuse's config and touches
 # no user.
 
 rows: [26]
@@ -64,11 +64,10 @@ withhold:
     - ltct_exp_professional
     - ltct_exp_education
     - firstname                    # the pseudonym replaces it
-org_minimum_max: firstname         # a pseudonym is chosen per person, never per organisation (R12)
 neutral_surname: "·"               # mandatory: names are not locked and core's edit form requires a surname (R4)
 reconcile_minutes: 60              # db/tasks.php runs reconcile_protection hourly
 why: >-
   #26 (spec 016, FR-001, FR-014): the levels and what each withholds are configuration and
-  rebuild with the server (SC-006). ltct_org and ltct_certname are never withheld: blanking
-  ltct_org would drop a learner from their cohort and courses (R11), and ltct_certname is the
-  certificate's name (R10). The learner's own words (description, interests) are theirs (R6).
+  rebuild with the server (SC-006). ltct_org is never withheld: blanking it would drop a
+  learner from their cohort and courses (R11). The learner's own words (description,
+  interests) are theirs (R6).

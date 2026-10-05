@@ -43,11 +43,4 @@ $capabilities = [
         'contextlevel' => CONTEXT_USER,
         'archetypes'   => ['manager' => CAP_ALLOW],
     ],
-    // Set an organisation's minimum level. The site team only (R12).
-    'local/ltuse:manageorgprotection' => [
-        'riskbitmask'  => RISK_PERSONAL,
-        'captype'      => 'write',
-        'contextlevel' => CONTEXT_SYSTEM,
-        'archetypes'   => ['manager' => CAP_ALLOW],
-    ],
 ];

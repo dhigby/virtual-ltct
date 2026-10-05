@@ -78,7 +78,6 @@ roles:
       moodle/site:trustcontent: allow
       local/ltuse:viewidentity: allow          # spec 016 R7 path 1: the site team sees real identities
       local/ltuse:manageprotection: allow      # ... and grants protection (R12)
-      local/ltuse:manageorgprotection: allow   # ... and sets organisation minimums (R12)
     why: >-
       #3 (FR-012): managers keep trusted content, so their edits keep iframe embeds. #11
       (spec 003): a manager may assign the mentor role, which is what offers "Mentor" on a

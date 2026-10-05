@@ -19,19 +19,28 @@ class hook_callbacks {
      * That reliance is a Principle XI exception, listed in the plugin README and guarded by
      * tests/protection_test.php and quickstart V7.
      *
+     * Never throws: core's hook manager calls each callback with no catch
+     * (lib/classes/hook/manager.php dispatch() on MOODLE_502_STABLE), so an exception here
+     * would abort every account save on the site, not only a protected one. A failure goes to
+     * debugging(), and the reconcile task repairs the account within the hour.
+     *
      * @param \core_user\hook\before_user_updated $hook
      */
     public static function before_user_updated(\core_user\hook\before_user_updated $hook): void {
-        $userid = (int)($hook->user->id ?? 0);
-        if ($userid <= 0 || service::in_bypass($userid) || !service::table_exists()) {
-            return;
-        }
-        $row = service::row($userid);
-        if (!$row || $row->effectivelevel === levels::NONE) {
-            return;
-        }
-        foreach (service::protected_columns($row) as $column => $value) {
-            $hook->user->$column = $value;
+        try {
+            $userid = (int)($hook->user->id ?? 0);
+            if ($userid <= 0 || service::in_bypass($userid) || !service::table_exists()) {
+                return;
+            }
+            $row = service::row($userid);
+            if (!$row || $row->effectivelevel === levels::NONE) {
+                return;
+            }
+            foreach (service::protected_columns($row) as $column => $value) {
+                $hook->user->$column = $value;
+            }
+        } catch (\Throwable $e) {
+            debugging('local_ltuse: protection hook failed: ' . $e->getMessage(), DEBUG_DEVELOPER);
         }
     }
 }

@@ -9,11 +9,11 @@
 defined('MOODLE_INTERNAL') || die();
 
 $plugin->component = 'local_ltuse';
-$plugin->version   = 2026100900;   // Identity protection (spec 016): three tables
-                                   // (local_ltuse_protection, _org_protection,
-                                   // _protection_log), three capabilities, the
-                                   // before_user_updated hook, observers, two tasks, two
-                                   // web services and the protectionchanged message.
+$plugin->version   = 2026100900;   // Identity protection (spec 016): two tables
+                                   // (local_ltuse_protection, _protection_log), two
+                                   // capabilities, the before_user_updated hook, two
+                                   // observers, two tasks, one web service and the
+                                   // protectionchanged message.
                                    // db/upgrade.php saves its savepoint at this stamp. It
                                    // sits above administration (spec 008, 2026100801), which
                                    // merges first. Before them, managers' own people (spec 002

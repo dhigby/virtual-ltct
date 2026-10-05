@@ -49,7 +49,7 @@ class Protection(unittest.TestCase):
         decl = sc.validate(self.dir)[0]
         protection = decl["protection"]
         self.assertEqual(protection["levels"], ["none", "email", "firstname", "pseudonym"])
-        self.assertEqual(protection["org_minimum_max"], "firstname")
+        self.assertNotIn("org_minimum_max", protection)
         self.assertIn("ltct_role", protection["withhold"]["firstname"])
         self.assertNotIn("firstname", protection["withhold"]["firstname"])
         self.assertIn("firstname", protection["withhold"]["pseudonym"])
@@ -97,10 +97,6 @@ class Protection(unittest.TestCase):
         self.edit("protection.yaml", "  email: [maildisplay]", "  email: [maildisplay, ltct_org]")
         self.assertInvalid("ltct_org is never withheld")
 
-    def test_the_certificate_name_is_never_withheld(self):
-        self.edit("protection.yaml", "  email: [maildisplay]", "  email: [maildisplay, ltct_certname]")
-        self.assertInvalid("ltct_certname is never withheld")
-
     def test_the_learners_own_words_are_never_withheld(self):
         self.edit("protection.yaml", "  email: [maildisplay]", "  email: [maildisplay, description]")
         self.assertInvalid("the learner's own words are theirs")
@@ -113,9 +109,13 @@ class Protection(unittest.TestCase):
         self.edit("protection.yaml", "    - firstname                    # the pseudonym replaces it\n", "")
         self.assertInvalid("must withhold firstname")
 
-    def test_an_organisation_minimum_is_never_a_pseudonym(self):
-        self.edit("protection.yaml", "org_minimum_max: firstname", "org_minimum_max: pseudonym")
-        self.assertInvalid("never a pseudonym")
+    def test_no_organisation_minimum_is_declared(self):
+        # Organisation minimums are cut (Doug, 2026-10-05 (scope review), change 9).
+        self.edit("protection.yaml", "reconcile_minutes: 60", "org_minimum_max: firstname\nreconcile_minutes: 60")
+        self.assertInvalid("org_minimum_max")
+
+    def test_manageorgprotection_is_gone(self):
+        self.assertNotIn("local/ltuse:manageorgprotection", sc.PROTECTION_MANAGE_CAPS)
 
     def test_the_neutral_surname_is_one_non_letter(self):
         self.edit("protection.yaml", 'neutral_surname: "·"', 'neutral_surname: "X"')
@@ -181,36 +181,15 @@ class Protection(unittest.TestCase):
         (self.dir / "settings" / "identity.yaml").unlink()
         self.assertInvalid("enablegravatar must be declared")
 
-    # --- profile fields and the certificate (R10) ---------------------------------------------------
+    # --- the certificate (R10) -------------------------------------------------------------------
 
-    def test_certname_is_a_private_locked_text_field(self):
-        self.edit("profile-fields.yaml", "    name: Name on certificate\n    visible: private",
-                  "    name: Name on certificate\n    visible: all")
-        self.assertInvalid("ltct_certname is a text field, visible: private")
-
-    def test_a_text_field_takes_no_options(self):
-        self.edit("profile-fields.yaml", "    name: Name on certificate\n",
-                  "    name: Name on certificate\n    options: [a, b]\n")
-        self.assertInvalid("only a menu has options")
-
-    def test_certname_must_be_declared(self):
-        text = (self.dir / "profile-fields.yaml").read_text(encoding="utf-8")
-        cut = text[text.index("  - shortname: ltct_certname"):]
-        (self.dir / "profile-fields.yaml").write_text(text.replace(cut, ""), encoding="utf-8")
-        self.assertInvalid("ltct_certname is not declared")
-
-    def test_the_certificate_never_prints_studentname_under_protection(self):
-        self.edit("certificate/template.yaml", "{type: userfield, field: ltct_certname,", "{type: studentname,")
-        self.assertInvalid("studentname would print a protected learner's pseudonym")
-
-    def test_a_userfield_prints_only_certname(self):
-        self.edit("certificate/template.yaml", "field: ltct_certname", "field: ltct_role")
-        self.assertInvalid("prints ltct_certname, the real name for the certificate, and nothing else")
-
-    def test_one_name_element_only(self):
-        self.edit("certificate/template.yaml", "      - {type: coursename,",
-                  "      - {type: studentname, x: 1, y: 1}\n      - {type: coursename,")
-        self.assertInvalid("needs exactly one name element, not 2")
+    def test_the_certificate_prints_core_studentname(self):
+        # ltct_certname is cut (Doug, 2026-10-05 (scope review), change 8): the certificate
+        # prints core's studentname, and the site team issues a real-name one on request.
+        decl = sc.validate(self.dir)[0]
+        kinds = [e["type"] for page in decl["certificate_template"]["pages"] for e in page["elements"]]
+        self.assertIn("studentname", kinds)
+        self.assertFalse(any(f["shortname"] == "ltct_certname" for f in decl["profile_fields"]))
 
     def test_without_protection_yaml_nothing_is_required(self):
         (self.dir / "protection.yaml").unlink()

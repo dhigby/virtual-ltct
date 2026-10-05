@@ -38,7 +38,7 @@ class surfaces {
             }
             $out[] = [
                 'id' => $userid,
-                'realname' => service::certname((string)$row->realfirstname, (string)$row->reallastname),
+                'realname' => service::real_fullname((string)$row->realfirstname, (string)$row->reallastname),
                 'display' => fullname($user),
                 'level' => (string)$row->effectivelevel,
                 'levelname' => get_string('protection:level:' . $row->effectivelevel, 'local_ltuse'),
@@ -76,7 +76,7 @@ class surfaces {
         $real = $entitled ? service::real_identity($learnerid) : null;
         return [
             'protected' => $entitled,
-            'realname' => $real ? service::certname($real['firstname'], $real['lastname']) : '',
+            'realname' => $real ? service::real_fullname($real['firstname'], $real['lastname']) : '',
             'protectedlabel' => $entitled ? get_string('protection:marker', 'local_ltuse') : '',
         ];
     }
@@ -116,7 +116,7 @@ class surfaces {
             return '';
         }
         $real = service::real_identity($userid);
-        $name = $real ? service::certname($real['firstname'], $real['lastname']) : '';
+        $name = $real ? service::real_fullname($real['firstname'], $real['lastname']) : '';
         return $marker . ' ' . get_string('protection:realname', 'local_ltuse', s($name)) . ' (' .
             get_string('protection:level:' . ($real['level'] ?? levels::NONE), 'local_ltuse') . ')';
     }

@@ -1870,11 +1870,6 @@ class Recognition(Base):
         shutil.copytree(site / "certificate", self.dir / "certificate")
         for rel in ("badges.yaml", "settings/badges.yaml"):
             self.write(rel, (site / rel).read_text(encoding="utf-8"))
-        # Spec 016 prints the name from ltct_certname, which needs profile-fields.yaml and the
-        # organisations behind it. This class tests spec 013's rules alone, so its copy keeps
-        # core's studentname; tests/test_protection_declaration.py tests the tracked userfield.
-        self.edit("certificate/template.yaml", "{type: userfield, field: ltct_certname,",
-                  "{type: studentname,")
 
     def test_the_tracked_declaration_is_accepted_and_rendered(self):
         self.assertAccepted()

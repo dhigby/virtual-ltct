@@ -106,9 +106,7 @@ function local_ltuse_control_view_profile($user, $course = null, $usercontext = 
  * cohort.idnumber is not indexed in core; moodle/local_ltuse/README.md lists this read.
  *
  * @param int $userid
- * @param bool $reload read afresh and refresh the cache: organisation actions do, before a write,
- *                     and so does spec 016's protection service, which runs in cron next to
- *                     tasks that change memberships
+ * @param bool $reload read afresh and refresh the cache: organisation actions do, before a write
  * @return string[] organisation keys, empty when the user is in none
  */
 function local_ltuse_organisation_member_keys(int $userid, bool $reload = false): array {

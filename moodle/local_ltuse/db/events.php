@@ -56,26 +56,13 @@ $observers = [
         'callback' => '\local_ltuse\observer::scheduler_slot_deleted',
     ],
 
-    // Spec 016 (R2): the writers the before_user_updated hook misses. Internal (the default),
-    // so they run while the protection service still holds its bypass set for the user.
-    [
-        'eventname' => '\core\event\user_created',
-        'callback' => '\local_ltuse\protection\observer::user_created',
-    ],
+    // Spec 016 (R2): the writers the before_user_updated hook misses, for protected users
+    // only. Internal (the default), so they run while the protection service still holds its
+    // bypass set for the user. No account-creation or cohort observer: protection is per person
+    // (Doug, 2026-10-05 (scope review)).
     [
         'eventname' => '\core\event\user_updated',
         'callback' => '\local_ltuse\protection\observer::user_updated',
-    ],
-    // Priority above enrol_cohort's (0), so an organisation's minimum is applied before cohort
-    // sync enrols the new member anywhere (US3-3).
-    [
-        'eventname' => '\core\event\cohort_member_added',
-        'callback' => '\local_ltuse\protection\observer::cohort_member_added',
-        'priority' => 1000,
-    ],
-    [
-        'eventname' => '\core\event\cohort_member_removed',
-        'callback' => '\local_ltuse\protection\observer::cohort_member_removed',
     ],
     [
         'eventname' => '\core\event\user_deleted',

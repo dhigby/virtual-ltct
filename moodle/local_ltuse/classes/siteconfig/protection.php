@@ -14,12 +14,12 @@ use local_ltuse\protection\service;
  * The declaration arrives as the payload's `protection`, already checked by
  * scripts/site_config.py:
  *
- *   protection {levels, withhold {email, firstname, pseudonym}, org_minimum_max,
- *               neutral_surname, reconcile_minutes, orgscope_ready}
+ *   protection {levels, withhold {email, firstname, pseudonym}, neutral_surname,
+ *               reconcile_minutes, orgscope_ready}
  *
  * It is kept in the plugin's config, `local_ltuse/protection`, as JSON, where the service reads
- * it. Apply never reads or writes any user's protection or any organisation's minimum: those are
- * Moodle data (constitution III). A change of the withhold lists reaches protected accounts at
+ * it. Apply never reads or writes any user's protection: that is Moodle data
+ * (constitution III). A change of the withhold lists reaches protected accounts at
  * the next reconcile run, not here.
  *
  * Items:
@@ -57,7 +57,6 @@ class protection {
         $out = [
             'levels' => array_values(array_map('strval', (array)($this->declared['levels'] ?? []))),
             'withhold' => [],
-            'org_minimum_max' => (string)($this->declared['org_minimum_max'] ?? levels::ORG_MAX),
             'neutral_surname' => (string)($this->declared['neutral_surname'] ?? ''),
             'reconcile_minutes' => (int)($this->declared['reconcile_minutes'] ?? 60),
             'orgscope_ready' => !empty($this->declared['orgscope_ready']),

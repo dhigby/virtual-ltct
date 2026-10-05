@@ -23,19 +23,6 @@ use local_ltuse\protection\levels as L;
 check(L::ORDER === ['none', 'email', 'firstname', 'pseudonym'], 'four levels, loosest first');
 check(L::is_level('email') && !L::is_level('Email') && !L::is_level('') && !L::is_level(null), 'is_level is exact');
 check(L::rank('none') === 0 && L::rank('pseudonym') === 3 && L::rank('bogus') === -1, 'rank');
-check(L::stricter('email', 'firstname') === 'firstname', 'stricter picks the stricter');
-check(L::stricter('pseudonym', 'firstname') === 'pseudonym', 'stricter is symmetric');
-check(L::stricter('bogus', 'email') === 'email', 'an unknown level counts as none');
-
-// --- effective level (FR-001a, R13) -----------------------------------------------------------
-check(L::effective('none', 'firstname') === ['firstname', 'organisation'], 'organisation minimum wins over a looser own level');
-check(L::effective('pseudonym', 'firstname') === ['pseudonym', 'own'], 'a stricter own level wins');
-check(L::effective('email', 'email') === ['email', 'own'], 'equal: own');
-check(L::effective('firstname', 'none', true) === ['firstname', 'organisation-kept'], 'kept after leaving a protected organisation');
-check(L::effective('', 'nonsense') === ['none', 'own'], 'garbage is none');
-check(!L::allowed_own('email', 'firstname'), 'an own level looser than the minimum is refused (US3-4)');
-check(L::allowed_own('pseudonym', 'firstname') && L::allowed_own('firstname', 'firstname'), 'equal or stricter is allowed');
-check(!L::allowed_own('bogus', 'none'), 'an unknown own level is refused');
 
 // --- availability before the organisation is hidden (R11) -------------------------------------
 check(L::available('email', false) && L::available('none', false), 'email and none need nothing');
@@ -58,8 +45,8 @@ $ps = L::withheld($withhold, 'pseudonym');
 check(in_array('firstname', $ps, true) && in_array('maildisplay', $ps, true) && in_array('city', $ps, true),
     'pseudonym includes everything below it');
 check(count($ps) === count(array_unique($ps)), 'no field listed twice');
-check(!in_array('ltct_org', L::withheld(['email' => ['ltct_org', 'ltct_certname', 'description', 'maildisplay']], 'email'), true),
-    'ltct_org, ltct_certname and description are never withheld');
+check(L::withheld(['email' => ['ltct_org', 'description', 'interests', 'maildisplay']], 'email') === ['maildisplay'],
+    'ltct_org, description and interests are never withheld');
 check(L::withheld(['email' => ['maildisplay', 'username', 'password']], 'email') === ['maildisplay'],
     'a field outside the fixed set is ignored');
 check(L::withheld(['email' => ['maildisplay']], 'pseudonym') === ['maildisplay'],
@@ -110,14 +97,6 @@ check(L::needs_acknowledgement('none', 'pseudonym', true), 'a raise with activit
 check(L::needs_acknowledgement('pseudonym', 'none', true), 'a lowering with activity');
 check(!L::needs_acknowledgement('none', 'pseudonym', false), 'no activity, no question');
 check(!L::needs_acknowledgement('email', 'email', true), 'no change, no question');
-
-// --- member cohorts (R2) -------------------------------------------------------------------------------
-$keys = ['fixture-a', 'fixture-b'];
-check(L::member_cohort_key('ltct:org:fixture-a', $keys) === 'fixture-a', 'a member cohort');
-check(L::member_cohort_key('ltct:org:fixture-a:managers', $keys) === null, 'never the managers cohort');
-check(L::member_cohort_key('ltct:org:fixture-z', $keys) === null, 'an undeclared key');
-check(L::member_cohort_key('ltct:org:', $keys) === null, 'no key');
-check(L::member_cohort_key('ltct:mentors', $keys) === null, 'the mentors cohort');
 
 // --- course mentors (R7 path 4) ----------------------------------------------------------------------
 check(L::course_counts('ltct:fixture-course'), 'a published course counts');

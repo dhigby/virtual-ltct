@@ -178,9 +178,8 @@
       <FIELDS>
         <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
         <FIELD NAME="userid" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false"/>
-        <FIELD NAME="ownlevel" TYPE="char" LENGTH="20" NOTNULL="true" DEFAULT="none" SEQUENCE="false" COMMENT="none, email, firstname or pseudonym: the user's own level"/>
-        <FIELD NAME="effectivelevel" TYPE="char" LENGTH="20" NOTNULL="true" DEFAULT="none" SEQUENCE="false" COMMENT="the level applied to the account: the stricter of ownlevel and the organisation minimum"/>
-        <FIELD NAME="source" TYPE="char" LENGTH="20" NOTNULL="true" DEFAULT="own" SEQUENCE="false" COMMENT="own, organisation or organisation-kept"/>
+        <FIELD NAME="ownlevel" TYPE="char" LENGTH="20" NOTNULL="true" DEFAULT="none" SEQUENCE="false" COMMENT="none, email, firstname or pseudonym: the level set for the user"/>
+        <FIELD NAME="effectivelevel" TYPE="char" LENGTH="20" NOTNULL="true" DEFAULT="none" SEQUENCE="false" COMMENT="the level applied to the account; the same as ownlevel, since no organisation sets a minimum"/>
         <FIELD NAME="pseudonym" TYPE="char" LENGTH="100" NOTNULL="true" SEQUENCE="false"/>
         <FIELD NAME="realfirstname" TYPE="char" LENGTH="100" NOTNULL="true" SEQUENCE="false"/>
         <FIELD NAME="reallastname" TYPE="char" LENGTH="100" NOTNULL="true" SEQUENCE="false"/>
@@ -197,23 +196,6 @@
         <INDEX NAME="usermodified" UNIQUE="false" FIELDS="usermodified"/>
       </INDEXES>
     </TABLE>
-    <TABLE NAME="local_ltuse_org_protection" COMMENT="Each organisation's minimum protection level (spec 016, research R12). Set by the site team; Moodle only, because declaring it would publish which partners are at risk.">
-      <FIELDS>
-        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
-        <FIELD NAME="orgkey" TYPE="char" LENGTH="30" NOTNULL="true" SEQUENCE="false" COMMENT="an organisation key declared in organisations.yaml"/>
-        <FIELD NAME="minlevel" TYPE="char" LENGTH="20" NOTNULL="true" DEFAULT="none" SEQUENCE="false" COMMENT="none, email or firstname"/>
-        <FIELD NAME="managers_see_identity" TYPE="int" LENGTH="1" NOTNULL="true" DEFAULT="1" SEQUENCE="false"/>
-        <FIELD NAME="timemodified" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false"/>
-        <FIELD NAME="usermodified" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false"/>
-      </FIELDS>
-      <KEYS>
-        <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
-      </KEYS>
-      <INDEXES>
-        <INDEX NAME="orgkey" UNIQUE="true" FIELDS="orgkey"/>
-        <INDEX NAME="usermodified" UNIQUE="false" FIELDS="usermodified"/>
-      </INDEXES>
-    </TABLE>
     <TABLE NAME="local_ltuse_protection_log" COMMENT="Every change of a user's protection: who, when, from and to which level (spec 016, FR-008). Moodle only.">
       <FIELDS>
         <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
@@ -221,7 +203,7 @@
         <FIELD NAME="actorid" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="who made the change; 0 once that person is deleted"/>
         <FIELD NAME="fromlevel" TYPE="char" LENGTH="20" NOTNULL="true" DEFAULT="none" SEQUENCE="false"/>
         <FIELD NAME="tolevel" TYPE="char" LENGTH="20" NOTNULL="true" DEFAULT="none" SEQUENCE="false"/>
-        <FIELD NAME="source" TYPE="char" LENGTH="20" NOTNULL="true" DEFAULT="own" SEQUENCE="false" COMMENT="own, organisation, organisation-kept or correction"/>
+        <FIELD NAME="source" TYPE="char" LENGTH="20" NOTNULL="true" DEFAULT="own" SEQUENCE="false" COMMENT="own (a change of level) or correction (the same level, corrected values)"/>
         <FIELD NAME="timecreated" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false"/>
       </FIELDS>
       <KEYS>

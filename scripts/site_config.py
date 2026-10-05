@@ -263,10 +263,10 @@ TOP_FILES = {
     # (specs/011-events-calendar/contracts/declaration.md).
     OFFICEHOURS_FILE: ({"rows", "course", "scheduler", "groups", "why"}, {"purpose"}),
     DASHBOARD_FILE: ({"rows", "default_blocks"}, {"purpose"}),
-    # Spec 016: the protection levels and what each withholds. Optional; who is protected,
-    # and organisation minimums, are Moodle data and never declared
-    # (specs/016-identity-protection/contracts/declaration.md).
-    PROTECTION_FILE: ({"rows", "levels", "withhold", "org_minimum_max", "neutral_surname",
+    # Spec 016: the protection levels and what each withholds. Optional; who is protected is
+    # Moodle data and never declared, and no organisation has a minimum (Doug, 2026-10-05
+    # (scope review)) (specs/016-identity-protection/contracts/declaration.md).
+    PROTECTION_FILE: ({"rows", "levels", "withhold", "neutral_surname",
                        "reconcile_minutes", "why"}, {"purpose"}),
     # Spec 006: role pathways. Optional; missing is roles: [] (specs/006-learning-pathways/
     # contracts/declaration.md).
@@ -290,8 +290,7 @@ EMAIL = re.compile(r"[^@\s]+@[^@\s]+\.[^@\s]+")
 FIELD_SHORTNAME = re.compile(r"^ltct_[a-z0-9_]+$")
 EXPERTISE_PREFIX = "ltct_exp_"
 ORG_FIELD = "ltct_org"
-DATATYPES = ("menu", "checkbox", "text")    # text: spec 016's ltct_certname (R10)
-CERT_FIELD = "ltct_certname"               # spec 016: the real name on the certificate
+DATATYPES = ("menu", "checkbox")
 # profile/lib.php PROFILE_VISIBLE_*: the payload carries the user_info_field column value.
 VISIBILITY = {"all": 2, "teachers": 3, "private": 1, "none": 0}
 OPTIONS_FROM = ("organisations",)
@@ -327,7 +326,7 @@ MENTOR_SINCE = 2026100301
 VIEWIDENTITY = "local/ltuse:viewidentity"
 PROTECTION_VIEW_ROLES = frozenset({"manager", MENTOR, "teacher"})
 PROTECTION_MANAGE_ROLES = frozenset({"manager"})
-PROTECTION_MANAGE_CAPS = ("local/ltuse:manageprotection", "local/ltuse:manageorgprotection")
+PROTECTION_MANAGE_CAPS = ("local/ltuse:manageprotection",)
 REPORT_EDIT_CAPS = ("moodle/reportbuilder:edit", "moodle/reportbuilder:editall")
 COURSE_LEADER_ROLES = ("editingteacher", "teacher")
 COURSE_LEADER_PROHIBIT = ("moodle/backup:downloadfile",)   # R14: email and logs stay (scope review)
@@ -1145,7 +1144,7 @@ def _validate_profile_fields(where, data, rows, orgs, problems):
                     ok = False
                 else:
                     options = [o["key"] for o in orgs["organisations"]]
-        elif datatype in ("checkbox", "text") and (has_options or has_from):
+        elif datatype == "checkbox" and (has_options or has_from):
             problems.add(fwhere, "only a menu has options")
             ok = False
 
@@ -1196,14 +1195,6 @@ def _validate_profile_fields(where, data, rows, orgs, problems):
         if not (_is_int(locked) and locked == 1):
             problems.add(where, "%s must be locked: 1, so only the site team can change it "
                          "(FR-009)" % ORG_FIELD)
-    cert_field = next((f for f in fields if isinstance(f, dict)
-                       and f.get("shortname") == CERT_FIELD), None)
-    if cert_field is not None and (cert_field.get("datatype") != "text"
-                                   or cert_field.get("visible") != "private"
-                                   or cert_field.get("locked") != 1):
-        problems.add(where, "%s is a text field, visible: private and locked: 1, so only the "
-                     "learner and the site team see a protected learner's real name (spec 016 "
-                     "R10)" % CERT_FIELD)
     for short in from_orgs:
         if short != ORG_FIELD:
             problems.add(where, "only %s takes options_from: organisations, not %s"
@@ -2308,10 +2299,8 @@ CERT_ELEMENTS = {                       # type -> (required keys, optional keys)
     "qrcode": ({"x", "y", "width"}, {"height"}),
     "image": ({"file", "x", "y", "width"}, {"height"}),
     "bgimage": ({"file"}, set()),
-    "userfield": ({"field", "x", "y"}, {"size", "align", "width"}),   # spec 016 R10
 }
-CERT_ONE_EACH = ("name", "coursename", "date", "code")   # FR-003
-CERT_NAME_ELEMENTS = ("studentname", "userfield")       # either counts as the one name (016)
+CERT_ONE_EACH = ("studentname", "coursename", "date", "code")   # FR-003
 CERT_NAME_MAX = 255                     # customcert_templates.name and customcert.name
 DATE_ITEMS = {"completion": -2}         # element_date DATE_COMPLETION; never the issue date (R6)
 DATE_FORMAT = re.compile(r"^(?:[1-5]|strftime[a-z]+)$")   # element_helper::get_date_format_string
@@ -2526,24 +2515,8 @@ def _validate_certificate(where, data, rows, site_dir, decl, problems):
             if "align" in element and element["align"] not in ALIGN:
                 problems.add(ewhere, "align is one of %s" % ", ".join(ALIGN))
             out = {k: element[k] for k in element if k not in ("date", "format", "file")}
-            if kind in CERT_NAME_ELEMENTS:
-                counts["name"] += 1
-            elif kind in counts:
+            if kind in counts:
                 counts[kind] += 1
-            if kind == "userfield":
-                # Spec 016 (R10): the real name, from the PRIVATE field the service fills for
-                # every learner. Any other field would print a protected learner's pseudonym,
-                # or something no certificate should carry.
-                fields = {f["shortname"]: f for f in decl["profile_fields"]}
-                field = fields.get(element["field"])
-                if element["field"] != CERT_FIELD:
-                    problems.add(ewhere, "a userfield element prints %s, the real name for the "
-                                 "certificate, and nothing else" % CERT_FIELD)
-                elif field is None:
-                    problems.add(ewhere, "%s is not declared in profile-fields.yaml" % CERT_FIELD)
-                elif field["visible"] != VISIBILITY["private"]:
-                    problems.add(ewhere, "%s must be visible: private, or the certificate shows "
-                                 "a protected learner's real name to anyone" % CERT_FIELD)
             if kind == "text":
                 text = element["text"]
                 if not _text(text):
@@ -2834,13 +2807,12 @@ def _check_calendar_settings(decl, problems):
 # specs/016-identity-protection/data-model.md "Declared (repo)" and contracts/declaration.md.
 
 PROTECTION_LEVELS = ["none", "email", "firstname", "pseudonym"]
-ORG_MINIMUM_MAX = "firstname"              # a pseudonym is chosen per person (R12)
 RECONCILE_MINUTES = 60                     # db/tasks.php runs reconcile_protection hourly
 ALTNAME_FIELDS = ("firstnamephonetic", "lastnamephonetic", "middlename", "alternatename")
 CORE_WITHHOLD = ("country", "city", "url", "institution", "department", "phone1", "phone2",
                  "address", "idnumber")
 SPECIAL_WITHHOLD = ("maildisplay", "picture", "firstname", "lastname")
-NEVER_WITHHELD = (ORG_FIELD, CERT_FIELD, "description", "interests")
+NEVER_WITHHELD = (ORG_FIELD, "description", "interests")
 NEUTRAL_SURNAME = re.compile(r"^[^\w\s]$", re.UNICODE)   # one non-letter character (R4)
 # The site-wide settings spec 016 requires, with the value each must have: only those that
 # cost nobody anything (Doug, 2026-10-05 (scope review), change 20). protectusernames and the
@@ -2893,7 +2865,6 @@ def _validate_protection(where, data, rows, decl, problems):
             if field in NEVER_WITHHELD:
                 problems.add(lwhere, "%s is never withheld: %s" % (field, {
                     ORG_FIELD: "blanking it drops the learner from their cohort and courses (R11)",
-                    CERT_FIELD: "it is the certificate's name (R10)",
                 }.get(field, "the learner's own words are theirs (R6)")))
             elif field not in allowed:
                 problems.add(lwhere, "%s is not a field the plugin can withhold" % field)
@@ -2920,9 +2891,6 @@ def _validate_protection(where, data, rows, decl, problems):
     if pseudo and "firstname" not in pseudo:
         problems.add(where + " withhold.pseudonym", "must withhold firstname: the pseudonym "
                      "replaces it")
-    if data.get("org_minimum_max") != ORG_MINIMUM_MAX:
-        problems.add(where, "org_minimum_max is %s: an organisation minimum is never a "
-                     "pseudonym, which is chosen per person (R12)" % ORG_MINIMUM_MAX)
     neutral = data.get("neutral_surname")
     if not (isinstance(neutral, str) and NEUTRAL_SURNAME.match(neutral)):
         problems.add(where, "neutral_surname is one non-letter character, such as \"\u00b7\": "
@@ -2934,7 +2902,7 @@ def _validate_protection(where, data, rows, decl, problems):
     if len(problems.items) > before:
         return None
     return {"levels": list(PROTECTION_LEVELS), "withhold": out_withhold,
-            "org_minimum_max": ORG_MINIMUM_MAX, "neutral_surname": neutral,
+            "neutral_surname": neutral,
             "reconcile_minutes": RECONCILE_MINUTES,
             "orgscope_ready": _orgscope_ready(decl)}
 
@@ -2990,22 +2958,12 @@ def _check_protection_site(decl, problems):
         elif str(setting["value"]) != str(want):
             problems.add(setting["file"], "%s must be %r (spec 016)" % (name, want))
 
-    if not any(f["shortname"] == CERT_FIELD for f in decl["profile_fields"]):
-        problems.add("profile-fields.yaml", "%s must be declared: the certificate's real name "
-                     "(spec 016 R10)" % CERT_FIELD)
     org = next((f for f in decl["profile_fields"] if f["shortname"] == ORG_FIELD), None)
     scoped = _reports_scoped_by_org(decl)
     if org is not None and org["visible"] == VISIBILITY["private"] and scoped:
         problems.add("profile-fields.yaml", "%s can be private only once no report scopes by it; "
                      "report builder silently drops a hidden field's condition, so %s would show "
                      "every organisation (spec 016 R11)" % (ORG_FIELD, ", ".join(scoped)))
-    cert = decl["certificate_template"]
-    if cert is not None:
-        kinds = [e["type"] for page in cert["pages"] for e in page["elements"]]
-        if "studentname" in kinds:
-            problems.add("certificate/template.yaml", "with protection declared, the name is a "
-                         "userfield on %s: studentname would print a protected learner's "
-                         "pseudonym on their own certificate (spec 016 R10)" % CERT_FIELD)
 
 
 def _literal(value):

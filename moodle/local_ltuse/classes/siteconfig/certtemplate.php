@@ -396,13 +396,6 @@ class certtemplate {
                         'contextid' => $syscontextid, 'filearea' => self::FILEAREA, 'itemid' => 0,
                         'filepath' => '/', 'filename' => self::stored_name((array)$e['image'])];
                     break;
-                case 'userfield':
-                    // Spec 016 (R10): the name from a PRIVATE profile field, ltct_certname. The
-                    // element stores the field's id as a string (customcertelement_userfield
-                    // normalise_data), and prints the value only to someone the field is visible
-                    // to, in the template's context: the learner, and the site team.
-                    $data = ['userfield' => (string)self::profile_field_id((string)($e['field'] ?? ''))] + $text;
-                    break;
                 default:   // studentname, code
                     $data = $text;
             }
@@ -435,22 +428,6 @@ class certtemplate {
             return element_helper::CUSTOMCERT_REF_POINT_TOPRIGHT;
         }
         return element_helper::CUSTOMCERT_REF_POINT_TOPLEFT;
-    }
-
-    /**
-     * A custom profile field's id by shortname, or 0 when it does not exist yet. apply creates
-     * profile fields (structure) before the certificate (recognition), so a declared field
-     * exists by the time a template is built; 0 shows as a difference until it does.
-     *
-     * @param string $shortname
-     * @return int
-     */
-    public static function profile_field_id(string $shortname): int {
-        global $DB;
-        if ($shortname === '') {
-            return 0;
-        }
-        return (int)$DB->get_field('user_info_field', 'id', ['shortname' => $shortname]);
     }
 
     /**

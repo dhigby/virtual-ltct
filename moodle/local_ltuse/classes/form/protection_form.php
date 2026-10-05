@@ -16,7 +16,6 @@ use local_ltuse\protection\levels;
  *   userid          the person
  *   seeidentity     the viewer may see (and so correct) the real identity
  *   available       level => bool, from levels::available()
- *   orgminimum      the organisation's minimum, which no own level may be looser than
  *   hasactivity     the person has activity, so a change needs the acknowledgement (R13)
  *   needsusername   their username gives away their real name (R13)
  *   suggested       a neutral username to offer
@@ -41,10 +40,6 @@ class protection_form extends \moodleform {
         }
         $mform->addElement('select', 'level', get_string('protection:level', 'local_ltuse'), $options);
         $mform->addHelpButton('level', 'protection:level', 'local_ltuse');
-        if (($data['orgminimum'] ?? levels::NONE) !== levels::NONE) {
-            $mform->addElement('static', 'orgminimum', '', get_string('protection:orgminimumnote', 'local_ltuse',
-                get_string('protection:level:' . $data['orgminimum'], 'local_ltuse')));
-        }
 
         $mform->addElement('text', 'pseudonym', get_string('protection:pseudonym', 'local_ltuse'), ['maxlength' => 100]);
         $mform->setType('pseudonym', PARAM_TEXT);
@@ -54,8 +49,7 @@ class protection_form extends \moodleform {
             $mform->addElement('text', 'newusername', get_string('protection:newusername', 'local_ltuse'));
             $mform->setType('newusername', PARAM_USERNAME);
             $mform->setDefault('newusername', (string)$data['suggested']);
-            $note = !empty($data['seeidentity']) ? 'protection:usernamenote' : 'protection:usernamenote:neutral';
-            $mform->addElement('static', 'usernamenote', '', get_string($note, 'local_ltuse'));
+            $mform->addElement('static', 'usernamenote', '', get_string('protection:usernamenote', 'local_ltuse'));
             $mform->hideIf('newusername', 'level', 'in', [levels::NONE, levels::EMAIL]);
             $mform->hideIf('usernamenote', 'level', 'in', [levels::NONE, levels::EMAIL]);
         }
@@ -91,9 +85,6 @@ class protection_form extends \moodleform {
             $errors['level'] = get_string('protection:err:level', 'local_ltuse');
         } else if (empty($this->_customdata['available'][$data['level']])) {
             $errors['level'] = get_string('protection:err:notready', 'local_ltuse');
-        } else if (!levels::allowed_own($data['level'], (string)($this->_customdata['orgminimum'] ?? levels::NONE))) {
-            $errors['level'] = get_string('protection:err:looser', 'local_ltuse',
-                get_string('protection:level:' . $this->_customdata['orgminimum'], 'local_ltuse'));
         }
         if (($data['level'] ?? '') === levels::PSEUDONYM && trim((string)($data['pseudonym'] ?? '')) === '') {
             $errors['pseudonym'] = get_string('required');

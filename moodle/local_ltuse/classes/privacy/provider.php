@@ -35,6 +35,11 @@ use core_privacy\local\request\writer;
  * made the link (usermodified). The link belongs to the cohort, so a deletion request keeps it
  * and sets usermodified to 0. Cohort membership is core_cohort's to export.
  *
+ * Spec 008 adds local_ltuse_course_mentor: a course mentor recorded for one learner in one
+ * course, or for a cohort in a course. A row belongs to its mentor and, for a one-course
+ * mentor, its learner, and is reported in each one's user context. The course-mentor
+ * enrolments and Teacher assignments the sync makes from it are core's to export and delete.
+ *
  * Its other tables hold nothing about a person: the competency framework, which courses aim
  * at which competency (spec 004), and which badge is each course's (spec 013). The
  * per-competency report counts enrolments and completions from core's tables at query time
@@ -55,6 +60,8 @@ class provider implements
     const ORGCONTACT = 'local_ltuse_org_contact';
     /** Spec 006: pathways given to cohorts, and who gave them (research R9). */
     const PATHWAY_COHORT = 'local_ltuse_pathway_cohort';
+    /** Spec 008: one-course and cohort mentors (research R10). */
+    const COURSE_MENTOR = 'local_ltuse_course_mentor';
 
     /**
      * @param collection $collection
@@ -89,6 +96,15 @@ class provider implements
             'timecreated' => 'privacy:metadata:local_ltuse_pathway_cohort:timecreated',
             'timemodified' => 'privacy:metadata:local_ltuse_pathway_cohort:timemodified',
         ], 'privacy:metadata:local_ltuse_pathway_cohort');
+        $collection->add_database_table(self::COURSE_MENTOR, [
+            'courseid' => 'privacy:metadata:course_mentor:courseid',
+            'mentorid' => 'privacy:metadata:course_mentor:mentorid',
+            'learnerid' => 'privacy:metadata:course_mentor:learnerid',
+            'cohortid' => 'privacy:metadata:course_mentor:cohortid',
+            'usermodified' => 'privacy:metadata:course_mentor:usermodified',
+            'timecreated' => 'privacy:metadata:course_mentor:timecreated',
+            'timemodified' => 'privacy:metadata:course_mentor:timemodified',
+        ], 'privacy:metadata:course_mentor');
         // The plugin also writes into core messaging: it makes mentor and learner contacts.
         $collection->add_subsystem_link('core_message', [], 'privacy:metadata:core_message');
         return $collection;
@@ -111,10 +127,13 @@ class provider implements
                         OR EXISTS (SELECT 1 FROM {" . self::ORGCONTACT . "} oc
                                     WHERE oc.managerid = :omanagerid OR oc.memberid = :omemberid)
                         OR EXISTS (SELECT 1 FROM {" . self::PATHWAY_COHORT . "} pc
-                                    WHERE pc.usermodified = :pcuserid))";
+                                    WHERE pc.usermodified = :pcuserid)
+                        OR EXISTS (SELECT 1 FROM {" . self::COURSE_MENTOR . "} cm
+                                    WHERE cm.mentorid = :cmmentorid OR cm.learnerid = :cmlearnerid))";
         $contextlist->add_from_sql($sql, ['level' => CONTEXT_USER, 'userid' => $userid,
             'mentorid' => $userid, 'learnerid' => $userid, 'bmentorid' => $userid, 'blearnerid' => $userid,
-            'omanagerid' => $userid, 'omemberid' => $userid, 'pcuserid' => $userid]);
+            'omanagerid' => $userid, 'omemberid' => $userid, 'pcuserid' => $userid,
+            'cmmentorid' => $userid, 'cmlearnerid' => $userid]);
         return $contextlist;
     }
 
@@ -146,6 +165,7 @@ class provider implements
             self::export_bookings($context, $userid);
             self::export_org_contacts($context, $userid);
             self::export_pathway_links($context, $userid);
+            self::export_course_mentors($context, $userid);
             $rows = $DB->get_records_select(self::TABLE, 'mentorid = :mentorid OR learnerid = :learnerid',
                 ['mentorid' => $userid, 'learnerid' => $userid], 'timecreated, id');
             if (!$rows) {
@@ -212,7 +232,8 @@ class provider implements
             || $DB->record_exists_select(self::BOOKING, 'mentorid = :mentorid OR learnerid = :learnerid', $params)
             || $DB->record_exists_select(self::ORGCONTACT, 'managerid = :managerid OR memberid = :memberid',
                 ['managerid' => $userid, 'memberid' => $userid])
-            || $DB->record_exists(self::PATHWAY_COHORT, ['usermodified' => $userid]);
+            || $DB->record_exists(self::PATHWAY_COHORT, ['usermodified' => $userid])
+            || $DB->record_exists_select(self::COURSE_MENTOR, 'mentorid = :mentorid OR learnerid = :learnerid', $params);
     }
 
     /**
@@ -291,6 +312,10 @@ class provider implements
         // Spec 002: the same for organisation contacts, through contacts::user_deleted(), which
         // removes each contact only if it is still the one this plugin made.
         \local_ltuse\organisation\contacts::user_deleted($userid);
+        // Spec 008. The sync removes, within the hour or at the next event, any course-mentor
+        // enrolment that rested on a deleted record.
+        $DB->delete_records_select(self::COURSE_MENTOR, 'mentorid = :mentorid OR learnerid = :learnerid',
+            ['mentorid' => $userid, 'learnerid' => $userid]);
     }
 
     /**
@@ -318,5 +343,34 @@ class provider implements
         }
         writer::with_context($context)->export_data(
             [get_string('privacy:path:orgcontacts', 'local_ltuse')], (object)['contacts' => $contacts]);
+    }
+
+    /**
+     * Export the course mentors recorded with the user as mentor or as learner (spec 008).
+     *
+     * @param context_user $context
+     * @param int $userid
+     */
+    protected static function export_course_mentors(context_user $context, int $userid): void {
+        global $DB;
+        $rows = $DB->get_records_select(self::COURSE_MENTOR, 'mentorid = :mentorid OR learnerid = :learnerid',
+            ['mentorid' => $userid, 'learnerid' => $userid], 'timecreated, id');
+        if (!$rows) {
+            return;
+        }
+        $records = [];
+        foreach ($rows as $row) {
+            $records[] = (object)[
+                'role' => ((int)$row->mentorid === $userid) ? 'mentor' : 'learner',
+                'courseid' => (int)$row->courseid,
+                'mentorid' => (int)$row->mentorid,
+                'learnerid' => (int)$row->learnerid,
+                'cohortid' => (int)$row->cohortid,
+                'timecreated' => transform::datetime($row->timecreated),
+                'timemodified' => transform::datetime($row->timemodified),
+            ];
+        }
+        writer::with_context($context)->export_data(
+            [get_string('privacy:path:coursementors', 'local_ltuse')], (object)['coursementors' => $records]);
     }
 }

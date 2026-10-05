@@ -43,6 +43,9 @@ not idempotent without it: `core_course_get_contents` does not reliably return a
 idnumber, so there is otherwise no way to ask Moodle which modules a previous publish
 created. With it, republishing is a diff rather than a blind re-create.
 
+The site team's administration functions (`local_ltuse_admin_*`, spec 008) are a separate
+service with its own token; see [Administration (spec 008)](#administration-spec-008).
+
 ## A module the repo no longer has is retired, never deleted
 
 Rename, renumber or remove a lesson in the repo, and its old module is still in Moodle
@@ -380,6 +383,14 @@ and the entities `core_reportbuilder\local\entities\base`. Before raising `requi
 against it. Moodle 5.0 to 5.2 changed default entity initialisation, entity order, the
 abstract `get_default_tables()`, custom sort fields and select-filter values (research R15).
 
+**Later specs list theirs with their own pieces**: spec 003 under
+[Mentors](#mentors-spec-003), spec 011 under
+[Events and office hours](#events-and-office-hours-spec-011), and spec 008 under
+[Administration](#administration-spec-008). Spec 008's include raw reads of `cohort` with
+its `component` (to refuse a cohort a plugin owns), of `user` by email, and of
+`role_assignments` with `component` and `itemid`, and the two direct `$DB` writes
+`cli/setup_publishing.php` still makes.
+
 **The pathway pages' raw reads (spec 006)**, all read-only, by indexed columns:
 
 | Table | Columns used | For |
@@ -657,7 +668,7 @@ few actions over their own learners, all decided by one pure, tested class.
 | The decision | `classes/organisation/access.php` (pure), `tests/org_access_harness.php` | `is_org_member_of_manager()`: the person's `ltct_org` is a key the viewer manages and the person is in that key's member cohort. `may_manage_account()`: that, and the person is a learner (not a site admin, course contact, system or category role holder, manager or `ltct:mentors` member, nor deleted). The per-action rules `may_enrol_into()` and `may_unenrol_from()`, and `is_placement_category()` for `place_course`. |
 | The facts | `classes/organisation/people.php`, `lib.php` | `people::facts()` gathers the decision's inputs through `local_ltuse_organisation_person_facts()`; actions read them afresh (`$reload`) before every write. `for_manager()` lists each managed organisation's people with email, courses and completion (`mentoring::courses()`, the Mentoring page's reading). |
 | The page | `organisation.php`, `templates/organisation.mustache` | Managers-cohort members only. Per learner: enrol, unenrol, a password reset link, suspend, reactivate, and a link to `mentors.php?userid=` (spec 003). Each opens a confirmation that says what it does; only the confirmed POST, with a sesskey, writes. |
-| The actions | `classes/organisation/actions.php` | Every method acts as the signed-in user and re-checks `may_manage_account()` and its own rule; none of the core calls below checks a capability. |
+| The actions | `classes/organisation/actions.php` | Every method acts as the signed-in user and re-checks `may_manage_account()` and its own rule; none of the core calls below checks a capability. Enrol, unenrol, suspend and reactivate each have an unchecked `do_*()` core for spec 008's administration service, which keeps the per-action rules but not the manager check. |
 | User menu | `db/hooks.php`, `classes/hook_callbacks.php` `user_menu()` | "My organisation", through `\core_user\hook\extend_user_menu`, for managers-cohort members only. |
 | Contacts and leavers | `classes/organisation/contacts.php`, `classes/observer.php`, `db/events.php`, table `local_ltuse_org_contact`, `classes/task/reconcile_org_contacts.php` | On `cohort_member_added` to `ltct:org:<key>` or its managers cohort, managers and members become message contacts, recorded as spec 003 records mentors'. On `cohort_member_removed`, only the contacts this plugin made go, and only when no other organisation or mentoring links the pair; a person leaving a member cohort has their organisation-enrolment enrolments in that organisation's `ltct:org:<key>` courses suspended (shared courses stand). The hourly task repairs both ways, for changes that fire no event. Counts only. |
 | Placement | `classes/external/place_course.php`, `classes/siteconfig/inspector.php`, `drift.php` | See [Course discussions](#course-discussions-spec-012) and the function table. |
@@ -683,7 +694,7 @@ site-wide: an enrolment through a disabled plugin is inactive, and `enrol()` ref
 
 **5.3 note.** `user_update_user()` is deprecated on `main` for 5.3 (MDL-82650) in favour of
 `\core\user::update_user()`. It is current in 5.2 and sits in one method,
-`actions::write_suspended()`. Spec 016 relies on the `before_user_updated` hook it dispatches,
+`actions::do_write_suspended()`, which the manager wrappers and spec 008's unchecked cores share. Spec 016 relies on the `before_user_updated` hook it dispatches,
 so both specs' user writes move to the 5.3 API together, once 016's hook test passes on it.
 
 **Raw reads added by the amendment.** None is a write; the only table written is this plugin's
@@ -735,6 +746,80 @@ each is re-checked as stated.
 | `my_pages`, `block_instances` | `userid IS NULL`, `name`, `private`; `blockname`, `parentcontextid`, `pagetypepattern`, `subpagepattern` | Whether a declared block is on the system default dashboard. The block manager reads blocks only for a page being displayed. |
 | `event` left-joined from `local_ltuse_booking` | `id` | Booking records whose calendar event is gone. |
 
+## Administration (spec 008)
+
+The site team brings learners on, enrols cohorts, suspends, moves and assigns mentors with
+[`scripts/ltct_admin.py`](../../scripts/ltct_admin.py), which talks only to this plugin's
+second web service. The recipes are in
+[`moodle/site/README.md`](../site/README.md#the-site-teams-administration-tool); the
+contracts are spec 008's
+[`contracts/admin-service.md`](../../specs/008-admin-tooling/contracts/admin-service.md) and
+[`contracts/cli.md`](../../specs/008-admin-tooling/contracts/cli.md).
+
+| Piece | Where | Does |
+|---|---|---|
+| Service `ltuse_admin` ("LTC administration") | `db/services.php` | A second external service, separate from the publisher's, so the admin tool has its own credential (FR-009). `restrictedusers = 1`, `requiredcapability` `local/ltuse:administer`, no file uploads. It lists only the `local_ltuse_admin_*` functions and `core_webservice_get_site_info`; spec 016's `local_ltuse_set_protection` is not listed, because intake calls the PHP method. |
+| Functions `local_ltuse_admin_*` | `classes/external/admin_*.php` | `check` and `list`; a `preview_*` and an `apply_*` for intake, cohort enrolment, suspension, move, cohort members, mentors and course mentors; `apply_pathway_assignment`; `summary`. Every preview is read-only and returns outcomes with masked people. Every apply takes one row and its expected outcome, classifies it again, and refuses if it moved off its path, so a repeat reports `already done`. Each re-checks `local/ltuse:administer` and then the core capability for its write. |
+| Capability `local/ltuse:administer` | `db/access.php` | System context, `RISK_PERSONAL \| RISK_DATALOSS \| RISK_SPAM` (it creates accounts that receive email), no archetype. |
+| Role `ltctadmin` | [`moodle/site/roles.yaml`](../site/roles.yaml) | Holds `local/ltuse:administer` and exactly the core capabilities the functions check, at system level, one assignment per site-team member. `local_ltuse_admin_check` names any the token user lacks. |
+| Token script | `cli/setup_admin_token.php` | `--username=<u> --token-file=<path>` authorises one site-team member for `ltuse_admin` and writes their own token to a mode-600 file. It never prints the token; `--rotate` revokes theirs and issues a new one. It uses core's `webservice::add_ws_authorised_user()`, `\core_external\util::generate_token()` and `webservice::delete_user_ws_token()`. There is no shared admin account, so Moodle's logs show who made each change. |
+| Rules | `classes/admin/*_rules.php` | Pure classes, no Moodle calls: `intake_rules`, `enrolment_rules` (which cohort may be enrolled in which course, and as what), `move_rules` (kept, lost, gained, suspended by rule), `course_mentor_rules`. Tested without Moodle by `tests/admin_harness.php`. |
+| Services | `classes/admin/` | `intake_service`, `cohort_enrolment` (cohort sync added or re-enabled, marked `customchar1 = 'ltct:008'`, disabled and never deleted), `suspension_service`, `move_service`, `membership_service`, `course_mentor_records`, `course_mentor_sync`, `masking`. Suspension and per-row course enrolment call spec 002's `organisation\actions` `do_*()` methods, the same writes an organisation manager's page makes. A new account's username is its email, lowercased; `intake_rules::username()` keeps a neutral `ltc-` code for a `firstname` or `pseudonym` target (spec 016 refuses those levels for a username holding the real name) and for an email `PARAM_USERNAME` would change, longer than 100 characters, or already a username here. Everyone signs in with their email (`authloginviaemail`). |
+| Observers | `db/events.php`, `classes/admin/observer.php` | `role_assigned` and `role_unassigned` (the mentor role in a user context), `user_enrolment_created`, `_updated` and `_deleted`, `enrol_instance_updated` and `_deleted`, and `user_updated` keep course mentors in step: internal, so a course mentor whose reason ends loses Teacher, their enrolment and their group in the same request (spec 016 relies on it). `pathway_courses_changed` (spec 006) enrols each enrolling cohort in a course that joins a pathway; never internal, so a rolled-back change enrols no one. |
+| Task | `db/tasks.php`, `classes/task/course_mentor_reconcile.php` | Hourly. Recomputes every `ltct:` course's course mentors, removes stray `local_ltuse` Teacher assignments and orphaned records, and re-syncs pathway cohort enrolments. The backstop, not the mechanism. |
+| Table | `db/install.xml`, `local_ltuse_course_mentor` | One-course mentors (learner, course) and the mentors of a cohort in a course. Default mentors are never copied in; they are read from spec 003's role assignments. Declared, exported and deleted by `classes/privacy/provider.php`; the database backup must include it (spec 015). |
+| Course-mentor enrolment | `classes/admin/course_mentor_sync.php` | One `enrol_self` instance per course, `customchar1 = 'ltct:coursementor'`, closed to self-enrolment. A course mentor is enrolled with no role, then given Teacher with component `local_ltuse`, so the role goes with the reason even when they are enrolled another way too. Each has a "Mentor group <n>" (idnumber `ltct:mentorgroup:<mentor id>`) holding them and the learners they assess there. |
+| Setting `local_ltuse/coursementorsync` | `settings.php` | The switch for everything in the three rows above. Declared **0** in [`moodle/site/settings/admin.yaml`](../site/settings/admin.yaml) until spec 008's plan decision 11 (how far a course mentor may see); at 0 the observers and the reconcile do nothing, and course-mentor records can still be written. `local_ltuse_admin_check` reports it. |
+
+**Removing `ltuse_admin` from `db/services.php` deletes every token issued for it** on the
+next upgrade, with its authorised users (`lib/upgradelib.php`, `external_update_descriptions()`),
+and each site-team member then needs a new token. The entry is keyed by its name, "LTC
+administration", so renaming that key does the same. Retire or rename it deliberately.
+
+**Principle XI exceptions added by spec 008.** `cli/setup_publishing.php` still makes two
+direct `$DB` writes, which predate spec 008: it inserts the publisher's
+`external_services_users` row and deletes its `external_tokens` rows itself, where
+`cli/setup_admin_token.php` uses `webservice::add_ws_authorised_user()` and
+`webservice::delete_user_ws_token()`. They stay listed here until the publisher's script is
+moved onto the same core APIs.
+
+**Raw reads added by spec 008** (the administration service), all read-only. The organisation actions it calls (`organisation\actions::do_*()`) make only the reads listed for spec 002 above.
+
+| Table | Read by | Why there is no API |
+|---|---|---|
+| `cohort` | `idnumber LIKE 'ltct:%'` (`admin_list`); `idnumber` exact and `id` (`admin\intake_service`, `admin\cohort_enrolment`) | Every organisation cohort is hidden and in system context, which `cohort_get_all_cohorts()` filters by visibility for the caller. `cohort.idnumber` is not indexed in core; the table holds tens of rows. |
+| `cohort_members` | `cohortid`, a count (`admin\cohort_enrolment::member_count()`) | The member count a cohort-enrolment preview prints. `core_cohort_get_cohort_members` returns every user id, not a count (research R18). |
+| `course` joined to `course_categories` | `course.idnumber LIKE 'ltct:%'`, the category's `idnumber` (`admin_list`) | The courses the site team may name, with the category that decides which organisations may be enrolled. `core_course_category` lists by category, not by course idnumber. |
+| `course` | `idnumber` exact, and `id` (`admin\intake_service::resolve()`, `admin\cohort_enrolment`) | The course an intake row or a cohort enrolment names. `get_course()` takes an id; there is no lookup by idnumber that is not a read. |
+| `course_categories` | `id` (`admin\intake_service`, `admin\cohort_enrolment`, `admin\move_service::category_idnumber()`, `admin_summary`) | The idnumber of one course's category, for `access::may_enrol_into()`, `admin\enrolment_rules`, `admin\move_rules` (an organisation-only course of the old organisation) and the summary. |
+| `role` | `shortname` of the role `enrolment_rules` gives (`admin\cohort_enrolment`) | The Student (or `orgmanager`) role's id for a new enrolment instance. Core has no lookup of a role by shortname that is not a raw read. |
+| `user` | `deleted = 0`, `mnethostid`, `email` compared case-insensitively (`admin\intake_service::match_accounts()`, also called by `admin\suspension_service`, `admin\move_service` and `admin\membership_service`); `username` and `mnethostid` exists, deleted rows included (`choose_username()`, `new_username()`) | Matching an intake row to every live account with its email, so two accounts for one email are refused rather than one being picked; and checking that a new username is free, over the `(mnethostid, username)` unique index, which holds deleted accounts too. `core_user::get_user_by_email()` is case-sensitive and returns one record. The table has no index on `email`; intakes are tens of rows. |
+| `enrol` | `enrol = 'cohort'` and `customint1` (a cohort id), with `status` (`admin\cohort_enrolment::enabled_courses()`, used by `enrol mirror` and `admin\move_service`; `admin_summary`) | Which courses one cohort is enrolled in. `enrol_get_instances()` reads one course at a time; the question is "which courses", across all of them. |
+| `cohort` | `idnumber` exact, with `contextid` and `component` (`admin\membership_service::resolve()`); `idnumber` exact (`admin\move_service`, `admin_summary`) | The managers cohort or `ltct:mentors` a managers file names, and whether a plugin owns its members; an organisation's cohort for a move or a summary. As the first `cohort` row. |
+| `cohort_members` joined to `user` | `cohortid`, `user.deleted = 0`; returns `id`, `email`, `suspended` (`admin_summary`) | One organisation's members, masked on the server, and the suspended count. `core_cohort_get_cohort_members` returns user ids only (research R18). |
+| `user_enrolments` | `enrolid` and `status`, a count (`admin_summary`) | Active enrolments through one cohort-sync instance. `count_enrolled_users()` counts by course, not by instance. |
+| `course` | `id` (`admin_summary`) | The idnumber and category of the course an instance belongs to. As the `course` rows above. |
+| `role` | `shortname` in (`teacher`, `student`, `mentor`) (`admin\course_mentor_sync::role_ids()`); `shortname = 'mentor'` (`admin\membership_service::mentor_setup()`) | The course-mentor, learner and mentor roles' ids. As the first `role` row. |
+| `role_assignments` joined to `context` | mentor `roleid`, `contextlevel = user`, `instanceid` in the course's learners (`admin\course_mentor_sync::default_mentors()`); `userid` of one mentor (`sync_mentor()`, `admin\membership_service::mentor_learners()`, with `component = ''`) | A learner's default mentors, and one mentor's learners: the same read as spec 003's Mentoring page (above), restricted to those people. `get_role_users()` reads one context at a time and never by holder. |
+| `role_assignments` | `contextid`, `roleid` (Teacher), `component = 'local_ltuse'`; returns `userid`, `itemid` (`admin\course_mentor_sync::state()`); joined to `context` and `course` for the same in courses no longer `ltct:` (`remove_stray_roles()`) | The Teacher assignments the sync gave and must take away. `get_role_users()` does not return `component` or `itemid`. |
+| `groups`, `groups_members` | `courseid` and `idnumber LIKE 'ltct:mentorgroup:%'`; `groupid` and `component` (`admin\course_mentor_sync`) | The mentor groups and the memberships the sync owns, as office hours' (above). |
+| `course` | `idnumber LIKE 'ltct:%'` (`admin\course_mentor_sync::reconcile()`); `id` (`admin\observer`, `sync_course()`) | Every course the reconcile visits, and whether an event's course is one the sync looks after. As the `course` rows above. |
+| `user_enrolments`, `enrol` | `id`, for an event's `enrolid` and its instance's `enrol` and `customchar1` (`admin\observer::user_enrolment_changed()`) | Whether a user-enrolment event is about the course-mentor instance, so the sync ignores its own writes. The event carries only the user enrolment's id. |
+| `user` | `id`, returns `email` (`admin\membership_service::preview_end()`) | The masked email of each learner an end-all lists. `core_user::get_user()` reads the whole record. |
+| `course`, `cohort` | `idnumber` exact, returns `id` (`admin\course_mentor_records::resolve()`, including `ltct:mentors`; `admin\membership_service::mentor_setup()`, `ltct:mentors` only) | The course and cohort a course-mentors row names, and the mentors cohort a mentor must belong to. As the first `course` and `cohort` rows. |
+| `local_ltuse_course_mentor` left-joined to `course`, `user`, `cohort` | `id` (`admin\course_mentor_sync::remove_orphan_records()`) | Course-mentor records whose course, cohort or people are gone. The plugin's own table. |
+
+`admin\course_mentor_sync` reads each course's enrolments with core's
+`enrol_get_course_users()` and `enrol_get_instances()`, and each person's courses with
+`enrol_get_all_users_courses()`. It writes only through core: `enrol_self_plugin::add_instance()`,
+`enrol_user()`, `update_user_enrol()`, `unenrol_user()`, `update_status()`, `role_assign()`,
+`role_unassign()`, `groups_create_group()`, `groups_add_member()` and `groups_remove_member()`.
+
+`admin\move_service` reads a learner's active courses and enrolments with core's
+`enrol_get_all_users_courses()`, `enrol_get_course_users()` and `enrol_get_instances()`, and
+`admin\membership_service` writes with `cohort_add_member()` / `cohort_remove_member()` after
+`cohort_is_member()`; none of these is a raw read.
+
 ## Verified against Moodle 5.2.3+ (2026-09-29)
 
 Installed and exercised end to end on Moodle 5.2.3+ (Build 20260928), PHP 8.3, PostgreSQL
@@ -782,10 +867,12 @@ and this plugin.
 - **No Moodle → repo sync.** One-way only. Editing in Moodle and syncing back would break
   the source-of-truth split the whole repo rests on. Content edited in Moodle is
   overwritten by the next publish; change the markdown instead.
-- **No enrolment, grades or learner records.** This plugin publishes content and creates no
-  learner data. Learner data is Moodle's alone (`INTENT.md`: *"Learner data lives in
-  Moodle, never in this repo"*); admin tooling that works with it is a separate concern.
-  Spec 004 comes closest, and stops here: `set_course_completion` flags incomplete course
+- **Enrolment through the administration service and the organisation page; never grades.**
+  The publish functions create no learner data. Accounts, cohort membership and enrolments
+  are written only by the administration service (spec 008) and spec 002's organisation
+  page, through core's APIs, and never stored in the repo. Learner data is Moodle's alone
+  (`INTENT.md`: *"Learner data lives in Moodle, never in this repo"*). Nothing here writes a
+  grade, an attempt or a completion. Spec 004 comes closest, and stops here: `set_course_completion` flags incomplete course
   completions for Moodle to re-check, through core's own data object, and never alters or
   deletes a completion; the per-competency datasource counts enrolments and completions at
   query time and stores none of them; nothing returns a user.

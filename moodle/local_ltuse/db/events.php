@@ -62,4 +62,51 @@ $observers = [
         'eventname' => '\core\event\cohort_deleted',
         'callback' => '\local_ltuse\observer::cohort_deleted',
     ],
+
+    // Spec 008: administration. A course joining a learning pathway (spec 006) is enrolled for
+    // every cohort that holds the pathway with enrol = 1 (research R11); a course leaving one
+    // unenrols nobody. Not internal, so a change that rolls back enrols no one. Spec 006's
+    // set_course_pathway fires it.
+    [
+        'eventname' => '\local_ltuse\event\pathway_courses_changed',
+        'callback' => '\local_ltuse\admin\observer::pathway_courses_changed',
+        'internal' => false,
+    ],
+
+    // Spec 008: administration. Course mentors (research R10). Internal (the default), so a
+    // course mentor whose reason ends loses Teacher, their course-mentor enrolment and their
+    // group in the same request, as spec 016's identity entitlement requires. All of them do nothing while
+    // local_ltuse/coursementorsync is 0; the hourly course_mentor_reconcile is the backstop.
+    [
+        'eventname' => '\core\event\role_assigned',
+        'callback' => '\local_ltuse\admin\observer::mentor_role_changed',
+    ],
+    [
+        'eventname' => '\core\event\role_unassigned',
+        'callback' => '\local_ltuse\admin\observer::mentor_role_changed',
+    ],
+    [
+        'eventname' => '\core\event\user_enrolment_created',
+        'callback' => '\local_ltuse\admin\observer::user_enrolment_changed',
+    ],
+    [
+        'eventname' => '\core\event\user_enrolment_updated',
+        'callback' => '\local_ltuse\admin\observer::user_enrolment_changed',
+    ],
+    [
+        'eventname' => '\core\event\user_enrolment_deleted',
+        'callback' => '\local_ltuse\admin\observer::user_enrolment_changed',
+    ],
+    [
+        'eventname' => '\core\event\enrol_instance_updated',
+        'callback' => '\local_ltuse\admin\observer::enrol_instance_changed',
+    ],
+    [
+        'eventname' => '\core\event\enrol_instance_deleted',
+        'callback' => '\local_ltuse\admin\observer::enrol_instance_changed',
+    ],
+    [
+        'eventname' => '\core\event\user_updated',
+        'callback' => '\local_ltuse\admin\observer::user_updated',
+    ],
 ];

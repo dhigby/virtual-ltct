@@ -26,6 +26,8 @@ on:
       - 'moodle/local_ltuse/lang/**'
       - 'tests/pathway_harness.php'
       - 'tests/test_pathway_wording.py'
+      - 'tests/admin_harness.php'
+      - 'scripts/admin_files.py'
   pull_request:
     paths:
       - 'moodle/site/**'
@@ -51,6 +53,8 @@ on:
       - 'moodle/local_ltuse/lang/**'
       - 'tests/pathway_harness.php'
       - 'tests/test_pathway_wording.py'
+      - 'tests/admin_harness.php'
+      - 'scripts/admin_files.py'
 
 jobs:
   validate:
@@ -86,3 +90,7 @@ jobs:
       # whose pathways. Needs no Moodle.
       - name: Pathway harness
         run: php tests/pathway_harness.php
+      # Spec 008: local_ltuse's pure administration rules and the server-side masking, which
+      # it compares with scripts/admin_files.py through Python. Needs no Moodle.
+      - name: Administration harness
+        run: php tests/admin_harness.php

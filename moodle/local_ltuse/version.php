@@ -9,12 +9,18 @@
 defined('MOODLE_INTERNAL') || die();
 
 $plugin->component = 'local_ltuse';
-$plugin->version   = 2026100602;   // Managers' own people (spec 002 amendment 2026-10-02):
-                                   // the "My organisation" page and its actions, the
+$plugin->version   = 2026100801;   // Administration (spec 008): the ltuse_admin service, the
+                                   // local/ltuse:administer capability and the coursementorsync
+                                   // setting (2026100800); then the course-mentor table
+                                   // (local_ltuse_course_mentor, savepoint 2026100801), its sync,
+                                   // observers and hourly reconcile. Spec 016 (2026100500)
+                                   // merges after this, so it re-bumps above it, renumbers its
+                                   // upgrade.php savepoint and re-pins site.yaml. Before it,
+                                   // managers' own people (spec 002 amendment 2026-10-02,
+                                   // 2026100602): the "My organisation" page and its actions, the
                                    // local_ltuse_org_contact table and the hourly
                                    // reconcile_org_contacts task, the cohort observers, and the
-                                   // local_ltuse_place_course web service. db/upgrade.php saves
-                                   // its savepoint at this stamp. Before it, manage mentors
+                                   // local_ltuse_place_course web service. Before it, manage mentors
                                    // (spec 003 Phase B, 2026100601): mentors.php and the
                                    // profile link, no schema change; and learning pathways
                                    // (spec 006, 2026100600): the pathway tables

@@ -101,7 +101,7 @@ Everything a manager does is our own `local_ltuse` code, because core cannot sco
 
 An organisation-only course is declared by the maintainer in a new `moodle/site/org-courses.yaml`. The publisher places it in the organisation's category through a new `local_ltuse` web service, and drift reports any course in the wrong place (R11). A one-off CLI removes the organisation groups and the shared-course managers enrolments already on the build host, reporting counts only (R13).
 
-Out of scope, by decision: making `ltct_org` private and moving spec 004's report scope to cohort membership (spec 016 decision 2); a user-context follow role (B3); managers creating accounts or editing the organisation field (FR-009, FR-013); managers enrolling into pilot courses; moving a course from Pilots to Published (spec 008 or later).
+Out of scope, by decision: moving spec 004's report scope to cohort membership (spec 016 decision 2; `ltct_org` stays visible under its option (a), Doug, 2026-10-05 (scope review)); a user-context follow role (B3); managers creating accounts or editing the organisation field (FR-009, FR-013); managers enrolling into pilot courses; moving a course from Pilots to Published (spec 008 or later).
 
 ### Technical Context
 
@@ -123,7 +123,7 @@ Out of scope, by decision: making `ltct_org` private and moving spec 004's repor
 
 **Performance Goals**: a removed manager loses every page, action and profile at once (no sync lag), and spec 004's report within its 30-minute audience cache (accepted, read-only); contacts follow a cohort change on its event, and the hourly reconcile repairs any missed one.
 
-**Constraints**: no learner data, names or counts per organisation in git, logs or PRs (III); no edit to core or any plugin (XI); no management action through a core selector that searches every user (FR-006a); spec 016's managers-cohort entitlement is matched by `is_org_member_of_manager`, which has no learner condition, while management actions use the narrower `may_manage_account` (R10); production gate before 016 (R13).
+**Constraints**: no learner data, names or counts per organisation in git, logs or PRs (III); no edit to core or any plugin (XI); no management action through a core selector that searches every user (FR-006a); spec 016's managers-cohort entitlement is matched by `is_org_member_of_manager`, which has no learner condition, while management actions use the narrower `may_manage_account` (R10); a person who asked for protection waits until 016 can set their level (R13; Doug, 2026-10-05 (scope review)).
 
 **Scale/Scope**: four organisations today; a handful of managers; per-organisation membership from tens to a few hundred.
 
@@ -133,7 +133,7 @@ Out of scope, by decision: making `ltct_org` private and moving spec 004's repor
 |---|---|
 | I. Source of truth | PASS. Group mode, the forum mode, the organisation-only list and the `ltct:mentors` cohort are declared. Drift reports a course whose group mode or placement differs, and never writes back. Enrolments, suspensions and mentor assignments a manager makes are learner data and stay in Moodle. |
 | II. Portability | PASS. Every new item is found by `idnumber`. `apply` and a republish rebuild them on a fresh instance; manager actions move with the data restore. |
-| III. Public repo (NON-NEGOTIABLE) | PASS. `org-courses.yaml` names a course and its host organisation, which are already public. An at-risk organisation hosts one only under the neutral key spec 016 gives it. The migration CLI and drift report counts, never names. |
+| III. Public repo (NON-NEGOTIABLE) | PASS. `org-courses.yaml` names a course and its host organisation, which are already public. An organisation that asks not to be named publicly hosts one only under a neutral key (Doug, 2026-10-05 (scope review)). The migration CLI and drift report counts, never names. |
 | IV. Disclosure boundary (NON-NEGOTIABLE) | PASS. Untouched. The payload's new placement field is checked by `check_moodle_payload.py` like any other. |
 | V. CBC fidelity | PASS. Not touched. |
 | VI. No LMS orientation | PASS with a gate. Learners do nothing new. Managers get one page for everything they do. Proven simple only by SC-004. |
@@ -218,14 +218,14 @@ Steps 2–3 are the minimum spec 016 needs. Step 4 closes the profile reach 016 
 - **011**: plans on open courses. Course events reach every organisation in a shared course; organisation-only course events reach one organisation by enrolment. Deleting organisation groups (R13) deletes any group events with them.
 - **012**: no organisation groups to rely on. `course-discussions.yaml` is gone; the organisation-cohort workshop allocator (T047–T051) is withdrawn; 012 settles assignment group mode before T032 and adds a rule for partner data in cross-organisation peer review.
 - **013**: R10's rationale now rests on `badges:viewotherbadges` alone; quickstart V9 is re-run (co-enrol B1 with A1; Manager A opens their own learner through R9's allow and sees no badges; Manager B is refused).
-- **016**: lands after this, and production enrols no learner of an at-risk organisation in a shared course until it does (R13). Asked of 016, to record in its own docs:
-  - its entitlement calls `access::is_org_member_of_manager()` rather than re-deriving the managers-cohort rule, with `managers_see_identity` as its own layer on top;
+- **016**: lands after this. Until it can set a person's level, a person who asked for protection waits; nobody else is held back (R13; Doug, 2026-10-05 (scope review)). Asked of 016, to record in its own docs:
+  - its entitlement calls `access::is_org_member_of_manager()` rather than re-deriving the managers-cohort rule. `managers_see_identity` was cut (Doug, 2026-10-05 (scope review)); a person who does not trust their managers is placed by the site team under a neutral entry with no managers;
   - `organisation.php` may show 016's marker and real name for a manager's own people, only through 016's `can_view_identity`; 016 keeps its own `protected.php` for mentors and the site team, and the two may share a listing component;
   - `mentors.php` gains 016's check that assigning a mentor to a protected learner needs `can_view_identity` (R10);
   - `org-courses.yaml` joins the public files its neutral-key guidance covers (R11);
   - R10's suspend and reactivate write a minimal `{id, suspended}` object; 016 adds a PHPUnit case that suspending a protected user leaves their names unchanged.
   - email (Doug, 2026-10-02): a protected person's address is shown to their own organisation's managers and to their mentors, never to classmates. This bears on 016 decision 1, which proposes removing email from course leaders' views for everyone.
-  Its decision 2 (`ltct_org` private, cohort report scope) is untouched here.
+  Its decision 2 (cohort report scope; `ltct_org` stays visible, option (a), Doug, 2026-10-05 (scope review)) is untouched here.
 - **005**: the community space is not a shared delivery course, so the 2.0.0 rule does not forbid its per-organisation rooms. But a group named for an organisation shows a protected member's organisation on every post, so 005 and 016 must settle those rooms (rename, or keep protected members out) before 016 ships; 016 adds the community space to its audit.
 - **006, 008**: wording. 008 FR-008's "category-scoped manager roles" becomes "the managers cohort and the organisation page"; its enrolment tooling has a shared-course and an organisation-only case.
 

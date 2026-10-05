@@ -67,7 +67,7 @@ use local_ltuse\admin\enrolment_rules;
 function intake(array $over = []): array {
     return array_merge(['accounts' => 0, 'org' => '', 'suspended' => false, 'effective' => 'none',
         'settled' => true, 'protection' => false, 'available' => [], 'roworg' => 'fixture-a',
-        'asked' => 'none', 'orgminimum' => 'none', 'courses' => [], 'active' => [], 'allowed' => []], $over);
+        'asked' => 'none', 'courses' => [], 'active' => [], 'allowed' => []], $over);
 }
 /** The same, with spec 016 installed and every level available. */
 function intake016(array $over = []): array {
@@ -92,10 +92,12 @@ check($r['changes'] === ['create', 'set_org:fixture-a', 'enrol:ltct:fixture-cour
 $r = intake_rules::classify(intake016(['asked' => 'email']));
 check($r['outcome'] === 'new' && $r['changes'] === ['create', 'set_protection:email', 'set_org:fixture-a'],
     'new with protection: protection before the organisation');
-check(intake_rules::classify(intake016(['orgminimum' => 'firstname']))['target'] === 'firstname',
-    'target is the organisation minimum when it is stricter than the row');
-check(intake_rules::classify(intake016(['asked' => 'pseudonym', 'orgminimum' => 'email']))['target'] === 'pseudonym',
-    'target is the row level when it is stricter than the minimum');
+check(intake_rules::classify(intake016(['asked' => 'pseudonym']))['target'] === 'pseudonym',
+    'target is the row\'s own level');
+check(intake_rules::classify(intake016(['asked' => '']))['target'] === 'none',
+    'target is none when the row asks for nothing');
+check(intake_rules::classify(intake016(['orgminimum' => 'firstname']))['target'] === 'none',
+    'an organisation minimum is no fact any more (Doug, 2026-10-05)');
 
 check(outcome(intake($existing)) === 'unchanged', 'unchanged: same organisation, no courses');
 check(outcome(intake(array_merge($existing, $course, ['active' => ['ltct:fixture-course']]))) === 'unchanged',
@@ -125,8 +127,6 @@ check(outcome(intake(['accounts' => 1, 'suspended' => true])) === 'flagged_suspe
     'flagged_suspended: even with no organisation yet');
 check(outcome(intake016(array_merge($existing, ['asked' => 'firstname', 'effective' => 'email']))) === 'flagged_protection',
     'flagged_protection: existing account below the row target');
-check(outcome(intake016(array_merge($existing, ['orgminimum' => 'email', 'effective' => 'none']))) === 'flagged_protection',
-    'flagged_protection: existing account below the organisation minimum');
 check(outcome(intake016(array_merge($existing, ['asked' => 'pseudonym', 'effective' => 'email',
     'available' => ['none', 'email']]))) === 'flagged_protection',
     'flagged_protection: an existing account is flagged, not made to wait');
@@ -136,8 +136,8 @@ check(outcome(intake(array_merge($existing, ['asked' => 'email']))) === 'waits',
     'waits: protection asked, 016 absent, even for an existing account');
 check(outcome(intake016(['asked' => 'firstname', 'available' => ['none', 'email']])) === 'waits',
     'waits: level_available false for the target');
-check(outcome(intake016(['orgminimum' => 'pseudonym', 'available' => ['none', 'email']])) === 'waits',
-    'waits: the organisation minimum is not available yet');
+check(outcome(intake016(['available' => ['none', 'email']])) === 'new',
+    'a row asking for nothing never waits, whatever 016 can set');
 check(intake_rules::classify(intake(['asked' => 'email']))['changes'] === [], 'waits: no change at all');
 check(outcome(intake016(['accounts' => 1, 'asked' => 'firstname', 'available' => ['none', 'email']])) === 'waits',
     'waits: an interrupted account still needing protection');
@@ -240,10 +240,10 @@ check(enrolment_rules::progress('refused', 'refused') === $refused, 'cohort prog
 use local_ltuse\admin\move_rules;
 
 // --- move_rules::classify (T048) ----------------------------------------------------------
-/** Facts for a fixture-a learner moving to fixture-b, with spec 016 absent. */
+/** Facts for a fixture-a learner moving to fixture-b. */
 function move(array $over = []): array {
-    return array_merge(['accounts' => 1, 'org' => 'fixture-a', 'neworg' => 'fixture-b', 'effective' => 'none',
-        'newminimum' => 'none', 'courses' => [], 'gained' => []], $over);
+    return array_merge(['accounts' => 1, 'org' => 'fixture-a', 'neworg' => 'fixture-b', 'courses' => [],
+        'gained' => []], $over);
 }
 /** One course the learner is active in: shared, through fixture-a's cohort sync only. */
 function active(array $over = []): array {
@@ -286,16 +286,9 @@ check($r['outcome'] === 'lost' && course_outcomes($r) === ['ltct:fixture-shared'
     'lost: a shared course with no match refuses the learner');
 $r = move_rules::classify(move(['courses' => [active(), active(['course' => 'ltct:fixture-two', 'newcohort' => true])]]));
 check($r['outcome'] === 'lost' && $r['lost'] === ['ltct:fixture-shared'], 'lost: one course of two is enough to refuse');
-$r = move_rules::classify(move(['effective' => 'none', 'newminimum' => 'email',
-    'courses' => [active(['newcohort' => true])]]));
-check($r['outcome'] === 'flagged_protection' && $r['reason'] === 'protection_below_new' && $r['changes'] === [],
-    'flagged_protection: effective level below the new organisation\'s minimum');
-check(move_rules::classify(move(['effective' => 'firstname', 'newminimum' => 'email']))['outcome'] === 'would_move',
-    'protection above the new minimum moves');
-check(move_rules::classify(move(['effective' => 'email', 'newminimum' => 'email']))['outcome'] === 'would_move',
-    'protection equal to the new minimum moves');
-check(move_rules::classify(move(['newminimum' => 'firstname', 'courses' => [active()]]))['outcome'] === 'flagged_protection',
-    'flagged_protection is reported before lost');
+check(move_rules::classify(move(['effective' => 'none', 'newminimum' => 'email',
+    'courses' => [active(['newcohort' => true])]]))['outcome'] === 'would_move',
+    'protection plays no part in a move: no organisation minimum (Doug, 2026-10-05)');
 check(move_rules::classify(move(['org' => 'fixture-b']))['outcome'] === 'moved', 'moved: already in the new organisation');
 check(move_rules::classify(move(['accounts' => 0]))['outcome'] === 'rejected', 'rejected: no account');
 check(move_rules::classify(move(['accounts' => 2]))['reason'] === 'duplicate_accounts', 'rejected: two accounts');
@@ -303,7 +296,6 @@ check(move_rules::classify(move(['org' => '']))['reason'] === 'no_org', 'rejecte
 $nocourses = move();
 unset($nocourses['courses']);
 check(move_rules::classify($nocourses)['outcome'] === 'rejected', 'move: a fact not supplied fails closed');
-check(move_rules::classify(move(['effective' => 'secret']))['outcome'] === 'rejected', 'move: an unknown level fails closed');
 check(move_rules::classify(move(['courses' => [['course' => 'ltct:fixture-shared']]]))['outcome'] === 'rejected',
     'move: a course missing its facts fails closed');
 check(move_rules::classify(move(['org' => 'fixture-ab', 'courses' => [active(['category' => 'ltct:org:fixture-a'])]]))['outcome']
@@ -321,8 +313,6 @@ check(move_rules::progress('would_move', 'would_move', $shown,
     array_merge($shown, [['course' => 'ltct:fixture-a-two', 'outcome' => 'suspended_by_rule']])) === $refused,
     'move progress: a new suspension since the preview is refused');
 check(move_rules::progress('would_move', 'lost', $shown, []) === $refused, 'move progress: would_move -> lost is refused');
-check(move_rules::progress('would_move', 'flagged_protection', $shown, []) === $refused,
-    'move progress: would_move -> flagged_protection is refused');
 check(move_rules::progress('lost', 'lost', [], []) === $refused, 'move progress: a stopping outcome is never applied');
 check(move_rules::progress('would_move', 'rejected', [], []) === $refused, 'move progress: would_move -> rejected is refused');
 

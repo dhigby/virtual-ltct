@@ -233,7 +233,7 @@ These steps change learner data, not configuration, so they are done in Moodle a
 
 **Names.** `--org` takes an organisation key; `--cohort` and `--course` take idnumbers (`ltct:org:<key>`, `ltct:<slug>`). `python scripts/ltct_admin.py list organisations|cohorts|courses [--org <key>]` prints the ones you may use.
 
-> **Production gate (spec 002 R13).** Until identity protection (spec 016, including its decision 2) is delivered, do not enrol into a shared course on production any organisation you have marked as possibly needing protection. The tool prints this reminder on every shared-course `enrol` and every `intake` with courses until `check` reports 016 ready. The marking is kept in Moodle by the site team, never in this repo.
+A row that `waits` asked for identity protection, and joins once identity protection is ready for that person.
 
 ### Bring learners on
 
@@ -242,7 +242,7 @@ python scripts/ltct_admin.py intake ~/ltct-private/intake.csv
 python scripts/ltct_admin.py intake ~/ltct-private/intake.csv --apply --confirm <code>
 ```
 
-One row per person, in the form managers send (see [Asking for new accounts](#asking-for-new-accounts)). A new address gets an account, an emailed password and their organisation. They sign in with their email address. Their organisation's cohort, and the courses it is enrolled in, follow in the same request. An address that already exists is matched, never duplicated. Someone already in another organisation, or suspended, is flagged and left alone: run `move` or `reactivate` deliberately. A row's `courses` column enrols them through the organisation's own enrolment, as a manager would. **Mind the production gate** when it does.
+One row per person, in the form managers send (see [Asking for new accounts](#asking-for-new-accounts)). A new address gets an account, an emailed password and their organisation. They sign in with their email address. Their organisation's cohort, and the courses it is enrolled in, follow in the same request. An address that already exists is matched, never duplicated. Someone already in another organisation, or suspended, is flagged and left alone: run `move` or `reactivate` deliberately. A row's `courses` column enrols them through the organisation's own enrolment, as a manager would.
 
 ### Enrol an organisation in a course
 
@@ -255,8 +255,6 @@ This adds, or turns back on, one cohort sync into the course, so every current a
 - an organisation's cohort, into a published course or its own organisation-only course;
 - its managers cohort, as Organisation manager, into its own organisation-only course only;
 - anything else, including any course in Pilots, is refused.
-
-**Mind the production gate** for a shared course.
 
 `enrol pathway --cohort ltct:org:<key> --pathway <key>` does the same for every course in a pathway (spec 006), and keeps it in step as courses join the pathway.
 
@@ -333,7 +331,7 @@ and send it to you. It holds the column names and nothing else.
 | `lastname` | Their last name. | Yes |
 | `organisation` | Your organisation's key, exactly as the site team gave it to you (for example `seed-company`), not its full name. | Yes |
 | `country` | Their country as two letters, for example `KE` or `PG`. | No |
-| `protection` | Leave empty for almost everyone. Fill it in only for a person who has asked for their identity to be protected. Then write `email`, `firstname` or `pseudonym`, and talk to the site team first. | No |
+| `protection` | Optional, and blank for nearly everyone. Fill it in only for a person who asked, when you added them, for their identity to be protected. Then write `email`, `firstname` or `pseudonym`, and talk to the site team first. | No |
 | `pseudonym` | The name to show instead of theirs. Only with `protection` set to `pseudonym`. | No |
 | `courses` | Courses to start them in, by the course code the site team gave you (`ltct:<name>`), separated by `;`. Leave empty if your organisation's courses are enough. | No |
 

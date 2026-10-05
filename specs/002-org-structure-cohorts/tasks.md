@@ -478,7 +478,7 @@ Everything here ships together: a forum left in separate groups once the groups 
 - **Phase 9**: T043–T045 first (failing). Wave 1 (T046–T054) blocks Wave 2 (T055–T058), which blocks T059.
 - **Phase 10**: T060–T064 first (failing). Wave 1 (T065–T067). Wave 2 (T068–T076): T068 needs T059 deployed; T069 needs T066; T070 and T071 need T065; T072 needs T042 and T073 needs nothing else; T079 needs T067 and T075. Wave 3 (T077–T080) needs Wave 2. T081 needs everything before it.
 - **Phase 11**: Wave 1 (T082–T087) blocks T088. T087 can run any time before the governing-text commit.
-- **Spec 016** starts after T068 and T069 are deployed (open courses and profile reach), and before production go-live (R13's gate).
+- **Spec 016** starts after T068 and T069 are deployed (open courses and profile reach). Until it can set a person's level, a person who asked for protection waits (R13's gate; Doug, 2026-10-05 (scope review)).
 
 ### Parallel examples
 

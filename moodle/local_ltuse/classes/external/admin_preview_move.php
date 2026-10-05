@@ -16,9 +16,9 @@ use local_ltuse\admin\move_service;
  * R8; spec 002 FR-017).
  *
  * `ltct_admin.py move FILE` calls this first. Every new organisation's cohort must exist, or
- * the whole file is refused naming it. Per learner: would_move, moved, lost, flagged_protection
- * or rejected, and per course kept, gained, suspended_by_rule or lost. A learner with any lost
- * course, or below the new organisation's protection minimum, will not be moved.
+ * the whole file is refused naming it. Per learner: would_move, moved, lost or rejected, and per
+ * course kept, gained, suspended_by_rule or lost. A learner with any lost course will not be
+ * moved.
  *
  * Read-only. People come back masked unless showpeople is set; courses by idnumber.
  */
@@ -76,7 +76,7 @@ class admin_preview_move extends external_api {
                     'row' => new external_value(PARAM_INT, 'Row number in the operator\'s file'),
                     'key' => new external_value(PARAM_RAW, 'The masked email, or the email with showpeople'),
                     'outcome' => new external_value(PARAM_ALPHAEXT,
-                        'would_move, moved, lost, flagged_protection or rejected'),
+                        'would_move, moved, lost or rejected'),
                     'reason' => new external_value(PARAM_RAW, 'Why, for an outcome that does not proceed'),
                     'changes' => new external_multiple_structure(
                         new external_value(PARAM_RAW, 'set_org:<key>, suspend:<course> or enrol:<course>'),

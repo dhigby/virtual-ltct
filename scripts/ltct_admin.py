@@ -94,12 +94,6 @@ REQUIRED_SETTINGS = {
 }
 PROTECTION_CAPABILITY = "local/ltuse:manageprotection"
 
-# 002 R13's production gate, printed on a shared-course enrolment while 016 is not ready.
-PRODUCTION_GATE = (
-    "Reminder (spec 002 R13): until identity protection (spec 016) is delivered, do not "
-    "enrol into a shared course on production any organisation you have marked as possibly "
-    "needing protection.")
-
 # Outcomes for which there is nothing left to send: the apply step counts them as already
 # done without a call.
 NOTHING_TO_DO = frozenset({"unchanged", "already", "moved"})
@@ -166,7 +160,6 @@ class Plan:
     preview: Callable[[bool], dict]
     apply: Callable[[dict, str], dict]
     command: list
-    gate: bool = False
     notes: list = field(default_factory=list)
     # Called after the counts with ({row number: preview row}, out), for a command that has
     # more to show than counts, such as a move's totals per course.
@@ -212,8 +205,6 @@ def _print_counts(plan, by_row, out):
 
 def drive(plan, apply, confirm, show_people, out=sys.stdout):
     """The shared two-step flow every changing command uses (research R15)."""
-    if plan.gate:
-        print(PRODUCTION_GATE, file=out)
     for note in plan.notes:
         print(note, file=out)
     previewed = _preview(plan, show_people, out)
@@ -340,18 +331,9 @@ def cmd_check(args, client, out):
     for lv in state.get("levels", []):
         print("  protection level %-10s %s" % (lv["level"], "available" if lv["available"]
                                                else "not available yet"), file=out)
-    if not protection_ready(state):
-        print(PRODUCTION_GATE, file=out)
     if status == EXIT_OK:
         print("\nReady.", file=out)
     return status
-
-
-def protection_ready(state):
-    """016 installed and every level available: when 002 R13's gate no longer applies."""
-    levels = state.get("levels", [])
-    return bool(state.get("protection")) and bool(levels) and all(lv["available"]
-                                                                  for lv in levels)
 
 
 def cmd_list(args, client_factory, out):
@@ -428,14 +410,8 @@ def intake_payload(row):
     }
 
 
-def _gate_needed(client):
-    """True while 002 R13's production gate applies: 016 absent or not every level ready."""
-    return not protection_ready(client.call("local_ltuse_admin_check") or {})
-
-
 def cmd_intake(args, client, out):
     path, rows = load_file(args.file, "intake", args.site_dir)
-    gate = any(_split(r.get("courses")) for r in rows) and _gate_needed(client)
     payload = [intake_payload(r) for r in rows]
     plan = Plan(
         title="Intake", source=path.name, rows=rows,
@@ -444,7 +420,7 @@ def cmd_intake(args, client, out):
         apply=lambda row, expected: client.call("local_ltuse_admin_apply_intake_row",
                                                 row=intake_payload(row),
                                                 expectedoutcome=expected),
-        command=["intake", args.file], gate=gate)
+        command=["intake", args.file])
     return drive(plan, args.apply, args.confirm, args.show_people, out)
 
 
@@ -456,13 +432,6 @@ def _cohort_preview(client, out, **params):
         print("Cohort %s holds %d member%s." % (params["cohortidnumber"], members,
                                                "" if members == 1 else "s"), file=out)
     return result
-
-
-def _shared_course(client, idnumber):
-    """Is this course in ltct:published? (002 R13's gate is about shared courses.)"""
-    items = (client.call("local_ltuse_admin_list", what="courses") or {}).get("items", [])
-    return any(i.get("idnumber") == idnumber and i.get("category") == "ltct:published"
-               for i in items)
 
 
 def cmd_enrol_course(args, client, out, action):
@@ -482,12 +451,11 @@ def cmd_enrol_course(args, client, out, action):
         return client.call("local_ltuse_admin_apply_cohort_enrolment", cohortidnumber=args.cohort,
                            courseidnumber=args.course, action=action, expectedoutcome=expected)
 
-    gate = action == "ensure" and _shared_course(client, args.course) and _gate_needed(client)
     command = (["enrol", "course"] if action == "ensure" else ["unenrol"]) + \
         ["--cohort", args.cohort, "--course", args.course]
     plan = Plan(title="Enrol" if action == "ensure" else "Unenrol",
                 source="%s in %s" % (args.cohort, args.course), rows=rows, preview=preview,
-                apply=apply, command=command, gate=gate)
+                apply=apply, command=command)
     if action == "remove":
         plan.notes.append("Unenrolling disables the cohort's enrolment method in the course. "
                           "Nobody's grades or completion are deleted, and enrolling again brings "
@@ -547,8 +515,7 @@ def cmd_enrol_pathway(args, client, out):
 
     plan = Plan(title="Enrol pathway", source="%s on %s" % (args.cohort, args.pathway),
                 rows=rows, preview=preview, apply=apply,
-                command=["enrol", "pathway", "--cohort", args.cohort, "--pathway", args.pathway],
-                gate=bool(courses) and _gate_needed(client))
+                command=["enrol", "pathway", "--cohort", args.cohort, "--pathway", args.pathway])
     return drive(plan, args.apply, args.confirm, args.show_people, out)
 
 
@@ -599,8 +566,7 @@ def cmd_enrol_mirror(args, client, out):
 
     plan = Plan(title="Enrol mirror", source="ltct:org:%s -> %s" % (args.from_org, cohort),
                 rows=rows, preview=preview, apply=apply,
-                command=["enrol", "mirror", "--from", args.from_org, "--to", args.to_org],
-                gate=_gate_needed(client))
+                command=["enrol", "mirror", "--from", args.from_org, "--to", args.to_org])
     return drive(plan, args.apply, args.confirm, args.show_people, out)
 
 
@@ -685,8 +651,7 @@ def cmd_move(args, client, out):
                 command=["move", args.file], details=_print_course_totals)
     plan.notes.append("A move changes each learner's organisation. Their old organisation's "
                       "enrolments are suspended with grades and completion kept. A learner who "
-                      "would lose a shared course, or whose protection is below the new "
-                      "organisation's minimum, is not moved.")
+                      "would lose a shared course is not moved.")
     return drive(plan, args.apply, args.confirm, args.show_people, out)
 
 

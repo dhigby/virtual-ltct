@@ -24,7 +24,9 @@ defined('MOODLE_INTERNAL') || die();
  *   rejected            two live accounts share the email, or a listed course is not one the
  *                       organisation may be enrolled into
  *
- * The target protection is the stricter of the row's own level and its organisation's minimum.
+ * The target protection is the row's own level: protection is per person, asked for when they
+ * are added, and blank for nearly everyone (spec 016; Doug, 2026-10-05 (scope review), which
+ * dropped organisation minimums).
  *
  * "Further along" (research R15): the path is new -> will_set_org -> will_enrol -> unchanged.
  * An apply whose row has moved along that path since its preview finishes the rest, or reports
@@ -46,7 +48,6 @@ defined('MOODLE_INTERNAL') || die();
  *                        when 016 is not installed
  *   roworg       string  the row's organisation key
  *   asked        string  the row's protection level, 'none' when not given
- *   orgminimum   string  the row organisation's minimum (016's org_minimum()); 'none' without 016
  *   courses      array   the row's course idnumbers
  *   active       array   the course idnumbers the account is already actively enrolled in
  *   allowed      array   the row's course idnumbers the organisation may be enrolled into
@@ -95,7 +96,7 @@ class intake_rules {
         $allowed = array_map('strval', $facts['allowed'] ?? []);
         $available = array_map('strval', $facts['available'] ?? []);
         $protection = !empty($facts['protection']);
-        $target = self::stricter((string)($facts['asked'] ?? ''), (string)($facts['orgminimum'] ?? ''));
+        $target = self::level((string)($facts['asked'] ?? ''));
         $effective = (string)($facts['effective'] ?? '');
         $settled = !empty($facts['settled']);
 
@@ -231,21 +232,14 @@ class intake_rules {
     }
 
     /**
-     * The stricter of two levels; '' counts as none. Null when either is not a level.
+     * A row's level as given; '' counts as none. Null when it is not a level.
      *
-     * @param string $a
-     * @param string $b
+     * @param string $level
      * @return string|null
      */
-    public static function stricter(string $a, string $b): ?string {
-        $a = $a === '' ? 'none' : $a;
-        $b = $b === '' ? 'none' : $b;
-        $ra = self::rank($a);
-        $rb = self::rank($b);
-        if ($ra === null || $rb === null) {
-            return null;
-        }
-        return $ra >= $rb ? $a : $b;
+    public static function level(string $level): ?string {
+        $level = $level === '' ? 'none' : $level;
+        return self::rank($level) === null ? null : $level;
     }
 
     /**

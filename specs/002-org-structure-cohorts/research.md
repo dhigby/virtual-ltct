@@ -332,7 +332,7 @@ Core's own route needs more than the publisher should hold: `core_course_get_cat
 
 It prints counts per step only, never names (Principle III), and is idempotent. Group mode and the forum mode are configuration and are fixed by `apply` (R3, R14), not by this CLI. Groups are learner data that `site_config` cannot see, which is why this is a CLI and not an apply step.
 
-The build host holds only test accounts, so posts written under separation becoming readable across organisations is not a concern. Production starts open, with one gate: until spec 016 is delivered, including its decision 2, no learner of an organisation that may need identity protection is enrolled in a shared course on production. In the meantime `ltct_org` is visible to classmates and course leaders still see email. The gate is checked at spec 015's go-live.
+The build host holds only test accounts, so posts written under separation becoming readable across organisations is not a concern. Production starts open, with one gate: a person who asked for identity protection waits until spec 016 can set their level. Spec 008's intake enforces it row by row, holding that person's row as `waits`; nobody else is held back, and no organisation or Area entry is marked (Doug, 2026-10-05 (scope review), replacing the 2026-10-02 gate on whole organisations). `ltct_org` is visible to classmates and course leaders see email.
 
 **Verify**: a dry run's counts match the build host; after `--execute`, R3's checks pass and a second run reports zero.
 

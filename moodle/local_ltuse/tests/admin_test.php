@@ -175,6 +175,17 @@ final class admin_test extends \advanced_testcase {
         $this->assertCount(0, $this->accounts('fixture-learner@example.org'));
     }
 
+    public function test_a_row_asking_for_no_protection_never_waits(): void {
+        // Protection is per person and opt-in, and an organisation has no minimum (Doug,
+        // 2026-10-05, scope review): a row with the column blank is brought on whatever 016 can
+        // set, installed or not.
+        $this->redirectEmails();
+        $row = $this->row(['protection' => '']);
+        $this->assertSame('new', intake_service::preview([$row], false)['rows'][0]['outcome']);
+        $this->assertSame('done', intake_service::apply_row($row, 'new')['status']);
+        $this->assertCount(1, $this->accounts('fixture-learner@example.org'));
+    }
+
     public function test_applying_one_email_twice_makes_one_account(): void {
         $this->redirectEmails();
         $first = intake_service::apply_row($this->row(), 'new');

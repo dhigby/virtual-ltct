@@ -22,7 +22,7 @@ UTF-8 CSV with a header row; `;` separates multiple values inside one cell. Colu
 | `lastname` | yes | As `firstname`. |
 | `organisation` | yes | A key declared in `moodle/site/organisations.yaml` (`site_config.validate`). |
 | `country` | no | ISO 3166-1 alpha-2, as Moodle's `country` field. New accounts only. |
-| `protection` | no | `none` (default), `email`, `firstname`, `pseudonym` (016's levels). Set only for a person who has asked for their identity to be protected when they are added; most rows leave it empty (plan decision 1). |
+| `protection` | no | `none` (default), `email`, `firstname`, `pseudonym` (016's levels). Optional, and blank for nearly everyone: set only for a person who has asked for their identity to be protected when they are added (plan decision 1). It alone is the row's target: an organisation has no minimum (Doug, 2026-10-05 (scope review)). |
 | `pseudonym` | no | Required when `protection` is `pseudonym`; refused otherwise. |
 | `courses` | no | `ltct:<slug>` idnumbers, `;`-separated, enrolled through the Organisation enrolment (research R7, plan decision 10). |
 
@@ -82,7 +82,7 @@ Returned by each `preview_*` function, one per row, and hashed into the confirma
 
 **Progress paths** (research R15): `new → will_set_org → will_enrol → unchanged`. On apply, a row whose current state lies further along its previewed outcome's path is finished or reported `already done`. Any other change refuses that row.
 
-**Move outcomes** (`move_rules`, per learner and course, research R8): `kept`, `gained`, `suspended_by_rule`, `lost`; per learner also `flagged_protection`. A learner with any `lost` course, or `flagged_protection`, is refused as a whole.
+**Move outcomes** (`move_rules`, per learner and course, research R8): `kept`, `gained`, `suspended_by_rule`, `lost`. A learner with any `lost` course is refused as a whole. Protection plays no part in a move: the per-learner `flagged_protection` outcome went with organisation minimums (Doug, 2026-10-05 (scope review)).
 
 ---
 

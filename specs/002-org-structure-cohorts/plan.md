@@ -123,7 +123,7 @@ Out of scope, by decision: making `ltct_org` private and moving spec 004's repor
 
 **Performance Goals**: a removed manager loses every page, action and profile at once (no sync lag), and spec 004's report within its 30-minute audience cache (accepted, read-only); contacts follow a cohort change on its event, and the hourly reconcile repairs any missed one.
 
-**Constraints**: no learner data, names or counts per organisation in git, logs or PRs (III); no edit to core or any plugin (XI); no management action through a core selector that searches every user (FR-006a); spec 016's managers-cohort entitlement is matched by `is_org_member_of_manager`, which has no learner condition, while management actions use the narrower `may_manage_account` (R10); production gate before 016 (R13).
+**Constraints**: no learner data, names or counts per organisation in git, logs or PRs (III); no edit to core or any plugin (XI); no management action through a core selector that searches every user (FR-006a); spec 016's managers-cohort entitlement is matched by `is_org_member_of_manager`, which has no learner condition, while management actions use the narrower `may_manage_account` (R10); a person who asked for protection waits until 016 can set their level (R13; Doug, 2026-10-05 (scope review)).
 
 **Scale/Scope**: four organisations today; a handful of managers; per-organisation membership from tens to a few hundred.
 
@@ -218,7 +218,7 @@ Steps 2–3 are the minimum spec 016 needs. Step 4 closes the profile reach 016 
 - **011**: plans on open courses. Course events reach every organisation in a shared course; organisation-only course events reach one organisation by enrolment. Deleting organisation groups (R13) deletes any group events with them.
 - **012**: no organisation groups to rely on. `course-discussions.yaml` is gone; the organisation-cohort workshop allocator (T047–T051) is withdrawn; 012 settles assignment group mode before T032 and adds a rule for partner data in cross-organisation peer review.
 - **013**: R10's rationale now rests on `badges:viewotherbadges` alone; quickstart V9 is re-run (co-enrol B1 with A1; Manager A opens their own learner through R9's allow and sees no badges; Manager B is refused).
-- **016**: lands after this, and production enrols no learner of an at-risk organisation in a shared course until it does (R13). Asked of 016, to record in its own docs:
+- **016**: lands after this. Until it can set a person's level, a person who asked for protection waits; nobody else is held back (R13; Doug, 2026-10-05 (scope review)). Asked of 016, to record in its own docs:
   - its entitlement calls `access::is_org_member_of_manager()` rather than re-deriving the managers-cohort rule, with `managers_see_identity` as its own layer on top;
   - `organisation.php` may show 016's marker and real name for a manager's own people, only through 016's `can_view_identity`; 016 keeps its own `protected.php` for mentors and the site team, and the two may share a listing component;
   - `mentors.php` gains 016's check that assigning a mentor to a protected learner needs `can_view_identity` (R10);

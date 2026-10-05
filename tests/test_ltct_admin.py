@@ -722,18 +722,16 @@ def test_a_row_that_became_flagged_is_refused(tmp_path, fixture_orgs):
     assert server.state.get("learner4@example.org") == "other"
 
 
-def test_intake_with_courses_prints_the_production_gate(tmp_path, fixture_orgs):
+def test_intake_with_courses_sends_them_and_prints_no_gate(tmp_path, fixture_orgs):
+    # 002 R13's production gate is gone (Doug, 2026-10-05, scope review): a person who asked
+    # for protection waits on the server, row by row, and nobody else is held back.
     path = write_csv(tmp_path / "intake.csv", [intake_row(2, courses="ltct:fixture-course")])
     server = IntakeServer()
     code, text = run(["intake", str(path)], client=server)
-    assert code == 0 and "spec 002 R13" in text
+    assert code == 0 and "R13" not in text
     sent = _calls(server, "local_ltuse_admin_preview_intake")
     assert sent[0]["rows"][0]["courses"] == ["ltct:fixture-course"]
-
-
-def test_intake_without_courses_prints_no_gate(tmp_path, fixture_orgs):
-    code, text = run(["intake", str(_intake_file(tmp_path))], client=IntakeServer())
-    assert code == 0 and "spec 002 R13" not in text
+    assert not _calls(server, "local_ltuse_admin_check")
 
 
 def test_intake_output_masks_people_unless_asked(tmp_path, fixture_orgs):
@@ -806,7 +804,7 @@ def test_enrol_course_previews_then_applies_once():
     argv = ["enrol", "course", "--cohort", "ltct:org:fixture-a", "--course", "ltct:fixture-course"]
     code, text = run(argv, client=server)
     assert code == 0 and "would_add" in text and "holds 3 members" in text
-    assert "spec 002 R13" in text                 # a shared course while 016 is not ready
+    assert "R13" not in text                      # no production gate (2026-10-05)
     assert not _calls(server, "local_ltuse_admin_apply_cohort_enrolment")
     code, text = run(argv + ["--apply", "--confirm", _preview_code(text)], client=server)
     assert code == 0
@@ -825,7 +823,6 @@ def test_unenrol_disables_and_has_its_own_code():
     argv = ["unenrol", "--cohort", "ltct:org:fixture-a", "--course", "ltct:fixture-course"]
     code, text = run(argv, client=server)
     assert code == 0 and "would_disable" in text and "grades" in text
-    assert "spec 002 R13" not in text
     assert _preview_code(text) != _preview_code(enrol)
     code, text = run(argv + ["--apply", "--confirm", _preview_code(text)], client=server)
     assert code == 0 and server.instances["ltct:fixture-course"] == "disabled"
@@ -1242,7 +1239,7 @@ def test_enrol_mirror_enrols_each_shared_course_once(fixture_orgs):
     argv = ["enrol", "mirror", "--from", "fixture-a", "--to", "fixture-b"]
     code, text = run(argv, client=server)
     assert code == 0 and "would_add" in text and "would_enable" in text
-    assert "spec 002 R13" in text
+    assert "R13" not in text
     preview = _calls(server, "local_ltuse_admin_preview_cohort_enrolment")[0]
     assert preview == {"cohortidnumber": "ltct:org:fixture-b", "mirrorfrom": "fixture-a"}
     code, text = run(argv + ["--apply", "--confirm", _preview_code(text)], client=server)

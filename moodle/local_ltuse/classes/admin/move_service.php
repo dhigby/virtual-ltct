@@ -12,27 +12,18 @@ defined('MOODLE_INTERNAL') || die();
  * organisation's cohort is enrolled in, and asks move_rules for the outcome. It changes nothing.
  *
  * apply_row() moves one learner, under the same per-email lock intake uses: it classifies
- * again, and writes the new ltct_org only when nothing would be lost and the learner's
- * protection already meets the new organisation's minimum. The write is the organisation field
- * and nothing else (FR-019), followed by user_updated, so tool_dynamic_cohorts moves the person
- * between cohorts in the same request and core suspends the old cohort-sync enrolments with
- * their history kept (enrol_cohort/unenrolaction = 3).
+ * again, and writes the new ltct_org only when nothing would be lost. The write is the
+ * organisation field and nothing else (FR-019), followed by user_updated, so
+ * tool_dynamic_cohorts moves the person between cohorts in the same request and core suspends
+ * the old cohort-sync enrolments with their history kept (enrol_cohort/unenrolaction = 3).
  *
- * Protection (spec 016, research R8): the new organisation's minimum is read with
- * service::org_minimum() and compared with service::effective_level(). A learner below it is
- * flagged_protection and is not moved; raising protection on an account that may have activity
- * can need an acknowledgement (016 R13), which is 016's page, never a bulk side effect. So this
- * class NEVER calls set_protection(). After the move it confirms is_settled(), and if not
- * settled asks the service to apply what is already set, once. Without spec 016 every minimum
- * counts as none.
+ * Protection (spec 016, research R8): a move neither reads nor sets it. Protection is per
+ * person and goes with them; an organisation has no minimum (Doug, 2026-10-05 (scope review)).
  *
  * The external functions check local/ltuse:administer and moodle/user:update first. Nothing
  * here checks a capability.
  */
 class move_service {
-
-    /** Spec 016's protection service, called only when installed (research R5). */
-    const PROTECTION_SERVICE = '\local_ltuse\protection\service';
 
     /**
      * Preview a whole move file. Changes nothing.
@@ -61,7 +52,7 @@ class move_service {
                 'row' => (int)$row['row'],
                 'key' => $key,
                 'outcome' => $decision['outcome'],
-                'reason' => self::reason($decision, $facts),
+                'reason' => self::reason($decision),
                 'changes' => $decision['changes'],
                 'courses' => $decision['courses'],
             ];
@@ -100,21 +91,18 @@ class move_service {
                 $decision['courses']);
             if ($step === intake_rules::REFUSED) {
                 $reason = in_array($decision['outcome'], ['would_move', 'moved'], true)
-                    ? intake_service::reason('changed') : self::reason($decision, $facts);
+                    ? intake_service::reason('changed') : self::reason($decision);
                 return self::answer($row, $decision['outcome'], 'refused', $reason);
             }
             if ($step === intake_rules::FINISH) {
-                // A retry after a lost response lands here: the move was made, so confirm
-                // protection settled, as the first attempt would have (research R8).
-                return self::answer($row, $decision['outcome'], 'already_done',
-                    self::settled((int)$facts['userid']) ? '' : intake_service::reason('moved_unsettled'));
+                // A retry after a lost response lands here: the move was made.
+                return self::answer($row, $decision['outcome'], 'already_done', '');
             }
             $neworg = trim((string)$row['organisation']);
             if (!intake_service::set_organisation((int)$facts['userid'], $neworg)) {
                 return self::answer($row, $decision['outcome'], 'refused', intake_service::reason('org_not_saved'));
             }
-            return self::answer($row, $decision['outcome'], 'done',
-                self::settled((int)$facts['userid']) ? '' : intake_service::reason('moved_unsettled'));
+            return self::answer($row, $decision['outcome'], 'done', '');
         } finally {
             $lock->release();
         }
@@ -124,16 +112,15 @@ class move_service {
 
     /**
      * Resolve each new organisation's cohort (any missing is a file-level refusal naming it),
-     * the courses it is enrolled in, and, with spec 016, its minimum.
+     * and the courses it is enrolled in.
      *
      * @param array $rows
      * @return array ['refusal' => string, 'orgs' => [key => ['cohortid' => int, 'courses' =>
-     *               int[] enabled cohort-sync course ids, 'minimum' => level]], 'protection' => bool]
+     *               int[] enabled cohort-sync course ids]]]
      */
     protected static function resolve(array $rows): array {
         $orgs = [];
         $missing = [];
-        $protection = class_exists(self::PROTECTION_SERVICE);
         foreach ($rows as $row) {
             $key = trim((string)($row['organisation'] ?? ''));
             if (array_key_exists($key, $orgs) || in_array(enrolment_rules::ORG_PREFIX . $key, $missing, true)) {
@@ -144,16 +131,11 @@ class move_service {
                 $missing[] = enrolment_rules::ORG_PREFIX . $key;
                 continue;
             }
-            if ($protection) {
-                $service = self::PROTECTION_SERVICE;
-                $org['minimum'] = (string)$service::org_minimum($key);
-            }
             $orgs[$key] = $org;
         }
         return [
             'refusal' => $missing ? get_string('admin:refusal:missing', 'local_ltuse', implode(', ', $missing)) : '',
             'orgs' => $orgs,
-            'protection' => $protection,
         ];
     }
 
@@ -161,7 +143,7 @@ class move_service {
      * An organisation's cohort and the courses it has an enabled cohort-sync instance in.
      *
      * @param string $key
-     * @return array|null ['cohortid' => int, 'courses' => int[], 'minimum' => 'none']
+     * @return array|null ['cohortid' => int, 'courses' => int[]]
      */
     protected static function org(string $key): ?array {
         global $DB;
@@ -172,8 +154,7 @@ class move_service {
         if (!$cohortid) {
             return null;
         }
-        return ['cohortid' => (int)$cohortid, 'courses' => cohort_enrolment::enabled_courses((int)$cohortid),
-            'minimum' => 'none'];
+        return ['cohortid' => (int)$cohortid, 'courses' => cohort_enrolment::enabled_courses((int)$cohortid)];
     }
 
     /**
@@ -194,17 +175,11 @@ class move_service {
             'accounts' => count($accounts),
             'org' => $userid ? intake_service::organisation_of($userid) : '',
             'neworg' => $neworg,
-            'effective' => 'none',
-            'newminimum' => $new['minimum'],
             'courses' => [],
             'gained' => [],
         ];
         if (!$userid) {
             return $facts;
-        }
-        if ($context['protection']) {
-            $service = self::PROTECTION_SERVICE;
-            $facts['effective'] = (string)$service::effective_level($userid);
         }
         $old = $facts['org'] !== '' && $facts['org'] !== $neworg ? self::org($facts['org']) : null;
         $oldcohortid = $old ? $old['cohortid'] : 0;
@@ -253,38 +228,17 @@ class move_service {
     }
 
     /**
-     * After a move, protection is settled (spec 016), asking the service to apply what is
-     * already set at most once. Never sets a level. True without spec 016.
-     *
-     * @param int $userid
-     * @return bool
-     */
-    protected static function settled(int $userid): bool {
-        if (!class_exists(self::PROTECTION_SERVICE)) {
-            return true;
-        }
-        $service = self::PROTECTION_SERVICE;
-        if (!$service::is_settled($userid)) {
-            $service::apply($userid);
-        }
-        return (bool)$service::is_settled($userid);
-    }
-
-    /**
      * The plain sentence for a decision's reason.
      *
      * @param array $decision move_rules::classify()'s result
-     * @param array $facts
      * @return string
      */
-    protected static function reason(array $decision, array $facts): string {
+    protected static function reason(array $decision): string {
         switch ($decision['reason']) {
             case '':
                 return '';
             case 'lost':
                 return get_string('admin:reason:lost', 'local_ltuse', implode(', ', $decision['lost']));
-            case 'protection_below_new':
-                return get_string('admin:reason:protection_below_new', 'local_ltuse', $facts['neworg']);
             default:
                 return intake_service::reason($decision['reason']);
         }

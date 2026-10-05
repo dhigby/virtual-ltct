@@ -28,13 +28,14 @@ defined('MOODLE_INTERNAL') || die();
  *
  * Per learner, the outcome is one of:
  *
- *   would_move          every course is kept, gained or suspended_by_rule: set ltct_org
- *   moved               ltct_org already holds the new key: nothing to do
- *   flagged_protection  the learner's effective protection is below the new organisation's
- *                       minimum: raise it on spec 016's page first; a bulk move never does
- *   lost                some course would be lost
- *   rejected            no live account, two accounts share the email, the account has no
- *                       organisation yet (that is intake's work), or a fact is missing
+ *   would_move  every course is kept, gained or suspended_by_rule: set ltct_org
+ *   moved       ltct_org already holds the new key: nothing to do
+ *   lost        some course would be lost
+ *   rejected    no live account, two accounts share the email, the account has no
+ *               organisation yet (that is intake's work), or a fact is missing
+ *
+ * Protection plays no part. It is per person and goes with them, and an organisation has no
+ * minimum (Doug, 2026-10-05 (scope review)).
  *
  * "Further along" (research R15): the path is would_move -> moved.
  *
@@ -46,9 +47,6 @@ defined('MOODLE_INTERNAL') || die();
  *   accounts    int     live accounts whose email matches, case-insensitively
  *   org         string  the account's ltct_org now, '' when empty
  *   neworg      string  the key the row moves them to
- *   effective   string  their effective protection level (016's effective_level()); 'none'
- *                       without 016
- *   newminimum  string  the new organisation's minimum (016's org_minimum()); 'none' without 016
  *   courses     array   one entry per course the learner is actively enrolled in:
  *                         course     string  the course idnumber
  *                         category   string  its category's idnumber
@@ -85,10 +83,8 @@ class move_rules {
         $accounts = isset($facts['accounts']) ? (int)$facts['accounts'] : -1;
         $org = trim((string)($facts['org'] ?? ''));
         $neworg = trim((string)($facts['neworg'] ?? ''));
-        $effective = intake_rules::rank((string)($facts['effective'] ?? ''));
-        $minimum = intake_rules::rank((string)($facts['newminimum'] ?? ''));
 
-        if ($accounts < 0 || $neworg === '' || $effective === null || $minimum === null
+        if ($accounts < 0 || $neworg === ''
                 || !isset($facts['courses']) || !is_array($facts['courses'])
                 || !isset($facts['gained']) || !is_array($facts['gained'])) {
             return self::result('rejected', 'facts');
@@ -134,9 +130,6 @@ class move_rules {
             }
         }
 
-        if ($effective < $minimum) {
-            return self::result('flagged_protection', 'protection_below_new', $courses, $lost);
-        }
         if ($lost) {
             return self::result('lost', 'lost', $courses, $lost);
         }

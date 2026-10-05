@@ -142,7 +142,7 @@ class intake_service {
      *
      * @param array $rows
      * @return array ['refusal' => string, 'courses' => [idnumber => [id, category idnumber]],
-     *               'available' => string[], 'protection' => bool, 'minimums' => [key => level]]
+     *               'available' => string[], 'protection' => bool]
      */
     protected static function resolve(array $rows): array {
         global $DB;
@@ -175,7 +175,6 @@ class intake_service {
 
         $protection = class_exists(self::PROTECTION_SERVICE);
         $available = [];
-        $minimums = [];
         if ($protection && !$missing) {
             $service = self::PROTECTION_SERVICE;
             foreach (intake_rules::LEVELS as $level) {
@@ -183,16 +182,12 @@ class intake_service {
                     $available[] = $level;
                 }
             }
-            foreach (array_keys($keys) as $key) {
-                $minimums[$key] = (string)$service::org_minimum($key);
-            }
         }
         return [
             'refusal' => $missing ? get_string('admin:refusal:missing', 'local_ltuse', implode(', ', $missing)) : '',
             'courses' => $courses,
             'available' => $available,
             'protection' => $protection,
-            'minimums' => $minimums,
         ];
     }
 
@@ -231,7 +226,6 @@ class intake_service {
             'available' => $context['available'],
             'roworg' => $key,
             'asked' => strtolower(trim((string)($row['protection'] ?? ''))) ?: 'none',
-            'orgminimum' => $context['minimums'][$key] ?? 'none',
             'courses' => $courses,
             'active' => $userid ? self::active_courses($userid, $courses, $context) : [],
             'allowed' => $allowed,

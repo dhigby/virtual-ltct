@@ -6,7 +6,9 @@ purpose: >-
   local_ltuse's administration service. These are the settings it owns. The others it
   depends on stay where their specs declare them (enrol_cohort/unenrolaction in groups.yaml,
   tool_dynamic_cohorts/realtime in cohorts.yaml), and "ltct_admin.py check" refuses to run if
-  any of them is wrong (research R13).
+  any of them is wrong (research R13). It also holds the site's general account rules (who
+  can make an account, and how people sign in), which spec 016 first declared and its scope
+  review moved here as rules for everyone, not protection measures (Doug, 2026-10-05).
 settings:
   - name: allowaccountssameemail
     value: 0
@@ -24,6 +26,35 @@ settings:
       account has it (lib/moodlelib.php, authenticate_user_login), which allowaccountssameemail
       above and the intake's own email match guarantee. On by default in 5.2
       (admin/settings/login.php); declared so drift catches it being turned off.
+  - name: protectusernames
+    value: 1
+    why: >-
+      A general account rule. With email as everyone's login, the forgotten-password form
+      must never confirm whether an address has an account here. Core's default
+      (admin/settings/security.php, MOODLE_502_STABLE); declared beside authloginviaemail so
+      drift catches it being turned off (Doug, 2026-10-05 (scope review)).
+  - name: auth
+    value: webservice
+    why: >-
+      A general account rule: the login methods enabled beside manual and nologin, which are
+      always on. Only webservice, for the publisher's account (local_ltuse/cli/
+      setup_publishing.php); everyone else is a manual account made by the site team. Not
+      core's default: a new site enables email self-registration's plugin (auth = email,
+      lib/db/install.php). Enabling another method, OAuth2 say, shows as drift and is a
+      decision of its own (Doug, 2026-10-05 (scope review)).
+  - name: registerauth
+    value: ""
+    why: >-
+      A general account rule: no self-registration. Accounts are made by the site team, through
+      intake (spec 002, this spec). Core's default (admin_setting_special_registerauth in
+      lib/adminlib.php, on admin/settings/login.php, MOODLE_502_STABLE); declared so drift
+      catches it being turned on (Doug, 2026-10-05 (scope review)).
+  - name: authpreventaccountcreation
+    value: 1
+    why: >-
+      A general account rule: no account is created by an outside login on first use, so every
+      account comes from intake, matched by email (research R2). Not core's default, which is 0
+      (admin/settings/plugins.php, MOODLE_502_STABLE) (Doug, 2026-10-05 (scope review)).
   - name: local_ltuse/coursementorsync
     value: 0
     why: >-

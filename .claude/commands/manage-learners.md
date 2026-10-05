@@ -77,11 +77,7 @@ and the password Moodle emails them. Someone protected at `firstname` or `pseudo
 email Moodle cannot use as a username, gets a generated username instead, but still signs in
 with their email.
 
-If the preview printed the **production reminder** (spec 002 R13), repeat it, word for word,
-and ask whether any organisation in this change is one the site team has marked as possibly
-needing protection. Until identity protection (spec 016) is delivered, such an organisation
-is not enrolled into a shared course on production. That marking is kept in Moodle by the
-site team; do not ask for it to be written down here.
+A row that `waits` asked for identity protection, and joins once identity protection is ready for that person.
 
 ## 5. Apply only on the operator's yes
 
@@ -124,10 +120,6 @@ again: rows already done report `already done`.
   enrol in that course, a move that would lose a course, a row needing protection first).
 - **Apply only after a yes to that preview.** No `--apply` without a fresh `--confirm` code
   the operator has seen explained.
-- **Production gate (spec 002 R13).** Until spec 016, including its decision 2, is delivered,
-  do not enrol into a shared course on production any organisation the site team has marked
-  as possibly needing protection. The tool prints the reminder on a shared-course `enrol` and
-  an `intake` with courses; repeat it and wait for the operator's answer.
 - **Write nothing about the people here.** No learner names, addresses, counts tied to an
   organisation, or protection levels go into the repo, an issue or a pull request
   (constitution III).

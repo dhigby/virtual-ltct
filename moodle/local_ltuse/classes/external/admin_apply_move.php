@@ -18,7 +18,7 @@ use local_ltuse\admin\move_service;
  * follow and core suspends the old cohort-sync enrolments with their history kept. The learner
  * is classified again under the per-email lock: would_move is applied only if it would suspend
  * or lose nothing expectedcourses did not show; moved is already_done; anything else (a lost
- * course, protection below the new minimum) is refused. Never sets protection.
+ * course, say) is refused. Never reads or sets protection.
  */
 class admin_apply_move extends external_api {
 

@@ -55,7 +55,7 @@ Cross-spec names come from the sessions planning those specs on 2026-10-04: spec
 - Rules must stay non-bulk (`bulkprocessing 0`), or members are inserted without `cohort_member_added` and cohort sync waits for its scheduled task (`classes/rule_manager.php` ~368-381). 002 R12 already requires this; 008 relies on it.
 - Writing only `ltct_org` keeps FR-019: `profile_save_data()` bypasses 016's `before_user_updated` hook until its hourly reconcile, so 008 passes a data object holding only `id` and `profile_field_ltct_org`, never another field (016's never-send list).
 
-**Order at creation** (016, INTENT 2026-10-03): create with no `ltct_org` → set protection to max(asked, the target organisation's minimum) (R5) → confirm settled → set `ltct_org` → per-row courses (R7). 008 does **not** rely on 016's `cohort_member_added` observer running before `enrol_cohort`'s. By the time the person joins the cohort, their protection is already at the organisation's minimum, so whichever observer runs first finds nothing to change. 016's observer declares `priority => 1000`, above `enrol_cohort`'s 0 (agreed 2026-10-04). It is the guard for paths 008 does not control, such as a hand edit of `ltct_org`, and nothing in 008 depends on it.
+**Order at creation** (016, INTENT 2026-10-03): create with no `ltct_org` → set protection to the row's own level, when it asks for one (R5) → confirm settled → set `ltct_org` → per-row courses (R7). 008 does **not** rely on any observer order. By the time the person joins the cohort, any protection they asked for is already set and settled. Organisations have no protection minimum and 016 keeps no cohort observer (Doug, 2026-10-05 (scope review)), so joining a cohort changes nobody's protection.
 
 ## R4. Where the rules live: pure classes, harness-tested
 
@@ -71,9 +71,9 @@ Thin `classes/admin/*_service.php` classes gather Moodle state, call the rules, 
 
 ## R5. Protection before enrolment (spec 016)
 
-**Decision**: The intake file has an optional `protection` column: `none`, `email`, `firstname` or `pseudonym` (016's level keys). Let **target** = max(asked level, the minimum of the row's organisation). For a row whose target is above `none`:
+**Decision**: The intake file has an optional `protection` column: `none`, `email`, `firstname` or `pseudonym` (016's level keys). Let **target** = the row's own level, `none` when the column is blank, as it is for nearly everyone. (Until 2026-10-05 the target was the stricter of that and the organisation's minimum; 016's scope review cut organisation minimums, so a row's organisation plays no part: Doug, 2026-10-05 (scope review).) For a row whose target is above `none`:
 
-0. **Before anything is written**, in preview and again at the start of apply: `service::level_available($target)` (read-only; agreed with 016 and exposed, 2026-10-04). If 016 is not installed (`class_exists` false) or the level is not yet available (until 016's decision 2 only `email` is), the outcome is **waits** and no account is created (INTENT 2026-10-03: "a request that asks for any protection waits").
+0. **Before anything is written**, in preview and again at the start of apply: `service::level_available($target)` (read-only; agreed with 016 and exposed, 2026-10-04). If 016 is not installed (`class_exists` false) or the level is not yet available, the outcome is **waits** and no account is created (INTENT 2026-10-03: "a request that asks for any protection waits").
 1. create the account without `ltct_org` (R2);
 2. call `\local_ltuse\protection\service::set_protection($userid, $target, $options, $USER->id)`, after `\local_ltuse\protection\entitlement::can_manage_protection($USER->id, $userid)`;
 3. check `service::is_settled($userid)` and that `service::effective_level($userid)` is at least `target`; if not settled, call `service::apply($userid)` synchronously and re-check;
@@ -83,7 +83,7 @@ If step 2 or 3 fails after the account exists, the row stops there with `ltct_or
 
 **Existing accounts**: an existing account whose `effective_level` is below the row's target is classified **flagged_protection**, and nothing is enrolled for that row. Raising protection on an account that already has activity can need an acknowledgement (016 R13), which is 016's page, not a bulk side effect.
 
-**The organisation minimum** is read with `service::org_minimum($orgkey)` (016, exists: `none`/`email`/`firstname`). Organisation minimums themselves are 016's data and are never set by 008. `service::level_available(string $level): bool` (016, added 2026-10-04) is read-only, needs no user, is true for `none`, and otherwise false until `protection.yaml` is applied and, for `firstname`/`pseudonym`, until 016's decision 2. 016's `cohort_member_added` observer declares `priority => 1000`, above `enrol_cohort`'s 0 (016, 2026-10-04): a backstop, not something 008 relies on.
+**Availability**: `service::level_available(string $level): bool` (016, added 2026-10-04) is read-only, needs no user, is true for `none`, and otherwise false until 016 can set that level (its `protection.yaml` applied). 016's scope review dropped the wait on its decision 2 for `firstname` and `pseudonym` (option (a): those levels no longer promise to hide the organisation). The only 016 calls 008 makes are `level_available`, `effective_level`, `is_settled`, `set_protection` and `apply`, each behind `class_exists`. `org_minimum()` is no longer called (dropped 2026-10-05, Doug, 2026-10-05 (scope review)).
 
 **Capability**: `can_manage_protection` for a new account with no organisation is true only with `local/ltuse:manageprotection` at system context (016's contract). 016's roles validator allows that capability on `manager` only (`PROTECTION_MANAGE_ROLES` in `site_config.py`). 008's PR widens that allowlist by one entry, `ltctadmin`, with its reason, and grants the capability in `roles.yaml` (agreed with 016, 2026-10-04). Until then, a token user would also need `manager`. `ltct_admin.py check` reports the capability missing as "protected rows will be refused".
 
@@ -147,7 +147,7 @@ The preview prints totals per course and per outcome. Apply sets `ltct_org` only
 
 **Rationale**: 002 FR-017 and Clarifications 2026-10-03 ("Spec 008 provides a counted dry run first"). The order "mirror, then move" is exactly 002's rule that each Area's cohort is enrolled in every shared course the `sil` cohort is before anyone moves.
 
-**Protection on move**: one rule. Before writing the new `ltct_org`, 008 reads `service::org_minimum(<new key>)`. A learner whose `effective_level` is below it is `flagged_protection` in the preview, with "raise protection on 016's page first", and is not moved. A mover is an existing account that may have activity, so raising their protection can need 016's acknowledgement (016 R13), which a bulk command must not give. `apply_move` never calls `set_protection`. It re-checks `effective_level` against the minimum, and confirms `is_settled()` after the move.
+**Protection on move** (revised 2026-10-05): none. Protection is per person and goes with them; an organisation has no minimum, so a new organisation asks nothing of a mover. `move_rules` has no `flagged_protection` outcome and `move_service` neither reads nor sets protection, before or after the move (Doug, 2026-10-05 (scope review)). Until then a move read `service::org_minimum(<new key>)`, refused a learner below it, and confirmed `is_settled()` afterwards; that was dropped with organisation minimums.
 
 **Edge case** (spec): a learner who already exists under another organisation is never moved by intake (outcome `flagged_other_org`). Only `move`, run deliberately, changes it.
 
@@ -254,7 +254,7 @@ A learner counts when they hold an **active** Student enrolment in C, through co
 
 ## R13. Site settings the tooling relies on
 
-**Decision**: a new `moodle/site/settings/admin.yaml` (`rows: [14]`) declares `allowaccountssameemail = 0` (R2) and, since 2026-10-05, `authloginviaemail = 1`, so everyone signs in with their email address (R2's usernames). `enrol_cohort/unenrolaction = 3` (002, `groups.yaml`), `tool_dynamic_cohorts` realtime and non-bulk rules (002, `cohorts.yaml`), and 016's auth settings stay where those specs declare them; 008's preflight (`ltct_admin.py check`) reads them through `local_ltuse_admin_check` and refuses to run if any is wrong, naming the setting.
+**Decision**: a new `moodle/site/settings/admin.yaml` (`rows: [14]`) declares `allowaccountssameemail = 0` (R2) and, since 2026-10-05, `authloginviaemail = 1`, so everyone signs in with their email address (R2's usernames). Since the same day it also holds the site's general account rules, moved from 016's `identity.yaml` by 016's scope review because they apply to everyone and are not protection measures: `protectusernames = 1` (with email as the login, the forgotten-password form must not confirm an address has an account; core's default), `auth = webservice` (the only method beside manual and nologin, for the publisher's account), `registerauth = ""` (no self-registration; core's default) and `authpreventaccountcreation = 1` (no account from an outside login) (Doug, 2026-10-05 (scope review)). `enrol_cohort/unenrolaction = 3` (002, `groups.yaml`) and `tool_dynamic_cohorts` realtime and non-bulk rules (002, `cohorts.yaml`) stay where those specs declare them; 008's preflight (`ltct_admin.py check`) reads them through `local_ltuse_admin_check` and refuses to run if any is wrong, naming the setting.
 
 **Rationale**: every rule 008 depends on must be in the repo (constitution II) and checked before a write, because a wrong `unenrolaction` turns "remove" into data loss.
 
@@ -305,7 +305,7 @@ An interrupted run, a lost response and a plain re-run with the same code all fi
 - never put an intake file, a summary or any output inside the repository;
 - never invent a cohort, course or organisation key; offer the ones `ltct_admin.py list` prints;
 - after any refusal, quote the tool's own message;
-- **production gate** (002 R13): until spec 016, including its decision 2, is delivered, do not enrol into a shared course on production any organisation the site team has marked as possibly needing protection. `ltct_admin.py` prints this reminder on any shared-course `enrol` and any `intake` with courses when `local_ltuse_admin_check` reports 016 absent or not ready. The marking itself is Moodle data the site team keeps, never the repo (constitution III).
+- a row that `waits` joins once identity protection is ready for that person. This is all that is left of 002 R13's production gate, narrowed on 2026-10-05 to "a person who asked for protection waits until 016 can set their level". Intake enforces it row by row, so `ltct_admin.py` prints no reminder and nobody marks an organisation (Doug, 2026-10-05 (scope review)).
 
 `ltct_admin.py` itself prints plain sentences and the next command to run, never a stack trace (FR-011). `ltct_admin.py template --kind intake --out <path>` writes a blank intake file with the column headers, so a manager can fill in a list the site team applies unchanged (US4).
 

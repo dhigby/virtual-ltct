@@ -419,11 +419,13 @@ class intake_service {
 
     /**
      * A username nobody has: ltc- and 8 lowercase base32 characters, never derived from the
-     * person (spec 016 R13).
+     * person (spec 016 R13). The one generator: spec 016's service::neutral_username() calls
+     * it. The unique index is (mnethostid, username) over every row, deleted ones included, so
+     * the check counts deleted accounts too.
      *
      * @return string
      */
-    protected static function new_username(): string {
+    public static function new_username(): string {
         global $CFG, $DB;
         $alphabet = self::USERNAME_ALPHABET;
         do {

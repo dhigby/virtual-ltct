@@ -2420,6 +2420,16 @@ class AdminRole(Base):
         self.assertEqual(roles["ltctadmin"]["allowassign"], ["mentor", "teacher"])
         self.assertEqual(roles["ltctadmin"]["capabilities"]["local/ltuse:administer"], "allow")
 
+    def test_ltctadmin_may_manage_protection(self):
+        # T014/T015 (research R5): intake protects a new account through spec 016, whose
+        # can_manage_protection needs local/ltuse:manageprotection, so 016's allowlist names
+        # ltctadmin beside manager, and the declared role holds the capability and validates.
+        self.assertEqual(sc.PROTECTION_MANAGE_ROLES, frozenset({"manager", "ltctadmin"}))
+        roles = {r["shortname"]: r for r in sc.validate(self.dir)[0]["roles"]}
+        self.assertEqual(roles["ltctadmin"]["capabilities"]["local/ltuse:manageprotection"], "allow")
+        self.assertNotIn("local/ltuse:viewidentity", roles["ltctadmin"]["capabilities"])
+        self.assertAccepted()
+
     def test_ltctadmin_is_system_only(self):
         self.edit("roles.yaml", "    contextlevels: [system]  #", "    contextlevels: [system, course]  #")
         self.assertInvalid("ltctadmin")
@@ -2434,5 +2444,3 @@ class AdminRole(Base):
         self.write("settings/admin.yaml",
                    (REPO / "moodle" / "site" / "settings" / "admin.yaml").read_text())
         self.assertAccepted()
-
-

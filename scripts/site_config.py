@@ -325,7 +325,11 @@ MENTOR_SINCE = 2026100301
 # must never hold. Widening any of these is a reviewed change to this block.
 VIEWIDENTITY = "local/ltuse:viewidentity"
 PROTECTION_VIEW_ROLES = frozenset({"manager", MENTOR, "teacher"})
-PROTECTION_MANAGE_ROLES = frozenset({"manager"})
+# ltctadmin (spec 008 research R5, agreed with 016 on 2026-10-04): intake grants a new account
+# the protection its row asks for through service::set_protection(), and can_manage_protection()
+# for an account with no organisation yet needs local/ltuse:manageprotection. The role is the
+# site team's own administration account, held at system level, never a manager's.
+PROTECTION_MANAGE_ROLES = frozenset({"manager", "ltctadmin"})
 PROTECTION_MANAGE_CAPS = ("local/ltuse:manageprotection",)
 REPORT_EDIT_CAPS = ("moodle/reportbuilder:edit", "moodle/reportbuilder:editall")
 COURSE_LEADER_ROLES = ("editingteacher", "teacher")
@@ -334,10 +338,9 @@ COURSE_LEADER_PROHIBIT = ("moodle/backup:downloadfile",)   # R14: email and logs
 NO_ALLOWASSIGN = frozenset({ORGMANAGER, MENTOR})
 
 # Spec 008 (research R12): the site team's administration role, held by each site-team
-# member's own account at system level. Spec 016's PROTECTION_MANAGE_ROLES allowlist gains
-# this role when 016 lands (008 task T015, agreed with 016 on 2026-10-04), because
-# can_manage_protection for a new account needs local/ltuse:manageprotection; until then
-# roles.yaml leaves that capability out, since an unknown capability blocks apply.
+# member's own account at system level. It is in spec 016's PROTECTION_MANAGE_ROLES above
+# (008 task T015), because can_manage_protection for a new account needs
+# local/ltuse:manageprotection (research R5).
 ADMIN_ROLE = "ltctadmin"
 
 

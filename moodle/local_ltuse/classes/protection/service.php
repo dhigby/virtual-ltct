@@ -57,16 +57,6 @@ class service {
     const LOCKWAIT = 10;
 
     /**
-     * Neutral usernames: this prefix and USERNAME_LENGTH characters of USERNAME_ALPHABET. The
-     * format to match is spec 008's intake_service::new_username() (ltc- and 8 lowercase base32
-     * characters), so an account made at intake and one renamed here look alike; when both
-     * specs are merged, one of them calls the other's.
-     */
-    const USERNAME_PREFIX = 'ltc-';
-    const USERNAME_LENGTH = 8;
-    const USERNAME_ALPHABET = 'abcdefghijklmnopqrstuvwxyz234567';
-
-    /**
      * The login methods a protected account may have (scope review change 4, R3): the site's
      * own, or none. Any other is an outside login that may write the real name back, so write()
      * and the hook set it to AUTH, and drifted() reports it.
@@ -710,22 +700,14 @@ class service {
 
     /**
      * A username nobody has: ltc- and 8 lowercase base32 characters, never derived from the
-     * person (R13). The same format as spec 008's intake_service::new_username(), which is the
-     * one to match. The unique index is (mnethostid, username) over every row, deleted ones
-     * included, so the check counts deleted accounts too.
+     * person (R13). Spec 008's intake_service::new_username() is the one generator, so an
+     * account made at intake and one renamed here look alike (merged 2026-10-05; the format is
+     * 008's).
      *
      * @return string
      */
     public static function neutral_username(): string {
-        global $DB, $CFG;
-        $alphabet = self::USERNAME_ALPHABET;
-        do {
-            $name = self::USERNAME_PREFIX;
-            for ($i = 0; $i < self::USERNAME_LENGTH; $i++) {
-                $name .= $alphabet[random_int(0, strlen($alphabet) - 1)];
-            }
-        } while ($DB->record_exists('user', ['username' => $name, 'mnethostid' => $CFG->mnet_localhost_id]));
-        return $name;
+        return \local_ltuse\admin\intake_service::new_username();
     }
 
     /**

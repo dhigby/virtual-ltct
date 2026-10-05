@@ -48,7 +48,7 @@ Named for the 006 and 008 sessions (2026-10-04); they are stable.
 - `email_warnings(int $userid): array`: why the account's email address may identify the person (`levels::email_reveals()`: the part before the @ holds the real first name or surname, or the domain holds a part of the organisation entry's key, a heuristic that cannot recognise a SIL partner's or an independent learner's employer domain; the granter's `emailchecked` is the control) (change 2).
 - `picture_levels(int $userid): array`: the levels that would delete the user's picture, for the granting page's warning; empty when they have none or it is already withheld.
 - `sync_log_blocks(): void`: the course-log block (R14), below.
-- `neutral_username(): string`: `ltc-` and 8 lowercase base32 characters, unused, in spec 008's `intake_service::new_username()` format (change 15).
+- `neutral_username(): string`: `ltc-` and 8 lowercase base32 characters, unused, in spec 008's `intake_service::new_username()` format (change 15). Since main (with spec 008) was merged in on 2026-10-05 it calls that method, so the site has one generator and its format is 008's.
 
 ### Spec 008's intake (the main grant path)
 

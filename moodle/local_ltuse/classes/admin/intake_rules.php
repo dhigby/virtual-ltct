@@ -213,8 +213,9 @@ class intake_rules {
      * A new account's username (research R2): its email, lowercased, the one thing the person
      * already knows. Null means a neutral generated one instead, when:
      *
-     *   - the target is firstname or pseudonym: spec 016 refuses those levels for a username
-     *     holding the real name (016 R13), and an email often does;
+     *   - the target is firstname or pseudonym: at those levels spec 016 replaces a username
+     *     holding the real name with a neutral one (016 R13, change 15), and an email often
+     *     holds it, so the account starts neutral and is never renamed;
      *   - Moodle's PARAM_USERNAME cleaning changes the email (a '+' with extendedusernamechars
      *     off), so user_create_user() would refuse it;
      *   - it is longer than user.username holds (counted in bytes, never fewer than characters);

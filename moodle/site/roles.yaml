@@ -83,7 +83,8 @@ roles:
       (spec 003): a manager may assign the mentor role, which is what offers "Mentor" on a
       learner's "Assign roles relative to this user" page. Admins need no pair. #26 (spec
       016): the two protection capabilities are the manager archetype's defaults, listed so
-      drift manages them; site_config.py allows the manage capability on no other role.
+      drift manages them; site_config.py allows the manage capability on no other role but
+      ltctadmin, the site team's administration role (spec 008 research R5).
 
   - shortname: editingteacher
     archetype: editingteacher
@@ -234,9 +235,7 @@ roles:
       enrol/self:manage: allow               # ... and its enrolments
       moodle/role:assign: allow              # mentor (user context) and Course mentor (course context)
       moodle/course:managegroups: allow      # mentor groups (R10)
-      # local/ltuse:manageprotection: allow  # spec 016's can_manage_protection for new accounts
-      #   (R5). Added with spec 016 (008 task T015): until 016 defines the capability, naming
-      #   it here would block apply ("no such capability on this server").
+      local/ltuse:manageprotection: allow    # intake protects a new account: spec 016's can_manage_protection (R5)
     why: >-
       #14 (spec 008, research R12): the site team's administration account, one per person so
       Moodle's logs show who made each change (plan decision 7). Exactly the capabilities the
@@ -245,4 +244,8 @@ roles:
       local/ltuse:administer: it creates accounts that receive email. Never an archetype:
       assigned by hand at system level to each site-team member, never to a manager. The
       Organisation manager role holds none of this; managers act on spec 002's organisation
-      page.
+      page. local/ltuse:manageprotection is spec 016's: intake grants a new account the
+      protection its row asks for, and 016's can_manage_protection needs this capability for
+      an account that has no organisation yet (008 research R5). It makes the holder the site
+      team in 016's terms, which this role is. It does not hold local/ltuse:viewidentity:
+      intake never needs to see a real identity.

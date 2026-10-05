@@ -257,6 +257,14 @@ linked from the learner's profile.
 **If declined**: FR-008's manager part and SC-003 move to spec 008 alongside managers enrolling
 their own learners. Phase A still delivers stories 1, 2 and 4, with the site team assigning.
 
+**Decided, 2026-10-02**: approved, as part of "Courses are open across organisations" (`INTENT.md`
+Decisions): managers assign and end mentors for their own people through our own pages. Spec
+002 research R10 narrows the manager branch above: a manager acts only for a **learner** of
+their organisation, through the shared `organisation\access::may_manage_account()`, and staff,
+mentors and other managers stay with the site team. The page follows R10 (contract
+`local-ltuse.md`, Phase B). It manages the default mentor only; a one-course mentor
+(`INTENT.md`, 2026-10-04) is spec 008's.
+
 ## R8. Feedback on learner work comes through spec 012's Course mentor (story 4)
 
 **Decision**: this spec does not enrol a learner's mentor into their courses.

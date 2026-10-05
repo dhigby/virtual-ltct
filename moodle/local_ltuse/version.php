@@ -9,11 +9,14 @@
 defined('MOODLE_INTERNAL') || die();
 
 $plugin->component = 'local_ltuse';
-$plugin->version   = 2026100600;   // Learning pathways (spec 006): the pathway tables
-                                   // (local_ltuse_course_pathway, _role_pathway,
+$plugin->version   = 2026100601;   // Manage mentors (spec 003 Phase B): mentors.php and
+                                   // the profile link, for the site team and a learner's
+                                   // organisation manager. No schema change. Before it,
+                                   // learning pathways (spec 006, 2026100600): the pathway
+                                   // tables (local_ltuse_course_pathway, _role_pathway,
                                    // _role_pathway_comp, _pathway_cohort), slug and url on
-                                   // local_ltuse_competency, set_course_pathway. db/upgrade.php
-                                   // saves its savepoint at this stamp. Before it, events and
+                                   // local_ltuse_competency, set_course_pathway; db/upgrade.php
+                                   // saves its savepoint there. Before it, events and
                                    // office hours (spec 011, 2026100400): calendar change
                                    // notices, the office-hours sync, booking notices and
                                    // their table (local_ltuse_booking), the time zone notice.

@@ -594,6 +594,50 @@ This plugin fills those three gaps and nothing else.
 | `course_completions` | `userid`, `timecompleted IS NOT NULL` | `userid` is | Lists a course the learner completed after their enrolment was deleted, which `enrol_get_all_users_courses()` no longer returns (FR-004). |
 | `role_allow_assign` | `(roleid, allowassign)` | unique key | The applier and drift check one declared allow-assign pair. `get_assignable_roles()` answers for a user in a context, not for a pair. |
 
+### Manage mentors: organisation managers (spec 003 Phase B)
+
+`mentors.php?userid=<learner>` shows one learner's current mentors, each with Remove, and an
+Add picker. It manages the user-context relationship only, the learner's default mentor; a
+mentor for one course is spec 008's. It is linked from the learner's profile
+(`local_ltuse_myprofile_navigation()`) whenever the same decision allows it. The site team
+can still use core's "Assign roles relative to this user" page instead.
+
+**Authorisation**, recomputed on every GET and POST, so a forged POST naming another learner
+is refused like a direct visit. `local_ltuse_may_manage_mentors()` in `lib.php` gathers the
+inputs, and `\local_ltuse\mentor_admin::decide()` decides. It is pure, and
+`tests/mentor_admin_harness.php` tests it. It allows:
+
+- **the site team**: `moodle/role:assign` in the learner's user context, with `mentor` among
+  `get_assignable_roles()` there. Any learner.
+- **an organisation manager**: `\local_ltuse\organisation\access::may_manage_account()`, the
+  shared check of spec 002 (research R10). The learner's `ltct_org` is one of the manager's
+  organisations, read through the existing `local_ltuse_managed_organisation_keys()` (`cohort`
+  ⋈ `cohort_members`), and the learner is in that organisation's member cohort. The person
+  must also be a learner: staff, mentors and other managers stay with the site team.
+
+It refuses everyone, the site team included, for themselves and for a missing or deleted
+user, with the same message as any other refusal. The facts about the person come from
+`local_ltuse_organisation_person_facts()`, which spec 002's organisation pages also use.
+
+**Picker**: members of the hidden system cohort `ltct:mentors` only, which the site team fills
+(`moodle/site/organisations.yaml`), never a site-wide user search. It leaves out the learner,
+their existing mentors, and deleted or suspended accounts. An Add or Remove names a mentor
+the page would itself offer, or it is refused.
+
+**Writes**: after a confirmation, as a POST with the sesskey, `role_assign()` or
+`role_unassign()` of `mentor` in the learner's user context. Neither checks a capability, so
+the decision is the only gate. Core's `role_assigned` and `role_unassigned` events record the
+viewer as the actor, and the observers above add or remove the message contacts.
+
+**Raw reads added by Phase B**, both read-only:
+
+| Table | Read by | Indexed? | Why there is no API |
+|---|---|---|---|
+| `cohort` | `idnumber = 'ltct:mentors'`, `contextid` (system) | no (`cohort.idnumber`) | No cohort API looks a cohort up by idnumber. One query per request, cached. |
+| `cohort_members` joined to `user` | `cm.cohortid`; `u.deleted = 0`, `u.suspended = 0` | `cohort_members.cohortid` is | Core has no function that lists one cohort's members. |
+
+Membership of `ltct:mentors` for one person is `cohort_is_member()`.
+
 ## Events and office hours (spec 011)
 
 Core's calendar does the rest of spec 011: event levels, export, the app's calendar, and the

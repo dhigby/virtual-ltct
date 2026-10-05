@@ -239,7 +239,39 @@ class intake_service {
             $facts['effective'] = (string)$service::effective_level($userid);
             $facts['settled'] = (bool)$service::is_settled($userid);
         }
+        if ($facts['asked'] === 'pseudonym' && $context['protection'] && class_exists(self::PROTECTION_LEVELS)) {
+            $facts['pseudonymproblems'] = self::pseudonym_problems($row, $userid);
+        }
         return $facts;
+    }
+
+    /**
+     * What spec 016 would find wrong with the row's pseudonym (levels::pseudonym_problems()),
+     * against the same names and the same other pseudonyms service::set_protection() uses: a
+     * new account's names are the row's; an existing one's are its own (never the row's,
+     * FR-019), or its held real names once protected. Asked before the account is created, so
+     * a pseudonym 016 would refuse never leaves an account made and emailed with no
+     * organisation.
+     *
+     * @param array $row
+     * @param int|null $userid the matched account, null when there is none
+     * @return string[] empty, toolong, isrealname, hasrealname, taken
+     */
+    protected static function pseudonym_problems(array $row, ?int $userid): array {
+        global $DB;
+        $service = self::PROTECTION_SERVICE;
+        $levels = self::PROTECTION_LEVELS;
+        $first = trim((string)$row['firstname']);
+        $last = trim((string)$row['lastname']);
+        if ($userid) {
+            $real = $service::real_identity($userid);
+            $account = $real ?? (array)core_user::get_user($userid, 'id, firstname, lastname');
+            $first = (string)($account['firstname'] ?? '');
+            $last = (string)($account['lastname'] ?? '');
+        }
+        $others = $service::table_exists() ? $DB->get_fieldset_select($service::TABLE, 'pseudonym',
+            "userid <> :userid AND pseudonym <> ''", ['userid' => $userid ?? 0]) : [];
+        return $levels::pseudonym_problems(trim((string)($row['pseudonym'] ?? '')), $first, $last, $others);
     }
 
     /**
@@ -439,7 +471,8 @@ class intake_service {
 
     /**
      * Bring the account's protection to $target through spec 016, and confirm it settled
-     * (research R5, steps 2 and 3). Never called for a target of none.
+     * (research R5, steps 2 and 3). Never called for a target of none. classify() has already
+     * refused a grant without email_checked, and a pseudonym 016 would refuse.
      *
      * @param int $userid
      * @param string $target
@@ -454,14 +487,19 @@ class intake_service {
         $service = self::PROTECTION_SERVICE;
         $entitlement = self::PROTECTION_ENTITLEMENT;
         $changed = false;
-        if (!self::protection_reached($userid, $target)) {
+        $rank = intake_rules::rank((string)$service::effective_level($userid));
+        if ($rank === null || $rank < intake_rules::rank($target)) {
+            // Below the target: a grant. At it, an unsettled account is only re-applied below,
+            // which needs no grant (and an organisation's manager may only grant a raise).
             // The service checks no permission itself, so the entitlement comes first.
             if (!$entitlement::can_manage_protection((int)$USER->id, $userid)) {
                 return [false, 'protection_not_permitted'];
             }
-            // The row is the person's request, and classify() let it through only once the
-            // address was checked (spec 016 contracts/protection-service.md, "Spec 008's intake").
-            $options = ['requested' => true, 'emailchecked' => true];
+            // The row is the person's request. emailchecked is the row's own email_checked:
+            // classify() lets a grant through only once it says yes (spec 016 FR-016,
+            // contracts/protection-service.md "Spec 008's intake"), so a log row never records
+            // a confirmation nobody gave.
+            $options = ['requested' => true, 'emailchecked' => !empty($row['emailchecked'])];
             if ($target === 'pseudonym') {
                 $options['pseudonym'] = trim((string)($row['pseudonym'] ?? ''));
             }

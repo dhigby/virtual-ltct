@@ -23,8 +23,8 @@ UTF-8 CSV with a header row; `;` separates multiple values inside one cell. Colu
 | `organisation` | yes | A key declared in `moodle/site/organisations.yaml` (`site_config.validate`). |
 | `country` | no | ISO 3166-1 alpha-2, as Moodle's `country` field. New accounts only. |
 | `protection` | no | `none` (default), `email`, `firstname`, `pseudonym` (016's levels). Optional, and blank for nearly everyone: set only for a person who has asked for their identity to be protected when they are added (plan decision 1). It alone is the row's target: an organisation has no minimum (Doug, 2026-10-05 (scope review)). |
-| `pseudonym` | no | Required when `protection` is `pseudonym`; refused otherwise. |
-| `email_checked` | no | `yes` or empty; refused on a row with no protection. With protection, the server checks whether the address may name the person or their organisation (016's `levels::email_reveals()`); a flagged row `waits` (`email_reveals`) until this says someone confirmed the address does not identify them (research R5, step 0b). |
+| `pseudonym` | no | Required when `protection` is `pseudonym`; refused otherwise. At most 100 characters (refused offline). One 016 would refuse is `rejected` (`pseudonym_invalid`) before any account is made (research R5, step 0c). |
+| `email_checked` | no | `yes` or empty; refused on a row with no protection. With protection, every row `waits` until this says someone confirmed the address identifies neither the person nor their organisation (016 FR-016): as `email_reveals` when the server's check (016's `levels::email_reveals()`) flags the address, else as `email_unchecked` (research R5, step 0b). |
 | `courses` | no | `ltct:<slug>` idnumbers, `;`-separated, enrolled through the Organisation enrolment (research R7, plan decision 10). |
 
 No username, password, role or cohort column: the username is the email, or generated (R2), passwords are emailed by Moodle, and a cohort comes from `organisation` (R3).

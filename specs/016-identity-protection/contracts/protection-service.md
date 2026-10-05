@@ -55,7 +55,7 @@ Named for the 006 and 008 sessions (2026-10-04); they are stable.
 008's `intake_service::protect()` calls `set_protection()` directly. A raise is refused without both recorded facts, so intake MUST pass:
 
 - `requested => true` when the row's protection column asks for a level: the row is the person's request;
-- `emailchecked => true` only after intake has checked the row's email itself and the operator has confirmed, or swapped, the address. Intake runs `levels::email_reveals($email, $first, $last, $orgkey)` with the **row's** organisation key, because `ltct_org` is not yet set when `protect()` runs, so `service::email_warnings()` would miss the organisation half. A row whose address is flagged and not confirmed waits.
+- `emailchecked => true` only after intake has checked the row's email itself and the operator has confirmed, or swapped, the address. Intake runs `levels::email_reveals($email, $first, $last, $orgkey)` with the **row's** organisation key, because `ltct_org` is not yet set when `protect()` runs, so `service::email_warnings()` would miss the organisation half. Every row that needs a grant waits until its `email_checked` column confirms the address, flagged or not (FR-016: the heuristic cannot recognise every employer domain), and intake passes that column as `emailchecked`, so the log never records a confirmation nobody gave. Intake also runs `levels::pseudonym_problems()` before creating the account, so a pseudonym `set_protection()` would refuse never leaves an account made with no organisation.
 
 Without them every intake row that asks for protection stops as `protection_failed` (tasks T043, 008's side). 008's intake contract names the same two options.
 

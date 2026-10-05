@@ -86,8 +86,25 @@ check($r['outcome'] === 'waits' && $r['reason'] === 'email_reveals',
     'waits: protection asked and the address may name the person');
 check(outcome(intake016(['asked' => 'firstname', 'emailflags' => ['name'], 'emailconfirmed' => true])) === 'new',
     'new: a flagged address once someone confirmed it');
-check(outcome(intake016(['asked' => 'email', 'emailflags' => []])) === 'new',
-    'new: protection asked, nothing flagged');
+$r = intake_rules::classify(intake016(['asked' => 'email', 'emailflags' => []]));
+check($r['outcome'] === 'waits' && $r['reason'] === 'email_unchecked',
+    'waits: protection asked, nothing flagged, and nobody confirmed the address (016 FR-016)');
+check(outcome(intake016(['asked' => 'email', 'emailflags' => [], 'emailconfirmed' => true])) === 'new',
+    'new: protection asked, the address confirmed');
+$r = intake_rules::classify(intake016(['asked' => 'pseudonym', 'emailconfirmed' => true,
+    'pseudonymproblems' => ['taken']]));
+check($r['outcome'] === 'rejected' && $r['reason'] === 'pseudonym_invalid' && $r['changes'] === [],
+    'rejected: a pseudonym 016 would refuse, before any account is made');
+check(outcome(intake016(['asked' => 'pseudonym', 'emailconfirmed' => true, 'pseudonymproblems' => []])) === 'new',
+    'new: a pseudonym 016 accepts');
+$r = intake_rules::classify(intake016(['asked' => 'pseudonym', 'emailconfirmed' => true]));
+check($r['outcome'] === 'rejected' && $r['reason'] === 'facts',
+    'rejected: a pseudonym target without its check fails closed');
+check(outcome(intake016(['accounts' => 1, 'asked' => 'pseudonym', 'effective' => 'pseudonym',
+    'settled' => false])) === 'will_set_org',
+    'will_set_org: at the target but unsettled is only re-applied, so needs no confirmation or pseudonym check');
+check(outcome(intake016(['accounts' => 1, 'asked' => 'email', 'effective' => 'none'])) === 'waits',
+    'waits: an interrupted account still needing its grant needs the confirmation too');
 check(outcome(intake(['emailflags' => ['name']])) === 'new',
     'new: no protection asked, so the address is never checked');
 $r = intake_rules::classify(intake(['loginclash' => true]));
@@ -98,7 +115,7 @@ check(outcome(intake(array_merge($existing, ['loginclash' => true]))) === 'uncha
 $r = intake_rules::classify(intake($course));
 check($r['changes'] === ['create', 'set_org:fixture-a', 'enrol:ltct:fixture-course'],
     'new: create, then organisation, then the course');
-$r = intake_rules::classify(intake016(['asked' => 'email']));
+$r = intake_rules::classify(intake016(['asked' => 'email', 'emailconfirmed' => true]));
 check($r['outcome'] === 'new' && $r['changes'] === ['create', 'set_protection:email', 'set_org:fixture-a'],
     'new with protection: protection before the organisation');
 check(intake_rules::classify(intake016(['asked' => 'pseudonym']))['target'] === 'pseudonym',
@@ -118,7 +135,8 @@ check(outcome(intake016(array_merge($existing, $course, ['asked' => 'email', 'ef
     'will_enrol: protection above the target is enough');
 
 check(outcome(intake(['accounts' => 1])) === 'will_set_org', 'will_set_org: account with no organisation');
-$r = intake_rules::classify(intake016(['accounts' => 1, 'asked' => 'email', 'effective' => 'none', 'settled' => true]));
+$r = intake_rules::classify(intake016(['accounts' => 1, 'asked' => 'email', 'effective' => 'none', 'settled' => true,
+    'emailconfirmed' => true]));
 check($r['outcome'] === 'will_set_org' && $r['changes'] === ['set_protection:email', 'set_org:fixture-a'],
     'will_set_org: created, protection never set: protect first');
 $r = intake_rules::classify(intake016(['accounts' => 1, 'asked' => 'email', 'effective' => 'email', 'settled' => false]));

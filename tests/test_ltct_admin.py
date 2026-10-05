@@ -552,6 +552,7 @@ def fixture_orgs(monkeypatch):
     ({"protection": "secret"}, "protection 'secret' is not one of"),
     ({"protection": "pseudonym"}, "the pseudonym column is needed"),
     ({"pseudonym": "fixture-alias"}, "protection is not pseudonym"),
+    ({"protection": "pseudonym", "pseudonym": "f" * 101}, "the pseudonym is longer than 100 characters"),
     ({"protection": "email", "email_checked": "maybe"}, "email_checked 'maybe' must be yes or empty"),
     ({"email_checked": "yes"}, "email_checked is only for a row that asks for protection"),
     ({"courses": "ltct:fixture-course;fixture-course"}, "is not a course idnumber"),

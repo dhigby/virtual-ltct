@@ -105,14 +105,37 @@ final class protection_test extends \advanced_testcase {
         $this->assertEquals(0, $live->maildisplay);
     }
 
+    /**
+     * An exception thrown while the user is in the bypass set (here, by every
+     * before_user_updated callback, which user_update_user() dispatches inside write()) closes
+     * the set and rolls the whole write back. advanced_testcase::redirectHook() replaces the
+     * hook's callbacks for the test (lib/phpunit/classes/advanced_testcase.php).
+     */
     public function test_an_exception_never_leaves_the_bypass_set_open(): void {
+        global $DB;
         $user = $this->learner();
+        $seen = [];
+        $this->redirectHook(\core_user\hook\before_user_updated::class,
+            function(\core_user\hook\before_user_updated $hook) use (&$seen): void {
+                $seen[] = service::in_bypass((int)$hook->user->id);
+                throw new \RuntimeException('fixture failure inside the bypass');
+            });
         try {
-            service::set_protection((int)$user->id, 'pseudonym', ['pseudonym' => ''] + self::GRANT);
-        } catch (\moodle_exception $e) {
-            $this->assertSame('protection:err:pseudonym', $e->errorcode);
+            service::set_protection((int)$user->id, 'firstname', self::GRANT);
+            $this->fail('the write did not throw');
+        } catch (\RuntimeException $e) {
+            $this->assertSame('fixture failure inside the bypass', $e->getMessage());
+        } finally {
+            $this->stopHookRedirections();
         }
+        $this->assertSame([true], $seen, 'the exception was thrown inside the bypass');
         $this->assertFalse(service::in_bypass((int)$user->id));
+        $this->assertNull(service::row((int)$user->id), 'the transaction rolled back');
+        $this->assertEquals(0, $DB->count_records(service::LOGTABLE, ['userid' => $user->id]));
+        $this->assertSame('Fixlast', \core_user::get_user($user->id)->lastname);
+        // The lock was released too: the same write now goes through.
+        service::set_protection((int)$user->id, 'firstname', self::GRANT);
+        $this->assertSame('firstname', service::effective_level((int)$user->id));
     }
 
     /**

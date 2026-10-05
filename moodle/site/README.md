@@ -333,7 +333,7 @@ and send it to you. It holds the column names and nothing else.
 | `country` | Their country as two letters, for example `KE` or `PG`. | No |
 | `protection` | Optional, and blank for nearly everyone. Fill it in only for a person who asked, when you added them, for their identity to be protected. Then write `email`, `firstname` or `pseudonym`, and talk to the site team first. | No |
 | `pseudonym` | The name to show instead of theirs. Only with `protection` set to `pseudonym`. | No |
-| `email_checked` | Only for a protected person. Others in a course still see their email address, so it must not give them away. If the site team tells you the address looks like it names them or your organisation, check it with them, then write `yes` here, or give them another address. | No |
+| `email_checked` | Only for a protected person, and needed for every one of them. Others in a course still see their email address, so it must not give them away. Check with the person that it names neither them nor your organisation, then write `yes` here, or give them another address. Until it says `yes` the row waits; nothing is made. | No |
 | `courses` | Courses to start them in, by the course code the site team gave you (`ltct:<name>`), separated by `;`. Leave empty if your organisation's courses are enough. | No |
 
 There is no column for a username, a password or a role. Everyone signs in with their email

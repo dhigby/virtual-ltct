@@ -70,6 +70,7 @@ COURSE = re.compile(r"ltct:[^:\s;]+")                  # a course this repo publ
 COUNTRY = re.compile(r"[A-Za-z]{2}")                    # ISO 3166-1 alpha-2, Moodle's country field
 IDNUMBER = re.compile(r"\S{1,100}")                     # cohort.idnumber is 100 characters
 PROTECTION_LEVELS = ("none", "email", "firstname", "pseudonym")   # spec 016's level keys
+PSEUDONYM_MAX = 100                                     # local_ltuse_protection.pseudonym
 MANAGER_ACTIONS = ("add", "remove")
 MENTORS_COHORT = "ltct:mentors"                         # as site_config.MENTORS_COHORT
 
@@ -341,6 +342,8 @@ def _check_intake(get, orgs):
         problems.append("protection is pseudonym, so the pseudonym column is needed")
     if get("pseudonym") and level != "pseudonym":
         problems.append("a pseudonym is given, but protection is not pseudonym")
+    if len(get("pseudonym")) > PSEUDONYM_MAX:
+        problems.append("the pseudonym is longer than %d characters" % PSEUDONYM_MAX)
     checked = get("email_checked").lower()
     if checked not in ("", "yes"):
         problems.append("email_checked %r must be yes or empty" % get("email_checked"))

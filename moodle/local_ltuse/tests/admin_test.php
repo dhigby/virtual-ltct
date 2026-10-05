@@ -165,14 +165,143 @@ final class admin_test extends \advanced_testcase {
         $events->close();
     }
 
-    public function test_a_protected_row_waits_and_creates_nothing_without_spec_016(): void {
-        if (class_exists('\local_ltuse\protection\service')) {
-            $this->markTestSkipped('spec 016 is installed; quickstart V5 covers this');
-        }
-        $row = $this->row(['protection' => 'email']);
-        $this->assertSame('waits', intake_service::preview([$row], false)['rows'][0]['outcome']);
+    public function test_a_protected_row_waits_while_protection_cannot_be_set(): void {
+        // setUp stores no protection.yaml, so 016 can set no level yet (level_available()).
+        $reason = class_exists('\local_ltuse\protection\service') ? 'protection_unavailable' : 'protection_absent';
+        $row = $this->row(['protection' => 'email', 'emailchecked' => true]);
+        $preview = intake_service::preview([$row], false)['rows'][0];
+        $this->assertSame('waits', $preview['outcome']);
+        $this->assertSame(get_string('admin:reason:' . $reason, 'local_ltuse'), $preview['reason']);
         $this->assertSame('refused', intake_service::apply_row($row, 'new')['status']);
         $this->assertCount(0, $this->accounts('fixture-learner@example.org'));
+    }
+
+    // --- intake with spec 016 (research R5) ---------------------------------------------------
+
+    /**
+     * Store protection.yaml as site_config.py apply would, so 016 can set every level.
+     */
+    private function protection_on(): void {
+        protection\service::reset_caches();
+        $withhold = ['email' => ['maildisplay'],
+            'firstname' => ['maildisplay', 'lastname', 'firstnamephonetic', 'lastnamephonetic', 'middlename',
+                'alternatename', 'picture', 'country', 'city'],
+            'pseudonym' => ['maildisplay', 'lastname', 'firstnamephonetic', 'lastnamephonetic', 'middlename',
+                'alternatename', 'picture', 'country', 'city', 'firstname']];
+        set_config(protection\service::CONFIG, json_encode(['levels' => protection\levels::ORDER,
+            'withhold' => $withhold, 'neutral_surname' => '·', 'reconcile_minutes' => 60]), 'local_ltuse');
+    }
+
+    /**
+     * @param string $email
+     * @return \stdClass the one live account with this email
+     */
+    private function account(string $email): \stdClass {
+        $accounts = $this->accounts($email);
+        $this->assertCount(1, $accounts);
+        return reset($accounts);
+    }
+
+    public function test_a_protected_row_is_protected_before_its_organisation_is_set(): void {
+        global $DB, $USER;
+        $this->protection_on();
+        $this->redirectEmails();
+        // An address that names neither the person nor the organisation, still confirmed.
+        $row = $this->row(['email' => 'kestrel77@example.org', 'protection' => 'email', 'emailchecked' => true]);
+        $preview = intake_service::preview([$row], false)['rows'][0];
+        $this->assertSame('new', $preview['outcome']);
+        $this->assertSame(['create', 'set_protection:email', 'set_org:fixture-a'], $preview['changes']);
+        $this->assertSame('done', intake_service::apply_row($row, 'new')['status']);
+
+        $user = $this->account('kestrel77@example.org');
+        $this->assertSame('email', protection\service::effective_level((int)$user->id));
+        $this->assertTrue(protection\service::is_settled((int)$user->id));
+        $this->assertSame('fixture-a', intake_service::organisation_of((int)$user->id));
+        $this->assertSame('kestrel77@example.org', $user->username, 'email level keeps the email username');
+        $log = $DB->get_record(protection\service::LOGTABLE, ['userid' => $user->id], '*', MUST_EXIST);
+        $this->assertSame('none', $log->fromlevel);
+        $this->assertSame('email', $log->tolevel);
+        $this->assertEquals(1, $log->requested);
+        $this->assertEquals(1, $log->emailchecked);
+        $this->assertEquals($USER->id, $log->actorid);
+        $this->assertSame('unchanged', intake_service::preview([$row], false)['rows'][0]['outcome']);
+    }
+
+    public function test_a_protected_row_waits_for_the_address_to_be_confirmed(): void {
+        $this->protection_on();
+        $this->redirectEmails();
+        // Unflagged: nothing in the address names them, but nobody has confirmed it (016 FR-016).
+        $row = $this->row(['email' => 'kestrel77@example.org', 'protection' => 'email']);
+        $preview = intake_service::preview([$row], false)['rows'][0];
+        $this->assertSame('waits', $preview['outcome']);
+        $this->assertSame(get_string('admin:reason:email_unchecked', 'local_ltuse'), $preview['reason']);
+
+        // Flagged: the address holds the first name.
+        $row = $this->row(['email' => 'fixture.learner@example.org', 'protection' => 'firstname']);
+        $preview = intake_service::preview([$row], false)['rows'][0];
+        $this->assertSame('waits', $preview['outcome']);
+        $this->assertSame(get_string('admin:reason:email_reveals', 'local_ltuse'), $preview['reason']);
+        $this->assertSame('refused', intake_service::apply_row($row, 'new')['status']);
+        $this->assertCount(0, $this->accounts('fixture.learner@example.org'), 'nothing was made');
+
+        // Once someone confirmed it, the row is brought on, under a neutral username that 016
+        // leaves alone.
+        $row['emailchecked'] = true;
+        $this->assertSame('new', intake_service::preview([$row], false)['rows'][0]['outcome']);
+        $this->assertSame('done', intake_service::apply_row($row, 'new')['status']);
+        $user = $this->account('fixture.learner@example.org');
+        $this->assertMatchesRegularExpression('/^ltc-[a-z2-7]{8}$/', $user->username);
+        $this->assertSame('firstname', protection\service::effective_level((int)$user->id));
+        $this->assertTrue(protection\service::is_settled((int)$user->id));
+        $this->assertSame('Fixture', $user->firstname);
+        $this->assertSame('·', $user->lastname);
+        $this->assertSame('Learner', protection\service::real_identity((int)$user->id)['lastname']);
+        $this->assertSame('fixture-a', intake_service::organisation_of((int)$user->id));
+    }
+
+    public function test_a_pseudonym_016_would_refuse_creates_nothing(): void {
+        $this->protection_on();
+        $this->redirectEmails();
+        $other = $this->getDataGenerator()->create_user(['email' => 'fixture-other@example.org']);
+        protection\service::set_protection((int)$other->id, 'pseudonym',
+            ['pseudonym' => 'Kestrel', 'requested' => true, 'emailchecked' => true]);
+
+        $base = ['email' => 'kestrel77@example.org', 'protection' => 'pseudonym', 'emailchecked' => true];
+        foreach (['Fixture', 'Learnerbird', 'kestrel', str_repeat('k', 101)] as $pseudonym) {
+            $row = $this->row($base + ['pseudonym' => $pseudonym]);
+            $preview = intake_service::preview([$row], false)['rows'][0];
+            $this->assertSame('rejected', $preview['outcome'], $pseudonym);
+            $this->assertSame(get_string('admin:reason:pseudonym_invalid', 'local_ltuse'), $preview['reason']);
+            $this->assertSame('refused', intake_service::apply_row($row, 'new')['status']);
+        }
+        $this->assertCount(0, $this->accounts('kestrel77@example.org'), 'nothing was made or emailed');
+
+        $row = $this->row($base + ['pseudonym' => 'Heron']);
+        $this->assertSame('new', intake_service::preview([$row], false)['rows'][0]['outcome']);
+        $this->assertSame('done', intake_service::apply_row($row, 'new')['status']);
+        $user = $this->account('kestrel77@example.org');
+        $this->assertSame('pseudonym', protection\service::effective_level((int)$user->id));
+        $this->assertSame('Heron', $user->firstname);
+    }
+
+    public function test_an_account_left_unprotected_resumes_from_protection(): void {
+        global $DB;
+        $this->protection_on();
+        $this->redirectEmails();
+        // As a run stopped after creation and before protection leaves it: no organisation, no level.
+        $user = $this->getDataGenerator()->create_user(['email' => 'kestrel77@example.org',
+            'firstname' => 'Fixture', 'lastname' => 'Learner']);
+        $row = $this->row(['email' => 'kestrel77@example.org', 'protection' => 'email', 'emailchecked' => true]);
+        $preview = intake_service::preview([$row], false)['rows'][0];
+        $this->assertSame('will_set_org', $preview['outcome']);
+        $this->assertSame(['set_protection:email', 'set_org:fixture-a'], $preview['changes']);
+
+        // Previewed as new by the interrupted run: further along, so it finishes.
+        $this->assertSame('done', intake_service::apply_row($row, 'new')['status']);
+        $this->assertSame('email', protection\service::effective_level((int)$user->id));
+        $this->assertTrue(protection\service::is_settled((int)$user->id));
+        $this->assertSame('fixture-a', intake_service::organisation_of((int)$user->id));
+        $this->assertEquals(1, $DB->get_field(protection\service::LOGTABLE, 'emailchecked', ['userid' => $user->id]));
     }
 
     public function test_a_row_asking_for_no_protection_never_waits(): void {

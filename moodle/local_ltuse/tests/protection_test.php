@@ -113,6 +113,10 @@ final class protection_test extends \advanced_testcase {
      */
     public function test_an_exception_never_leaves_the_bypass_set_open(): void {
         global $DB;
+        // The write rolls its own transaction back. Inside the test's reset transaction that
+        // rollback would block every later commit, including the second write below
+        // (advanced_testcase::preventResetByRollback(), lib/phpunit/classes/advanced_testcase.php).
+        $this->preventResetByRollback();
         $user = $this->learner();
         $seen = [];
         $this->redirectHook(\core_user\hook\before_user_updated::class,

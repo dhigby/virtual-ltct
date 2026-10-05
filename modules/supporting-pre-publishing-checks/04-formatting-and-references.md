@@ -216,7 +216,7 @@ Four things to do with these inventories:
   it reaches a typesetter — unrecognized or unconfigured punctuation characters left
   unresolved in the inventory's settings can surface late, as a pile of issues the
   typesetter has to chase down one by one instead of the team resolving them upfront.
-- **Select "Show sequences" in the Punctuation Inventory's Inventory menu**, so that
+- **Select "Show sequences" in the Punctuation Inventory tab's Inventory menu**, so that
   punctuation *sequences* — multi-character combinations, such as multiple quotation
   marks paired with spacing or another punctuation character — are actually inventoried,
   not just the individual characters. The checkbox under Run Basic Checks is simply how
@@ -227,7 +227,7 @@ Four things to do with these inventories:
   **"Punctuation"** and only checks individual characters, so the review can look
   complete while a whole class of problems goes unseen.
 
-  ![The Punctuation Inventory's Inventory menu, with "Show sequences" checked and highlighted.](assets/ss-04-punctuation-inventory-show-sequences.png)
+  ![The Punctuation Inventory tab's Inventory menu, with "Show sequences" checked and highlighted.](assets/ss-04-punctuation-inventory-show-sequences.png)
   *This checkbox is what makes "Punctuation (sequences)" mean anything.*
 
   A flagged result under "Punctuation (sequences)" looks like this — each combination
@@ -273,7 +273,7 @@ by a single unselected menu option rather than by anyone skipping a step.
   earlier in the project.
 - Loose or unconfigured settings in the Punctuation Inventory are what create a late
   time-sink for the typesetter — catching them here is cheaper for everyone.
-- "Show sequences" must be selected in the Punctuation Inventory's Inventory menu for
+- "Show sequences" must be selected in the Punctuation Inventory tab's Inventory menu for
   Run Basic Checks' punctuation checkbox to relabel itself "Punctuation (sequences)" and
   actually check multi-character sequences — without it, that same checkbox stays a
   plain "Punctuation" check, and the review can look complete while still missing them.

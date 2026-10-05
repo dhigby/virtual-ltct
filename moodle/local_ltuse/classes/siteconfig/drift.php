@@ -129,6 +129,13 @@ class drift {
                 $this->report->add_result($item);
             }
         }
+        // Spec 016: counts only, never a name: protected accounts awaiting the reconcile run,
+        // and protected users whose username still gives their name away.
+        if ($this->inspector->protection()) {
+            foreach (protection::extras() as $item) {
+                $this->report->add_result($item);
+            }
+        }
     }
 
     /**

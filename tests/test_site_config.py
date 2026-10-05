@@ -1148,7 +1148,7 @@ PROGRESS = """\
       - {column: completion:progresspercent, heading: Progress}
       - {column: completion:timecompleted, heading: Completed}
     conditions:
-      - {condition: user:profilefield_ltct_org, values: {operator: equal, value: "{org}"}}
+      - {condition: cohort:idnumber, values: {operator: equal, value: "ltct:org:{org}"}}
       - {condition: role:name, values: {operator: equal, value: student}}
       - {condition: enrol:plugin, values: {operator: not_equal, value: manual}}
     filters: [course:fullname, user:fullname]
@@ -1263,8 +1263,8 @@ class Reports(ReportsBase):
                 r = reports["org_%s_progress" % key.replace("-", "_")]
                 self.assertEqual(r["name"], "%s: learner progress" % name)
                 conds = {c["condition"]: c["values"] for c in r["conditions"]}
-                self.assertEqual(conds["user:profilefield_ltct_org"],
-                                 {"operator": "equal", "value": key})
+                self.assertEqual(conds["cohort:idnumber"],
+                                 {"operator": "equal", "value": "ltct:org:%s" % key})
                 self.assertEqual(r["audiences"], [{"type": "cohortmember",
                                                    "cohort": "ltct:org:%s:managers" % key}])
         progress = sorted(a for a in reports if a.startswith("org_"))
@@ -1277,8 +1277,8 @@ class Reports(ReportsBase):
         self.assertNotIn("{org}", json.dumps(self.payload()["reports"]))
 
     def test_scope_conditions_required(self):
-        for line in ('      - {condition: user:profilefield_ltct_org, values: {operator: equal, '
-                     'value: "{org}"}}\n',
+        for line in ('      - {condition: cohort:idnumber, values: {operator: equal, '
+                     'value: "ltct:org:{org}"}}\n',
                      "      - {condition: role:name, values: {operator: equal, value: student}}\n",
                      "      - {condition: enrol:plugin, values: {operator: not_equal, value: manual}}\n"):
             with self.subTest(removed=line.strip()):
@@ -1287,7 +1287,8 @@ class Reports(ReportsBase):
                 self.assertRejected()
 
     def test_scope_condition_values_verbatim(self):
-        for old, new in (('value: "{org}"}}', "value: fixture-a}}"),
+        for old, new in (('value: "ltct:org:{org}"}}', "value: ltct:org:fixture-a}}"),
+                         ('value: "ltct:org:{org}"}}', 'value: "ltct:org:{org}:managers"}}'),
                          ("value: student}}", "value: editingteacher}}"),
                          # Spec 002 R10: delivery is any enrolment but a pilot's, so the
                          # 2026-10-01 form (cohort sync only) is refused, as is any other.
@@ -1313,6 +1314,15 @@ class Reports(ReportsBase):
 
     def test_condition_role_unknown(self):
         self.only(PROGRAMME.replace("value: student}}", "value: fixture-nobody}}"))
+        self.assertRejected()
+
+    def test_organisation_field_condition_refused(self):
+        # Spec 016 R11: report builder drops a profile field's condition once the field is
+        # hidden, so the organisation is never a condition, on any report.
+        line = "      - {condition: role:name, values: {operator: equal, value: student}}\n"
+        self.assertIn(line, PROGRAMME)
+        self.only(PROGRAMME.replace(line, line + "      - {condition: user:profilefield_ltct_org, "
+                                    "values: {operator: equal, value: fixture-a}}\n"))
         self.assertRejected()
 
     def test_second_audience(self):
@@ -1478,7 +1488,7 @@ class Reports(ReportsBase):
         self.assertEqual(r["columns"][0], {"column": "user:fullnamewithlink", "heading": "Learner",
                                            "aggregation": None})
         self.assertEqual([c["condition"] for c in r["conditions"]],
-                         ["user:profilefield_ltct_org", "role:name", "enrol:plugin"])
+                         ["cohort:idnumber", "role:name", "enrol:plugin"])
         self.assertEqual(r["conditions"][1], {"condition": "role:name",
                                               "values": {"operator": "equal", "value": "student"}})
         self.assertEqual(r["filters"], ["course:fullname", "user:fullname"])
@@ -1491,12 +1501,14 @@ class Reports(ReportsBase):
                     "values": {"operator": "not_equal", "value": "manual"}}
         self.assertEqual(r["conditions"][2], delivery)
         self.assertIn(delivery, prog["conditions"])
-        # Spec 004's arrays in apply order, then spec 013's two after reports, then spec 011's.
-        # Spec 006 puts levels and role_pathways between competencies and reports.
-        self.assertEqual(list(self.payload())[-10:],
+        # Spec 004's arrays in apply order, then spec 013's two after reports, then spec 011's,
+        # then spec 016's protection last. Spec 006 puts levels and role_pathways between
+        # competencies and reports.
+        self.assertEqual(list(self.payload())[-11:],
                          ["course_field_category", "course_fields", "competencies", "levels",
                           "role_pathways", "reports",
-                          "badge_template", "certificate_template", "officehours", "dashboard"])
+                          "badge_template", "certificate_template", "officehours", "dashboard",
+                          "protection"])
 
     def test_tracked_delivery_condition(self):
         # Spec 002 R10: a manager's enrolment (the organisation-enrolment instance, enrol_self)
@@ -2408,6 +2420,16 @@ class AdminRole(Base):
         self.assertEqual(roles["ltctadmin"]["allowassign"], ["mentor", "teacher"])
         self.assertEqual(roles["ltctadmin"]["capabilities"]["local/ltuse:administer"], "allow")
 
+    def test_ltctadmin_may_manage_protection(self):
+        # T014/T015 (research R5): intake protects a new account through spec 016, whose
+        # can_manage_protection needs local/ltuse:manageprotection, so 016's allowlist names
+        # ltctadmin beside manager, and the declared role holds the capability and validates.
+        self.assertEqual(sc.PROTECTION_MANAGE_ROLES, frozenset({"manager", "ltctadmin"}))
+        roles = {r["shortname"]: r for r in sc.validate(self.dir)[0]["roles"]}
+        self.assertEqual(roles["ltctadmin"]["capabilities"]["local/ltuse:manageprotection"], "allow")
+        self.assertNotIn("local/ltuse:viewidentity", roles["ltctadmin"]["capabilities"])
+        self.assertAccepted()
+
     def test_ltctadmin_is_system_only(self):
         self.edit("roles.yaml", "    contextlevels: [system]  #", "    contextlevels: [system, course]  #")
         self.assertInvalid("ltctadmin")
@@ -2422,5 +2444,3 @@ class AdminRole(Base):
         self.write("settings/admin.yaml",
                    (REPO / "moodle" / "site" / "settings" / "admin.yaml").read_text())
         self.assertAccepted()
-
-

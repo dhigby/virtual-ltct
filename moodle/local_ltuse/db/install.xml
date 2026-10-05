@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<XMLDB PATH="local/ltuse/db" VERSION="20261006" COMMENT="XMLDB file for Moodle local/ltuse"
+<XMLDB PATH="local/ltuse/db" VERSION="20261009" COMMENT="XMLDB file for Moodle local/ltuse"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:noNamespaceSchemaLocation="../../../lib/xmldb/xmldb.xsd"
 >
@@ -194,6 +194,49 @@
         <INDEX NAME="course-mentor-learner-cohort" UNIQUE="true" FIELDS="courseid, mentorid, learnerid, cohortid"/>
         <INDEX NAME="learnerid" UNIQUE="false" FIELDS="learnerid"/>
         <INDEX NAME="cohortid" UNIQUE="false" FIELDS="cohortid"/>
+      </INDEXES>
+    </TABLE>
+    <TABLE NAME="local_ltuse_protection" COMMENT="Identity protection, one row per protected user (spec 016, research R5). Holds the real identity of a person at risk: learner data, Moodle only, never in the repo.">
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
+        <FIELD NAME="userid" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false"/>
+        <FIELD NAME="ownlevel" TYPE="char" LENGTH="20" NOTNULL="true" DEFAULT="none" SEQUENCE="false" COMMENT="none, email, firstname or pseudonym: the level set for the user"/>
+        <FIELD NAME="effectivelevel" TYPE="char" LENGTH="20" NOTNULL="true" DEFAULT="none" SEQUENCE="false" COMMENT="the level applied to the account; the same as ownlevel, since no organisation sets a minimum"/>
+        <FIELD NAME="pseudonym" TYPE="char" LENGTH="100" NOTNULL="true" SEQUENCE="false"/>
+        <FIELD NAME="realfirstname" TYPE="char" LENGTH="100" NOTNULL="true" SEQUENCE="false"/>
+        <FIELD NAME="reallastname" TYPE="char" LENGTH="100" NOTNULL="true" SEQUENCE="false"/>
+        <FIELD NAME="realfields" TYPE="text" NOTNULL="false" SEQUENCE="false" COMMENT="JSON {field: {value, taken}}, each taken when that field first became withheld (R5)"/>
+        <FIELD NAME="hidelogs" TYPE="int" LENGTH="1" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="1 when the person asked for course logs to be blocked in the courses they take (R14)"/>
+        <FIELD NAME="timecreated" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false"/>
+        <FIELD NAME="timemodified" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false"/>
+        <FIELD NAME="usermodified" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false"/>
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+        <KEY NAME="userid" TYPE="foreign-unique" FIELDS="userid" REFTABLE="user" REFFIELDS="id"/>
+      </KEYS>
+      <INDEXES>
+        <INDEX NAME="usermodified" UNIQUE="false" FIELDS="usermodified"/>
+      </INDEXES>
+    </TABLE>
+    <TABLE NAME="local_ltuse_protection_log" COMMENT="Every change of a user's protection: who, when, from and to which level, and for a raise that the person asked and the email was checked (spec 016, FR-008). Moodle only.">
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
+        <FIELD NAME="userid" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false"/>
+        <FIELD NAME="actorid" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="who made the change; 0 once that person is deleted"/>
+        <FIELD NAME="fromlevel" TYPE="char" LENGTH="20" NOTNULL="true" DEFAULT="none" SEQUENCE="false"/>
+        <FIELD NAME="tolevel" TYPE="char" LENGTH="20" NOTNULL="true" DEFAULT="none" SEQUENCE="false"/>
+        <FIELD NAME="source" TYPE="char" LENGTH="20" NOTNULL="true" DEFAULT="own" SEQUENCE="false" COMMENT="own (a change of level) or correction (the same level, corrected values)"/>
+        <FIELD NAME="requested" TYPE="int" LENGTH="1" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="1 when the person asked for this change; required for a raise"/>
+        <FIELD NAME="emailchecked" TYPE="int" LENGTH="1" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="1 when the granter confirmed the account email identifies neither the person nor their organisation; required for a raise"/>
+        <FIELD NAME="timecreated" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false"/>
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+      </KEYS>
+      <INDEXES>
+        <INDEX NAME="userid" UNIQUE="false" FIELDS="userid"/>
+        <INDEX NAME="actorid" UNIQUE="false" FIELDS="actorid"/>
       </INDEXES>
     </TABLE>
   </TABLES>

@@ -26,7 +26,8 @@
     <%#learners%>
     <ion-item class="ion-text-wrap">
         <ion-label>
-            <h2 ngNonBindable><% fullname %></h2>
+            <h2 ngNonBindable><% fullname %><%#protected%> <ion-badge color="warning"><% protectedlabel %></ion-badge><%/protected%></h2>
+            <%#protected%><p ngNonBindable><%#str%>protection:realname, local_ltuse, <% realname %><%/str%></p><%/protected%>
             <p>
                 <a href="<% profileurl %>" core-link capture="true"><%#str%>mentoring:profile, local_ltuse<%/str%></a> ·
                 <a href="<% gradesurl %>" core-link capture="true"><%#str%>mentoring:grades, local_ltuse<%/str%></a> ·

@@ -36,4 +36,24 @@ $capabilities = [
         'contextlevel' => CONTEXT_SYSTEM,
         'archetypes'   => [],
     ],
+
+    // Spec 016 (research R7). Never checked alone: every surface asks
+    // local_ltuse\protection\entitlement, which adds the organisation-manager path.
+    // See a protected user's real identity and the Protected marker. The site team at system
+    // context; the declared mentor role in the learner's user context; the declared teacher
+    // role ("Course mentor") in an ltct: course the learner takes (path 4).
+    'local/ltuse:viewidentity' => [
+        'riskbitmask'  => RISK_PERSONAL,
+        'captype'      => 'read',
+        'contextlevel' => CONTEXT_USER,
+        'archetypes'   => ['manager' => CAP_ALLOW],
+    ],
+    // Grant, change or remove one person's protection. The site team; own-organisation
+    // managers come through managers-cohort membership, not this capability.
+    'local/ltuse:manageprotection' => [
+        'riskbitmask'  => RISK_PERSONAL,
+        'captype'      => 'write',
+        'contextlevel' => CONTEXT_USER,
+        'archetypes'   => ['manager' => CAP_ALLOW],
+    ],
 ];

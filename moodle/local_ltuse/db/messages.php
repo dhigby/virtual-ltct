@@ -25,4 +25,14 @@ $messageproviders = [
             'airnotifier' => MESSAGE_PERMITTED + MESSAGE_DEFAULT_ENABLED,
         ],
     ],
+    // Spec 016 (US3-1): to the learner only, when their protection level changes. It names the
+    // level and what others now see, never a real name or who made the change. Forced on in
+    // the browser, so a learner always learns that their identity is shown differently.
+    'protectionchanged' => [
+        'defaults' => [
+            'popup' => MESSAGE_FORCED + MESSAGE_DEFAULT_ENABLED,
+            'email' => MESSAGE_PERMITTED + MESSAGE_DEFAULT_ENABLED,
+            'airnotifier' => MESSAGE_PERMITTED + MESSAGE_DEFAULT_ENABLED,
+        ],
+    ],
 ];

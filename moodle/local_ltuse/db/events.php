@@ -56,6 +56,19 @@ $observers = [
         'callback' => '\local_ltuse\observer::scheduler_slot_deleted',
     ],
 
+    // Spec 016 (R2): the writers the before_user_updated hook misses, for protected users
+    // only. Internal (the default), so they run while the protection service still holds its
+    // bypass set for the user. No account-creation or cohort observer: protection is per person
+    // (Doug, 2026-10-05 (scope review)).
+    [
+        'eventname' => '\core\event\user_updated',
+        'callback' => '\local_ltuse\protection\observer::user_updated',
+    ],
+    [
+        'eventname' => '\core\event\user_deleted',
+        'callback' => '\local_ltuse\protection\observer::user_deleted',
+    ],
+
     // Spec 006 (contracts/pathway-api.md): a deleted cohort's pathway links go through
     // assignments::unassign(), so spec 008 sees each removal as pathway_unassigned.
     [

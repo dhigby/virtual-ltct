@@ -71,6 +71,7 @@ RETIRED_FILES = {
 }
 ORG_COURSES_FILE = "org-courses.yaml"        # spec 002 R11
 OFFICEHOURS_FILE = "office-hours.yaml"       # spec 011
+PROTECTION_FILE = "protection.yaml"          # spec 016
 DASHBOARD_FILE = "dashboard.yaml"            # spec 011
 PATHWAYS_FILE = "pathways.yaml"              # spec 006
 REQUIREMENTS = REPO / "moodle" / "REQUIREMENTS.md"
@@ -262,6 +263,11 @@ TOP_FILES = {
     # (specs/011-events-calendar/contracts/declaration.md).
     OFFICEHOURS_FILE: ({"rows", "course", "scheduler", "groups", "why"}, {"purpose"}),
     DASHBOARD_FILE: ({"rows", "default_blocks"}, {"purpose"}),
+    # Spec 016: the protection levels and what each withholds. Optional; who is protected is
+    # Moodle data and never declared, and no organisation has a minimum (Doug, 2026-10-05
+    # (scope review)) (specs/016-identity-protection/contracts/declaration.md).
+    PROTECTION_FILE: ({"rows", "levels", "withhold", "neutral_surname",
+                       "reconcile_minutes", "why"}, {"purpose"}),
     # Spec 006: role pathways. Optional; missing is roles: [] (specs/006-learning-pathways/
     # contracts/declaration.md).
     PATHWAYS_FILE: ({"rows", "purpose", "roles"}, set()),
@@ -308,18 +314,33 @@ MENTOR = "mentor"
 # may add moodle/competency:planview, read only, and never planreview, planmanage or
 # usercompetencyrate (research R11).
 MENTOR_ALLOW = frozenset({"moodle/user:viewdetails", "moodle/user:viewuseractivitiesreport",
-                          "local/ltuse:viewmenteeprogress"})
+                          "local/ltuse:viewmenteeprogress",
+                          # Spec 016 (R7 path 2): a mentor sees their learner's real identity
+                          # and the Protected marker. A reviewed widening (plan, cross-spec 003).
+                          "local/ltuse:viewidentity"})
 # The local_ltuse version that adds local/ltuse:viewmenteeprogress; from it on, roles.yaml
 # must declare the mentor role (FR-001).
 MENTOR_SINCE = 2026100301
+# Spec 016 (R7, R8, R14): who may hold the protection capabilities, and what the course roles
+# must never hold. Widening any of these is a reviewed change to this block.
+VIEWIDENTITY = "local/ltuse:viewidentity"
+PROTECTION_VIEW_ROLES = frozenset({"manager", MENTOR, "teacher"})
+# ltctadmin (spec 008 research R5, agreed with 016 on 2026-10-04): intake grants a new account
+# the protection its row asks for through service::set_protection(), and can_manage_protection()
+# for an account with no organisation yet needs local/ltuse:manageprotection. The role is the
+# site team's own administration account, held at system level, never a manager's.
+PROTECTION_MANAGE_ROLES = frozenset({"manager", "ltctadmin"})
+PROTECTION_MANAGE_CAPS = ("local/ltuse:manageprotection",)
+REPORT_EDIT_CAPS = ("moodle/reportbuilder:edit", "moodle/reportbuilder:editall")
+COURSE_LEADER_ROLES = ("editingteacher", "teacher")
+COURSE_LEADER_PROHIBIT = ("moodle/backup:downloadfile",)   # R14: email and logs stay (scope review)
 # Roles that must not let anyone assign roles: the follow-only roles (spec 003 contract).
 NO_ALLOWASSIGN = frozenset({ORGMANAGER, MENTOR})
 
 # Spec 008 (research R12): the site team's administration role, held by each site-team
-# member's own account at system level. Spec 016's PROTECTION_MANAGE_ROLES allowlist gains
-# this role when 016 lands (008 task T015, agreed with 016 on 2026-10-04), because
-# can_manage_protection for a new account needs local/ltuse:manageprotection; until then
-# roles.yaml leaves that capability out, since an unknown capability blocks apply.
+# member's own account at system level. It is in spec 016's PROTECTION_MANAGE_ROLES above
+# (008 task T015), because can_manage_protection for a new account needs
+# local/ltuse:manageprotection (research R5).
 ADMIN_ROLE = "ltctadmin"
 
 
@@ -507,7 +528,7 @@ def validate(site_dir=SITE_DIR, modules_dir=None):
             "reports": [], "org_courses": [],
             "badge_template": None, "certificate_template": None,
             "officehours": None, "dashboard": [],
-            "levels": [], "role_pathways": []}
+            "levels": [], "role_pathways": [], "protection": None}
     if not site_dir.is_dir():
         problems.add(_rel(site_dir), "declaration directory not found")
         return decl, problems
@@ -519,9 +540,9 @@ def validate(site_dir=SITE_DIR, modules_dir=None):
             problems.add(_rel(path), "unexpected file; the declaration is site.yaml, "
                          "ignore.yaml, roles.yaml, organisations.yaml, "
                          "profile-fields.yaml, %s, course-fields.yaml, reports.yaml, "
-                         "badges.yaml, certificate/template.yaml, %s, %s, %s and "
+                         "badges.yaml, certificate/template.yaml, %s, %s, %s, %s and "
                          "settings/*.yaml" % (ORG_COURSES_FILE, OFFICEHOURS_FILE,
-                                              DASHBOARD_FILE, PATHWAYS_FILE))
+                                              DASHBOARD_FILE, PATHWAYS_FILE, PROTECTION_FILE))
 
     loaded = {}
     for name, (required, optional) in TOP_FILES.items():
@@ -894,6 +915,12 @@ def validate(site_dir=SITE_DIR, modules_dir=None):
         path, data = loaded[DASHBOARD_FILE]
         decl["dashboard"] = _validate_dashboard(_rel(path), data, rows, problems)
     _check_calendar_settings(decl, problems)
+
+    # Spec 016: protection.yaml, then what it needs from the rest of the declaration.
+    if PROTECTION_FILE in loaded:
+        path, data = loaded[PROTECTION_FILE]
+        decl["protection"] = _validate_protection(_rel(path), data, rows, decl, problems)
+        _check_protection_site(decl, problems)
     return decl, problems
 
 
@@ -1358,17 +1385,27 @@ COLUMN_TYPE_PATTERNS = (
 )
 ORG_PLACEHOLDER = "{org}"
 PER_VALUES = ("organisation",)
-# The three select conditions every per-organisation report carries, verbatim (FR-005).
+# The three conditions every per-organisation report carries, verbatim (FR-005).
+# The organisation is its member cohort, ltct:org:<key>, matched on cohort:idnumber (a text
+# condition, filters\text IS_EQUAL_TO 3; the participants datasource joins the cohort entity
+# through cohort_members, course/classes/reportbuilder/datasource/participants.php on
+# MOODLE_502_STABLE). A cohort that does not exist matches nobody, so the scope fails closed,
+# and it does not depend on ltct_org's visibility (spec 016 T034-T035, Doug, 2026-10-05 (scope
+# review), decision 2 option a).
 # A select stores the option key, so apply turns role:name's shortname into the role id.
 # Delivery is any enrolment but a pilot's manual one (spec 002 R10, amending spec 004 R10):
 # cohort sync, and a manager's enrolment through the organisation-enrolment instance
 # (enrol_self). A select condition holds one value, so it is "not manual", never a list.
 SCOPE_CONDITIONS = (
-    ("user:profilefield_" + ORG_FIELD, {"operator": "equal", "value": ORG_PLACEHOLDER}),
+    ("cohort:idnumber", {"operator": "equal", "value": "ltct:org:" + ORG_PLACEHOLDER}),
     ("role:name", {"operator": "equal", "value": "student"}),
     ("enrol:plugin", {"operator": "not_equal", "value": "manual"}),
 )
-SELECT_CONDITIONS = frozenset(name for name, _ in SCOPE_CONDITIONS)
+# Never a report condition: report builder offers a profile field's condition only while the
+# field is visible (user_profile_fields.php L214) and silently skips an unavailable one
+# (datasource.php L288-315), so a scope on ltct_org would widen the moment the field was
+# hidden (spec 016 R11).
+ORG_FIELD_CONDITION = "user:profilefield_" + ORG_FIELD
 # Operator words the applier maps to filter constants: select::EQUAL_TO (1) and
 # NOT_EQUAL_TO (2), public/reportbuilder/classes/local/filters/select.php on MOODLE_502_STABLE.
 CONDITION_OPERATORS = ("equal", "not_equal")
@@ -2005,9 +2042,11 @@ def _check_conditions(where, conditions, per, role_names, problems):
             problems.add(cwhere, "role %r is neither core nor in roles.yaml" % (value,))
         elif ident == "enrol:plugin" and value not in STANDARD["enrol"]:
             problems.add(cwhere, "enrol plugin %r is not a core enrolment method" % (value,))
-        elif ident == SCOPE_CONDITIONS[0][0] and per is None:
-            problems.add(cwhere, "%s is the organisation scope; it belongs on a per: "
-                         "organisation report, as %s" % (ident, ORG_PLACEHOLDER))
+        elif ident == ORG_FIELD_CONDITION:
+            problems.add(cwhere, "%s is never a condition: report builder drops a profile "
+                         "field's condition once the field is hidden, and the report widens; "
+                         "scope by the organisation's cohort, %s (spec 016 R11)"
+                         % (ident, SCOPE_CONDITIONS[0][0]))
         out.append({"condition": ident, "values": {"operator": operator, "value": value}})
     if per is not None:
         declared = {c["condition"]: c["values"] for c in out}
@@ -2799,6 +2838,148 @@ def _check_calendar_settings(decl, problems):
 # The payload: the declaration as the JSON site_config.php reads (data-model "Rendered
 # payload"). Built in memory; the resolved form is only ever written to the child's stdin.
 
+# --- spec 016: identity protection -------------------------------------------------------
+# specs/016-identity-protection/data-model.md "Declared (repo)" and contracts/declaration.md.
+
+PROTECTION_LEVELS = ["none", "email", "firstname", "pseudonym"]
+RECONCILE_MINUTES = 60                     # db/tasks.php runs reconcile_protection hourly
+ALTNAME_FIELDS = ("firstnamephonetic", "lastnamephonetic", "middlename", "alternatename")
+CORE_WITHHOLD = ("country", "city", "url", "institution", "department", "phone1", "phone2",
+                 "address", "idnumber")
+SPECIAL_WITHHOLD = ("maildisplay", "picture", "firstname", "lastname")
+NEVER_WITHHELD = (ORG_FIELD, "description", "interests")
+NEUTRAL_SURNAME = re.compile(r"^[^\w\s]$", re.UNICODE)   # one non-letter character (R4)
+# The site-wide settings spec 016 requires, with the value each must have: only those that
+# cost nobody anything (Doug, 2026-10-05 (scope review), change 20). protectusernames,
+# registerauth and authpreventaccountcreation are general account rules in spec 008's admin.yaml,
+# and the login methods are its site.yaml plugin entries.
+PROTECTION_SETTINGS = {
+    "allowedemaildomains": "",                                # R8, core default
+    "enablegravatar": 0,                                      # R6, core default
+    "forceloginforprofileimage": 1,                           # R6
+}
+
+
+def _withhold_allowed(decl):
+    """The fields a level may withhold: the fixed set, plus our declared profile fields."""
+    ours = {f["shortname"] for f in decl["profile_fields"]} - set(NEVER_WITHHELD)
+    return set(SPECIAL_WITHHOLD) | set(ALTNAME_FIELDS) | set(CORE_WITHHOLD) | ours
+
+
+def _validate_protection(where, data, rows, decl, problems):
+    """Check protection.yaml. Returns the payload's protection object, or None."""
+    _check_hosts(where, data, problems)
+    _check_rows(where, data, rows, problems)
+    if not _text(data.get("why")):
+        problems.add(where, "why must say which row or spec needs it")
+    before = len(problems.items)
+    for path, value in _walk_strings(data, ()):
+        if "@" in value:
+            problems.add(where, "%s holds an @; nothing here names a person or an address "
+                         "(constitution III)" % (".".join(path) or "value"))
+    if data.get("levels") != PROTECTION_LEVELS:
+        problems.add(where, "levels must be exactly %s, in that order (FR-001)"
+                     % ", ".join(PROTECTION_LEVELS))
+    withhold = data.get("withhold")
+    allowed = _withhold_allowed(decl)
+    ours = sorted(f["shortname"] for f in decl["profile_fields"]
+                  if f["shortname"] not in NEVER_WITHHELD)
+    out_withhold = {}
+    if not _check_keys(where + " withhold", withhold, set(PROTECTION_LEVELS[1:]), set(),
+                       problems):
+        withhold = {}
+    previous = []
+    for level in PROTECTION_LEVELS[1:]:
+        fields = withhold.get(level)
+        lwhere = "%s withhold.%s" % (where, level)
+        if not isinstance(fields, list) or not all(isinstance(f, str) for f in fields):
+            problems.add(lwhere, "must be a list of field names")
+            continue
+        if len(set(fields)) != len(fields):
+            problems.add(lwhere, "names a field twice")
+        for field in fields:
+            if field in NEVER_WITHHELD:
+                problems.add(lwhere, "%s is never withheld: %s" % (field, {
+                    ORG_FIELD: "blanking it drops the learner from their cohort and courses (R11)",
+                }.get(field, "the learner's own words are theirs (R6)")))
+            elif field not in allowed:
+                problems.add(lwhere, "%s is not a field the plugin can withhold" % field)
+        missing = [f for f in previous if f not in fields]
+        if missing:
+            problems.add(lwhere, "each level includes the one before it; missing %s"
+                         % ", ".join(missing))
+        previous = list(fields)
+        out_withhold[level] = list(fields)
+    email = out_withhold.get("email", [])
+    if email and "maildisplay" not in email:
+        problems.add(where + " withhold.email", "must withhold maildisplay (FR-001)")
+    first = out_withhold.get("firstname", [])
+    if first:
+        need = ["lastname", "picture"] + list(ALTNAME_FIELDS) + list(CORE_WITHHOLD) + ours
+        lacking = [f for f in need if f not in first]
+        if lacking:
+            problems.add(where + " withhold.firstname", "must also withhold %s (R6)"
+                         % ", ".join(lacking))
+        if "firstname" in first:
+            problems.add(where + " withhold.firstname", "keeps the first name; only "
+                         "pseudonym withholds it")
+    pseudo = out_withhold.get("pseudonym", [])
+    if pseudo and "firstname" not in pseudo:
+        problems.add(where + " withhold.pseudonym", "must withhold firstname: the pseudonym "
+                     "replaces it")
+    neutral = data.get("neutral_surname")
+    if not (isinstance(neutral, str) and NEUTRAL_SURNAME.match(neutral)):
+        problems.add(where, "neutral_surname is one non-letter character, such as \"\u00b7\": "
+                     "names are not locked, so a protected learner's own profile form must "
+                     "save, and core requires a surname there (R4)")
+    if data.get("reconcile_minutes") != RECONCILE_MINUTES:
+        problems.add(where, "reconcile_minutes is %d: db/tasks.php runs reconcile_protection "
+                     "hourly" % RECONCILE_MINUTES)
+    if len(problems.items) > before:
+        return None
+    return {"levels": list(PROTECTION_LEVELS), "withhold": out_withhold,
+            "neutral_surname": neutral,
+            "reconcile_minutes": RECONCILE_MINUTES}
+
+
+def _check_protection_site(decl, problems):
+    """What protection needs from roles, settings, profile fields and reports."""
+    roles = {r["shortname"]: r for r in decl["roles"]}
+    for short, role in roles.items():
+        caps = role.get("capabilities", {})
+        if caps.get(VIEWIDENTITY) == "allow" and short not in PROTECTION_VIEW_ROLES:
+            problems.add("roles.yaml %s" % short, "%s is held only by %s (spec 016 R7)"
+                         % (VIEWIDENTITY, ", ".join(sorted(PROTECTION_VIEW_ROLES))))
+        for cap in PROTECTION_MANAGE_CAPS:
+            if caps.get(cap) == "allow" and short not in PROTECTION_MANAGE_ROLES:
+                problems.add("roles.yaml %s" % short, "%s is the site team's only (spec 016 "
+                             "R12)" % cap)
+        for cap in REPORT_EDIT_CAPS:
+            if caps.get(cap) == "allow" and short != "manager":
+                problems.add("roles.yaml %s" % short, "%s stays with manager: a report someone "
+                             "else builds could show any learner's email (spec 016 R8)" % cap)
+    for short in ("manager", "teacher"):
+        if roles.get(short, {}).get("capabilities", {}).get(VIEWIDENTITY) != "allow":
+            problems.add("roles.yaml %s" % short, "must allow %s (spec 016 R7)"
+                         % VIEWIDENTITY)
+    if MENTOR in roles and roles[MENTOR].get("capabilities", {}).get(VIEWIDENTITY) != "allow":
+        problems.add("roles.yaml %s" % MENTOR, "must allow %s: a mentor sees their "
+                     "learner's real identity (FR-006)" % VIEWIDENTITY)
+    for short in COURSE_LEADER_ROLES:
+        caps = roles.get(short, {}).get("capabilities", {})
+        for cap in COURSE_LEADER_PROHIBIT:
+            if caps.get(cap) != "prohibit":
+                problems.add("roles.yaml %s" % short, "must prohibit %s (spec 016 R14)" % cap)
+
+    declared = {s["name"]: s for s in decl["settings"]}
+    for name, want in PROTECTION_SETTINGS.items():
+        setting = declared.get(name)
+        if setting is None:
+            problems.add("settings", "%s must be declared as %r (spec 016)" % (name, want))
+        elif str(setting["value"]) != str(want):
+            problems.add(setting["file"], "%s must be %r (spec 016)" % (name, want))
+
+
 def _literal(value):
     if isinstance(value, list):
         return [str(v) for v in value]
@@ -2875,6 +3056,8 @@ def build_payload(decl, mode, environ, redact=False):
         # office-hours course and activity, then the default dashboard's blocks.
         "officehours": decl["officehours"],
         "dashboard": decl["dashboard"],
+        # Spec 016, last: the levels and what each withholds. Never who is protected.
+        "protection": decl["protection"],
     }
     for s in decl["settings"]:
         out = {"name": s["name"], "plugin": s["plugin"], "setting": s["setting"],
@@ -2947,13 +3130,14 @@ def _summary(decl):
             "%d categories, %d cohorts, %d profile fields, %d cohort rules, "
             "%d organisation-only courses, %d course fields, %d competencies, %d reports, "
             "%d badge template, %d certificate template, %d office-hours course, "
-            "%d dashboard blocks"
+            "%d dashboard blocks, %d protection levels"
             % (len(decl["settings"]), files, len(decl["plugins"]), len(decl["roles"]),
                len(decl["ignore"]), len(decl["categories"]), len(decl["cohorts"]),
                len(decl["profile_fields"]), len(decl["cohort_rules"]),
                len(decl["org_courses"]), len(decl["course_fields"]), len(decl["competencies"]), len(decl["reports"]),
                decl["badge_template"] is not None, decl["certificate_template"] is not None,
-               decl["officehours"] is not None, len(decl["dashboard"])))
+               decl["officehours"] is not None, len(decl["dashboard"]),
+               len(decl["protection"]["levels"]) if decl["protection"] else 0))
 
 
 def main(argv=None, environ=None):

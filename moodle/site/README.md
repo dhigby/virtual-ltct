@@ -333,7 +333,7 @@ and send it to you. It holds the column names and nothing else.
 | `country` | Their country as two letters, for example `KE` or `PG`. | No |
 | `protection` | Optional, and blank for nearly everyone. Fill it in only for a person who asked, when you added them, for their identity to be protected. Then write `email`, `firstname` or `pseudonym`, and talk to the site team first. | No |
 | `pseudonym` | The name to show instead of theirs. Only with `protection` set to `pseudonym`. | No |
-| `email_checked` | Only for a protected person. Others in a course still see their email address, so it must not give them away. If the site team tells you the address looks like it names them or your organisation, check it with them, then write `yes` here, or give them another address. | No |
+| `email_checked` | Only for a protected person, and needed for every one of them. Others in a course still see their email address, so it must not give them away. Check with the person that it names neither them nor your organisation, then write `yes` here, or give them another address. Until it says `yes` the row waits; nothing is made. | No |
 | `courses` | Courses to start them in, by the course code the site team gave you (`ltct:<name>`), separated by `;`. Leave empty if your organisation's courses are enough. | No |
 
 There is no column for a username, a password or a role. Everyone signs in with their email
@@ -398,6 +398,40 @@ php public/local/ltuse/cli/mentor_contacts.php --end-all --mentor=<username>
 It asks first, prints counts only, and leaves every learner's records as they are. After the upgrade that adds mentor contacts, run `php public/local/ltuse/cli/mentor_contacts.php --sync` once, so mentors assigned earlier get their contacts too.
 
 **Feedback on a learner's work** is not this role's job, but a learner's mentors are also their **course mentors** by default: `local_ltuse` enrols them as Course mentor (`teacher`) in each course the learner takes, in a "Mentor group" with the learners they assess there, and removes them as soon as the reason ends (spec 008 research R10). A one-course or cohort mentor recorded with `ltct_admin.py course-mentors` takes the default mentor's place in that course (spec 012; spec 008 plan decision 2). To assign many mentors at once, use `ltct_admin.py mentors assign`; to end all of one mentor's relationships, `ltct_admin.py mentors end`. The automatic sync stays off (`local_ltuse/coursementorsync: 0` in `settings/admin.yaml`) until spec 016 limits what a course mentor sees of protected learners to their own mentor group (spec 008 plan decision 11, approved 2026-10-04). Until then, nobody is enrolled as a course mentor automatically: where a course asks for work, enrol the mentor as **Course mentor** (`teacher`) in that course by hand, with no group.
+
+## Protecting a person
+
+Some learners work where being identifiable puts them, or the people they work with, at risk. Identity protection lets them take part exactly as before under less of their identity (spec 016). **Who is protected, their pseudonym and their real name live only in Moodle. Never write them here, in an issue, a PR or a screenshot.** Screenshots of `ltct-test-*` accounts only are fine in a PR.
+
+| Level | Others see |
+|---|---|
+| Email hidden | The name and profile; classmates do not see the email address |
+| First name only | The first name and organisation only: no surname, picture, location, role or expertise |
+| Pseudonym | A chosen name and the organisation only |
+
+Each level includes the ones before it. The organisation shows at every level: tell the person so when they are protected. The people who run their courses and their organisation's managers still see the email address, which is why it is checked (below). The site team, the learner's mentors, the course mentor who assesses them in a course (whose own mentor group holds them), and their own organisation's managers still see the real identity, with a **Protected** marker, on the learner's profile, the Mentoring page and **People I support** (`/local/ltuse/protected.php`). Nobody else ever sees the marker, and there is no download of protected people.
+
+**Only for someone who asks** (Doug, 2026-10-05 (scope review)). Protection is to be offered when the person is added, in the welcome message and in site help; none of those says so yet (spec 016 task T047, on spec 008's intake and welcome message). Until it does, tell each person you add that they can ask, and who would still see their real identity. Saving a new or higher level records that the person asked, and that you checked their email address identifies neither them nor their organisation. The page warns when the part before the @ looks like their name, or the domain contains part of their organisation entry's key. That second warning is only a hint: it cannot recognise the employer of a SIL partner or an independent learner, so look at the address yourself; your confirmation is what counts. Have the address changed to one that does not identify them before you save. Nothing changes for anyone who did not ask.
+
+**To protect a person**: set it when the account is made, before they start. An organisation's manager can do this for their own people then. After that, raising it, lowering or removing it, and correcting the real name are the site team's: open `/local/ltuse/protection.php?id=<user id>` (an unprotected profile has no link), pick the level, and save. The learner gets a notice saying what others now see.
+
+**Protect early.** Later, a rename links what they already did to the new name, so the page asks you to acknowledge that first. A fresh account is one option to talk through with the person, not the default.
+
+**Usernames.** Everyone signs in with their email. At First name only or Pseudonym, a username that contains the real first name or surname is replaced with a neutral one automatically; the person keeps signing in with their email.
+
+**Names and email are not locked.** Learners change their own. For a protected learner, the plugin puts the protected name back on any edit, and their surname shows as `·`. To correct a protected learner's real name, use their **Identity protection** page (site team).
+
+**There is no organisation-wide protection** (Doug, 2026-10-05 (scope review)): each person is protected only when they ask, and an organisation's own managers always see their people's real identity. A person who does not want their organisation's managers to see it is placed by the site team under a neutral organisation entry with no managers. **Neutral organisation names**: an organisation that asks not to be named publicly gets a neutral key and name from its first commit, because the key can never change and `organisations.yaml` is public. No other organisation needs one.
+
+**Lowering.** Nothing is lowered automatically, and moving to another organisation keeps the person's level. A picture removed by protection does not come back; the learner uploads it again.
+
+**Course logs.** Course staff see each learner's IP address in the course logs, which gives away a rough location. If a protected person asks for that to be hidden, tick **block course logs** on their **Identity protection** page: course staff then lose the course log, today's log and the live log in every course they take, for every learner there, which is the cost. A course they join later is covered within the hour. The plugin owns those course-level prohibits, so do not set them by hand.
+
+**Course backups.** Course leaders cannot download backups. Never leave a course backup that includes users in a course's backup area: it carries every enrolled account's details.
+
+**When the hourly task fails.** **Reconcile protection** (`\local_ltuse\task\reconcile_protection`) repairs protected accounts that something else changed. If a repair fails, the run is recorded as failed and core's failed-task alert fires: open the task log, fix the cause, and let the next run repair it. With nobody protected it does nothing. On a core upgrade, while anyone is protected, re-run spec 016's quickstart V7.
+
+What protection cannot do, and what to tell the learner, is listed as known gaps in [spec 016's research](../../specs/016-identity-protection/research.md#known-gaps-fr-015): copies already emailed or downloaded, the app's cache for up to 18 hours, file author names inside uploaded documents, the email address course staff see, and the organisation, which shows at every level.
 
 ## Events and live sessions
 

@@ -15,6 +15,12 @@ $callbacks = [
         'hook' => \core\hook\output\before_standard_top_of_body_html_generation::class,
         'callback' => \local_ltuse\hook_callbacks::class . '::top_of_body',
     ],
+    // Spec 016 (R2): a protected user's protected values are re-applied on every
+    // user_update_user(), whoever calls it.
+    [
+        'hook' => \core_user\hook\before_user_updated::class,
+        'callback' => \local_ltuse\protection\hook_callbacks::class . '::before_user_updated',
+    ],
     // Spec 002 (amendment 2026-10-02, R10): a "My organisation" item in the user menu, only for
     // a member of an organisation's managers cohort.
     [

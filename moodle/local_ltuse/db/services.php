@@ -92,6 +92,17 @@ $functions = [
                         . 'moodle/badges:configurecriteria, moodle/badges:configuredetails, '
                         . 'moodle/badges:configuremessages, mod/customcert:addinstance',
     ],
+
+    // Spec 016 (R12): not in the publishing service. It checks
+    // local_ltuse\protection\entitlement itself; the capability listed is the site team's.
+    'local_ltuse_set_protection' => [
+        'classname'    => 'local_ltuse\external\set_protection',
+        'description'  => 'Grant, change or remove one person\'s identity protection. Never '
+                        . 'returns a real identity.',
+        'type'         => 'write',
+        'ajax'         => false,
+        'capabilities' => 'local/ltuse:manageprotection',
+    ],
     'local_ltuse_place_course' => [
         'classname'    => 'local_ltuse\external\place_course',
         'description'  => 'Move a published course into its category by idnumber (ltct:org:<key>, '

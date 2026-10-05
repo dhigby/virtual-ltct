@@ -20,9 +20,11 @@ defined('MOODLE_INTERNAL') || die();
  *   flagged_protection  the account has an organisation and its effective protection is below
  *                       the row's target: raise it on spec 016's page
  *   waits               the target protection is above none and spec 016 cannot set it yet (not
- *                       installed, or level_available() false): no account is created
- *   rejected            two live accounts share the email, or a listed course is not one the
- *                       organisation may be enrolled into
+ *                       installed, or level_available() false), or the row's address has not
+ *                       been confirmed (email_checked): no account is created
+ *   rejected            two live accounts share the email, a listed course is not one the
+ *                       organisation may be enrolled into, or the pseudonym is one spec 016
+ *                       would refuse
  *
  * The target protection is the row's own level: protection is per person, asked for when they
  * are added, and blank for nearly everyone (spec 016; Doug, 2026-10-05 (scope review), which
@@ -55,7 +57,12 @@ defined('MOODLE_INTERNAL') || die();
  *   emailflags   array   with protection asked: what spec 016's levels::email_reveals() says
  *                        the row's email may give away ('name', 'organisation'); empty otherwise
  *   emailconfirmed bool  the row's email_checked column: someone confirmed the address does
- *                        not identify the person
+ *                        not identify the person. Every grant needs it, flagged or not (016
+ *                        FR-016): the flags are a heuristic, and cannot recognise a SIL
+ *                        partner's or an independent learner's employer domain
+ *   pseudonymproblems array  with a pseudonym target: what spec 016's
+ *                        levels::pseudonym_problems() finds wrong with the row's pseudonym
+ *                        (empty, toolong, isrealname, hasrealname, taken); empty when it is fine
  *   loginclash   bool    with no matched account: another live account on this site has the
  *                        row's email as its username, so signing in with that email would reach
  *                        the other account (core looks a username up before an email)
@@ -129,19 +136,32 @@ class intake_rules {
 
         $protects = $target !== 'none';
         $belowtarget = self::rank($effective) === null || self::rank($effective) < self::rank($target);
-        // A protection write is needed for a new account, and for an interrupted one whose
-        // protection has not reached the target or has not settled.
+        // Protection work is needed for a new account, and for an interrupted one whose
+        // protection has not reached the target or has not settled. A grant (set_protection) is
+        // needed only below the target; at it, an unsettled account is only re-applied.
         $needsprotection = $protects && (!$exists || ($org === '' && ($belowtarget || !$settled)));
+        $needsgrant = $protects && (!$exists || ($org === '' && $belowtarget));
         if ($protects && !$protection) {
             return self::result('waits', 'protection_absent', $target);
         }
         if ($needsprotection && !in_array($target, $available, true)) {
             return self::result('waits', 'protection_unavailable', $target);
         }
-        // Spec 016 change 2: a protected person's address stays visible to others in a course,
-        // so one that looks like it names them waits until someone confirms it does not.
-        if ($needsprotection && !empty($facts['emailflags']) && empty($facts['emailconfirmed'])) {
-            return self::result('waits', 'email_reveals', $target);
+        // Spec 016 refuses a pseudonym only once the account exists, so it is checked here,
+        // before anything is created or emailed.
+        if ($needsgrant && $target === 'pseudonym') {
+            if (!array_key_exists('pseudonymproblems', $facts)) {
+                return self::result('rejected', 'facts', $target);
+            }
+            if (!empty($facts['pseudonymproblems'])) {
+                return self::result('rejected', 'pseudonym_invalid', $target);
+            }
+        }
+        // Spec 016 FR-016: a protected person's address stays visible to others in a course,
+        // so every grant waits until someone confirms it identifies neither them nor their
+        // organisation. One that looks like it does says so.
+        if ($needsgrant && empty($facts['emailconfirmed'])) {
+            return self::result('waits', !empty($facts['emailflags']) ? 'email_reveals' : 'email_unchecked', $target);
         }
 
         $missing = array_values(array_diff($courses, $active));
@@ -213,8 +233,9 @@ class intake_rules {
      * A new account's username (research R2): its email, lowercased, the one thing the person
      * already knows. Null means a neutral generated one instead, when:
      *
-     *   - the target is firstname or pseudonym: spec 016 refuses those levels for a username
-     *     holding the real name (016 R13), and an email often does;
+     *   - the target is firstname or pseudonym: at those levels spec 016 replaces a username
+     *     holding the real name with a neutral one (016 R13, change 15), and an email often
+     *     holds it, so the account starts neutral and is never renamed;
      *   - Moodle's PARAM_USERNAME cleaning changes the email (a '+' with extendedusernamechars
      *     off), so user_create_user() would refuse it;
      *   - it is longer than user.username holds (counted in bytes, never fewer than characters);

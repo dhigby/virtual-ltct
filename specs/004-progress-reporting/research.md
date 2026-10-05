@@ -136,7 +136,7 @@ The learner's route to their next lesson is the course page. With `showcompletio
 
 So, as spec 002 does for cohorts, **each organisation gets its own report, generated from its entry in `organisations.yaml`**:
 - **Fixed conditions**, which a viewer cannot change:
-  - `user:profilefield_ltct_org` equal to the key;
+  - `user:profilefield_ltct_org` equal to the key; **Amended by spec 016 decision 2 option (a) (Doug, 2026-10-05 (scope review)):** the scope condition is `cohort:idnumber = ltct:org:{org}`, a text condition; the Organisation column is dropped; `validate` refuses `user:profilefield_ltct_org` conditions.
   - `role:name` is `student`, so the organisation's managers and any teacher are not listed as learners. The stored value is the student role's id, resolved by shortname at apply (R10);
   - `enrol:plugin` is `cohort`, which separates delivery from pilots (R10).
 - **Audience**: `core_cohort\reportbuilder\audience\cohortmember` with the organisation's managers cohort, `ltct:org:<key>:managers`.

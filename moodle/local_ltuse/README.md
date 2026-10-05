@@ -820,6 +820,39 @@ moved onto the same core APIs.
 `admin\membership_service` writes with `cohort_add_member()` / `cohort_remove_member()` after
 `cohort_is_member()`; none of these is a raw read.
 
+## Identity protection (spec 016)
+
+Some learners need to take part under less of their identity: email hidden, first name only,
+or a pseudonym. Protection is per person, only for someone who asks; no organisation sets a
+minimum for its members (Doug, 2026-10-05 (scope review)). Moodle 5.2 has no hook into
+`fullname()`, and every view renders names live from the user record, so this plugin writes
+the protected display into the account itself and keeps the real values in its own table
+(research R1, R5). **Who is protected, their pseudonym and their real identity are Moodle
+data, never the repo's.** Not yet run on a server; quickstart V1–V17 are the instance checks.
+
+| Piece | Where | Does |
+|---|---|---|
+| Rules | `classes/protection/levels.php` (pure, `tests/protection_harness.php`) | The four levels, the withheld fields per level, pseudonym and username rules (NFC and case folding), the email-address warning, what a manager who is not the site team may change, and which courses count for a course mentor. Every level is available once `protection.yaml` is stored: the organisation stays visible at every level (decision 2, option a). |
+| Entitlement | `classes/protection/entitlement.php` | `can_view_identity()`: the site team, an assigned mentor, a course mentor in an `ltct:<slug>` course the learner takes (never `ltct:officehours`) whose own group there, `ltct:mentorgroup:<mentor id>` (spec 008), holds the learner, and a manager of the learner's own organisation. `can_manage_protection()`, `is_site_team()`, `may_be_entitled()` (the cheap test before "People I support"), `marker()`. Every surface asks it; none checks a capability alone. |
+| Service | `classes/protection/service.php` | The one place a level is applied: `set_protection()`, `apply()` (a repair at the level already set), `effective_level()`, `is_settled()`, `level_available()`, `real_identity()`, `email_warnings()`, `picture_levels()` (the granting page's warning before a picture is deleted), `neutral_username()`, `sync_log_blocks()`. A raise needs `requested` (the person asked) and `emailchecked` (the address identifies neither them nor their organisation), and the log row records both. Anyone but the site team grants only at intake: a raise, before any activity (`user.firstaccess`, or an enrolment), with no correction. At `firstname`+ a username that holds the real name becomes `ltc-` and 8 base32 characters, spec 008's `intake_service::new_username()` format; the person still signs in with their email. Each write runs under a per-user lock and one transaction, with the user in a private bypass set the hook and observer skip. It snapshots each newly withheld field, rewrites the account through `user_update_user()` and `profile_save_data()`, deletes the picture at `firstname`+, keeps the account on a site login (`auth` `manual` or `nologin`, no `auth_oauth2` linked login, R3), logs, purges `core/coursecontacts`, re-saves office-hours slots and sends `protectionchanged`. It never lowers anyone automatically. A person who asks for their location to be hidden (`hidelogs`) gets `editingteacher` and `teacher` prohibited `report/log:view`, `report/log:viewtoday` and `report/loglive:view` in each course they are enrolled in, through `assign_capability()`; this plugin owns those course-level prohibits, so one set by hand where nobody asked is removed (R14). |
+| Enforcement | `classes/protection/hook_callbacks.php`, `classes/protection/observer.php`, `classes/task/apply_protection.php`, `classes/task/reconcile_protection.php` | `before_user_updated` re-applies the protected values and the site login on every `user_update_user()`, and never throws: a failure goes to `debugging()`. The `user_updated` observer returns at once for anyone with no protection row and re-applies a protected account that drifted; `user_deleted` runs the shared deletion. The hourly task reads only the protected rows, does nothing when there are none, repairs drift (a non-site login and linked logins included), brings the course-log block into line with the courses of those who asked, and fails the run when any repair fails, so core's failed-task handling flags it; its log has counts only. |
+| Surfaces | `lib.php` (profile node), `classes/mentoring.php` and its templates, `protected.php`, `protection.php`, `classes/protection/surfaces.php` | The real identity and the **Protected** marker appear only here, only to the entitled: the profile, the Mentoring page (web and app), "People I support" (no download), and the granting page. A non-entitled viewer never sees the marker. The profile section appears only on a protected person's profile, and on your own only when you are protected or support someone who is; a first grant is made at intake, so an unprotected profile has no granting link. |
+| Web services | `local_ltuse_set_protection` | The granting page's logic for scripts and spec 008. `requested` is a required parameter; `emailchecked` is needed for a raise. Not in the publishing service. Never returns a real identity. |
+| Site config | `classes/siteconfig/protection.php` | `apply` stores `protection.yaml` in `local_ltuse/protection`; `drift` reports a count only (accounts awaiting repair). |
+| Privacy | `classes/privacy/provider.php` | The two tables: a user's own rows in full, changes they made to others as a count and dates, deletion shared with the `user_deleted` observer. |
+
+**Principle XI exceptions added by spec 016.** Each is the only route to the behaviour.
+
+| Exception | Why | Re-checked by |
+|---|---|---|
+| Mutating the object `before_user_updated` carries. The hook is a notification; the change persists because `user_update_user()` keeps using the same object after dispatch (`user/lib.php`, `MOODLE_502_STABLE`). | No 5.2 hook overrides a display name, and every view renders from the record (R1, R2). | `tests/protection_test.php` `test_the_hook_reapplies_the_protected_record`, and quickstart V7 on every core upgrade while anyone is protected. `user_update_user()`, which dispatches it, is deprecated for 5.3 (MDL-82650): re-check the hook on the 5.3 API before widening `$plugin->supported` |
+| `mod_scheduler`'s `\mod_scheduler\model\slot::load_by_id()->save()` to re-save a protected user's future slots, which re-runs its private `update_calendar()` and renames the calendar events it names from `fullname()`. | The scheduler stores names in `{event}.name`; nothing else rewrites them (R15). Re-saving changes no time, so spec 011's booking notice stays silent. | Quickstart V17 on every scheduler re-pin |
+
+**Raw reads added by spec 016**: `user_info_field` (`shortname`, `datatype`, every row, a few
+dozen) to blank the withheld profile fields, and, by indexed columns, `scheduler_slots` and
+`scheduler_appointment` by `teacherid` and `studentid`, and `user` by its unique
+(`mnethostid`, `username`) index to keep a generated username unused, as spec 008's intake does. For the course-log block: `user_enrolments` joined to `enrol` for the courses of the protected rows with `hidelogs`, and `role_capabilities` joined to `context` for the course-level prohibits of the three log capabilities. Linked logins are read and deleted through `\auth_oauth2\linked_login`, never the table.
+
 ## Verified against Moodle 5.2.3+ (2026-09-29)
 
 Installed and exercised end to end on Moodle 5.2.3+ (Build 20260928), PHP 8.3, PostgreSQL

@@ -121,11 +121,11 @@ function xmldb_local_ltuse_upgrade($oldversion) {
     // the seam with spec 008. Only local_ltuse_pathway_cohort touches a user (usermodified).
     if ($oldversion < 2026100600) {
         $table = new xmldb_table('local_ltuse_competency');
-        $field = new xmldb_field('slug', XMLDB_TYPE_CHAR, '100', null, XMLDB_NOTNULL, null, '', 'timemodified');
+        $field = new xmldb_field('slug', XMLDB_TYPE_CHAR, '100', null, XMLDB_NOTNULL, null, null, 'timemodified');
         if (!$dbman->field_exists($table, $field)) {
             $dbman->add_field($table, $field);
         }
-        $field = new xmldb_field('url', XMLDB_TYPE_CHAR, '255', null, XMLDB_NOTNULL, null, '', 'slug');
+        $field = new xmldb_field('url', XMLDB_TYPE_CHAR, '255', null, XMLDB_NOTNULL, null, null, 'slug');
         if (!$dbman->field_exists($table, $field)) {
             $dbman->add_field($table, $field);
         }

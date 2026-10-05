@@ -12,8 +12,8 @@
         <FIELD NAME="sortorder" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="1-based position across the whole framework"/>
         <FIELD NAME="retired" TYPE="int" LENGTH="1" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="1 once the competency is no longer declared"/>
         <FIELD NAME="timemodified" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false"/>
-        <FIELD NAME="slug" TYPE="char" LENGTH="100" NOTNULL="true" DEFAULT="" SEQUENCE="false" COMMENT="The descriptor's frontmatter slug (spec 006, R3); names the competency pathway competency:slug. Unique among non-empty values, checked by apply"/>
-        <FIELD NAME="url" TYPE="char" LENGTH="255" NOTNULL="true" DEFAULT="" SEQUENCE="false" COMMENT="The competency's page on the published competency site (spec 006, R4); the host comes from mkdocs.yml, never from PHP"/>
+        <FIELD NAME="slug" TYPE="char" LENGTH="100" NOTNULL="true" SEQUENCE="false" COMMENT="The descriptor's frontmatter slug (spec 006, R3); names the competency pathway competency:slug. Unique among non-empty values, checked by apply"/>
+        <FIELD NAME="url" TYPE="char" LENGTH="255" NOTNULL="true" SEQUENCE="false" COMMENT="The competency's page on the published competency site (spec 006, R4); the host comes from mkdocs.yml, never from PHP"/>
       </FIELDS>
       <KEYS>
         <KEY NAME="primary" TYPE="primary" FIELDS="id"/>

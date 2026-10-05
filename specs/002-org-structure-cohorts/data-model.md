@@ -560,7 +560,7 @@ It is created on first use with `enrol_get_plugin('self')->add_instance()`, not 
 
 ## Moodle-only entities (never declared)
 
-These are learner data. They are created in Moodle by the site team, by managers for their own learners (2026-10-02), or by `local_ltuse` on their behalf, and never appear in the repo, a declaration, a payload or a run report (R8, constitution III). *(2026-10-05: spec 008 merged, PR #93. The site team now makes most of them with `scripts/ltct_admin.py`, whose command is named in each row; learner files stay outside every git tree.)*
+These are learner data. They are created in Moodle by the site team, by managers for their own learners (2026-10-02), or by `local_ltuse` on their behalf, and never appear in the repo, a declaration, a payload or a run report (R8, constitution III). *(2026-10-05: spec 008 merged, PR #93. The site team now makes most of them with `scripts/ltct_admin.py`, whose command is named in each row it covers; learner files stay outside every git tree.)*
 
 | Entity | Created by | Relationships | Rule |
 |---|---|---|---|

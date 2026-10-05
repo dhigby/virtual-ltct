@@ -26,8 +26,8 @@ real people or exports. Report results by scenario ID.
     prerequisite above, that `ltct-test-learner-1` and `ltct-test-mentor-1` share no course,
     would then fail as soon as A2 assigns the mentor, and A6, A7, A8, A9 and A13 would test the
     Teacher role, not the Mentor role. A7 would fail outright: `teacher` holds
-    `report/completion:view` and `report/progress:view` by default (research R8; accepted by
-    Doug, 2026-10-05). So for
+    `report/completion:view` and `report/progress:view` by default (spec FR-005's note, research R8;
+    accepted by Doug, 2026-10-05). So for
     Phase A, either enrol the test learners in C1–C3 manually (a pilot enrolment, which the sync
     never counts) or run with `local_ltuse/coursementorsync: 0` in the run's `--site-dir` copy.
     Task T035 turns it on for story 4: if Phase A ran with a `--site-dir` copy at 0, T035 starts

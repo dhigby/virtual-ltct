@@ -52,10 +52,10 @@ settings:
     value: 1
     why: >-
       On since 2026-10-05: spec 016 (#84, merged) narrowed its course-mentor path, so a course
-      mentor sees a protected learner only when they share a mentor group in the course (plan
-      decision 11, approved 2026-10-04).
+      mentor sees a protected learner's real identity only when they share a mentor group in
+      the course (plan decision 11, approved 2026-10-04).
       At 1, each learner's course mentors are enrolled as Course mentor in the courses they
       take and removed by event (research R10); at 0 the observers and the hourly reconcile do
       nothing, and one-course and cohort mentors can still be recorded. Declared 1 since #97
-      (2026-10-05), before 008's instance checks V9 and V11-V13 (T067) ran; accepted (Doug,
-      2026-10-05).
+      (2026-10-05), before 008's instance checks V9 and V11-V13 (T067) had run, and they still
+      have not; accepted (Doug, 2026-10-05).

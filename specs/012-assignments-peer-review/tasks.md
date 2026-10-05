@@ -100,6 +100,7 @@ Files: ~~moodle/site/course-discussions.yaml~~ (retired 2026-10-02 by spec 002 R
   *(Superseded 2026-10-02: the file no longer exists. Spec 002 R14 retired it when every course forum went to no groups, and `scripts/site_config.py` now refuses it. Re-plan input 5.)*
 - [x] **T018** [P] [US4] Add `local_ltuse_ensure_discussion`: create a `general` forum in section 0 if absent (name and intro on create only); otherwise set only its group mode, `groupingid = 0`; read and write no discussion or post; report `courseforced`; return `{cmid, created, groupmode}` (R5) · moodle/local_ltuse/classes/external/ensure_discussion.php
 - [x] **T019** [P] [US4] Report discussion drift for every `ltct:` course: `differs`, `missing`, `forced`, and `allparticipants` as a count only, never content or names (R5, Principle III) · moodle/local_ltuse/classes/siteconfig/inspector.php, moodle/local_ltuse/classes/siteconfig/drift.php
+  *(Superseded in part 2026-10-02 by spec 002 R14: the `allparticipants` warning and its forum vault count are removed; `differs`, `missing` and `forced` stand. Re-plan input 5.)*
 
 **⟶ Wait for Wave 1 to finish, then:**
 

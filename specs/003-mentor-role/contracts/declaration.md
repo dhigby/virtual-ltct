@@ -30,7 +30,7 @@ never delete, and report what is undeclared.
 *(Amended 2026-10-05: spec 016 added `local/ltuse:viewidentity`, so an assigned mentor sees a
 protected learner's real identity and the Protected marker while assigned (016 FR-006, R7 path
 2). It is a reviewed widening of the allowlist below; `moodle/site/roles.yaml` (around
-:198-202) and `MENTOR_ALLOW` in `scripts/site_config.py` (around :316-320) carry it with their
+:208-212) and `MENTOR_ALLOW` in `scripts/site_config.py` (around :316-320) carry it with their
 reason.)*
 
 **Validation** (`site_config.py validate`, new `_check_mentor`). Each of these is a problem,

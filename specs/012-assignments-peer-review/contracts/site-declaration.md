@@ -4,7 +4,7 @@ These additions extend spec 001's declaration. They are validated, applied and d
 
 ## `moodle/site/course-discussions.yaml` (new)
 
-*(Retired 2026-10-02 by spec 002 R14: every course forum runs with no groups, `load_discussions()` is removed, and `scripts/site_config.py` refuses the file. Drift still reports a forum whose group mode is not "no groups" (`differs`) and a course without one (`missing`). Kept as the record of the Phase A contract; spec 012 is parked for re-plan (Doug, 2026-10-05).)*
+*(Retired 2026-10-02 by spec 002 R14: every course forum runs with no groups, `load_discussions()` is removed, and `scripts/site_config.py` refuses the file. Drift still reports a forum whose group mode is not "no groups" (`differs`) and a course without one (`missing`). The `allparticipants` warning below was removed with it (002 R14); `forced` stays as a warning. Kept as the record of the Phase A contract; spec 012 is parked for re-plan (Doug, 2026-10-05).)*
 
 ```yaml
 # Row #10: which courses' discussion spaces are shared across organisations.

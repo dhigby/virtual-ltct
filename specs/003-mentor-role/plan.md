@@ -187,9 +187,9 @@ siteconfig classes because it is a property of a role declaration, not a new ite
 ## Cross-spec effects
 
 - **Spec 002 (decision needed; decided 2026-10-02, approved, R7)**: Phase B reverses the
-  2026-10-01 decline of manager self-service, for mentor assignment only. If it is declined,
+  2026-10-01 decline of manager self-service, for mentor assignment only. ~~If it is declined,
   FR-008's manager part and SC-003 move to spec 008, and this spec's FR-008 is amended in the
-  same PR. The profile hook gains a mentor exemption (R9) and still only takes access away.
+  same PR.~~ The profile hook gains a mentor exemption (R9) and still only takes access away.
 - **Spec 012**: story 4 relies on its Course mentor role, and its cross-spec note is corrected:
   ~~the site team, not the organisation manager, enrols a mentor as Course mentor (R8).~~ 012's
   `teacher` declaration is untouched. *(Updated 2026-10-05: nobody enrols a course mentor by

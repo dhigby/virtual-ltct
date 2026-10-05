@@ -53,7 +53,7 @@ context (four since spec 016; see the note under the table):
 assigned (016 research R7 path 2). It is read only and checked in the learner's user context
 like the other three, so FR-005 and FR-006 hold. It is a reviewed widening of the allowlist:
 `MENTOR_ALLOW` in `scripts/site_config.py` (around :316-320) and the mentor declaration in
-`moodle/site/roles.yaml` (around :198-202) both carry it with their reason.
+`moodle/site/roles.yaml` (around :208-212) both carry it with their reason.
 
 **Left out, on purpose**:
 - `moodle/user:editprofile`. It is a write capability (FR-006).

@@ -6,7 +6,7 @@ Run on the temporary 5.2.3+ build host, with **test accounts only** (`ltct-test-
 
 - `MOODLE_URL`, `MOODLE_TOKEN`, `MOODLE_DIR` and `MOODLE_SSH` set, as for `site_config.py` and the publisher.
 - Spec 002's test set-up: two test organisations, A and B, each with two learners and one manager. Each organisation is enrolled by cohort sync into two shared test courses, with its own group. One extra test learner is enrolled **manually** as a pilot.
-  - *Amended 2026-10-05 (spec 002 open courses, PR #86; 002 R2, R13):* shared courses have no organisation groups (cohort sync with no group), and the managers cohort is not enrolled in them. Managers are scoped by their managers cohort, through the organisation report's audience and its member-cohort condition, not by groups. For V6, add one organisation-only test course for A, where A's managers cohort is enrolled as `orgmanager`. Live on ltuse.net, the test-a and test-b fixtures are kept for these checks (spec 002 T081).
+  - *Amended 2026-10-05 (spec 002 open courses, PR #86; 002 R2, R13):* shared courses have no organisation groups (cohort sync with no group), and the managers cohort is not enrolled in them. Managers are scoped by their managers cohort, through the organisation report's audience and its member-cohort condition, not by groups. For V6 and V10, add one organisation-only test course for A, where A's managers cohort is enrolled as `orgmanager`. Live on ltuse.net, the test-a and test-b fixtures are kept for these checks (spec 002 T081).
 - An Android device with the Moodle app (V7), shared with spec 009's V7.
 
 ## Offline (no server)

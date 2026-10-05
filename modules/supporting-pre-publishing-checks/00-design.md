@@ -263,6 +263,11 @@
 >    orthography: if the consultant has the orthography statement written by the project's
 >    linguist, the consultant can check the character against it; otherwise the team decides.
 >
+> Also clarified (lesson 04, step 8): **Footnote quotes** is rarely needed in the field, since
+> quoting verse text in a footnote is a relatively new feature that few teams use. For a team
+> that does, running the check is essential: any editing of the verse can leave the footnote's
+> quote out of date.
+>
 > Seat time, competencies, outcome level and all objectives are unchanged. `module-author` may
 > revise `04-formatting-and-references.md` and `07-mentor-guide.md` on this basis.
 
@@ -968,6 +973,9 @@ variation or an error is the team's judgment; the consultant confirms the differ
 reviewed and gets the team to judge each one (the marker's earlier wording is kept as history);
 (2) **Punctuation Inventory** (lesson 04) — if the consultant has the orthography statement
 written by the project's linguist, they can check a flagged character against it; otherwise the
-team decides whether it is valid. Seat time, competencies, outcome level and all objectives are
+team decides whether it is valid. Also clarified: **Footnote quotes** (lesson 04, step 8) is
+rarely needed, since few teams quote verse text in footnotes yet (a relatively new feature), but
+a team that does must run it, because any editing of the verse can leave the quote out of date.
+Seat time, competencies, outcome level and all objectives are
 unchanged. `module-author` may revise `04-formatting-and-references.md` and `07-mentor-guide.md`
 on this basis.

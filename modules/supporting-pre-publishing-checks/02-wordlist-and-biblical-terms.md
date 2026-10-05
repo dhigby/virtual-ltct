@@ -35,7 +35,8 @@ prepares you to spot and address with the team.
 
 **Wordlist / spelling: a false-clean result, confirmed in the field.** This is the
 check area where "false-clean" isn't theoretical — it's a documented pattern from the
-SME interview behind this course:
+SME interview behind this course. Every word in the wordlist carries one of three
+spelling statuses: **Correct**, **Incorrect** or **Undecided**.
 
 - A wordlist of **thousands of words was blanket-approved** — every entry marked
   correct without genuine review.

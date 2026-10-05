@@ -258,6 +258,7 @@ $string['admin:refusal:target'] = 'name exactly one course or one pathway, with 
 $string['admin:reason:bad_email'] = 'the email is not an address Moodle can send to; nothing was done';
 $string['admin:reason:facts'] = 'the server could not read everything it needs about this row; nothing was done';
 $string['admin:reason:duplicate_accounts'] = 'two accounts already share this email; the site team must merge or change one by hand first';
+$string['admin:reason:login_clash'] = 'another account uses this email as its username, so this person could not sign in with it; the site team must change that account\'s username first';
 $string['admin:reason:suspended'] = 'the account exists and is suspended; reactivate it deliberately if that is right';
 $string['admin:reason:other_org'] = 'the account is already in {$a}; use "move" if this is right';
 $string['admin:reason:course_not_allowed'] = 'a listed course is not one this organisation may be enrolled into';

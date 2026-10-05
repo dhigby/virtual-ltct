@@ -13,7 +13,7 @@
 - Every write is idempotent and goes one row per call, so an interrupted run on a poor link is finished by running it again.
 
 **Accounts** (R2, R3, R5):
-- An account is created with a neutral generated username and Moodle's own password email, and matched by email on every later run.
+- An account is created with its email as its username (a neutral generated one when name-protected or when the email cannot be a username) and Moodle's own password email, and matched by email on every later run.
 - Its organisation is set through the `ltct_org` field; dynamic cohorts then place it in the organisation's cohort, which enrols it.
 - Any protection it asks for is set by spec 016's service, and confirmed settled, before the organisation field is set. Until 016 allows the level, the row waits.
 - On an existing account, 008 writes only `suspended` and `ltct_org`.
@@ -98,7 +98,7 @@
 | IX. Flat cost, field-ready | PASS. Core plus our plugin; no paid plugin or service. Writes are resumable on a bad link (R15). |
 | X. Traceable and verified | PASS, with gates. Cites row #14; the delivering PR updates it. Each Moodle API is confirmed in source (research). Behaviours the source only implies are instance checks V1–V19, each blocking the story that relies on it. Not done until 2–3 real managers (FR-014), whose findings name no Area or organisation (quickstart). 002 R13's production gate (no shared-course enrolment of a possibly-protected organisation before 016 and its decision 2) is printed by the tool and stated in the guided command's rules (R16). Cites rows #14, #11 (FR-017, FR-018) and #8, #15 (FR-015), each updated by the PR that delivers it. **Recurring burden**: account creation, moves and mentor records stay with the site team, now as minutes per intake rather than per learner. The hourly reconcile rides the cron 015 monitors. Server operation is not claimed as covered while the operator is undecided (015). |
 | XI. Survives an upgrade | PASS. Our own code uses supported extension points only: web services, events, a scheduled task and the plugin's own table. Every write uses a core API (`user_create_user`, `profile_save_data`, `cohort_add_member`, `enrol_plugin::add_instance`/`update_status`/`enrol_user`, `role_assign`, `groups_*`), and the new `setup_admin_token.php` uses `webservice::add_ws_authorised_user()` and `delete_user_ws_token()` rather than the direct `$DB` writes in `setup_publishing.php` (R12). Reads use indexed core columns; any raw read of another component's schema (e.g. `tool_dynamic_cohorts`'s `component` value) is listed in the plugin README. `requires` and `supported` stay at 5.2. |
-| Platform: core first | PASS, with one justified exception (Complexity Tracking): our own functions instead of core Upload users, because core cannot order protection before enrolment, generate neutral usernames, match by email when creating, or enrol without the manual method (R1). Core Upload users stays documented as the fallback. |
+| Platform: core first | PASS, with one justified exception (Complexity Tracking): our own functions instead of core Upload users, because core cannot order protection before enrolment, give name-protected people neutral usernames, match by email when creating, or enrol without the manual method (R1). Core Upload users stays documented as the fallback. |
 
 ## Project Structure
 
@@ -227,7 +227,7 @@ These are for the maintainer (Doug). `/speckit-tasks` may generate tasks as draf
   - 008 also calls `level_available()` and `org_minimum()` (both agreed and exposed by 016 on 2026-10-04), and relies on nothing about observer order. 016's `cohort_member_added` observer has `priority => 1000` as a backstop.
   - 008's PR adds `ltctadmin` to 016's `PROTECTION_MANAGE_ROLES` allowlist in `site_config.py`, with its reason (R5, agreed with 016).
   - Decision 11, about how far a course mentor sees, is open on both specs.
-- **Spec 017**: when an ALTC may create an account by approving a request, it should create it through `intake_service`, so that ordering, neutral usernames and protection stay in one place.
+- **Spec 017**: when an ALTC may create an account by approving a request, it should create it through `intake_service`, so that ordering, the username rule and protection stay in one place.
 - **Publisher**: decision 4 (Pilots → Published). `setup_publishing.php`'s two direct `$DB` writes should move to the same core APIs as `setup_admin_token.php`; until they do, they go in the plugin README's XI list (R12).
 - **`local_ltuse` README**: its line "No enrolment, grades or learner records" is already untrue after 002's R10, and becomes "enrolment through the administration service and the organisation page; never grades".
 
@@ -235,7 +235,7 @@ These are for the maintainer (Doug). `/speckit-tasks` may generate tasks as draf
 
 | Violation | Why Needed | Simpler Alternative Rejected Because |
 |-----------|------------|-------------------------------------|
-| Our own administration web service and functions, instead of core Upload users (FR-010 named it as the core example) | Protection set before enrolment (016), neutral usernames (016 R13), create-or-match by email in one run, enrolment that is not the manual method (004), server-side preview with a confirmation code, and refusal of dynamic and other organisations' cohorts (R1, R7) | Core Upload users matches by email only in update modes, saves profile data after `user_created`, enrols through the first manual instance (counted as a pilot), and needs the admin UI or SSH as the main admin. It stays the documented fallback. |
+| Our own administration web service and functions, instead of core Upload users (FR-010 named it as the core example) | Protection set before enrolment (016), the email as username with neutral ones for name-protected people (016 R13), create-or-match by email in one run, enrolment that is not the manual method (004), server-side preview with a confirmation code, and refusal of dynamic and other organisations' cohorts (R1, R7) | Core Upload users matches by email only in update modes, saves profile data after `user_created`, enrols through the first manual instance (counted as a pilot), and needs the admin UI or SSH as the main admin. It stays the documented fallback. |
 | A second external service and a new role | FR-009: a credential distinct from publishing, with only administration's permissions (R12) | Reusing `MOODLE_TOKEN` breaks FR-009; SSH to the server is a wider privilege than a scoped token. |
 | A new table, `local_ltuse_course_mentor` | One-course and cohort mentors are not 003 role assignments and have no core home (R10) | Using group membership as the record mixes the record with its effect and cannot hold a cohort mentor before anyone is enrolled. |
 | A dedicated `enrol_self` instance for course mentors | The mentor's enrolment must be removable on its own and must not be the manual method (R10) | Manual enrolment is taken by `enrol_manual_enrol_users`' "first instance" rule and counts as a pilot; reusing the Organisation enrolment would let 002's manager unenrol action remove a mentor. |

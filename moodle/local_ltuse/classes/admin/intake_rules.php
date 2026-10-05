@@ -51,6 +51,9 @@ defined('MOODLE_INTERNAL') || die();
  *   active       array   the course idnumbers the account is already actively enrolled in
  *   allowed      array   the row's course idnumbers the organisation may be enrolled into
  *                        (enrolment_rules, as Student)
+ *   loginclash   bool    with no matched account: another live account on this site has the
+ *                        row's email as its username, so signing in with that email would reach
+ *                        the other account (core looks a username up before an email)
  *
  * A fact not supplied counts against the row: a missing key fails closed.
  */
@@ -58,6 +61,12 @@ class intake_rules {
 
     /** Spec 016's protection levels, least protected first. */
     const LEVELS = ['none', 'email', 'firstname', 'pseudonym'];
+
+    /** Targets whose new account gets the email as its username (username()); others stay neutral. */
+    const EMAIL_USERNAME_LEVELS = ['none', 'email'];
+
+    /** user.username is char(100) (lib/db/install.xml). */
+    const USERNAME_MAX = 100;
 
     /** The intake path, in order; an outcome further along has been partly or fully applied. */
     const PATH = ['new', 'will_set_org', 'will_enrol', 'unchanged'];
@@ -97,6 +106,9 @@ class intake_rules {
             return self::result('rejected', 'duplicate_accounts', $target);
         }
         $exists = $accounts === 1;
+        if (!$exists && !empty($facts['loginclash'])) {
+            return self::result('rejected', 'login_clash', $target);
+        }
         if ($exists && !array_key_exists('suspended', $facts)) {
             return self::result('rejected', 'facts', $target);
         }
@@ -185,6 +197,37 @@ class intake_rules {
             return self::APPLY;
         }
         return self::REFUSED;
+    }
+
+    /**
+     * A new account's username (research R2): its email, lowercased, the one thing the person
+     * already knows. Null means a neutral generated one instead, when:
+     *
+     *   - the target is firstname or pseudonym: spec 016 refuses those levels for a username
+     *     holding the real name (016 R13), and an email often does;
+     *   - Moodle's PARAM_USERNAME cleaning changes the email (a '+' with extendedusernamechars
+     *     off), so user_create_user() would refuse it;
+     *   - it is longer than user.username holds (counted in bytes, never fewer than characters);
+     *   - an account on this site already has it as its username. classify() has already
+     *     rejected a row whose email is a live account's username (login_clash), so here that
+     *     is a deleted account, which never signs in.
+     *
+     * Everyone signs in with their email (authloginviaemail), so the fallback costs them nothing.
+     *
+     * @param string $email the row's email, trimmed and lowercased
+     * @param string $target the row's target protection (classify()'s 'target')
+     * @param string $cleaned $email through clean_param(PARAM_USERNAME)
+     * @param bool $taken an account on this site already has $email as its username
+     * @return string|null
+     */
+    public static function username(string $email, string $target, string $cleaned, bool $taken): ?string {
+        if ($email === '' || !in_array($target, self::EMAIL_USERNAME_LEVELS, true)) {
+            return null;
+        }
+        if ($cleaned !== $email || strlen($email) > self::USERNAME_MAX || $taken) {
+            return null;
+        }
+        return $email;
     }
 
     /**

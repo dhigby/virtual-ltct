@@ -337,9 +337,9 @@ and send it to you. It holds the column names and nothing else.
 | `pseudonym` | The name to show instead of theirs. Only with `protection` set to `pseudonym`. | No |
 | `courses` | Courses to start them in, by the course code the site team gave you (`ltct:<name>`), separated by `;`. Leave empty if your organisation's courses are enough. | No |
 
-There is no column for a username, a password or a role. Each person signs in with their
-email address and the password Moodle emails them; their organisation decides their cohort and courses. A column
-the form does not have is refused, so do not add any.
+There is no column for a username, a password or a role. Everyone signs in with their email
+address and the password Moodle emails them; their organisation decides their cohort and
+courses. A column the form does not have is refused, so do not add any.
 
 **3. Keep it private.** The list names real people. Save it in a folder only you can open, and
 **never inside a repository folder or a folder that syncs to one**: anything there can be

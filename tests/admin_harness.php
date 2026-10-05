@@ -81,6 +81,11 @@ $existing = ['accounts' => 1, 'org' => 'fixture-a'];
 $course = ['courses' => ['ltct:fixture-course'], 'allowed' => ['ltct:fixture-course']];
 
 check(outcome(intake()) === 'new', 'new: no live account has the email');
+$r = intake_rules::classify(intake(['loginclash' => true]));
+check($r['outcome'] === 'rejected' && $r['reason'] === 'login_clash',
+    'rejected: the email is another live account\'s username');
+check(outcome(intake(array_merge($existing, ['loginclash' => true]))) === 'unchanged',
+    'login clash ignored for a matched account: intake creates nothing');
 $r = intake_rules::classify(intake($course));
 check($r['changes'] === ['create', 'set_org:fixture-a', 'enrol:ltct:fixture-course'],
     'new: create, then organisation, then the course');
@@ -176,6 +181,22 @@ check(intake_rules::change_progress('would_change', 'unchanged') === $finish, 'c
 check(intake_rules::change_progress('would_change', 'rejected') === $refused, 'change progress: -> rejected is refused');
 check(intake_rules::change_progress('rejected', 'rejected') === $refused, 'change progress: rejected is never applied');
 check(intake_rules::change_progress('unchanged', 'would_change') === $refused, 'change progress: backwards is refused');
+
+// --- intake_rules::username (research R2, 2026-10-05) ----------------------------------------
+$mail = 'fixture-learner@example.org';
+check(intake_rules::username($mail, 'none', $mail, false) === $mail, 'username: the email, for no protection');
+check(intake_rules::username($mail, 'email', $mail, false) === $mail, 'username: the email, at email level');
+check(intake_rules::username($mail, 'firstname', $mail, false) === null, 'username: neutral at firstname (016 R13)');
+check(intake_rules::username($mail, 'pseudonym', $mail, false) === null, 'username: neutral at pseudonym (016 R13)');
+check(intake_rules::username($mail, 'secret', $mail, false) === null, 'username: neutral for a level it does not know');
+check(intake_rules::username($mail, 'none', $mail, true) === null, 'username: neutral when already a username here');
+check(intake_rules::username('fixture+tag@example.org', 'none', 'fixturetag@example.org', false) === null,
+    'username: neutral when PARAM_USERNAME would change it');
+$long = str_repeat('a', 89) . '@example.org';   // 101 characters
+check(intake_rules::username($long, 'none', $long, false) === null, 'username: neutral when longer than user.username');
+$fits = str_repeat('a', 88) . '@example.org';   // 100 characters
+check(intake_rules::username($fits, 'none', $fits, false) === $fits, 'username: the email at exactly 100 characters');
+check(intake_rules::username('', 'none', '', false) === null, 'username: neutral for no email');
 
 // --- enrolment_rules::decide (T039) -------------------------------------------------------
 function role_of(string $cohort, string $course, string $category): ?string {

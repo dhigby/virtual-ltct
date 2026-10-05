@@ -18,11 +18,12 @@ settings:
   - name: authloginviaemail
     value: 1
     why: >-
-      Learners sign in with their email address. Nobody should have to remember the generated
-      username an intake gives them (Doug, 2026-10-05). Core accepts an email only when one live
+      Learners sign in with their email address, which is also the username an intake gives
+      most of them; nobody should have to remember the generated code a name-protected person
+      gets instead (Doug, 2026-10-05). Core accepts an email only when one live
       account has it (lib/moodlelib.php, authenticate_user_login), which allowaccountssameemail
-      above and the intake's own email match guarantee. On by default in 5.2; declared so drift
-      catches it being turned off.
+      above and the intake's own email match guarantee. On by default in 5.2
+      (admin/settings/login.php); declared so drift catches it being turned off.
   - name: local_ltuse/coursementorsync
     value: 0
     why: >-

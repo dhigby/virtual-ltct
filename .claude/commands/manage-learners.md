@@ -72,6 +72,10 @@ Tell the operator, in a few sentences, what will happen: how many accounts are c
 many are already there, which rows will be left alone and why, which courses gain or lose
 people. Use the tool's own reasons for flagged rows. Point out anything they may not expect,
 for example a row flagged as already in another organisation, which needs `move`, not intake.
+If they ask how new people sign in: with their email address, which is also their username,
+and the password Moodle emails them. Someone protected at `firstname` or `pseudonym`, or whose
+email Moodle cannot use as a username, gets a generated username instead, but still signs in
+with their email.
 
 If the preview printed the **production reminder** (spec 002 R13), repeat it, word for word,
 and ask whether any organisation in this change is one the site team has marked as possibly

@@ -94,12 +94,60 @@ final class admin_test extends \advanced_testcase {
         $this->assertSame(1, (int)$user->confirmed);
         $this->assertSame((int)$CFG->mnet_localhost_id, (int)$user->mnethostid);
         $this->assertSame('manual', $user->auth);
-        $this->assertMatchesRegularExpression('/^ltc-[a-z2-7]{8}$/', $user->username);
+        $this->assertSame('fixture-learner@example.org', $user->username, 'the email is the username');
         $this->assertSame('1', (string)get_user_preferences('auth_forcepasswordchange', null, $user->id));
         $this->assertSame('fixture-a', profile_user_record($user->id, false)->ltct_org);
         $this->assertNotSame('', (string)\core_user::get_user($user->id)->password, 'Moodle set a password');
         $this->assertSame(1, $sink->count(), 'Moodle\'s own password email');
         $sink->close();
+    }
+
+    public function test_the_username_is_the_email_lowercased(): void {
+        $this->redirectEmails();
+        $row = $this->row(['email' => ' Fixture-Mixed@Example.ORG ']);
+        $this->assertSame('done', intake_service::apply_row($row, 'new')['status']);
+        $accounts = $this->accounts('fixture-mixed@example.org');
+        $this->assertCount(1, $accounts);
+        $this->assertSame('fixture-mixed@example.org', reset($accounts)->username);
+    }
+
+    public function test_an_email_that_is_another_accounts_username_is_rejected(): void {
+        // Someone else's username is this address (their own email has since changed). Sign-in
+        // looks a username up before an email, so the new person could never sign in with it.
+        $this->getDataGenerator()->create_user(['username' => 'fixture-learner@example.org',
+            'email' => 'fixture-changed@example.org']);
+        $row = $this->row();
+        $preview = intake_service::preview([$row], false)['rows'][0];
+        $this->assertSame('rejected', $preview['outcome']);
+        $this->assertSame(get_string('admin:reason:login_clash', 'local_ltuse'), $preview['reason']);
+        $this->assertSame('refused', intake_service::apply_row($row, 'new')['status']);
+        $this->assertCount(0, $this->accounts('fixture-learner@example.org'), 'no account was made');
+    }
+
+    public function test_choose_username_keeps_name_protected_rows_neutral_and_falls_back(): void {
+        global $DB;
+        $neutral = '/^ltc-[a-z2-7]{8}$/';
+        $mail = 'fixture-choose@example.org';
+        $this->assertSame($mail, intake_service::choose_username('Fixture-Choose@Example.org', 'none'));
+        $this->assertSame($mail, intake_service::choose_username($mail, 'email'));
+        // 016 refuses firstname or pseudonym for a username holding the real name (016 R13).
+        $this->assertMatchesRegularExpression($neutral, intake_service::choose_username($mail, 'firstname'));
+        $this->assertMatchesRegularExpression($neutral, intake_service::choose_username($mail, 'pseudonym'));
+
+        // PARAM_USERNAME drops '+' unless extendedusernamechars is on.
+        set_config('extendedusernamechars', 0);
+        $this->assertMatchesRegularExpression($neutral, intake_service::choose_username('fixture+tag@example.org', 'none'));
+        set_config('extendedusernamechars', 1);
+        $this->assertSame('fixture+tag@example.org', intake_service::choose_username('fixture+tag@example.org', 'none'));
+
+        // Longer than user.username's 100 characters.
+        $this->assertMatchesRegularExpression($neutral,
+            intake_service::choose_username(str_repeat('a', 89) . '@example.org', 'none'));
+
+        // A deleted account still holds its row in the (mnethostid, username) unique index.
+        $gone = $this->getDataGenerator()->create_user(['username' => $mail, 'email' => 'fixture-gone@example.org']);
+        $DB->set_field('user', 'deleted', 1, ['id' => $gone->id]);
+        $this->assertMatchesRegularExpression($neutral, intake_service::choose_username($mail, 'none'));
     }
 
     public function test_the_organisation_is_set_after_the_account_is_created(): void {

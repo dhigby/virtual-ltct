@@ -26,7 +26,7 @@ UTF-8 CSV with a header row; `;` separates multiple values inside one cell. Colu
 | `pseudonym` | no | Required when `protection` is `pseudonym`; refused otherwise. |
 | `courses` | no | `ltct:<slug>` idnumbers, `;`-separated, enrolled through the Organisation enrolment (research R7, plan decision 10). |
 
-No username, password, role or cohort column: usernames are generated (R2), passwords are emailed by Moodle, and a cohort comes from `organisation` (R3).
+No username, password, role or cohort column: the username is the email, or generated (R2), passwords are emailed by Moodle, and a cohort comes from `organisation` (R3).
 
 ### Move file (FR-015)
 
@@ -90,7 +90,7 @@ Returned by each `preview_*` function, one per row, and hashed into the confirma
 
 | What | Where in Moodle | Written by | Notes |
 |---|---|---|---|
-| Account | `user` | `user_create_user($user, false, false)` under a per-email lock, then `user_created` | `auth = manual`, `confirmed = 1`, `mnethostid = $CFG->mnet_localhost_id`, `password = ''`, username `ltc-` + 8 base32 chars; `auth_forcepasswordchange` set and the password emailed after commit (research R2). Only `suspended` and `ltct_org` are ever written on an existing account (FR-019). |
+| Account | `user` | `user_create_user($user, false, false)` under a per-email lock, then `user_created` | `auth = manual`, `confirmed = 1`, `mnethostid = $CFG->mnet_localhost_id`, `password = ''`, username the lowercased email, or `ltc-` + 8 base32 chars for a `firstname` or `pseudonym` target or an email that cannot be a username; `auth_forcepasswordchange` set and the password emailed after commit (research R2). Only `suspended` and `ltct_org` are ever written on an existing account (FR-019). |
 | Organisation of record | `user_info_data` for `ltct_org` | `profile_save_data()` with only that field, then `user_updated` | Membership of `ltct:org:<key>` follows through `tool_dynamic_cohorts` (research R3). |
 | Protection | 016's tables | `\local_ltuse\protection\service::set_protection()` | 016's data; 008 only calls it (research R5). |
 | Managers / mentors cohort membership | `cohort_members` | `cohort_add_member()` / `cohort_remove_member()` | Only `ltct:org:<key>:managers` and `ltct:mentors` (research R9). |

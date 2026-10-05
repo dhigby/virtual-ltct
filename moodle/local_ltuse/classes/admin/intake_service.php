@@ -39,7 +39,10 @@ class intake_service {
     /** Seconds to wait for another run holding the same email's lock. */
     const LOCK_WAIT = 30;
 
-    /** Generated usernames: this prefix and USERNAME_LENGTH characters of USERNAME_ALPHABET. */
+    /**
+     * Generated usernames, for a row intake_rules::username() keeps neutral: this prefix and
+     * USERNAME_LENGTH characters of USERNAME_ALPHABET.
+     */
     const USERNAME_PREFIX = 'ltc-';
     const USERNAME_LENGTH = 8;
     const USERNAME_ALPHABET = 'abcdefghijklmnopqrstuvwxyz234567';
@@ -232,6 +235,7 @@ class intake_service {
             'courses' => $courses,
             'active' => $userid ? self::active_courses($userid, $courses, $context) : [],
             'allowed' => $allowed,
+            'loginclash' => !$accounts && self::username_in_use(self::normalise_email((string)$row['email'])),
         ];
         if ($userid && $context['protection']) {
             $service = self::PROTECTION_SERVICE;
@@ -258,6 +262,20 @@ class intake_service {
         $select = 'deleted = 0 AND mnethostid = :mnethostid AND ' . $DB->sql_equal('email', ':email', false);
         return array_values($DB->get_records_select('user', $select,
             ['mnethostid' => $CFG->mnet_localhost_id, 'email' => $email], 'id ASC', 'id, suspended'));
+    }
+
+    /**
+     * Whether a live account on this site has this text as its username. Sign-in looks a
+     * username up before an email (authenticate_user_login(), lib/moodlelib.php), so a new
+     * account whose email is someone else's username could never sign in with it.
+     *
+     * @param string $email lowercased
+     * @return bool
+     */
+    protected static function username_in_use(string $email): bool {
+        global $CFG, $DB;
+        return $email !== '' && $DB->record_exists('user',
+            ['username' => $email, 'mnethostid' => $CFG->mnet_localhost_id, 'deleted' => 0]);
     }
 
     /**
@@ -296,7 +314,7 @@ class intake_service {
         $did = false;
 
         if ($outcome === 'new') {
-            $userid = self::create_account($row);
+            $userid = self::create_account($row, $decision['target']);
             $did = true;
         }
         if ($outcome === 'new' || $outcome === 'will_set_org') {
@@ -323,14 +341,15 @@ class intake_service {
     }
 
     /**
-     * Create the account (research R2): manual authentication, confirmed, on this site, a
-     * neutral generated username, no password until Moodle emails one, and no organisation.
-     * Fires user_created itself, as core's web service does after its own fields.
+     * Create the account (research R2): manual authentication, confirmed, on this site, the
+     * username choose_username() gives, no password until Moodle emails one, and no
+     * organisation. Fires user_created itself, as core's web service does after its own fields.
      *
      * @param array $row
+     * @param string $target the row's target protection
      * @return int the new user's id
      */
-    protected static function create_account(array $row): int {
+    protected static function create_account(array $row, string $target): int {
         global $CFG, $DB;
         require_once($CFG->dirroot . '/user/lib.php');
 
@@ -338,7 +357,7 @@ class intake_service {
             'auth' => 'manual',
             'confirmed' => 1,
             'mnethostid' => $CFG->mnet_localhost_id,
-            'username' => self::new_username(),
+            'username' => self::choose_username((string)$row['email'], $target),
             'password' => '',
             'firstname' => trim((string)$row['firstname']),
             'lastname' => trim((string)$row['lastname']),
@@ -360,6 +379,25 @@ class intake_service {
         // learner able to sign in once the rest is finished.
         setnew_password_and_mail(core_user::get_user($userid, '*', MUST_EXIST));
         return $userid;
+    }
+
+    /**
+     * A new account's username: its lowercased email, or a neutral generated one when
+     * intake_rules::username() says so (a firstname or pseudonym target, an email
+     * PARAM_USERNAME would change or user.username cannot hold, or one already a username here).
+     * The unique index is (mnethostid, username) over every row, deleted ones included, so the
+     * check counts deleted accounts too.
+     *
+     * @param string $email the row's email
+     * @param string $target the row's target protection
+     * @return string
+     */
+    public static function choose_username(string $email, string $target): string {
+        global $CFG, $DB;
+        $email = self::normalise_email($email);
+        $taken = $DB->record_exists('user', ['username' => $email, 'mnethostid' => $CFG->mnet_localhost_id]);
+        return intake_rules::username($email, $target, clean_param($email, PARAM_USERNAME), $taken)
+            ?? self::new_username();
     }
 
     /**

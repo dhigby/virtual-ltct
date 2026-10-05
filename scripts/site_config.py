@@ -1364,7 +1364,7 @@ ORG_PLACEHOLDER = "{org}"
 PER_VALUES = ("organisation",)
 # The three conditions every per-organisation report carries, verbatim (FR-005).
 # The organisation is its member cohort, ltct:org:<key>, matched on cohort:idnumber (a text
-# condition, filters	ext IS_EQUAL_TO 3; the participants datasource joins the cohort entity
+# condition, filters\text IS_EQUAL_TO 3; the participants datasource joins the cohort entity
 # through cohort_members, course/classes/reportbuilder/datasource/participants.php on
 # MOODLE_502_STABLE). A cohort that does not exist matches nobody, so the scope fails closed,
 # and it does not depend on ltct_org's visibility (spec 016 T034-T035, Doug, 2026-10-05 (scope

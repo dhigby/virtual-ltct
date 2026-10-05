@@ -82,8 +82,8 @@ roles:
       #3 (FR-012): managers keep trusted content, so their edits keep iframe embeds. #11
       (spec 003): a manager may assign the mentor role, which is what offers "Mentor" on a
       learner's "Assign roles relative to this user" page. Admins need no pair. #26 (spec
-      016): the three protection capabilities are the manager archetype's defaults, listed so
-      drift manages them; site_config.py allows the two manage capabilities on no other role.
+      016): the two protection capabilities are the manager archetype's defaults, listed so
+      drift manages them; site_config.py allows the manage capability on no other role.
 
   - shortname: editingteacher
     archetype: editingteacher

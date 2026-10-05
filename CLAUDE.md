@@ -348,6 +348,9 @@ step cost.
 applied with `python scripts/site_config.py apply`. A setting clicked into the admin UI is not done;
 `drift` reports it. Settings `config.php` sets (`wwwroot`, `debug`) are provisioning's, not this folder's.
 
+**Shared courses have no organisation groups**: managers are scoped by their managers cohort through
+`local_ltuse\organisation\access`, never by groups, so never send `groupmode: 1` (spec 002 R3, R10).
+
 `MOODLE_URL` and `MOODLE_TOKEN` come from the environment. **The repo is public — never
 write a token into a file here.** The plugin the publisher depends on is
 [`moodle/local_ltuse/`](moodle/local_ltuse/README.md); Moodle has no core web service that

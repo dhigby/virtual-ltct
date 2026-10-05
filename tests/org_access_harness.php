@@ -98,5 +98,54 @@ check(!access::may_unenrol_from('self', ''), 'unenrol: a self instance with an e
 check(!access::may_unenrol_from('cohort', access::ENROL_MARKER), 'unenrol: never a cohort-sync enrolment');
 check(!access::may_unenrol_from('manual', access::ENROL_MARKER), 'unenrol: never a manual (pilot) enrolment');
 
+// --- is_placement_category (local_ltuse_place_course, R11) ----------------------------------
+check(access::is_placement_category('ltct:published'), 'place: published');
+check(access::is_placement_category('ltct:pilots'), 'place: pilots');
+check(access::is_placement_category('ltct:org:fixture-a'), "place: an organisation's category");
+check(!access::is_placement_category('ltct:organisations'), 'place: never the parent category');
+check(!access::is_placement_category('ltct:org:'), 'place: ltct:org: names no organisation');
+check(!access::is_placement_category('ltct:org:fixture-a:managers'), 'place: not a cohort-shaped idnumber');
+check(!access::is_placement_category('misc'), 'place: never a category this repo does not own');
+check(!access::is_placement_category(''), 'place: a category with no idnumber');
+
+// The two pure helpers beside access.php: the reset status map (actions) and the cohort
+// idnumber parse (contacts). Only from a checkout: the eval mode carries access.php alone.
+$dir = __DIR__ . '/../moodle/local_ltuse/classes/organisation/';
+if (!isset($LTCT_ORG_ACCESS_SRC) && is_file($dir . 'actions.php') && is_file($dir . 'contacts.php')) {
+    require $dir . 'actions.php';
+    require $dir . 'contacts.php';
+    $actions = 'local_ltuse\organisation\actions';
+    $contacts = 'local_ltuse\organisation\contacts';
+
+    // --- actions::reset_outcome (core_login_process_password_reset statuses, R10, T041) ------
+    $map = [
+        'emailresetconfirmsent' => 'organisation:reset:sent',
+        'emailalreadysent' => 'organisation:reset:alreadysent',
+        'emailpasswordconfirmsent' => 'organisation:reset:notconfirmed',
+        'emailpasswordconfirmnoemail' => 'organisation:reset:noemail',
+        'emailpasswordconfirmnotsent' => 'organisation:reset:notfound',
+        'emailpasswordconfirmmaybesent' => 'organisation:reset:maybesent',
+    ];
+    foreach ($map as $status => $want) {
+        check($actions::reset_outcome($status) === $want, "reset: $status");
+    }
+    check($actions::reset_outcome('') === 'organisation:reset:unknown', 'reset: an empty status is unknown');
+    check($actions::reset_outcome('somethingnew') === 'organisation:reset:unknown',
+        'reset: a status core adds later is unknown, never "sent"');
+    check(count(array_unique(array_values($map))) === count($map), 'reset: each status says something different');
+
+    // --- contacts::parse_cohort (R12) -------------------------------------------------------
+    check($contacts::parse_cohort('ltct:org:fixture-a') === ['fixture-a', 'members'], 'cohort: member cohort');
+    check($contacts::parse_cohort('ltct:org:fixture-a:managers') === ['fixture-a', 'managers'], 'cohort: managers cohort');
+    check($contacts::parse_cohort('ltct:mentors') === null, 'cohort: ltct:mentors is not an organisation');
+    check($contacts::parse_cohort('ltct:org:') === null, 'cohort: ltct:org: names no organisation');
+    check($contacts::parse_cohort('ltct:org::managers') === null, 'cohort: ltct:org::managers names no organisation');
+    check($contacts::parse_cohort('ltct:org:fixture-a:other') === null, 'cohort: an unknown suffix');
+    check($contacts::parse_cohort('fixture-a') === null, 'cohort: not ours');
+    check($contacts::parse_cohort('') === null, 'cohort: no idnumber');
+} else if (!isset($LTCT_ORG_ACCESS_SRC)) {
+    check(false, 'actions.php and contacts.php are present');
+}
+
 echo $fails ? "FAILURES: $fails\n" : "ALL PASSED\n";
 exit($fails ? 1 : 0);

@@ -92,6 +92,15 @@ $functions = [
                         . 'moodle/badges:configurecriteria, moodle/badges:configuredetails, '
                         . 'moodle/badges:configuremessages, mod/customcert:addinstance',
     ],
+    'local_ltuse_place_course' => [
+        'classname'    => 'local_ltuse\external\place_course',
+        'description'  => 'Move a published course into its category by idnumber (ltct:org:<key>, '
+                        . 'ltct:pilots or ltct:published), only when it is elsewhere. Spec 002 '
+                        . 'organisation-only courses. Idempotent.',
+        'type'         => 'write',
+        'ajax'         => false,
+        'capabilities' => 'local/ltuse:publish',
+    ],
     // Spec 006: pathways.
     'local_ltuse_set_course_pathway' => [
         'classname'    => 'local_ltuse\external\set_course_pathway',
@@ -122,6 +131,7 @@ $services = [
             'local_ltuse_set_course_competencies',
             'local_ltuse_ensure_discussion',
             'local_ltuse_set_course_recognition',
+            'local_ltuse_place_course',
             // Spec 006: pathways.
             'local_ltuse_set_course_pathway',
             // Core functions the publisher also needs. Listed here so one token covers

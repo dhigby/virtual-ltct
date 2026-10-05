@@ -20,6 +20,18 @@ $observers = [
         'callback' => '\local_ltuse\observer::user_deleted',
     ],
 
+    // Spec 002 (amendment 2026-10-02, R10, R12): an organisation's managers and people are
+    // message contacts, and a person who leaves an organisation is suspended in its own
+    // courses. Fired by cohort_add_member() and cohort_remove_member() (cohort/lib.php:189-224).
+    [
+        'eventname' => '\core\event\cohort_member_added',
+        'callback' => '\local_ltuse\observer::cohort_member_added',
+    ],
+    [
+        'eventname' => '\core\event\cohort_member_removed',
+        'callback' => '\local_ltuse\observer::cohort_member_removed',
+    ],
+
     // Spec 011 (R15, R20): calendar changes and cancellations, and office-hours bookings.
     // Not internal, so a change inside a transaction that rolls back announces nothing.
     [

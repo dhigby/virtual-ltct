@@ -30,6 +30,12 @@ competencies and target level go to two course fields, and the competencies also
 plugin's per-competency table; both are read back. Anything that needs a person is
 listed after the summary and the exit code is 1, though the publish itself completed.
 
+PLACEMENT (spec 002 R11). A course listed in moodle/site/org-courses.yaml is only for one
+organisation's people. Straight after the course is created or updated, and on every publish,
+local_ltuse_place_course puts it in that organisation's category, ltct:org:<key>, by
+idnumber, so a course moved by hand goes back. A shared course is never placed: it stays where
+--category created it.
+
 BADGE AND CERTIFICATE (spec 013). After completion, local_ltuse_set_course_recognition makes
 or rewords the course's badge from the template site_config.py apply stored. Only a delivery
 publish (course_stage.py at stage 8) activates the badge and makes the certificate activity;
@@ -244,6 +250,28 @@ def ensure_course(client, manifest, category_id, problems=None):
     return courseid, created
 
 
+def ensure_placement(client, manifest):
+    """Put an organisation-only course in its organisation's category (spec 002 R11).
+
+    On every publish, after create and update alike, so the placement is re-asserted each
+    time. A shared course makes no call. The plugin moves the course only when it is
+    elsewhere, and says so; a refusal (a category that does not exist, or is not
+    ltct:org:<key>) is a MoodleError and stops the publish before any content is sent.
+    """
+    placement = manifest["placement"]
+    if not placement["org_only"]:
+        return
+    category = placement["category_idnumber"]
+    result = client.call("local_ltuse_place_course", courseidnumber=manifest["idnumber"],
+                         categoryidnumber=category)
+    if client.dry_run:
+        print("  placement dry-run: %s" % category)
+    elif (result or {}).get("moved"):
+        print("  placement moved to %s" % category)
+    else:
+        print("  placement %s (already there)" % category)
+
+
 def ensure_competencies(client, manifest, courseid, problems):
     """Replace the course's rows in Moodle's per-competency table (spec 004, R15)."""
     kept, skipped = split_meta(unique_competencies(manifest))
@@ -371,6 +399,7 @@ def publish(client, payload_dir, category_id):
     courseid, created = ensure_course(client, manifest, category_id, problems=problems)
     print("  course    %s (%s)" % (manifest["idnumber"],
                                    "created, hidden" if created else "updated"))
+    ensure_placement(client, manifest)
     ensure_competencies(client, manifest, courseid, problems)
     ensure_pathway(client, manifest, courseid, problems)
 

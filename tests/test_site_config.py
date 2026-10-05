@@ -818,6 +818,131 @@ class OpenCourses(Base):
         self.assertEqual(om[0]["capabilities"].get("moodle/site:viewuseridentity"), "allow")
 
 
+ORG_COURSE_ENTRY = """\
+  - slug: coretech-computer-hardware
+    organisation: fixture-north
+    why: approved by the maintainer, fixture issue
+"""
+ORG_COURSES = "rows: [8, 15]\norg_only:\n" + ORG_COURSE_ENTRY
+
+
+class OrgCourses(Base):
+    """org-courses.yaml (spec 002 R11, contracts/declaration.md, data-model.md)."""
+
+    def setUp(self):
+        super().setUp()
+        self.write("org-courses.yaml", ORG_COURSES)
+
+    def payload(self):
+        rc, out, err = self.run_main("render")
+        self.assertEqual(rc, 0, err)
+        return json.loads(out)
+
+    def test_valid(self):
+        self.assertAccepted()
+        rc, out, _ = self.run_main("validate")
+        self.assertEqual(rc, 0, out)
+
+    def test_absent_file_is_valid(self):
+        (self.dir / "org-courses.yaml").unlink()
+        self.assertAccepted()
+        courses, problems = sc.load_org_courses(self.dir)
+        self.assertEqual(courses, [])
+        self.assertFalse(problems)
+
+    def test_empty_list_valid(self):
+        for text in ("rows: [8, 15]\norg_only: []\n", "rows: [8, 15]\norg_only:\n"):
+            with self.subTest(text=text):
+                self.write("org-courses.yaml", text)
+                self.assertAccepted()
+                self.assertEqual(sc.load_org_courses(self.dir)[0], [])
+
+    def test_load_returns_entries(self):
+        courses, problems = sc.load_org_courses(self.dir)
+        self.assertFalse(problems, problems.items)
+        self.assertEqual(courses, [{"slug": "coretech-computer-hardware",
+                                    "organisation": "fixture-north",
+                                    "why": "approved by the maintainer, fixture issue"}])
+
+    def test_each_key_required(self):
+        for entry in ("  - organisation: fixture-north\n    why: fixture\n",
+                      "  - slug: coretech-computer-hardware\n    why: fixture\n",
+                      "  - slug: coretech-computer-hardware\n    organisation: fixture-north\n"):
+            with self.subTest(entry=entry):
+                self.write("org-courses.yaml", "rows: [8, 15]\norg_only:\n" + entry)
+                self.assertRejected()
+
+    def test_blank_why(self):
+        self.edit("org-courses.yaml", "why: approved by the maintainer, fixture issue", "why: ''")
+        self.assertRejected()
+
+    def test_unknown_key_in_entry(self):
+        self.edit("org-courses.yaml", "    why:", "    hidden: true\n    why:")
+        self.assertRejected()
+
+    def test_unknown_top_key(self):
+        self.write("org-courses.yaml", ORG_COURSES + "shared: []\n")
+        self.assertRejected()
+
+    def test_rows_required_and_known(self):
+        self.write("org-courses.yaml", ORG_COURSES.replace("rows: [8, 15]\n", ""))
+        self.assertRejected()
+        self.write("org-courses.yaml", ORG_COURSES.replace("rows: [8, 15]", "rows: [999]"))
+        self.assertRejected()
+
+    def test_org_only_required(self):
+        self.write("org-courses.yaml", "rows: [8, 15]\n")
+        self.assertRejected()
+
+    def test_unknown_slug(self):
+        self.edit("org-courses.yaml", "slug: coretech-computer-hardware", "slug: no-such-course")
+        self.assertRejected()
+
+    def test_slug_uses_branch_slug(self):
+        self.edit("org-courses.yaml", "slug: coretech-computer-hardware",
+                  "slug: paratext-9-advanced-support")
+        self.assertAccepted()
+        self.edit("org-courses.yaml", "slug: paratext-9-advanced-support",
+                  "slug: Paratext 9 advanced support")
+        self.assertInvalid("paratext-9-advanced-support")
+
+    def test_template_is_not_a_course(self):
+        self.edit("org-courses.yaml", "slug: coretech-computer-hardware", "slug: template")
+        self.assertRejected()
+
+    def test_duplicate_slug(self):
+        self.write("org-courses.yaml", ORG_COURSES + ORG_COURSE_ENTRY.replace(
+            "fixture-north", "independent"))
+        self.assertRejected()
+
+    def test_organisation_must_be_declared(self):
+        self.edit("org-courses.yaml", "organisation: fixture-north", "organisation: fixture-south")
+        self.assertRejected()
+        self.assertEqual(sc.load_org_courses(self.dir)[0], [])
+
+    def test_organisation_needs_organisations_file(self):
+        (self.dir / "organisations.yaml").unlink()
+        (self.dir / "profile-fields.yaml").unlink()
+        self.assertRejected()
+
+    def test_payload_carries_category_not_reason(self):
+        p = self.payload()
+        self.assertEqual(p["org_courses"], [{
+            "slug": "coretech-computer-hardware",
+            "course_idnumber": "ltct:coretech-computer-hardware",
+            "category_idnumber": "ltct:org:fixture-north"}])
+        self.assertNotIn("fixture issue", json.dumps(p))
+
+    def test_payload_empty_when_absent(self):
+        (self.dir / "org-courses.yaml").unlink()
+        self.assertEqual(self.payload()["org_courses"], [])
+
+    def test_tracked_declaration_loads(self):
+        # The committed file is what moodle_payload.py and publish_moodle.py use.
+        courses, problems = sc.load_org_courses()
+        self.assertFalse(problems, problems.items)
+
+
 class Render(Base):
     def test_redacts(self):
         env = {"SMTP_PASS": "s3cr3t-value", "MOODLE_NOREPLY": "noreply@x", "MOODLE_URL": "https://m.example"}
@@ -1025,7 +1150,7 @@ PROGRESS = """\
     conditions:
       - {condition: user:profilefield_ltct_org, values: {operator: equal, value: "{org}"}}
       - {condition: role:name, values: {operator: equal, value: student}}
-      - {condition: enrol:plugin, values: {operator: equal, value: cohort}}
+      - {condition: enrol:plugin, values: {operator: not_equal, value: manual}}
     filters: [course:fullname, user:fullname]
     audiences:
       - {type: cohortmember, cohort: "ltct:org:{org}:managers"}
@@ -1052,7 +1177,7 @@ PROGRAMME = """\
       - {column: completion:timecompleted, heading: Completed, aggregation: count}
     conditions:
       - {condition: role:name, values: {operator: equal, value: student}}
-      - {condition: enrol:plugin, values: {operator: equal, value: cohort}}
+      - {condition: enrol:plugin, values: {operator: not_equal, value: manual}}
     filters: [user:profilefield_ltct_org, completion:timecompleted]
     audiences:
       - {type: systemrole, role: manager}
@@ -1155,7 +1280,7 @@ class Reports(ReportsBase):
         for line in ('      - {condition: user:profilefield_ltct_org, values: {operator: equal, '
                      'value: "{org}"}}\n',
                      "      - {condition: role:name, values: {operator: equal, value: student}}\n",
-                     "      - {condition: enrol:plugin, values: {operator: equal, value: cohort}}\n"):
+                     "      - {condition: enrol:plugin, values: {operator: not_equal, value: manual}}\n"):
             with self.subTest(removed=line.strip()):
                 self.assertIn(line, PROGRESS)
                 self.only(PROGRESS.replace(line, ""))
@@ -1164,9 +1289,14 @@ class Reports(ReportsBase):
     def test_scope_condition_values_verbatim(self):
         for old, new in (('value: "{org}"}}', "value: fixture-a}}"),
                          ("value: student}}", "value: editingteacher}}"),
-                         ("value: cohort}}", "value: manual}}"),
+                         # Spec 002 R10: delivery is any enrolment but a pilot's, so the
+                         # 2026-10-01 form (cohort sync only) is refused, as is any other.
+                         ("{operator: not_equal, value: manual}", "{operator: equal, value: cohort}"),
+                         ("{operator: not_equal, value: manual}", "{operator: equal, value: manual}"),
+                         ("{operator: not_equal, value: manual}", "{operator: not_equal, value: guest}"),
                          ("{operator: equal, value: student}", "{operator: notequal, value: student}"),
-                         ("{operator: equal, value: cohort}", "{value: cohort}")):
+                         ("{operator: equal, value: student}", "{operator: not_equal, value: student}"),
+                         ("{operator: not_equal, value: manual}", "{value: manual}")):
             with self.subTest(old=old, new=new):
                 self.assertIn(old, PROGRESS)
                 self.only(PROGRESS.replace(old, new, 1))
@@ -1174,8 +1304,9 @@ class Reports(ReportsBase):
 
     def test_condition_values_shape(self):
         for old, new in (("{operator: equal, value: student}", "{operator: 1, value: student}"),
-                         ("{operator: equal, value: cohort}", "{operator: equal, value: cohort, x: 1}"),
-                         ("{operator: equal, value: cohort}", "cohort")):
+                         ("{operator: not_equal, value: manual}", "{operator: not_equal, value: manual, x: 1}"),
+                         ("{operator: not_equal, value: manual}", "{operator: notequal, value: manual}"),
+                         ("{operator: not_equal, value: manual}", "manual")):
             with self.subTest(new=new):
                 self.only(PROGRAMME.replace(old, new))
                 self.assertRejected()
@@ -1356,12 +1487,30 @@ class Reports(ReportsBase):
         self.assertIsNone(prog["schedule"])
         self.assertEqual(prog["audiences"], [{"type": "systemrole", "role": "manager"}])
         self.assertEqual(prog["columns"][3]["aggregation"], "countdistinct")
+        delivery = {"condition": "enrol:plugin",
+                    "values": {"operator": "not_equal", "value": "manual"}}
+        self.assertEqual(r["conditions"][2], delivery)
+        self.assertIn(delivery, prog["conditions"])
         # Spec 004's arrays in apply order, then spec 013's two after reports, then spec 011's.
         # Spec 006 puts levels and role_pathways between competencies and reports.
         self.assertEqual(list(self.payload())[-10:],
                          ["course_field_category", "course_fields", "competencies", "levels",
                           "role_pathways", "reports",
                           "badge_template", "certificate_template", "officehours", "dashboard"])
+
+    def test_tracked_delivery_condition(self):
+        # Spec 002 R10: a manager's enrolment (the organisation-enrolment instance, enrol_self)
+        # is delivery, so delivery is any enrolment but a pilot's manual one. report builder's
+        # select condition holds one value (filters\select EQUAL_TO 1, NOT_EQUAL_TO 2).
+        tracked = yaml.safe_load((REPO / "moodle" / "site" / "reports.yaml")
+                                 .read_text(encoding="utf-8"))["reports"]
+        enrol = {r["key"]: [c["values"] for c in r["conditions"]
+                            if c["condition"] == "enrol:plugin"] for r in tracked}
+        for key in ("progress", "programme"):
+            self.assertEqual(enrol[key], [{"operator": "not_equal", "value": "manual"}], key)
+        self.assertEqual(enrol["pilots"], [{"operator": "equal", "value": "manual"}])
+        self.assertEqual(sc.SCOPE_CONDITIONS[2],
+                         ("enrol:plugin", {"operator": "not_equal", "value": "manual"}))
 
     def test_summary_counts_reports(self):
         rc, out, _ = self.run_main("validate")

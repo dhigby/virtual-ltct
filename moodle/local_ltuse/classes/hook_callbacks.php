@@ -62,6 +62,32 @@ class hook_callbacks {
     }
 
     /**
+     * Add "My organisation" to the user menu for a member of any ltct:org:<key>:managers
+     * cohort (spec 002 amendment 2026-10-02, research R10). Nobody else sees it. The hook is
+     * dispatched from user_get_user_navigation_info() (user/lib.php:970 on MOODLE_502_STABLE);
+     * an item is a stdClass with itemtype 'link', url, title and titleidentifier, as core's own
+     * menu items are, or add_navitem() drops it (user/classes/hook/extend_user_menu.php).
+     *
+     * @param \core_user\hook\extend_user_menu $hook
+     */
+    public static function user_menu(\core_user\hook\extend_user_menu $hook): void {
+        global $CFG, $USER;
+        if (!isloggedin() || isguestuser() || during_initial_install()) {
+            return;
+        }
+        require_once($CFG->dirroot . '/local/ltuse/lib.php');
+        if (!local_ltuse_managed_organisation_keys((int)$USER->id)) {
+            return;
+        }
+        $hook->add_navitem((object)[
+            'itemtype' => 'link',
+            'url' => new moodle_url('/local/ltuse/organisation.php'),
+            'title' => get_string('organisation', 'local_ltuse'),
+            'titleidentifier' => 'organisation,local_ltuse',
+        ]);
+    }
+
+    /**
      * Say which time zone the office-hours booking page's times are in, with a link to change
      * it (spec 011, research R14; plan decision 2). Only on that scheduler's own pages; never a
      * redirect. The hook is dispatched from core_renderer::standard_top_of_body_html()

@@ -25,6 +25,9 @@ defined('MOODLE_INTERNAL') || die();
  *   6. each ltct: course with activity reports on (spec 003) or a group mode other than 0
  *      (spec 002 R3, amended 2026-10-02), as changed. A managers cohort synced into a shared
  *      course is a blocking fail from pass 1, as a count only (spec 002 R2).
+ *   7. each ltct: course's category against org-courses.yaml (spec 002 R11, 2026-10-02): a
+ *      declared organisation-only course outside its category is changed, an undeclared one
+ *      inside an ltct:org:* category is extra. Neither blocks; apply never moves a course.
  *
  * A setting forced in config.php is skipped in pass 3: config.php belongs to provisioning,
  * not to this declaration (R6). Any difference makes the run exit 1 (FR-008); a warning is
@@ -88,6 +91,11 @@ class drift {
             $this->report->add_result($item);
         }
         foreach ($this->inspector->check_course_groupmodes() as $item) {
+            $this->report->add_result($item);
+        }
+        // Pass 7: organisation-only course placement (spec 002 R11). Drift only: the applier
+        // never calls this, so apply never moves a course.
+        foreach ($this->inspector->check_course_placement() as $item) {
             $this->report->add_result($item);
         }
     }

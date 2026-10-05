@@ -193,5 +193,26 @@ function xmldb_local_ltuse_upgrade($oldversion) {
         upgrade_plugin_savepoint(true, 2026100600, 'local', 'ltuse');
     }
 
+    // Open courses, managers' own people (spec 002 amendment 2026-10-02, research R12): the
+    // message contacts this plugin makes between an organisation's managers and its people, so
+    // a leave removes only those.
+    if ($oldversion < 2026100602) {
+        $table = new xmldb_table('local_ltuse_org_contact');
+        $table->add_field('id', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, XMLDB_SEQUENCE, null);
+        $table->add_field('managerid', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, null);
+        $table->add_field('memberid', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, null);
+        $table->add_field('contactid', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, '0');
+        $table->add_field('timecreated', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, '0');
+        $table->add_key('primary', XMLDB_KEY_PRIMARY, ['id']);
+        $table->add_key('managerid', XMLDB_KEY_FOREIGN, ['managerid'], 'user', ['id']);
+        $table->add_key('memberid', XMLDB_KEY_FOREIGN, ['memberid'], 'user', ['id']);
+        $table->add_index('managermember', XMLDB_INDEX_UNIQUE, ['managerid', 'memberid']);
+        if (!$dbman->table_exists($table)) {
+            $dbman->create_table($table);
+        }
+
+        upgrade_plugin_savepoint(true, 2026100602, 'local', 'ltuse');
+    }
+
     return true;
 }

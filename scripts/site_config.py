@@ -16,7 +16,9 @@ Contracts: specs/001-site-config-as-code/contracts/ (declaration.md, site-config
 output.md); every validation rule is in data-model.md. Spec 012's
 moodle/site/course-discussions.yaml is retired: shared courses are open across
 organisations, so there is nothing to share or separate (spec 002 research R3, R14), and a
-file left behind is refused.
+file left behind is refused. Its place is taken by moodle/site/org-courses.yaml (spec 002
+R11): the courses only one organisation's people may join, read only by load_org_courses(),
+which moodle_payload.py also uses.
 
 ENVIRONMENT (never a file; the repo is public)
 
@@ -67,6 +69,7 @@ RETIRED_FILES = {
     "course-discussions.yaml": "retired, spec 002 R14: shared courses are open across "
                                "organisations, so there is nothing to share; delete it",
 }
+ORG_COURSES_FILE = "org-courses.yaml"        # spec 002 R11
 OFFICEHOURS_FILE = "office-hours.yaml"       # spec 011
 DASHBOARD_FILE = "dashboard.yaml"            # spec 011
 PATHWAYS_FILE = "pathways.yaml"              # spec 006
@@ -244,6 +247,9 @@ TOP_FILES = {
     "organisations.yaml": ({"rows", "purpose", "categories", "organisations", "mentors"},
                            set()),
     "profile-fields.yaml": ({"rows", "purpose", "category", "fields"}, set()),
+    # Spec 002 amendment (R11): the organisation-only courses. Optional; validated by
+    # load_org_courses(), not by the loop in validate(), because the publisher reads it too.
+    ORG_COURSES_FILE: ({"rows", "org_only"}, set()),
     # Spec 004: report templates and the two course fields. Both optional, as above
     # (specs/004-progress-reporting/contracts/declaration.md).
     "reports.yaml": ({"rows", "purpose", "reports"}, set()),
@@ -491,7 +497,7 @@ def validate(site_dir=SITE_DIR, modules_dir=None):
     decl = {"moodle": None, "plugins": [], "ignore": [], "roles": [], "settings": [],
             "categories": [], "cohorts": [], "profile_fields": [], "cohort_rules": [],
             "course_field_category": None, "course_fields": [], "competencies": [],
-            "reports": [],
+            "reports": [], "org_courses": [],
             "badge_template": None, "certificate_template": None,
             "officehours": None, "dashboard": [],
             "levels": [], "role_pathways": []}
@@ -505,12 +511,15 @@ def validate(site_dir=SITE_DIR, modules_dir=None):
         elif path.is_file() and path.suffix in (".yaml", ".yml") and path.name not in TOP_FILES:
             problems.add(_rel(path), "unexpected file; the declaration is site.yaml, "
                          "ignore.yaml, roles.yaml, organisations.yaml, "
-                         "profile-fields.yaml, course-fields.yaml, reports.yaml, "
+                         "profile-fields.yaml, %s, course-fields.yaml, reports.yaml, "
                          "badges.yaml, certificate/template.yaml, %s, %s, %s and "
-                         "settings/*.yaml" % (OFFICEHOURS_FILE, DASHBOARD_FILE, PATHWAYS_FILE))
+                         "settings/*.yaml" % (ORG_COURSES_FILE, OFFICEHOURS_FILE,
+                                              DASHBOARD_FILE, PATHWAYS_FILE))
 
     loaded = {}
     for name, (required, optional) in TOP_FILES.items():
+        if name == ORG_COURSES_FILE:
+            continue   # load_org_courses() below; the publisher reads it through the same loader
         path = site_dir / name
         if not path.exists():
             if name == "site.yaml":
@@ -825,6 +834,14 @@ def validate(site_dir=SITE_DIR, modules_dir=None):
                          "%s must be 0: shared courses are open across organisations, and "
                          "groups never separate organisations (spec 002 R3)" % GROUPMODE_SETTING)
     _expand(decl, orgs, fields)
+
+    # org-courses.yaml (spec 002 R11): the organisation keys are the ones validated above.
+    org_keys = {o["key"] for o in orgs["organisations"]} if orgs is not None else set()
+    org_courses, course_problems = load_org_courses(site_dir, modules_dir, org_keys=org_keys)
+    problems.items.extend(course_problems.items)
+    decl["org_courses"] = [{"slug": c["slug"], "course_idnumber": "ltct:" + c["slug"],
+                            "category_idnumber": "ltct:org:" + c["organisation"]}
+                           for c in org_courses]
 
     # Spec 004: the competency list, the course fields, then the reports, which read both.
     decl["competencies"] = _competency_list(problems)
@@ -1323,14 +1340,18 @@ ORG_PLACEHOLDER = "{org}"
 PER_VALUES = ("organisation",)
 # The three select conditions every per-organisation report carries, verbatim (FR-005).
 # A select stores the option key, so apply turns role:name's shortname into the role id.
+# Delivery is any enrolment but a pilot's manual one (spec 002 R10, amending spec 004 R10):
+# cohort sync, and a manager's enrolment through the organisation-enrolment instance
+# (enrol_self). A select condition holds one value, so it is "not manual", never a list.
 SCOPE_CONDITIONS = (
     ("user:profilefield_" + ORG_FIELD, {"operator": "equal", "value": ORG_PLACEHOLDER}),
     ("role:name", {"operator": "equal", "value": "student"}),
-    ("enrol:plugin", {"operator": "equal", "value": "cohort"}),
+    ("enrol:plugin", {"operator": "not_equal", "value": "manual"}),
 )
 SELECT_CONDITIONS = frozenset(name for name, _ in SCOPE_CONDITIONS)
-# Operator words the applier maps to filter constants; only select::EQUAL_TO (1) so far.
-CONDITION_OPERATORS = ("equal",)
+# Operator words the applier maps to filter constants: select::EQUAL_TO (1) and
+# NOT_EQUAL_TO (2), public/reportbuilder/classes/local/filters/select.php on MOODLE_502_STABLE.
+CONDITION_OPERATORS = ("equal", "not_equal")
 MANAGERS_AUDIENCE = {"type": "cohortmember", "cohort": "ltct:org:%s:managers" % ORG_PLACEHOLDER}
 AUDIENCE_KEYS = {"cohortmember": "cohort", "systemrole": "role"}
 SORT_DIRECTIONS = ("asc", "desc")
@@ -2096,6 +2117,102 @@ def _course_slugs(modules_dir):
     return slugs
 
 
+def _declared_org_keys(site_dir):
+    """The organisation keys organisations.yaml declares, read leniently.
+
+    Only for load_org_courses() called on its own, by the publisher: validate() checks the
+    file itself and passes the keys it accepted.
+    """
+    path = site_dir / "organisations.yaml"
+    if not path.exists():
+        return set()
+    data = _load(path, Problems())
+    orgs = data.get("organisations") if isinstance(data, dict) else None
+    return {o["key"] for o in orgs or [] if isinstance(o, dict)
+            and isinstance(o.get("key"), str) and KEY.match(o["key"])}
+
+
+def load_org_courses(site_dir=None, modules_dir=None, org_keys=None):
+    """Read moodle/site/org-courses.yaml (spec 002 R11, contracts/declaration.md).
+
+    Returns (courses, Problems): `courses` is a list of {slug, organisation, why}, one per
+    course that only its host organisation's people may join. Every other course is
+    shared, which is also what an absent file or an empty list means.
+
+    This is the only reader of the file. scripts/moodle_payload.py calls it for each
+    course's `placement`, and validate() for the drift payload's `org_courses`, so the
+    publisher and the drift check cannot disagree.
+
+    Rules (the retired course-discussions.yaml's, plus one): rows cite
+    moodle/REQUIREMENTS.md; each slug is a course under modules/, compared with
+    course_stage.branch_slug(); no slug twice; `why` is required; and `organisation` is a
+    key declared in organisations.yaml. An invalid entry is left out of `courses`.
+    """
+    site_dir = pathlib.Path(site_dir) if site_dir is not None else SITE_DIR
+    modules_dir = pathlib.Path(modules_dir) if modules_dir is not None else MODULES
+    problems = Problems()
+    path = site_dir / ORG_COURSES_FILE
+    if not path.exists():
+        return [], problems
+    where = _rel(path)
+    before = len(problems.items)
+    data = _load(path, problems)
+    if data is None:
+        if len(problems.items) == before:
+            problems.add(where, "empty; write `rows: [8, 15]` and `org_only: []`")
+        return [], problems
+    required, optional = TOP_FILES[ORG_COURSES_FILE]
+    if not _check_keys(where, data, required, optional, problems):
+        return [], problems
+    _check_hosts(where, data, problems)
+    _check_rows(where, data, _requirement_rows(), problems)
+
+    entries = data.get("org_only")
+    if entries is None:
+        entries = []                     # `org_only:` with nothing under it: none
+    if not isinstance(entries, list):
+        problems.add(where, "org_only must be a list of {slug, organisation, why}")
+        return [], problems
+    if org_keys is None:
+        org_keys = _declared_org_keys(site_dir)
+
+    courses = _course_slugs(modules_dir)
+    out, seen = [], set()
+    for i, entry in enumerate(entries):
+        ewhere = "%s org_only[%d]" % (where, i)
+        if not _check_keys(ewhere, entry, {"slug", "organisation", "why"}, set(), problems):
+            continue
+        slug = entry.get("slug")
+        if not _text(slug):
+            problems.add(ewhere, "slug must be a course's branch_slug()")
+            continue
+        if slug not in courses:
+            canonical = branch_slug(slug)
+            if canonical in courses:
+                problems.add(ewhere, "%s: write it as %s, the course's branch_slug()"
+                             % (slug, canonical))
+            else:
+                problems.add(ewhere, "%s is not a course under modules/" % slug)
+            continue
+        if slug in seen:
+            problems.add(ewhere, "%s is declared twice; a course has at most one host "
+                         "organisation" % slug)
+            continue
+        seen.add(slug)
+        org = entry.get("organisation")
+        if org not in org_keys:
+            problems.add(ewhere, "%s: organisation %r is not a key in organisations.yaml"
+                         % (slug, org))
+            continue
+        if not _text(entry.get("why")):
+            problems.add(ewhere, "%s: why must record the approval (\"approved by the "
+                         "maintainer, issue #N\"), never the organisation's circumstances"
+                         % slug)
+            continue
+        out.append({"slug": slug, "organisation": org, "why": entry["why"]})
+    return out, problems
+
+
 def _check_source(where, component, version, source, problems):
     if not isinstance(source, dict):
         problems.add(where, "source is {url, sha256} or {path}")
@@ -2716,6 +2833,9 @@ def build_payload(decl, mode, environ, redact=False):
         "cohorts": decl["cohorts"],
         "profile_fields": decl["profile_fields"],
         "cohort_rules": decl["cohort_rules"],
+        # Spec 002 R11: the organisation-only courses, for placement drift. The `why` stays
+        # in the repo; the server needs only where each course belongs.
+        "org_courses": decl["org_courses"],
         # Spec 004, in application order; reports last (data-model "Rendered payload
         # additions"). Every {org} is already expanded.
         "course_field_category": decl["course_field_category"],
@@ -2805,13 +2925,13 @@ def _summary(decl):
     files = len({s["file"] for s in decl["settings"]})
     return ("%d settings in %d files, %d plugins, %d roles, %d ignore entries, "
             "%d categories, %d cohorts, %d profile fields, %d cohort rules, "
-            "%d course fields, %d competencies, %d reports, "
+            "%d organisation-only courses, %d course fields, %d competencies, %d reports, "
             "%d badge template, %d certificate template, %d office-hours course, "
             "%d dashboard blocks"
             % (len(decl["settings"]), files, len(decl["plugins"]), len(decl["roles"]),
                len(decl["ignore"]), len(decl["categories"]), len(decl["cohorts"]),
                len(decl["profile_fields"]), len(decl["cohort_rules"]),
-               len(decl["course_fields"]), len(decl["competencies"]), len(decl["reports"]),
+               len(decl["org_courses"]), len(decl["course_fields"]), len(decl["competencies"]), len(decl["reports"]),
                decl["badge_template"] is not None, decl["certificate_template"] is not None,
                decl["officehours"] is not None, len(decl["dashboard"])))
 

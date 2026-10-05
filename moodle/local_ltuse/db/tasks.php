@@ -15,4 +15,15 @@ $tasks = [
         'month' => '*',
         'dayofweek' => '*',
     ],
+    // Spec 002 (amendment 2026-10-02, R12): repair organisation contacts and old-organisation
+    // enrolments that no cohort event reached, hourly, at a minute Moodle picks per site.
+    [
+        'classname' => '\local_ltuse\task\reconcile_org_contacts',
+        'blocking' => 0,
+        'minute' => 'R',
+        'hour' => '*',
+        'day' => '*',
+        'month' => '*',
+        'dayofweek' => '*',
+    ],
 ];

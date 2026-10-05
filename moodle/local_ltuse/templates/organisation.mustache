@@ -1,0 +1,91 @@
+{{!
+    @template local_ltuse/organisation
+
+    The "my organisation" page (spec 002 amendment 2026-10-02, research R10). Phone-width first:
+    lists, no wide tables. Course completion only; never a CBC level. Every action link opens a
+    confirmation that says what it does; nothing here writes on a GET.
+
+    Context variables required for this template:
+    * empty
+    * organisations: [{name, haspeople, people: [{id, fullname, email, suspended, canmanage,
+        profileurl, mentorsurl, reseturl, suspendurl, reactivateurl, hascourses,
+        courses: [{fullname (format_string, so unescaped), statustext, completed, notactive,
+                   enrolmenttext, hidden, canunenrol, unenrolurl}],
+        canenrol, enrolchoices: [{id, fullname (format_string, so unescaped)}]}]}]
+    * actionurl: the page's URL, for the enrol form
+
+    Example context (json):
+    {
+        "empty": false,
+        "actionurl": "#",
+        "organisations": [{"name": "Fixture organisation", "haspeople": true,
+            "people": [{"id": 2, "fullname": "Learner One", "email": "fixture@example.com",
+                "suspended": false, "canmanage": true, "profileurl": "#", "mentorsurl": "#",
+                "reseturl": "#", "suspendurl": "#", "reactivateurl": "#", "hascourses": true,
+                "courses": [{"fullname": "Course A", "statustext": "In progress, 40%",
+                    "notactive": false, "enrolmenttext": "", "hidden": false,
+                    "canunenrol": true, "unenrolurl": "#"}],
+                "canenrol": true, "enrolchoices": [{"id": 3, "fullname": "Course B"}]}]}]
+    }
+}}
+<div class="local-ltuse-organisation">
+{{#empty}}
+    <p>{{#str}}organisation:empty, local_ltuse{{/str}}</p>
+{{/empty}}
+{{#organisations}}
+    <h3>{{{name}}}</h3>
+    {{^haspeople}}
+    <p class="text-muted">{{#str}}organisation:nopeople, local_ltuse{{/str}}</p>
+    {{/haspeople}}
+    {{#people}}
+    <section class="card mb-3" id="person-{{id}}">
+        <div class="card-body">
+            <h4 class="card-title h5">{{fullname}}
+                {{#suspended}}<span class="badge bg-warning text-dark">{{#str}}organisation:suspended, local_ltuse{{/str}}</span>{{/suspended}}
+            </h4>
+            <p class="mb-2">
+                {{email}} ·
+                <a href="{{profileurl}}">{{#str}}mentoring:profile, local_ltuse{{/str}}</a>
+                {{#canmanage}}
+                · <a href="{{mentorsurl}}">{{#str}}organisation:mentors, local_ltuse{{/str}}</a>
+                · <a href="{{reseturl}}">{{#str}}organisation:action:reset, local_ltuse{{/str}}</a>
+                {{^suspended}}· <a href="{{suspendurl}}">{{#str}}organisation:action:suspend, local_ltuse{{/str}}</a>{{/suspended}}
+                {{#suspended}}· <a href="{{reactivateurl}}">{{#str}}organisation:action:reactivate, local_ltuse{{/str}}</a>{{/suspended}}
+                {{/canmanage}}
+            </p>
+            {{^canmanage}}
+            <p class="text-muted small mb-2">{{#str}}organisation:siteteam, local_ltuse{{/str}}</p>
+            {{/canmanage}}
+            {{#hascourses}}
+            <ul class="list-unstyled mb-2">
+                {{#courses}}
+                <li class="py-1 border-top">
+                    <span class="font-weight-bold">{{{fullname}}}</span>
+                    {{#hidden}}<span class="badge bg-secondary">{{#str}}mentoring:hidden, local_ltuse{{/str}}</span>{{/hidden}}
+                    <br>
+                    <span class="{{#completed}}text-success{{/completed}}">{{statustext}}</span>
+                    {{#notactive}}<span class="text-muted"> ({{enrolmenttext}})</span>{{/notactive}}
+                    {{#canunenrol}} · <a href="{{unenrolurl}}">{{#str}}organisation:action:unenrol, local_ltuse{{/str}}</a>{{/canunenrol}}
+                </li>
+                {{/courses}}
+            </ul>
+            {{/hascourses}}
+            {{^hascourses}}
+            <p class="text-muted mb-2">{{#str}}mentoring:nocourses, local_ltuse{{/str}}</p>
+            {{/hascourses}}
+            {{#canenrol}}
+            <form method="get" action="{{actionurl}}" class="d-flex flex-wrap gap-2 align-items-center">
+                <input type="hidden" name="action" value="enrol">
+                <input type="hidden" name="userid" value="{{id}}">
+                <label class="visually-hidden" for="enrol-{{id}}">{{#str}}organisation:enrolin, local_ltuse{{/str}}</label>
+                <select class="form-select w-auto" name="courseid" id="enrol-{{id}}">
+                    {{#enrolchoices}}<option value="{{id}}">{{{fullname}}}</option>{{/enrolchoices}}
+                </select>
+                <button type="submit" class="btn btn-secondary">{{#str}}organisation:action:enrol, local_ltuse{{/str}}</button>
+            </form>
+            {{/canenrol}}
+        </div>
+    </section>
+    {{/people}}
+{{/organisations}}
+</div>

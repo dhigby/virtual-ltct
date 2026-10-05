@@ -225,11 +225,13 @@ class mentoring {
     /**
      * A learner's courses with their status: every course they are enrolled in, active or
      * suspended, and every course they completed even if the enrolment is gone (FR-004).
+     * Public for spec 002's organisation page (organisation\people), so both pages show a
+     * learner's progress the same way.
      *
      * @param int $learnerid
      * @return array[]
      */
-    protected static function courses(int $learnerid): array {
+    public static function courses(int $learnerid): array {
         global $CFG, $DB;
         require_once($CFG->libdir . '/completionlib.php');
 

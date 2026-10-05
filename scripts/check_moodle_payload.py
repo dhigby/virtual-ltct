@@ -51,7 +51,12 @@ Moodle even when it leaks nothing (spec 004):
                           cbc_wording.check_recognition(), since a title is free text and
                           reaches the badge; and the certificate's idnumber fits Moodle's column and is no
                           lesson's.
-  9. Target level      -- spec 006: a target_outcome_level that is present is one of
+  9. Placement         -- spec 002 R11: the course says whether it is organisation-only,
+                          and an organisation-only course names its organisation's
+                          category, ltct:org:<key>, and nothing else. A malformed one would
+                          leave an organisation-only course in a shared category, open to
+                          everyone, so it is refused.
+ 10. Target level      -- spec 006: a target_outcome_level that is present is one of
                           outcome-levels.yaml's course_target_levels labels, verbatim. The
                           publisher sends its leading digit as the course's pathway level,
                           so a label it cannot read a digit from must never reach Moodle.
@@ -96,6 +101,8 @@ COURSE_COMPLETION = "all"
 SITE = REPO / "moodle" / "site"
 IDNUMBER_MAX = 100                                 # course_modules.idnumber
 PLACEHOLDER = re.compile(r"\{([^{}]*)\}")
+# An organisation's category (spec 002 R11); the key as site_config.KEY allows it.
+ORG_CATEGORY = re.compile(r"^ltct:org:[a-z][a-z0-9-]*$")
 
 
 def normalise(text):
@@ -126,6 +133,7 @@ def check(payload_dir):
     problems += check_completion(slug, manifest)
     problems += check_competencies(slug, manifest)
     problems += check_recognition(slug, manifest)
+    problems += check_placement(slug, manifest)
     problems += check_target_level(slug, manifest)
 
     if manifest["view"] != "learner":
@@ -210,6 +218,24 @@ def check(payload_dir):
         warnings.append("%s: not publishable -- %s" % (slug, manifest["blocked_reason"]))
 
     return problems, warnings
+
+
+def check_placement(slug, manifest):
+    """Check 9. {org_only, category_idnumber}, both present and consistent (spec 002 R11)."""
+    placement = manifest.get("placement")
+    if not isinstance(placement, dict) or set(placement) != {"org_only", "category_idnumber"}:
+        return ["%s: placement must be exactly {org_only, category_idnumber}, not %r"
+                % (slug, placement)]
+    org_only, category = placement["org_only"], placement["category_idnumber"]
+    if not isinstance(org_only, bool):
+        return ["%s: placement.org_only must be true or false, not %r" % (slug, org_only)]
+    if org_only and not (isinstance(category, str) and ORG_CATEGORY.match(category)):
+        return ["%s: an organisation-only course's placement.category_idnumber must be "
+                "ltct:org:<key>, not %r" % (slug, category)]
+    if not org_only and category is not None:
+        return ["%s: a shared course's placement.category_idnumber must be null, not %r"
+                % (slug, category)]
+    return []
 
 
 def check_completion(slug, manifest):

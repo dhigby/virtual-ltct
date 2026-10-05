@@ -26,6 +26,11 @@ use core_privacy\local\request\writer;
  * appointment itself is mod_scheduler's to export, the calendar events core's, and the
  * eventchange and bookingnotice notifications core messaging's.
  *
+ * Spec 002 (amendment 2026-10-02, R12) adds local_ltuse_org_contact: which message contacts it
+ * made between an organisation's manager and a person in it. Like the mentor contacts, each
+ * row belongs to both people and is reported in each one's user context, and deleting it
+ * removes the contact it stands for. Organisation membership itself is core's cohorts'.
+ *
  * Spec 006 adds local_ltuse_pathway_cohort: each pathway given to a cohort, with the user who
  * made the link (usermodified). The link belongs to the cohort, so a deletion request keeps it
  * and sets usermodified to 0. Cohort membership is core_cohort's to export.
@@ -46,6 +51,8 @@ class provider implements
     /** Spec 011: each office-hours booking's last notified time (research R20). */
     const BOOKING = 'local_ltuse_booking';
 
+    /** Spec 002: the organisation contacts it made (research R12). */
+    const ORGCONTACT = 'local_ltuse_org_contact';
     /** Spec 006: pathways given to cohorts, and who gave them (research R9). */
     const PATHWAY_COHORT = 'local_ltuse_pathway_cohort';
 
@@ -69,6 +76,12 @@ class provider implements
             'timeduration' => 'privacy:metadata:booking:timeduration',
             'timecreated' => 'privacy:metadata:booking:timecreated',
         ], 'privacy:metadata:booking');
+        $collection->add_database_table(self::ORGCONTACT, [
+            'managerid' => 'privacy:metadata:org_contact:managerid',
+            'memberid' => 'privacy:metadata:org_contact:memberid',
+            'contactid' => 'privacy:metadata:org_contact:contactid',
+            'timecreated' => 'privacy:metadata:org_contact:timecreated',
+        ], 'privacy:metadata:org_contact');
         $collection->add_database_table(self::PATHWAY_COHORT, [
             'pathwaykey' => 'privacy:metadata:local_ltuse_pathway_cohort:pathwaykey',
             'cohortid' => 'privacy:metadata:local_ltuse_pathway_cohort:cohortid',
@@ -95,11 +108,13 @@ class provider implements
                                  WHERE mc.mentorid = :mentorid OR mc.learnerid = :learnerid)
                         OR EXISTS (SELECT 1 FROM {" . self::BOOKING . "} b
                                     WHERE b.mentorid = :bmentorid OR b.learnerid = :blearnerid)
+                        OR EXISTS (SELECT 1 FROM {" . self::ORGCONTACT . "} oc
+                                    WHERE oc.managerid = :omanagerid OR oc.memberid = :omemberid)
                         OR EXISTS (SELECT 1 FROM {" . self::PATHWAY_COHORT . "} pc
                                     WHERE pc.usermodified = :pcuserid))";
         $contextlist->add_from_sql($sql, ['level' => CONTEXT_USER, 'userid' => $userid,
             'mentorid' => $userid, 'learnerid' => $userid, 'bmentorid' => $userid, 'blearnerid' => $userid,
-            'pcuserid' => $userid]);
+            'omanagerid' => $userid, 'omemberid' => $userid, 'pcuserid' => $userid]);
         return $contextlist;
     }
 
@@ -129,6 +144,7 @@ class provider implements
                 continue;
             }
             self::export_bookings($context, $userid);
+            self::export_org_contacts($context, $userid);
             self::export_pathway_links($context, $userid);
             $rows = $DB->get_records_select(self::TABLE, 'mentorid = :mentorid OR learnerid = :learnerid',
                 ['mentorid' => $userid, 'learnerid' => $userid], 'timecreated, id');
@@ -194,6 +210,8 @@ class provider implements
         $params = ['mentorid' => $userid, 'learnerid' => $userid];
         return $DB->record_exists_select(self::TABLE, 'mentorid = :mentorid OR learnerid = :learnerid', $params)
             || $DB->record_exists_select(self::BOOKING, 'mentorid = :mentorid OR learnerid = :learnerid', $params)
+            || $DB->record_exists_select(self::ORGCONTACT, 'managerid = :managerid OR memberid = :memberid',
+                ['managerid' => $userid, 'memberid' => $userid])
             || $DB->record_exists(self::PATHWAY_COHORT, ['usermodified' => $userid]);
     }
 
@@ -270,5 +288,35 @@ class provider implements
             ['mentorid' => $userid, 'learnerid' => $userid]);
         // A pathway link belongs to its cohort: keep it, forget who made it (spec 006).
         $DB->set_field(self::PATHWAY_COHORT, 'usermodified', 0, ['usermodified' => $userid]);
+        // Spec 002: the same for organisation contacts, through contacts::user_deleted(), which
+        // removes each contact only if it is still the one this plugin made.
+        \local_ltuse\organisation\contacts::user_deleted($userid);
+    }
+
+    /**
+     * Export the user's organisation contact records, as manager or as member (spec 002, R12).
+     *
+     * @param context_user $context
+     * @param int $userid
+     */
+    protected static function export_org_contacts(context_user $context, int $userid): void {
+        global $DB;
+        $rows = $DB->get_records_select(self::ORGCONTACT, 'managerid = :managerid OR memberid = :memberid',
+            ['managerid' => $userid, 'memberid' => $userid], 'timecreated, id');
+        if (!$rows) {
+            return;
+        }
+        $contacts = [];
+        foreach ($rows as $row) {
+            $contacts[] = (object)[
+                'role' => ((int)$row->managerid === $userid) ? 'manager' : 'member',
+                'managerid' => (int)$row->managerid,
+                'memberid' => (int)$row->memberid,
+                'contactid' => (int)$row->contactid,
+                'timecreated' => transform::datetime($row->timecreated),
+            ];
+        }
+        writer::with_context($context)->export_data(
+            [get_string('privacy:path:orgcontacts', 'local_ltuse')], (object)['contacts' => $contacts]);
     }
 }

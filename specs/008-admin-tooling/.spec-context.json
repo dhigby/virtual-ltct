@@ -2,8 +2,8 @@
   "workflow": "speckit",
   "specName": "Simple Administration Tooling",
   "branch": "specs/moodle-requirements",
-  "currentStep": "tasks",
-  "status": "ready-to-implement",
+  "currentStep": "implement",
+  "status": "implementing",
   "history": [
     {
       "step": "specify",
@@ -25,6 +25,13 @@
       "kind": "complete",
       "by": "extension",
       "at": "2026-10-04T21:58:04.229Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "kind": "complete",
+      "by": "extension",
+      "at": "2026-10-05T00:06:56.559Z"
     }
   ],
   "telemetryInstanceId": "ca7b7865-32c3-47f5-9b66-14db77307056"

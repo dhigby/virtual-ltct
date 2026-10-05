@@ -19,7 +19,8 @@ scenario is built to surface:
 - **(c) Coaches, doesn't take over the keyboard.**
 - **(d) Drives the tools correctly** — chooses the sensible list/option (e.g. link
   first-per-section, not every occurrence) and can undo a bad move.
-- **(e) Judges legitimate variation vs. error**, especially in parallel passages.
+- **(e) Leaves legitimate variation vs. error to the team**, especially in parallel
+  passages: confirms the differences were reviewed, and gets the team to judge each one.
 - **(f) Advises the surfaced decisions** (layout, hyphenation, renderings) and defers to the
   team or another consultant where it's genuinely their call, not the LTC's.
 - **(g) Knows when to escalate** — an LT mentor for tooling problems, a Translation

@@ -251,6 +251,20 @@
 > level and every other objective are unchanged. `module-author` may revise
 > `03-parallel-passages-and-measures.md`, `04-formatting-and-references.md`, `06-scenario-bank.md`
 > and `07-mentor-guide.md`, and `quiz-writer` may revise `08-quiz.md` (Q12), on this basis.
+>
+> **Amendment, Stage 4 advisories, 2026-10-05 (Jenni Beadle, course author and SME) — two more
+> places where the LTC could be read as judging target-language text, clarifications within the
+> approved scope, no re-approval needed:**
+> 1. **"What good looks like" marker (e)** (here and in `07-mentor-guide.md`). Whether a
+>    difference is legitimate variation or an error is the **team's** judgment. The consultant
+>    confirms the differences were reviewed and gets the team to judge each one. The marker's
+>    earlier wording, "Judges legitimate variation vs. error", is kept below as history.
+> 2. **Punctuation Inventory (lesson 04).** Whether a flagged character is valid in the
+>    orthography: if the consultant has the orthography statement written by the project's
+>    linguist, the consultant can check the character against it; otherwise the team decides.
+>
+> Seat time, competencies, outcome level and all objectives are unchanged. `module-author` may
+> revise `04-formatting-and-references.md` and `07-mentor-guide.md` on this basis.
 
 ## Outcome-level open question (resolve before approval)
 
@@ -946,3 +960,14 @@ once it is. Seat time (course total 355), competencies, outcome level and all ot
 are unchanged. `module-author` may revise `03-parallel-passages-and-measures.md`,
 `04-formatting-and-references.md`, `06-scenario-bank.md` and `07-mentor-guide.md`, and
 `quiz-writer` may revise `08-quiz.md` (Q12), on this basis.
+
+**Amendment, Stage 4 advisories, 2026-10-05 (Jenni Beadle, course author and SME) — two more
+places where the LTC could be read as judging target-language text, clarifications within the
+approved scope, no re-approval needed:** (1) **marker (e)** — whether a difference is legitimate
+variation or an error is the team's judgment; the consultant confirms the differences were
+reviewed and gets the team to judge each one (the marker's earlier wording is kept as history);
+(2) **Punctuation Inventory** (lesson 04) — if the consultant has the orthography statement
+written by the project's linguist, they can check a flagged character against it; otherwise the
+team decides whether it is valid. Seat time, competencies, outcome level and all objectives are
+unchanged. `module-author` may revise `04-formatting-and-references.md` and `07-mentor-guide.md`
+on this basis.

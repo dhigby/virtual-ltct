@@ -216,6 +216,9 @@ Four things to do with these inventories:
   it reaches a typesetter — unrecognized or unconfigured punctuation characters left
   unresolved in the inventory's settings can surface late, as a pile of issues the
   typesetter has to chase down one by one instead of the team resolving them upfront.
+  Whether a flagged character is valid is an orthography question. If you have the
+  orthography statement written by the project's linguist, you can check the character
+  against it; if not, the team decides.
 - **Select "Show sequences" in the Punctuation Inventory tab's Inventory menu**, so that
   punctuation *sequences* — multi-character combinations, such as multiple quotation
   marks paired with spacing or another punctuation character — are actually inventoried,

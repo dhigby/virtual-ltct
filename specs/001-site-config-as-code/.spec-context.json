@@ -362,6 +362,9 @@
       "decision": "Push (message_airnotifier) is enabled in the baseline; supersedes \"Push stays disabled\"",
       "why": "ltuse.net moved to the Premium app plan on 2026-10-02: unlimited push devices at a flat rate, so constitution IX holds",
       "rejected": "keeping push off until spec 015"
+    },
+    {
+      "decision": "The declaration contract lists every extension of the declaration (Doug, 2026-10-05)"
     }
   ],
   "concerns": [
@@ -390,6 +393,10 @@
     {
       "note": "The first drift run printed the airnotifier access key and calendar export salt into this session's terminal before redaction was fixed; nothing reached the repo",
       "step": "implement"
+    },
+    {
+      "note": "2026-10-05: drift on ltuse.net shows 16 differences, all expected (12 test-a/test-b fixtures, 3 courses awaiting a republish for their forum, 1 MOODLE_BADGE_CONTACT unset in the shell); the 2026-10-01 clean drift no longer holds",
+      "kind": "verification"
     }
   ],
   "step_summaries": {
@@ -548,7 +555,7 @@
       ]
     }
   },
-  "currentTask": "T026",
+  "currentTask": "T025",
   "task_summaries": {
     "T001": {
       "status": "DONE",

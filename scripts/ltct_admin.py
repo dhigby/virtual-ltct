@@ -406,6 +406,7 @@ def intake_payload(row):
         "country": (row.get("country") or "").strip().upper(),
         "protection": (row.get("protection") or "").strip().lower(),
         "pseudonym": (row.get("pseudonym") or "").strip(),
+        "emailchecked": (row.get("email_checked") or "").strip().lower() == "yes",
         "courses": _split(row.get("courses")),
     }
 

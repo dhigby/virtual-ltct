@@ -263,6 +263,7 @@ $string['admin:reason:suspended'] = 'the account exists and is suspended; reacti
 $string['admin:reason:other_org'] = 'the account is already in {$a}; use "move" if this is right';
 $string['admin:reason:course_not_allowed'] = 'a listed course is not one this organisation may be enrolled into';
 $string['admin:reason:protection_absent'] = 'protection is asked for, and identity protection (spec 016) is not installed; the row waits';
+$string['admin:reason:email_reveals'] = 'the email address looks like it names this person or their organisation, and others in a course will see it; use another address, or put yes in email_checked once you have confirmed it does not identify them';
 $string['admin:reason:protection_unavailable'] = 'the protection this row needs cannot be set on this site yet; the row waits';
 $string['admin:reason:protection_below'] = 'the account\'s protection is below what this row needs; raise it on the protection page first';
 $string['admin:reason:course_not_ltct'] = 'the course is not one this repository publishes (ltct:<slug>), or is the office-hours course';

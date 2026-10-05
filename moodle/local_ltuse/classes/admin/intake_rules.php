@@ -52,6 +52,10 @@ defined('MOODLE_INTERNAL') || die();
  *   active       array   the course idnumbers the account is already actively enrolled in
  *   allowed      array   the row's course idnumbers the organisation may be enrolled into
  *                        (enrolment_rules, as Student)
+ *   emailflags   array   with protection asked: what spec 016's levels::email_reveals() says
+ *                        the row's email may give away ('name', 'organisation'); empty otherwise
+ *   emailconfirmed bool  the row's email_checked column: someone confirmed the address does
+ *                        not identify the person
  *   loginclash   bool    with no matched account: another live account on this site has the
  *                        row's email as its username, so signing in with that email would reach
  *                        the other account (core looks a username up before an email)
@@ -133,6 +137,11 @@ class intake_rules {
         }
         if ($needsprotection && !in_array($target, $available, true)) {
             return self::result('waits', 'protection_unavailable', $target);
+        }
+        // Spec 016 change 2: a protected person's address stays visible to others in a course,
+        // so one that looks like it names them waits until someone confirms it does not.
+        if ($needsprotection && !empty($facts['emailflags']) && empty($facts['emailconfirmed'])) {
+            return self::result('waits', 'email_reveals', $target);
         }
 
         $missing = array_values(array_diff($courses, $active));

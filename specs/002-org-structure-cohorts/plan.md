@@ -101,7 +101,7 @@ Everything a manager does is our own `local_ltuse` code, because core cannot sco
 
 An organisation-only course is declared by the maintainer in a new `moodle/site/org-courses.yaml`. The publisher places it in the organisation's category through a new `local_ltuse` web service, and drift reports any course in the wrong place (R11). A one-off CLI removes the organisation groups and the shared-course managers enrolments already on the build host, reporting counts only (R13).
 
-Out of scope, by decision: making `ltct_org` private and moving spec 004's report scope to cohort membership (spec 016 decision 2); a user-context follow role (B3); managers creating accounts or editing the organisation field (FR-009, FR-013); managers enrolling into pilot courses; moving a course from Pilots to Published (spec 008 or later).
+Out of scope, by decision: moving spec 004's report scope to cohort membership (spec 016 decision 2; `ltct_org` stays visible under its option (a), Doug, 2026-10-05 (scope review)); a user-context follow role (B3); managers creating accounts or editing the organisation field (FR-009, FR-013); managers enrolling into pilot courses; moving a course from Pilots to Published (spec 008 or later).
 
 ### Technical Context
 
@@ -225,7 +225,7 @@ Steps 2–3 are the minimum spec 016 needs. Step 4 closes the profile reach 016 
   - `org-courses.yaml` joins the public files its neutral-key guidance covers (R11);
   - R10's suspend and reactivate write a minimal `{id, suspended}` object; 016 adds a PHPUnit case that suspending a protected user leaves their names unchanged.
   - email (Doug, 2026-10-02): a protected person's address is shown to their own organisation's managers and to their mentors, never to classmates. This bears on 016 decision 1, which proposes removing email from course leaders' views for everyone.
-  Its decision 2 (`ltct_org` private, cohort report scope) is untouched here.
+  Its decision 2 (cohort report scope; `ltct_org` stays visible, option (a), Doug, 2026-10-05 (scope review)) is untouched here.
 - **005**: the community space is not a shared delivery course, so the 2.0.0 rule does not forbid its per-organisation rooms. But a group named for an organisation shows a protected member's organisation on every post, so 005 and 016 must settle those rooms (rename, or keep protected members out) before 016 ships; 016 adds the community space to its audit.
 - **006, 008**: wording. 008 FR-008's "category-scoped manager roles" becomes "the managers cohort and the organisation page"; its enrolment tooling has a shared-course and an organisation-only case.
 

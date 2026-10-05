@@ -53,6 +53,7 @@ class intake_service {
     /** Spec 016's classes, called only when installed (research R5). */
     const PROTECTION_SERVICE = '\local_ltuse\protection\service';
     const PROTECTION_ENTITLEMENT = '\local_ltuse\protection\entitlement';
+    const PROTECTION_LEVELS = '\local_ltuse\protection\levels';
 
     /** Spec 002's management actions (organisation\actions), for the per-row courses. */
     const ACTIONS = '\local_ltuse\organisation\actions';
@@ -230,6 +231,8 @@ class intake_service {
             'active' => $userid ? self::active_courses($userid, $courses, $context) : [],
             'allowed' => $allowed,
             'loginclash' => !$accounts && self::username_in_use(self::normalise_email((string)$row['email'])),
+            'emailflags' => self::email_flags($row, $key),
+            'emailconfirmed' => !empty($row['emailchecked']),
         ];
         if ($userid && $context['protection']) {
             $service = self::PROTECTION_SERVICE;
@@ -256,6 +259,26 @@ class intake_service {
         $select = 'deleted = 0 AND mnethostid = :mnethostid AND ' . $DB->sql_equal('email', ':email', false);
         return array_values($DB->get_records_select('user', $select,
             ['mnethostid' => $CFG->mnet_localhost_id, 'email' => $email], 'id ASC', 'id, suspended'));
+    }
+
+    /**
+     * What the row's email may give away, when the row asks for protection (spec 016 change 2,
+     * its contracts/protection-service.md "Spec 008's intake"): levels::email_reveals() with the
+     * row's own names and organisation key, because ltct_org is not set yet when protect() runs.
+     * Empty without spec 016, where a protected row waits anyway.
+     *
+     * @param array $row
+     * @param string $key the row's organisation key
+     * @return string[] 'name', 'organisation'
+     */
+    protected static function email_flags(array $row, string $key): array {
+        $asked = strtolower(trim((string)($row['protection'] ?? '')));
+        if ($asked === '' || $asked === 'none' || !class_exists(self::PROTECTION_LEVELS)) {
+            return [];
+        }
+        $levels = self::PROTECTION_LEVELS;
+        return $levels::email_reveals(self::normalise_email((string)$row['email']),
+            trim((string)$row['firstname']), trim((string)$row['lastname']), $key);
     }
 
     /**
@@ -434,7 +457,12 @@ class intake_service {
             if (!$entitlement::can_manage_protection((int)$USER->id, $userid)) {
                 return [false, 'protection_not_permitted'];
             }
-            $options = $target === 'pseudonym' ? ['pseudonym' => trim((string)($row['pseudonym'] ?? ''))] : [];
+            // The row is the person's request, and classify() let it through only once the
+            // address was checked (spec 016 contracts/protection-service.md, "Spec 008's intake").
+            $options = ['requested' => true, 'emailchecked' => true];
+            if ($target === 'pseudonym') {
+                $options['pseudonym'] = trim((string)($row['pseudonym'] ?? ''));
+            }
             try {
                 $service::set_protection($userid, $target, $options, (int)$USER->id);
             } catch (\moodle_exception $e) {

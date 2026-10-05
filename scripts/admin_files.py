@@ -52,7 +52,7 @@ MULTI_SEP = ";"
 # unknown column is refused, never ignored, so a misspelt one cannot silently drop data.
 KINDS = {
     "intake": (("email", "firstname", "lastname", "organisation"),
-               ("country", "protection", "pseudonym", "courses")),
+               ("country", "protection", "pseudonym", "email_checked", "courses")),
     "move": (("email", "organisation"), ()),
     "mentors": (("learner_email", "mentor_email"), ()),
     "course-mentors": (("course", "mentor_email"), ("learner_email", "cohort")),
@@ -341,6 +341,11 @@ def _check_intake(get, orgs):
         problems.append("protection is pseudonym, so the pseudonym column is needed")
     if get("pseudonym") and level != "pseudonym":
         problems.append("a pseudonym is given, but protection is not pseudonym")
+    checked = get("email_checked").lower()
+    if checked not in ("", "yes"):
+        problems.append("email_checked %r must be yes or empty" % get("email_checked"))
+    elif checked and level == "none":
+        problems.append("email_checked is only for a row that asks for protection")
     for course in [c.strip() for c in get("courses").split(MULTI_SEP) if c.strip()]:
         if not COURSE.fullmatch(course):
             problems.append("course %r is not a course idnumber like ltct:<slug>" % course)

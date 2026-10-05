@@ -48,6 +48,9 @@ class admin_preview_intake extends external_api {
                 VALUE_DEFAULT, ''),
             'pseudonym' => new external_value(PARAM_TEXT, 'Pseudonym, with protection pseudonym only',
                 VALUE_DEFAULT, ''),
+            'emailchecked' => new external_value(PARAM_BOOL,
+                'With protection: someone confirmed the email address does not identify the person',
+                VALUE_DEFAULT, false),
             'courses' => new external_multiple_structure(
                 new external_value(PARAM_RAW_TRIMMED, 'Course idnumber, ltct:<slug>'),
                 'Courses to enrol in through the Organisation enrolment', VALUE_DEFAULT, []),

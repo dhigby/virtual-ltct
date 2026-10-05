@@ -81,6 +81,15 @@ $existing = ['accounts' => 1, 'org' => 'fixture-a'];
 $course = ['courses' => ['ltct:fixture-course'], 'allowed' => ['ltct:fixture-course']];
 
 check(outcome(intake()) === 'new', 'new: no live account has the email');
+$r = intake_rules::classify(intake016(['asked' => 'firstname', 'emailflags' => ['name']]));
+check($r['outcome'] === 'waits' && $r['reason'] === 'email_reveals',
+    'waits: protection asked and the address may name the person');
+check(outcome(intake016(['asked' => 'firstname', 'emailflags' => ['name'], 'emailconfirmed' => true])) === 'new',
+    'new: a flagged address once someone confirmed it');
+check(outcome(intake016(['asked' => 'email', 'emailflags' => []])) === 'new',
+    'new: protection asked, nothing flagged');
+check(outcome(intake(['emailflags' => ['name']])) === 'new',
+    'new: no protection asked, so the address is never checked');
 $r = intake_rules::classify(intake(['loginclash' => true]));
 check($r['outcome'] === 'rejected' && $r['reason'] === 'login_clash',
     'rejected: the email is another live account\'s username');

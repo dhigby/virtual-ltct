@@ -32,7 +32,7 @@ def intake_row(n, **over):
     """One intake row, as read_csv() would return it; row numbers start at 2 (header is 1)."""
     row = {"row": n, "email": "learner%d@example.org" % n, "firstname": "Fixture",
            "lastname": "Learner%d" % n, "organisation": "fixture-a", "country": "",
-           "protection": "", "pseudonym": "", "courses": ""}
+           "protection": "", "pseudonym": "", "email_checked": "", "courses": ""}
     row.update(over)
     return row
 
@@ -171,7 +171,7 @@ def test_template_is_written_only_outside_git(tmp_path):
     code, text = run(["template", "--kind", "intake", "--out", str(out)])
     assert code == 0
     assert out.read_text(encoding="utf-8-sig").strip() == \
-        "email,firstname,lastname,organisation,country,protection,pseudonym,courses"
+        "email,firstname,lastname,organisation,country,protection,pseudonym,email_checked,courses"
     code, text = run(["template", "--kind", "intake", "--out", str(out)])
     assert code == 1 and "already exists" in text          # never overwrites a filled list
     code, text = run(["template", "--kind", "move", "--out", str(REPO / "blank.csv")])
@@ -197,7 +197,7 @@ def test_code_is_stable_across_runs():
 @pytest.mark.parametrize("column,value", [
     ("email", "someone.else@example.org"), ("firstname", "Other"), ("lastname", "Other"),
     ("organisation", "fixture-b"), ("country", "KE"), ("protection", "email"),
-    ("courses", "ltct:fixture-course"), ("pseudonym", "fixture-alias"),
+    ("courses", "ltct:fixture-course"), ("pseudonym", "fixture-alias"), ("email_checked", "yes"),
 ])
 def test_code_changes_with_any_input_column(column, value):
     outcomes = ["new", "new", "new"]
@@ -525,7 +525,7 @@ def test_the_publisher_still_gets_one_attempt(monkeypatch):
 
 # --- T028: intake offline validation ------------------------------------------------------------
 INTAKE_HEADER = ["email", "firstname", "lastname", "organisation", "country", "protection",
-                 "pseudonym", "courses"]
+                 "pseudonym", "email_checked", "courses"]
 
 
 def write_csv(path, rows, header=INTAKE_HEADER):
@@ -552,6 +552,8 @@ def fixture_orgs(monkeypatch):
     ({"protection": "secret"}, "protection 'secret' is not one of"),
     ({"protection": "pseudonym"}, "the pseudonym column is needed"),
     ({"pseudonym": "fixture-alias"}, "protection is not pseudonym"),
+    ({"protection": "email", "email_checked": "maybe"}, "email_checked 'maybe' must be yes or empty"),
+    ({"email_checked": "yes"}, "email_checked is only for a row that asks for protection"),
     ({"courses": "ltct:fixture-course;fixture-course"}, "is not a course idnumber"),
     ({"courses": "ltct:fixture-course:03"}, "is not a course idnumber"),
     ({"firstname": ""}, "firstname is empty"),
@@ -1530,3 +1532,8 @@ def test_course_mentors_file_is_checked_offline(tmp_path, fixture_orgs, row, exp
     server = MentorServer()
     code, text = run(["course-mentors", str(_course_mentors_file(tmp_path, [row]))], client=server)
     assert code == 1 and expect in text and server.calls == []
+
+
+def test_intake_payload_carries_email_checked():
+    assert la.intake_payload(intake_row(2, protection="email", email_checked="Yes"))["emailchecked"] is True
+    assert la.intake_payload(intake_row(2, protection="email"))["emailchecked"] is False

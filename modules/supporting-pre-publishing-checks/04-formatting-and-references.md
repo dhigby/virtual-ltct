@@ -155,7 +155,7 @@ short and clean may simply have its denied items switched out of view. Turn on
 
 ![The View menu open with "Denied messages" highlighted.](assets/ss-04-view-denied.png)
 
-![A denied error shown with strikethrough text: "Expected continuers &#91;"&#93; are missing OR quote not closed."](assets/ss-04-denied-error-strikethrough.png)
+![A denied error at MAT 2:5 shown with strikethrough text: "Text of marker/style does not begin with a capital: w".](assets/ss-04-denied-error-strikethrough.png)
 *Denied errors are struck through — but only if this view option is on.*
 
 ![A Basic Checks results list with the top item reading "Denied message(s) not shown."](assets/ss-04-denied-error-not-shown.png)

@@ -4,7 +4,7 @@
 
 **Created**: 2026-10-02
 
-**Status**: Draft
+**Status**: Built and merged 2026-10-05 (#96 into #84, #84 into main), and deployed to ltuse.net (`local_ltuse` 2026100900). PHPUnit ran green in plugin CI; no instance check (quickstart V1–V18) has been run yet.
 
 **Input**: User description: "Identity protection for at-risk users (spec 016). Some users need extra protection of their identity because of the areas they work in: hiding their email address, showing only a first name, or using a pseudonym. Following the 2026-10-02 decision (spec 011 handoff, PR #82) courses are open: students see all classmates, course leaders see their students, mentors see and interact with mentees across organisations, and organisation managers see and manage their users. Identity protection must not block a protected user from interacting in Moodle (forums, peer review, messaging, mentor booking, events). Reference: https://studentprivacy.ed.gov/ferpa."
 
@@ -40,6 +40,15 @@ Doug ruled on 2026-10-04 and 2026-10-05 that identity protection is **per person
 - Q: Who changes protection after intake? → A: The site team. An organisation's manager grants it when the person is added, before any activity. Corrections, later raises, lowering and removal are the site team's (FR-008; change 14).
 - Q: How does a learner know they can ask? → A: It is offered at intake, in the welcome message and in site help (FR-008; change 12).
 - Q: Are course logs and global search closed for everyone? → A: No. Course logs stay open to course staff; a protected person who asks for their location to be hidden gets a block in the courses they take (plan decision 5, logs; change 5). The global search user area stays on; the spec that turns global search on handles protected people (change 7).
+
+### Session 2026-10-05 (after the merge)
+
+Doug's rulings on the post-merge alignment audit. Each is recorded as "Doug, 2026-10-05".
+
+- Q: What does a protected person's secret identity rest on? → A: "Secret identity is permitted through a pseudonym and an email address that does not indicate the person's real name" (Doug, 2026-10-05). Protection does not keep everything about a person secret: their organisation shows at every level (FR-001), course staff see their checked email address (FR-016), and the entitled people of FR-006 see their real identity.
+- Q: The guiding principle for what people in the system may see (for example supporters, course mentors and course leaders)? → A: "We trust people who are in the system" (Doug, 2026-10-05).
+- Q: A course mentor holds Moodle's non-editing Teacher role (`teacher`), whose 5.2 defaults (`moodle/grade:viewall`, `gradereport/grader:view`, `report/progress:view`, `report/completion:view`, `moodle/site:viewuseridentity`, `moodle/course:viewhiddenuserfields`; `public/lib/db/access.php` and the report plugins' `db/access.php`, `MOODLE_502_STABLE`) reach every learner in a course in group mode 0, not only the learners they assess. Accepted? → A: Yes, accepted under that principle (Doug, 2026-10-05). It is the protected display they see: a protected learner's real identity still reaches a course mentor only through a shared mentor group (FR-006, research R7 path 4). The course-mentor sync was turned on (`local_ltuse/coursementorsync: 1`, #97) before spec 008's instance checks V9 and V11–V13 (008 T067) had run; also accepted.
+- Q: A course leader (`editingteacher`) can give themselves `teacher` and a mentor group, and so reach path 4 (research R7, tasks T046). Narrow their assignable roles? → A: No. It stays a known gap, accepted under the same principle (Doug, 2026-10-05).
 
 ## Context
 
@@ -230,4 +239,4 @@ On delivery, the same PR updates this row's status in moodle/REQUIREMENTS.md (co
 - **011-events-calendar**: calendar views, booking and feeds (FR-011).
 - **012-assignments-peer-review**: anonymous peer review and course discussions (FR-002, FR-003).
 - **013-certificates-badges**: certificates and public badge verification (FR-010).
-- **016 → 008-admin-tooling**: protection is granted at intake, so 008's intake calls this spec's service, records that the person asked and that their email was checked (FR-008, FR-016), and holds back a row whose level cannot yet be set. 008 gives everyone their email as username and turns on sign-in by email; the general account rules (`registerauth`, `authpreventaccountcreation`, `protectusernames`) are declared in 008's `admin.yaml`, and the login methods are 008's `site.yaml` plugin entries (`auth_webservice` on, `auth_email` off), not an `auth` setting. 008's course-mentor sync stays off until this spec's narrowed course-mentor path is merged (plan, Cross-spec effects).
+- **016 → 008-admin-tooling**: protection is granted at intake, so 008's intake calls this spec's service, records that the person asked and that their email was checked (FR-008, FR-016), and holds back a row whose level cannot yet be set. 008 gives everyone their email as username and turns on sign-in by email; the general account rules (`registerauth`, `authpreventaccountcreation`, `protectusernames`) are declared in 008's `admin.yaml`, and the login methods are 008's `site.yaml` plugin entries (`auth_webservice` on, `auth_email` off), not an `auth` setting. ~~008's course-mentor sync stays off until this spec's narrowed course-mentor path is merged~~: it was, and the sync has been on since 2026-10-05 (`local_ltuse/coursementorsync: 1` in 008's `moodle/site/settings/admin.yaml`, #97) (plan, Cross-spec effects).

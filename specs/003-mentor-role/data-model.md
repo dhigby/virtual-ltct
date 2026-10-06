@@ -17,7 +17,7 @@ with a data restore.
 | `description` | follows the learners assigned to them across every course; changes nothing | |
 | `archetype` | `""` | must be empty, so every capability is managed and a hand-granted one shows as drift |
 | `contextlevels` | `[user]` | must be exactly `[user]` (FR-002) |
-| `capabilities` | `moodle/user:viewdetails`, `moodle/user:viewuseractivitiesreport`, `local/ltuse:viewmenteeprogress`, all `allow` | only from the allowlist (research R2). No `prohibit`. |
+| `capabilities` | `moodle/user:viewdetails`, `moodle/user:viewuseractivitiesreport`, `local/ltuse:viewmenteeprogress`, and since spec 016 `local/ltuse:viewidentity` (016 R7 path 2), all `allow` | only from the allowlist (research R2). No `prohibit`. The fourth is a reviewed widening (`MENTOR_ALLOW`, `scripts/site_config.py`). |
 | `why` | cites #11 and FR-003, FR-005, FR-006, FR-013 | |
 
 ### `allowassign` (new key on a role declaration)

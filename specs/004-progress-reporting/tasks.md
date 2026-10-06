@@ -247,7 +247,7 @@ Depends on US1, because progress shows only once completion is tracked.
 
 ## Phase 5: User Story 3, a manager sees their own organisation's progress, and only theirs (P2)
 
-**Goal**: One generated report per organisation, scoped by fixed conditions and opened only by that organisation's managers cohort. Core's in-course reports are scoped by separate groups.
+**Goal**: One generated report per organisation, scoped by fixed conditions and opened only by that organisation's managers cohort. Core's in-course reports are scoped by separate groups. *(Amended 2026-10-05: shared courses have no organisation groups (spec 002 open courses, PR #86); a manager has the in-course reports only in an organisation-only course, where `orgmanager` is enrolled (002 R2).)*
 
 **Independent test**: quickstart V1, V5 and V6. With test organisations A and B, every report and export manager A can reach holds only A's learners.
 
@@ -259,7 +259,7 @@ Builds on spec 002's organisations, managers cohorts and `ltct_org` field. It do
 
 - [X] T032 [P] [US3] Write `reports.yaml` validation and expansion cases on `fixture-*` organisations:
   - **Expansion**: one `per: organisation` template with two organisations gives two reports. Their areas are `org:fixture-a:progress` and `org:fixture-b:progress`. `{org}` becomes the organisation's name in `name`, and its key in condition values and the audience cohort.
-  - **Scope**: a template missing any of `user:profilefield_ltct_org = {org}`, `role:name = student` and `enrol:plugin = cohort` fails. So does a second audience. *(**Amended by spec 016 decision 2 option (a) (Doug, 2026-10-05 (scope review)):** the scope condition is `cohort:idnumber = ltct:org:{org}`, a text condition; the Organisation column is dropped; `validate` refuses `user:profilefield_ltct_org` conditions.)*
+  - **Scope**: a template missing any of `user:profilefield_ltct_org = {org}`, `role:name = student` and `enrol:plugin = cohort` fails. So does a second audience. *(**Amended by spec 016 decision 2 option (a) (Doug, 2026-10-05 (scope review)):** the scope condition is `cohort:idnumber = ltct:org:{org}`, a text condition; the Organisation column is dropped; `validate` refuses `user:profilefield_ltct_org` conditions.)* *(**Amended by spec 002 R10 (a0389bc, PR #92; note 2026-10-05):** the delivery condition is `enrol:plugin` not equal to `manual`, not `enrol:plugin = cohort`, so cohort sync and the organisation-enrolment instance both count (`SCOPE_CONDITIONS`, `scripts/site_config.py`; research R10's amendment).)*
   - **Audiences**: an `allusers` audience on any report fails.
   - **Names**: an area over 100 characters fails, as does a duplicate area or a key not matching `[a-z][a-z0-9-]*`.
   - **Keys**: a missing `why`, a missing `source` or an unknown key fails.
@@ -308,15 +308,15 @@ Builds on spec 002's organisations, managers cohorts and `ltct_org` field. It do
 
   Save the output outside the repo · moodle/site/reports.yaml
 - [ ] T039 [US3] Run quickstart V5 and V6 as managers A and B, with T028's courses, a manually enrolled pilot learner and `ltct-test-*` accounts:
-  - **The organisation's own report**: A's report has A's learners only, with every FR-006 column.
+  - **The organisation's own report**: A's report has A's learners only, with every FR-006 column. *(Amended 2026-10-05: the columns FR-006 names as amended, the ones `reports.yaml` `progress` declares: Learner, Course, Enrolled, Started, Progress, Quiz result, Completed, Last active in course. No Organisation or Group column.)*
   - **Another organisation's report**: B's report, opened by id, is refused.
   - **Filters**: no filter, set or cleared, shows a B learner, the pilot or a manager.
   - **Downloads**: CSV and Excel hold the same rows. Save them outside the repo.
   - **Web services**: `core_reportbuilder_list_reports` and `core_reportbuilder_retrieve_report`, called with A's own token, return only A's report.
   - **A moved learner** leaves A's report and appears in B's.
   - **An empty organisation** shows an empty report, not an error.
-  - **Two cohorts**: an A learner enrolled in the same course through a second A cohort appears once for that course. If they appear twice, set `enrolment:timecreated` to `aggregation: min` and `group:name` to `aggregation: groupconcatdistinct` in `reports.yaml` (T002 confirmed both), re-apply and re-check.
-  - **V6**: both in-course reports show A's group only, and group 0 or B's group id in the URL is refused.
+  - **Two cohorts**: an A learner enrolled in the same course through a second A cohort appears once for that course. If they appear twice, set `enrolment:timecreated` to `aggregation: min` and `group:name` to `aggregation: groupconcatdistinct` in `reports.yaml` (T002 confirmed both), re-apply and re-check. *(`group:name` is no longer declared (fe7e77c, spec 002 open courses, PR #86; first reached main through PR #85, d8c1d5b), so the fallback is `enrolment:timecreated` `min` alone.)*
+  - **V6**: both in-course reports show A's group only, and group 0 or B's group id in the URL is refused. *(**Superseded 2026-10-05** by spec 002's open courses (PR #86; 002 R2; spec 002 plan, cross-spec "004" follow-ups): shared courses have no organisation groups, and `orgmanager` is enrolled only in organisation-only courses. Run quickstart V6 as amended: in an organisation-only course. Still open.)*
 
   Record the outcomes in research R7 and R8 "Verify" · specs/004-progress-reporting/research.md
 
@@ -469,7 +469,7 @@ Depends on US3 (the reports class) and US1 (the publisher sequence it extends).
     - each is `TYPE_INTEGER`, with `set_disabled_aggregation_all()`;
     - each value is one correlated subquery on `competencyid = {c}.id`, as data-model.md "Per-competency report" defines;
     - the student role is matched by `shortname` through `{role}`, never by id;
-    - only `enrol = 'cohort'` counts, never manual.
+    - only `enrol = 'cohort'` counts, never manual. *(**Amended by spec 002 R10 (a0389bc, PR #92; note 2026-10-05):** the course's organisation-enrolment instance (`enrol = 'self'`, `customchar1 = 'ltct:orgenrol'`) counts as delivery too, in every count including "Of which in delivery" (`coverage.php` `delivery_instance()`). Manual never counts.)*
   - Neither entity has a user, course or enrolment entity, or a level column.
 
   · moodle/local_ltuse/classes/reportbuilder/local/entities/coverage.php
@@ -504,7 +504,7 @@ Depends on US3 (the reports class) and US1 (the publisher sequence it extends).
   This makes T048 pass · scripts/publish_moodle.py
 - [X] T065 [US5] Make three declaration changes:
   - In `roles.yaml`, add `moodle/course:changelockedcustomfields: allow` to `ltcpublisher` (R11).
-  - In `reports.yaml`, add the `programme`, `competency-coverage` and `pilots` templates. `pilots` is `progress` without `per: organisation` and the `ltct_org` condition, with `enrol:plugin = manual`, the `systemrole manager` audience and no schedule (R10).
+  - In `reports.yaml`, add the `programme`, `competency-coverage` and `pilots` templates. `pilots` is `progress` without `per: organisation` and the `ltct_org` condition, with `enrol:plugin = manual`, the `systemrole manager` audience and no schedule (R10). *(Note 2026-10-05: `progress` has since lost its Organisation column and `ltct_org` condition (spec 016 decision 2 option (a), Doug, 2026-10-05 (scope review); d395494, PR #84), so the two now differ the other way: merged `pilots` keeps the `user:profilefield_ltct_org` column, headed Organisation, and `progress` no longer has it (`moodle/site/reports.yaml`).)*
   - In `07-pilot.md`, say in one line that the pilot learner is enrolled with the course's manual enrolment method, never through a cohort (R10).
 
   · moodle/site/reports.yaml
@@ -514,8 +514,8 @@ Depends on US3 (the reports class) and US1 (the publisher sequence it extends).
 - [ ] T066 [US5] Run the offline checks: `validate`, `python -m pytest -q tests/` and `php tests/criteria_harness.php`. Run T049's PHPUnit where T003 decided, and record that it ran there, never on `ltuse.net`. Deploy `local_ltuse` and run the CLI upgrade. Confirm the two tables exist; T027's first upgrade created them. Then run `apply --site-dir <scratch>` twice. The second run changes nothing · moodle/local_ltuse/tests/competency_coverage_test.php
 - [ ] T067 [US5] Run quickstart V9's programme and pilot bullet, and every V10 bullet, with `ltct-test-*` accounts and courses only:
   - **Rows**: 42, in `competencies.yaml` order, and 0 where no course aims at it.
-  - **Courses columns**: Translation Tools shows 2 and Paratext 1. After republishing A without Paratext, it shows 0. "Of which in delivery" is 0 with manual enrolment only, and 1 with cohort sync.
-  - **P, D1, D2 and M**: enrolments 2, learners 2, completions 1. A second cohort for D1, then a suspended D2, change the counts as quickstart says.
+  - **Courses columns**: Translation Tools shows 2 and Paratext 1. After republishing A without Paratext, it shows 0. "Of which in delivery" is 0 with manual enrolment only, and 1 with cohort sync. *(2026-10-05, spec 002 R10: an enabled organisation-enrolment instance alone also gives 1; an ordinary self-enrolment instance does not. Not yet run.)*
+  - **P, D1, D2 and M**: enrolments 2, learners 2, completions 1. A second cohort for D1, then a suspended D2, change the counts as quickstart says. *(Note 2026-10-05, spec 002 R2: M's managers cohort is enrolled only in an organisation-only course, so run this in an organisation-only test course A; see quickstart V10's note.)*
   - **Agreement**: the courses column agrees with COVERAGE.md, and completions with the organisation reports. The programme report's counts equal A's and B's totals. The pilots report lists only P.
   - **Fail closed**: a missing competency, and a retired one, behave as quickstart says.
   - **Access**: refused for an orgmanager and a plain user, in the UI and through the web services.

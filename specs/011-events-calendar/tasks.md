@@ -87,7 +87,7 @@
 - [X] T011 [US1] Validate `settings/calendar.yaml` in `scripts/site_config.py`. The zone list is `zoneinfo.available_timezones()` plus `UTC`, and `forcetimezone` must be `99`.
 - [X] T012 [P] [US1] Create `moodle/site/dashboard.yaml` with `rows: [21]` and `default_blocks: [{block: calendar_upcoming, region: side-pre, why: …}]` (side-post until 2026-10-05, changed to Boost's own region; apply's refusal on ltuse.net was dashboard.php calling add_block() on a page with no region added, fixed the same day) (R18, FR-003). Validate it in `scripts/site_config.py`: "additive: `apply` never removes a block it did not declare".
 - [X] T013 [US1] Implement `moodle/local_ltuse/classes/siteconfig/dashboard.php`:
-  - **`apply`**: for each declared block not already on the default dashboard, call `block_manager::add_block($block, $region, 0, false, 'my-index', <default my_pages id>)` at system context. The default page is `my_pages` with `userid null`, `name '__default'` and `private 1`.
+  - **`apply`**: for each declared block not already on the default dashboard, call `add_region($region)` on a bare `moodle_page`'s block manager at system context, then `block_manager::add_block($block, $region, 0, false, 'my-index', <default my_pages id>)`. The default page is `my_pages` with `userid null`, `name '__default'` and `private 1`. *(2026-10-05: `add_region()` added by #98. A bare page knows no region, so `add_block()` refused the declared one on ltuse.net; core does the same in `blocks/timeline/db/install.php`.)*
   - **`drift`**: report `missing` when the block is absent.
   - Never call `my_reset_page_for_all_users()`, and never remove a block.
 - [X] T014 [P] [US1] Implement the pure `moodle/local_ltuse/classes/timezone_notice.php`, `applies(string $pagetype, ?string $cmidnumber): bool` and `text(string $zone): string`, with no Moodle calls, per `contracts/local-ltuse.md` "Time zone notice".
@@ -237,6 +237,7 @@
     - then `officehours::reconcile()`, reporting counts.
   - **`drift`**: `missing`, `changed`, and `extra`/`ambiguous`, per `contracts/declaration.md`.
   - Never delete the course, the activity, a group, a slot or an appointment.
+  - *2026-10-05*: the new module does not keep the group mode it is created with (the first apply on ltuse.net left it at 0), so `apply` now sets it straight after creation, and on update, with `\core_courseformat\formatactions::cm($courseid)->set_groupmode()`, which replaces `set_coursemodule_groupmode()`, deprecated in 5.2 by MDL-86857 (#97).
 - [X] T042 [US3] Add the scheduled task `moodle/local_ltuse/classes/task/officehours_reconcile.php` and `db/tasks.php`: hourly, minute `R`, calling `officehours::reconcile()`.
 - [X] T043 [US3] Extend the existing `role_assigned`, `role_unassigned` and `user_deleted` handlers in `moodle/local_ltuse/classes/observer.php`. After 003's contact handling, call `officehours::sync_pair()`, or `sync_user()` for a deleted user. A failure goes to `debugging()` and never throws.
 - [X] T044 [US3] Add `local_ltuse_allow_group_member_remove($itemid, $groupid, $userid)` to `moodle/local_ltuse/lib.php`, returning false.
@@ -297,8 +298,9 @@
 
 - [X] T057 [P] Link 011's declaration contract from `specs/001-site-config-as-code/contracts/declaration.md`, as 002, 004 and 013 are linked.
 - [ ] T058 [P] Update row #21 in `moodle/REQUIREMENTS.md` to built and verified, citing V1–V17 (constitution X).
-- [ ] T059 Run `python -m pytest tests/`, the three new harnesses, and `python scripts/site_config.py validate`. Then run `apply` and `drift` on the instance. `drift` must say `No differences.` (V1 in full).
-- [ ] T060 Once spec 016 (PR #84) has landed, run V18 with 016's V17, and record the result in both PRs.
+- [ ] T059 Run `python -m pytest tests/`, the three new harnesses, and `python scripts/site_config.py validate`. Then run `apply` and `drift` on the instance. `drift` must say ~~`No differences.`~~ no differences other than the expected ones recorded below (V1 in full).
+  - *2026-10-05, partial*: `apply` and `drift` ran on ltuse.net. `drift` reported `16 differences, 250 ok`, every one expected and none an 011 item: 12 test-a/test-b fixture leftovers kept for spec 002 T081 and spec 013's open checks, 3 discussion forums missing in courses published before spec 002's open-courses change, and 1 `env-missing` (`badges_defaultissuercontact`, `MOODLE_BADGE_CONTACT` unset in that shell, an artefact of the shell rather than a site state, so V1 runs with it set) (Doug, 2026-10-05). The dashboard's `calendar_upcoming` in `side-pre` and the office-hours course, activity, enrolment, groups and members were all `ok`. V1 in full (a second `apply` that changes nothing, and the output check) has not run; still open.
+- [ ] T060 ~~Once spec 016 (PR #84) has landed,~~ Spec 016 landed on 2026-10-05 (#84, 998cbb3), so T060 is unblocked: run V18 with 016's V17, and record the result in both PRs.
 - [ ] T061 Fill in spec 011's header branch and Status once the stories close. The maintainer marks completion.
 
 ---
@@ -313,7 +315,7 @@
 - **US2 (Phase 4)**: depends on Phase 2. T021 and T029 also depend on T001 (the open-courses change has merged).
 - **US3 (Phase 5)**: depends on Phase 2. It uses spec 003's observers, which are already on `main`. It is independent of US1 and US2, although V13 sees US2's notices if US2 is built.
 - **US4 (Phase 6)**: documentation and one check. It can run any time after Phase 2.
-- **Polish (Phase 7)**: after the stories it reports on. T060 waits on spec 016.
+- **Polish (Phase 7)**: after the stories it reports on. ~~T060 waits on spec 016.~~ T060 is unblocked: spec 016 merged on 2026-10-05 (#84, 998cbb3).
 
 ### Within Each User Story
 
@@ -368,7 +370,7 @@ T045  tests/booking_notice_harness.php
 2. US2 comes once the open-courses change has merged (T001): managers post, and changes are announced.
 3. US3 is office hours and their booking messages (decisions 1, 3, 4 and 5, decided 2026-10-02).
 4. US4 is the live-session recipe.
-5. Polish: row #21, the 001 contract link, and V18 once 016 lands.
+5. Polish: row #21, the 001 contract link, and V18 once 016 lands (it landed 2026-10-05; T060).
 
 ## Notes
 

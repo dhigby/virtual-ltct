@@ -553,6 +553,182 @@
       "kind": "complete",
       "by": "extension",
       "at": "2026-10-03T03:36:28.877Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T059",
+      "kind": "complete",
+      "by": "extension",
+      "at": "2026-10-05T23:11:02.109Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T062",
+      "kind": "complete",
+      "by": "extension",
+      "at": "2026-10-05T23:11:02.109Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T063",
+      "kind": "complete",
+      "by": "extension",
+      "at": "2026-10-05T23:11:02.109Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T064",
+      "kind": "complete",
+      "by": "extension",
+      "at": "2026-10-05T23:11:02.109Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T067",
+      "kind": "complete",
+      "by": "extension",
+      "at": "2026-10-05T23:11:02.109Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T068",
+      "kind": "complete",
+      "by": "extension",
+      "at": "2026-10-05T23:11:02.109Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T070",
+      "kind": "complete",
+      "by": "extension",
+      "at": "2026-10-05T23:11:02.109Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T071",
+      "kind": "complete",
+      "by": "extension",
+      "at": "2026-10-05T23:11:02.109Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T072",
+      "kind": "complete",
+      "by": "extension",
+      "at": "2026-10-05T23:11:02.109Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T073",
+      "kind": "complete",
+      "by": "extension",
+      "at": "2026-10-05T23:11:02.109Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T074",
+      "kind": "complete",
+      "by": "extension",
+      "at": "2026-10-05T23:11:02.109Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T075",
+      "kind": "complete",
+      "by": "extension",
+      "at": "2026-10-05T23:11:02.109Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T076",
+      "kind": "complete",
+      "by": "extension",
+      "at": "2026-10-05T23:11:02.109Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T077",
+      "kind": "complete",
+      "by": "extension",
+      "at": "2026-10-05T23:11:02.109Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T078",
+      "kind": "complete",
+      "by": "extension",
+      "at": "2026-10-05T23:11:02.109Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T079",
+      "kind": "complete",
+      "by": "extension",
+      "at": "2026-10-05T23:11:02.109Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T080",
+      "kind": "complete",
+      "by": "extension",
+      "at": "2026-10-05T23:11:02.109Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T082",
+      "kind": "complete",
+      "by": "extension",
+      "at": "2026-10-05T23:11:02.109Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T083",
+      "kind": "complete",
+      "by": "extension",
+      "at": "2026-10-05T23:11:02.109Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T084",
+      "kind": "complete",
+      "by": "extension",
+      "at": "2026-10-05T23:11:02.109Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T085",
+      "kind": "complete",
+      "by": "extension",
+      "at": "2026-10-05T23:11:02.109Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T087",
+      "kind": "complete",
+      "by": "extension",
+      "at": "2026-10-05T23:11:02.110Z"
     }
   ],
   "telemetryInstanceId": "8cef185e-f537-4bf0-90e3-61f5872f3f00",
@@ -626,6 +802,18 @@
       "decision": "enrol_flatfile/map_10 added to ignore.yaml",
       "why": "Creating orgmanager (role id 10) surfaced it, exactly like map_9 for ltcpublisher",
       "rejected": "A pattern-based ignore, which would change spec 001's contract"
+    },
+    {
+      "decision": "Superseded 2026-10-02 (open courses): managers are not follow-only, and shared courses have no organisation groups; see spec.md Clarifications"
+    },
+    {
+      "decision": "Managers can no longer be hidden from: managers_see_identity cut by the spec 016 scope review (Doug, 2026-10-05)"
+    },
+    {
+      "decision": "FR-014 to FR-019 and SC-006 stay deferred to a later plan step (Doug, 2026-10-05)"
+    },
+    {
+      "decision": "mentors.php can_view_identity ask dropped as moot (Doug, 2026-10-05)"
     }
   ],
   "step_summaries": {

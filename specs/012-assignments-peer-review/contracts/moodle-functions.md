@@ -56,7 +56,7 @@ Behaviour:
 | Param | Notes |
 |---|---|
 | `courseidnumber`, `idnumber`, `name`, `intro` | `name` and `intro` are used **only on create** |
-| `shared` | bool → `VISIBLEGROUPS` if true, else `SEPARATEGROUPS`; `groupingid = 0` |
+| ~~`shared`~~ | ~~bool → `VISIBLEGROUPS` if true, else `SEPARATEGROUPS`; `groupingid = 0`~~ *(Removed 2026-10-02 by spec 002 R14: the function takes no `shared` parameter, and `wanted_groupmode()` is `NOGROUPS` for every course, `groupingid = 0`.)* |
 
 Behaviour:
 - Creates a `type = general` forum in section 0 if it is absent.
@@ -77,6 +77,8 @@ Behaviour:
 - Every assignment, workshop and mentor-notes idnumber added in Phases B and C must be counted the same way.
 
 ## Plugin `workshopallocation_orgcohort` (new, `moodle/workshopallocation_orgcohort/`)
+
+*(2026-10-05, parked for re-plan: the cohort and organisation groups below do not exist in shared courses since spec 002's open-courses change (2026-10-02). The re-plan sets the allocator's scope from 008's mentor groups and the cross-organisation rule 002 left to 012 and Doug; see [spec.md, Re-plan inputs](../spec.md#re-plan-inputs) 1 and 4. The same applies to `SEPARATEGROUPS` above for the assign and workshop.)*
 
 - Plugin type `workshopallocation`, installed at `mod/workshop/allocation/orgcohort`.
 - Declares `requires` and `supported` per Principle XI.

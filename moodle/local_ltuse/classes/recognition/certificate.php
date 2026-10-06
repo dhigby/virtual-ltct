@@ -171,14 +171,24 @@ class certificate {
      * Whether the live activity differs from its settings, so a republish writes nothing
      * (and bumps no revision) when it already matches.
      *
+     * Compares the name, intro, verifyany, the three email settings and the availability, so
+     * a hand-set emailstudents, emailteachers or emailothers is put back on the next publish.
+     * The email columns are int(1), int(1) and a nullable text in mod_customcert v5.2.9's
+     * db/install.xml (the version moodle/site/site.yaml pins).
+     *
      * @param stdClass $cm the course_modules record
      * @param array $fields
      * @return bool
      */
     protected static function differs(stdClass $cm, array $fields): bool {
         global $DB;
-        $instance = $DB->get_record('customcert', ['id' => $cm->instance], 'name, intro, verifyany', MUST_EXIST);
+        $instance = $DB->get_record('customcert', ['id' => $cm->instance],
+            'name, intro, verifyany, emailstudents, emailteachers, emailothers', MUST_EXIST);
         return $instance->name !== $fields['name'] || $instance->intro !== $fields['introeditor']['text']
-            || (int)$instance->verifyany !== 1 || (string)$cm->availability !== $fields['availabilityconditionsjson'];
+            || (int)$instance->verifyany !== (int)$fields['verifyany']
+            || (int)$instance->emailstudents !== (int)$fields['emailstudents']
+            || (int)$instance->emailteachers !== (int)$fields['emailteachers']
+            || (string)$instance->emailothers !== (string)$fields['emailothers']
+            || (string)$cm->availability !== $fields['availabilityconditionsjson'];
     }
 }

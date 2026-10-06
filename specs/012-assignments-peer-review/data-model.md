@@ -8,7 +8,7 @@ Course package (modules/<slug>/)
  │                                     ├── Criterion 1..12 ──► guide criterion | workshop aspect
  │                                     └── Mentor-only text  ──► guide marker notes + Mentor-notes page (hidden)
  └── (every course) ──────────────────────────────publish──► Course discussion (forum)
-moodle/site/course-discussions.yaml ──► Discussion sharing ──► forum group mode
+moodle/site/course-discussions.yaml ──► Discussion sharing ──► forum group mode   [superseded 2026-10-02: file retired by spec 002 R14; NOGROUPS in every course]
 
 Moodle only:  Submission · Feedback (guide grade + comments) · Peer allocation · Peer assessment · Post
 ```
@@ -63,9 +63,11 @@ One forum per published course. Identity: `ltct:<slug>:discussion`.
   - Every publishable course has one, backfilled courses included (FR-015).
   - Its name and intro are set on create only.
   - Its posts are never read or written by the publisher or `site_config.py`.
-- **Group mode**: `SEPARATEGROUPS` unless the course is listed `shared` in `course-discussions.yaml` (then `VISIBLEGROUPS`). `groupingid = 0` relies on spec 002's invariant (below).
+- **Group mode**: ~~`SEPARATEGROUPS` unless the course is listed `shared` in `course-discussions.yaml` (then `VISIBLEGROUPS`). `groupingid = 0` relies on spec 002's invariant (below).~~ *(Since 2026-10-02: `NOGROUPS` in every course, `groupingid = 0` (spec 002 R14; `ensure_discussion::wanted_groupmode()`).)*
 
 ## Discussion sharing (declared)
+
+*(Retired 2026-10-02 by spec 002 R14: there is nothing to share or separate, and `scripts/site_config.py` refuses `course-discussions.yaml`. Re-plan input 5.)*
 
 An entry `{slug, why}` in `moodle/site/course-discussions.yaml`.
 
@@ -73,13 +75,15 @@ An entry `{slug, why}` in `moodle/site/course-discussions.yaml`.
 
 ## Organisation group and cohort group (from spec 002; consumed here)
 
+*(Withdrawn by spec 002 on 2026-10-02: shared courses have no organisation or cohort groups and stay in group mode 0 (002 FR-011). The re-plan adopts spec 008's mentor groups, `ltct:mentorgroup:<mentor id>`, as the assessor scope (008 plan decision 3) and drops the invariant below. Re-plan inputs 1 and 4.)*
+
 Groups inside a course. Group idnumbers are `ltct:org:<key>` and `ltct:cohort:<key>`. Each cohort group belongs to exactly one organisation.
 
 - **Invariant this spec depends on**: every group in a course is within exactly one organisation. Spec 002's plan must guarantee it, because the forum's `groupingid = 0` and the allocator's "never across organisations" both rest on it. If spec 002 settles on other idnumbers, the allocator and this file change with it.
 
 ## Course mentor (Moodle role assignment; consumed here)
 
-The core `teacher` role, enrolled in the course and placed in the learner's cohort group (R3). It can grade only its groups. It is not the spec 003 user-context mentor relationship, which it complements. Who holds it is recorded only in Moodle.
+The core `teacher` role, enrolled in the course and placed in ~~the learner's cohort group (R3)~~ *(2026-10-05: their own mentor group, "Mentor group `<n>`", idnumber `ltct:mentorgroup:<mentor id>`, holding them and the learners they assess; enrolled, grouped and removed by spec 008's course-mentor sync (008 research R10, plan decisions 2 and 3), on since 2026-10-05)*. It can grade only its groups in an activity set to separate groups; in the course itself, which stays in group mode 0, its defaults reach every learner (accepted, Doug, 2026-10-05; re-plan input 3). It is not the spec 003 user-context mentor relationship, which it complements. Who holds it is recorded only in Moodle.
 
 ## Learner data (Moodle only, never in the repo)
 

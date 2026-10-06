@@ -30,6 +30,11 @@ on:
       - 'tests/test_pathway_wording.py'
       - 'tests/admin_harness.php'
       - 'scripts/admin_files.py'
+      - 'tests/report_harness.php'
+      - 'tests/profile_access_harness.php'
+      - 'tests/org_access_harness.php'
+      - 'tests/mentoring_harness.php'
+      - 'tests/mentor_admin_harness.php'
   pull_request:
     paths:
       - 'moodle/site/**'
@@ -59,6 +64,11 @@ on:
       - 'tests/test_pathway_wording.py'
       - 'tests/admin_harness.php'
       - 'scripts/admin_files.py'
+      - 'tests/report_harness.php'
+      - 'tests/profile_access_harness.php'
+      - 'tests/org_access_harness.php'
+      - 'tests/mentoring_harness.php'
+      - 'tests/mentor_admin_harness.php'
 
 jobs:
   validate:
@@ -102,3 +112,19 @@ jobs:
       # it compares with scripts/admin_files.py through Python. Needs no Moodle.
       - name: Administration harness
         run: php tests/admin_harness.php
+      # Spec 001: the site_config.php run report (secrets redacted, summary lines, exit codes).
+      # It reads the class on stdin. Needs no Moodle.
+      - name: Site config report harness
+        run: php tests/report_harness.php < moodle/local_ltuse/classes/siteconfig/report.php
+      # Spec 002: the profile decision and the shared organisation access check, with the
+      # organisation page's reset outcomes and cohort idnumbers. Needs no Moodle.
+      - name: Organisation access harnesses
+        run: |
+          php tests/profile_access_harness.php
+          php tests/org_access_harness.php
+      # Spec 003: the Mentoring page's progress status and course order, and who may assign
+      # and end a learner's mentors. Needs no Moodle.
+      - name: Mentor harnesses
+        run: |
+          php tests/mentoring_harness.php
+          php tests/mentor_admin_harness.php

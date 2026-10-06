@@ -60,4 +60,4 @@ Re-checked after Phase 1 design: no change.
 ## Cross-spec effects
 
 - **Spec 015**: `provision.sh` installs plugin code at the pinned release, then the runbook runs `site_config.py apply`. Its interim "explicit list of settings" goes away once this spec ships. Secrets this declaration references (SMTP password, from 015's research) live on the operator's machine, not in `/etc/ltct/ops.env`, because apply runs from there.
-- **Specs 002–014**: each adds a file under `moodle/site/settings/` and any plugin or role to `site.yaml` or `roles.yaml`. They never use `setup_publishing.php` or the admin UI.
+- **Specs 002–014**: each adds a file under `moodle/site/settings/` and any plugin or role to `site.yaml` or `roles.yaml`. They never use `setup_publishing.php` or the admin UI. *(2026-10-05: as built, later specs also add top-level files under `moodle/site/` (016's `protection.yaml` among them) and entries to `ignore.yaml`; [the contract's Extensions table](contracts/declaration.md#extensions) is the index.)*

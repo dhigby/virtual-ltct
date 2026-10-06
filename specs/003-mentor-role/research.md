@@ -39,13 +39,21 @@ relationship table in `local_ltuse`. This duplicates core and loses core privacy
 ## R2. What the role may hold
 
 **Decision**: exactly three capabilities, all allow, all checked in the learner's user
-context:
+context (four since spec 016; see the note under the table):
 
 | Capability | What it unlocks | Why |
 |---|---|---|
 | `moodle/user:viewdetails` | the learner's profile, and the "parent" route in `user/view.php` | the mentor must open their learner |
 | `moodle/user:viewuseractivitiesreport` | core Grades overview across all the learner's courses (`grade_report_overview::check_access`) | read-only, and the one cross-course page core gives a mentor |
 | `local/ltuse:viewmenteeprogress` (new) | our Mentoring page (R3) | lets our page check the relationship by capability rather than by guessing |
+| `local/ltuse:viewidentity` (spec 016) | a protected learner's real identity and the Protected marker, on the profile, the Mentoring page (web and app) and "People I support" | spec 016 FR-006 and R7 path 2. Added after this decision, see below |
+
+**Widened by spec 016 (2026-10-05)**: the role now holds a fourth capability,
+`local/ltuse:viewidentity`, so an assigned mentor sees their learner's real identity while
+assigned (016 research R7 path 2). It is read only and checked in the learner's user context
+like the other three, so FR-005 and FR-006 hold. It is a reviewed widening of the allowlist:
+`MENTOR_ALLOW` in `scripts/site_config.py` (around :316-320) and the mentor declaration in
+`moodle/site/roles.yaml` (around :208-212) both carry it with their reason.
 
 **Left out, on purpose**:
 - `moodle/user:editprofile`. It is a write capability (FR-006).
@@ -218,6 +226,8 @@ For this to work:
 button. `cli/mentor_contacts.php --end-all --mentor=<username>` calls
 `role_unassign_all(['userid' => …, 'roleid' => mentor])`. That fires the unassign events, so
 R5 removes the contacts too. A button for this is spec 008's (bulk tooling).
+*(Delivered, noted 2026-10-05: spec 008 shipped it as `ltct_admin.py mentors end --mentor E`
+(`scripts/ltct_admin.py:702`, `cmd_mentors_end`), a CLI, not a button.)*
 
 **Scripting**: `core_role_assign_roles` and `core_role_unassign_roles` accept
 `contextlevel: user` with `instanceid: <learner id>`. Spec 008's bulk assignment can use them
@@ -270,9 +280,27 @@ mentors and other managers stay with the site team. The page follows R10 (contra
 **Decision**: this spec does not enrol a learner's mentor into their courses.
 - FR-011 is met by spec 012's course-level **Course mentor** role (`teacher`, without
   `accessallgroups`), which reads and gives feedback on submissions in its own groups.
-- The site team enrols a mentor as Course mentor with the organisation's group, as 012
-  describes.
-- Automatic syncing of a learner's mentor into their courses is spec 008's.
+- ~~The site team enrols a mentor as Course mentor with the organisation's group, as 012
+  describes.~~
+- ~~Automatic syncing of a learner's mentor into their courses is spec 008's.~~
+
+**Superseded (2026-10-05)**: spec 008's course-mentor sync (008 research R10) does this, on
+since 2026-10-05 (`local_ltuse/coursementorsync: 1` in `moodle/site/settings/admin.yaml`, #97).
+Each learner's course mentor in a course is, by default, their mentor here; a one-course or
+cohort mentor replaces them in that course (008 plan decision 2). The sync enrols the course
+mentor as `teacher` through the course's `ltct:coursementor` enrolment instance, puts them and
+the learners they assess into their own "Mentor group `<n>`" (idnumber
+`ltct:mentorgroup:<mentor id>`, 008 plan decision 3), and removes them when the reason ends
+(`moodle/local_ltuse/classes/admin/course_mentor_sync.php`). The course stays in group mode 0
+with no organisation groups (spec 002, open courses), so there is no "organisation's group" to
+enrol into and nobody enrols course mentors by hand. Only learners actively enrolled as Student
+through cohort sync or the Organisation enrolment count; a pilot learner (manual enrolment)
+gets no course mentor.
+
+A course mentor holds Teacher, whose Moodle 5.2 defaults reach every learner in a group-mode-0
+course, not only those they assess. Accepted (Doug, 2026-10-05): we trust people who are in
+the system. A protected learner's real identity still reaches a course mentor only through a
+shared mentor group (spec 016 R7 path 4). See spec FR-005's note.
 
 **Rationale**:
 - The user-context role cannot reach course activities. Letting it read submissions would
@@ -283,7 +311,9 @@ mentors and other managers stay with the site team. The page follows R10 (contra
 
 **Correction for spec 012**: 012's plan says "until then the organisation manager enrols the
 mentor with the cohort". Under spec 002's decision the site team enrols, not the manager. The
-delivering PR fixes that sentence.
+delivering PR fixes that sentence. *(Itself superseded 2026-10-05: neither enrols by hand now;
+spec 008's sync does, as above. Spec 012 is parked for re-plan (Doug, 2026-10-05), and its
+plan marks that sentence superseded.)*
 
 ## R9. Spec 002's profile hook must exempt mentors by the new capability
 

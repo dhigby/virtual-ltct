@@ -8,6 +8,7 @@ Each scenario names the spec acceptance or success criterion it proves. Moodle s
 - `MOODLE_URL`, `MOODLE_TOKEN` for the temporary instance, from the environment (never a file)
 - `local_ltuse` at this spec's version and `workshopallocation_orgcohort` installed; `python scripts/site_config.py apply` run
 - Test accounts: 4 learners (L1, L2 in org A, cohort A1; L3 in org A, cohort A2; L4 in org B), 1 Course mentor M for org A, groups named per spec 002
+  - *(2026-10-05, parked for re-plan: shared courses have no organisation or cohort groups (spec 002, 2026-10-02), and a Course mentor is enrolled by spec 008's course-mentor sync into their own "Mentor group `<n>`" (`ltct:mentorgroup:<mentor id>`), not set up by hand "for org A". The re-plan rewrites these prerequisites; see [spec.md, Re-plan inputs](spec.md#re-plan-inputs) 1, 2 and 4.)*
 
 ## Phase A: no design gate needed
 
@@ -33,9 +34,9 @@ python scripts/publish_moodle.py --slug <course>
 
 Expect a `forum  ltct:<course>:discussion  created` line. As L1, post a discussion. Republish, and expect `updated` with the post still there.
 
-**A4. Organisations don't see each other (US4-2, SC-004).** As L4 (org B), open the discussion. L1's post is not listed. Add the course to `moodle/site/course-discussions.yaml` with a `why`, run `site_config.py apply`, and L4 now sees it. Remove the entry and apply again.
+~~**A4. Organisations don't see each other (US4-2, SC-004).** As L4 (org B), open the discussion. L1's post is not listed. Add the course to `moodle/site/course-discussions.yaml` with a `why`, run `site_config.py apply`, and L4 now sees it. Remove the entry and apply again.~~ *(Superseded 2026-10-02: the forum is open across organisations and the declaration is retired (spec 002 R14). Spec 002's own check replaces this one: after `apply`, every `ltct:` course forum is NOGROUPS, and learners from both test organisations post and read each other's posts.)*
 
-**A5. Drift catches a hand change (US4-3).** As admin, set the forum to visible groups by hand. Then:
+**A5. Drift catches a hand change (US4-3).** As admin, set the forum to visible groups by hand *(2026-10-05: any mode but no groups, since the forum is NOGROUPS)*. Then:
 
 ```bash
 python scripts/site_config.py drift
@@ -73,6 +74,8 @@ python -m pytest -q tests/test_disclosure_mentor_only.py tests/test_assignment_p
 **B6. Withheld whole on doubt (edge case).** Put a `## Model answer` heading outside the mentor-only block. The publish reports the file **withheld** and refuses without `--allow-withheld`. With the flag, learners see only the placeholder.
 
 ## Phase C: peer review
+
+*(2026-10-05: C1 keys allocation to organisation and cohort groups, which shared courses no longer have. It waits on the re-plan and the cross-organisation rule spec 002 left to 012 and Doug; re-plan input 4. In C2, a protected learner shows under their protected display name, to M too; re-plan input 6.)*
 
 **C1. Allocation stays inside the organisation (US3-1, SC-004).** Publish a `**Review:** peer` assignment. L1–L4 submit, and M switches to the assessment phase.
 - L1 and L2 review each other first (cohort A1), and L3 is drawn in from A2 only to make up numbers.

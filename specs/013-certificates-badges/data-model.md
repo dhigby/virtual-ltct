@@ -45,7 +45,7 @@ pages:
       - {type: studentname, x: 148, y: 80, size: 24, align: C}
       - {type: text, text: "has completed the course", x: 148, y: 98, size: 14, align: C}
       - {type: coursename, x: 148, y: 112, size: 18, align: C}
-      - {type: date, date: completion, format: "j F Y", x: 148, y: 130, size: 12, align: C}
+      - {type: date, date: completion, format: strftimedate, x: 148, y: 130, size: 12, align: C}
       - {type: text, text: "{programme}", x: 148, y: 150, size: 12, align: C}
       - {type: code, x: 148, y: 185, size: 9, align: C}
       - {type: qrcode, x: 260, y: 165, width: 25}
@@ -57,6 +57,7 @@ The layout above shows the shape only. The real positions and the logo come from
 **Validation**:
 - Element `type`s are limited to `text`, `studentname`, `coursename`, `date`, `code`, `qrcode`, `image` and `bgimage`.
 - `date` must be `completion`, which maps to `DATE_COMPLETION = -2`. An issue date would show the first download, not when the course was completed (R6, R9).
+- `format` is `1`–`5` or a `strftime…` langconfig key such as `strftimedate` (`DATE_FORMAT` accepts `strftime[a-z]+`), as the date element reads it (`element_helper::get_date_format_string`; `DATE_FORMAT` in `scripts/site_config.py`). The template uses `strftimedate`, so the date follows the date format of the language the PDF is generated in. *(2026-10-05: this page showed `"j F Y"` until now; the merged template has always used `strftimedate`, 4c9f12e.)*
 - There must be exactly one `studentname`, one `coursename`, one `date` and one `code` (FR-003).
 - Every `text`, `name`, `activity_name` and `intro` passes `check_recognition()`, and the page must contain "training completed" or "completed the course".
 - The images must exist, and total at most 100 KB (R11).
@@ -116,10 +117,12 @@ There is one per delivered course: a `customcert` course module, created by `loc
 | `requiredtime` | `0` |
 | cm `availability` | `{"op":"&","c":[{"type":"coursecompleted","id":"1"}],"showc":[true]}` (R8) |
 | cm `completion` | `0`. Never a course criterion (R8). |
-| section | The last lesson section of the course, never the hidden Retired section that holds modules the repo dropped. |
+| section | The last lesson section of the course (the highest-numbered ordinary section, never the hidden Retired section that holds modules the repo dropped, never a delegated one) when the activity is created, and when a republish finds it in the Retired section and moves it out. Otherwise a republish leaves it in the section it is in, so a certificate moved by hand to another ordinary section, or left behind when a later lesson section is added, stays there (`certificate.php`, `sync()` lines 57-58 and 68-73, `last_lesson_section()`). |
 | pages and elements | A copy of the site template, made with `template_load_service::replace()` (R7). |
 
 **Lifecycle**: created on the first stage-8 publish, then re-copied from the site template whenever it differs. **Never deleted**, because deleting it deletes every issued code (R14).
+
+A republish rewrites the activity with all the settings above when it is hidden, sits in the Retired section, or `certificate::differs()` finds a difference (`moodle/local_ltuse/classes/recognition/certificate.php`, `sync()`, lines 64-76). `differs()` compares only the name, intro, `verifyany`, `emailstudents`, `emailteachers`, `emailothers` and the availability, so a hand change to any other setting (`requiredtime`, `protection_*`, cm `completion`, and the other fields `fields()` writes, such as `deliveryoption`, `language` or `showdescription`) survives until one of those triggers a rewrite. A hand-set `emailteachers`, `emailothers` or `emailstudents` is put back on the next publish; the PDF is not mailed to anyone once the activity has been republished (spec 016 R10, review M4). *(2026-10-05: before this change `differs()` did not compare the three email settings, so a hand-set value survived a republish while everything else matched; fixed in 98a9279 on this branch (2026-10-05), which spec 016 R10 (review M4) asked for.)*
 
 ## Issued badge and issued certificate (Moodle, learner data)
 

@@ -1,6 +1,6 @@
 # Data Model: Partner organisations, cohorts and profiles
 
-> **Amended 2026-10-03 in the spec** (Areas and Area Language Technology Coordinators, [Clarifications 2026-10-03](spec.md)). This file is not yet redone for it; that happens in the plan step, before any build. Where this file disagrees with the 2026-10-03 Clarifications, the spec wins.
+> **Amended 2026-10-03 in the spec** (Areas and Area Language Technology Coordinators, [Clarifications 2026-10-03](spec.md)). This file was not redone for it; ~~that happens in the plan step, before any build~~ *(2026-10-05: what it describes is built and deployed through the 2026-10-02 to 2026-10-05 amendments; FR-014 to FR-019 and SC-006 stay deferred to a later plan step, Doug, 2026-10-05)*. Where this file disagrees with the 2026-10-03 Clarifications, the spec wins.
 
 **Spec**: [spec.md](spec.md) | **Plan**: [plan.md](plan.md) | **Research**: [research.md](research.md)
 
@@ -103,7 +103,7 @@ The hidden system cohort `ltct:mentors`, from which a manager picks a learner's 
 | `name` | text | Yes | Display name of the cohort. |
 | `why` | text | Yes | Which row or spec needs it. |
 
-The `idnumber` is fixed, `ltct:mentors`, and is not declared. The cohort is rendered into the payload's `cohorts` array like an organisation cohort: system context, `visible = 0`, no rule. The site team fills it by hand in Moodle; mentors may come from any organisation, so it belongs to none. Its membership is learner data and never appears in the repo.
+The `idnumber` is fixed, `ltct:mentors`, and is not declared. The cohort is rendered into the payload's `cohorts` array like an organisation cohort: system context, `visible = 0`, no rule. The site team fills it in Moodle, since 2026-10-05 with `ltct_admin.py managers` (spec 008); mentors may come from any organisation, so it belongs to none. Its membership is learner data and never appears in the repo.
 
 ### Validation rules
 
@@ -154,7 +154,7 @@ From each entry, `site_config.py` renders:
 |---|---|---|---|---|
 | Organisation category | `ltct:org:<key>` | `<name>` | shared category `organisations` | Holds that organisation's organisation-only courses only, each declared in `org-courses.yaml` and placed there by the publisher (FR-003, R11). *(Amended 2026-10-02.)* |
 | Organisation cohort | `ltct:org:<key>` | `<name>` | system context, `visible = 0` | Filled by its cohort rule (FR-010). |
-| Managers cohort | `ltct:org:<key>:managers` | `<name> managers` | system context, `visible = 0` | No rule. Filled by hand in Moodle (FR-012). |
+| Managers cohort | `ltct:org:<key>:managers` | `<name> managers` | system context, `visible = 0` | No rule. Filled by the site team in Moodle (FR-012), since 2026-10-05 with `ltct_admin.py managers` (spec 008). |
 | Cohort rule | (of `ltct:org:<key>`) | `ltct: ltct:org:<key>` | | Condition `ltct_org` equals `<key>`. See Cohort rule. |
 | Menu option | | `<key>` | option of `ltct_org` | See Profile field declaration. |
 
@@ -200,7 +200,7 @@ The cohort rows apply creates. They share one shape (R1), and so does the `ltct:
 | `idnumber` | as in Identity | Lookup key. |
 | `name` | as derived | Updated by apply when the declaration changes. |
 | `visible` | `0` | Offered only to someone with `moodle/cohort:view` at system context, so only the site team can enrol it (R1, FR-007). A manager's "my organisation" page reads the cohort server-side and never offers it in core's form, so this stays `0` (R1, 2026-10-02). |
-| `component` | not set by apply | `tool_dynamic_cohorts` sets it on cohorts it manages, which also blocks hand edits of their membership (R4). Drift does not report it as `changed`. Managers cohorts keep it empty, because they are filled by hand. |
+| `component` | not set by apply | `tool_dynamic_cohorts` sets it on cohorts it manages, which also blocks hand edits of their membership (R4). Drift does not report it as `changed`. Managers cohorts keep it empty, because they are filled by hand *(2026-10-05: since spec 008, PR #93, by the site team with `ltct_admin.py managers FILE`, or by hand in Moodle)*. |
 | `description` | not managed | |
 
 Written with `cohort_add_cohort()` and `cohort_update_cohort()` only (Principle XI).
@@ -507,10 +507,10 @@ Not declared and not stored: `local_ltuse\organisation\access`, a pure class tes
 | V is P | ids | both | Never applies to oneself. |
 | V's managed organisation keys | `local_ltuse_managed_organisation_keys()`, the one read of `ltct:org:%:managers` membership (R9) | both | Read on every request, so leaving the managers cohort ends everything at once. |
 | P's `ltct_org` | `profile_user_record()` | both | Must be non-empty and one of V's keys. |
-| P is in `ltct:org:<P's ltct_org>` | the cohort read | both | A learner whose field is set but who has not yet joined the cohort cannot be managed, so spec 016 can settle their protection first. |
+| P is in `ltct:org:<P's ltct_org>` | the cohort read | both | A learner whose field is set but who has not yet joined the cohort cannot be managed, so the field and the cohort agree. Protection is per person and is set before enrolment by spec 008's intake, and an organisation has no minimum (Doug, 2026-10-05 (scope review); research R10). *(Until 2026-10-05 this read "so spec 016 can settle their protection first", the organisation-minimum rationale the scope review removed.)* |
 | P is deleted | the user record | `may_manage_account` | |
 | P is a site admin | core's admin list | `may_manage_account` | |
-| P is staff | `has_coursecontact_role($P)`, the same staff test as R9 | `may_manage_account` | Course teachers are the site team's. |
+| P is staff | ~~`has_coursecontact_role($P)`, the same staff test as R9~~ *(amended 2026-10-04, `38a2c5b`)* any role but `student` in any course context, one read of `{role_assignments}` in `local_ltuse_organisation_person_facts()` (`lib.php`); `has_coursecontact_role()` sees only `$CFG->coursecontact` | `may_manage_account` | Course teachers, course leaders and course mentors (`teacher`) are the site team's. |
 | P holds a role assignment at system or any category context | `get_user_roles()` for the system context and each category from `core_course_category::get_all()`; public APIs only | `may_manage_account` | Staff are the site team's to manage. |
 | P is in any managers cohort | the same cohort read | `may_manage_account` | Other managers are the site team's. |
 | P is in `ltct:mentors` | the same cohort read | `may_manage_account` | Mentors are the site team's. |
@@ -519,7 +519,7 @@ Outcome: `is_org_member_of_manager` holds when V is not P, P's `ltct_org` is one
 
 ### Per-action rules
 
-Each action re-checks its predicate on the server, with `require_login()` and a sesskey on every write. None of the core functions it calls checks a capability itself, so this decision is the only gate.
+Each action re-checks its predicate on the server, with `require_login()` and a sesskey on every write. None of the core functions it calls checks a capability itself, so for a manager this decision is the only gate. *(2026-10-04, spec 008.)* Spec 008's admin service does not go through it: it calls the unchecked `do_*()` cores (below; `classes/admin/intake_service.php:579`, `classes/admin/suspension_service.php:76-78`) after `require_capability('local/ltuse:administer')` in its external functions.
 
 | Action | Predicate | Extra inputs | Rule |
 |---|---|---|---|
@@ -539,8 +539,8 @@ Every write fires core's own event with V as the actor; there is no event of our
 
 | Layer | Methods | Checks | Called by |
 |---|---|---|---|
-| Unchecked core | `do_suspend(int $userid)`, `do_reactivate(int $userid)`, `do_enrol(int $userid, int $courseid)`, `do_unenrol(int $userid, int $courseid)` | The per-action rules above that do not depend on who manages P: never a site admin, never the acting user, never a deleted account for enrolment; `may_enrol_into()` for enrolment, `may_unenrol_from()` for unenrolment. `do_suspend` calls `destroy_user_sessions()` then `user_update_user((object)['id' => …, 'suspended' => 1], false)`. | Spec 008's `local_ltuse_admin_*` functions, after `require_capability('local/ltuse:administer')` and their own rules. Never a page. |
-| Manager wrapper | `suspend()`, `reactivate()`, `enrol()`, `unenrol()` (and `send_reset()`) | `may_manage_account(V, P)` for the acting user, then the matching `do_*()`. | `organisation.php` only. |
+| Unchecked core | `do_suspend(int $userid)`, `do_reactivate(int $userid)`, `do_enrol(int $userid, int $courseid)`, `do_unenrol(int $userid, int $courseid)` | The per-action rules above that do not depend on who manages P: never a site admin, never the acting user, never a deleted account for enrolment; `may_enrol_into()` for enrolment, `may_unenrol_from()` for unenrolment. `do_suspend` calls `destroy_user_sessions()` then `user_update_user((object)['id' => …, 'suspended' => 1], false)`. | Spec 008's `local_ltuse_admin_*` functions, after `require_capability('local/ltuse:administer')` and their own rules: `do_enrol()` from intake (`classes/admin/intake_service.php:579`), `do_suspend()` and `do_reactivate()` from `suspension_service.php:76-78`. `do_unenrol()` is available; no 008 caller yet (only `tests/organisation_test.php`). Never a page. |
+| Manager wrapper | `suspend()`, `reactivate()`, `enrol()`, `unenrol()` (and `send_reset()`) | `may_manage_account(V, P)` for the acting user (`require_manageable()`), then the same core write as the matching `do_*()`: the wrappers call the helpers both layers share (`enrol_course()`, `unenrol_instance()`, `do_write_suspended()`; `actions.php` ~:82-84, :130-134), not `do_*()` itself. | `organisation.php` only. |
 
 One suspend path for managers and the site team, so spec 016's PHPUnit case (suspending a protected user leaves names unchanged) is written once, against this class. 002's T071 built the class with manager checks only; spec 008 added the unchecked cores to it when it merged main (PR #93). `do_suspend()` and `do_reactivate()` return whether anything changed, as the wrappers do.
 
@@ -560,21 +560,21 @@ It is created on first use with `enrol_get_plugin('self')->add_instance()`, not 
 
 ## Moodle-only entities (never declared)
 
-These are learner data. They are created in Moodle by the site team, by managers for their own learners (2026-10-02), or by `local_ltuse` on their behalf, later also by spec 008's tooling, and never appear in the repo, a declaration, a payload or a run report (R8, constitution III).
+These are learner data. They are created in Moodle by the site team, by managers for their own learners (2026-10-02), or by `local_ltuse` on their behalf, and never appear in the repo, a declaration, a payload or a run report (R8, constitution III). *(2026-10-05: spec 008 merged, PR #93. The site team now makes most of them with `scripts/ltct_admin.py`, whose command is named in each row it covers; learner files stay outside every git tree.)*
 
 | Entity | Created by | Relationships | Rule |
 |---|---|---|---|
-| Profile value | site team (account creation, CSV `profile_field_ltct_org`); learner for the unlocked fields | one per user per field | `ltct_org` holds an organisation key. Values persist across courses and after a course ends (US4-1). |
+| Profile value | site team (account creation: `ltct_admin.py intake`, which sets `ltct_org`, or core CSV `profile_field_ltct_org`; a change of organisation: `ltct_admin.py move`); learner for the unlocked fields | one per user per field | `ltct_org` holds an organisation key. Values persist across courses and after a course ends (US4-1). |
 | Organisation cohort membership | `tool_dynamic_cohorts` | user → `ltct:org:<key>` | Never edited by hand: the cohort's `component` blocks it. |
-| Managers cohort membership | site team, by hand | user → `ltct:org:<key>:managers` | The only way to make someone a manager (FR-012). A person in two managers cohorts manages both. |
-| Mentors cohort membership *(2026-10-02)* | site team, by hand | user → `ltct:mentors` | The only source of a manager's mentor candidates (R10). |
-| Cohort-sync instance *(amended 2026-10-02)* | site team | course + cohort + role, no group | Shared course: one per enrolled organisation, `ltct:org:<key>` as `student`; the managers cohort is **not** enrolled. Organisation-only course: `ltct:org:<key>` as `student` and `ltct:org:<key>:managers` as `orgmanager`. On leaving the cohort: suspended, roles removed (R7). |
-| Organisation enrolment *(2026-10-02)* | a manager, for their own learner, or the site team | user → course's organisation-enrolment instance (`enrol_self`), Student | Made and ended by a manager only through `may_manage_account` (R10). On a move of organisation it stands in shared courses and is suspended in the old organisation's `ltct:org:*` courses (R12 observer and reconcile task). |
+| Managers cohort membership | site team, with `ltct_admin.py managers` (or by hand in Moodle) | user → `ltct:org:<key>:managers` | The only way to make someone a manager (FR-012). A person in two managers cohorts manages both. |
+| Mentors cohort membership *(2026-10-02)* | site team, with `ltct_admin.py managers` (or by hand in Moodle) | user → `ltct:mentors` | The only source of a manager's mentor candidates (R10). |
+| Cohort-sync instance *(amended 2026-10-02)* | site team, with `ltct_admin.py enrol course`, `enrol pathway`, `enrol mirror` and `unenrol` | course + cohort + role, no group | Shared course: one per enrolled organisation, `ltct:org:<key>` as `student`; the managers cohort is **not** enrolled. Organisation-only course: `ltct:org:<key>` as `student` and `ltct:org:<key>:managers` as `orgmanager`. On leaving the cohort: suspended, roles removed (R7). |
+| Organisation enrolment *(2026-10-02)* | a manager, for their own learner, or the site team (`ltct_admin.py intake`, through `do_enrol()`) | user → course's organisation-enrolment instance (`enrol_self`), Student | Made and ended by a manager only through `may_manage_account` (R10). On a move of organisation it stands in shared courses and is suspended in the old organisation's `ltct:org:*` courses (R12 observer and reconcile task). |
 | Manual enrolment | the site team or the pilot coordinator | user → course's manual instance | Pilots (stage 7). Never made or ended by a manager. |
-| Suspension *(2026-10-02)* | a manager, for their own learner, or the site team | `user.suspended` | Site-wide. Sessions are ended first (R10). |
-| Mentor assignment *(2026-10-02)* | a manager, for their own learner (`mentors.php`), or the site team | `mentor` role in the learner's user context | Spec 003's role and contact observer (003 R7 Phase B). |
+| Suspension *(2026-10-02)* | a manager, for their own learner, or the site team (`ltct_admin.py suspend` and `reactivate`, through `do_suspend()` / `do_reactivate()`) | `user.suspended` | Site-wide. Sessions are ended first (R10). |
+| Mentor assignment *(2026-10-02)* | a manager, for their own learner (`mentors.php`), or the site team (`ltct_admin.py mentors assign` and `mentors end`) | `mentor` role in the learner's user context | Spec 003's role and contact observer (003 R7 Phase B). |
 | Organisation contact record *(2026-10-02)* | `local_ltuse` observer and reconcile task | manager ↔ member, plus the core contact | See below. |
-| Account | site team only | | Managers never create accounts (FR-013). |
+| Account | site team only (`ltct_admin.py intake`) | | Managers never create accounts (FR-013). |
 
 *Superseded (2026-10-01)*: a course group per enrolled organisation, named for it and holding both of that organisation's cohort-sync instances, and two instances per organisation in every course. Existing ones on the build host are removed by a one-off CLI that reports counts only (R13): for every `ltct:` course it sets each cohort-sync instance's group to none and deletes the organisation groups; only for courses outside the `ltct:org:*` categories does it also delete the managers-cohort sync instances.
 

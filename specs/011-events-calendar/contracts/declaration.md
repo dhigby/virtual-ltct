@@ -39,10 +39,10 @@ Two arrays are handled after spec 013's:
 `apply`:
 - **`officehours`**:
   - It creates the course with `create_course()` when no course has the idnumber `ltct:officehours`, and otherwise updates its declared fields with `update_course()`.
-  - It creates the scheduler with `create_module()` when no course module in the course has the idnumber `ltct:officehours:scheduler`, and otherwise sets its declared instance values and its course-module group mode.
+  - It creates the scheduler with `create_module()` when no course module in the course has the idnumber `ltct:officehours:scheduler`, and otherwise sets its declared instance values and its course-module group mode. A new scheduler's group mode is set again straight after creation, with `\core_courseformat\formatactions::cm($courseid)->set_groupmode()`, because the new module does not keep the group mode it was created with: the first apply on ltuse.net, on 2026-10-05, left it at 0 (#97).
   - It ensures the course has exactly one manual enrolment instance named `ltct:officehours`, adding it with `add_instance()`.
   - It then runs `\local_ltuse\officehours::reconcile()` once and reports counts only (`groups 4, members +2 −0, enrolments suspended 1`).
-- **`dashboard`**: for each declared block not already on the default `my-index` page, it calls `add_block()` there, with the default `my_pages` row as the subpage. It never removes a block and never resets a user's own dashboard.
+- **`dashboard`**: for each declared block not already on the default `my-index` page, it calls `add_region($region)` on a bare `moodle_page`'s block manager and then `add_block()` there, with the default `my_pages` row as the subpage. A bare page has no layout, so its block manager knows no region until one is added, and `add_block()` refuses every region as unknown; core does the same in `blocks/timeline/db/install.php` (MOODLE_502_STABLE) (`moodle/local_ltuse/classes/siteconfig/dashboard.php` `apply()`; #98, 2026-10-05). It never removes a block and never resets a user's own dashboard.
 - **Settings**: applied as 001 applies any setting. As with spec 013's plugins, `mod_scheduler` is installed before `apply` runs. Until it is, its settings are `unknown`, which stops the run.
 
 `drift`:

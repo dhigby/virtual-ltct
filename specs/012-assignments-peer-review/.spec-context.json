@@ -688,6 +688,10 @@
     {
       "note": "check_course_package.py already exits 1 on this branch: 20 errors from existing course content, unrelated to this spec.",
       "step": "implement"
+    },
+    {
+      "note": "Parked for re-plan (Doug, 2026-10-05): open courses (spec 002) and spec 008 decision 3 mentor groups change its basis; Phases B/C and the T014 design approval wait",
+      "kind": "blocked"
     }
   ],
   "last_action": "Resolved T013, raw-write and capability questions; T014 awaits the maintainer"

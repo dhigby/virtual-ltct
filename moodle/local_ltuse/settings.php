@@ -12,7 +12,7 @@ if ($hassiteconfig) {
     $ADMIN->add('localplugins', $settings);
 
     // Spec 008: administration. Whether course mentors are enrolled automatically (research
-    // R10). Declared 0 in moodle/site/settings/admin.yaml until plan decision 11.
+    // R10). Declared 1 in moodle/site/settings/admin.yaml since 2026-10-05 (#97).
     $settings->add(new admin_setting_configcheckbox(
         'local_ltuse/coursementorsync',
         new lang_string('setting:coursementorsync', 'local_ltuse'),

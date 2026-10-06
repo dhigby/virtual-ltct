@@ -1,8 +1,10 @@
 # Implementation Plan: Partner organisations, cohorts and profiles
 
-> **Amended 2026-10-03 in the spec** (Areas and Area Language Technology Coordinators, [Clarifications 2026-10-03](spec.md)). This file is not yet redone for it; that happens in the plan step, before any build. Where this file disagrees with the 2026-10-03 Clarifications, the spec wins.
+> **Amended 2026-10-03 in the spec** (Areas and Area Language Technology Coordinators, [Clarifications 2026-10-03](spec.md)). This file is not yet redone for it; that happens in a later plan step, before any build. FR-014 to FR-019 and SC-006 stay deferred to that step (Doug, 2026-10-05). Where this file disagrees with the 2026-10-03 Clarifications, the spec wins.
+>
+> **Brought up to date 2026-10-05** with what merged through main `a0dccef`: the open-courses amendment (PR #92), spec 008's admin tooling (PR #93) and spec 016 (PR #84), all deployed on `ltuse.net` on 2026-10-05 as `local_ltuse` 2026100900. No instance check of the 2026-10-02 amendment has run yet (T081; T086, which re-runs T021, T030 and T031 on open courses; T088). The 2026-10-01 checks ran on the temporary instance.
 
-**Branch**: `specs/moodle-requirements`; amended on `002-open-courses` | **Date**: 2026-10-01, amended 2026-10-02 | **Spec**: [spec.md](spec.md)
+**Branch**: `specs/moodle-requirements`; amended on `002-open-courses` (PR #92) and `specs/align-2026-10-05` | **Date**: 2026-10-01, amended 2026-10-02, 2026-10-04 (spec 008's `do_*()` cores) and 2026-10-05 | **Spec**: [spec.md](spec.md)
 
 > **Amended 2026-10-02: open courses.** Organisations are no longer separated inside a course. The [amendment](#amendment-2026-10-02-open-courses) at the end of this plan supersedes the paragraphs and lines marked *(superseded 2026-10-02)*; everything else stands.
 
@@ -78,7 +80,7 @@ Re-checked after Phase 1 design, and again after the 2026-10-01 task review adde
 ## Cross-spec effects
 
 - **Spec 001**: its contract gains two files and four item types. This plan's [contracts/declaration.md](contracts/declaration.md) is the addition; spec 001's contract links to it.
-- **Spec 008**: owns the site team's recurring work: bulk account creation with the organisation field, adding an organisation's cohorts to a course with its group *(superseded 2026-10-02: with no group)*, and adding someone to a managers cohort. Until it ships, these are admin-interface steps on learner data, which is allowed: they are memberships, not configuration.
+- **Spec 008**: owns the site team's recurring work: bulk account creation with the organisation field, adding an organisation's cohorts to a course with its group *(superseded 2026-10-02: with no group)*, and adding someone to a managers cohort. Until it ships, these are admin-interface steps on learner data, which is allowed: they are memberships, not configuration. *(2026-10-05: 008 shipped, PR #93. `scripts/ltct_admin.py` does them: `intake`, `enrol course`, `managers`; research R8 maps every step.)*
 - **Spec 004**: progress reports per organisation build on the organisation cohorts and the `orgmanager` role *(superseded 2026-10-02: the role only in organisation-only courses; see the amendment's Cross-spec effects)*. It adds the grade and report capabilities this spec leaves out.
 - **Spec 003**: a mentor who is also an organisation manager holds both roles. `orgmanager` uses no `prohibit`, so it never takes a permission away from another role. The profile hook exempts anyone with `moodle/user:viewalldetails` in the viewed learner's context, which is how a mentor reaches a mentee in Moodle.
 - **Publisher**: `--category` still takes a numeric id. Categories now carry an `idnumber`, so accepting `ltct:published` instead is a small follow-on. It is not needed here. *(2026-10-02: organisation-only courses are placed by idnumber, research R11.)*
@@ -98,6 +100,8 @@ Organisation managers stop being enrolled in shared courses. Instead they get th
 - **Contact.** Each manager and each of their organisation's people become message contacts automatically (R12).
 
 Everything a manager does is our own `local_ltuse` code, because core cannot scope any of it to one organisation (R2, R10). `orgmanager` keeps its capabilities and is used only in organisation-only courses.
+
+*(Amended 2026-10-04 for spec 008.)* The actions class has two layers: manager wrappers that run the shared check, and unchecked `do_*()` cores that spec 008's admin service calls after `require_capability('local/ltuse:administer')` (data model, "Management actions: two layers").
 
 An organisation-only course is declared by the maintainer in a new `moodle/site/org-courses.yaml`. The publisher places it in the organisation's category through a new `local_ltuse` web service, and drift reports any course in the wrong place (R11). A one-off CLI removes the organisation groups and the shared-course managers enrolments already on the build host, reporting counts only (R13).
 
@@ -161,7 +165,7 @@ moodle/
 ├── local_ltuse/
 │   ├── classes/organisation/access.php # new: the shared check and per-action rules, pure (R10)
 │   ├── classes/organisation/people.php # new: the manager's people and their progress (R10)
-│   ├── classes/organisation/actions.php# new: enrol, unenrol, reset link, suspend, reactivate (R10)
+│   ├── classes/organisation/actions.php# new: enrol, unenrol, reset link, suspend, reactivate (R10); + unchecked do_*() cores for spec 008 (2026-10-04)
 │   ├── classes/organisation/contacts.php # new: manager–member contacts (R12)
 │   ├── classes/observer.php            # changed: + cohort_member_added/removed (R12)
 │   ├── classes/task/reconcile_org_contacts.php # new: hourly repair (R12)
@@ -192,11 +196,11 @@ tests/
 ├── profile_access_harness.php          # changed: R9 cases
 └── org_access_harness.php              # new: R10 rules
 process/stages/08-publish.md            # changed: the two enrolment recipes
-.github/workflows/{site-config,publisher-tests}.yml  # changed: path triggers; runs org_access_harness.php
+.github/workflows/{site-config,publisher-tests}.yml  # changed: path triggers (2026-10-05: site-config.yml now runs org_access_harness.php and profile_access_harness.php)
 CLAUDE.md                               # changed: one line under "Delivery: Moodle"
 ```
 
-**Structure Decision**: Everything a manager does lives under `classes/organisation/`, behind one pure `access` class that every page, action, the profile hook and (later) spec 016's entitlement call. It is harness-tested in CI like `profile_access`. Pages are thin: they gather inputs, call `access`, then call `actions`. That keeps the security rule in one tested place.
+**Structure Decision**: Everything a manager does lives under `classes/organisation/`, behind one pure `access` class that every page, action, the profile hook and (later) spec 016's entitlement call. It is harness-tested like `profile_access`, by `tests/org_access_harness.php`. *(2026-10-05: neither harness ran in CI until commit 98a9279 on `specs/align-2026-10-05` added both, with the report, mentoring and mentor_admin harnesses, to `.github/workflows/site-config.yml`; before that they ran only by hand.)* Pages are thin: they gather inputs, call `access`, then call `actions`. That keeps the security rule in one tested place. *(Amended 2026-10-04 for spec 008.)* `actions` has two layers: the manager wrappers (`enrol()`, `unenrol()`, `suspend()`, `reactivate()`) run `may_manage_account` and are the only ones a page calls; the unchecked `do_*()` cores keep each action's own rules but ask no manager, and are called only by spec 008's admin service after `require_capability('local/ltuse:administer')`.
 
 ### Order of work
 
@@ -213,21 +217,21 @@ Steps 2–3 are the minimum spec 016 needs. Step 4 closes the profile reach 016 
 ### Cross-spec effects
 
 - **003 (merged)**: its `groupmode 1` is main's own and is removed here. R7 Phase B is built here as `mentors.php`. Doc follow-ups in 003: research R8 ("with the organisation's group"), tasks T034/T035 (a mentor with no group, checked across two organisations), `spec.md:123`, and the `profile_access.php` docblock. Any later 003 work branches from main after this change.
-- **004**: the report scope stays on `ltct_org` (Doug, 2026-10-02: left to 016). Changed here, because R10 needs it: the delivery condition `enrol:plugin = cohort` in `reports.yaml` (progress, programme) and `SCOPE_CONDITIONS` in `site_config.py` become "not `manual`", and `coverage.php` plus `competency_coverage_test.php` count the organisation-enrolment instance as delivery; `group:name` goes. Doc follow-ups in 004: `orgmanager`'s in-course reports apply only in organisation-only courses, so FR-006's second sentence is relaxed for shared courses, R8, R10 and quickstart V6 are rewritten (run V6 in an organisation-only course).
+- **004**: ~~the report scope stays on `ltct_org` (Doug, 2026-10-02: left to 016).~~ *2026-10-05: spec 016 moved the `progress` report's scope to the member cohort, `cohort:idnumber = ltct:org:<key>` (016 decision 2, option (a); `d395494`, PR #84); `ltct_org` stays visible.* Changed here, because R10 needs it: the delivery condition `enrol:plugin = cohort` in `reports.yaml` (progress, programme) and `SCOPE_CONDITIONS` in `site_config.py` become "not `manual`", and `coverage.php` plus `competency_coverage_test.php` count the organisation-enrolment instance as delivery; `group:name` goes. Doc follow-ups in 004: `orgmanager`'s in-course reports apply only in organisation-only courses, so FR-006's second sentence is relaxed for shared courses, R8, R10 and quickstart V6 are rewritten (run V6 in an organisation-only course).
 - **Follow-up checklist**: [org-boundaries.md §2](../011-events-calendar/org-boundaries.md) is the per-file list for 003, 004, 012 and 013's own documents (line numbers as of `de31ede`).
 - **011**: plans on open courses. Course events reach every organisation in a shared course; organisation-only course events reach one organisation by enrolment. Deleting organisation groups (R13) deletes any group events with them.
 - **012**: no organisation groups to rely on. `course-discussions.yaml` is gone; the organisation-cohort workshop allocator (T047–T051) is withdrawn; 012 settles assignment group mode before T032 and adds a rule for partner data in cross-organisation peer review.
 - **013**: R10's rationale now rests on `badges:viewotherbadges` alone; quickstart V9 is re-run (co-enrol B1 with A1; Manager A opens their own learner through R9's allow and sees no badges; Manager B is refused).
-- **016**: lands after this. Until it can set a person's level, a person who asked for protection waits; nobody else is held back (R13; Doug, 2026-10-05 (scope review)). Asked of 016, to record in its own docs:
+- **016**: lands after this. Until it can set a person's level, a person who asked for protection waits; nobody else is held back (R13; Doug, 2026-10-05 (scope review)). *(2026-10-05: 016 merged, #84, and was deployed with `local_ltuse` 2026100900. Intake now sets protection through it; a row waits only when 016 cannot set its level, `level_available()` false, or its address has not been confirmed (`moodle/local_ltuse/classes/admin/intake_rules.php`, `waits`).)* Asked of 016, to record in its own docs:
   - its entitlement calls `access::is_org_member_of_manager()` rather than re-deriving the managers-cohort rule. `managers_see_identity` was cut (Doug, 2026-10-05 (scope review)); a person who does not trust their managers is placed by the site team under a neutral entry with no managers;
   - `organisation.php` may show 016's marker and real name for a manager's own people, only through 016's `can_view_identity`; 016 keeps its own `protected.php` for mentors and the site team, and the two may share a listing component;
-  - `mentors.php` gains 016's check that assigning a mentor to a protected learner needs `can_view_identity` (R10);
+  - ~~`mentors.php` gains 016's check that assigning a mentor to a protected learner needs `can_view_identity` (R10);~~ *Dropped as moot (Doug, 2026-10-05): once `managers_see_identity` was cut, everyone `mentors.php` authorises already passes `can_view_identity`: the site team by path 1, an own-organisation manager by path 3;*
   - `org-courses.yaml` joins the public files its neutral-key guidance covers (R11);
   - R10's suspend and reactivate write a minimal `{id, suspended}` object; 016 adds a PHPUnit case that suspending a protected user leaves their names unchanged.
-  - email (Doug, 2026-10-02): a protected person's address is shown to their own organisation's managers and to their mentors, never to classmates. This bears on 016 decision 1, which proposes removing email from course leaders' views for everyone.
+  - email (Doug, 2026-10-02): a protected person's address is shown to their own organisation's managers and to their mentors, never to classmates. This bore on 016 decision 1, which proposed removing email from course leaders' views for everyone. *Decision 1 was rejected (Doug, 2026-10-05 (scope review); 016 research R8): email stays in staff views for everyone, and 016 checks that a protected person's address does not identify them at every grant.*
   Its decision 2 (cohort report scope; `ltct_org` stays visible, option (a), Doug, 2026-10-05 (scope review)) is untouched here.
-- **005**: the community space is not a shared delivery course, so the 2.0.0 rule does not forbid its per-organisation rooms. But a group named for an organisation shows a protected member's organisation on every post, so 005 and 016 must settle those rooms (rename, or keep protected members out) before 016 ships; 016 adds the community space to its audit.
-- **006, 008**: wording. 008 FR-008's "category-scoped manager roles" becomes "the managers cohort and the organisation page"; its enrolment tooling has a shared-course and an organisation-only case.
+- **005**: the community space is not a shared delivery course, so the 2.0.0 rule does not forbid its per-organisation rooms. But a group named for an organisation shows a protected member's organisation on every post, so 005 and 016 must settle those rooms (rename, or keep protected members out) before 016 ships; 016 adds the community space to its audit. *(2026-10-05: not settled. 016 shipped (#84) without it, and its docs do not mention the community space; 005 is still a spec only. Still open, now for 005: the rooms must be settled before 005 builds them.)*
+- **006, 008**: wording. 008 FR-008's "category-scoped manager roles" becomes "the managers cohort and the organisation page"; its enrolment tooling has a shared-course and an organisation-only case. *(2026-10-04, 008 research R6; merged in PR #93.)* 008 needed to act on people no manager may (staff, mentors, managers, holding-entry learners), so `organisation\actions` split each of enrol, unenrol, suspend and reactivate into a manager wrapper and an unchecked `do_*()` core; 008's admin service calls only the cores, after `require_capability('local/ltuse:administer')`.
 
 ### Complexity Tracking
 

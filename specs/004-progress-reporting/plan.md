@@ -15,11 +15,11 @@
 
 **Managers** get two scoped views:
 - One report builder report per organisation, generated from `organisations.yaml` as 002 generates cohorts. Its conditions are fixed to that organisation's learners on delivery enrolments, and only that organisation's managers cohort can open it. Report builder never filters rows by viewer, which is why the scope is built into each report (R7).
-- Core's per-course completion reports, which separate groups already scope (R8).
+- Core's per-course completion reports, which separate groups already scope (R8). *Amended 2026-10-05: shared courses have no organisation groups (spec 002 open courses, PR #86), and `orgmanager` is enrolled only in organisation-only courses, where every learner is the organisation's (002 R2). So a manager has these reports only there; see "Cross-spec effects".*
 
 Each organisation report is emailed weekly to its managers as Excel, viewed as each recipient (R12).
 
-**The maintainer** gets three reports, for the site team only: a programme report (completions per course), a per-competency table with a row for every framework competency, and a pilot report. Pilot learners are enrolled manually and delivery learners by cohort sync, which keeps pilots out of delivery figures (R10).
+**The maintainer** gets three reports, for the site team only: a programme report (completions per course), a per-competency table with a row for every framework competency, and a pilot report. Pilot learners are enrolled manually and delivery learners by cohort sync, which keeps pilots out of delivery figures (R10). *Amended 2026-10-05 (spec 002 R10, a0389bc, PR #92): delivery is any enrolment method but `manual`, so a manager's enrolment through the organisation-enrolment instance counts as delivery too.*
 
 A course's competencies and target level reach Moodle in two ways. Two locked course custom fields show them on the course, labelled as what it aims at (R11). A course-to-competency map, owned by the plugin, is what the per-competency table counts. That table is a `local_ltuse` report builder datasource, because core cannot give one row per competency (R15).
 
@@ -149,6 +149,8 @@ These were reviewed on 2026-10-02, after the first draft of this plan.
 
 - **Spec 001**: its declaration contract gains two files and four item types: reports, the course field category, course fields, and the competency list read from the repo-root `competencies.yaml`. This plan's [contracts/declaration.md](contracts/declaration.md) is the addition, and 001's contract links to it.
 - **Spec 002**: `orgmanager` gains two report capabilities. The organisation list now also generates one report and one schedule per organisation. 002's moved-learner limit now also shows on the two in-course reports (R8).
+  - *Amended 2026-10-05:* spec 002's open-courses change (PRs #86 and #92) changed this spec's delivery condition from `enrol:plugin = cohort` to `enrol:plugin` not equal to `manual`, so a manager's enrolment through the organisation-enrolment instance counts as delivery (002 R10, a0389bc); `coverage.php` counts that instance too; `group:name` left the reports, because shared courses have no organisation groups (fe7e77c); and `orgmanager`, with its two report capabilities, is enrolled only in organisation-only courses (002 R2), so R8 and quickstart V6 apply only there.
+- **Spec 016**: decision 2, option (a) (Doug, 2026-10-05 (scope review), 016 research R11, tasks T034–T035, d395494, PR #84) moved the organisation report's scope from the `user:profilefield_ltct_org` condition to `cohort:idnumber = ltct:org:{org}`, dropped the Organisation column, and made `validate` refuse an `ltct_org` condition on any report. FR-006, R7, data-model "Report" and contracts/declaration.md carry amendment notes; the original text stays for the record.
 - **Spec 003**: mentors read the same completion data. A mentor view of assigned learners belongs to 003.
 - **Spec 006 and 013**: both read course completion, which is now on in every published course and never wiped by a republish. This spec does not commit spec 006 to core competencies. R15 deliberately uses none, and its reasons for rejecting `tool_lp` (Principle V) are input for 006.
 - **Spec 007**: receives the "next incomplete lesson" link if SC-004 shows it is needed (R6), and may group My courses by `ltct_competencies`.

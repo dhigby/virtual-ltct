@@ -36,11 +36,12 @@
   "discussion": {
     "idnumber": "ltct:<slug>:discussion",
     "name": "Course discussion",
-    "intro_html": "...",
-    "shared": false                        // from moodle/site/course-discussions.yaml, default false
+    "intro_html": "..."
   }
 }
 ```
+
+*(2026-10-02: the `discussion` block's `"shared": false` field was removed by spec 002 R14. The forum runs with no groups in every course, so there is nothing to share; the block is exactly `{idnumber, name, intro_html}` (`tests/test_moodle_payload_discussion.py`, `test_block_carries_no_sharing_flag`). Re-plan input 5.)*
 
 - Mentor pages are written under `<out>/<slug>/mentor/`, **never** under `pages/`. That directory split is what lets the check treat "every file in `pages/`" as learner-visible without exceptions.
 - A withheld assignment appears in `withheld` and gets a placeholder `intro_html` with **no** criteria and **no** `mentor_page`. Nothing derived from its source is shipped.

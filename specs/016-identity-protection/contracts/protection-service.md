@@ -17,7 +17,7 @@ Amended by the scope review (Doug, 2026-10-05 (scope review)): protection is per
 | `local/ltuse:manageprotection` | CONTEXT_USER | write | `RISK_PERSONAL` | `manager` |
 | ~~`local/ltuse:manageorgprotection`~~ | — | — | — | Removed (change 9) |
 
-`mentor` (in the learner's user context) and `teacher` (in a course's context, R7 path 4) get `viewidentity` through `roles.yaml`.
+`mentor` (in the learner's user context) and `teacher` (in a course's context, R7 path 4) get `viewidentity` through `roles.yaml`. Spec 008's `ltctadmin`, held at system level by each site-team member's administration account, gets `manageprotection` there too (008 research R5), so its intake can grant protection to an account with no organisation yet.
 
 ## Entitlement
 
@@ -57,7 +57,7 @@ Named for the 006 and 008 sessions (2026-10-04); they are stable.
 - `requested => true` when the row's protection column asks for a level: the row is the person's request;
 - `emailchecked => true` only after intake has checked the row's email itself and the operator has confirmed, or swapped, the address. Intake runs `levels::email_reveals($email, $first, $last, $orgkey)` with the **row's** organisation key, because `ltct_org` is not yet set when `protect()` runs, so `service::email_warnings()` would miss the organisation half. Every row that needs a grant waits until its `email_checked` column confirms the address, flagged or not (FR-016: the heuristic cannot recognise every employer domain), and intake passes that column as `emailchecked`, so the log never records a confirmation nobody gave. Intake also runs `levels::pseudonym_problems()` before creating the account, so a pseudonym `set_protection()` would refuse never leaves an account made with no organisation.
 
-Without them every intake row that asks for protection stops as `protection_failed` (tasks T043, 008's side). 008's intake contract names the same two options.
+008's intake passes both (#93, 19a6d91; `moodle/local_ltuse/classes/admin/intake_service.php`, `protect()`): `requested` is always true for a row that asks, and `emailchecked` is the row's own `email_checked`. A refusal from `set_protection()` stops the row as `protection_failed`, and one that `can_manage_protection()` refuses as `protection_not_permitted` (tasks T043). 008's intake contract names the same two options.
 
 ## Web service `local_ltuse_set_protection`
 

@@ -84,7 +84,7 @@ roles:
       learner's "Assign roles relative to this user" page. Admins need no pair. #26 (spec
       016): the two protection capabilities are the manager archetype's defaults, listed so
       drift manages them; site_config.py allows the manage capability on no other role but
-      ltctadmin, the site team's administration role (spec 008 research R5).
+      ltctadmin, the site team's administration role (spec 008 research R12; the grant is R5).
 
   - shortname: editingteacher
     archetype: editingteacher
@@ -95,7 +95,7 @@ roles:
       #3 (FR-012): editing teachers lose trusted content at system context, so content they
       edit in Moodle is cleaned of iframes. Only the publisher and managers keep an iframe.
       #26 (spec 016, R14): no course backup download. The editingteacher archetype allows it
-      (lib/db/access.php, MOODLE_502_STABLE), and a backup with users carries every enrolled
+      (public/lib/db/access.php, MOODLE_502_STABLE), and a backup with users carries every enrolled
       account's fields. Courses come from the repo, so a course leader has no use for a
       backup; prohibit, so no course override gives it back. Email and course logs are not
       taken away: the scope review rejected hiding them from everyone (Doug, 2026-10-05 (scope
@@ -171,15 +171,25 @@ roles:
       office-hours course, where every mentor is a teacher (R7 path 4); it is checked in a
       course context, which a learner's user context does not inherit from. The backup
       prohibit is editingteacher's (R14); the teacher archetype never held
-      moodle/backup:downloadfile (lib/db/access.php, MOODLE_502_STABLE), so it changes nothing
+      moodle/backup:downloadfile (public/lib/db/access.php, MOODLE_502_STABLE), so it changes nothing
       today and stops a course override adding it.
       #22 (spec 012): the course-level role that assesses work. Its archetype defaults are what
       FR-010/FR-013 need (assign:grade, workshop allocate/switchphase/overridegrades,
-      viewhiddenactivities). Since 2026-10-02 shared courses have no organisation groups, so
-      lacking moodle/site:accessallgroups no longer scopes anyone there; it matters only where
-      a teacher uses groups for teaching (spec 002 R3). A role with an archetype has only its listed
-      capabilities managed, so accessallgroups is declared explicitly (as the archetype
-      default, inherit) for drift to catch it being granted by hand.
+      viewhiddenactivities). Since 2026-10-02 shared courses have no organisation groups and
+      run in group mode 0, so lacking moodle/site:accessallgroups scopes a course mentor only
+      where a group mode is set: an assessed activity in separate groups that limits each
+      assessor to the learners they assess, once spec 012's re-plan sets one (spec 002 FR-019,
+      deferred), or groups a teacher uses for teaching (spec 002 R3). A mentor group scopes the
+      real identities above, not what the course shows. The archetype's Moodle 5.2 defaults
+      (moodle/grade:viewall, gradereport/grader:view, report/progress:view,
+      report/completion:view, moodle/site:viewuseridentity, moodle/course:viewhiddenuserfields;
+      public/lib/db/access.php and the report plugins' db/access.php, MOODLE_502_STABLE) reach
+      every learner in a course in group mode 0, not only the learners they assess. Accepted
+      (Doug, 2026-10-05): we trust people who are in the system. A protected learner's real
+      identity still reaches a course mentor only through a shared mentor group (spec 016 path
+      4). A role with an archetype has only its listed capabilities managed, so accessallgroups
+      is declared explicitly (as the archetype default, inherit) for drift to catch it being
+      granted by hand.
 
   - shortname: mentor
     name: Mentor

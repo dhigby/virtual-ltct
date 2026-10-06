@@ -15,9 +15,9 @@ last checks before a team's files go to the typesetter.
 - You will be able to:
   - Advise a team on a single- versus two-column layout decision based on reader and
     community expectation — not just word length.
-  - Use the Wordlist's Show hyphenation view to approve correct guesses and correct
-    wrong ones — individually and in batches — so long words break correctly in a
-    two-column layout.
+  - Use the Wordlist's Show hyphenation view to draft, enter and approve hyphenation
+    breaks — individually and in batches — with each break confirmed by the team, so
+    long words break correctly in a two-column layout.
 - You will be able to:
   - Lead a team through the final PTXprint draft-PDF read-through.
   - Resolve or triage what it surfaces, deferring true typesetting composition to the
@@ -154,18 +154,45 @@ Digital and Print Publishing competency:
    ![The Wordlist's Show hyphenation view, with a Hyphenation column showing grey ticks (unreviewed) and green ticks (approved) alongside each word.](assets/ss-05-wordlist-hyphenation.png)
    *Grey = Paratext's guess; green = a human confirmed it.*
 
-   Your job is to work through the guesses:
-   - **Correct guess** — click the grey tick; it turns green. Approved.
-   - **Wrong guess** — click the word and add or remove `=` marks where the breaks
-     should actually fall; the tick turns green automatically once you edit it.
-   - **Batch-approve a run of correct words** — select the first word, then
-     shift-click to extend a consecutive selection (or Ctrl-click to pick several
-     non-consecutive ones), then use the Wordlist's tab menu > **Edit > Approve word
-     hyphenation** to approve them all at once. As you approve more words, Paratext's
-     guesses get better, so late in the review not every remaining word needs
-     individual attention.
+   Where a word may break is a fact about the language, and you don't speak it — so
+   neither Paratext's guess nor your own impression of a word settles whether a break is
+   right. **The decision about each break sits with the team.** Your part is the drafting
+   and all the tool work around that decision:
 
-   Your approvals save to **`hyphenatedWords.txt`** in the project folder when you close
+   1. **Ask the team for their orthography statement.** If they can provide one, draft
+      breaks from the syllable structure it describes — adding or removing `=` marks on
+      Paratext's guesses where the statement's syllable rules point.
+      - If there is no orthography statement — common on a first translation into a
+        language — don't draft from guesswork. The team proposes the breaks, and you
+        enter them in the Wordlist.
+   2. **Have the team review and confirm each break.** Go through the drafted and
+      guessed breaks with a team member who speaks the language; they say whether each
+      one is right.
+      - Where they say a break is wrong, click the word and add or remove `=` marks
+        where they say the breaks fall; the tick turns green automatically once you
+        edit it.
+   3. **Approve a single confirmed word** — click its grey tick.
+      - The tick turns green. Approved.
+   4. **Batch-approve a run of confirmed words** — select the first word, then
+      shift-click to extend a consecutive selection (or Ctrl-click to pick several
+      non-consecutive ones), then use the Wordlist's tab menu > **Edit > Approve word
+      hyphenation**.
+      - Every selected word is approved at once.
+   5. **Before the files go to print, confirm hyphenation is approved** — check that no
+      grey ticks remain on words the team hasn't reviewed.
+
+   > **WARNING — editing a word turns it green before anyone has confirmed it:** Because
+   > the tick goes green as soon as you edit a word, the breaks you drafted from the
+   > orthography statement show as approved before the team has seen them. Keep a note
+   > of which words you drafted, so the team's review covers those as well as the
+   > remaining grey ticks.
+
+   > **TIP:** As more words are approved, Paratext's guesses get better, so late in the
+   > review the team may be able to confirm a run of words at a glance rather than one
+   > at a time — which is where batch approval saves the most time. It is still their
+   > confirmation that each break is right; batch approval just records it faster.
+
+   The approvals save to **`hyphenatedWords.txt`** in the project folder when you close
    the Wordlist. Lines *without* a leading asterisk are still just Paratext's unapproved
    guesses; a leading `*` marks a line the team has approved.
 
@@ -186,10 +213,13 @@ Digital and Print Publishing competency:
    > **TIP:** For advanced or unusual cases, `hyphenatedWords.txt` itself can be
    > hand-edited to customize which characters represent hard/soft hyphens and
    > hyphenated markers (`HardHyphen`, `SoftHyphen`, `SoftHyphenOut`,
-   > `HyphenatedMarkers`). That's beyond what most teams need — the approve/correct
+   > `HyphenatedMarkers`). That's beyond what most teams need — the draft/confirm/approve
    > workflow above covers the normal case.
 
-   This is genuine hands-on tooling work, not just advice-giving.
+   Enabling the view, drafting and entering breaks, approving them individually and in
+   batches, and confirming everything is approved before print is genuine hands-on
+   tooling work, not just advice-giving. What you don't do is decide for yourself where
+   a word in a language you don't speak may break.
 
 ### The final PTXprint draft-PDF read-through
 
@@ -233,10 +263,12 @@ properly the typesetter's craft.
   drive the fix yourself, but check via Find (the link report is transient) and inspect
   the `\w...\w*` markup on each result rather than trusting a hit count.
 - Layout decisions follow reader expectation, not word length alone; once the layout
-  is set, working the Wordlist's Show hyphenation view — approving correct guesses
-  (grey tick → green), fixing wrong ones with `=` marks, and batch-approving with
-  shift-click/Ctrl-click — is hands-on technical work you do yourself, and it should
-  be done before print, since PTXprint's draft PDF will use unapproved guesses too.
+  is set, working the Wordlist's Show hyphenation view — drafting breaks from the
+  team's orthography statement (or entering the breaks the team proposes when there
+  isn't one), approving confirmed words (grey tick → green), and batch-approving with
+  shift-click/Ctrl-click — is hands-on technical work you do yourself. Whether each
+  break is right is the team's call, and it should all be confirmed and approved before
+  print, since PTXprint's draft PDF will use unapproved guesses too.
 - The draft-PDF read-through is your last chance to catch spreads, orphans, footnote
   shifts, heading placement, and underfilled pages — triage what you find rather than
   trying to resolve everything yourself.
@@ -259,12 +291,16 @@ answer, then check it against the Content section above.
    tell you about a layout choice, and one line on what actually sets the baseline for
    it. Then draft the single question — one sentence — you'd ask a team to establish
    that baseline, aimed at what the community already reads and uses.
-4. **Say where the hands-on half of your role begins, and walk the approve/correct
+4. **Say where the hands-on half of your role begins, and walk the draft/confirm/approve
    loop.** At what point in the layout sequence does opening the Wordlist's Show
    hyphenation view become the right next step, and what has to be settled before it?
-   Then, for a word Paratext has guessed wrong, describe the two clicks that take it
-   from grey tick to green — and separately, describe how you'd approve ten
-   already-correct guesses in one action rather than one at a time.
+   Then write what you'd do first if the team can give you an orthography statement,
+   and what you'd do instead if they can't — and who decides, in both cases, whether a
+   break is right. For a word the team says Paratext has broken wrongly, describe the
+   steps that take it from grey tick to green; then describe how you'd approve ten
+   words the team has confirmed in one action rather than one at a time. Finish with
+   one line on why a word you drafted yourself still needs the team's review even
+   though its tick is already green.
 5. **List the five things to watch for** in the draft-PDF read-through, from memory.
    Then write the general test you'd use to decide whether something the read-through
    surfaces is yours to resolve or is typesetting craft belonging to the typesetter —

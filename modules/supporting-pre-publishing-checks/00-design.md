@@ -1,7 +1,5 @@
 # Course Design Document
 
-> **Before proceeding:** Copy this file into your new course folder as `00-design.md`. Content drafting must not begin until this document is approved by a human reviewer. This is stage 1 of the [production pipeline](../../process/PROCESS.md) — see [`process/stages/01-design.md`](../../process/stages/01-design.md) and [`02-approve.md`](../../process/stages/02-approve.md).
-
 ## Course overview
 
 | Item | Description |
@@ -12,186 +10,60 @@
 | **SME(s) consulted** | Jenni Beadle — design interview conducted 2026-08-24/25 (recorded verbatim in "SME knowledge notes" below). Doug Higby — course author, ruled (2026-08-25 meeting) that the course must map to an honest CBC rung rather than blend levels. |
 | **Design status** | Approved by Kevin Nicholas on 2026-08-27 |
 
-> **Amendment, confirmed by Kevin Nicholas on 2026-08-28:** Kevin raised a new field case
-> post-approval, on issue #40 — significant time spent with a typesetter working through
-> Paratext's **Punctuation Inventory** (Tools > Checking Inventories > Punctuation Inventory)
-> settings ahead of typesetting.
-> Jenni placed this as a new subsection of `04-formatting-and-references.md` (see that
-> row in "Module breakdown" and field case 7 in "SME knowledge notes" below). Kevin confirmed
-> (PR #43) the placement and time budget are correctly scoped. `module-author` may proceed
-> with drafting `04-formatting-and-references.md`.
+### Amendments
 
-> **Amendment confirmed by Kevin Nicholas on 2026-09-03 (comment on PR #46) — raised during
-> Stage 5 SME fact-check, 2026-09-03:** Kevin raised a further field case, confirmed by Jenni
-> Beadle's team on the same date — the Punctuation Inventory's **Inventory menu > "Show
-> sequences"** option is what makes the **"Punctuation (sequences)"** checkbox under Run Basic
-> Checks actually check punctuation sequences/combinations meaningfully. Jenni had proposed
-> this as a new, separate section in `04-formatting-and-references.md`; **Kevin's ruling is to
-> fold it into the existing Punctuation Inventory subsection as a "Punctuation Sequences"
-> addition instead** (see that row in "Module breakdown" and field case 8 in "SME knowledge
-> notes" below), scoped to punctuation sequences only (quotation-mark specifics are explicitly
-> out of scope, deferred to a future addition). The lighter treatment revises the lesson's
-> time estimate to **80 minutes** (Jenni's separate-section proposal had estimated 85), keeping
-> 10 minutes of headroom under the 90-minute cap. `module-author` may revise
-> `04-formatting-and-references.md` accordingly.
+Changes made to this design since its approval on 2026-08-27, oldest first. The full text of
+each amendment is in the [Amendment log](#amendment-log) at the end of this document; none
+needed re-approval unless its entry says it did (the 2026-08-28 and 2026-09-03 amendments were
+each confirmed by the Design Approver, Kevin Nicholas, and the 2026-09-06 entry does not say
+either way).
 
-> **Amendment, Stage 5 SME fact-check pass, 2026-09-06 (Jenni Beadle):** Objective 3's field
-> case (the "no-selection rendering error" / Paratext auto-grabbing the first word of the verse)
-> is **UNCONFIRMED, pending a reply from support.bible** — Jenni saw it once, in one project, has
-> not been able to reproduce it since (including in that same project's current version), and it
-> was never a reported Paratext error. A screenshot of that one project instead showed something
-> closer to a stale/old rendering left in place alongside a later, correct rendering added without
-> deleting the original. Two NEW findings, confirmed from live Paratext screenshots reviewed the
-> same day, are added in their place as the primary teaching content for objective 3 and lesson
-> `02-wordlist-and-biblical-terms.md`: (1) blank renderings are the tool's normal default starting
-> state, coached via the Found column/count rather than eyeballing the list, and (2) stale/
-> duplicate renderings can pile up when an old rendering isn't deleted after a correct one is
-> added. See field case 4 (revised), field cases 9–10 (new), and the revised objective 3 below.
-> These two new findings are already confirmed and do not need to wait on support.bible; only the
-> no-selection/auto-grab mechanism itself remains pending.
-
-> **Amendment, Stage 5 SME fact-check pass, 2026-09-08 (Jenni Beadle) — terminology/attribution
-> correction, no re-approval needed:** Field case 1 ("denied errors") is a **Basic Checks**
-> case — Basic Checks results have their own real accept/deny mechanism. It had been conflated
-> into the wordlist/Biblical Terms module (`02-wordlist-and-biblical-terms.md`) alongside field
-> case 2 (wordlist blanket-approval), which is wrong: Paratext's spelling/wordlist status has
-> only three states — **Correct, Incorrect, Undecided** — there is no "deny" action for a word.
-> Corrected: field case 1 is now explicitly flagged as Basic Checks-specific in "SME knowledge
-> notes"; the `02-wordlist-and-biblical-terms.md` module-breakdown row no longer implies field
-> case 1 lives there and now describes its false-clean content using Correct/Incorrect/Undecided
-> terminology; the `04-formatting-and-references.md` row now incorporates field case 1 as its
-> concrete Basic Checks false-clean example; and the "Common mistakes" section's Wordlist/spelling
-> and Formatting & markup/Basic Checks bullets are corrected accordingly. Objective 1's wording is
-> generalized so it no longer implies "denied errors" is a wordlist-specific example. This is a
-> terminology/attribution fix only — objective 1 still covers the false-clean thread generally,
-> module scope and time estimates are unchanged, and no new approval is required.
-
-> **Amendment, Stage 5 SME fact-check pass, 2026-09-10 (Jenni Beadle) — support.bible query
-> resolved, no re-approval needed:** A support.bible programmer replied to Jenni's pending query
-> (open since 2026-09-06) with a plausible explanation for the field case 4 rendering behavior:
-> the team had likely run Paratext's **Guess Renderings** feature before the project had enough
-> translated data for it to work reliably, which caused it to default to the verse's first word as
-> a guessed rendering. This is a real, named Paratext feature, not a hypothetical — and critically,
-> translators would **not** consciously notice this happening, since it's an automated/background
-> action rather than something like forgetting to select text. This is now promoted from
-> "unconfirmed, pending" to a credible, attributed third pattern to watch for in Biblical Terms
-> renderings — attributed as "likely cause per a support.bible programmer," not stated as certain
-> fact — alongside the two already-confirmed patterns (blank renderings, stale/duplicate
-> renderings), which remain the primary teaching content for objective 3 and lesson
-> `02-wordlist-and-biblical-terms.md`. Jenni also confirmed a coaching technique for spotting it:
-> scanning through a term's occurrences using the down arrow to quickly step through verses makes
-> it visually obvious when a rendering is just repeating the verse's first word, pattern-matching
-> the verse text. See field case 4 (revised again below), the revised objective 3, and the
-> "Tool-version specifics" section. `module-author` may revise `02-wordlist-and-biblical-terms.md`
-> on this basis.
-
-> **Amendment, 2026-09-11 (Jenni Beadle and Doug Higby) — factual update on Numbers/Measures tool
-> maturity, no re-approval needed:** Jenni and Doug have worked together to build a new,
-> **consolidated Numbers check that covers numbers, weights, and measures together in one check**,
-> replacing the old split Numbers/Measures approach (Measures itself was never released as its own
-> separate check, so it is being absorbed into this new consolidated check rather than "replaced"
-> in its own right). It is currently **in testing** — Jenni has manually imported it under a
-> working/test label for testing purposes only, which is not its eventual real name and is not
-> used anywhere in this document; it is described functionally throughout as **"the new
-> consolidated Numbers check (covering numbers, weights, and measures)."** Jenni and Doug expect
-> it to ship before this course publishes, but it is **not yet confirmed/released** as of this
-> writing. Because it is still in testing, and because not every team will be on a Paratext
-> version that has it once it does ship, the underlying skill objective 5 teaches — confirm what's
-> actually available in a team's specific Paratext version before relying on it — is unchanged and
-> remains essential: older or unmigrated projects may continue to show only the old, separate
-> Numbers check (with no Measures check at all) for some time after the new consolidated check
-> releases. This is a factual/content update reflecting real-world tool development, not a scope
-> or objective-count change. See the revised objective 5, the revised `03-parallel-passages-and-
-> measures.md` module-breakdown row, the revised Numbers/Measures field case, and the revised
-> "Tool-version specifics" section below. `module-author` may draft or revise
-> `03-parallel-passages-and-measures.md` on this basis.
-
-> **Amendment, Stage 5 SME fact-check pass, 2026-09-11 (Jenni Beadle) — menu-path correction and a
-> second, complementary field-confirmed tool, no re-approval needed:** Two corrections, confirmed
-> via live Paratext screenshots. First, **the menu path for the Punctuation Inventory has been
-> wrong throughout this document** — it is at **Tools > Checking Inventories > Punctuation
-> Inventory**, not "Checks > Inventories"; every occurrence is corrected. Second, a **separate,
-> dedicated inventory called "Unmatched Pairs of Punctuation"** exists (also under Tools > Checking
-> Inventories), confirmed via a live screenshot: a standalone window listing single unmatched
-> punctuation pairs (e.g. an unmatched "}", "[", "(") with a count and a per-row Status column
-> (checkmark = approved, X = incorrect, ? = needs review) — the same status pattern used elsewhere
-> in this course. This is **distinct from and complementary to** the existing "Show sequences"
-> feature within Punctuation Inventory (field case 8): Unmatched Pairs of Punctuation catches
-> single-character unmatched bracket/parenthesis-type pairs directly, while "Show sequences"
-> catches multi-character punctuation sequences/combinations (e.g. multiple quotation marks
-> combined with spacing or other punctuation), confirmed via a second screenshot. Both are real,
-> useful checks the LTC should know about — this is an addition, not a replacement of either. The
-> separate, more complex dedicated quotation-marks check (handling continuing quote marks across
-> paragraph breaks) **remains genuinely out of scope**, confirmed still accurate — the existing
-> "quotation marks deferred to a future addition" language is unchanged. See field case 11 (new)
-> in "SME knowledge notes," the revised `04-formatting-and-references.md` module-breakdown row, and
-> the menu-path correction throughout. **Flag for the Design Approver / module-author: this
-> addition may push lesson 04 over its 80-minute estimate (10 minutes under the 90-minute cap) —
-> see the module-breakdown row for a trim recommendation if so.** `module-author` may revise
-> `04-formatting-and-references.md` accordingly.
-
-> **Amendment, Stage 5 SME fact-check pass, 2026-09-15 (Jenni Beadle) — mandatory first-step
-> correction, no re-approval needed:** The structural-first formatting-check order taught in this
-> course (marker-pair census → ghost markers → long/short verses → headings → book titles →
-> references → footnotes, 7 steps) was missing its actual mandatory first step: **Chapter/Verse
-> Numbers** — a distinct check category in Paratext's Run Basic Checks dialog, alongside Markers,
-> Characters, Punctuation, References, and Footnote quotes. Every other check in this lesson
-> quotes/relies on chapter and verse locations to report its results, which become unreliable or
-> ambiguous if chapter/verse numbering has errors (e.g. duplicate verses) — so Chapter/Verse
-> Numbers must always be confirmed clean **first**. The order is now **8 steps**, not 7. This is a
-> factual correction reflecting real Paratext check dependencies, not a scope change. See the
-> revised objective 6, the revised `04-formatting-and-references.md` module-breakdown row, and
-> field case 12 (new) in "SME knowledge notes." **Flag for module-author: lesson 04 is already at
-> an estimated 85 minutes (5 under the 90-minute cap, per the 2026-09-11 "Unmatched Pairs of
-> Punctuation" addition) — keep the new Chapter/Verse Numbers step's content concise (e.g. one line
-> explaining why it must come first) and consider trimming elsewhere in the lesson (the
-> reference/book-title portion is the standing trim candidate) to compensate if needed.**
-> `module-author` may revise `04-formatting-and-references.md` on this basis.
-
-> **Amendment, Stage 5 SME fact-check pass, 2026-09-17 (Jenni Beadle) — hyphenation mechanism
-> correction, no re-approval needed:** Objective 8 and the `05-glossary-linking-and-layout.md`
-> module-breakdown row wrongly framed the LTC's hands-on layout work as "building a hyphenation
-> file" for a two-column layout. Confirmed via a live Paratext screenshot: hyphenation is
-> **automatically generated by the Wordlist tool**, not hand-built. The Wordlist's **View menu**
-> has a **"Show hyphenation"** option (alongside "Show morphology" and "Show spelling status");
-> enabling it displays a hyphenation column, and Paratext auto-generates a `hyphenatedWords.txt`
-> file. The LTC's actual hands-on job is to **enable Show hyphenation, then review and correct any
-> wrong hyphenation breaks** the automatic generation produced — not to build the file from
-> scratch. This is a factual/mechanism correction, not a scope change: the objective still covers
-> the same underlying skill (genuine hands-on layout/hyphenation tooling work, which is what keeps
-> the course's Digital and Print Publishing "hands-on setup" claim honest), just correcting what
-> that work actually is. See the revised objective 8, the revised `05-glossary-linking-and-layout.md`
-> row, field case 5 (revised) and the "Common mistakes" Layout & publishing bullet below.
-> `module-author` may revise `05-glossary-linking-and-layout.md` on this basis.
-
-> **Amendment, Stage 5 SME fact-check pass, 2026-09-18 (Jenni Beadle) — support.bible reply
-> confirms and enriches the hyphenation mechanism, no re-approval needed:** A support.bible reply
-> has now confirmed the 2026-09-17 correction (Paratext's Wordlist auto-generates hyphenation; the
-> LTC reviews/corrects it) and added substantially richer mechanism detail: the exact menu path
-> (Tools > Wordlist > View menu > "Show hyphenation"); the meaning of `=` marks in a word
-> (acceptable break points, e.g. `an=ti=no=mi=an=ism`); the **grey tick / green tick** approval
-> status per word (grey = Paratext's guess, unapproved; click to approve, or edit the `=` marks to
-> correct a wrong guess, which turns the tick green automatically); **batch approval** of correct
-> guesses via shift-click/Ctrl-click to extend a selection, then Wordlist tab menu > Edit > "Approve
-> word hyphenation"; the **`hyphenatedWords.txt` asterisk convention** (lines with `*` are
-> team-approved, lines without are still Paratext's unapproved guesses), saved when the Wordlist
-> closes; that guesses improve as more words are approved, so not every remaining word needs
-> individual approval once guesses are reliable; that **PTXprint's draft-PDF export uses both
-> approved and guessed hyphenations**, but best practice is to approve before publication rather
-> than rely on unapproved guesses going to print; that in a **Study Bible Publication project the
-> Wordlist is view-only**, so hyphenation can't be approved directly there; and an important
-> distinction from **word break characters** (for scripts without space-separated words), which are
-> a separate setting under Project > Project settings > Language settings > Other Characters tab,
-> not to be conflated with hyphenation. An advanced/optional detail — customizing `HardHyphen`,
-> `SoftHyphen`, `SoftHyphenOut`, and `HyphenatedMarkers` at the top of `hyphenatedWords.txt` — is
-> noted as lighter-touch, optional content, not core teaching. This is a factual/detail enrichment
-> of the already-correct mechanism, not a scope change. See field case 5 (revised again below) and
-> the revised `05-glossary-linking-and-layout.md` module-breakdown row. **Time-budget note:** lesson
-> 05 is revised from 65 to **75 minutes** to accommodate the fuller workflow (grey/green ticks,
-> batch approval, the asterisk convention, the Study Bible Publication caveat, and a brief mention
-> of the word-break-characters distinction) — still 15 minutes under the 90-minute cap; the course
-> total rises from 345 to **355 minutes** accordingly. `module-author` may draft
-> `05-glossary-linking-and-layout.md` on this basis.
+1. **2026-08-28** — Kevin Nicholas (Design Approver), post-approval — a Punctuation Inventory
+   subsection is added to lesson 04 (field case 7); course total 335 minutes.
+   [full text](#amendment-1-2026-08-28)
+2. **2026-09-03** — Kevin Nicholas, Stage 5 SME fact-check — "Show sequences" is folded into the
+   Punctuation Inventory subsection as a "Punctuation Sequences" addition (field case 8); lesson
+   04 at 80 minutes. [full text](#amendment-2-2026-09-03)
+3. **2026-09-06** — Jenni Beadle, Stage 5 SME fact-check — objective 3's first-word rendering case
+   is marked unconfirmed pending support.bible; blank and stale/duplicate renderings (field cases
+   9–10) become its primary content. [full text](#amendment-3-2026-09-06)
+4. **2026-09-08** — Jenni Beadle, Stage 5 SME fact-check — field case 1 ("denied errors") is
+   reattributed to Basic Checks; wordlist status has only Correct/Incorrect/Undecided.
+   [full text](#amendment-4-2026-09-08)
+5. **2026-09-10** — Jenni Beadle, Stage 5 SME fact-check — support.bible reply: the first-word
+   rendering is likely caused by Guess Renderings; down-arrow scanning technique added.
+   [full text](#amendment-5-2026-09-10)
+6. **2026-09-11** — Jenni Beadle and Doug Higby — a new consolidated Numbers check (numbers,
+   weights and measures) is in testing; objective 5 covers either state.
+   [full text](#amendment-6-2026-09-11)
+7. **2026-09-11** — Jenni Beadle, Stage 5 SME fact-check — Punctuation Inventory menu path
+   corrected; "Unmatched Pairs of Punctuation" added (field case 11); lesson 04 estimated at 85
+   minutes. [full text](#amendment-7-2026-09-11)
+8. **2026-09-15** — Jenni Beadle, Stage 5 SME fact-check — Chapter/Verse Numbers added as the
+   mandatory first formatting check; the order is now 8 steps.
+   [full text](#amendment-8-2026-09-15)
+9. **2026-09-17** — Jenni Beadle, Stage 5 SME fact-check — hyphenation is auto-generated by the
+   Wordlist ("Show hyphenation"), not hand-built. [full text](#amendment-9-2026-09-17)
+10. **2026-09-18** — Jenni Beadle, Stage 5 SME fact-check — a support.bible reply confirms and
+    enriches the hyphenation workflow; lesson 05 from 65 to 75 minutes, course total 345 to 355.
+    [full text](#amendment-10-2026-09-18)
+11. **2026-10-03** — Jenni Beadle (course author and SME), Stage 4 alignment check — the
+    consultant drafts hyphenation breaks from the orthography statement and the team confirms
+    them. [full text](#amendment-11-2026-10-03)
+12. **2026-10-04** — Jenni Beadle, Stage 4 alignment re-check — what the consultant checks vs.
+    what the team judges (headings, measures, book names, footnote placement); scenario count
+    corrected to seven. [full text](#amendment-12-2026-10-04)
+13. **2026-10-05** — Jenni Beadle, Stage 4 advisories — marker (e) and Punctuation Inventory
+    character validity left to the team; Footnote quotes and the wordlist/Basic Checks parallel
+    clarified. [full text](#amendment-13-2026-10-05)
+14. **2026-10-06** — Steve White (internal reviewer), agreed by Jenni Beadle, Stage 6 internal
+    review — parallel passages should not be more harmonized than the original texts; also the
+    2026-10-07 replacement of both denied-error screenshots.
+    [full text](#amendment-14-2026-10-06)
+15. **2026-10-07** — Jenni Beadle (SME), Stage 6 internal review — the Parallel Passages
+    tool's shading is added to lesson 03; the consultant compares the shading of the Greek
+    with the shading of the translation, and lesson 03's Challenge 2 now rests on it.
+    [full text](#amendment-15-2026-10-07)
 
 ## Outcome-level open question (resolve before approval)
 
@@ -278,10 +150,10 @@ secondary objectives or their competency coverage.
 | 2 | Core | Learner can confirm that a parallel-passage comparison check was actually run and its results reviewed by the team, flag passages the tool surfaces as inconsistent (by the tool's own comparison, not the learner's own linguistic judgment) back to the team for adjudication, and check that the team's own decisions about legitimate variation vs. over-harmonising — not the LTC's — are driving the resolution | Translation Tools 2.0, `2 - With Assistance` | Quiz + Scenario Bank |
 | 3 | Secondary | Learner can recognize incomplete Biblical Terms coverage — blank renderings (the tool's default starting state) presented as a finished list — by checking the Found column/count rather than eyeballing the list, recognize stale/duplicate renderings left in place after a correct rendering was added without deleting the original, and coach the team to complete and clean up the list — without taking over their keyboard. Learner can also recognize a third pattern — a rendering that just repeats the verse's first word, likely caused by running **Guess Renderings** before the project had enough translated data for it to work reliably (per a support.bible programmer's reply, 2026-09-10; not something translators would consciously notice, since it's automated/background) — by scanning a term's occurrences with the down arrow to quickly step through verses, which makes the first-word pattern visually obvious. (This third pattern is now confirmed/attributed, not unconfirmed — see "SME knowledge notes," field case 4 revised 2026-09-10 — but remains secondary to the two primary patterns above.) | Translation Tools 2.0, `2 - With Assistance` | Quiz + Scenario Bank |
 | 4 | Secondary | Learner can diagnose configuration-caused Send/Receive and performance slowdowns from over-adding terms to the *Project* Biblical Terms list, and advise the team on right-sizing it | Translation Tools 5.0 (Scripture Collaboration), `2 - With Assistance` — "Advise users in best-practices for collaboration and data safety... assist users to configure plans and tasks in a way that helps them" | Quiz + Scenario Bank |
-| 5 | Core | Learner can confirm whether the team's Paratext version has the new consolidated Numbers check (covering numbers, weights, and measures) or still only the old separate Numbers check, run whichever is available against the team's *already-agreed and documented* approach (not the LTC's own judgment of what the rendering should be), and refer any gaps or contradictions the check surfaces back to the team to resolve rather than deciding new renderings | Translation Tools 2.0, `2 - With Assistance` | Quiz + Scenario Bank |
+| 5 | Core | Learner can confirm whether the team's Paratext version has the new consolidated Numbers check (covering numbers, weights, and measures) or still only the old separate Numbers check, run whichever is available, be honest with the team about what the tool does and does not catch, and have the **team** find and review their own measure renderings against their *already-agreed and documented* approach (not the LTC's own judgment of what the rendering should be) — referring any gaps, contradictions or inconsistencies the check or the team's review surfaces back to the team to resolve, rather than informally comparing measure renderings themselves or deciding new renderings (clarified 2026-10-04, Jenni Beadle, stage-4 alignment re-check — was "run whichever is available against the team's already-agreed and documented approach … and refer any gaps or contradictions the check surfaces back to the team to resolve," which left room for the LTC to compare measure renderings informally; that is possible but not easy, ambiguous terms get missed, and the review is the team's) | Translation Tools 2.0, `2 - With Assistance` | Quiz + Scenario Bank |
 | 6 | Core | Learner can diagnose formatting-check failures — unclosed marker pairs, ghost markers, wrong markers, book-title/heading/reference errors — working structural-first **starting with Chapter/Verse Numbers** (confirmed clean before anything else, since references, footnotes, and other verse-based checks quote chapter/verse locations and their reported results become unreliable or ambiguous if those numbers have errors, e.g. duplicate verses — corrected 2026-09-15, Jenni Beadle), and coach a team to a zero-error result | Translation Tools 2.0, `2 - With Assistance` | Quiz + Scenario Bank |
 | 7 | Core | Learner can diagnose over-linked glossary marking (every occurrence vs. first-per-section) and coach the team to unlink and relink at the correct scope | Translation Tools 2.0, `2 - With Assistance` | Quiz + Scenario Bank |
-| 8 | Secondary | Learner can advise a team on a single- vs. two-column layout decision based on reader/community expectation (not just word length), and, since Paratext auto-generates hyphenation via the Wordlist tool, enable **Show hyphenation** (Wordlist's View menu) and review/correct the resulting automatic hyphenation breaks — approving correct guesses (individually or in batches) and fixing wrong ones — so long words break correctly in a two-column layout (corrected 2026-09-17, Jenni Beadle — was wrongly framed as "build a hyphenation file from scratch"; enriched 2026-09-18 per a confirming support.bible reply) | Digital and Print Publishing 1.0 (Print Publishing), `2 - With Assistance` — "Customize and use appropriate tools to produce publishable output for Scripture and dictionaries" | Quiz + Scenario Bank |
+| 8 | Secondary | Learner can advise a team on a single- vs. two-column layout decision based on reader/community expectation (not just word length), and, since Paratext auto-generates hyphenation via the Wordlist tool, enable **Show hyphenation** (Wordlist's View menu), explain the grey/green ticks, `=` break marks and the `hyphenatedWords.txt` asterisk convention, draft hyphenation breaks from the syllable structure in the team's **orthography statement** where the team can provide one (or, where there is none, enter the breaks the team proposes) and have the **team review and confirm** each break, then batch-approve the confirmed breaks via Edit > "Approve word hyphenation" and confirm hyphenation is approved before publication — so long words break correctly in a two-column layout (corrected 2026-09-17, Jenni Beadle — was wrongly framed as "build a hyphenation file from scratch"; enriched 2026-09-18 per a confirming support.bible reply; clarified 2026-10-03, Jenni Beadle, stage-4 alignment check — was "review/correct the resulting automatic hyphenation breaks," but where a word may break is a judgment about the language, which the team confirms, not the LTC) | Digital and Print Publishing 1.0 (Print Publishing), `2 - With Assistance` — "Customize and use appropriate tools to produce publishable output for Scripture and dictionaries" | Quiz + Scenario Bank |
 | 9 | Core | Learner can lead a team through the final PTXprint draft-PDF read-through (spreads, orphan words, footnote shifts, heading placement, underfilled pages) and resolve or triage what it surfaces, deferring true typesetting composition to the typesetter | Digital and Print Publishing 1.0, `2 - With Assistance` | Quiz + Scenario Bank |
 | 10 | Core | Learner can decide, for any surfaced issue, whether it is theirs to resolve, the team's translation decision, or needs escalation (an LT mentor for tooling, a Translation Consultant for content) | Translation Tools 2.0, `2 - With Assistance` | Quiz + Scenario Bank |
 
@@ -336,9 +208,9 @@ each core check-area lesson instead of either a heavy standalone module or being
 | --- | --- | --- | --- |
 | `01-supporting-the-final-turn.md` | The translation process as a 6-stage spiral; Stage 6 as the final turn re-running earlier checks; the cross-cutting spine (false-clean results) introduced as a recurring watch-for, not a standalone topic; the consultant's role (diagnose, coach, never touch the keyboard); when to escalate | 1 (light touch), 10 | 35 |
 | `02-wordlist-and-biblical-terms.md` | Biblical Terms list completion and cleanup (secondary, condensed): recognizing blank renderings as the tool's normal default starting state and confirming genuine completion via the Found column/count rather than eyeballing the list; recognizing stale/duplicate renderings left in place after a correct rendering was added without deleting the original; a third pattern — a rendering that just repeats the verse's first word, likely caused by running **Guess Renderings** before the project had enough translated data (per a support.bible programmer's reply, 2026-09-10 — see field case 4, revised) — noted as a real, attributed pattern to watch for (no longer unconfirmed/pending), spotted by scanning a term's occurrences with the **down arrow** to quickly step through verses so the first-word repetition becomes visually obvious; Project Biblical Terms bloat and performance (secondary, condensed); recurring false-clean callout for this check area, resting solely on the confirmed **blanket-approval pattern** — a wordlist mass-marked **Correct** — described using correct spelling-status terminology (**Correct / Incorrect / Undecided**), not "denied" (**reattributed 2026-09-08**: the "denied errors" field case belongs to Basic Checks in `04-formatting-and-references.md`, not here — see "SME knowledge notes," field case 1) | 1 (callout), 3, 4 | 40 |
-| `03-parallel-passages-and-measures.md` | Parallel passages: confirming the comparison check was run and routing tool-flagged inconsistencies to the team (core, expanded); Numbers and Measures: confirming whether the team's Paratext version has the **new consolidated Numbers check (covering numbers, weights, and measures)** — in testing as of 2026-09-11, anticipated to be the primary case by the time this course publishes — or still only the **old separate Numbers check** (limited scope, no separate Measures check), which remains a real fallback scenario for teams not yet on the newer version; running whichever is available against the team's already-agreed, documented approach, and routing gaps back to the team (core, expanded); recurring false-clean callout | 1 (callout), 2, 5 | 60 |
-| `04-formatting-and-references.md` | Formatting checks in structural-first order, now **8 steps** (corrected 2026-09-15, Jenni Beadle — was 7, missing its actual mandatory first step): **(0) Chapter/Verse Numbers first and confirmed clean**, because every other check here (references, footnotes, verse-based markers, etc.) quotes/relies on chapter and verse locations to report its results, which become unreliable or ambiguous if chapter/verse numbering has errors (e.g. duplicate verses); then (1) marker-pair census, (2) ghost markers, (3) long/short verses, (4) section headings, (5) book titles, (6) references, (7) footnotes (core); subsection (confirmed by Kevin Nicholas on 2026-08-28): Punctuation Inventory (**Tools > Checking Inventories > Punctuation Inventory** — corrected 2026-09-11, was mis-stated as "Checks > Inventories") ahead of typesetting — reviewing/using the inventory itself (not PTXprint or the typesetter's own tooling), confirming the inventory was actually reviewed rather than assumed already handled earlier in the process (echoes the objective-1 false-clean theme), and common settings issues that turn this into a time-sink for a typesetter; **"Punctuation Sequences" addition folded into that Punctuation Inventory subsection (raised 2026-09-03; confirmed by Kevin Nicholas on 2026-09-03 via PR #46 comment — folded in, not a separate section): "Show sequences" in the Punctuation Inventory's Inventory menu, and its relationship to the "Punctuation (sequences)" Basic Checks option** — reviewing the inventory without "Show sequences" selected can silently miss unmatched punctuation-pair sequences (echoes the false-clean theme again); scoped to punctuation sequences only — quotation-mark-specific complexity is explicitly out of scope here and deferred to a future addition; **"Unmatched Pairs of Punctuation" addition (2026-09-11, Jenni Beadle, confirmed from live Paratext screenshots — field case 11)**: a separate, dedicated inventory under Tools > Checking Inventories that catches single unmatched bracket/parenthesis-type pairs directly (e.g. an unmatched "}", "[", "("), complementing rather than replacing "Show sequences" (which catches multi-character punctuation sequences/combinations instead) — both use the same approved/incorrect/needs-review Status pattern seen elsewhere in the course; quotation-mark-specific complexity remains out of scope for both, deferred to the same future addition; recurring false-clean callout — **incorporating field case 1** (**reattributed 2026-09-08**: a team denying Basic Checks errors they didn't understand, rather than resolving them) as the concrete example of the false-clean pattern in the Basic Checks context specifically, since Basic Checks is where "deny" is an actual, correct Paratext action (unlike wordlist/spelling status, which has no deny — see `02-wordlist-and-biblical-terms.md` and "SME knowledge notes") | 1 (callout), 6 | **85 — FLAGGED 2026-09-11: the "Unmatched Pairs of Punctuation" addition pushes this lesson from 80 to an estimated 85 minutes, only 5 under the 90-minute cap.** If drafting confirms it runs longer than 5 minutes of content, trim the reference/book-title portion first (as already flagged for the prior amendment); if that alone isn't enough, this lesson should be split rather than pushed over 90 minutes. **FURTHER FLAGGED 2026-09-15 (Jenni Beadle):** the new mandatory first step (Chapter/Verse Numbers) adds content on top of this already-tight 85-minute estimate, with only 5 minutes of headroom left under the 90-minute cap. `module-author` should keep this new step's content concise — e.g. one line explaining why Chapter/Verse Numbers must be confirmed clean before any other check — and should consider trimming something elsewhere in the lesson (the reference/book-title portion is the standing trim candidate) to compensate if the addition doesn't fit within the remaining headroom |
-| `05-glossary-linking-and-layout.md` | Glossary-linking scope (over-linking, core); single- vs. two-column layout decisions (secondary, condensed); Paratext's Wordlist-driven automatic hyphenation — enabling **Show hyphenation** (Wordlist's View menu) and reviewing/correcting the resulting automatically-generated hyphenation breaks, not building a hyphenation file from scratch (corrected 2026-09-17, Jenni Beadle); **enriched 2026-09-18 per a confirming support.bible reply** to cover the fuller workflow: the grey-tick (guessed, unapproved) vs. green-tick (approved) status per word, approving a correct guess by clicking its tick or fixing a wrong one by editing its `=` break marks, batch-approving many correct words at once via shift-click/Ctrl-click then Wordlist tab menu > Edit > "Approve word hyphenation," and the `hyphenatedWords.txt` asterisk convention (starred lines = team-approved, unstarred = still guesses); a brief note that a **Study Bible Publication project's Wordlist is view-only** (hyphenation can't be approved there) and that hyphenation is **distinct from "word break characters"** (a separate Project settings > Language settings setting, for scripts without space-separated words); the advanced `HardHyphen`/`SoftHyphen`/`SoftHyphenOut`/`HyphenatedMarkers` customization settings are flagged as optional/lighter-touch, not core teaching; the PTXprint draft-PDF read-through (core); recurring false-clean callout | 1 (callout), 7, 8, 9 | **75 — revised 2026-09-18 (was 65): the fuller confirmed hyphenation workflow needs modest additional content; still 15 minutes under the 90-minute cap** |
+| `03-parallel-passages-and-measures.md` | Parallel passages: confirming the comparison check was run and routing tool-flagged inconsistencies to the team (core, expanded); Numbers and Measures: confirming whether the team's Paratext version has the **new consolidated Numbers check (covering numbers, weights, and measures)** — in testing as of 2026-09-11, anticipated to be the primary case by the time this course publishes — or still only the **old separate Numbers check** (limited scope, no separate Measures check), which remains a real fallback scenario for teams not yet on the newer version; running whichever is available against the team's already-agreed, documented approach, and routing gaps back to the team (core, expanded) (clarified 2026-10-04, Jenni Beadle, stage-4 alignment re-check — the consultant confirms which check is available, runs it and is honest about the tool gap, while the **team** finds and reviews its own measure renderings against its documented approach and the consultant routes any inconsistencies to the team; the consultant does not informally compare measure renderings, which is possible but not easy and misses ambiguous terms); recurring false-clean callout | 1 (callout), 2, 5 | 60 |
+| `04-formatting-and-references.md` | Formatting checks in structural-first order, now **8 steps** (corrected 2026-09-15, Jenni Beadle — was 7, missing its actual mandatory first step): **(0) Chapter/Verse Numbers first and confirmed clean**, because every other check here (references, footnotes, verse-based markers, etc.) quotes/relies on chapter and verse locations to report its results, which become unreliable or ambiguous if chapter/verse numbering has errors (e.g. duplicate verses); then (1) marker-pair census, (2) ghost markers, (3) long/short verses, (4) section headings, (5) book titles, (6) references, (7) footnotes (core) (clarified 2026-10-04, Jenni Beadle, stage-4 alignment re-check — **section headings**: the consultant checks heading structure (present, heading marker, no verse text swallowed by the missing-`\p` cascade) and cross-checks placement against the LWC Bible, or against a back translation only if it was made manually outside Paratext; whether a heading's wording fits its passage is the team's call, and Basic Checks does not report headings that don't match their text; **book names**: a consistency check — the same book named inconsistently across the places its name appears, e.g. "Mark" vs "The Gospel of Mark" — the consultant spots the inconsistency, the team decides the right form; **footnotes on the wrong verse**: not easy for a consultant to spot, so the consultant prompts the team to review footnote placement); subsection (confirmed by Kevin Nicholas on 2026-08-28): Punctuation Inventory (**Tools > Checking Inventories > Punctuation Inventory** — corrected 2026-09-11, was mis-stated as "Checks > Inventories") ahead of typesetting — reviewing/using the inventory itself (not PTXprint or the typesetter's own tooling), confirming the inventory was actually reviewed rather than assumed already handled earlier in the process (echoes the objective-1 false-clean theme), and common settings issues that turn this into a time-sink for a typesetter; **"Punctuation Sequences" addition folded into that Punctuation Inventory subsection (raised 2026-09-03; confirmed by Kevin Nicholas on 2026-09-03 via PR #46 comment — folded in, not a separate section): "Show sequences" in the Punctuation Inventory's Inventory menu, and its relationship to the "Punctuation (sequences)" Basic Checks option** — reviewing the inventory without "Show sequences" selected can silently miss unmatched punctuation-pair sequences (echoes the false-clean theme again); scoped to punctuation sequences only — quotation-mark-specific complexity is explicitly out of scope here and deferred to a future addition; **"Unmatched Pairs of Punctuation" addition (2026-09-11, Jenni Beadle, confirmed from live Paratext screenshots — field case 11)**: a separate, dedicated inventory under Tools > Checking Inventories that catches single unmatched bracket/parenthesis-type pairs directly (e.g. an unmatched "}", "[", "("), complementing rather than replacing "Show sequences" (which catches multi-character punctuation sequences/combinations instead) — both use the same approved/incorrect/needs-review Status pattern seen elsewhere in the course; quotation-mark-specific complexity remains out of scope for both, deferred to the same future addition; recurring false-clean callout — **incorporating field case 1** (**reattributed 2026-09-08**: a team denying Basic Checks errors they didn't understand, rather than resolving them) as the concrete example of the false-clean pattern in the Basic Checks context specifically, since Basic Checks is where "deny" is an actual, correct Paratext action (unlike wordlist/spelling status, which has no deny — see `02-wordlist-and-biblical-terms.md` and "SME knowledge notes") | 1 (callout), 6 | **85 — FLAGGED 2026-09-11: the "Unmatched Pairs of Punctuation" addition pushes this lesson from 80 to an estimated 85 minutes, only 5 under the 90-minute cap.** If drafting confirms it runs longer than 5 minutes of content, trim the reference/book-title portion first (as already flagged for the prior amendment); if that alone isn't enough, this lesson should be split rather than pushed over 90 minutes. **FURTHER FLAGGED 2026-09-15 (Jenni Beadle):** the new mandatory first step (Chapter/Verse Numbers) adds content on top of this already-tight 85-minute estimate, with only 5 minutes of headroom left under the 90-minute cap. `module-author` should keep this new step's content concise — e.g. one line explaining why Chapter/Verse Numbers must be confirmed clean before any other check — and should consider trimming something elsewhere in the lesson (the reference/book-title portion is the standing trim candidate) to compensate if the addition doesn't fit within the remaining headroom |
+| `05-glossary-linking-and-layout.md` | Glossary-linking scope (over-linking, core); single- vs. two-column layout decisions (secondary, condensed); Paratext's Wordlist-driven automatic hyphenation — enabling **Show hyphenation** (Wordlist's View menu), then drafting breaks from the syllable structure in the team's **orthography statement** where one exists (or entering the breaks the team proposes where there is none) and having the **team review and confirm** each break, not building a hyphenation file from scratch (corrected 2026-09-17, Jenni Beadle; clarified 2026-10-03, Jenni Beadle, stage-4 alignment check — was "reviewing/correcting the resulting automatically-generated hyphenation breaks," but where a word may break is a judgment about the language, which the team confirms, not the LTC); **enriched 2026-09-18 per a confirming support.bible reply** to cover the fuller workflow: the grey-tick (guessed, unapproved) vs. green-tick (approved) status per word, approving a team-confirmed guess by clicking its tick or entering the team's correction by editing its `=` break marks, batch-approving many team-confirmed words at once via shift-click/Ctrl-click then Wordlist tab menu > Edit > "Approve word hyphenation," and the `hyphenatedWords.txt` asterisk convention (starred lines = team-approved, unstarred = still guesses); a brief note that a **Study Bible Publication project's Wordlist is view-only** (hyphenation can't be approved there) and that hyphenation is **distinct from "word break characters"** (a separate Project settings > Language settings setting, for scripts without space-separated words); the advanced `HardHyphen`/`SoftHyphen`/`SoftHyphenOut`/`HyphenatedMarkers` customization settings are flagged as optional/lighter-touch, not core teaching; the PTXprint draft-PDF read-through (core); recurring false-clean callout | 1 (callout), 7, 8, 9 | **75 — revised 2026-09-18 (was 65): the fuller confirmed hyphenation workflow needs modest additional content; still 15 minutes under the 90-minute cap** |
 | `06-scenario-bank.md` | Mentor-reviewed applied scenarios weighted toward core objectives (2, 5, 6, 7, 9, 10 each get a full scenario), secondary objectives (3, 4, 8) folded into one combined scenario, and objective 1 (false-clean) run as a thread inside two of the core scenarios rather than its own case | 1–10 | 60 |
 | `07-mentor-guide.md` | Facilitator notes: what to watch for in each scenario response, the "good" markers from the SME interview | — | — |
 | `08-quiz.md` | Assessment | 1–10 | — |
@@ -352,9 +224,10 @@ each; the secondary objectives 1, 3, 4, 8 share the remainder) — mixed recogni
 reasoning format (e.g. "given this check result, what happened and what do you do next"), since the
 quiz alone can only assess recognition, not live coaching. The mentor-reviewed scenario bank
 (`06-scenario-bank.md`) is the component that earns the `3 - Independent` claim (see "Outcome-level
-open question" above): six scenarios weighted the same way — one full scenario each for the six
+open question" above): seven scenarios weighted the same way — one full scenario each for the six
 core objectives, one combined scenario folding in the three remaining secondary objectives
-(3, 4, 8), and objective 1 (false-clean results) woven as a thread inside two of the core scenarios
+(3, 4, 8) (count corrected 2026-10-04, Jenni Beadle, stage-4 alignment re-check — was "six
+scenarios," but six core plus one combined is seven, matching `06-scenario-bank.md`), and objective 1 (false-clean results) woven as a thread inside two of the core scenarios
 rather than given its own case, per the flagged spine tension above. Each scenario is built from a
 confirmed SME field case or a stated mistake pattern, asking the learner to write out how they
 would diagnose the situation, what they would say to the team, and what (if anything) they would
@@ -435,8 +308,12 @@ cases were added in this review round; the stories below are unchanged.
    **"Show hyphenation"** option (alongside "Show morphology" and "Show spelling status");
    enabling it displays a hyphenation column and Paratext auto-generates a
    `hyphenatedWords.txt` file. The consultant's actual hands-on job is to **enable Show
-   hyphenation, then review and correct any wrong hyphenation breaks** the automatic
-   generation produced — not to build the file from scratch. This is still a concrete case
+   hyphenation, then draft breaks from the syllable structure in the team's orthography
+   statement (where one exists) and have the team review and confirm them** — or, where
+   there is no orthography statement, enter the breaks the team proposes — not to build the
+   file from scratch, and not to judge on their own where a word may break. **(Clarified
+   2026-10-03, Jenni Beadle — stage-4 alignment check; was "review and correct any wrong
+   hyphenation breaks the automatic generation produced.")** This is still a concrete case
    where the consultant both advises a publishing-layout decision *and* does genuine
    hands-on tooling work — confirming Digital and Print Publishing is honestly earned by
    this course, just via this corrected mechanism. **(Enriched 2026-09-18, Jenni Beadle — a
@@ -566,8 +443,10 @@ matching the same rule taught in the team workbook).
   reply, 2026-09-10 — see field case 4, revised) — spotted by scanning a term's occurrences with
   the down arrow to quickly step through verses.
 - **Parallel passages**: over-harmonising — forcing all parallel passages to match exactly and
-  erasing legitimate variation. They must be consistent in *meaning*, not necessarily identical in
-  *form*.
+  erasing legitimate variation. Different biblical authors may relate a story differently, and
+  parallel passages should not be more harmonized than the original texts. (Clarified 2026-10-06,
+  internal review by Steve White, agreed by Jenni Beadle — was "consistent in *meaning*, not
+  necessarily identical in *form*", which was unclear and potentially wrong.)
 - **Numbers & Measures** (see "Tool-version specifics" below): a new **consolidated Numbers check
   covering numbers, weights, and measures together** is in testing (as of 2026-09-11) and expected
   to ship before this course publishes, replacing the old separate Numbers check (Measures was
@@ -593,10 +472,11 @@ matching the same rule taught in the team workbook).
 - **Glossary linking**: over-linked (every occurrence, instead of first-per-section).
 - **Layout & publishing (read-through)**: single- vs. two-column choice; hyphenation is
   automatically generated by the Wordlist tool (enable **Show hyphenation** in its View menu),
-  so the actual mistake to watch for is not enabling it, not approving/correcting the grey-tick
-  guesses it produces (individually or via batch approval), or relying on unapproved guesses at
-  print time instead of approving hyphenation first (corrected 2026-09-17, enriched 2026-09-18,
-  Jenni Beadle — was wrongly framed as building a hyphenation file by hand).
+  so the actual mistake to watch for is not enabling it, not getting the grey-tick guesses
+  reviewed and confirmed by the team (individually or via batch approval), or relying on
+  unapproved guesses at print time instead of approving hyphenation first (corrected 2026-09-17,
+  enriched 2026-09-18, Jenni Beadle — was wrongly framed as building a hyphenation file by hand;
+  clarified 2026-10-03 — the team, not the consultant, decides where a word may break).
 - **Cross-cutting spine**: don't trust an old or fake "all clear" — denied errors (Basic Checks'
   own accept/deny mechanism), skipped checks, or mass-approved/blanket statuses (e.g. a wordlist
   mass-marked Correct) can occur in *any* of the areas above, using whichever accept/reject
@@ -621,6 +501,8 @@ Observable markers of a competent supporting consultant:
 - (d) **Drives the tools correctly** — chooses the sensible list/option (e.g. link
   first-per-section, not every occurrence) and can undo a bad move.
 - (e) **Judges legitimate variation vs. error**, especially in parallel passages.
+  (Clarified 2026-10-05, Jenni Beadle: now **Leaves legitimate variation vs. error to the team**
+  — confirms the differences were reviewed, and gets the team to judge each one.)
 - (f) **Advises the surfaced decisions** (layout, hyphenation, renderings) and defers to the team
   or another consultant where it's genuinely their call, not the LTC's.
 - (g) **Knows when to escalate** — an LT mentor for tooling problems, a Translation Consultant for
@@ -667,6 +549,21 @@ Observable markers of a competent supporting consultant:
   pattern alongside the two already-confirmed findings (blank-rendering default state,
   stale/duplicate renderings — field cases 9–10); see field case 4 (revised 2026-09-10) for the
   confirmed coaching technique (scanning occurrences with the down arrow).
+- **Open question, 2026-10-04 (Jenni Beadle) — not yet a ruling:** the name under which the
+  consolidated measures list appears in Paratext's **Open Biblical Terms List** dialog is **not yet
+  confirmed** — it is currently seen as "Numbers 2," which may be a testing label rather than its
+  released name. Jenni will confirm with Doug Higby. Until then, lesson 2's wording that names this
+  list stays as drafted; once the name is confirmed, this item is closed by a dated amendment and
+  `module-author` updates lesson 2's wording to match.
+- **Resolved, 2026-10-05 (Jenni Beadle):** there is **no Measures list**. "Numbers (2)" is only the
+  name Paratext gave the combined numbers/weights/measures list when Jenni imported it for
+  testing; it is not the released name, and no released Paratext version has the list yet. The
+  course and the new list are expected to be released together, so the "anticipated primary case"
+  framing above stands, and lesson 03 needs no change. Lesson 02 now says Numbers is a separate
+  entry, that there is no Measures list, and that a combined list is replacing Numbers, without
+  naming it. The screenshot `assets/ss-02-bt-choose-list.png` shows Jenni's imported test lists
+  ("Numbers (2) (imported)", "test (imported)"), which learners won't see; those two rows were cropped out on 2026-10-05.
+  If the list's release slips past the course's, revisit lesson 03's framing.
 
 ---
 
@@ -680,7 +577,8 @@ checking and team-routing, since an LTC does not normally know the project langu
 files** (5 numbered content lessons + scenario bank + mentor guide + quiz), totaling **355 minutes**
 (~5.9 hours) of learner-facing seat time (content lessons + mentor-reviewed scenario bank; mentor
 guide and quiz excluded from the total per convention), now weighted toward the core objectives.
-The 345-minute total includes the Punctuation Inventory subsection added to
+The 355-minute total (corrected 2026-10-04 — this sentence still said "345-minute" after the
+2026-09-18 amendment raised the total; see the end of this paragraph) includes the Punctuation Inventory subsection added to
 `04-formatting-and-references.md` on 2026-08-28 and **confirmed by Kevin Nicholas on 2026-08-28**
 (see the amendment note at the top of this document; previously 320 minutes as approved
 2026-08-27), the "Punctuation Sequences" addition of 2026-09-03, **confirmed by Kevin Nicholas on
@@ -689,7 +587,8 @@ The 345-minute total includes the Punctuation Inventory subsection added to
 of 2026-09-11 (Jenni Beadle, field-confirmed), which brings `04-formatting-and-references.md` to an
 estimated **85 minutes — only 5 minutes under the 90-minute cap. Flagged for module-author:** trim
 the reference/book-title portion first if drafting runs longer than estimated, or split the lesson
-rather than exceed 90 minutes.
+rather than exceed 90 minutes. It also includes the 2026-09-18 hyphenation-workflow enrichment,
+which brought `05-glossary-linking-and-layout.md` from 65 to 75 minutes (+10, 345 to 355).
 Every objective traces to a descriptor component and to both the quiz and the scenario bank. One
 open tension is flagged and left for the Design Approver: whether the lighter, recurring-callout
 treatment of objective 1 (false-clean results) adequately preserves the "spine" framing from the
@@ -710,119 +609,397 @@ from the Design Approver per stage 2 of the pipeline.
 > mentor-reviewed scenario bank mandatory, and the recurring-callout spine treatment confirmed.
 > See the resolution notes in each section above. Drafting may begin.
 
-**Amendment confirmed by Kevin Nicholas on 2026-08-28 (PR #43):** the Punctuation Inventory
-subsection added to `04-formatting-and-references.md` (field case 7, module-breakdown row, and
-revised 335-minute total) is confirmed correctly scoped and placed. `module-author` may draft
+## Amendment log
+
+The full text of every amendment listed under "Amendments" at the top of this document, oldest
+first. Each entry is the record of that amendment; the dated inline notes in the body above mark
+where it changed the text.
+
+### Amendment 1: 2026-08-28
+
+**Amendment, confirmed by Kevin Nicholas on 2026-08-28 (PR #43):** Kevin raised a new field case
+post-approval, on issue #40 — significant time spent with a typesetter working through
+Paratext's **Punctuation Inventory** (Tools > Checking Inventories > Punctuation Inventory)
+settings ahead of typesetting. Jenni placed this as a new subsection of
+`04-formatting-and-references.md` (see that row in "Module breakdown" and field case 7 in "SME
+knowledge notes"). Kevin confirmed (PR #43) that the placement and time budget are correctly
+scoped — the subsection (field case 7, module-breakdown row, and revised 335-minute total) is
+confirmed correctly scoped and placed. `module-author` may proceed with drafting
 `04-formatting-and-references.md`.
 
-**Amendment confirmed by Kevin Nicholas on 2026-09-03 (comment on PR #46; raised during Stage 5
-SME fact-check, 2026-09-03):** the "Show sequences" material (Punctuation Inventory's Inventory
-menu) and its relationship to the "Punctuation (sequences)" Basic Checks option is confirmed
-correctly scoped (punctuation sequences only; quotation marks deferred to a future addition).
-Kevin's ruling on placement: **fold it into the existing Punctuation Inventory subsection of
-`04-formatting-and-references.md` as a "Punctuation Sequences" addition, not a separate section**
-(field case 8, module-breakdown row, and revised 340-minute total). The lighter treatment puts
-the lesson at 80 minutes, 10 under the cap. `module-author` may revise
-`04-formatting-and-references.md`.
+### Amendment 2: 2026-09-03
 
-**Amendment, Stage 5 SME fact-check pass, 2026-09-06 (Jenni Beadle):** Objective 3 and its
-underlying field case (the "no-selection rendering error") are revised — the auto-grab mechanism
-is now marked **unconfirmed, pending a reply from support.bible** (Jenni saw it once,
-unreproducible since, never a reported Paratext error), rather than removed outright. Objective 3
-now primarily teaches two **confirmed** patterns from live Paratext screenshots reviewed the same
-day: blank renderings as the tool's default starting state (confirmed via the Found column/count)
-and stale/duplicate renderings piling up when an old rendering isn't deleted after a correct one
-is added (field cases 9–10). The `02-wordlist-and-biblical-terms.md` module-breakdown row is
-revised accordingly; its estimated time (40 minutes) is unchanged. These two new findings do not
-need to wait on support.bible; only the auto-grab mechanism itself remains pending, and this
+**Amendment confirmed by Kevin Nicholas on 2026-09-03 (comment on PR #46) — raised during
+Stage 5 SME fact-check, 2026-09-03:** Kevin raised a further field case, confirmed by Jenni
+Beadle's team on the same date — the Punctuation Inventory's **Inventory menu > "Show
+sequences"** option is what makes the **"Punctuation (sequences)"** checkbox under Run Basic
+Checks actually check punctuation sequences/combinations meaningfully. The "Show sequences"
+material and its relationship to the "Punctuation (sequences)" Basic Checks option is confirmed
+correctly scoped: punctuation sequences only (quotation-mark specifics are explicitly out of
+scope, deferred to a future addition). Jenni had proposed this as a new, separate section in
+`04-formatting-and-references.md`; **Kevin's ruling is to fold it into the existing Punctuation
+Inventory subsection of `04-formatting-and-references.md` as a "Punctuation Sequences" addition
+instead, not a separate section** (see that row in "Module breakdown", field case 8 in "SME
+knowledge notes", and the revised 340-minute total). The lighter treatment revises the lesson's
+time estimate to **80 minutes** (Jenni's separate-section proposal had estimated 85), keeping 10
+minutes of headroom under the 90-minute cap. `module-author` may revise
+`04-formatting-and-references.md` accordingly.
+
+### Amendment 3: 2026-09-06
+
+**Amendment, Stage 5 SME fact-check pass, 2026-09-06 (Jenni Beadle):** Objective 3's field case
+(the "no-selection rendering error" / Paratext auto-grabbing the first word of the verse) is
+**UNCONFIRMED, pending a reply from support.bible**, and is marked as such rather than removed
+outright — Jenni saw it once, in one project, has not been able to reproduce it since (including
+in that same project's current version), and it was never a reported Paratext error. A
+screenshot of that one project instead showed something closer to a stale/old rendering left in
+place alongside a later, correct rendering added without deleting the original. Two NEW findings,
+confirmed from live Paratext screenshots reviewed the same day, are added in their place as the
+primary teaching content for objective 3 and lesson `02-wordlist-and-biblical-terms.md`:
+
+1. blank renderings are the tool's normal default starting state, coached via the Found
+   column/count rather than eyeballing the list, and
+2. stale/duplicate renderings can pile up when an old rendering isn't deleted after a correct one
+   is added.
+
+See field case 4 (revised), field cases 9–10 (new), and the revised objective 3. The
+`02-wordlist-and-biblical-terms.md` module-breakdown row is revised accordingly; its estimated
+time (40 minutes) is unchanged. These two new findings are already confirmed and do not need to
+wait on support.bible; only the no-selection/auto-grab mechanism itself remains pending, and this
 document will be amended again once that reply arrives. `module-author` may draft or revise
 `02-wordlist-and-biblical-terms.md` on this basis.
 
+### Amendment 4: 2026-09-08
+
+**Amendment, Stage 5 SME fact-check pass, 2026-09-08 (Jenni Beadle) — terminology/attribution
+correction, no re-approval needed:** Field case 1 ("denied errors") is a **Basic Checks** case —
+Basic Checks results have their own real accept/deny mechanism. It had been conflated into the
+wordlist/Biblical Terms module (`02-wordlist-and-biblical-terms.md`) alongside field case 2
+(wordlist blanket-approval), which is wrong: Paratext's spelling/wordlist status has only three
+states — **Correct, Incorrect, Undecided** — there is no "deny" action for a word. Corrected:
+field case 1 is now explicitly flagged as Basic Checks-specific in "SME knowledge notes"; the
+`02-wordlist-and-biblical-terms.md` module-breakdown row no longer implies field case 1 lives
+there and now describes its false-clean content using Correct/Incorrect/Undecided terminology; the
+`04-formatting-and-references.md` row now incorporates field case 1 as its concrete Basic Checks
+false-clean example; and the "Common mistakes" section's Wordlist/spelling and Formatting &
+markup/Basic Checks bullets are corrected accordingly. Objective 1's wording is generalized so it
+no longer implies "denied errors" is a wordlist-specific example. This is a
+terminology/attribution fix only — objective 1 still covers the false-clean thread generally,
+module scope and time estimates are unchanged, and no new approval is required.
+
+### Amendment 5: 2026-09-10
+
 **Amendment, Stage 5 SME fact-check pass, 2026-09-10 (Jenni Beadle) — support.bible query
-resolved:** the reply arrived. A support.bible programmer's plausible explanation — the team
-likely ran **Guess Renderings** before the project had enough translated data, causing it to
-default to the verse's first word — promotes the field case 4 mechanism from unconfirmed/pending
-to a credible, attributed third pattern (attributed as "likely cause per a support.bible
-programmer," not certain fact), taught alongside but secondary to the two already-confirmed
-patterns (blank renderings, stale/duplicate renderings). Jenni also confirmed a coaching
-technique: scanning a term's occurrences with the down arrow to quickly step through verses,
-which makes the first-word repetition visually obvious. Field case 4, objective 3, the
-`02-wordlist-and-biblical-terms.md` module-breakdown row, the "Common mistakes" Biblical Terms
-bullet, and the "Tool-version specifics" section are all revised accordingly; estimated time for
+resolved, no re-approval needed:** A support.bible programmer replied to Jenni's pending query
+(open since 2026-09-06) with a plausible explanation for the field case 4 rendering behavior: the
+team had likely run Paratext's **Guess Renderings** feature before the project had enough
+translated data for it to work reliably, which caused it to default to the verse's first word as a
+guessed rendering. This is a real, named Paratext feature, not a hypothetical — and critically,
+translators would **not** consciously notice this happening, since it's an automated/background
+action rather than something like forgetting to select text. This is now promoted from
+"unconfirmed, pending" to a credible, attributed third pattern to watch for in Biblical Terms
+renderings — attributed as "likely cause per a support.bible programmer," not stated as certain
+fact — taught alongside but secondary to the two already-confirmed patterns (blank renderings,
+stale/duplicate renderings), which remain the primary teaching content for objective 3 and lesson
+`02-wordlist-and-biblical-terms.md`. Jenni also confirmed a coaching technique for spotting it:
+scanning through a term's occurrences using the down arrow to quickly step through verses makes it
+visually obvious when a rendering is just repeating the verse's first word, pattern-matching the
+verse text. Field case 4 (revised again), objective 3, the `02-wordlist-and-biblical-terms.md`
+module-breakdown row, the "Common mistakes" Biblical Terms bullet, and the "Tool-version
+specifics" section are all revised accordingly; the estimated time for
 `02-wordlist-and-biblical-terms.md` (40 minutes) is unchanged. `module-author` may draft or revise
 `02-wordlist-and-biblical-terms.md` on this basis.
 
-**Amendment, 2026-09-11 (Jenni Beadle and Doug Higby) — Numbers/Measures tool development, no
-re-approval needed:** a new, consolidated Numbers check that covers numbers, weights, and measures
-together in one check is in testing and expected to ship before this course publishes, replacing
-the old separate Numbers check (Measures was never released as its own check, so it is absorbed
-rather than separately replaced). It is described functionally throughout this document — not by
-the working/test label Jenni used for manual testing import, which is not its eventual real name.
-Objective 5's wording, the "Scope" section, the `03-parallel-passages-and-measures.md`
-module-breakdown row, the "Common mistakes" Numbers & Measures bullet, and the "Tool-version
-specifics" section are all revised to teach the new consolidated check as the anticipated primary
-case, with the old split-check behavior retained as a real fallback for teams not yet on the newer
-Paratext version. This is a factual update reflecting real-world tool development, not a scope or
-objective-count change; module and time estimates are unchanged. `module-author` may draft or
-revise `03-parallel-passages-and-measures.md` on this basis.
+### Amendment 6: 2026-09-11
+
+**Amendment, 2026-09-11 (Jenni Beadle and Doug Higby) — factual update on Numbers/Measures tool
+maturity, no re-approval needed:** Jenni and Doug have worked together to build a new,
+**consolidated Numbers check that covers numbers, weights, and measures together in one check**,
+replacing the old split Numbers/Measures approach (Measures itself was never released as its own
+separate check, so it is being absorbed into this new consolidated check rather than "replaced" in
+its own right). It is currently **in testing** — Jenni has manually imported it under a
+working/test label for testing purposes only, which is not its eventual real name and is not used
+anywhere in this document; it is described functionally throughout as **"the new consolidated
+Numbers check (covering numbers, weights, and measures)."** Jenni and Doug expect it to ship
+before this course publishes, but it is **not yet confirmed/released** as of this writing. Because
+it is still in testing, and because not every team will be on a Paratext version that has it once
+it does ship, the underlying skill objective 5 teaches — confirm what's actually available in a
+team's specific Paratext version before relying on it — is unchanged and remains essential: older
+or unmigrated projects may continue to show only the old, separate Numbers check (with no Measures
+check at all) for some time after the new consolidated check releases. Objective 5's wording, the
+"Scope" section, the `03-parallel-passages-and-measures.md` module-breakdown row, the revised
+Numbers/Measures field case, the "Common mistakes" Numbers & Measures bullet, and the
+"Tool-version specifics" section are all revised to teach the new consolidated check as the
+anticipated primary case, with the old split-check behavior retained as a real fallback for teams
+not yet on the newer Paratext version. This is a factual/content update reflecting real-world tool
+development, not a scope or objective-count change; module and time estimates are unchanged.
+`module-author` may draft or revise `03-parallel-passages-and-measures.md` on this basis.
+
+### Amendment 7: 2026-09-11
 
 **Amendment, Stage 5 SME fact-check pass, 2026-09-11 (Jenni Beadle) — menu-path correction and a
-second, complementary field-confirmed tool, no re-approval needed:** the Punctuation Inventory menu
-path is corrected throughout this document to **Tools > Checking Inventories > Punctuation
-Inventory** (was wrongly stated as "Checks > Inventories"). A second, dedicated, field-confirmed
-tool — **"Unmatched Pairs of Punctuation"** — is added as field case 11, complementing (not
-replacing) the existing "Show sequences" content (field case 8): it catches single-character
-unmatched bracket/parenthesis-type pairs, while "Show sequences" catches multi-character
-punctuation sequences. The dedicated quotation-marks-across-paragraphs check remains out of scope,
-confirmed still accurate. **This addition pushes `04-formatting-and-references.md` from 80 to an
-estimated 85 minutes (5 minutes under the 90-minute cap) and the course total from 340 to 345
-minutes — flagged for the Design Approver and `module-author`; trim the reference/book-title
-portion first if drafting runs longer than estimated, or split the lesson rather than exceed 90
-minutes.** `module-author` may revise `04-formatting-and-references.md` on this basis.
+second, complementary field-confirmed tool, no re-approval needed:** Two corrections, confirmed
+via live Paratext screenshots.
+
+- First, **the menu path for the Punctuation Inventory has been wrong throughout this document** —
+  it is at **Tools > Checking Inventories > Punctuation Inventory**, not "Checks > Inventories";
+  every occurrence is corrected.
+- Second, a **separate, dedicated inventory called "Unmatched Pairs of Punctuation"** exists (also
+  under Tools > Checking Inventories), confirmed via a live screenshot: a standalone window
+  listing single unmatched punctuation pairs (e.g. an unmatched "}", "[", "(") with a count and a
+  per-row Status column (checkmark = approved, X = incorrect, ? = needs review) — the same status
+  pattern used elsewhere in this course. It is added as field case 11. This is **distinct from and
+  complementary to** the existing "Show sequences" feature within Punctuation Inventory (field
+  case 8): Unmatched Pairs of Punctuation catches single-character unmatched
+  bracket/parenthesis-type pairs directly, while "Show sequences" catches multi-character
+  punctuation sequences/combinations (e.g. multiple quotation marks combined with spacing or
+  other punctuation), confirmed via a second screenshot. Both are real, useful checks the LTC
+  should know about — this is an addition, not a replacement of either.
+
+The separate, more complex dedicated quotation-marks check (handling continuing quote marks across
+paragraph breaks) **remains genuinely out of scope**, confirmed still accurate — the existing
+"quotation marks deferred to a future addition" language is unchanged. See field case 11 (new) in
+"SME knowledge notes," the revised `04-formatting-and-references.md` module-breakdown row, and the
+menu-path correction throughout. **Flag for the Design Approver / module-author: this addition may
+push lesson 04 over its 80-minute estimate (10 minutes under the 90-minute cap); it is estimated
+to bring `04-formatting-and-references.md` from 80 to 85 minutes (5 minutes under the 90-minute
+cap) and the course total from 340 to 345 minutes. See the module-breakdown row for the trim
+recommendation: trim the reference/book-title portion first if drafting runs longer than
+estimated, or split the lesson rather than exceed 90 minutes.** `module-author` may revise
+`04-formatting-and-references.md` accordingly.
+
+### Amendment 8: 2026-09-15
 
 **Amendment, Stage 5 SME fact-check pass, 2026-09-15 (Jenni Beadle) — mandatory first-step
-correction, no re-approval needed:** the structural-first formatting-check order was missing its
-actual mandatory first step, **Chapter/Verse Numbers** — a distinct Run Basic Checks category that
-every other check in this lesson (references, footnotes, verse-based markers) depends on for
-reliable reported locations; a chapter/verse numbering error (e.g. a duplicate verse) makes those
-other checks' results unreliable or ambiguous. The order is now **8 steps**, leading with
-Chapter/Verse Numbers, not 7. Objective 6, the `04-formatting-and-references.md` module-breakdown
-row, and the "Common mistakes" Formatting & markup bullet are revised; field case 12 (new) is added
-to "SME knowledge notes." This is a factual correction, not a scope change. **Time-budget flag:**
-lesson 04 is already at an estimated 85 minutes (5 under the 90-minute cap, per the 2026-09-11
-"Unmatched Pairs of Punctuation" addition); `module-author` should keep the new step's content
-concise (e.g. one line explaining why it must come first) and consider trimming elsewhere in the
-lesson (the reference/book-title portion is the standing trim candidate) to compensate if the
-addition doesn't fit within the remaining headroom, rather than silently absorbing it or pushing
-the lesson over 90 minutes. `module-author` may revise `04-formatting-and-references.md` on this
-basis.
+correction, no re-approval needed:** The structural-first formatting-check order taught in this
+course (marker-pair census → ghost markers → long/short verses → headings → book titles →
+references → footnotes, 7 steps) was missing its actual mandatory first step: **Chapter/Verse
+Numbers** — a distinct check category in Paratext's Run Basic Checks dialog, alongside Markers,
+Characters, Punctuation, References, and Footnote quotes. Every other check in this lesson
+(references, footnotes, verse-based markers) quotes/relies on chapter and verse locations to
+report its results, which become unreliable or ambiguous if chapter/verse numbering has errors
+(e.g. duplicate verses) — so Chapter/Verse Numbers must always be confirmed clean **first**. The
+order is now **8 steps**, leading with Chapter/Verse Numbers, not 7. This is a factual correction
+reflecting real Paratext check dependencies, not a scope change. Objective 6, the
+`04-formatting-and-references.md` module-breakdown row, and the "Common mistakes" Formatting &
+markup bullet are revised; field case 12 (new) is added to "SME knowledge notes." **Flag for
+module-author: lesson 04 is already at an estimated 85 minutes (5 under the 90-minute cap, per the
+2026-09-11 "Unmatched Pairs of Punctuation" addition) — keep the new Chapter/Verse Numbers step's
+content concise (e.g. one line explaining why it must come first) and consider trimming elsewhere
+in the lesson (the reference/book-title portion is the standing trim candidate) to compensate if
+the addition doesn't fit within the remaining headroom, rather than silently absorbing it or
+pushing the lesson over 90 minutes.** `module-author` may revise
+`04-formatting-and-references.md` on this basis.
+
+### Amendment 9: 2026-09-17
 
 **Amendment, Stage 5 SME fact-check pass, 2026-09-17 (Jenni Beadle) — hyphenation mechanism
-correction, no re-approval needed:** objective 8 and the course's Digital and Print Publishing
-"hands-on setup" claim had wrongly framed the LTC's hyphenation work as building a hyphenation
-file by hand. Confirmed via a live Paratext screenshot: hyphenation is **automatically generated
-by the Wordlist tool** — its **View menu** has a **"Show hyphenation"** option (alongside "Show
-morphology" and "Show spelling status") that, when enabled, displays a hyphenation column and
-auto-generates a `hyphenatedWords.txt` file. The LTC's real hands-on job is to **enable Show
-hyphenation, then review and correct any wrong hyphenation breaks** the automatic generation
-produced, not to build the file from scratch. Objective 8, the `05-glossary-linking-and-layout.md`
-module-breakdown row, field case 5, and the "Common mistakes" Layout & publishing bullet are all
-revised accordingly; the underlying skill and time estimates are unchanged — this is a
-factual/mechanism correction, not a scope change. `module-author` may revise
+correction, no re-approval needed:** Objective 8, the `05-glossary-linking-and-layout.md`
+module-breakdown row and the course's Digital and Print Publishing "hands-on setup" claim wrongly
+framed the LTC's hands-on layout work as "building a hyphenation file" by hand for a two-column
+layout. Confirmed via a live Paratext screenshot: hyphenation is **automatically generated by the
+Wordlist tool**, not hand-built. The Wordlist's **View menu** has a **"Show hyphenation"** option
+(alongside "Show morphology" and "Show spelling status"); enabling it displays a hyphenation
+column, and Paratext auto-generates a `hyphenatedWords.txt` file. The LTC's actual hands-on job is
+to **enable Show hyphenation, then review and correct any wrong hyphenation breaks** the automatic
+generation produced — not to build the file from scratch. This is a factual/mechanism correction,
+not a scope change: the objective still covers the same underlying skill (genuine hands-on
+layout/hyphenation tooling work, which is what keeps the course's Digital and Print Publishing
+"hands-on setup" claim honest), just correcting what that work actually is; time estimates are
+unchanged. Objective 8, the `05-glossary-linking-and-layout.md` row, field case 5 and the "Common
+mistakes" Layout & publishing bullet are all revised accordingly. `module-author` may revise
 `05-glossary-linking-and-layout.md` on this basis.
 
-**Amendment, Stage 5 SME fact-check pass, 2026-09-18 (Jenni Beadle) — support.bible reply confirms
-and enriches the hyphenation mechanism, no re-approval needed:** a support.bible reply confirmed
-the 2026-09-17 mechanism correction and added detail the LTC needs to actually do the task: the
-exact menu path (Tools > Wordlist > View menu > "Show hyphenation"), the meaning of `=` break
-marks, the grey-tick (guessed)/green-tick (approved) status per word and how to approve or correct
-it, batch approval via shift-click/Ctrl-click plus Wordlist tab menu > Edit > "Approve word
-hyphenation," the `hyphenatedWords.txt` asterisk convention for approved vs. guessed lines, the
-Study Bible Publication view-only caveat, the distinction from separately-configured word break
-characters, and the advanced (optional, non-core) `HardHyphen`/`SoftHyphen`/`SoftHyphenOut`/
-`HyphenatedMarkers` customization settings. Objective 8, field case 5, and the
-`05-glossary-linking-and-layout.md` module-breakdown row are revised accordingly. Lesson 05's
-estimated time is revised from 65 to **75 minutes** to accommodate the richer content (still 15
-minutes under the 90-minute cap); the course total rises from 345 to **355 minutes**. This is a
-factual/detail enrichment, not a scope change. `module-author` may draft
-`05-glossary-linking-and-layout.md` on this basis.
+### Amendment 10: 2026-09-18
+
+**Amendment, Stage 5 SME fact-check pass, 2026-09-18 (Jenni Beadle) — support.bible reply
+confirms and enriches the hyphenation mechanism, no re-approval needed:** A support.bible reply has
+now confirmed the 2026-09-17 correction (Paratext's Wordlist auto-generates hyphenation; the LTC
+reviews/corrects it) and added substantially richer mechanism detail the LTC needs to actually do
+the task:
+
+- the exact menu path (Tools > Wordlist > View menu > "Show hyphenation");
+- the meaning of `=` marks in a word (acceptable break points, e.g. `an=ti=no=mi=an=ism`);
+- the **grey tick / green tick** approval status per word (grey = Paratext's guess, unapproved;
+  click to approve, or edit the `=` marks to correct a wrong guess, which turns the tick green
+  automatically);
+- **batch approval** of correct guesses via shift-click/Ctrl-click to extend a selection, then
+  Wordlist tab menu > Edit > "Approve word hyphenation";
+- the **`hyphenatedWords.txt` asterisk convention** (lines with `*` are team-approved, lines
+  without are still Paratext's unapproved guesses), saved when the Wordlist closes;
+- that guesses improve as more words are approved, so not every remaining word needs individual
+  approval once guesses are reliable;
+- that **PTXprint's draft-PDF export uses both approved and guessed hyphenations**, but best
+  practice is to approve before publication rather than rely on unapproved guesses going to
+  print;
+- that in a **Study Bible Publication project the Wordlist is view-only**, so hyphenation can't be
+  approved directly there;
+- and an important distinction from **word break characters** (for scripts without
+  space-separated words), which are a separate setting under Project > Project settings >
+  Language settings > Other Characters tab, not to be conflated with hyphenation.
+
+An advanced/optional detail — customizing `HardHyphen`, `SoftHyphen`, `SoftHyphenOut`, and
+`HyphenatedMarkers` at the top of `hyphenatedWords.txt` — is noted as lighter-touch, optional,
+non-core content, not core teaching. This is a factual/detail enrichment of the already-correct
+mechanism, not a scope change. Objective 8, field case 5 (revised again) and the
+`05-glossary-linking-and-layout.md` module-breakdown row are revised accordingly.
+**Time-budget note:** lesson 05 is revised from 65 to **75 minutes** to accommodate the fuller
+workflow (grey/green ticks, batch approval, the asterisk convention, the Study Bible Publication
+caveat, and a brief mention of the word-break-characters distinction) — still 15 minutes under the
+90-minute cap; the course total rises from 345 to **355 minutes** accordingly. `module-author` may
+draft `05-glossary-linking-and-layout.md` on this basis.
+
+### Amendment 11: 2026-10-03
+
+**Amendment, Stage 4 alignment check, 2026-10-03 (Jenni Beadle, course author and SME) — who
+decides hyphenation breaks, clarification within the approved scope, no re-approval needed:** The
+2026-09-17 and 2026-09-18 amendments above describe the LTC's hands-on job as "enable Show
+hyphenation, then review and correct any wrong hyphenation breaks." The stage-4 alignment check
+flagged that this asks the LTC to judge target-language text: an LTC does not speak the language,
+and where a word may break is a judgment about that language. Ruling: the consultant may **draft**
+hyphenation breaks based on the syllable structure in the team's **orthography statement**, if the
+team can provide one, and the **team reviews and confirms** each break. If there is no orthography
+statement, the team proposes the breaks and the consultant enters them in the Wordlist. The
+consultant's own hands-on technical work is unchanged — enable Show hyphenation; explain the
+grey/green ticks, `=` marks and the `hyphenatedWords.txt` asterisk convention; draft or enter the
+breaks; batch-approve via Edit > "Approve word hyphenation"; and confirm hyphenation is approved
+before publication — so the course's Digital and Print Publishing claim is still honestly earned.
+"Review and correct any wrong hyphenation breaks" therefore becomes "draft breaks from the
+orthography statement (where one exists) and have the team review and confirm them." The earlier
+amendments' wording is kept as history. Objective 8 and the field case 5 "hands-on job" sentence
+are revised (clarified) accordingly; wherever the `05-glossary-linking-and-layout.md`
+module-breakdown row or the "Common mistakes" Layout & publishing bullet speak of the LTC
+reviewing, correcting or approving hyphenation guesses, read them under this ruling. Seat time
+(lesson 05 at 75 minutes, course total 355), competencies, outcome level and every other
+objective are unchanged. `module-author` may revise `05-glossary-linking-and-layout.md` on this
+basis.
+
+### Amendment 12: 2026-10-04
+
+**Amendment, Stage 4 alignment re-check, 2026-10-04 (Jenni Beadle, course author and SME) — what
+the consultant checks vs. what the team judges, clarifications within the approved scope, no
+re-approval needed:** The stage-4 alignment re-check flagged four more places where the course
+could be read as asking the LTC to judge target-language text, which an LTC does not speak.
+Rulings:
+
+1. **Section headings (lesson 04, step 5).** The consultant checks heading *structure* — the
+   heading is present, carries a heading marker, and has not swallowed verse text (the
+   missing-`\p` cascade) — and cross-checks heading *placement* against the LWC (Language of
+   Wider Communication) Bible. A back translation is a useful cross-check only if it was made
+   manually outside Paratext; one made in Paratext carries the translation's own headings, so it
+   cannot confirm them. Whether a heading's wording fits its passage is the team's call. Basic
+   Checks does not report headings that don't match their text, so Scenario 3's symptom is
+   described structurally, not as a mismatch the tool reports.
+2. **Weights and measures (lesson 03, objective 5, Scenario 2, Q12).** The consultant does not
+   informally compare measure renderings — it is possible but not easy, and ambiguous terms get
+   missed. The **team** finds and reviews its own measure renderings against its documented
+   approach; the consultant confirms what check is available in the team's Paratext version,
+   runs it, is honest with the team about the tool gap, and routes any inconsistencies to the
+   team.
+3. **Book names (lesson 04, step 6).** The book-names check is a **consistency** check: the same
+   book named inconsistently across the places its name appears (SME example: "Mark" vs "The
+   Gospel of Mark"). The consultant spots the inconsistency; the team decides the right form.
+4. **Footnotes on the wrong verse (lesson 04, step 8).** A footnote attached to the wrong verse is
+   not easy for a consultant to spot; the consultant prompts the team to review footnote
+   placement rather than claiming to check it themselves.
+
+Objective 5 and the `03-parallel-passages-and-measures.md` and `04-formatting-and-references.md`
+module-breakdown rows are clarified accordingly and carry dated "clarified 2026-10-04" notes
+(earlier wording kept as history); wherever the "Common mistakes" Numbers & Measures or References
+& book names bullets, or "What good looks like" marker (e), could be read as the LTC judging
+renderings, headings or book-name forms, read them under these rulings. Two arithmetic slips are
+also corrected: the Assessment plan's scenario count is corrected from "six" to **seven** (six core
+scenarios plus one combined secondary scenario — the bank's actual structure, matching
+`06-scenario-bank.md`), and the summary's stale "345-minute" figure is corrected to 355, with the
+sentence now naming the 2026-09-18 lesson-05 enrichment that accounts for the difference. One
+**open question** (not a ruling) is recorded under "Tool-version specifics": the name of the
+consolidated measures list in Paratext's Open Biblical Terms List (currently seen as "Numbers 2")
+is not yet confirmed; Jenni will confirm with Doug Higby, and lesson 2's wording will be fixed once
+it is. (Resolved 2026-10-05: there is no Measures list, and "Numbers (2)" was only Jenni's
+imported test list; see "Tool-version specifics".) Seat time (course total 355), competencies, outcome level and every other objective are
+unchanged. `module-author` may revise `03-parallel-passages-and-measures.md`,
+`04-formatting-and-references.md`, `06-scenario-bank.md` and `07-mentor-guide.md`, and
+`quiz-writer` may revise `08-quiz.md` (Q12), on this basis.
+
+### Amendment 13: 2026-10-05
+
+**Amendment, Stage 4 advisories, 2026-10-05 (Jenni Beadle, course author and SME) — two more
+places where the LTC could be read as judging target-language text, clarifications within the
+approved scope, no re-approval needed:**
+
+1. **"What good looks like" marker (e)** (here and in `07-mentor-guide.md`). Whether a difference
+   is legitimate variation or an error is the **team's** judgment. The consultant confirms the
+   differences were reviewed and gets the team to judge each one. The marker's earlier wording,
+   "Judges legitimate variation vs. error", is kept as history.
+2. **Punctuation Inventory (lesson 04).** Whether a flagged character is valid in the orthography:
+   if the consultant has the orthography statement written by the project's linguist, the
+   consultant can check the character against it; otherwise the team decides.
+
+Also clarified (lesson 04, step 8): **Footnote quotes.** Quoting verse text in footnotes (`\fq`)
+is uncommon in the SME's experience (Central Africa), so the lesson makes no claim about how
+widely it is used. The consultant finds out whether a project uses it from `\fq` markers in the
+Markers Inventory, with no need to ask the team. If any are present, running the check is
+essential: any editing of the verse can leave the footnote's quote out of
+date.
+
+Also clarified (lessons 02 and 04): the wordlist has no "deny" action, and the course no longer
+contrasts it with Basic Checks as a point of confusion. Instead it draws the parallel: in the
+wordlist the false-clean shortcut is marking every word Correct; in Basic Checks it is denying
+flagged errors. Lesson 02 names the three spelling statuses (Correct, Incorrect, Undecided) in its
+Content, and its Challenge 1 asks only for those; lesson 04's Challenge 3 is retitled "A denied
+error is not a resolved one" and asks for the wordlist's equivalent shortcut.
+
+Seat time, competencies, outcome level and all objectives are unchanged. `module-author` may revise
+`02-wordlist-and-biblical-terms.md`, `04-formatting-and-references.md` and `07-mentor-guide.md` on
+this basis.
+
+### Amendment 14: 2026-10-06
+
+**Amendment, Stage 6 internal review, 2026-10-06 (Steve White, internal reviewer on PR #95, agreed by
+Jenni Beadle) — what over-harmonising parallel passages means, clarification within the approved scope,
+no re-approval needed:** Over-harmonising is now defined as making parallel passages match more
+closely than the original texts do. "Different biblical authors may relate a story differently;
+parallel passages should not be more harmonized than the original texts" replaces "consistent in
+*meaning*, not necessarily identical in *form*", which was unclear and potentially wrong. The
+"Common mistakes" Parallel passages bullet carries a dated "Clarified 2026-10-06" note. This
+revised lesson 03 (`03-parallel-passages-and-measures.md` — its Content, Key takeaways and
+Challenge 1), option B of Q9 in `08-quiz.md`, and the video script. Seat time, competencies,
+outcome level and all objectives are unchanged; no re-approval was needed.
+
+Also recorded under this internal review, 2026-10-07: the screenshot
+`assets/ss-04-denied-error-strikethrough.png` (lesson 04) was replaced with a clearer single-line
+example (MAT 2:5), and `assets/ss-04-denied-error-not-shown.png` was re-taken from the same
+Matthew results so the two screenshots pair.
+
+### Amendment 15: 2026-10-07
+
+**Amendment, Stage 6 internal review, 2026-10-07 (Jenni Beadle, course author and SME) — the
+Parallel Passages tool's shading, clarification within the approved scope, no re-approval
+needed:** The Parallel Passages tool shades matching text in every text it shows — the
+project's translation as well as the Greek and any resources. Wherever the same three or more
+words appear in both parallel passages, they are shaded green; text that differs is unshaded.
+In the Greek, yellow marks words a biblical scholar has marked by hand as equivalent, usually a
+word with a different gloss. Because the translation is shaded too, the consultant can compare
+the *pattern* of shading in the Greek with the pattern in the translation without reading
+either: Greek shaded but translation not suggests the translation differs where the originals
+agree; translation shaded but Greek not suggests it may be more harmonized than the originals.
+The consultant points the pattern out as a question, not an error: not every language can word
+things the same way, so some variation is acceptable even where the originals agree. Whether the
+difference is right is the team's decision.
+Jenni confirmed this is a fair thing to teach the consultant. Lesson 03 gains a paragraph on the
+shading and a new screenshot (`assets/ss-03-pp-source-shading.png`, MAT 3:4 / MRK 1:6); its
+Challenge 2 now asks what in the tool shows whether two passages may differ; its Key takeaways
+mention the shading; and a leftover "meaning versus form" phrase in its Content is replaced.
+Scenario 1 (its Context and Diagnose task) and the mentor guide's Scenario 1 scoring now use the same comparison. Also from this stage, approved by Jenni on 2026-10-07 (stage-4 advisories): Scenario 3's
+escalation task and the mentor guide's Scenario 3 scoring now split a display or settings quirk
+(LT mentor) from whether a character is valid in the language (the linguist's orthography
+statement, or the team), applying amendment 13 to the scenario bank; lesson 03 gains a bullet
+that a missing documented approach to a kind of measurement is agreed first, which Challenge 3
+and Q12 already tested; and lesson 03's Challenge 2 says "a difference the team finds" rather
+than "flagged difference". A follow-up alignment check (2026-10-07) also led to lesson 03 and the
+video script saying the tool shows matches but does not judge them (replacing "nothing for it to
+compute"), lesson 03 stating that unshaded Greek means the translation may differ, and Challenge
+1 separating spotting the shading (the consultant) from judging against the standard (the team). Seat time, competencies,
+outcome level and all objectives are unchanged. `module-author` may revise
+`03-parallel-passages-and-measures.md`, `06-scenario-bank.md` and `07-mentor-guide.md` on this
+basis.

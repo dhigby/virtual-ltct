@@ -6,7 +6,7 @@ lessons and the recurring "false-clean" thread that runs through all of them, so
 learner has the map in their head before working the lessons in detail. It is **not** a
 full read-aloud of the lessons — the click-by-click tool work, the Challenge exercises,
 and the mentor-reviewed scenario bank all happen outside this video. The recording
-happens outside this repo; upload to Cypher for Business is a separate human step.
+happens outside this repo; uploading it (to Vimeo or Google Drive, then linking it from lesson 1) is a separate human step.
 
 **Estimated runtime:** 16-18 minutes (overview companion to five 35-85 minute lessons
 plus the mentor-reviewed scenario bank).
@@ -70,8 +70,8 @@ spotting it yourself."
 | On-screen | Voiceover / talking points |
 | --- | --- |
 | Slide: "Your job here is process and routing — not judging meaning." | "You typically don't speak the language a team translates into. So in this lesson, your role is deliberately narrower: confirm the check ran, confirm the team reviewed what it found, and hand judgment about wording back to them." |
-| Live recording (or `assets/ss-03-pp-changed-text.png`) of the Parallel Passages tool, Status column showing a green checkmark on one row and a red "?" on another. | "The Parallel Passages tool puts related passages side by side, but it doesn't flag inconsistencies for you — there's nothing for it to compute. What it does track is review status: a checkmark means reviewed and approved, a red question mark means the verse changed since it was last approved and needs another look. Your job is to open this tool and check for red question marks yourself, not take the team's word that a pass already happened." |
-| Slide: "Consistent in meaning, not identical in form." | "Watch for over-harmonising — forcing every parallel passage to match exactly and erasing legitimate variation. Two Gospel accounts of the same event can use different wording and still be a faithful, consistent translation. That call belongs to the team." |
+| Live recording (or `assets/ss-03-pp-changed-text.png`) of the Parallel Passages tool, Status column showing a green checkmark on one row and a red "?" on another. | "The Parallel Passages tool puts related passages side by side, and shades where they match, but it doesn't judge or flag inconsistencies for you. What it does track is review status: a checkmark means reviewed and approved, a red question mark means the verse changed since it was last approved and needs another look. Your job is to open this tool and check for red question marks yourself, not take the team's word that a pass already happened." |
+| Slide: "No more harmonized than the original texts." | "Watch for over-harmonising — making parallel passages match more closely than the original texts do. Different biblical authors may relate a story differently. That call belongs to the team." |
 | Cut to `assets/ss-02-bt-choose-list.png` or equivalent — the Open Biblical Terms List dialog showing Numbers as a separate entry. | "Numbers and measures checking is mid-change right now — a new consolidated check covering numbers, weights, and measures together is expected to replace the older, separate Numbers check, but not every team's Paratext version has it yet. Your skill here doesn't depend on which one ships first: confirm what a specific team's version actually has, run whichever check is available against their own already-agreed, documented approach, and route any gap back to them." |
 
 ### Segment 4 — Formatting, structural-first order, and the Punctuation Inventory (companion to Lesson 4)
@@ -93,7 +93,7 @@ spotting it yourself."
 | --- | --- |
 | Live recording (or `assets/ss-05-find-with-markup.png`) of a Paratext Find search for a glossary term, showing one plain occurrence and one wrapped in `\w...\w*` markup. | "Glossary over-linking — every occurrence marked instead of just the first per section — doesn't leave a durable report to check later; the linking operation's own report is transient. Use Find instead: search the term, and read the markup on each result. If every occurrence is wrapped, that's over-linked; if only the first per section is, the scope is right." |
 | Slide: "Layout follows reader expectation, not word length." | "A team may assume single-column layout because their language has long words — but if the community's existing Bibles, in a language of wider communication, are conventionally printed in two columns, that reader expectation is the baseline to match, not the word-length problem." |
-| Live recording (or `assets/ss-05-wordlist-hyphenation.png`) of the Wordlist's Show hyphenation view — a grey tick, a click, the tick turning green; then a shift-click batch-approval. | "Hyphenation isn't hand-built — Paratext's Wordlist auto-generates it. Turn on Show hyphenation in its View menu, and each word carries a tick: grey means guessed, unreviewed; green means approved. Click a correct guess to approve it, edit a wrong one's break marks to fix it, or select a run of words and batch-approve them all at once. Do this before the files go to print — PTXprint's draft PDF will use unapproved guesses too." |
+| Live recording (or `assets/ss-05-wordlist-hyphenation.png`) of the Wordlist's Show hyphenation view — a grey tick, a click, the tick turning green; then a shift-click batch-approval. | "Hyphenation isn't hand-built — Paratext's Wordlist auto-generates it. Turn on Show hyphenation in its View menu, and each word carries a tick: grey means guessed, unreviewed; green means approved. But where a word may break is the team's call, not yours. Draft breaks from the syllable rules in their orthography statement — or, if there isn't one, enter the breaks they propose — have the team confirm each break, then approve the confirmed ones, singly or in a batch. Do this before the files go to print — PTXprint's draft PDF will use unapproved guesses too." |
 | Live recording (or the module's PTXprint spread images) of a draft-PDF spread showing an awkward heading break and an underfilled column. | "Last stop: the draft-PDF read-through in PTXprint. Watch for spreads, orphan words, footnote shifts, awkward heading placement, and underfilled pages — and triage what you find. Some of it's yours to fix, some is the team's call, and true typesetting composition belongs to the typesetter, not you." |
 
 ### Segment 6 — Where this goes next (companion to the scenario bank)
@@ -102,7 +102,7 @@ spotting it yourself."
 
 | On-screen | Voiceover / talking points |
 | --- | --- |
-| Slide: "Five lessons build knowledge. The scenario bank, mentor-reviewed, is what earns Independent." | "Everything in this video and in the five lessons builds your knowledge of these check areas — that's real, and it's worth having. But this course's target is Independent: being able to support a team through this, not just recognize it. That's what the mentor-reviewed scenario bank is for — six applied scenarios, each scored against a mentor's watch-for list, not just a right-answer key." |
+| Slide: "Five lessons build knowledge. The scenario bank, mentor-reviewed, is what earns Independent." | "Everything in this video and in the five lessons builds your knowledge of these check areas — that's real, and it's worth having. But this course's target is Independent: being able to support a team through this, not just recognize it. That's what the mentor-reviewed scenario bank is for — seven applied scenarios, each scored against a mentor's watch-for list, not just a right-answer key." |
 | Slide listing the recurring thread: "Watch for a false-clean result — in every check area." | "And notice the thread that ran through every segment just now: a clean-looking status that nobody actually earned. Watching for that isn't specific to any one check area — it's the habit this whole course is building." |
 
 ## Call to action / close
@@ -139,7 +139,8 @@ escalate, and submit your answers to your mentor for review."
     Confirm which is easier to stage reliably on camera; both are field-confirmed in the
     lessons, but this script does not commit to one.
   - Segment 2's "down arrow stepping through occurrences" and Segment 5's grey-tick →
-    green-tick approval and batch-approval are described generically here based on the
+    green-tick approval and batch-approval (of breaks the team has already confirmed —
+    the team confirms before anything is approved) are described generically here based on the
     lesson text; confirm the exact live sequence (which project, which term/word) before
     recording so the demo doesn't require last-minute UI hunting on camera.
   - Numbers/measures (Segment 3) is explicitly in flux — the new consolidated check was
@@ -155,8 +156,8 @@ escalate, and submit your answers to your mentor for review."
   - PTXprint UI (Segment 5) was verified against PTXprint 3.0.38 in the lesson; confirm
     the presenter's installed version before recording and note on screen if menu labels
     have moved.
-  - This script does not invent any UI screenshot beyond what `list of images+videos.txt`
-    and the lesson files already describe — where a live recording is called for instead
+  - This script does not invent any UI screenshot beyond the screenshots in `assets/`
+    and what the lesson files already describe — where a live recording is called for instead
     of a still, that's a deliberate choice to show motion (e.g. down-arrow stepping,
     click-to-approve), not a gap in the source material.
 - **Live-demo caution:** several of this course's field cases involve settings that are

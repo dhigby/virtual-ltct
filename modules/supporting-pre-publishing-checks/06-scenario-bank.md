@@ -2,7 +2,7 @@
 
 **Estimated time:** 60 minutes
 
-**Purpose:** Six mentor-reviewed scenarios that put the whole course to work — diagnosing
+**Purpose:** Seven mentor-reviewed scenarios that put the whole course to work — diagnosing
 a check-area problem, deciding what to say to the team, and deciding what (if anything)
 to escalate. This is the component that earns this course's `3 - Independent` claim (see
 `00-design.md`, "Outcome-level open question"): a mentor scores your reasoning and
@@ -42,13 +42,16 @@ to be different — we're not touching them, this was already checked months ago
 side. Several of them show a red question mark in the Status column rather than a
 checkmark — meaning those verses were edited during a revision pass some time ago and
 haven't been reviewed again since. You don't speak the team's language, so you can't
-judge the passages' meaning yourself.
+judge the passages' meaning yourself — but you can see the tool's shading on the Greek
+and on the team's translation.
 
 **Your task:**
 1. **Diagnose:** What would you confirm before accepting the team lead's explanation?
    How would you use the Parallel Passages tool's Status column to check whether the
    relevant verses have actually been reviewed since the last revision pass, and how
    does what you find there connect to the "we already did that" trap from Lesson 1?
+   What could comparing the shading of the Greek with the shading of the translation
+   tell you about those verses?
 2. **Say to the team:** How would you ask the team to open the Parallel Passages tool
    and walk through the verses still marked with a red "?", without implying you doubt
    their judgment about legitimate variation?
@@ -64,13 +67,14 @@ judge the passages' meaning yourself.
 numbers, weights, and measures. When you go looking, you find that this team's Paratext
 version has not yet migrated to the new consolidated numbers/weights/measures check —
 they still only have the older, separate **Numbers** check, and there is no working
-Measures check available to them at all. You confirm this, then run the Numbers check
-where it applies, along with what informal comparison you can do for the measures
-themselves. That informal comparison turns up an inconsistency between two occurrences
-of what should be the same measurement — one passage renders it one way, another
-passage renders it differently. You ask the team what their documented approach to
-measures is, and they aren't sure such a document exists; someone recalls "a decision
-early on" but nobody can point to where it's written.
+Measures check available to them at all. You confirm this, run the Numbers check where
+it applies, tell the team there is no reliable tool for weights and measures on their
+version yet, and ask them to find and review their own measure renderings. Their review
+turns up an inconsistency between two occurrences of what should be the same
+measurement — one passage renders it one way, another passage renders it differently.
+When you ask what their documented approach to measures is, they aren't sure such a
+document exists; someone recalls "a decision early on" but nobody can point to where
+it's written.
 
 **Context:** A new consolidated check that covers numbers, weights, and measures
 together is expected to become available before too long, but rollout doesn't reach
@@ -83,16 +87,17 @@ routing, not recognizing a specific known error.
 **Your task:**
 1. **Diagnose:** How would you confirm, for this team's Paratext version, whether they
    have the new consolidated check or only the older, separate Numbers check with no
-   working Measures check — and what would you do about the measurement inconsistency
-   given that no working check can catch it reliably on their version? Separately, what
-   would you check first about the inconsistency you did find — the check result itself,
-   or whether an agreed approach exists at all? What's the difference between "an
-   inconsistency turned up" and "the team has no documented standard to check against"?
+   working Measures check — and, given that no working check can catch weights/measures
+   inconsistencies reliably on their version, why is it the team rather than you who
+   finds and reviews the measure renderings? Separately, what would you settle first
+   about the inconsistency the team found — the inconsistency itself, or whether an
+   agreed approach exists at all? What's the difference between "an inconsistency turned
+   up" and "the team has no documented standard to check against"?
 2. **Say to the team:** How would you explain to the team what their Paratext version
    does and doesn't have available yet, and how would you help them either locate their
    existing decision or agree on one now, without proposing a rendering yourself?
 3. **Escalate:** Once an approach is documented, whose job is it to decide which of the
-   two flagged renderings is correct — and is there any version of this situation that
+   two inconsistent renderings is correct — and is there any version of this situation that
    would need a Translation Consultant rather than staying inside the team?
 
 ---
@@ -100,8 +105,11 @@ routing, not recognizing a specific known error.
 ## Scenario 3: The Inventory Nobody Opened (Objective 6 — formatting checks)
 
 **Situation:** A team's Basic Checks show a short list of formatting errors, all in the
-second half of Mark — a heading that doesn't match the text it introduces, and a
-reference that looks garbled. The team hasn't mentioned Chapter/Verse Numbers at all —
+second half of Mark — for each of several consecutive verses just after one section
+heading, a pair of errors: "Verse number in heading" and "Marker cannot occur here: \v" —
+and a reference that looks garbled. When the team opens that passage, the verses after the
+heading are showing in the heading's bold style, with their verse numbers gone from the
+normal flow of the text. The team hasn't mentioned Chapter/Verse Numbers at all —
 they went straight to the marker and reference flags. Separately, the team tells you
 the Punctuation Inventory "was already checked back when we started the project." The
 project has since been through two more revision passes and is headed to a typesetter in
@@ -123,8 +131,9 @@ of these as already handled.
    structural-first, and what would you specifically ask them to open and show you for
    the Punctuation Inventory?
 3. **Escalate:** If the Punctuation Inventory's settings turn out to be genuinely
-   confusing or you can't tell whether an unrecognized character is a real problem or a
-   font-display quirk, who do you bring in?
+   confusing, or an unrecognized character might just be a font-display quirk, who do
+   you bring in? And if the question is whether a character is valid in the language
+   at all, where does the answer come from?
 
 ---
 
@@ -163,7 +172,7 @@ before their files go to the typesetter. In one sitting you spot: an orphan word
 alone at the top of a column, a footnote that has shifted two pages from its reference,
 and a heading that lands awkwardly at a column break on a spread.
 
-**Context:** The team is verified on PTXprint 3.0.38. They're eager to sign off and move
+**Context:** The team is on PTXprint 3.0.38. They're eager to sign off and move
 on, and are inclined to treat all three as "typesetting's problem now."
 
 **Your task:**
@@ -235,8 +244,11 @@ unrelated, minor asks.
 3. **Escalate:** Which of these three, if any, would need to go beyond you and the team,
    and which are entirely within your own coaching and technical-setup role (remember:
    this course's Digital and Print Publishing claim rests on you both advising *and*
-   doing hands-on setup, such as enabling Show hyphenation in the Wordlist and
-   reviewing/correcting the auto-generated hyphenation breaks)?
+   doing hands-on setup — enabling Show hyphenation in the Wordlist, drafting breaks
+   from the team's orthography statement if they can provide one (or entering the
+   breaks the team proposes if they can't), setting up batch approval, and confirming
+   hyphenation is approved before print)? For the hyphenation part, also say who
+   decides whether each break is right, and how you'd get that decision from them.
 
 ---
 

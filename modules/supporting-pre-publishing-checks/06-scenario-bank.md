@@ -42,13 +42,16 @@ to be different — we're not touching them, this was already checked months ago
 side. Several of them show a red question mark in the Status column rather than a
 checkmark — meaning those verses were edited during a revision pass some time ago and
 haven't been reviewed again since. You don't speak the team's language, so you can't
-judge the passages' meaning yourself.
+judge the passages' meaning yourself — but you can see the tool's shading on the Greek
+and on the team's translation.
 
 **Your task:**
 1. **Diagnose:** What would you confirm before accepting the team lead's explanation?
    How would you use the Parallel Passages tool's Status column to check whether the
    relevant verses have actually been reviewed since the last revision pass, and how
    does what you find there connect to the "we already did that" trap from Lesson 1?
+   What could comparing the shading of the Greek with the shading of the translation
+   tell you about those verses?
 2. **Say to the team:** How would you ask the team to open the Parallel Passages tool
    and walk through the verses still marked with a red "?", without implying you doubt
    their judgment about legitimate variation?

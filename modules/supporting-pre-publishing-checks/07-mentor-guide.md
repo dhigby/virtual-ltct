@@ -66,9 +66,13 @@ for the relevant verses, not to dig through Project History (Project History is 
 mechanism for this check). A strong answer names the Status column specifically — a red
 "?" on a verse edited during the recent revision pass is direct evidence the "already
 checked" claim doesn't hold for that verse. This is marker **(a)**: don't trust a
-clean/settled-sounding result just because the team is confident about it. A weak answer
-accepts the team lead's explanation at face value and moves on to judging the passages
-itself.
+clean/settled-sounding result just because the team is confident about it. A strong
+answer also compares the shading of the Greek with the shading of the translation on
+those verses: where the Greek is unshaded, the originals differ, so the team lead may be
+right that the translation should differ there; where the Greek is shaded but the
+translation isn't, the translation differs where the originals agree, and that is worth
+pointing out to the team. A weak answer accepts the team lead's explanation at face value
+and moves on to judging the passages itself.
 
 **Watch for in what they'd say to the team:** the learner does not attempt to judge whether
 the differences are legitimate variation or error — they don't speak the language.
@@ -76,7 +80,9 @@ A strong answer asks the team to open the Parallel Passages tool and walk throug
 verse still showing a red "?" themselves, framed as routine process ("let's make sure
 everything edited in the recent revision gets reviewed again") rather than as doubting
 the team's judgment — marker **(e)**, correctly deferred to the people who can actually
-judge meaning.
+judge meaning. Pointing to a shading mismatch ("the Greek is shaded here and your
+translation isn't — can you look at that one?") is a strong way in: it names a pattern
+the learner can see, without claiming to judge the wording.
 
 **Watch for in escalation:** if the review surfaces a genuine internal disagreement about
 legitimate variation vs. error, that stays with the team (or moves to a Translation

@@ -66,8 +66,9 @@ shading of the Greek with the shading of the translation without reading either 
 - **The translation is shaded but the Greek isn't:** the translation may be more
   harmonized than the originals.
 
-Either is a pattern to point out to the team. Whether the difference is right is the
-team's decision.
+Either is a pattern to point out to the team, not an error. Not every language can
+word things the same way, so even where the originals agree, some variation in the
+translation is acceptable. Whether the difference is right is the team's decision.
 
 ![The Parallel Passages tool comparing MAT 3:4 with MRK 1:6. In the GRK row, Greek words that match across the two passages are shaded green and words marked as equivalent are shaded yellow, each with an English gloss underneath. Below it, the project (PTP) row and the RSV resource row shade the words that match across the two passages; the unshaded words differ.](assets/ss-03-pp-source-shading.png)
 *Compare the shading, not the words: Greek, translation and resource are shaded the same way.*

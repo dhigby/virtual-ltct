@@ -71,7 +71,8 @@ answer also compares the shading of the Greek with the shading of the translatio
 those verses: where the Greek is unshaded, the originals differ, so the team lead may be
 right that the translation should differ there; where the Greek is shaded but the
 translation isn't, the translation differs where the originals agree, and that is worth
-pointing out to the team. A weak answer accepts the team lead's explanation at face value
+pointing out to the team — as a question, not an error, since not every language can word
+things the same way and some variation is acceptable. A weak answer accepts the team lead's explanation at face value
 and moves on to judging the passages itself.
 
 **Watch for in what they'd say to the team:** the learner does not attempt to judge whether

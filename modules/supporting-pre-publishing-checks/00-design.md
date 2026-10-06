@@ -983,7 +983,9 @@ word with a different gloss. Because the translation is shaded too, the consulta
 the *pattern* of shading in the Greek with the pattern in the translation without reading
 either: Greek shaded but translation not suggests the translation differs where the originals
 agree; translation shaded but Greek not suggests it may be more harmonized than the originals.
-The consultant points the pattern out; whether the difference is right is the team's decision.
+The consultant points the pattern out as a question, not an error: not every language can word
+things the same way, so some variation is acceptable even where the originals agree. Whether the
+difference is right is the team's decision.
 Jenni confirmed this is a fair thing to teach the consultant. Lesson 03 gains a paragraph on the
 shading and a new screenshot (`assets/ss-03-pp-source-shading.png`, MAT 3:4 / MRK 1:6); its
 Challenge 2 now asks what in the tool shows whether two passages may differ; its Key takeaways

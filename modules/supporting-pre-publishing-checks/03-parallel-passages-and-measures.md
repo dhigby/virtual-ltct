@@ -47,8 +47,8 @@ decide the rendering yourself.
 Paratext's Parallel Passages tool opens as its own window and displays passages that
 should say the same thing (e.g. synoptic Gospel accounts, repeated Old Testament
 passages) **side by side**, including the original-language text/gloss for reference.
-It does **not** algorithmically detect or flag "inconsistencies" the way a wordlist or
-Biblical Terms check does — there is nothing for it to compute. The team looks at each
+It shows where the passages match (see the shading below), but it does **not** judge
+or flag "inconsistencies" the way a wordlist or Biblical Terms check does. The team looks at each
 pair of parallel passages themselves and decides whether the translation is consistent
 and acceptable. That judgment call — whether the translation is more harmonized than the
 original texts, or less consistent than they are — is the team's from the start, not
@@ -59,7 +59,9 @@ translation as well as the Greek and any resources. Wherever the same three or m
 words appear in both parallel passages, they're shaded green, and text that differs is
 left unshaded. In the Greek, yellow marks words a biblical scholar has marked by hand
 as equivalent — usually a word with a different gloss. That means you can compare the
-shading of the Greek with the shading of the translation without reading either one:
+shading of the Greek with the shading of the translation without reading either one.
+Where the Greek is unshaded, the originals differ there, so the translation may differ
+too. Two patterns are worth pointing out:
 
 - **The Greek is shaded but the translation isn't:** the translation differs where the
   originals agree.
@@ -198,12 +200,12 @@ run it against the documented approach, and route gaps back to the team.
 
 ## Challenge
 
-**✏️ Try this:** Five short exercises — recall, two discriminations, and one narrow
-tool check. Write each answer, then verify it against the Content section above.
+**✏️ Try this:** Five short exercises, including one narrow tool check. Write each answer, then verify it against the Content section above.
 
 1. **State the standard parallel passages are held to** in one sentence, and name the
-   specific failure mode that comes from missing it. Then say who compares the
-   translation against that standard, and why it isn't you.
+   specific failure mode that comes from missing it. Then say who judges the
+   translation against that standard, and why it isn't you — even though you can spot
+   the shading patterns yourself.
 2. **Write the general test** for a legitimate "these should differ" decision: what in
    the tool shows whether two parallel passages *may* differ, and what has to be true
    before a difference counts as *decided*? State it as a test you could apply in any

@@ -990,7 +990,16 @@ Jenni confirmed this is a fair thing to teach the consultant. Lesson 03 gains a 
 shading and a new screenshot (`assets/ss-03-pp-source-shading.png`, MAT 3:4 / MRK 1:6); its
 Challenge 2 now asks what in the tool shows whether two passages may differ; its Key takeaways
 mention the shading; and a leftover "meaning versus form" phrase in its Content is replaced.
-Scenario 1 (its Context and Diagnose task) and the mentor guide's Scenario 1 scoring now use the same comparison. Seat time, competencies,
+Scenario 1 (its Context and Diagnose task) and the mentor guide's Scenario 1 scoring now use the same comparison. Also from this stage, approved by Jenni on 2026-10-07 (stage-4 advisories): Scenario 3's
+escalation task and the mentor guide's Scenario 3 scoring now split a display or settings quirk
+(LT mentor) from whether a character is valid in the language (the linguist's orthography
+statement, or the team), applying amendment 13 to the scenario bank; lesson 03 gains a bullet
+that a missing documented approach to a kind of measurement is agreed first, which Challenge 3
+and Q12 already tested; and lesson 03's Challenge 2 says "a difference the team finds" rather
+than "flagged difference". A follow-up alignment check (2026-10-07) also led to lesson 03 and the
+video script saying the tool shows matches but does not judge them (replacing "nothing for it to
+compute"), lesson 03 stating that unshaded Greek means the translation may differ, and Challenge
+1 separating spotting the shading (the consultant) from judging against the standard (the team). Seat time, competencies,
 outcome level and all objectives are unchanged. `module-author` may revise
 `03-parallel-passages-and-measures.md`, `06-scenario-bank.md` and `07-mentor-guide.md` on this
 basis.

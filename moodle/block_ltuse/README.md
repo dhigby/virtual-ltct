@@ -95,3 +95,10 @@ Checked against `MOODLE_502_STABLE` source, Moodle 5.2.3+; `version.php` pins `r
 - **Nothing for site admins.** The site team's Dashboard is not a learner's; the block is
   empty for anyone who can configure the site.
 - **No other person's data.** The only other people it names are the learner's own mentors.
+
+## Licence
+
+The plugin's code is © 2026 SIL Global and licensed GNU GPL v3 or later, the header every
+PHP file carries. Moodle requires that for a plugin, which builds on Moodle's GPL code, and its
+code checker accepts no other header. The curriculum this repository publishes is a different
+work, under CC BY-SA 4.0 (Doug, 2026-10-06).

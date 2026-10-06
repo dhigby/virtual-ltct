@@ -1,12 +1,27 @@
 <?php
-// PHPUnit tests for the learner home block's web and app views (spec 007, contracts/learner-ui.md).
+// This file is part of Moodle - https://moodle.org/
 //
-// Synthetic data only, never run on the shared host: every name here is a fixture value, never
-// a real learner or course. Where this runs is spec 004's plan.md "Testing".
+// Moodle is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// Moodle is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with Moodle.  If not, see <https://www.gnu.org/licenses/>.
 
 namespace block_ltuse;
 
 /**
+ * PHPUnit tests for the learner home block's web and app views (spec 007, contracts/learner-ui.md).
+ *
+ * Synthetic data only, never run on the shared host: every name here is a fixture value, never
+ * a real learner or course. Where this runs is spec 004's plan.md "Testing".
+ *
  * The block renders one mode from local_ltuse\learner_home, every visible word a lang string,
  * shows nothing to the site team, and can be placed on the Dashboard only. The app view shows the
  * same mode from the same context, plus the two offline hints the web never shows (R7, R8).
@@ -16,11 +31,12 @@ namespace block_ltuse;
  *
  * @package    block_ltuse
  * @category   test
+ * @copyright  2026 SIL Global
+ * @license    https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  * @covers     \block_ltuse
  * @covers     \block_ltuse\output\mobile
  */
 final class block_test extends \advanced_testcase {
-
     public static function setUpBeforeClass(): void {
         global $CFG;
         require_once($CFG->dirroot . '/blocks/moodleblock.class.php');
@@ -50,8 +66,10 @@ final class block_test extends \advanced_testcase {
         $this->assertStringContainsString(s(get_string('empty', 'block_ltuse')), $text);
         $this->assertStringContainsString(s(get_string('empty:who', 'block_ltuse')), $text);
         $this->assertStringContainsString(s(get_string('contactsupport', 'block_ltuse')), $text);
-        $this->assertStringContainsString('href="' . (new \moodle_url('/user/contactsitesupport.php'))->out(false) . '"',
-            $text);
+        $this->assertStringContainsString(
+            'href="' . (new \moodle_url('/user/contactsitesupport.php'))->out(false) . '"',
+            $text
+        );
         $this->assertStringContainsString('ltuse-home', $text);
     }
 
@@ -71,8 +89,10 @@ final class block_test extends \advanced_testcase {
         $this->assertStringContainsString(s(get_string('start', 'block_ltuse', 'Fixture page 1')), $text);
         $this->assertStringContainsString(s(get_string('coursename', 'block_ltuse', 'Fixture course A')), $text);
         $url = (new \moodle_url('/mod/page/view.php', ['id' => $first->cmid]))->out(false);
-        $this->assertMatchesRegularExpression('~<a [^>]*class="btn btn-primary"[^>]*href="' . preg_quote($url, '~') . '"~',
-            $text);
+        $this->assertMatchesRegularExpression(
+            '~<a [^>]*class="btn btn-primary"[^>]*href="' . preg_quote($url, '~') . '"~',
+            $text
+        );
         $this->assertStringNotContainsString(s(get_string('empty', 'block_ltuse')), $text);
     }
 

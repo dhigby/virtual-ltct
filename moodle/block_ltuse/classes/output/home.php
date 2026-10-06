@@ -1,7 +1,20 @@
 <?php
-namespace block_ltuse\output;
+// This file is part of Moodle - https://moodle.org/
+//
+// Moodle is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// Moodle is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with Moodle.  If not, see <https://www.gnu.org/licenses/>.
 
-defined('MOODLE_INTERNAL') || die();
+namespace block_ltuse\output;
 
 use local_ltuse\learner_home;
 use moodle_url;
@@ -18,10 +31,15 @@ use moodle_url;
  * outputs them unescaped; every other string is plain text and is escaped there. A mentor's
  * name is fullname(), plain text, so it is s()ed here before it joins an onward label, and every
  * onward label is HTML too.
+ *
+ * @package    block_ltuse
+ * @copyright  2026 SIL Global
+ * @license    https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 final class home {
-
     /**
+     * The template context for one learner's state, for the web and the app alike.
+     *
      * @param array $state learner_home::state()
      * @return array ['route' => ?{coursename, label, url}, 'empty' => ?{text, who, supportlabel,
      *     supporturl}, 'done' => ?{text}, 'onward' => ?{heading, pathways: [{label, url}],

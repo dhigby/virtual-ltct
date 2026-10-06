@@ -168,13 +168,20 @@ class certificate {
     }
 
     /**
+     * The customcert columns fields() sets, as they appear in mod_customcert v5.2.9's
+     * db/install.xml (the version moodle/site/site.yaml pins). The protection_* flags are
+     * not columns: customcert_update_instance() folds them into `protection`.
+     */
+    const INT_COLUMNS = ['requiredtime', 'verifyany', 'usecustomfilename', 'emailstudents',
+        'emailteachers', 'issueautomatically'];
+    /** Nullable char and text columns; a null compares as ''. */
+    const TEXT_COLUMNS = ['deliveryoption', 'customfilenamepattern', 'emailothers', 'language'];
+    /** The course_modules columns update_moduleinfo() rewrites from fields(). */
+    const CM_INT_COLUMNS = ['showdescription', 'visibleoncoursepage'];
+
+    /**
      * Whether the live activity differs from its settings, so a republish writes nothing
      * (and bumps no revision) when it already matches.
-     *
-     * Compares the name, intro, verifyany, the three email settings and the availability, so
-     * a hand-set emailstudents, emailteachers or emailothers is put back on the next publish.
-     * The email columns are int(1), int(1) and a nullable text in mod_customcert v5.2.9's
-     * db/install.xml (the version moodle/site/site.yaml pins).
      *
      * @param stdClass $cm the course_modules record
      * @param array $fields
@@ -182,13 +189,57 @@ class certificate {
      */
     protected static function differs(stdClass $cm, array $fields): bool {
         global $DB;
-        $instance = $DB->get_record('customcert', ['id' => $cm->instance],
-            'name, intro, verifyany, emailstudents, emailteachers, emailothers', MUST_EXIST);
-        return $instance->name !== $fields['name'] || $instance->intro !== $fields['introeditor']['text']
-            || (int)$instance->verifyany !== (int)$fields['verifyany']
-            || (int)$instance->emailstudents !== (int)$fields['emailstudents']
-            || (int)$instance->emailteachers !== (int)$fields['emailteachers']
-            || (string)$instance->emailothers !== (string)$fields['emailothers']
-            || (string)$cm->availability !== $fields['availabilityconditionsjson'];
+        $instance = $DB->get_record('customcert', ['id' => $cm->instance], '*', MUST_EXIST);
+        // The plugin's own encoding, the one customcert_update_instance() stores.
+        $protection = \mod_customcert\service\form_service::set_protection((object)$fields);
+        return self::differences($instance, $cm, $fields, $protection) !== [];
+    }
+
+    /**
+     * Every setting fields() writes that the live activity does not match, so a hand change to
+     * any of them (requiredtime, the protection flags, the email settings, the delivery option)
+     * is put back on the next publish. Completion is not compared: update_moduleinfo() writes
+     * it only with completionunlocked, which util::upsert_module() sends only for a rule.
+     *
+     * @param stdClass $instance the customcert record
+     * @param stdClass $cm the course_modules record
+     * @param array $fields
+     * @param string $protection the protection column fields() encodes to
+     * @return string[] the names that differ, empty when the activity matches
+     */
+    public static function differences(stdClass $instance, stdClass $cm, array $fields,
+                                       string $protection): array {
+        $differ = [];
+        if ((string)$instance->name !== $fields['name']) {
+            $differ[] = 'name';
+        }
+        if ((string)$instance->intro !== $fields['introeditor']['text']) {
+            $differ[] = 'intro';
+        }
+        if ((int)$instance->introformat !== (int)$fields['introeditor']['format']) {
+            $differ[] = 'introformat';
+        }
+        foreach (self::INT_COLUMNS as $column) {
+            if ((int)$instance->$column !== (int)$fields[$column]) {
+                $differ[] = $column;
+            }
+        }
+        foreach (self::TEXT_COLUMNS as $column) {
+            if ((string)$instance->$column !== (string)$fields[$column]) {
+                $differ[] = $column;
+            }
+        }
+        if ((string)$instance->protection !== $protection) {
+            $differ[] = 'protection';
+        }
+        foreach (self::CM_INT_COLUMNS as $column) {
+            if ((int)$cm->$column !== (int)$fields[$column]) {
+                $differ[] = $column;
+            }
+        }
+        if ((string)$cm->availability !== $fields['availabilityconditionsjson']) {
+            $differ[] = 'availability';
+        }
+        return $differ;
     }
 }

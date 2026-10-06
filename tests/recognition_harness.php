@@ -1,6 +1,7 @@
 <?php
 // Harness for local_ltuse's pure recognition pieces (spec 013): the badge text renderer, the
-// wording backstop and the certificate's availability. Needs no Moodle. Run from the repo
+// wording backstop, the certificate's availability and the settings a republish puts back.
+// Needs no Moodle. Run from the repo
 // root: php tests/recognition_harness.php
 //
 // The deny patterns are read from scripts/cbc_wording.py, the only definition of the rule,
@@ -101,6 +102,60 @@ check($json === '{"op":"&","c":[{"type":"coursecompleted","id":"1"}],"showc":[tr
     'availability: course completed, shown while locked');
 $decoded = json_decode($json, true);
 check(count($decoded['c']) === 1 && count($decoded['showc']) === 1, 'availability: one condition, one showc');
+
+// --- the certificate's settings, put back on a republish -------------------------------------
+// fields() needs mod_customcert, so this is its shape with the same values; 'I' stands in for
+// pdf_generation_service::DELIVERY_OPTION_INLINE.
+$fields = [
+    'name' => 'Certificate of training completed', 'introeditor' => ['text' => '<p>Intro</p>', 'format' => 1],
+    'showdescription' => 1, 'visible' => 1, 'visibleoncoursepage' => 1, 'verifyany' => 1,
+    'requiredtime' => 0, 'deliveryoption' => 'I', 'usecustomfilename' => 0, 'customfilenamepattern' => '',
+    'emailstudents' => 0, 'emailteachers' => 0, 'emailothers' => '', 'issueautomatically' => 0,
+    'protection_print' => 0, 'protection_modify' => 0, 'protection_copy' => 0, 'language' => '',
+    'completion' => 0, 'availabilityconditionsjson' => $json,
+];
+// As the database hands them back: every number a string, nullable text columns null.
+$instance = (object)['name' => $fields['name'], 'intro' => '<p>Intro</p>', 'introformat' => '1',
+    'requiredtime' => '0', 'verifyany' => '1', 'deliveryoption' => 'I', 'usecustomfilename' => '0',
+    'customfilenamepattern' => null, 'emailstudents' => '0', 'emailteachers' => '0', 'emailothers' => null,
+    'issueautomatically' => '0', 'completionemailed' => '1', 'protection' => '', 'language' => null];
+$cm = (object)['showdescription' => '1', 'visibleoncoursepage' => '1', 'availability' => $json, 'completion' => '0'];
+check(certificate::differences($instance, $cm, $fields, '') === [],
+    'differences: none when it matches, nulls and string numbers included');
+$handset = [
+    'requiredtime' => ['instance', '30'],
+    'protection' => ['instance', 'print, copy'],
+    'deliveryoption' => ['instance', 'D'],
+    'usecustomfilename' => ['instance', '1'],
+    'customfilenamepattern' => ['instance', '{FIRSTNAME}'],
+    'issueautomatically' => ['instance', '1'],
+    'emailstudents' => ['instance', '1'],
+    'emailteachers' => ['instance', '1'],
+    'emailothers' => ['instance', 'x@example.org'],
+    'language' => ['instance', 'fr'],
+    'verifyany' => ['instance', '0'],
+    'introformat' => ['instance', '0'],
+    'name' => ['instance', 'Renamed'],
+    'showdescription' => ['cm', '0'],
+    'visibleoncoursepage' => ['cm', '0'],
+    'availability' => ['cm', null],
+];
+foreach ($handset as $setting => [$record, $value]) {
+    $i = clone $instance;
+    $c = clone $cm;
+    if ($record === 'cm') {
+        $c->$setting = $value;
+    } else {
+        $i->$setting = $value;
+    }
+    check(certificate::differences($i, $c, $fields, '') === [$setting], "differences: a hand-set $setting is found");
+}
+check(certificate::differences($instance, $cm, $fields, 'print') === ['protection'],
+    'differences: compares protection with the encoding it is given');
+$c = clone $cm;
+$c->completion = '1';
+check(certificate::differences($instance, $c, $fields, '') === [],
+    'differences: completion is not compared (a rewrite would not put it back)');
 
 echo $fails ? "\n$fails FAILED\n" : "\nall passed\n";
 exit($fails ? 1 : 0);

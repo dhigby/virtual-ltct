@@ -6,6 +6,11 @@ This feature adds no table. Everything it needs is either declared in `moodle/si
 computed at render time from data Moodle and local_ltuse already hold. Learner data is read
 inside Moodle to render a page and is never written to the repo (Principle III).
 
+## Glossary
+
+- **Landing page** = the **Dashboard** = the **learner home**: the page a learner sees after login, rendered by the `block_ltuse` block (with `myoverview` beneath it).
+- **Lesson** = one published module (`cm`) in its own course **section**; the spec says "lesson", Moodle says section and course module.
+
 ## 1. Learner landing page (declared)
 
 The default Dashboard, declared in `moodle/site/dashboard.yaml` and the settings it depends

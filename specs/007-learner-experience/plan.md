@@ -106,30 +106,30 @@ One instance serves every partner, with one experience for all (VII).
 | **VI. No LMS orientation** | This is the feature's purpose. It is measured by V9 with real learners. |
 | **VII. One shape** | One Dashboard and one block for every partner. No per-organisation layout. |
 | **IX. Flat cost, field-ready** | No paid plugin or theme. App parity and offline hints (R7, R8). V6 checks whether the block needs the Premium plan. |
-| **X. Traceable, verified** | Row #13. Each Moodle behaviour relied on is either confirmed in source (R13) or carried as a V-check. The publisher change is judged not a content-model change (R10), and plan decision 3 asks the maintainer to confirm that. Done only after V9. No new recurring operation. |
+| **X. Traceable, verified** | Row #13. Each Moodle behaviour relied on is either confirmed in source (R13) or carried as a V-check. The publisher change is not a content-model change (R10); the maintainer confirmed this in decision 3. Done only after V9. No new recurring operation. |
 | **XI. Survives an upgrade** | Configuration (form 1). Our own block plugin and a hook callback (form 3). No core or Boost edit, and no child theme. `blocks_delete_instance()` and `my_reset_page_for_all_users()` are public core APIs. The block declares `requires` and `supported`. |
 | **Platform & Delivery** | Core first: a block of our own only where core has no equivalent (R3, R5). Nothing hard-codes `ltuse.net`. |
 
 No violation, so Complexity Tracking is empty.
 
-## Decisions to confirm with the maintainer
+## Maintainer decisions
 
-The plan proceeds on these defaults. Each is reversible and is recorded in research.md.
+All five were decided by Doug on 2026-10-06 (except 4, decided 2026-10-05). The reasoning is in research.md.
 
-1. **Build "Continue" now** (R3). Spec 004 R6 proposed waiting for the pilot to show the
+1. **Decided: build "Continue" now** (R3). Spec 004 R6 proposed waiting for the pilot to show the
    need. Spec 007 US1-2 asks for it, and the block exists anyway for FR-002 and FR-008.
-2. **Prevent dashboard editing for learners, and reset the personal dashboards that exist
+2. **Decided: prevent dashboard editing for learners, and reset the personal dashboards that exist
    on the server today** (R4). The reset is irreversible for them. On today's site they
    predate any learner; `drift` reports how many, as a count, never as people.
-3. **The section-summary change is a publisher change, not a content-model change** (R10).
-   If you read constitution X as covering it, US2's time display waits for your approval of
-   the design in contracts/update-sections.md.
+3. **Decided: the section-summary change is a publisher change, not a content-model change**
+   (R10). Constitution X's design-approval gate does not apply, and
+   contracts/update-sections.md stands as written.
 4. ~~The brand colour~~ **Decided** (Doug, 2026-10-05): SIL Blue `#005CB9` as Boost's brand
    colour. The complementing colours are translucent SIL Blue tints, used only for this
    feature's block and button (R11).
-5. **`MOODLE_SUPPORT_EMAIL`** (R9): the address learners with no course reach. Today's live
-   `supportemail` is a personal address. A shared site-team address is recommended, and
-   spec 015 makes it a provisioning value.
+5. **Decided: `MOODLE_SUPPORT_EMAIL`** (R9), the address learners with no course reach,
+   stays the current personal address for now. Spec 015 makes it a provisioning value, and
+   that is the point to move it to a shared site-team address.
 
 ## Project Structure
 

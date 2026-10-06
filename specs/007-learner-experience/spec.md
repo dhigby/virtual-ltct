@@ -4,7 +4,7 @@
 
 **Created**: 2026-09-30
 
-**Status**: Draft
+**Status**: Implemented (T001–T073 merged); awaiting live checks and pilot (T074–T082)
 
 **Input**: User description: "Deliver REQUIREMENTS.md row #13, Simple learner experience (Must): a partner learner can log in to the training system and know what to do without any Moodle orientation — a trimmed dashboard, a course layout that shows a course as a short sequence of lessons, a clean list of their courses, a light theme tweak, and the same experience in the Moodle Android app. Row #13 is a 'simple' row: it is not done until 2–3 real partner learners have used it and their findings are recorded."
 
@@ -86,14 +86,14 @@ A learner who has completed a course sees, from the same landing page, where the
 
 ### Functional Requirements
 
-- **FR-001**: The landing page a learner sees after login MUST show their enrolled courses and one obvious "continue" route, and MUST NOT show blocks, panels or links a learner does not need.
+- **FR-001**: The landing page a learner sees after login MUST show their enrolled courses and one obvious "continue" route, and MUST NOT show blocks, panels or links a learner does not need. The default Dashboard holds only `ltuse` (content 0), `myoverview` (content 1) and `calendar_upcoming` (side-pre). Verified by SC-002 and quickstart V1.
 - **FR-002**: A learner with no enrolment MUST see a plain message saying nothing is assigned yet and who to contact.
 - **FR-003**: A published course MUST present its lessons as an ordered sequence showing each lesson's title, estimated time and the learner's completion state.
 - **FR-004**: Each lesson MUST offer a visible route to the next lesson or quiz without the learner using Moodle's own navigation menus.
 - **FR-005**: Completion state MUST be tracked per lesson and per course so that "where you left off" and "completed" are shown accurately (tracking itself is delivered by 004; this spec requires it to be visible to the learner).
-- **FR-006**: The Moodle Android app MUST present the same courses, lesson order and completion state as the web, and published pages MUST render correctly in it.
-- **FR-007**: A learner MUST be able to find, from within a course in the app, how to make it available offline.
-- **FR-008**: Where they exist for that learner, the landing page MUST show onward routes — next pathway course, community space, mentor contact (destinations delivered by 006, 005 and 003).
+- **FR-006**: The Moodle Android app MUST present the same courses, lesson order and completion state as the web, and published pages MUST render correctly in it, as measured by SC-004 and quickstart V6–V7.
+- **FR-007**: A learner MUST be able to find, from within a course in the app, how to make it available offline. This is met by the app's native course-menu Download course, which spec 009 keeps enabled (`tool_mobile/disabledfeatures` empty) and quickstart V6 step 3 verifies; the Home-tab hint tells the learner where it is. The in-course hint on the course page's top section (research R8) was dropped (tasks T005 (g)).
+- **FR-008**: Where they exist for that learner, the landing page MUST show onward routes — next pathway course, community space, mentor contact (destinations delivered by 006, 005 and 003). The community route stays `null` until spec 005 declares the community space, and must be wired then.
 - **FR-009**: Every setting, theme adjustment, dashboard default and course-format choice this feature depends on MUST be applied from the repo's training-system configuration, so a rebuilt server presents the same experience with no manual steps.
 - **FR-010**: The experience MUST use core Moodle capability where it exists; a plugin or theme change is used only where core cannot achieve a requirement here, and is pinned to the version verified.
 - **FR-011**: Nothing the learner sees MUST describe a completion, badge or level as "certified", or state that the learner has reached a CBC level; where a course's target level is shown, it MUST use CBC vocabulary (for example `2 - With Assistance`) and read as the course's aim.
@@ -111,18 +111,20 @@ A learner who has completed a course sees, from the same landing page, where the
 
 ### Measurable Outcomes
 
-- **SC-001**: At least 2 of 3 (and never fewer than 2) real partner learners in the pilot reach the first lesson of their course within 5 minutes of first login, with no help and no prior Moodle orientation.
+- **SC-001**: At least 2 real partner learners, and all of them if only 2 take part, in the pilot reach the first lesson of their course within 5 minutes of first login, with no help and no prior Moodle orientation.
 - **SC-002**: From the landing page, a returning learner reaches the lesson they left off in no more than 2 taps or clicks, on web and in the app.
 - **SC-003**: A pilot learner completes two consecutive lessons using only on-screen routes, with zero uses of Moodle's own navigation menus.
 - **SC-004**: In the app, a downloaded course's lessons open and read fully (text and screenshots) with the device offline.
 - **SC-005**: A server rebuilt from the repo plus a data restore presents the identical learner experience with zero manual admin-interface steps.
-- **SC-006**: Every pilot finding is recorded and each is marked resolved or accepted before the row is marked done.
+  _Note_: on the temporary instance this is evidenced by an empty drift after apply (T074); the full rebuild-and-restore check is deferred to spec 015.
+- **SC-006**: Every pilot finding is recorded and each is marked resolved or accepted before the row is marked done (the rule itself is FR-014).
 
 ## Assumptions
 
 - Pilot learners are the stage-7 pilot learners of an early course, who are real partner learners; no separate usability study is needed if the pilot is observed and findings captured.
 - "Real partner learners" means people from a partner organisation who would use the system for real, not department staff standing in for them.
 - Findings are recorded in the repo only in de-identified form (role, device, what happened); names, emails and anything else identifying stay out of the repo (Principle III).
+- Offline use inside a course relies on the Moodle app's native Download course (FR-007), not on a hint in the course page.
 - The default Moodle course format that shows one topic per lesson is expected to meet FR-003; a third-party course format is considered only if verification shows core cannot.
 - Interface translation is delivered by 010; this spec only requires its own text to be translatable.
 - The experience is built and piloted on the temporary instance; production learners wait for the dedicated VPS (015).
@@ -133,7 +135,7 @@ A learner who has completed a course sees, from the same landing page, where the
 
 | # | Requirement | Pri | What this spec delivers |
 |---|---|---|---|
-| 13 | Simple learner experience | Must | Trimmed landing page, course-as-lessons view, clean course list, light theme adjustment, app parity and offline discoverability, and the 2–3 real-learner test that makes it done. |
+| 13 | Simple learner experience | Must | Trimmed landing page, course-as-lessons view, course list from the `myoverview` (Course overview) block only, SIL Blue `#005CB9` brand colour, app parity and offline discoverability, and the 2–3 real-learner test that makes it done. |
 
 On delivery, the same PR updates these rows' status in moodle/REQUIREMENTS.md (constitution X).
 
@@ -148,6 +150,7 @@ On delivery, the same PR updates these rows' status in moodle/REQUIREMENTS.md (c
 - **VII. One shape**: One learner experience for every partner and every course; no per-partner dashboard or theme.
 - **IX. Flat cost, field-ready**: Built for the Android app and offline (US3, SC-004); lessons do not depend on video. No paid theme or plugin.
 - **X. Traceable and verified**: Cites row #13; every setting is verified on the temporary 5.2.3+ instance before the plan depends on it; not done until 2–3 real partner learners have used it and findings are recorded (FR-014). No recurring operations are added beyond the server itself, whose operator is undecided (015).
+- **XI. Survives an upgrade**: Configuration (form 1); our own block plugin and a hook callback (form 3). No core or Boost edit, and no child theme.
 - **Platform & Delivery**: Core first (FR-010); Moodle core never modified; any plugin pinned; one instance, one experience for all partners; server always from `MOODLE_URL`.
 
 ## Dependencies

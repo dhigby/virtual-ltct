@@ -50,8 +50,27 @@ passages) **side by side**, including the original-language text/gloss for refer
 It does **not** algorithmically detect or flag "inconsistencies" the way a wordlist or
 Biblical Terms check does — there is nothing for it to compute. The team looks at each
 pair of parallel passages themselves and decides whether the translation is consistent
-and acceptable. That judgment call — meaning versus form — is the team's from the
-start, not something the tool hands you pre-flagged.
+and acceptable. That judgment call — whether the translation is more harmonized than the
+original texts, or less consistent than they are — is the team's from the start, not
+something the tool hands you pre-flagged.
+
+**The shading.** The tool shades matching text in every text it shows: the project's
+translation as well as the Greek and any resources. Wherever the same three or more
+words appear in both parallel passages, they're shaded green, and text that differs is
+left unshaded. In the Greek, yellow marks words a biblical scholar has marked by hand
+as equivalent — usually a word with a different gloss. That means you can compare the
+shading of the Greek with the shading of the translation without reading either one:
+
+- **The Greek is shaded but the translation isn't:** the translation differs where the
+  originals agree.
+- **The translation is shaded but the Greek isn't:** the translation may be more
+  harmonized than the originals.
+
+Either is a pattern to point out to the team. Whether the difference is right is the
+team's decision.
+
+![The Parallel Passages tool comparing MAT 3:4 with MRK 1:6. In the GRK row, Greek words that match across the two passages are shaded green and words marked as equivalent are shaded yellow, each with an English gloss underneath. Below it, the project (PTP) row and the RSV resource row shade the words that match across the two passages; the unshaded words differ.](assets/ss-03-pp-source-shading.png)
+*Compare the shading, not the words: Greek, translation and resource are shaded the same way.*
 
 What the tool *does* track is **review status**, per verse, in a **Status column**:
 
@@ -161,8 +180,9 @@ run it against the documented approach, and route gaps back to the team.
 - In both check areas, your job is process and routing — confirm every relevant item has
   actually been reviewed, and hand judgment calls about wording back to the team.
 - The Parallel Passages tool shows passages side by side (with original-language text)
-  for the team to judge themselves — it doesn't flag inconsistencies for you. Check the
-  Status column instead: a checkmark means reviewed and approved, a red "?" means edited
+  for the team to judge themselves — it doesn't flag inconsistencies for you. Compare
+  the shading of the Greek with the shading of the translation, and check the
+  Status column: a checkmark means reviewed and approved, a red "?" means edited
   since approval and needing another look.
 - Parallel passages should not be more harmonized than the original texts — watch for
   over-harmonising as the specific failure mode here.
@@ -183,10 +203,10 @@ tool check. Write each answer, then verify it against the Content section above.
 1. **State the standard parallel passages are held to** in one sentence, and name the
    specific failure mode that comes from missing it. Then say who compares the
    translation against that standard, and why it isn't you.
-2. **Write the general test** that tells a legitimate "these should differ" decision
-   apart from an unreviewed dismissal: what has to be true before a difference the team
-   finds counts as *decided*? State it as a test you could apply to any such difference
-   in any project, not as a verdict on one passage. Two or three lines.
+2. **Write the general test** for a legitimate "these should differ" decision: what in
+   the tool shows whether two parallel passages *may* differ, and what has to be true
+   before a difference counts as *decided*? State it as a test you could apply in any
+   project, not as a verdict on one passage. Two or three lines.
 3. **Two situations that look alike.** (a) A check, or the team's own review of their
    renderings, turns up an inconsistency between two occurrences of the same
    measurement. (b) There is no documented, agreed approach for

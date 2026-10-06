@@ -58,8 +58,12 @@ either way).
     clarified. [full text](#amendment-13-2026-10-05)
 14. **2026-10-06** — Steve White (internal reviewer), agreed by Jenni Beadle, Stage 6 internal
     review — parallel passages should not be more harmonized than the original texts; also the
-    2026-10-07 replacement of the denied-error screenshot.
+    2026-10-07 replacement of both denied-error screenshots.
     [full text](#amendment-14-2026-10-06)
+15. **2026-10-07** — Jenni Beadle (SME), Stage 6 internal review — the Parallel Passages
+    tool's shading is added to lesson 03; the consultant compares the shading of the Greek
+    with the shading of the translation, and lesson 03's Challenge 2 now rests on it.
+    [full text](#amendment-15-2026-10-07)
 
 ## Outcome-level open question (resolve before approval)
 
@@ -964,4 +968,27 @@ outcome level and all objectives are unchanged; no re-approval was needed.
 
 Also recorded under this internal review, 2026-10-07: the screenshot
 `assets/ss-04-denied-error-strikethrough.png` (lesson 04) was replaced with a clearer single-line
-example (MAT 2:5).
+example (MAT 2:5), and `assets/ss-04-denied-error-not-shown.png` was re-taken from the same
+Matthew results so the two screenshots pair.
+
+### Amendment 15: 2026-10-07
+
+**Amendment, Stage 6 internal review, 2026-10-07 (Jenni Beadle, course author and SME) — the
+Parallel Passages tool's shading, clarification within the approved scope, no re-approval
+needed:** The Parallel Passages tool shades matching text in every text it shows — the
+project's translation as well as the Greek and any resources. Wherever the same three or more
+words appear in both parallel passages, they are shaded green; text that differs is unshaded.
+In the Greek, yellow marks words a biblical scholar has marked by hand as equivalent, usually a
+word with a different gloss. Because the translation is shaded too, the consultant can compare
+the *pattern* of shading in the Greek with the pattern in the translation without reading
+either: Greek shaded but translation not suggests the translation differs where the originals
+agree; translation shaded but Greek not suggests it may be more harmonized than the originals.
+The consultant points the pattern out; whether the difference is right is the team's decision.
+Jenni confirmed this is a fair thing to teach the consultant. Lesson 03 gains a paragraph on the
+shading and a new screenshot (`assets/ss-03-pp-source-shading.png`, MAT 3:4 / MRK 1:6); its
+Challenge 2 now asks what in the tool shows whether two passages may differ; its Key takeaways
+mention the shading; and a leftover "meaning versus form" phrase in its Content is replaced.
+Scenario 1 and the mentor guide may later use the same comparison. Seat time, competencies,
+outcome level and all objectives are unchanged. `module-author` may revise
+`03-parallel-passages-and-measures.md`, `06-scenario-bank.md` and `07-mentor-guide.md` on this
+basis.

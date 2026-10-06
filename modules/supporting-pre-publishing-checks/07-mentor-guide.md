@@ -173,10 +173,13 @@ Punctuation Inventory open on screen now, walked through live — not a descript
 was done "back at the start." Marker **(c)**: coaching them to open and review it
 themselves, not the learner doing it for them.
 
-**Watch for in escalation:** genuinely ambiguous Punctuation Inventory settings, or an
-unrecognized character the learner can't tell is a real problem vs. a font-display quirk,
-go to an LT mentor (a tooling/technical question), not a Translation Consultant. A learner
-who can't distinguish this from a content question has missed marker **(g)**.
+**Watch for in escalation:** genuinely ambiguous Punctuation Inventory settings, or a
+character that may be a font-display quirk, go to an LT mentor (a tooling/technical
+question), not a Translation Consultant. Whether a character is valid in the language is
+a different question: the learner checks it against the orthography statement written by
+the project's linguist, if they have it, and otherwise leaves it to the team. A learner
+who sends that question to an LT mentor, or decides it themselves without the orthography
+statement, has missed marker **(g)**.
 
 **Common wrong turn:** three separate ways a learner can go wrong here:
 - Working the Basic Checks flag list in the order it appears rather than checking for a

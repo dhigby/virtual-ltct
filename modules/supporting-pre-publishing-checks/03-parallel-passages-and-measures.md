@@ -134,6 +134,10 @@ Either way, your role follows the same reframed pattern as parallel passages:
   team's documented approach, or inconsistency between two occurrences of the same
   measure — **refer it back to the team to resolve**, rather than deciding what the
   correct rendering should be yourself.
+- If the team has **no documented approach** for a kind of measurement, that comes
+  first: the team agrees and documents its approach before anyone resolves individual
+  inconsistencies, because an inconsistency can't be judged without a standard to check
+  it against.
 - If a team is stuck on the old Numbers-only check, **don't try to compare the measure
   renderings yourself.** It is possible to do some of this by hand, but it isn't easy and
   ambiguous terms will slip past you. Instead, be honest that there's no reliable tool for
@@ -180,9 +184,9 @@ tool check. Write each answer, then verify it against the Content section above.
    specific failure mode that comes from missing it. Then say who compares the
    translation against that standard, and why it isn't you.
 2. **Write the general test** that tells a legitimate "these should differ" decision
-   apart from an unreviewed dismissal: what has to be true before a flagged difference
-   counts as *decided*? State it as a test you could apply to any flagged difference in
-   any project, not as a verdict on one passage. Two or three lines.
+   apart from an unreviewed dismissal: what has to be true before a difference the team
+   finds counts as *decided*? State it as a test you could apply to any such difference
+   in any project, not as a verdict on one passage. Two or three lines.
 3. **Two situations that look alike.** (a) A check, or the team's own review of their
    renderings, turns up an inconsistency between two occurrences of the same
    measurement. (b) There is no documented, agreed approach for

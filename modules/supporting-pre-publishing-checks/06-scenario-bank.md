@@ -128,8 +128,9 @@ of these as already handled.
    structural-first, and what would you specifically ask them to open and show you for
    the Punctuation Inventory?
 3. **Escalate:** If the Punctuation Inventory's settings turn out to be genuinely
-   confusing or you can't tell whether an unrecognized character is a real problem or a
-   font-display quirk, who do you bring in?
+   confusing, or an unrecognized character might just be a font-display quirk, who do
+   you bring in? And if the question is whether a character is valid in the language
+   at all, where does the answer come from?
 
 ---
 

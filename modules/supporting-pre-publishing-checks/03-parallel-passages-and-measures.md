@@ -82,10 +82,9 @@ not the team notices.
 Once you can see which verses still show a red "?", your job is to **surface those to
 the team**, not to decide whether the passages are consistent yourself. The common
 mistake here, per the SME field material, is **over-harmonising**: a team (or an
-overzealous checker) forces every parallel passage to match exactly, erasing legitimate
-variation. Passages need to be consistent in **meaning**, not necessarily identical in
-**form** — two Gospel accounts of the same event can use different wording and still be
-a faithful, consistent translation. That judgment belongs to the team (and, where
+overzealous checker) makes parallel passages match more closely than the original texts
+do. Different biblical authors may relate a story differently, and parallel passages
+should not be more harmonized than the original texts. That judgment belongs to the team (and, where
 content-level Scripture questions are involved, potentially a Translation Consultant) —
 your role is to make sure every verse pairing that shows a red "?" was actually looked
 at and given a genuine decision, not left unreviewed or silently over-corrected.
@@ -161,7 +160,7 @@ run it against the documented approach, and route gaps back to the team.
   for the team to judge themselves — it doesn't flag inconsistencies for you. Check the
   Status column instead: a checkmark means reviewed and approved, a red "?" means edited
   since approval and needing another look.
-- Parallel passages need consistency of meaning, not identical form — watch for
+- Parallel passages should not be more harmonized than the original texts — watch for
   over-harmonising as the specific failure mode here.
 - A new consolidated check (numbers, weights, and measures together) is expected to
   replace the old, separate Numbers check — but not every team will be on a Paratext
@@ -177,10 +176,9 @@ run it against the documented approach, and route gaps back to the team.
 **✏️ Try this:** Five short exercises — recall, two discriminations, and one narrow
 tool check. Write each answer, then verify it against the Content section above.
 
-1. **State what "consistent" means** for parallel passages in one sentence, and name
-   the specific failure mode that comes from getting it wrong. Then say which of the
-   two — consistency of meaning, or identity of form — you are actually able to judge
-   yourself, and why the other one isn't yours.
+1. **State the standard parallel passages are held to** in one sentence, and name the
+   specific failure mode that comes from missing it. Then say who compares the
+   translation against that standard, and why it isn't you.
 2. **Write the general test** that tells a legitimate "these should differ" decision
    apart from an unreviewed dismissal: what has to be true before a flagged difference
    counts as *decided*? State it as a test you could apply to any flagged difference in

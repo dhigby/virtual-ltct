@@ -84,7 +84,7 @@ Biblical Terms list and the Send/Receive slowdown "hard to convince the team of"
 
 **Question 9:** What is "over-harmonising" in the context of parallel-passage checks?
 - A) Leaving parallel passages unreviewed so that differences between them go unchecked
-- B) Forcing every parallel passage to match word for word, erasing legitimate variation
+- B) Making parallel passages match more closely than the original texts do
 - C) Approving parallel passages in bulk without opening the Show differences comparison first
 - D) Adding so many cross-references that the parallel passages become hard to follow
 

@@ -43,7 +43,7 @@ Org-only courses stay as they are designed today: a course in the organisation's
 | `roles.yaml:67` (user `badges:viewotherbadges: inherit`) | Hides badges. Groups also stopped cross-organisation profile access. | Keep. It is now the only thing hiding badges from classmates. State that in spec 013 R10. |
 | `roles.yaml:116-123` (student `workshop:viewauthornames`) | Peer anonymity | Unchanged. It matters more across organisations. |
 | `site_config.py:273-280` (`ORGMANAGER_DENY`); `tests/test_site_config.py:550` | Refuses `accessallgroups` and other reach-widening capabilities for orgmanager. | Keep as least privilege. Consider adding `moodle/site:viewuseridentity`. |
-| `003:moodle\site\roles.yaml:114-136` (mentor) | Lacks `moodle/badges:viewotherbadges`. | Add `allow`, plus the matching validate allowlist entry (spec 003 R2). Spec 013 US3 needs it. This is not caused by the org change. |
+| `003:moodle\site\roles.yaml:114-136` (mentor) | Lacks `moodle/badges:viewotherbadges`. | Add `allow`, plus the matching validate allowlist entry (spec 003 R2). Spec 013 US3 needs it. This is not caused by the org change. *(Done 2026-10-05: spec 013 T034.)* |
 | New (optional, §3) | — | A user-context "organisation manager (follow)" role. |
 
 ### `local_ltuse` code

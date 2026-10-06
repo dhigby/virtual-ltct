@@ -317,7 +317,10 @@ MENTOR_ALLOW = frozenset({"moodle/user:viewdetails", "moodle/user:viewuseractivi
                           "local/ltuse:viewmenteeprogress",
                           # Spec 016 (R7 path 2): a mentor sees their learner's real identity
                           # and the Protected marker. A reviewed widening (plan, cross-spec 003).
-                          "local/ltuse:viewidentity"})
+                          "local/ltuse:viewidentity",
+                          # Spec 013 (R10, US3): a mentor sees their learner's public badges,
+                          # checked in the learner's user context. Read only; a reviewed widening.
+                          "moodle/badges:viewotherbadges"})
 # The local_ltuse version that adds local/ltuse:viewmenteeprogress; from it on, roles.yaml
 # must declare the mentor role (FR-001).
 MENTOR_SINCE = 2026100301

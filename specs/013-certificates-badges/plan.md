@@ -149,7 +149,7 @@ These are for the maintainer (Doug). `/speckit-tasks` may generate tasks as draf
 ## Cross-spec effects
 
 - **Spec 001**: its declaration contract gains `badges.yaml`, `certificate/`, `settings/badges.yaml`, two plugin pins and two item types ([contracts/declaration.md](contracts/declaration.md)). 001's contract links to it, as it does to 002's and 004's.
-- **Spec 003**: its mentor role must grant `moodle/badges:viewotherbadges` in user context (R10). Until 003 is built, US3's mentor check is limited to the site team view, and US3 is not closed.
+- **Spec 003**: its mentor role must grant `moodle/badges:viewotherbadges` in user context (R10). Until 003 is built, US3's mentor check is limited to the site team view, and US3 is not closed. *(2026-10-05: done. The `mentor` role in `moodle/site/roles.yaml` grants it, and `MENTOR_ALLOW` allows it; the mentor half of V9 can now run.)*
 - **Spec 004**: this spec depends on its completion criteria and its two course fields. `set_course_completion` leaves out the certificate's idnumber. 004's FR-010 rule moves to `cbc_wording.py` unchanged, and its tests move with it.
 - **Spec 006**: pathway badges wait for pathways (spec Assumptions). R1's course criterion is the pattern to follow.
 - **Spec 009**: V7 runs on 009's V7 device.

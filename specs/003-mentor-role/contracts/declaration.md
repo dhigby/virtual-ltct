@@ -23,6 +23,7 @@ never delete, and report what is undeclared.
       moodle/user:viewuseractivitiesreport: allow    # core Grades overview, read-only
       local/ltuse:viewmenteeprogress: allow          # the Mentoring page (research R3)
       local/ltuse:viewidentity: allow                # spec 016 R7 path 2 (added by 016)
+      moodle/badges:viewotherbadges: allow           # spec 013 R10 (added by 013)
     why: >-
       #11 (spec 003). ...
 ```
@@ -33,6 +34,12 @@ protected learner's real identity and the Protected marker while assigned (016 F
 :208-212) and `MENTOR_ALLOW` in `scripts/site_config.py` (around :316-320) carry it with their
 reason.)*
 
+*(Amended 2026-10-05: spec 013 added `moodle/badges:viewotherbadges`, so an assigned mentor sees
+their learner's public badges (013 R10, FR-011, US3). The `user` role no longer holds it, so
+without this grant a mentor saw none. Core checks it in the learner's user context
+(`public/badges/lib.php:51`, `public/badges/classes/external.php:118`, `MOODLE_502_STABLE`), where
+this role is assigned. It is read only, a second reviewed widening of the allowlist below.)*
+
 **Validation** (`site_config.py validate`, new `_check_mentor`). Each of these is a problem,
 and `validate` exits 1:
 
@@ -41,7 +48,7 @@ and `validate` exits 1:
 | `contextlevels` is not exactly `[user]` | FR-002 |
 | `archetype` is not empty | research R2 |
 | any capability is `prohibit` | roles combine; a mentor who is a manager keeps both |
-| any capability outside the allowlist `{moodle/user:viewdetails, moodle/user:viewuseractivitiesreport, local/ltuse:viewmenteeprogress}`, plus `local/ltuse:viewidentity` since spec 016 (R7 path 2; a reviewed widening, `MENTOR_ALLOW` in `scripts/site_config.py`) | FR-006, FR-013, research R2 |
+| any capability outside the allowlist `{moodle/user:viewdetails, moodle/user:viewuseractivitiesreport, local/ltuse:viewmenteeprogress}`, plus `local/ltuse:viewidentity` since spec 016 (R7 path 2) and `moodle/badges:viewotherbadges` since spec 013 (R10), each a reviewed widening (`MENTOR_ALLOW` in `scripts/site_config.py`) | FR-006, FR-013, research R2 |
 | the `mentor` role is missing while `local_ltuse` is pinned at or after the version that adds the capability | FR-001 |
 
 **Inspector, applier and drift**: no change. They already handle a role with an empty

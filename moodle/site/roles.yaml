@@ -67,9 +67,9 @@ roles:
       moodle/badges:viewotherbadges: inherit
     why: >-
       #23 (spec 013 R10, FR-011): a learner's badges are not shown to other learners. The
-      capability is granted to the mentor role in the learner's user context (spec 003), and
-      managers keep it through their archetype, so the evidence stays visible to those who
-      need it.
+      capability is granted to the mentor role in the learner's user context (spec 003, the
+      mentor entry below), and managers keep it through their archetype, so the evidence
+      stays visible to those who need it.
 
   - shortname: manager
     archetype: manager
@@ -206,10 +206,17 @@ roles:
       moodle/user:viewuseractivitiesreport: allow    # core Grades overview, read only
       local/ltuse:viewmenteeprogress: allow          # the Mentoring page (research R3)
       local/ltuse:viewidentity: allow                # spec 016 R7 path 2: the learner's real identity
+      moodle/badges:viewotherbadges: allow           # spec 013 R10: the learner's badges on their profile
     why: >-
       #26 (spec 016, FR-006): a mentor sees their learner's real identity and the Protected
       marker, on the profile, the Mentoring page and "People I support", and loses it with the
       assignment. A reviewed widening of the allowlist below.
+      #23 (spec 013 R10, FR-011, US3): a mentor sees their learner's badges, which the user
+      role no longer shows to everyone. Core checks moodle/badges:viewotherbadges in the
+      learner's user context (public/badges/lib.php:51 and classes/external.php:118,
+      MOODLE_502_STABLE), where this role is assigned, so it reaches only assigned learners and
+      only the badges each has left public. Read only (RISK_PERSONAL); a second reviewed
+      widening.
       #11 (spec 003): one mentor role for every partner (FR-001). Every capability is checked
       in the learner's own user context, so it reaches only the learners someone is assigned
       to (FR-005), and every course they join later (FR-004). It holds nothing that writes

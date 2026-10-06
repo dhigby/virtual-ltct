@@ -39,7 +39,7 @@ relationship table in `local_ltuse`. This duplicates core and loses core privacy
 ## R2. What the role may hold
 
 **Decision**: exactly three capabilities, all allow, all checked in the learner's user
-context (four since spec 016; see the note under the table):
+context (four since spec 016 and five since spec 013; see the notes under the table):
 
 | Capability | What it unlocks | Why |
 |---|---|---|
@@ -47,6 +47,7 @@ context (four since spec 016; see the note under the table):
 | `moodle/user:viewuseractivitiesreport` | core Grades overview across all the learner's courses (`grade_report_overview::check_access`) | read-only, and the one cross-course page core gives a mentor |
 | `local/ltuse:viewmenteeprogress` (new) | our Mentoring page (R3) | lets our page check the relationship by capability rather than by guessing |
 | `local/ltuse:viewidentity` (spec 016) | a protected learner's real identity and the Protected marker, on the profile, the Mentoring page (web and app) and "People I support" | spec 016 FR-006 and R7 path 2. Added after this decision, see below |
+| `moodle/badges:viewotherbadges` (spec 013) | the learner's public badges, on the profile and through `core_badges_get_user_badges` | spec 013 R10, FR-011, US3. Added after this decision, see below |
 
 **Widened by spec 016 (2026-10-05)**: the role now holds a fourth capability,
 `local/ltuse:viewidentity`, so an assigned mentor sees their learner's real identity while
@@ -54,6 +55,14 @@ assigned (016 research R7 path 2). It is read only and checked in the learner's 
 like the other three, so FR-005 and FR-006 hold. It is a reviewed widening of the allowlist:
 `MENTOR_ALLOW` in `scripts/site_config.py` (around :316-320) and the mentor declaration in
 `moodle/site/roles.yaml` (around :208-212) both carry it with their reason.
+
+**Widened by spec 013 (2026-10-05)**: a fifth capability, `moodle/badges:viewotherbadges`, so an
+assigned mentor sees their learner's badges. Spec 013 R10 takes it from the `user` role so
+learners cannot see each other's badges, and recorded that this role must grant it; the role
+was built without it, so mentors saw no badges. Core checks it in the learner's user context
+(`public/badges/lib.php:51`, `public/badges/classes/external.php:118`, `MOODLE_502_STABLE`), and
+only for badges the learner has left public, so FR-005 and FR-006 hold. Read only
+(`RISK_PERSONAL`). `MENTOR_ALLOW` and the mentor declaration carry it with their reason.
 
 **Left out, on purpose**:
 - `moodle/user:editprofile`. It is a write capability (FR-006).

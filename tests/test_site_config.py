@@ -613,6 +613,14 @@ class Mentor(Base):
     def test_tracked_declaration_is_valid(self):
         self.assertEqual(sc.validate()[1].items, [])
 
+    def test_reviewed_widenings_accepted(self):
+        # Spec 016 R7 path 2 and spec 013 R10: read-only, checked in the learner's user context.
+        for cap in ("local/ltuse:viewidentity", "moodle/badges:viewotherbadges"):
+            with self.subTest(capability=cap):
+                self.reset()
+                self.edit("roles.yaml", self.LAST_CAP, self.LAST_CAP + "      %s: allow\n" % cap)
+                self.assertAccepted()
+
     def test_capability_outside_allowlist(self):
         for cap in ("moodle/user:editprofile", "moodle/user:viewalldetails",
                     "moodle/competency:usercompetencyrate", "moodle/grade:viewall",

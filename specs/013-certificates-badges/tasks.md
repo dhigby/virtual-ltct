@@ -114,9 +114,10 @@
 
 - [x] T031 [US3] Record mentor-role requirement for spec 003 (`moodle/badges:viewotherbadges` granted in learner **user** context) in `moodle/local_ltuse/README.md` and `moodle/site/README.md`
 - [x] T032 [US3] Confirm badge description renders competencies/target-level as course description only ("designed to support progress towards `<CBC label>`", CBC vocabulary exact per `outcome-levels.yaml`) in `moodle/local_ltuse/classes/recognition/renderer.php`
-- [ ] T033 [US3] Run instance check V9 from `specs/013-certificates-badges/quickstart.md` (learner B1 refused A1's badges via profile + `core_badges_get_user_badges`; manager A refused/sees none; site team sees them; mentor checks deferred to spec 003) and record results in the PR *(Note 2026-10-05: manager A now opens A1's profile under spec 002 R9 as amended, and must see no badges there; see quickstart V9's note, which also records that spec 003's `mentor` role does not yet hold `moodle/badges:viewotherbadges`.)*
+- [ ] T033 [US3] Run instance check V9 from `specs/013-certificates-badges/quickstart.md` (learner B1 refused A1's badges via profile + `core_badges_get_user_badges`; manager A refused/sees none; site team sees them; mentor checks deferred to spec 003) and record results in the PR *(Note 2026-10-05: manager A now opens A1's profile under spec 002 R9 as amended, and must see no badges there; see quickstart V9's note, which also records that spec 003's `mentor` role did not hold `moodle/badges:viewotherbadges`. It does since 2026-10-05 (T034), so the mentor checks are no longer deferred.)*
+- [x] T034 [US3] Grant `moodle/badges:viewotherbadges: allow` on the `mentor` role in `moodle/site/roles.yaml`, widen `MENTOR_ALLOW` in `scripts/site_config.py` to match (reviewed, spec 003 research R2), and test it in `tests/test_site_config.py` (R10; found by spec 011's org-boundaries audit)
 
-**Checkpoint**: US3 limited check passes; full mentor-matrix check re-runs once spec 003's role exists (plan cross-spec effects)
+**Checkpoint**: US3 limited check passes; full mentor-matrix check re-runs once spec 003's role exists (plan cross-spec effects). *(2026-10-05: the role exists and, since T034, holds the capability; V9 runs in full.)*
 
 ---
 

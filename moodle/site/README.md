@@ -189,8 +189,8 @@ the maintainer supplies them (spec 013 plan, decision 4).
 
 **Who sees a learner's badges.** Not other learners: `roles.yaml` takes
 `moodle/badges:viewotherbadges` from the authenticated-user role. The site team keeps it.
-**Spec 003's mentor role must grant `moodle/badges:viewotherbadges`, assigned in the learner's
-user context**, so a mentor sees their own assigned learners' badges and nobody else's.
+Spec 003's mentor role grants `moodle/badges:viewotherbadges`, and because it is assigned in the
+learner's user context, a mentor sees their own assigned learners' badges and nobody else's.
 Organisation managers follow completion through their reports, not through badges.
 
 **Retire a course by hiding it, never by deleting it.** Deleting a course archives its badges,

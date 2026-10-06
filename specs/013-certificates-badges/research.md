@@ -164,7 +164,7 @@ The links lead an anonymous visitor to a login page and show nothing more. So FR
 **Decision**: Badges stay visible on the learner's own profile and to their assigned mentor. They are not visible to other learners.
 
 - `roles.yaml` sets `moodle/badges:viewotherbadges` to `inherit` for the `user` role (authenticated user). Its archetype default is allow (`lib/db/access.php:2080–2087`, `CONTEXT_USER`, `RISK_PERSONAL`).
-- The capability is granted to spec 003's mentor role, which is assigned in the learner's **user** context. So a mentor sees exactly their assigned learners' badges (US3, FR-011), with no code of ours. Spec 003 adds this line when it builds the role; this plan only records the requirement.
+- The capability is granted to spec 003's mentor role, which is assigned in the learner's **user** context. So a mentor sees exactly their assigned learners' badges (US3, FR-011), with no code of ours. *(2026-10-05: spec 003 built the role without it, so mentors saw no badges. `moodle/site/roles.yaml` now grants it on `mentor`, and `MENTOR_ALLOW` in `scripts/site_config.py` is widened to allow it, a reviewed change (003 research R2).)*
 - `manager` keeps it through its archetype, for the site team.
 
 **Why a capability, not the privacy flag**:

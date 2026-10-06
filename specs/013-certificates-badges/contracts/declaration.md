@@ -23,6 +23,7 @@ This extends [spec 001's declaration contract](../../001-site-config-as-code/con
   - Adds `badges_badgesalt`, which is per-site, and which would break every issued assertion if changed (R9).
 - **`roles.yaml`**
   - `user`: `moodle/badges:viewotherbadges: inherit` (R10).
+  - `mentor` (spec 003's role): `moodle/badges:viewotherbadges: allow` (R10), so an assigned mentor sees their learner's badges. *(Added 2026-10-05: the role had been built without it; `MENTOR_ALLOW` in `scripts/site_config.py` is widened to match.)*
   - `ltcpublisher`: `moodle/badges:createbadge`, `moodle/badges:configuredetails`, `moodle/badges:configurecriteria`, `moodle/badges:configuremessages` and `mod/customcert:manage`. The exact set is confirmed when the web service is built, by checking which capabilities the classes we call require (T-task).
 
 ## Payload arrays (PHP side)

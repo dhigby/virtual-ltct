@@ -252,8 +252,9 @@ would award them. Stage 8 suspends their manual enrolment first (`process/stages
 
 **Who sees a learner's badges.** `roles.yaml` sets `moodle/badges:viewotherbadges` to
 `inherit` for the authenticated-user role, so learners cannot see each other's badges.
-**Spec 003's mentor role must grant `moodle/badges:viewotherbadges`, assigned in the learner's
-user context**, so a mentor sees exactly their assigned learners' badges. Managers keep it
+Spec 003's mentor role grants `moodle/badges:viewotherbadges`, and because it is assigned in the
+learner's user context, a mentor sees exactly their assigned learners' badges (and only the ones
+each learner has left public). Managers keep it
 through their archetype. Organisation managers follow completion through spec 004's reports
 instead: a course-context role cannot reach a user-context capability.
 

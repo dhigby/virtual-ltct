@@ -121,7 +121,7 @@ relies on. Each correction resolves a gap found while preparing these tasks.
   - research R2: the decision covers **every** `block_myoverview/displaygrouping*` setting, adding `displaygroupingallincludinghidden = 0` and `displaygroupingcustomfield = 0` to the six.
   - research R4 Verify: "after apply, drift shows no personal dashboards line".
   - research R10: the `ensure_sections` citation is `publish_moodle.py:102-119`, called at `:406-409` (not `:222-224`).
-  - research R8: the course-page hint is dropped (T005 g). FR-007 inside a course is met by the app's native course-menu Download course, which spec 009 keeps enabled (`tool_mobile/disabledfeatures` empty) and V6 step 3 verifies; the Home-tab hint tells the learner where it is.
+  - research R8: the course-page hint is dropped, and FR-007 inside a course is met as T005 (g) states.
   - plan.md Testing and Project Structure: the wording test is `tests/test_learner_wording.py` (pytest), not a PHP unit test in `block_ltuse/tests/`; that folder holds the block's PHPUnit tests.
 
 **Checkpoint**: CI triggers on the new plugin; the contracts say what the code does.
@@ -132,7 +132,7 @@ relies on. Each correction resolves a gap found while preparing these tasks.
 
 **Purpose**: The block plugin, its pin, and the one rule both the block and the hook use.
 US1, US3 and US4 all render through `block_ltuse` and `local_ltuse\learner_home`. US2's
-hook needs `learner_home_rules::is_published_course()`.
+hook needs `learner_home_rules::is_published_course()`. (FR-009, FR-010)
 
 **Ordering note**: pinning `block_ltuse` in `site.yaml` makes every live `apply` refuse
 (`inspector::check_plugin` reports `missing`, blocking) until the block is installed on the
@@ -185,7 +185,7 @@ rule is tested. US1 and US2 can start; US3 and US4 follow US1.
 `calendar_upcoming` (side-pre). The block shows "Start" / "Continue: <lesson>" in one tap, or
 the empty-state message with Contact site support. Learners cannot customise the Dashboard,
 leftover personal dashboards are reset, and the brand colour is SIL Blue. All of it is
-declared and enforced from `moodle/site/`.
+declared and enforced from `moodle/site/`. (FR-001, FR-002, FR-005, FR-013)
 
 **Independent Test**: `python scripts/site_config.py validate`, `python -m pytest -q
 tests/test_site_config.py tests/test_learner_wording.py`, `php tests/learner_home_harness.php`,
@@ -442,7 +442,7 @@ T074–T075 (live).
 
 **Goal**: Each lesson section shows its own `**Estimated time:**` line as the section summary,
 sent one-way by the publisher (R10). Every lesson page on the web ends with "Next: <name>",
-or "Back to the course" on the last one (R6).
+or "Back to the course" on the last one (R6). (FR-003, FR-004, FR-011, FR-013)
 
 **Independent Test**: `python -m pytest -q tests/test_payload_time_text.py tests/test_publish_moodle.py tests/test_payload_completion.py tests/test_learner_wording.py`,
 `php tests/learner_home_harness.php` and `php -l` pass, and in plugin CI the PHPUnit test T037
@@ -571,7 +571,7 @@ the first publish with the new publisher (T004, T073, T074).
 ## Phase 5: User Story 3 — The same experience in the Android app (Priority: P2)
 
 **Goal**: The block renders on the app's Home tab from the same data class, through a
-`CoreBlockDelegate` handler, with the two offline hints shown only in the app (R7, R8).
+`CoreBlockDelegate` handler, with the two offline hints shown only in the app (R7, R8). (FR-006, FR-007)
 
 **Depends on US1**: this story extends the block US1 builds. It needs T029 (state), T030
 (strings) and T031 (`\block_ltuse\output\home::context()`), so it is testable only after them.
@@ -757,7 +757,7 @@ and the live checks that verify row #13.
   If the first drift shows any of `defaulthomepage`, `enabledashboard`, `enablemycourses` or `enablemyhome`, R1's live reading was wrong: record which. Commit only pass/fail.
 - [ ] T075 (live, post-merge) Quickstart V1–V3 with test accounts **A** and **B**: the Start button and the course list only; the empty state and the Contact site support form addressed to the provisioned address; the narrow phone width; no "Customise this page"; All / In progress / Past only; SIL Blue buttons and the pale tinted panel; after lessons 1–2, "Continue: <lesson 3>" in one click.
 - [ ] T076 (live, post-merge) Quickstart V4–V5: each lesson section shows its time; a quiz section shows none; Done / To do; the Retired section is invisible; "Next" twice reaches lesson 3; "Back to the course" on the last module; the app's own arrows. First publish `paratext-quotation-rules` with the new publisher (after T074), and confirm a second publish prints `summaries 0` and `0 updated`. In a dry-run payload of a course with a withheld quiz, the quiz section's `time_text` is `""` and the placeholder page that names who to ask is the section's only module; Next from the last lesson leads to it (spec Edge Cases). Record the app version.
-- [ ] T077 (live, post-merge) Quickstart V6–V7 on an Android device with the Moodle app 5.2.x:
+- [ ] T077 (live, post-merge) Quickstart V6–V7 (SC-004) on an Android device with the Moodle app 5.2.x:
   - the Home tab renders the block at its position;
   - Continue opens the lesson in the app;
   - the hint's menu wording matches the app, or fix `offline:course` / `offline:quiz` and record the app version;

@@ -47,6 +47,13 @@ whether this publish is a delivery and the course's target level; the plugin wor
 pathways the course is on and announces what it joined or left. A delivered course with no
 target level, or competency pathways that read back differently from the map, exits 1.
 
+SECTION SUMMARIES (spec 007). Each section's summary is its lesson's estimated-time line, the
+payload's `time_text`, so a learner sees how long a lesson takes before opening it. The plugin
+writes a summary or a name only when it differs, so an unchanged republish writes no section.
+A server whose local_ltuse predates spec 007 refuses the summary after the course, placement,
+competency and pathway calls have written, so the plugin is deployed first; see
+specs/007-learner-experience/contracts/update-sections.md.
+
 Environment:
     MOODLE_URL, MOODLE_TOKEN    see scripts/moodle_client.py
 
@@ -60,6 +67,7 @@ import re
 import subprocess
 import sys
 import tempfile
+from html import unescape
 
 import yaml
 
@@ -71,6 +79,7 @@ from moodle_xml import quiz_xml  # noqa: E402
 
 REPO = pathlib.Path(__file__).resolve().parent.parent
 MODULE_TOKEN_RE = re.compile(r"@@MODULE:([^@]+)@@")
+TAG_RE = re.compile(r"<[^>]+>")
 WITHHELD_TOKEN = "#@@WITHHELD@@"
 
 if hasattr(sys.stdout, "reconfigure"):
@@ -99,7 +108,11 @@ def verify(payload_root, slug):
     return result.returncode == 0
 
 
-def ensure_sections(client, courseidnumber, count, names):
+SERVER_PREDATES_007 = ("the server's local_ltuse predates spec 007; deploy it before "
+                       "publishing")
+
+
+def ensure_sections(client, courseidnumber, count, sections):
     """Make sure the course has `count` numbered sections, named to match the lessons.
 
     One call, to local_ltuse. This was originally three calls to local_wsmanagesections,
@@ -109,14 +122,34 @@ def ensure_sections(client, courseidnumber, count, names):
     course_update_section(). The publisher now depends on nothing but Moodle core and our
     own plugin.
 
-    Idempotent: sections that already exist are renamed, never appended to.
+    Idempotent: sections that already exist are renamed, never appended to, and the plugin
+    writes a name or a summary only when it differs from what is stored.
+
+    Spec 007: each section's summary is its lesson's estimated-time line, the manifest's
+    `time_text`, sent only when the section has one ("" clears a quiz's). A manifest from
+    before spec 007 has none, sends no summary key, and the plugin leaves summaries alone.
+
+    Returns (summaries sent, the plugin's reply). A plugin older than spec 007 refuses the
+    unknown key as `invalidparameter`; the key's name is only in debuginfo, which Moodle
+    sends only with debugging on, so the errorcode is the test. That exits 1 with a hint.
     """
-    return client.call(
-        "local_ltuse_update_sections",
-        courseidnumber=courseidnumber,
-        numsections=count,
-        sections=[{"number": n, "name": names.get(n, "")}
-                  for n in sorted(names) if names.get(n)])
+    items = []
+    for s in sections:
+        item = {"number": s["number"], "name": s["name"]}
+        if "time_text" in s:
+            item["summary"] = s["time_text"]
+        items.append(item)
+    sent = sum(1 for item in items if "summary" in item)
+    try:
+        reply = client.call("local_ltuse_update_sections", courseidnumber=courseidnumber,
+                            numsections=count, sections=items)
+    except MoodleError as e:
+        if (e.function == "local_ltuse_update_sections"
+                and e.errorcode == "invalidparameter" and sent):
+            print("\n%s:\n  %s" % (SERVER_PREDATES_007, e), file=sys.stderr)
+            raise SystemExit(1)
+        raise
+    return sent, reply
 
 
 # No groups: shared courses are open across organisations (spec 002 R3, amended
@@ -403,10 +436,17 @@ def publish(client, payload_dir, category_id):
     ensure_competencies(client, manifest, courseid, problems)
     ensure_pathway(client, manifest, courseid, problems)
 
-    names ={s["number"]: s["name"] for s in manifest["sections"]}
-    ensure_sections(client, manifest["idnumber"], len(manifest["sections"]),
-                    names)
+    sent_summaries, reply = ensure_sections(client, manifest["idnumber"],
+                                            len(manifest["sections"]), manifest["sections"])
     print("  sections  %d" % len(manifest["sections"]))
+    # A dry run counts what it would send; a publish, what the plugin actually wrote.
+    print("  summaries %d" % (sent_summaries if client.dry_run
+                              else (reply or {}).get("summaries", sent_summaries)))
+    if client.dry_run:
+        for s in manifest["sections"]:
+            if "time_text" in s:
+                text = unescape(TAG_RE.sub("", s["time_text"])).strip()
+                print("    summary %d  %s" % (s["number"], text or "(none: cleared)"))
 
     # --- what is already on the server ---------------------------------------------------
     # Existing course-module ids and each page's files, from one read call. This is what

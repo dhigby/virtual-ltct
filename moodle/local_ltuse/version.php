@@ -9,12 +9,17 @@
 defined('MOODLE_INTERNAL') || die();
 
 $plugin->component = 'local_ltuse';
-$plugin->version   = 2026100900;   // Identity protection (spec 016): two tables
+$plugin->version   = 2026100901;   // Simple learner experience (spec 007): the Next button
+                                   // (the before_footer_html_generation
+                                   // hook), learner_home, the dashboard declaration and
+                                   // update_sections' summary parameter. No schema, so no
+                                   // savepoint. Before it, identity protection (spec 016,
+                                   // 2026100900): two tables
                                    // (local_ltuse_protection, _protection_log), two
                                    // capabilities, the before_user_updated hook, two
                                    // observers, two tasks, one web service and the
                                    // protectionchanged message. db/upgrade.php saves its
-                                   // savepoint at this stamp, after administration's.
+                                   // savepoint at 2026100900, after administration's.
                                    // Before it, administration (spec 008, 2026100801): the
                                    // ltuse_admin service, the local/ltuse:administer
                                    // capability and the coursementorsync setting
@@ -62,7 +67,7 @@ $plugin->requires  = 2026042000;   // Moodle 5.2 -- the release this was
 $plugin->supported = [502, 502];
 
 $plugin->maturity  = MATURITY_ALPHA;
-$plugin->release   = '0.13.0';   // Spec 016. 0.12.0 is main's release before it.
+$plugin->release   = '0.14.0';   // Spec 007. 0.13.0 (spec 016) is main's release before it.
 
 // No third-party dependencies, deliberately. Sections were originally going to be
 // local_wsmanagesections' job, but it could not be installed here, so local_ltuse grew an

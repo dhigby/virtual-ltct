@@ -249,8 +249,8 @@ class MoodleClient:
 
 
 # Every function scripts/publish_moodle.py calls. Spec 009 added parameters to two of them
-# but no new names; spec 004 added set_course_completion and set_course_competencies, and
-# spec 002 R11 added place_course.
+# but no new names; spec 004 added set_course_completion and set_course_competencies,
+# spec 002 R11 added place_course, and spec 007 added a parameter to update_sections.
 REQUIRED_FUNCTIONS = (
     "local_ltuse_get_course_manifest", "local_ltuse_create_page",
     "local_ltuse_update_sections",

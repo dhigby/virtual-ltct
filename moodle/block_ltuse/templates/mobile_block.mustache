@@ -1,0 +1,89 @@
+{{!
+    @template block_ltuse/mobile_block
+
+    The learner home block on the Moodle app's Home tab (spec 007, R7 and R8; contracts/learner-ui.md).
+    Ionic markup, not Bootstrap. The same context as block_ltuse/block, built by
+    \block_ltuse\output\home::context() from local_ltuse\learner_home::state(), so the app shows
+    the same mode as the web. Links are core-link with capture="true", so a lesson opens in the
+    app's own module page and not the browser. Beneath any mode, the onward routes under an
+    ion-item-divider "Where next", when there are any. Beneath the rest, the two offline hints,
+    in Ionic's muted colour rather than a CSS text colour (R11). Styled by div.ltuse-home in
+    local_ltuse/styles.css, which the app reads through mobilecssurl. No images.
+
+    Context variables required for this template:
+    * route: {coursename, label, url} to continue or start, or null. coursename and label carry
+        format_string() output, so they are HTML and output unescaped
+    * empty: {text, who, supportlabel, supporturl} when the learner has no course, or null
+    * done: {text} when every course is finished, or null
+    * onward: {heading, pathways: [{label, url}], mentors: [{label, url}], community: {label, url}
+        or null}, the routes beneath any mode under "Where next", or null when there are none.
+        Each label carries a name already made safe, so it is HTML and output unescaped
+    * app: true
+
+    Example context (json):
+    {
+        "route": {"coursename": "Course: Fixture course", "label": "Continue: Fixture lesson 3",
+            "url": "https://example.org/mod/page/view.php?id=3"},
+        "empty": null,
+        "done": null,
+        "onward": null,
+        "app": true
+    }
+}}
+{{=<% %>=}}
+<div class="ltuse-home">
+<%#route%>
+<ion-item class="ion-text-wrap" lines="none">
+    <ion-label>
+        <p ngNonBindable><%{ coursename }%></p>
+    </ion-label>
+</ion-item>
+<ion-button expand="block" class="ion-text-wrap" href="<% url %>" core-link capture="true">
+    <span ngNonBindable><%{ label }%></span>
+</ion-button>
+<%/route%>
+<%#empty%>
+<ion-item class="ion-text-wrap" lines="none">
+    <ion-label>
+        <p ngNonBindable><% text %></p>
+        <p ngNonBindable><% who %></p>
+        <p><a href="<% supporturl %>" core-link capture="true" ngNonBindable><% supportlabel %></a></p>
+    </ion-label>
+</ion-item>
+<%/empty%>
+<%#done%>
+<ion-item class="ion-text-wrap" lines="none">
+    <ion-label>
+        <p ngNonBindable><% text %></p>
+    </ion-label>
+</ion-item>
+<%/done%>
+<%#onward%>
+<div class="ltuse-onward">
+<ion-item-divider>
+    <ion-label><h2 ngNonBindable><% heading %></h2></ion-label>
+</ion-item-divider>
+<%#pathways%>
+<ion-item class="ion-text-wrap" lines="none">
+    <ion-label><p><a href="<% url %>" core-link capture="true" ngNonBindable><%{ label }%></a></p></ion-label>
+</ion-item>
+<%/pathways%>
+<%#mentors%>
+<ion-item class="ion-text-wrap" lines="none">
+    <ion-label><p><a href="<% url %>" core-link capture="true" ngNonBindable><%{ label }%></a></p></ion-label>
+</ion-item>
+<%/mentors%>
+<%#community%>
+<ion-item class="ion-text-wrap" lines="none">
+    <ion-label><p><a href="<% url %>" core-link capture="true" ngNonBindable><%{ label }%></a></p></ion-label>
+</ion-item>
+<%/community%>
+</div>
+<%/onward%>
+<ion-item class="ion-text-wrap" lines="none">
+    <ion-label>
+        <p><ion-text color="medium"><%#str%>offline:course, block_ltuse<%/str%></ion-text></p>
+        <p><ion-text color="medium"><%#str%>offline:quiz, block_ltuse<%/str%></ion-text></p>
+    </ion-label>
+</ion-item>
+</div>

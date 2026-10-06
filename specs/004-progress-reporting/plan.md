@@ -136,7 +136,7 @@ These were reviewed on 2026-10-02, after the first draft of this plan.
 
 | # | Limit | Status |
 |---|---|---|
-| 1 | No "go to my next lesson" link. Core gives the My courses progress bar and Done / To do on the course page. The link goes to spec 007 if SC-004's learners need it (R6). | **Pending the maintainer (Doug).** |
+| 1 | No "go to my next lesson" link. Core gives the My courses progress bar and Done / To do on the course page. The link goes to spec 007 if SC-004's learners need it (R6). | Handed to spec 007, which builds the link now in its learner home block ([007 plan decision 1](../007-learner-experience/plan.md#decisions-to-confirm-with-the-maintainer), [research R3](../007-learner-experience/research.md#r3-continue-where-you-left-off-has-no-core-implementation)) and owns the My courses groupings ([007 R2](../007-learner-experience/research.md#r2-which-dashboard-blocks-stay)). **Pending the maintainer (Doug)**: confirming 007's decision 1. |
 | 2 | Managers cannot subscribe themselves to the weekly email. Every manager of an organisation receives it, and per-person opt-in would need a `:subscribers` cohort per organisation (R12). | **Pending the maintainer (Doug).** |
 | 3 | The organisation report shows progress as a percentage, not "4 of 6 lessons". The per-lesson detail is in core's in-course reports (R8). | Accepted. |
 | 4 | Per-competency counts one competency at a time. | **Rejected and redesigned.** R15 now gives one table with a row for each of the 42 framework competencies, built on a `local_ltuse` datasource. The design was chosen from three candidates: core only, our own datasource, and core competencies. |

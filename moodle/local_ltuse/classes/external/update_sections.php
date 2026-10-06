@@ -31,6 +31,12 @@ use local_ltuse\util;
  *
  * Idempotent. Sections already present are left alone and simply renamed, so a republish
  * never appends a second set.
+ *
+ * Spec 007 R10 adds each section's summary: the lesson's Estimated time line, sent by the
+ * publisher (contracts/update-sections.md). A name or a summary is written only when it
+ * differs from what is stored, so an unchanged republish writes no section. An absent
+ * summary is left untouched, which keeps callers that predate it working; an empty one
+ * clears it.
  */
 class update_sections extends external_api {
 
@@ -43,6 +49,8 @@ class update_sections extends external_api {
                 new external_single_structure([
                     'number' => new external_value(PARAM_INT, 'Section number'),
                     'name' => new external_value(PARAM_TEXT, 'Section name'),
+                    'summary' => new external_value(PARAM_RAW,
+                        'section summary HTML, FORMAT_HTML; absent leaves it untouched', VALUE_OPTIONAL),
                 ]),
                 'Sections to name', VALUE_DEFAULT, []
             ),
@@ -79,9 +87,15 @@ class update_sections extends external_api {
             course_create_sections_if_missing($course, range(0, $params['numsections']));
         }
 
+        // Name and summary are decided separately, and each is written only when it differs
+        // from what is stored. Stored values are compared as strings, so a NULL equals ''.
+        // validate_parameters() keeps an absent VALUE_OPTIONAL key absent, so
+        // array_key_exists() tells "leave the summary" from "clear it".
         $renamed = 0;
+        $summaries = 0;
         foreach ($params['sections'] as $s) {
-            if ($s['name'] === '') {
+            $hassummary = array_key_exists('summary', $s);
+            if ($s['name'] === '' && !$hassummary) {
                 continue;
             }
             $record = $DB->get_record('course_sections',
@@ -89,8 +103,21 @@ class update_sections extends external_api {
             if (!$record) {
                 continue;
             }
-            course_update_section($course, $record, (object)['name' => $s['name']]);
-            $renamed++;
+            $data = [];
+            if ($s['name'] !== '' && $s['name'] !== (string)$record->name) {
+                $data['name'] = $s['name'];
+            }
+            if ($hassummary && ($s['summary'] !== (string)$record->summary
+                    || (int)$record->summaryformat !== (int)FORMAT_HTML)) {
+                $data['summary'] = $s['summary'];
+                $data['summaryformat'] = FORMAT_HTML;
+            }
+            if (!$data) {
+                continue;
+            }
+            course_update_section($course, $record, (object)$data);
+            $renamed += isset($data['name']) ? 1 : 0;
+            $summaries += isset($data['summary']) ? 1 : 0;
         }
 
         $after = (int)$DB->get_field_sql(
@@ -102,6 +129,7 @@ class update_sections extends external_api {
             'sectionsbefore' => $before,
             'sectionsafter' => $after,
             'renamed' => $renamed,
+            'summaries' => $summaries,
         ];
     }
 
@@ -110,7 +138,8 @@ class update_sections extends external_api {
             'courseid' => new external_value(PARAM_INT, 'Course id'),
             'sectionsbefore' => new external_value(PARAM_INT, 'Highest section number before'),
             'sectionsafter' => new external_value(PARAM_INT, 'Highest section number after'),
-            'renamed' => new external_value(PARAM_INT, 'How many sections were named'),
+            'renamed' => new external_value(PARAM_INT, 'names actually written'),
+            'summaries' => new external_value(PARAM_INT, 'summaries actually written'),
         ]);
     }
 }

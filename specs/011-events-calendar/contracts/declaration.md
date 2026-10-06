@@ -7,7 +7,7 @@ This extends [spec 001's declaration contract](../../001-site-config-as-code/con
 | File | Holds |
 |---|---|
 | `moodle/site/office-hours.yaml` | The office-hours course, its scheduler activity and the group name template (R16, R19). |
-| `moodle/site/dashboard.yaml` | The blocks the default dashboard must carry: `calendar_upcoming` (R18). |
+| `moodle/site/dashboard.yaml` | The blocks the default dashboard must carry: `calendar_upcoming` (R18). [spec 007's dashboard contract](../../007-learner-experience/contracts/dashboard-declaration.md) makes it the whole default dashboard, in order. |
 | `moodle/site/settings/calendar.yaml` | `enablecalendarexport`, `calendar_customexport`, `calendar_adminseesall`, `timezone: UTC`, `forcetimezone: 99` (R12, D7). Cites row 21. |
 | `moodle/site/settings/scheduler.yaml` | The six `mod_scheduler/*` site settings (R19). Cites row 21. |
 
@@ -34,7 +34,7 @@ This extends [spec 001's declaration contract](../../001-site-config-as-code/con
 Two arrays are handled after spec 013's:
 
 1. **`officehours`**: the rendered `office-hours.yaml`, with `guardtime` in seconds. The category is resolved by its `ltct:` idnumber.
-2. **`dashboard`**: the list of `{block, region}`.
+2. **`dashboard`**: the list of `{block, region}`. Since [spec 007's dashboard contract](../../007-learner-experience/contracts/dashboard-declaration.md), an item may also carry `weight`, and two sibling keys follow it: `dashboard_complete` and `dashboard_personal`.
 
 `apply`:
 - **`officehours`**:
@@ -42,7 +42,7 @@ Two arrays are handled after spec 013's:
   - It creates the scheduler with `create_module()` when no course module in the course has the idnumber `ltct:officehours:scheduler`, and otherwise sets its declared instance values and its course-module group mode. A new scheduler's group mode is set again straight after creation, with `\core_courseformat\formatactions::cm($courseid)->set_groupmode()`, because the new module does not keep the group mode it was created with: the first apply on ltuse.net, on 2026-10-05, left it at 0 (#97).
   - It ensures the course has exactly one manual enrolment instance named `ltct:officehours`, adding it with `add_instance()`.
   - It then runs `\local_ltuse\officehours::reconcile()` once and reports counts only (`groups 4, members +2 −0, enrolments suspended 1`).
-- **`dashboard`**: for each declared block not already on the default `my-index` page, it calls `add_region($region)` on a bare `moodle_page`'s block manager and then `add_block()` there, with the default `my_pages` row as the subpage. A bare page has no layout, so its block manager knows no region until one is added, and `add_block()` refuses every region as unknown; core does the same in `blocks/timeline/db/install.php` (MOODLE_502_STABLE) (`moodle/local_ltuse/classes/siteconfig/dashboard.php` `apply()`; #98, 2026-10-05). It never removes a block and never resets a user's own dashboard.
+- **`dashboard`**: for each declared block not already on the default `my-index` page, it calls `add_region($region)` on a bare `moodle_page`'s block manager and then `add_block()` there, with the default `my_pages` row as the subpage. A bare page has no layout, so its block manager knows no region until one is added, and `add_block()` refuses every region as unknown; core does the same in `blocks/timeline/db/install.php` (MOODLE_502_STABLE) (`moodle/local_ltuse/classes/siteconfig/dashboard.php` `apply()`; #98, 2026-10-05). It never removes a block and never resets a user's own dashboard, unless spec 007's keys say so: `complete: true` removes every undeclared block from the default page, and `personal_dashboards: reset` resets personal dashboards ([spec 007's dashboard contract](../../007-learner-experience/contracts/dashboard-declaration.md)).
 - **Settings**: applied as 001 applies any setting. As with spec 013's plugins, `mod_scheduler` is installed before `apply` runs. Until it is, its settings are `unknown`, which stops the run.
 
 `drift`:
@@ -68,5 +68,5 @@ These are the rules in data-model.md, plus:
 - the group name template holds `{n}` and no name placeholder;
 - `orgmanager` holds no calendar capability other than `manageentries`;
 - `student` does not allow `mod/scheduler:seeotherstudentsbooking`;
-- `dashboard.yaml` names no block twice;
+- `dashboard.yaml` names no block twice, and [spec 007's dashboard contract](../../007-learner-experience/contracts/dashboard-declaration.md) adds its own rules for `ltuse`, pinned blocks and `personal_dashboards`;
 - `hiddenuserfields` (`settings/groups.yaml`) never contains `timezone`, so the profile always shows the zone (R14).

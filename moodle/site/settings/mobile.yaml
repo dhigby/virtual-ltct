@@ -15,7 +15,7 @@ settings:
     value: 1
     why: Without it the app is refused at sign-in, and a consultant in the field has no offline course.
   - name: mobilecssurl
-    value: env:MOODLE_URL/local/ltuse/styles.css?v=2
+    value: env:MOODLE_URL/local/ltuse/styles.css?v=3
     why: >-
       Published pages use callout classes that only local_ltuse's stylesheet styles. Without
       it the app shows them as plain text. The app applies it only on the Premium app plan

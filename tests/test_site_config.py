@@ -1511,12 +1511,12 @@ class Reports(ReportsBase):
         self.assertIn(delivery, prog["conditions"])
         # Spec 004's arrays in apply order, then spec 013's two after reports, then spec 011's,
         # then spec 016's protection last. Spec 006 puts levels and role_pathways between
-        # competencies and reports.
-        self.assertEqual(list(self.payload())[-11:],
+        # competencies and reports; spec 007 puts dashboard's two siblings right after it.
+        self.assertEqual(list(self.payload())[-13:],
                          ["course_field_category", "course_fields", "competencies", "levels",
                           "role_pathways", "reports",
                           "badge_template", "certificate_template", "officehours", "dashboard",
-                          "protection"])
+                          "dashboard_complete", "dashboard_personal", "protection"])
 
     def test_tracked_delivery_condition(self):
         # Spec 002 R10: a manager's enrolment (the organisation-enrolment instance, enrol_self)
@@ -1978,6 +1978,14 @@ ignore:
   - setting: calendar_exportsalt
     reason: per install
 """
+# Spec 007: the tracked dashboard.yaml places block_ltuse, which validate accepts only when it
+# is pinned. Built like SCHEDULER_PIN, from the stamp in the repo's own version.php.
+BLOCK_PIN = """\
+  - component: block_ltuse
+    version: %s
+    source: {path: moodle/block_ltuse}
+    why: "#13"
+""" % sc._php_stamp(REPO / "moodle" / "block_ltuse" / "version.php", "version")
 
 
 class EventsAbsent(Base):
@@ -1991,6 +1999,9 @@ class EventsAbsent(Base):
         payload = sc.build_payload(decl, "apply", {})
         self.assertIsNone(payload["officehours"])
         self.assertEqual(payload["dashboard"], [])
+        # Spec 007: the two sibling keys default to 011's additive, keep-everything behaviour.
+        self.assertIs(payload["dashboard_complete"], False)
+        self.assertEqual(payload["dashboard_personal"], "keep")
 
 
 class Events(Base):
@@ -1999,7 +2010,7 @@ class Events(Base):
     def setUp(self):
         super().setUp()
         site = REPO / "moodle" / "site"
-        self.write("site.yaml", SITE.format(ver=VER, sha="a" * 64) + SCHEDULER_PIN)
+        self.write("site.yaml", SITE.format(ver=VER, sha="a" * 64) + SCHEDULER_PIN + BLOCK_PIN)
         self.write("ignore.yaml", NO_TIMEZONE_IGNORE)
         self.edit("organisations.yaml", "organisations:\n  - key: independent",
                   MENTORING_CATEGORY + "organisations:\n  - key: independent")
@@ -2015,10 +2026,16 @@ class Events(Base):
         self.assertEqual(hours["course"]["category_idnumber"], "ltct:mentoring")
         self.assertEqual(hours["scheduler"]["guardtime"], 12 * 3600)   # decision 3
         self.assertEqual(hours["scheduler"]["allownotifications"], 0)  # R20
-        self.assertEqual(decl["dashboard"], [{"block": "calendar_upcoming", "region": "side-pre"}])
+        # Spec 007 (contracts/dashboard-declaration.md): weight only where it is declared.
+        self.assertEqual(decl["dashboard"], [
+            {"block": "ltuse", "region": "content", "weight": 0},
+            {"block": "myoverview", "region": "content", "weight": 1},
+            {"block": "calendar_upcoming", "region": "side-pre"}])
         payload = sc.build_payload(decl, "apply", {})
         self.assertEqual(payload["officehours"], hours)
         self.assertEqual(payload["dashboard"], decl["dashboard"])
+        self.assertIs(payload["dashboard_complete"], True)
+        self.assertEqual(payload["dashboard_personal"], "reset")
         self.assertNotIn("guardtime_hours", json.dumps(payload))
 
     def test_office_hours_rules(self):
@@ -2102,6 +2119,76 @@ class Events(Base):
         self.write("settings/hidden.yaml", "rows: [21]\npurpose: x\nsettings:\n"
                    "  - name: hiddenuserfields\n    value: \"icqnumber,timezone\"\n    why: x\n")
         self.assertInvalid("hiddenuserfields must not hide timezone")
+
+
+class Dashboard007(Events):
+    """Spec 007's amended dashboard (contracts/dashboard-declaration.md) and its settings file,
+    then one broken rule at a time (T013)."""
+
+    MANAGEBLOCKS = "      moodle/my:manageblocks: prevent"
+
+    def setUp(self):
+        super().setUp()
+        rel = "settings/learner-experience.yaml"
+        self.write(rel, (REPO / "moodle" / "site" / rel).read_text(encoding="utf-8"))
+
+    def test_the_tracked_files_are_accepted(self):
+        self.assertAccepted()
+
+    def test_ltuse_must_be_pinned(self):
+        self.write("site.yaml", SITE.format(ver=VER, sha="a" * 64) + SCHEDULER_PIN)
+        self.assertInvalid("site.yaml")
+
+    def test_the_amended_dashboard_rules(self):
+        ltuse = "  - block: ltuse\n    region: content\n    weight: 0\n"
+        cases = [
+            ("unknown block", "block: myoverview", "block: nosuchblock", "nosuchblock"),
+            ("named twice", "block: myoverview", "block: calendar_upcoming", "twice"),
+            ("side-post", "region: side-pre", "region: side-post", "region is one of"),
+            ("weight one", "weight: 1", "weight: one", "weight"),
+            ("weight -1", "weight: 1", "weight: -1", "weight"),
+            ("complete yes-please", "complete: true", "complete: yes-please", "complete"),
+            ("complete 1", "complete: true", "complete: 1", "complete"),
+            ("wipe", "personal_dashboards: reset", "personal_dashboards: wipe",
+             "personal_dashboards"),
+            ("ltuse at 1", ltuse, ltuse.replace("weight: 0", "weight: 1"), "ltuse"),
+            ("ltuse in side-pre", ltuse, ltuse.replace("region: content", "region: side-pre"),
+             "ltuse"),
+            ("layout", "personal_dashboards: reset", "personal_dashboards: reset\nlayout: grid",
+             "layout"),
+        ]
+        for label, old, new, needle in cases:
+            with self.subTest(change=label):
+                self.reset()
+                self.edit("dashboard.yaml", old, new)
+                self.assertInvalid(needle)
+
+    def test_a_reset_needs_editing_prevented(self):
+        roles = (self.dir / "roles.yaml").read_text()
+        self.assertIn(self.MANAGEBLOCKS + "\n", roles)
+        for replacement in ("", "      moodle/my:manageblocks: prohibit"):
+            with self.subTest(replacement=replacement):
+                self.reset()
+                self.edit("roles.yaml", self.MANAGEBLOCKS, replacement)
+                self.assertInvalid("moodle/my:manageblocks")
+
+    def test_an_unquoted_colour_is_no_value(self):
+        self.edit("settings/learner-experience.yaml", 'value: "#005CB9"', "value: #005CB9")
+        self.assertInvalid("no value")
+
+    def test_the_home_page_has_one_home(self):
+        self.edit("settings/test.yaml", "settings:\n",
+                  "settings:\n  - name: defaulthomepage\n    value: 1\n    why: again\n")
+        self.assertInvalid("defaulthomepage is already declared")
+
+    def test_the_support_address_is_never_in_the_repo(self):
+        path = REPO / "moodle" / "site" / "settings" / "learner-experience.yaml"
+        data = yaml.safe_load(path.read_text(encoding="utf-8"))
+        support = [s for s in data["settings"] if s["name"] == "supportemail"]
+        self.assertEqual(len(support), 1)
+        value = support[0]["value"]
+        self.assertTrue(value.startswith("env:"), value)
+        self.assertNotIn("@", value)
 
 
 class OrgManagerCalendar(Base):

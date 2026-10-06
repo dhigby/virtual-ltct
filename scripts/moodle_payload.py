@@ -186,9 +186,51 @@ def title_of(md_text, fallback):
     return m.group(1).strip() if m else fallback
 
 
+H2_RE = re.compile(r"^## ", re.M)
+
+
+def header_of(md_text):
+    """The lesson header: the text after the frontmatter and before the first `## ` heading.
+
+    Where CLAUDE.md puts `**Estimated time:**`, right under the H1. Nothing past it, so a
+    line inside a quiz's `## Answer key` or a mentor-only block can never be read as the
+    time: both markers are H2s (disclosure.py). "" if the header itself carries anything that
+    looks like a key or mentor marker, so this fails closed like the page does.
+    """
+    body = md_text
+    if body.startswith("---"):
+        # Cut, not parsed: a lesson's time must not hang on its frontmatter being valid YAML.
+        end = body.find("\n---", 3)
+        body = body[end + 4:] if end != -1 else body
+    h2 = H2_RE.search(body)
+    head = body[:h2.start()] if h2 else body
+    if disclosure.RESIDUAL_RE.search(head) or disclosure.RESTRICTED_RESIDUAL_RE.search(head):
+        return ""
+    return head
+
+
 def minutes_of(md_text):
-    m = TIME_RE.search(md_text)
+    m = TIME_RE.search(header_of(md_text))
     return int(m.group(1)) if m else None
+
+
+def time_text_of(raw):
+    """A section's `**Estimated time:**` line alone, rendered: its summary (spec 007, R10).
+
+    The whole source line, so a scenario bank's "15 minutes to read through and orient
+    (...)" keeps its words, and only that line, so a header with no blank line after it
+    does not pull Target Audience in with it. Rendered but never wrap()ped: a section
+    summary sits outside the page. Read from the header only (header_of()), never from the
+    body, so an answer key's text cannot reach a learner-visible summary. "" when the header
+    has no such line, as a quiz has not.
+    """
+    head = header_of(raw)
+    m = TIME_RE.search(head)
+    if not m:
+        return ""
+    start = head.rfind("\n", 0, m.start()) + 1
+    end = head.find("\n", m.start())
+    return render(head[start:end if end != -1 else len(head)].strip())
 
 
 def module_key(filename):
@@ -298,6 +340,7 @@ class Payload:
                 "number": n,
                 "name": title_of(raw, p.stem),
                 "minutes": minutes_of(raw),
+                "time_text": time_text_of(raw),
                 "modules": [mod],
             })
             pages[mod["html_file"]] = html
@@ -309,13 +352,15 @@ class Payload:
             if p.name.endswith("-quiz.md"):
                 quiz_mods, quiz_pages, quiz_defs = self._quiz(p, raw, n)
                 sections.append({"number": n, "name": title_of(raw, p.stem),
-                                 "minutes": minutes_of(raw), "modules": quiz_mods})
+                                 "minutes": minutes_of(raw), "time_text": time_text_of(raw),
+                                 "modules": quiz_mods})
                 pages.update(quiz_pages)
                 quizzes.extend(quiz_defs)
                 continue
             mod, html = self._page(p, asset_by_rel, module_ids, excluded_names, used_assets)
             sections.append({"number": n, "name": title_of(raw, p.stem),
-                             "minutes": minutes_of(raw), "modules": [mod]})
+                             "minutes": minutes_of(raw), "time_text": time_text_of(raw),
+                             "modules": [mod]})
             pages[mod["html_file"]] = html
 
         readme = self.folder / "README.md"

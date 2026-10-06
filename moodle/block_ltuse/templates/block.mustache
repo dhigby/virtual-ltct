@@ -1,0 +1,62 @@
+{{!
+    @template block_ltuse/block
+
+    The learner home block on the web Dashboard (spec 007, contracts/learner-ui.md): one way
+    into a course, or the empty state with who to ask, or done; beneath any of them, under
+    "Where next" (div.ltuse-onward), the onward routes when there are any. Built by
+    \block_ltuse\output\home::context() from local_ltuse\learner_home::state(); every word is
+    a lang string. Styled by div.ltuse-home in local_ltuse/styles.css. Phone-width first: the
+    button wraps rather than overflows.
+
+    Context variables required for this template:
+    * route: {coursename, label, url} to continue or start, or null. coursename and label carry
+        format_string() output, so they are HTML and output unescaped
+    * empty: {text, who, supportlabel, supporturl} when the learner has no course, or null
+    * done: {text} when every course is finished, or null
+    * onward: {heading, pathways: [{label, url}], mentors: [{label, url}], community: {label, url}
+        or null}, the routes beneath any mode under "Where next", or null when there are none.
+        Each label carries a name already made safe, so it is HTML and output unescaped
+
+    Example context (json):
+    {
+        "route": {"coursename": "Course: Fixture course", "label": "Continue: Fixture lesson 3",
+            "url": "https://example.org/mod/page/view.php?id=3"},
+        "empty": null,
+        "done": null,
+        "onward": {"heading": "Where next",
+            "pathways": [{"label": "Next on your pathway: Fixture course B",
+                "url": "https://example.org/course/view.php?id=4"}],
+            "mentors": [{"label": "Message Fixture Mentor", "url": "https://example.org/message/index.php?id=5"}],
+            "community": {"label": "Community: Fixture community", "url": "https://example.org/community"} }
+    }
+}}
+<div class="ltuse-home">
+{{#route}}
+    <p class="small mb-2">{{{coursename}}}</p>
+    <a class="btn btn-primary" href="{{url}}">{{{label}}}</a>
+{{/route}}
+{{#empty}}
+    <p>{{text}}</p>
+    <p>{{who}}</p>
+    <p class="mb-0"><a href="{{supporturl}}">{{supportlabel}}</a></p>
+{{/empty}}
+{{#done}}
+    <p class="mb-0">{{text}}</p>
+{{/done}}
+{{#onward}}
+    <div class="ltuse-onward">
+        <h3 class="h6 mb-2">{{heading}}</h3>
+        <ul class="list-unstyled mb-0">
+            {{#pathways}}
+            <li><a href="{{url}}">{{{label}}}</a></li>
+            {{/pathways}}
+            {{#mentors}}
+            <li><a href="{{url}}">{{{label}}}</a></li>
+            {{/mentors}}
+            {{#community}}
+            <li><a href="{{url}}">{{{label}}}</a></li>
+            {{/community}}
+        </ul>
+    </div>
+{{/onward}}
+</div>

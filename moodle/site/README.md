@@ -19,7 +19,8 @@ the pull request that adds a setting is the record of why it exists.
 | `reports.yaml` | The report builder reports: one learner-progress report per organisation, for its managers, with a weekly email; and three for the site team (completions per course, the competencies published courses aim at, and the pilots). |
 | `settings/completion.yaml` | Completion switched on for the site and for new courses, with each lesson's completion conditions shown on the course page. |
 | `office-hours.yaml` | The one course where mentors offer office hours and learners book them, and its booking activity (spec 011). |
-| `dashboard.yaml` | Blocks every learner's default dashboard carries: Upcoming events (spec 011). |
+| `dashboard.yaml` | The whole default Dashboard: the learner home block, the course list, Upcoming events (specs 007, 011). |
+| `settings/learner-experience.yaml` | What a learner lands on: the Dashboard as the home page, the course list's views, the brand colour and Contact site support (spec 007). |
 | `settings/calendar.yaml` | Calendar export, and the site's default time zone, UTC (spec 011). |
 | `pathways.yaml` | Role pathways: a named set of competencies a role needs (spec 006). Empty until a role is supplied. |
 | `badges.yaml`, `badges/` | The one completion badge template and its image, rendered into every delivered course's badge (spec 013). |
@@ -68,6 +69,11 @@ pinned with `version` (its `$plugin->version`) and a `source` (`url` plus a quot
 Apply never installs, upgrades or downgrades plugin code: it refuses a mismatch, naming both
 releases. To move a pin, verify the new release on the test instance, install it there, and
 raise the pin in the same pull request.
+
+A plugin of our own, kept in this repo (`local_ltuse`, `block_ltuse`), is pinned with
+`version` and `source: {path: moodle/<plugin>}` in place of `url` and `sha256`. `validate`
+refuses the pin unless `version` equals the `$plugin->version` in that folder's `version.php`,
+so raise both in the same change, then deploy the folder before running `apply`.
 
 **A role** goes in `roles.yaml`. A role with an `archetype`, such as `manager` or
 `editingteacher`, is Moodle's own: only the capabilities you list are managed, and its other
@@ -121,6 +127,10 @@ On ltuse.net, `drift` after `apply` on 2026-10-05 reported 16 differences and 25
 - **The `test-a` and `test-b` fixtures (12)**: their 2 organisation-field options, 2 categories, 4 cohorts (learner and managers for each), 2 cohort rules and 2 progress reports, reported as `extra`. They are kept on purpose until spec 002's T081 and spec 013's instance checks have passed.
 - **A discussion forum missing (3)** in courses published before spec 002's open-courses change: `coretech-computer-hardware`, `paratext-quotation-rules` and `software-support-and-troubleshooting-for-translation-teams`. Republishing a course creates its forum; `apply` never does.
 - **`badges_defaultissuercontact` (1)**, when `MOODLE_BADGE_CONTACT` is not set in the shell that runs `drift`.
+- **`supportemail` (1)**, when `MOODLE_SUPPORT_EMAIL` is not set in the shell that runs `drift`, as for `badges_defaultissuercontact`.
+
+`dashboard personal dashboards` is not on this list. Once an `apply` has reset them, a learner
+cannot make another, so it does not appear; if it does, it is a real difference.
 
 Anything else is a real difference. When one of these is resolved, take it off this list.
 
@@ -499,3 +509,45 @@ mentor. `apply` creates it, and `local_ltuse` keeps it filled.
 A learner or mentor who leaves is suspended in the course, never removed, so their past
 appointments stay. Who booked what is learner data, so it stays in Moodle and its privacy
 export.
+
+## The learner experience
+
+Row #13 (spec 007). A learner signs in to the **Dashboard**, and so does the app's Home tab.
+My courses and the site home are switched off (`settings/learner-experience.yaml`), so there
+is one place to start. The Dashboard holds three blocks, and nothing else (`dashboard.yaml`):
+
+- **Learner home** (`block_ltuse`): one button into the next lesson ("Continue" or "Start"),
+  a message when every course is finished, and, for a learner with no course yet, who to ask:
+  their organisation's coordinator, by role and never by name, and **Contact the site team**.
+  Beneath it are the onward routes: the next course on their pathway and a message link to
+  each of their mentors.
+- **The course list**, with each course's progress, offering All, In progress and Past only.
+- **Upcoming events** (spec 011).
+
+Inside a course, each lesson shows its time and its Done / To do state, and every lesson page
+ends with a **Next** button. The site wears SIL Blue, `#005CB9`.
+
+**Why learners cannot edit the Dashboard.** `roles.yaml` prevents `moodle/my:manageblocks`
+for the authenticated-user role. A learner who moved or added a block would keep their own
+copy of the page, and every later change to `dashboard.yaml` would pass them by, so a rebuilt
+server would no longer show everyone the same thing. The site team edits the default Dashboard
+through `moodle/my:configsyspages`, which this does not touch. No archetype but the user role
+grants `manageblocks`, so a non-admin manager's own Dashboard is locked as well. It is
+`prevent`, not `prohibit`, because a role that explicitly allows the capability can still give
+editing back, and nothing can override a prohibit.
+
+**`complete: true`** makes `dashboard.yaml` the whole default Dashboard. `apply` removes any
+other block from the default page, in any region, which is what takes away Timeline, the month
+calendar and Recently accessed items. To add a block, declare it: one added by hand shows in
+`drift` as `extra` and is removed by the next `apply`. It never touches a block on any other
+page, and never changes a block's settings.
+
+**`personal_dashboards: reset`** makes `apply` reset every learner's own copy of the
+Dashboard to the default, with core's reset. It cannot be undone, and `validate` refuses it
+unless `roles.yaml` prevents editing; `apply` also refuses it while editing is still allowed
+on the server. `drift` reports how many own copies there are, as a number, never who.
+
+**`MOODLE_SUPPORT_EMAIL`** is where **Contact the site team** sends: core's Contact site
+support form, open to signed-in users only. It is a provisioning value each server is given,
+like the host in `mobilecssurl`. Set it in the shell that runs `apply`, to a shared site-team
+address. Never write an address into this repo, because it is public.

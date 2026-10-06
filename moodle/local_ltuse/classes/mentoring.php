@@ -344,10 +344,16 @@ class mentoring {
     /**
      * The people who mentor this user (FR-010).
      *
+     * Public because spec 007's learner_home calls it for the learner home block's "Message
+     * <mentor>" lines, which need the mentors alone and not for_user()'s mentees and courses.
+     * The caller checks role_id() first: with no mentor role on the server, get_role_users()
+     * would be asked for role 0, which is every role.
+     *
      * @param int $userid
-     * @return array[]
+     * @return array[] [{id, fullname, firstname, lastname, messageurl}], sorted by last name, then
+     *     first name
      */
-    protected static function mentors(int $userid): array {
+    public static function mentors(int $userid): array {
         $context = context_user::instance($userid, IGNORE_MISSING);
         if (!$context) {
             return [];

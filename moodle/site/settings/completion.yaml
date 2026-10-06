@@ -16,5 +16,4 @@ settings:
   - name: moodlecourse/showcompletionconditions
     value: 1
     why: The course page shows each lesson's Done / To do (US2, R6).
-  # block_myoverview grouping settings: added only if quickstart V8 shows they make
-  # "In progress" the first view (R6).
+  # block_myoverview grouping settings are declared in learner-experience.yaml (spec 007 R2).

@@ -18,6 +18,7 @@ shape and Moodle's.
 | Function | Type | Does |
 |---|---|---|
 | `local_ltuse_get_course_manifest` | read | Returns the repo→Moodle map for one course: its sections, and every module carrying an `ltct:` idnumber. |
+| `local_ltuse_update_sections` | write | Creates a course's sections up to a number and names them, through core's `course_create_sections_if_missing()` and `course_update_section()`. Spec 007 adds an optional `summary` per section (the lesson's Estimated time line, `FORMAT_HTML`). A name or summary is written only when it differs from what is stored; an absent summary is left alone, an empty one clears it. Returns `renamed` and `summaries`, the writes actually made. |
 | `local_ltuse_create_page` | write | Creates or updates one `mod_page`, addressed by course-module idnumber. |
 | `local_ltuse_import_questions` | write | Imports Moodle XML into a category in the course question bank, creating the `mod_qbank` instance and category if needed. |
 | `local_ltuse_create_quiz` | write | Creates or updates a `mod_quiz` and rebuilds its slots as references into that category. |
@@ -34,9 +35,11 @@ had them shows to everyone whatever `groupid` it carries (`mod/forum/lib.php:679
 organisation that needs a private forum has an organisation-only course instead (R11).
 
 Course create/update stays on core (`core_course_create_courses`,
-`core_course_update_courses`, `core_course_get_courses_by_field`) and section handling on
-[`local_wsmanagesections`](https://moodle.org/plugins/local_wsmanagesections). Neither is
-duplicated here.
+`core_course_update_courses`, `core_course_get_courses_by_field`) and is not duplicated here.
+Sections go through `update_sections`, which replaced the planned
+[`local_wsmanagesections`](https://moodle.org/plugins/local_wsmanagesections) dependency when
+that plugin could not be installed (see
+[Verified against Moodle 5.2.3+](#verified-against-moodle-523-2026-09-29)).
 
 `get_course_manifest` is the one function not in the original sketch, and the publish is
 not idempotent without it: `core_course_get_contents` does not reliably return a module's
@@ -387,10 +390,38 @@ and the entities `core_reportbuilder\local\entities\base`. Before raising `requi
 against it. Moodle 5.0 to 5.2 changed default entity initialisation, entity order, the
 abstract `get_default_tables()`, custom sort fields and select-filter values (research R15).
 
+**Spec 007 adds these**, each confirmed in `MOODLE_502_STABLE` source (Moodle 5.2.3+):
+
+- `\core\hook\output\before_footer_html_generation`
+  (`lib/classes/hook/output/before_footer_html_generation.php:30`), built and dispatched in
+  `core_renderer::footer()` at `lib/classes/output/core_renderer.php:965-967`, before
+  `container_end_all()`, so the Next button lands inside `div[role=main]` under the lesson. Not
+  `after_standard_main_region_html_generation`: Boost prints that after the page footer, outside
+  `#page` (`theme/boost/templates/drawers.mustache:181`). Boost's course index hides core's own
+  previous/next links (`activity_navigation()`, `:488-493`);
+- `course_update_section()` (`course/lib.php:1049`) with `summary` and `summaryformat`. It hands
+  the fields to `sectionactions::update()` (`course/format/classes/local/sectionactions.php:371`),
+  which writes the section and fires `course_section_updated`;
+- `blocks_delete_instance()` (`lib/blocklib.php:2545`), which deletes the block's context, its
+  `block_positions` rows and its instance, for an undeclared block on the default Dashboard;
+- `my_reset_page_for_all_users(MY_PAGE_PRIVATE, 'my-index')` (`my/lib.php:232`; its other
+  arguments are a progress bar and the page name, `MY_PAGE_DEFAULT`), for the declared reset of
+  personal dashboards;
+- `completion_info` (`lib/completionlib.php:238`): `is_enabled()` (`:296`),
+  `is_course_complete()` (`:521`) and `get_data($cm, true, $userid)` (`:1008`), for what the
+  learner has finished;
+- `get_fast_modinfo($course, $userid)` (`lib/modinfolib.php:58`) and `cm_info`
+  (`course/classes/cm_info.php:187`): `->uservisible` (`get_user_visible()`, `:1546`), `->url`
+  (`get_url()`, `:740`), `is_of_type_that_can_display()` (`:1569`) and `is_stealth()` (`:1583`),
+  so a hidden lesson or one in the Retired section is never offered;
+- `enrol_get_all_users_courses($userid, true, …)` (`lib/enrollib.php:1061`), for the learner's
+  active courses.
+
 **Later specs list theirs with their own pieces**: spec 003 under
 [Mentors](#mentors-spec-003), spec 011 under
-[Events and office hours](#events-and-office-hours-spec-011), and spec 008 under
-[Administration](#administration-spec-008). Spec 008's include raw reads of `cohort` with
+[Events and office hours](#events-and-office-hours-spec-011), spec 008 under
+[Administration](#administration-spec-008), and spec 007 under
+[The learner experience](#the-learner-experience-spec-007). Spec 008's include raw reads of `cohort` with
 its `component` (to refuse a cohort a plugin owns), of `user` by email, and of
 `role_assignments` with `component` and `itemid`, and the two direct `$DB` writes
 `cli/setup_publishing.php` still makes.
@@ -467,14 +498,37 @@ to a different Moodle server is a re-publish rather than a data move.
 
 ## Install
 
-```bash
-# On the Moodle server, from the Moodle root:
-cp -r /path/to/virtual-ltct/moodle/local_ltuse public/local/ltuse
-php -d max_input_vars=5000 admin/cli/upgrade.php --non-interactive
-```
+Two plugins go on together, since spec 007: this one, and the learner home block
+[`block_ltuse`](../block_ltuse/README.md), which depends on it. In this order:
+
+1. On `main`, fast-forwarded to `origin/main` (`git log main..origin/main` is empty), so the
+   next step's `apply` never enforces a stale declaration.
+2. Archive both with LF line endings and copy them in, **local_ltuse first, then the block**:
+
+   ```bash
+   # From the repo. -c core.autocrlf=false keeps LF: a Windows checkout with
+   # core.autocrlf=true would otherwise archive CRLF.
+   git -c core.autocrlf=false archive -o local_ltuse.tar HEAD:moodle/local_ltuse
+   git -c core.autocrlf=false archive -o block_ltuse.tar HEAD:moodle/block_ltuse
+   # Copy both to the server; then, from the Moodle root:
+   mkdir -p public/local/ltuse public/blocks/ltuse
+   tar -xf local_ltuse.tar -C public/local/ltuse
+   tar -xf block_ltuse.tar -C public/blocks/ltuse
+   ```
+
+3. Upgrade:
+
+   ```bash
+   php -d max_input_vars=5000 admin/cli/upgrade.php --non-interactive
+   ```
+
+4. Then `python scripts/site_config.py apply` (below). It places the block on the default
+   Dashboard (`moodle/site/dashboard.yaml`); nobody adds it by hand.
 
 The `-d max_input_vars=5000` is there because the upgrade's environment check reads the
-CLI's `php.ini`, which on the build host is set lower than the web server's.
+CLI's `php.ini`, which on the build host is set lower than the web server's. Both plugins are
+pinned in `moodle/site/site.yaml` to their `version.php` stamps, and `validate` fails if they
+differ.
 
 Then, from your own machine, apply the site declaration and create the publishing account:
 
@@ -725,7 +779,7 @@ time zone on the profile. This plugin fills four gaps.
 | Booking notices | `classes/booking_notice.php`, `classes/observer.php`, `db/messages.php` (`bookingnotice`), table `local_ltuse_booking` | Every office-hours booking, change of time and cancellation is emailed to the mentee and the mentor. The person who acted gets "You …"; the other side gets a notice. The office-hours scheduler sends none itself (`allownotifications` 0). The observer reads the scheduler's `SSstu:<slotid>` calendar events, which it rewrites on every save, and mod_scheduler's own `slot_deleted`. The table keeps each booking's last notified time, because core's update event carries no old one. So a note edit or spec 016's re-save sends nothing. |
 | Office-hours sync | `classes/officehours.php`, `classes/officehours_plan.php` (pure), `classes/task/officehours_reconcile.php`, `lib.php` `local_ltuse_allow_group_member_remove()` | One group per mentor (`ltct:mentor:<id>`, visibility OWN, a name with no person's name) in `ltct:officehours`, holding the mentor and each mentee. Members are added with component `local_ltuse`, through the course's one manual enrolment instance, and are suspended, never unenrolled. Spec 003's role observers sync a pair as it changes. The hourly task reconciles everything and clears booking records whose event is gone. Logs carry counts only. |
 | Time zone notice | `classes/timezone_notice.php` (pure), `classes/hook_callbacks.php` `top_of_body()`, `db/hooks.php` | On the office-hours scheduler's pages only, a notice through `\core\hook\output\before_standard_top_of_body_html_generation` names the zone their times are in, with a link to change it on the profile. It never redirects. |
-| Site config | `classes/siteconfig/officehours.php`, `classes/siteconfig/dashboard.php` | `apply` creates or updates the office-hours course and its scheduler, the enrolment instance and the group name template, then reconciles. It also adds the declared blocks to the default dashboard. It never deletes anything. |
+| Site config | `classes/siteconfig/officehours.php`, `classes/siteconfig/dashboard.php` | `apply` creates or updates the office-hours course and its scheduler, the enrolment instance and the group name template, then reconciles. It also adds the declared blocks to the default dashboard. It never deletes anything, except on the default dashboard: since spec 007, when `dashboard.yaml` declares `complete`, apply removes each undeclared block from that one page, and with `personal_dashboards: reset` it resets personal dashboards (see [The learner experience](#the-learner-experience-spec-007)). |
 | Privacy | `classes/privacy/provider.php` | Declares, exports and deletes `local_ltuse_booking` rows in the learner's and the mentor's user contexts. The appointment is mod_scheduler's, and the events and notifications are core's. |
 
 Discussion checks (spec 012) skip `ltct:officehours`: it is site config's course, not the
@@ -747,7 +801,7 @@ each is re-checked as stated.
 | `role_assignments` joined to `context` | `roleid` (the mentor role), `contextlevel = CONTEXT_USER` | Every mentor relationship at once, for the reconcile. Spec 003's Mentoring page reads the same join. |
 | `user_enrolments` | `enrolid` | Every enrolment in the office-hours instance, with its status. `get_enrolled_users()` omits suspended ones. |
 | `groups`, `groups_members` | `courseid` and `idnumber`; `groupid` and `component` | The mentor groups and the memberships this plugin owns. `groups_get_members()` does not return `component` or `itemid`. |
-| `my_pages`, `block_instances` | `userid IS NULL`, `name`, `private`; `blockname`, `parentcontextid`, `pagetypepattern`, `subpagepattern` | Whether a declared block is on the system default dashboard. The block manager reads blocks only for a page being displayed. |
+| `my_pages`, `block_instances` | `userid IS NULL`, `name`, `private`; `blockname`, `parentcontextid`, `pagetypepattern`, `subpagepattern` | Whether a declared block is on the system default dashboard. The block manager reads blocks only for a page being displayed. Spec 007 widens it: **every** block instance on the default page, in any region (no region filter), with `defaultregion` and `defaultweight`, left-joined to that page's `block_positions` row (`blockinstanceid`, `contextid`, `pagetype`, `subpage`) for the effective region and weight, as `block_manager::load_blocks()` resolves them; the personal-dashboard count, `my_pages` `userid IS NOT NULL`, `name '__default'`, `private 1`, as a count only, never a user id; `role` by `shortname = 'user'`; and the live `role_capabilities` read of that role's `moodle/my:manageblocks` at system context (`inspector::live_role_capabilities()`, the read listed under [Site configuration](#site-configuration-clisite_configphp)), made again in `apply` because the roles step may just have changed it. |
 | `event` left-joined from `local_ltuse_booking` | `id` | Booking records whose calendar event is gone. |
 
 ## Administration (spec 008)
@@ -858,6 +912,40 @@ dozen) to blank the withheld profile fields, and, by indexed columns, `scheduler
 `scheduler_appointment` by `teacherid` and `studentid`, and `user` by its unique
 (`mnethostid`, `username`) index to keep a generated username unused, as spec 008's intake does. For the course-log block: `user_enrolments` joined to `enrol` for the courses of the protected rows with `hidelogs`, and `role_capabilities` joined to `context` for the course-level prohibits of the three log capabilities. Linked logins are read and deleted through `\auth_oauth2\linked_login`, never the table.
 
+## The learner experience (spec 007)
+
+Row #13: a learner signs in to the Dashboard and finds one way into their next lesson, a short
+course list, and who to ask when they have no course yet. Built 2026-10-06 and **not yet
+verified on the instance** (constitution X); spec 007's quickstart V1-V9 are the instance
+checks. The pure rules are checked by `tests/learner_home_harness.php` and
+`tests/dashboard_plan_harness.php` with a bare PHP CLI, and the rest by PHPUnit in plugin CI.
+The block itself is a second plugin, [`block_ltuse`](../block_ltuse/README.md); this plugin
+holds everything it shows, so the block holds no data of its own.
+
+| Piece | Where | Does |
+|---|---|---|
+| Next button | `db/hooks.php`, `classes/hook_callbacks.php` `before_footer()`, `classes/learner_home_rules.php` | Ends a module's own view page in a published course with one button, "Next: <lesson>", or "Back to the course" on the last, through `\core\hook\output\before_footer_html_generation`. The next lesson follows core's `activity_navigation()` rule (`next_cm()`), which Boost's course index hides. Not on a quiz attempt, a review or a forum discussion, and not in the office-hours course (`applies_next()`). Web only: the app has its own module navigation. |
+| Learner state | `classes/learner_home.php` | `state()` gives one user's mode (empty, continue, start or done), the course and lesson to open, and the onward routes (pathways, their own mentors, the community space once spec 005 declares one). The web block and the app handler both read it, so they cannot differ. The continue choice is `learner_home_rules::choose()`: the most recently opened incomplete course with completion on, and in it the first lesson the learner can open and has not completed. It reads only for the viewing user, stores nothing, and returns nothing for the site team (`applies()`). |
+| Rules | `classes/learner_home_rules.php` (pure, `tests/learner_home_harness.php`) | Which courses count (`is_published_course()`: `ltct:<slug>`, never `ltct:officehours`), the order courses are tried in, the first incomplete lesson, the mode, the next lesson, which pages carry Next, and the onward routes. No Moodle call, so it is tested without Moodle. |
+| Dashboard declaration | `classes/siteconfig/dashboard.php`, `classes/siteconfig/dashboard_plan.php` (pure, `tests/dashboard_plan_harness.php`) | Spec 011's dashboard class, amended by [`specs/007-learner-experience/contracts/dashboard-declaration.md`](../../specs/007-learner-experience/contracts/dashboard-declaration.md). `dashboard_plan::plan()` decides the adds, the deletes (only with `complete`), the weights and the reset; `check()` and `apply()` each plan afresh, because apply's roles step runs first and may just have prevented editing. With `personal_dashboards: reset`, apply resets personal dashboards only while `moodle/my:manageblocks` is prevented for the `user` role, read live, and otherwise reports the reset refused. Drift shows the count of personal dashboards, never a user. |
+| Section summaries | `classes/external/update_sections.php` | Each lesson section's summary carries its Estimated time line, sent by the publisher ([`contracts/update-sections.md`](../../specs/007-learner-experience/contracts/update-sections.md)). Written only when it differs, so an unchanged republish writes no section. |
+| Styles | `styles.css` | `div.ltuse-home` (the block) and `div.ltuse-next` (the button), which the app reads too through `mobilecssurl`. |
+
+**Principle XI exception added by spec 007.**
+
+| Exception | Why | Re-checked by |
+|---|---|---|
+| Direct writes of a default-Dashboard block's order: `block_instances.defaultweight` (with `timemodified`), and that block's `block_positions.weight` for the default page (`contextid` system, `pagetype` `my-index`, `subpage` the default page's id) when such a row exists (`dashboard::set_weight()`). Exactly what `block_manager::reposition_block()` (`lib/blocklib.php:990`) writes for a default page. | `reposition_block()` needs the page's blocks loaded, which initialises a theme and output inside the CLI applier. The write touches only instances already on the default page. | The dashboard drift on every core upgrade: a weight apply set must read back unchanged. |
+
+**Raw reads added by `learner_home`**, both read-only, by indexed columns of stable core tables.
+The dashboard's are in the spec 011 table under
+[Events and office hours](#events-and-office-hours-spec-011).
+
+| Table | Read by | Why there is no API |
+|---|---|---|
+| `user_lastaccess` | `userid`; returns `courseid`, `timeaccess` | When the learner last opened each course. `course_get_recent_courses()` reads the same table but keeps visible courses only, and a hidden course the learner may see still counts. |
+| `user_enrolments` joined to `enrol` | `ue.userid`, `ue.status`, `ue.timestart`, `ue.timeend`, `e.status`; the latest `timestart`, or `timecreated`, per course | When the learner was given each course, so one never opened is started in enrolment order. `enrol_get_all_users_courses()` returns courses, not enrolment times. |
+
 ## Verified against Moodle 5.2.3+ (2026-09-29)
 
 Installed and exercised end to end on Moodle 5.2.3+ (Build 20260928), PHP 8.3, PostgreSQL
@@ -920,4 +1008,6 @@ and this plugin.
   Spec 009 adds none: files go through `file_storage` and pages through
   `update_moduleinfo()`. Spec 004 writes `$DB` only to the plugin's own two tables; criteria,
   aggregation and completions go through the completion data objects, reports through report
-  builder's helpers, and custom fields through `course_handler`.
+  builder's helpers, and custom fields through `course_handler`. Spec 007's one exception, a
+  default-Dashboard block's order, is listed under
+  [The learner experience](#the-learner-experience-spec-007).

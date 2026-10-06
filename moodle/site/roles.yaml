@@ -65,11 +65,18 @@ roles:
     archetype: user
     capabilities:
       moodle/badges:viewotherbadges: inherit
+      moodle/my:manageblocks: prevent
     why: >-
       #23 (spec 013 R10, FR-011): a learner's badges are not shown to other learners. The
       capability is granted to the mentor role in the learner's user context (spec 003, the
       mentor entry below), and managers keep it through their archetype, so the evidence
-      stays visible to those who need it.
+      stays visible to those who need it. #13 (spec 007 R4): a learner cannot customise the
+      Dashboard, so every learner keeps the declared default and a future change reaches
+      them. The site team edits the default Dashboard through moodle/my:configsyspages (the
+      manager archetype's), which this does not touch; no archetype but user grants
+      manageblocks, so a non-admin manager's own Dashboard is locked too. `prevent`, not
+      `prohibit`, because a role that explicitly allows it can still give editing back;
+      nothing can override a prohibit.
 
   - shortname: manager
     archetype: manager

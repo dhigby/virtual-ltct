@@ -27,4 +27,9 @@ $callbacks = [
         'hook' => \core_user\hook\extend_user_menu::class,
         'callback' => \local_ltuse\hook_callbacks::class . '::user_menu',
     ],
+    // Spec 007 R6: Next on a lesson page; Boost's course index hides core's own.
+    [
+        'hook' => \core\hook\output\before_footer_html_generation::class,
+        'callback' => \local_ltuse\hook_callbacks::class . '::before_footer',
+    ],
 ];

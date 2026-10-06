@@ -57,7 +57,11 @@ defined('MOODLE_INTERNAL') || die();
  *
  *   officehours  officehours::apply(): the course, the scheduler, the enrolment instance, the
  *                group name template, then a reconcile of memberships
- *   dashboard    dashboard::apply(): every declared block missing from the default dashboard
+ *   dashboard    dashboard::apply(): every declared block missing from the default dashboard,
+ *                at its declared weight; with `dashboard_complete`, every undeclared block on
+ *                the default page removed; declared weights set; with `dashboard_personal`
+ *                reset, personal dashboards reset (spec 007,
+ *                specs/007-learner-experience/contracts/dashboard-declaration.md)
  *
  * The preflight stops on a run-wide block only (report::has_blocking()). A report-scoped
  * block, such as an audience cohort that does not exist, leaves just that report unwritten:
@@ -65,7 +69,9 @@ defined('MOODLE_INTERNAL') || die();
  *
  * It never installs, upgrades or downgrades plugin code, never resets or deletes a role,
  * never deletes a category, cohort, field, rule, competency or report (FR-004), and never
- * creates a course's discussion forum or writes a post.
+ * creates a course's discussion forum or writes a post. It deletes an undeclared block from
+ * the default Dashboard page only when dashboard.yaml says `complete`, and resets personal
+ * dashboards only when it says `reset` and editing is prevented live (spec 007).
  */
 class applier {
 
@@ -135,7 +141,10 @@ class applier {
     /**
      * Apply spec 011's two arrays, last: the office-hours course, its activity, enrolment
      * instance and group name template, then a reconcile of its memberships; then the default
-     * dashboard's blocks. Never deletes a course, an activity, a group or a block.
+     * dashboard's blocks. Never deletes a course, an activity or a group. The dashboard step
+     * deletes a block from the default Dashboard page only when dashboard.yaml says `complete`,
+     * and resets personal dashboards only when it says `reset` and editing is prevented live,
+     * which the roles step above may just have done (spec 007).
      */
     protected function apply_events(): void {
         if ($this->inspector->officehours()) {

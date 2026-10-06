@@ -47,6 +47,11 @@ class FakeClient:
         self.visible = 1
         self.pathway_added, self.pathway_removed = [], []
         self.pathway = None
+        # Spec 007: a server whose local_ltuse predates the section summary refuses the call
+        # as a production server does, errorcode and message only (no debuginfo without
+        # debugging). `sections_reply` overrides the answer (None: computed from the call).
+        self.sections_error = False
+        self.sections_reply = None
 
     def manifest(self, idnumber):
         return self.call("local_ltuse_get_course_manifest", idnumber=idnumber)
@@ -99,6 +104,17 @@ class FakeClient:
                     "added": list(self.pathway_added), "removed": list(self.pathway_removed)}
         if function == "local_ltuse_get_course_manifest":
             return {"modules": list(self.server.values())}
+        if function == "local_ltuse_update_sections":
+            if self.sections_error:
+                raise pm.MoodleError(function, {"errorcode": "invalidparameter",
+                                                "message": "Invalid parameter value detected"})
+            if self.sections_reply is not None:
+                return dict(self.sections_reply)
+            items = params["sections"]
+            return {"courseid": 7, "sectionsbefore": params["numsections"],
+                    "sectionsafter": params["numsections"],
+                    "renamed": sum(1 for s in items if s["name"]),
+                    "summaries": sum(1 for s in items if "summary" in s)}
         if function == "local_ltuse_create_page":
             m = self.server.get(params["idnumber"])
             if m is None:
@@ -202,6 +218,22 @@ class PublishBase(unittest.TestCase):
             "placement": placement or SHARED,
         }
         (self.dir / "manifest.json").write_text(json.dumps(manifest), encoding="utf-8")
+
+    def write_manifest_with_times(self, **kwargs):
+        """As write_manifest(), with each section's time_text as spec 007's payload has it.
+
+        write_manifest() itself keeps writing sections without it: a manifest from before
+        spec 007, which must still publish and send no summary.
+        """
+        self.write_manifest(**kwargs)
+        path = self.dir / "manifest.json"
+        manifest = json.loads(path.read_text(encoding="utf-8"))
+        for s in manifest["sections"]:
+            kind = s["modules"][0]["kind"]
+            s["time_text"] = "" if kind == "quiz" else (
+                "<p><strong>Estimated time:</strong> %d minutes</p>" % (10 * s["number"]))
+        path.write_text(json.dumps(manifest), encoding="utf-8")
+        return manifest
 
     def resolved(self, html, cmids):
         return pm.MODULE_TOKEN_RE.sub(
@@ -521,6 +553,21 @@ class FakePayload:
         return manifest, {}, {}
 
 
+class Tee:
+    """A stream that writes to each of `streams`."""
+
+    def __init__(self, *streams):
+        self.streams = streams
+
+    def write(self, text):
+        for s in self.streams:
+            s.write(text)
+        return len(text)
+
+    def flush(self):
+        pass
+
+
 class Main(PublishBase):
     """Drives main() end to end, with the build, the gate and the client replaced."""
 
@@ -538,10 +585,15 @@ class Main(PublishBase):
         old_argv = sys.argv
         sys.argv = ["publish_moodle.py", "--slug", "demo",
                     "--keep-payload", str(self.dir), *argv]
-        out = io.StringIO()
+        # Both streams into `out`, in order; stderr alone also into self.stderr.
+        out, self.stderr = io.StringIO(), io.StringIO()
         try:
-            with contextlib.redirect_stdout(out), contextlib.redirect_stderr(out):
-                rc = pm.main()
+            with contextlib.redirect_stdout(out), \
+                    contextlib.redirect_stderr(Tee(out, self.stderr)):
+                try:
+                    rc = pm.main()
+                except SystemExit as e:     # as sys.exit(main()) would end the process
+                    rc = e.code
         finally:
             sys.argv = old_argv
             for n, v in saved.items():
@@ -924,6 +976,118 @@ class Pathways(Main):
         self.assertEqual(rc, 0, out)
         self.assertIn(self.PATHWAY, [f for f, _ in client.calls])
         self.assertIn("  pathways  dry-run: delivery 1, target level 4", out)
+
+
+class SectionSummaries(Main):
+    """Spec 007, US2: each section's estimated-time line is sent as its summary."""
+
+    SECTIONS = "local_ltuse_update_sections"
+    HINT = "the server's local_ltuse predates spec 007; deploy it before publishing"
+
+    def sent(self, client):
+        calls = client.calls_to(self.SECTIONS)
+        self.assertEqual(len(calls), 1)
+        return calls[0]["sections"]
+
+    def following(self, out, line):
+        lines = out.splitlines()
+        return lines[lines.index(line) + 1]
+
+    # (a)
+    def test_every_section_is_sent_with_its_time_text_as_summary(self):
+        manifest = self.write_manifest_with_times(quizzes=[QUIZ])
+        client = FakeClient(self.server_as_published())
+        self.publish(client)
+        self.assertEqual(self.sent(client), [
+            {"number": s["number"], "name": s["name"], "summary": s["time_text"]}
+            for s in manifest["sections"]])
+        self.assertEqual(self.sent(client)[-1]["summary"], "", "the quiz's is cleared")
+        self.assertEqual(client.calls_to(self.SECTIONS)[0]["numsections"], 3)
+
+    # (b)
+    def test_an_old_manifest_sends_no_summary_key(self):
+        client = FakeClient(self.server_as_published())
+        self.publish(client)
+        items = self.sent(client)
+        self.assertEqual([(s["number"], s["name"]) for s in items],
+                         [(1, "01-one"), (2, "02-two")])
+        for s in items:
+            self.assertNotIn("summary", s)
+
+    # (c)
+    def test_summaries_follow_sections_counted_from_the_reply(self):
+        self.write_manifest_with_times()
+        client = FakeClient(self.server_as_published())
+        # An unchanged republish: the plugin writes none of the two it was sent.
+        client.sections_reply = {"courseid": 7, "sectionsbefore": 2, "sectionsafter": 2,
+                                 "renamed": 0, "summaries": 0}
+        out = self.publish(client)
+        self.assertEqual(self.following(out, "  sections  2"), "  summaries 0")
+
+    def test_a_reply_without_summaries_counts_what_was_sent(self):
+        self.write_manifest_with_times()
+        client = FakeClient(self.server_as_published())
+        client.sections_reply = {"courseid": 7, "sectionsbefore": 2, "sectionsafter": 2,
+                                 "renamed": 2}
+        out = self.publish(client)
+        self.assertEqual(self.following(out, "  sections  2"), "  summaries 2")
+
+    def test_an_old_manifest_counts_none(self):
+        out = self.publish(FakeClient(self.server_as_published()))
+        self.assertEqual(self.following(out, "  sections  2"), "  summaries 0")
+
+    def test_dry_run_counts_what_it_would_send_and_shows_each(self):
+        self.write_manifest_with_times(quizzes=[QUIZ])
+        client = FakeClient(self.server_as_published(), dry_run=True)
+        out = self.publish(client)
+        self.assertEqual(sum(1 for s in self.sent(client) if "summary" in s), 3)
+        self.assertEqual(self.following(out, "  sections  3"), "  summaries 3")
+        lines = out.splitlines()
+        at = lines.index("  summaries 3")
+        self.assertEqual(lines[at + 1:at + 4], [
+            "    summary 1  Estimated time: 10 minutes",
+            "    summary 2  Estimated time: 20 minutes",
+            "    summary 3  (none: cleared)"])
+        self.assertNotIn("<strong>", out)
+
+    # (d)
+    def test_a_server_that_predates_spec_007_stops_the_publish_with_a_hint(self):
+        self.write_manifest_with_times()
+        client = FakeClient(self.server_as_published())
+        client.sections_error = True
+        rc, out = self.run_main(client)
+        self.assertEqual(rc, 1)
+        err = self.stderr.getvalue()
+        self.assertIn(self.HINT, err)
+        self.assertIn("local_ltuse_update_sections: Invalid parameter value detected "
+                      "[invalidparameter]", err)
+        self.assertEqual(client.calls_to("local_ltuse_create_page"), [])
+
+    def test_the_same_refusal_without_summaries_has_no_hint(self):
+        # An old manifest sent no summary, so the summary cannot be what was refused.
+        client = FakeClient(self.server_as_published())
+        client.sections_error = True
+        rc, out = self.run_main(client)
+        self.assertEqual(rc, 1)
+        err = self.stderr.getvalue()
+        self.assertNotIn(self.HINT, err)
+        self.assertIn("Moodle rejected the publish", err)
+        self.assertIn("Invalid parameter value detected", err)
+
+    def test_another_refusal_has_no_hint(self):
+        self.write_manifest_with_times()
+        client = FakeClient(self.server_as_published())
+
+        def refuse(function, **params):
+            if function == self.SECTIONS:
+                raise pm.MoodleError(function, {"errorcode": "nopermissions",
+                                                "message": "Sorry"})
+            return FakeClient.call(client, function, **params)
+        client.call = refuse
+        rc, out = self.run_main(client)
+        self.assertEqual(rc, 1)
+        self.assertNotIn(self.HINT, self.stderr.getvalue())
+        self.assertIn("nopermissions", self.stderr.getvalue())
 
 
 class PayloadTargetLevel(unittest.TestCase):

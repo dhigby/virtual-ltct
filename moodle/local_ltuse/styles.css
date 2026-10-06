@@ -5,8 +5,10 @@
  * reason the team chose Moodle in the first place. Keep it small and defensive: this
  * loads on every page of the site, not only on course pages.
  *
- * Scoped to .local-ltuse-page, which scripts/moodle_payload.py wraps each page in, so
- * nothing here can affect a page somebody else made.
+ * Scoped to .local-ltuse-page, which scripts/moodle_payload.py wraps each page in; to spec
+ * 006's .local-ltuse-pathways and .local-ltuse-pathway; and to spec 007's div.ltuse-home (the
+ * learner home block) and div.ltuse-next (the next-lesson button). So nothing here can affect
+ * a page somebody else made.
  *
  * Every background is a translucent tint and no rule sets a text colour, so the theme's own
  * text colour shows through in light and dark alike. Do not add a prefers-color-scheme
@@ -89,4 +91,40 @@
 .local-ltuse-pathway .cx-pathway-next {
     border-left: 4px solid currentColor;
     padding-left: 0.5em;
+}
+
+/* Spec 007: the learner home block on the Dashboard (block_ltuse), web and app (R11). SIL Blue
+ * (#005CB9) as a translucent tint and a rule, never a text colour; the button is Boost's
+ * btn-primary, which brandcolor makes SIL Blue. */
+div.ltuse-home {
+    background: rgba(0, 92, 185, 0.08);
+    border-left: 4px solid #005CB9;
+    padding: 1rem 1.25rem;
+    margin-bottom: 1rem;
+}
+
+/* A long lesson name wraps inside the button at the narrowest phone width. */
+div.ltuse-home .btn {
+    white-space: normal;
+    max-width: 100%;
+}
+
+/* The rule above "Where next", the onward routes. */
+div.ltuse-home .ltuse-onward {
+    border-top: 1px solid rgba(0, 92, 185, 0.20);
+    margin-top: 1rem;
+    padding-top: 0.75rem;
+}
+
+/* Spec 007: the next-lesson button at the foot of a lesson page (R6). Layout only: the button
+ * is Boost's own btn-primary or btn-secondary. */
+div.ltuse-next {
+    margin-top: 1.5rem;
+    text-align: end;
+}
+
+/* A long lesson name wraps inside the button at the narrowest phone width. */
+div.ltuse-next .btn {
+    white-space: normal;
+    max-width: 100%;
 }

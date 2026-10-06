@@ -126,7 +126,7 @@ The learner's route to their next lesson is the course page. With `showcompletio
 
 **The gap**: Core has no "continue where you left off" link that goes straight to the next incomplete lesson. Acceptance scenario US2-1 asks for one, and this plan does not build it. It is a learner-experience question, so it goes to spec 007 (#13), which owns the dashboard. US2 is not marked done until SC-004's real learners have tried the core route. If they cannot find their next lesson within a minute, 007 adds the link. The plan records this rather than quietly meeting a weaker criterion.
 
-**Status**: The maintainer has not yet confirmed this gap (plan "Decisions on the plan's limits", #1).
+**Status**: Handed to spec 007. It builds the continue link now, in its learner home block, rather than waiting for SC-004's learners ([007 plan decision 1](../007-learner-experience/plan.md#decisions-to-confirm-with-the-maintainer), [research R3](../007-learner-experience/research.md#r3-continue-where-you-left-off-has-no-core-implementation)), and it owns the `block_myoverview` groupings, declared in `settings/learner-experience.yaml` ([007 research R2](../007-learner-experience/research.md#r2-which-dashboard-blocks-stay)). The maintainer's confirmation of 007's decision 1 is the open item (plan "Decisions on the plan's limits", #1).
 
 **Verify**: The block's admin settings for which groupings are offered (`block_myoverview/displaygroupingall` and its siblings), and which grouping a learner sees first when "All" is not offered. If hiding "All" makes "In progress" the first view, `settings/completion.yaml` declares it. If not, the default stays and 007 decides.
 

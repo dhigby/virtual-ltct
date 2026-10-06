@@ -41,7 +41,7 @@ What `block_ltuse` derives for the viewing user. It is never stored.
 
 | Field | Derived from |
 |---|---|
-| `courses_active` | the user's active enrolments in visible courses (`enrol_get_my_courses`) |
+| `courses_active` | `enrol_get_all_users_courses($userid, true)` in visible courses (a hidden one only for a user with `moodle/course:viewhiddencourses` in it), filtered by `learner_home_rules::is_published_course()` |
 | `continue_course` | the most recently accessed incomplete course with completion on (R3) |
 | `continue_cm` | that course's first visible, trackable, not-complete `cm` in course order |
 | `mode` | `continue` · `start` · `empty` · `done` (see below) |
@@ -76,20 +76,20 @@ plus one field.
 | `cm` completion | page: on view; quiz: per spec 004 | existing |
 | `showcompletionconditions` | `1` | `settings/completion.yaml` (existing) |
 
-**Validation**: A lesson with no `**Estimated time:**` header already fails
-`check_course_package.py`, so `time_text` is never empty for a pipeline course. For a
-backfilled course without one, the summary is sent empty, which clears it. That is a
-faithful copy of the source, never a made-up time.
+**Validation**: Lessons and scenario banks always carry the `**Estimated time:**` header,
+because a pipeline course without one fails `check_course_package.py`. Quiz sections have
+none, so their summary is cleared. For a backfilled course without one, the summary is sent
+empty, which clears it. That is a faithful copy of the source, never a made-up time.
 
 **Identity**: unchanged. Sections are found by number within `ltct:<slug>`.
 
 ## 4. Next-lesson route (computed, per render)
 
-Rendered by local_ltuse's `after_standard_main_region_html_generation` callback (R6).
+Rendered by local_ltuse's `before_footer_html_generation` callback (R6).
 
 | Field | Derived from |
 |---|---|
-| applies | page layout `incourse`, context is a module, and the course `idnumber` starts with `ltct:` |
+| applies | `$PAGE->pagetype` matches `^mod-[a-z0-9]+-view$`, not every `incourse` page, so there is no Next in a quiz attempt, a quiz review or a forum discussion; the context is a module; and the course is a published course, `learner_home_rules::is_published_course()`: its `idnumber` matches `^ltct:[^:]+$` and is not `local_ltuse\officehours::COURSE` (`ltct:officehours`) |
 | `next_cm` | the first `cm` after the current one in `get_fast_modinfo()->get_cms()` order that is `uservisible`, not stealth and has a URL (core's own rule) |
 | link | `next_cm->url`, or the course page when there is none |
 

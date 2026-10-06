@@ -260,9 +260,11 @@ TOP_FILES = {
     "badges.yaml": ({"rows", "image", "name", "description", "imagecaption", "message_subject",
                      "message", "version", "language", "why"}, set()),
     # Spec 011: the office-hours course and the default dashboard's blocks. Both optional
-    # (specs/011-events-calendar/contracts/declaration.md).
+    # (specs/011-events-calendar/contracts/declaration.md). Spec 007 adds the dashboard's
+    # `complete` and `personal_dashboards` (specs/007-learner-experience/contracts/
+    # dashboard-declaration.md).
     OFFICEHOURS_FILE: ({"rows", "course", "scheduler", "groups", "why"}, {"purpose"}),
-    DASHBOARD_FILE: ({"rows", "default_blocks"}, {"purpose"}),
+    DASHBOARD_FILE: ({"rows", "default_blocks"}, {"purpose", "complete", "personal_dashboards"}),
     # Spec 016: the protection levels and what each withholds. Optional; who is protected is
     # Moodle data and never declared, and no organisation has a minimum (Doug, 2026-10-05
     # (scope review)) (specs/016-identity-protection/contracts/declaration.md).
@@ -531,6 +533,7 @@ def validate(site_dir=SITE_DIR, modules_dir=None):
             "reports": [], "org_courses": [],
             "badge_template": None, "certificate_template": None,
             "officehours": None, "dashboard": [],
+            "dashboard_complete": False, "dashboard_personal": "keep",
             "levels": [], "role_pathways": [], "protection": None}
     if not site_dir.is_dir():
         problems.add(_rel(site_dir), "declaration directory not found")
@@ -916,7 +919,7 @@ def validate(site_dir=SITE_DIR, modules_dir=None):
         _check_office_hours_site(decl, problems)
     if DASHBOARD_FILE in loaded:
         path, data = loaded[DASHBOARD_FILE]
-        decl["dashboard"] = _validate_dashboard(_rel(path), data, rows, problems)
+        decl["dashboard"] = _validate_dashboard(_rel(path), data, rows, decl, problems)
     _check_calendar_settings(decl, problems)
 
     # Spec 016: protection.yaml, then what it needs from the rest of the declaration.
@@ -2640,6 +2643,12 @@ GROUP_NAME_FORBIDDEN = ("{name}", "{firstname}", "{lastname}", "{fullname}")
 # MOODLE_502_STABLE), and my/index.php adds content. (side-post, core's BLOCK_POS_RIGHT, is
 # shown in the default region in Boost; it was never why apply failed: see dashboard.php.)
 DASHBOARD_REGIONS = ("side-pre", "content")
+# Spec 007 (contracts/dashboard-declaration.md): what apply does with dashboards learners made
+# their own, and the one capability that must be prevented before it may reset them (R4).
+DASHBOARD_PERSONAL = ("reset", "keep")
+MANAGEBLOCKS = "moodle/my:manageblocks"
+# block_ltuse, the learner home block, is first on the page (spec 007 data-model §1).
+LEARNER_HOME_BLOCK = "ltuse"
 CALENDAR_SETTINGS = ("enablecalendarexport", "calendar_customexport", "calendar_adminseesall",
                      "timezone", "forcetimezone")
 NO_FORCED_TIMEZONE = "99"                  # forcetimezone: each learner's own zone wins (R5)
@@ -2786,22 +2795,47 @@ def _check_office_hours_site(decl, problems):
                      "(spec 011 D4, FR-008)" % STUDENT_BOOKINGS)
 
 
-def _validate_dashboard(where, data, rows, problems):
-    """Check dashboard.yaml. Returns the payload's `dashboard`: [{block, region}]."""
+def _validate_dashboard(where, data, rows, decl, problems):
+    """Check dashboard.yaml (spec 011, amended by spec 007's contracts/dashboard-declaration.md).
+
+    Sets decl's `dashboard_complete` and `dashboard_personal`, and returns the payload's
+    `dashboard`: [{block, region, weight?}], with `weight` only where it is declared. Runs
+    after site.yaml and roles.yaml, because a block may be a pinned plugin and a reset needs
+    the user role's editing prevented.
+    """
     _check_hosts(where, data, problems)
     _check_rows(where, data, rows, problems)
+    complete = data.get("complete", Flag(False, "false"))
+    if not (isinstance(complete, Flag) and complete.text.lower() in ("true", "false")):
+        problems.add(where, "complete is true or false")
+    else:
+        decl["dashboard_complete"] = bool(complete.value)
+    personal = data.get("personal_dashboards", "keep")
+    if personal not in DASHBOARD_PERSONAL:
+        problems.add(where, "personal_dashboards is %s" % " or ".join(DASHBOARD_PERSONAL))
+    else:
+        decl["dashboard_personal"] = personal
+        user = next((r for r in decl["roles"] if r["shortname"] == "user"), None)
+        if personal == "reset" and (user or {}).get("capabilities", {}).get(MANAGEBLOCKS) != "prevent":
+            problems.add(where, "personal_dashboards: reset needs roles.yaml's user entry to "
+                         "declare %s as prevent: while a learner can edit their dashboard a "
+                         "reset is undone, and a prohibit no role could ever allow back (spec "
+                         "007 R4)" % MANAGEBLOCKS)
     blocks = data.get("default_blocks")
     if not isinstance(blocks, list) or not blocks:
         problems.add(where, "default_blocks must be a non-empty list")
         return []
+    pinned = {p["component"] for p in decl["plugins"]}
     out, seen = [], set()
     for i, entry in enumerate(blocks):
         bwhere = "%s default_blocks[%d]" % (where, i)
-        if not _check_keys(bwhere, entry, {"block", "region", "why"}, set(), problems):
+        if not _check_keys(bwhere, entry, {"block", "region", "why"}, {"weight"}, problems):
             continue
         block, region = entry["block"], entry["region"]
-        if block not in STANDARD["block"]:
-            problems.add(bwhere, "block %r is not a core block" % (block,))
+        if not isinstance(block, str) or (block not in STANDARD["block"]
+                                          and "block_" + block not in pinned):
+            problems.add(bwhere, "block %r is neither a core block nor a block_<name> plugin "
+                         "pinned in site.yaml" % (block,))
             continue
         if block in seen:
             problems.add(bwhere, "%s names no block twice; it is listed already" % block)
@@ -2810,9 +2844,18 @@ def _validate_dashboard(where, data, rows, problems):
         if region not in DASHBOARD_REGIONS:
             problems.add(bwhere, "region is one of %s" % ", ".join(DASHBOARD_REGIONS))
             continue
+        if "weight" in entry and not (_is_int(entry["weight"]) and entry["weight"] >= 0):
+            problems.add(bwhere, "weight must be a whole number, 0 or more")
+            continue
+        if block == LEARNER_HOME_BLOCK and (region != "content" or entry.get("weight") != 0):
+            problems.add(bwhere, "%s must be declared at region content, weight 0: it is the "
+                         "first thing a learner sees (spec 007 data-model §1)" % block)
+            continue
         if not _text(entry["why"]):
             problems.add(bwhere, "why must say what the block is for")
         out.append({"block": block, "region": region})
+        if "weight" in entry:
+            out[-1]["weight"] = entry["weight"]
     return out
 
 
@@ -3062,6 +3105,10 @@ def build_payload(decl, mode, environ, redact=False):
         # office-hours course and activity, then the default dashboard's blocks.
         "officehours": decl["officehours"],
         "dashboard": decl["dashboard"],
+        # Spec 007 (contracts/dashboard-declaration.md "Payload"): whether the list above is the
+        # whole default page, and what apply does with personal dashboards.
+        "dashboard_complete": decl["dashboard_complete"],
+        "dashboard_personal": decl["dashboard_personal"],
         # Spec 016, last: the levels and what each withholds. Never who is protected.
         "protection": decl["protection"],
     }
@@ -3136,13 +3183,15 @@ def _summary(decl):
             "%d categories, %d cohorts, %d profile fields, %d cohort rules, "
             "%d organisation-only courses, %d course fields, %d competencies, %d reports, "
             "%d badge template, %d certificate template, %d office-hours course, "
-            "%d dashboard blocks, %d protection levels"
+            "%d dashboard blocks%s, %d protection levels"
             % (len(decl["settings"]), files, len(decl["plugins"]), len(decl["roles"]),
                len(decl["ignore"]), len(decl["categories"]), len(decl["cohorts"]),
                len(decl["profile_fields"]), len(decl["cohort_rules"]),
                len(decl["org_courses"]), len(decl["course_fields"]), len(decl["competencies"]), len(decl["reports"]),
                decl["badge_template"] is not None, decl["certificate_template"] is not None,
                decl["officehours"] is not None, len(decl["dashboard"]),
+               (", complete" if decl["dashboard_complete"] else "")
+               + (", personal dashboards reset" if decl["dashboard_personal"] == "reset" else ""),
                len(decl["protection"]["levels"]) if decl["protection"] else 0))
 
 

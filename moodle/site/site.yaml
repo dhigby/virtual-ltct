@@ -9,10 +9,15 @@ moodle:
 
 plugins:
   - component: local_ltuse
-    version: 2026100900
+    version: 2026100901
     source:
       path: moodle/local_ltuse
     why: The publish endpoint and this applier. Pinned to the version.php stamp in this repo.
+  - component: block_ltuse
+    version: 2026100600
+    source:
+      path: moodle/block_ltuse
+    why: "#13 (spec 007 R5): the learner home block on the default Dashboard: continue, the empty state and onward routes. Core has none of these (R3)."
 
   # Row #3: SCORM 1.2, H5P and embedded video.
   - component: mod_scorm

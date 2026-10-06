@@ -73,9 +73,9 @@ email or a real count into the repo (Principle III).
 **Purpose**: CI triggers for the new plugin, and the design-doc corrections the code below
 relies on. Each correction resolves a gap found while preparing these tasks.
 
-- [ ] T001 Extend `.github/workflows/site-config.yml`: in **both** the `push.paths` and `pull_request.paths` lists, add `'moodle/block_ltuse/**'` (the `site.yaml` path pin reads `moodle/block_ltuse/version.php`, and the wording test reads its lang file). Nothing else here: each new test file is wired in by the task that creates it (T009, T014, T016).
-- [ ] T002 [P] Add a `block_ltuse` job to `.github/workflows/local-ltuse-plugin-ci.yml`, beside the existing `test` job. Copy the existing job (moodle-plugin-ci `^4`, PHP 8.3, pgsql 16, `MOODLE_502_STABLE`, `MUSTACHE_IGNORE_NAMES: 'mobile_*.mustache'`). Install with `moodle-plugin-ci install --plugin ./repo/moodle/block_ltuse` plus local_ltuse as an extra plugin, because the block depends on it. Before writing, look up `install`'s extra-plugins option for moodle-plugin-ci `^4` (ctx7, then the moodle-plugin-ci source). It takes a **directory of plugin directories**, so copy `moodle/local_ltuse` to `extra/local_ltuse` in a step first if needed. Run phplint, validate, savepoints, mustache and `phpunit --fail-on-warning`; phpcs and phpdoc are `continue-on-error`, as in the existing job. Add `'moodle/block_ltuse/**'` to both trigger path lists. Path filters are workflow-level, so both jobs run on a change to either plugin. That is intended, because the block depends on local_ltuse.
-- [ ] T003 [P] Amend `specs/007-learner-experience/contracts/dashboard-declaration.md` to settle what the code below implements:
+- [X] T001 Extend `.github/workflows/site-config.yml`: in **both** the `push.paths` and `pull_request.paths` lists, add `'moodle/block_ltuse/**'` (the `site.yaml` path pin reads `moodle/block_ltuse/version.php`, and the wording test reads its lang file). Nothing else here: each new test file is wired in by the task that creates it (T009, T014, T016).
+- [X] T002 [P] Add a `block_ltuse` job to `.github/workflows/local-ltuse-plugin-ci.yml`, beside the existing `test` job. Copy the existing job (moodle-plugin-ci `^4`, PHP 8.3, pgsql 16, `MOODLE_502_STABLE`, `MUSTACHE_IGNORE_NAMES: 'mobile_*.mustache'`). Install with `moodle-plugin-ci install --plugin ./repo/moodle/block_ltuse` plus local_ltuse as an extra plugin, because the block depends on it. Before writing, look up `install`'s extra-plugins option for moodle-plugin-ci `^4` (ctx7, then the moodle-plugin-ci source). It takes a **directory of plugin directories**, so copy `moodle/local_ltuse` to `extra/local_ltuse` in a step first if needed. Run phplint, validate, savepoints, mustache and `phpunit --fail-on-warning`; phpcs and phpdoc are `continue-on-error`, as in the existing job. Add `'moodle/block_ltuse/**'` to both trigger path lists. Path filters are workflow-level, so both jobs run on a change to either plugin. That is intended, because the block depends on local_ltuse.
+- [X] T003 [P] Amend `specs/007-learner-experience/contracts/dashboard-declaration.md` to settle what the code below implements:
   - (a) **Payload shape**: `dashboard` stays a list of `{block, region, weight?}`, with `weight` present only when declared, so `inspector::entries()` keeps working. Two sibling keys follow it in the payload: `dashboard_complete` (bool, default `false`) and `dashboard_personal` (`"reset"` · `"keep"`, default `"keep"`).
   - (b) A block is valid if it is a core block (`STANDARD['block']`) **or** `block_<name>` is pinned in `site.yaml`.
   - (c) `personal_dashboards: reset` requires the `user` entry in `roles.yaml` to declare `moodle/my:manageblocks` as exactly `prevent`. `prohibit` is refused too, because it binds the site team (R4).
@@ -87,7 +87,7 @@ relies on. Each correction resolves a gap found while preparing these tasks.
   - (i) A block is added at its declared weight (0 when undeclared), so a second apply finds nothing to do.
   - (j) The region of a live instance is not compared (011's `present()`): a declared block live in another region is neither added, deleted nor reweighted.
   - (k) `reset` with a count of 0 plans nothing and reports no line, whether or not editing is prevented.
-- [ ] T004 [P] Amend `specs/007-learner-experience/contracts/update-sections.md`:
+- [X] T004 [P] Amend `specs/007-learner-experience/contracts/update-sections.md`:
   - `time_text` is "the header line alone (the whole source line holding the `TIME_RE` match, trailing text included), rendered with `moodle_payload.render()`, not wrapped". It is not "exactly as the lesson renders it": in `coretech-computer-hardware/01..04-module-N.md` the header has no blank line after it, so the lesson renders it in one `<p>` with Target Audience and Format.
   - The check uses its own rendered-HTML pattern, because `check_moodle_payload.py` imports neither `moodle_payload` nor `markdown`.
   - The web service now also skips a **name** write when the stored name is byte-identical, and counts `renamed` only for real writes. That is what makes "an unchanged republish writes nothing" true, since today every name is rewritten. Stored values are compared as `(string)`, so a NULL equals `''`.
@@ -95,7 +95,7 @@ relies on. Each correction resolves a gap found while preparing these tasks.
   - The `summary` key is `external_value(PARAM_RAW, …, VALUE_OPTIONAL)`, tested with `array_key_exists`.
   - Deploy order: a server still on local_ltuse `2026100900` rejects the unknown `summary` key in `validate_parameters` (`invalidparameter`), after the course, placement, competencies and pathway calls have already written. So the plugin is deployed and its pin applied before the first publish with the new publisher. That includes `.github/workflows/moodle-publish.yml`, which publishes on a push to main touching `scripts/publish_moodle.py` or `scripts/moodle_payload.py` when the repository variable `MOODLE_ENABLED` is `true`: with it on, local_ltuse is deployed before the merge.
   - Quiz files carry no `**Estimated time:**` line, so a quiz section's `time_text` is `""` and its summary is cleared.
-- [ ] T005 [P] Amend `specs/007-learner-experience/contracts/learner-ui.md`:
+- [X] T005 [P] Amend `specs/007-learner-experience/contracts/learner-ui.md`:
   - (a) The block plugin's required files: `db/access.php` with `block/ltuse:myaddinstance` (captype `write`, contextlevel `CONTEXT_SYSTEM`, archetypes `['manager' => CAP_ALLOW]`, no `clonepermissionsfrom`) and `block/ltuse:addinstance` (riskbitmask `RISK_SPAM | RISK_XSS`, captype `write`, contextlevel `CONTEXT_BLOCK`, archetypes `['manager' => CAP_ALLOW]`, no `clonepermissionsfrom`). Cloning from `moodle/my:manageblocks` would grant `user`, whose archetype allows it until apply prevents it. The declaration places the block, and no learner or teacher adds it (R4). Also `classes/privacy/provider.php` as a `null_provider` with `privacy:metadata`; `version.php` `maturity` and `release`; lang ids `pluginname`, `ltuse:addinstance`, `ltuse:myaddinstance`, `privacy:metadata`.
   - (b) A **published course** is one whose `idnumber` matches `^ltct:[^:]+$` and is not `local_ltuse\officehours::COURSE` (`ltct:officehours`). Both the hook and the continue choice use this one rule, `learner_home_rules::is_published_course()`.
   - (c) The hook acts only when `$PAGE->pagetype` matches `^mod-[a-z0-9]+-view$`, not on every `incourse` page, so there is no Next in a quiz attempt, a quiz review or a forum discussion.
@@ -105,7 +105,7 @@ relies on. Each correction resolves a gap found while preparing these tasks.
   - (g) The offline hints appear in the block's app view only. R8's "and on the course page's top section" has no mechanism in this contract, so it is dropped. FR-007 inside a course is met by the app's native course-menu Download course, which spec 009 keeps enabled (`tool_mobile/disabledfeatures` empty) and V6 step 3 verifies. The Home-tab hint tells the learner where it is.
   - (h) The styling scopes are `div.ltuse-home` and `div.ltuse-next`, named in the `styles.css` header.
   - (i) "Never shown": replace "a PHP unit test asserts the lang file contains none of them" with "`tests/test_learner_wording.py` (pytest) holds every block_ltuse string and the spec 007 local_ltuse block to `cbc_wording.report_label_problems(strict=True)`".
-- [ ] T006 [P] Correct `specs/007-learner-experience/data-model.md`, `quickstart.md`, `research.md` and `plan.md`:
+- [X] T006 [P] Correct `specs/007-learner-experience/data-model.md`, `quickstart.md`, `research.md` and `plan.md`:
   - data-model §2: `courses_active` becomes "`enrol_get_all_users_courses($userid, true)` in visible courses (a hidden one only for a user with `moodle/course:viewhiddencourses` in it), filtered by `learner_home_rules::is_published_course()`".
   - data-model §3 Validation: replace "so `time_text` is never empty for a pipeline course" with: lessons and scenario banks always carry the header (`check_course_package.py`); quiz sections have none, so their summary is cleared.
   - data-model §4: "applies" gains the pagetype rule and the published-course rule from T005.
@@ -138,7 +138,7 @@ hook needs `learner_home_rules::is_published_course()`.
 (`inspector::check_plugin` reports `missing`, blocking) until the block is installed on the
 server. That is intended. The live order is in T074, and nothing is applied before merge.
 
-- [ ] T007 Create the `moodle/block_ltuse/` skeleton. Before writing, look up `block_base` on `MOODLE_502_STABLE` (`blocks/moodleblock.class.php`): `init()`, `get_content()`, `applicable_formats()`, `instance_allow_multiple()`, `hide_header()`, `has_config()`, and the `$this->content` shape. Record the file and line for T070.
+- [X] T007 Create the `moodle/block_ltuse/` skeleton. Before writing, look up `block_base` on `MOODLE_502_STABLE` (`blocks/moodleblock.class.php`): `init()`, `get_content()`, `applicable_formats()`, `instance_allow_multiple()`, `hide_header()`, `has_config()`, and the `$this->content` shape. Record the file and line for T070.
   - `version.php`:
     - `$plugin->component = 'block_ltuse'`;
     - a new `YYYYMMDDXX` version;
@@ -160,14 +160,14 @@ server. That is intended. The live order is in T074, and nothing is applied befo
   - `classes/privacy/provider.php`: `block_ltuse\privacy\provider implements \core_privacy\local\metadata\null_provider`.
 
   Run `php -l` on every file.
-- [ ] T008 Pin the block in `moodle/site/site.yaml`, beside the `local_ltuse` entry: `- component: block_ltuse`, `version: <the stamp from moodle/block_ltuse/version.php>`, `source: {path: moodle/block_ltuse}`, `why: "#13 (spec 007 R5): the learner home block on the default Dashboard: continue, the empty state and onward routes. Core has none of these (R3)."`. Run `python scripts/site_config.py validate`. `_check_source` requires the version and component to equal those in `version.php`.
-- [ ] T009 [P] Create `tests/learner_home_harness.php` in the existing harness style. It requires `../moodle/local_ltuse/classes/learner_home_rules.php`, uses `fixture-*` names only, and exits 1 with `FAILURES: n` when the class or a method is missing. First cases, for `learner_home_rules::is_published_course(string $idnumber): bool`:
+- [X] T008 Pin the block in `moodle/site/site.yaml`, beside the `local_ltuse` entry: `- component: block_ltuse`, `version: <the stamp from moodle/block_ltuse/version.php>`, `source: {path: moodle/block_ltuse}`, `why: "#13 (spec 007 R5): the learner home block on the default Dashboard: continue, the empty state and onward routes. Core has none of these (R3)."`. Run `python scripts/site_config.py validate`. `_check_source` requires the version and component to equal those in `version.php`.
+- [X] T009 [P] Create `tests/learner_home_harness.php` in the existing harness style. It requires `../moodle/local_ltuse/classes/learner_home_rules.php`, uses `fixture-*` names only, and exits 1 with `FAILURES: n` when the class or a method is missing. First cases, for `learner_home_rules::is_published_course(string $idnumber): bool`:
   - true for `ltct:fixture-a`;
   - false for `ltct:officehours`, for `ltct:fixture-a:03` (a module), for `''`, for `LTCT:x`, for `ltct:` and for `other:x`.
 
   Wire it into `.github/workflows/site-config.yml` in the same edit: add `'tests/learner_home_harness.php'` to both path lists, and a plain `php tests/learner_home_harness.php` run step after the existing harness steps. Run it and see it fail.
-- [ ] T010 Create `moodle/local_ltuse/classes/learner_home_rules.php`: `namespace local_ltuse; final class learner_home_rules`. Pure static methods only: no Moodle function, no `$DB`, no constant from Moodle, so the harness can load it. Add `is_published_course()`, matching `^ltct:[^:]+$` and excluding the office-hours idnumber. Copy the literal `'ltct:officehours'` into a class constant, with a comment pointing at `officehours::COURSE`, because requiring `officehours.php` would pull in Moodle. Make T009 pass.
-- [ ] T011 Create `moodle/local_ltuse/classes/learner_home.php`: `namespace local_ltuse; final class learner_home`, the data class of data-model §2 (one class, both views). This task adds the skeleton only:
+- [X] T010 Create `moodle/local_ltuse/classes/learner_home_rules.php`: `namespace local_ltuse; final class learner_home_rules`. Pure static methods only: no Moodle function, no `$DB`, no constant from Moodle, so the harness can load it. Add `is_published_course()`, matching `^ltct:[^:]+$` and excluding the office-hours idnumber. Copy the literal `'ltct:officehours'` into a class constant, with a comment pointing at `officehours::COURSE`, because requiring `officehours.php` would pull in Moodle. Make T009 pass.
+- [X] T011 Create `moodle/local_ltuse/classes/learner_home.php`: `namespace local_ltuse; final class learner_home`, the data class of data-model §2 (one class, both views). This task adds the skeleton only:
   - `published_courses(int $userid): array` returns the user's active enrolments in visible courses, filtered by `learner_home_rules::is_published_course($course->idnumber)`. Use `enrol_get_all_users_courses($userid, true, 'idnumber, enablecompletion, visible')`, after confirming its signature and its `$onlyactive` semantics on `MOODLE_502_STABLE` (`lib/enrollib.php`). Keep a course only when `$course->visible` is 1 or the user has `moodle/course:viewhiddencourses` in its context. Confirm on `MOODLE_502_STABLE` whether `enrol_get_my_courses()` or `enrol_get_all_users_courses()` already filters hidden courses, and record it for T070. The publisher creates courses hidden, so a pilot course not yet opened is never offered.
   - `state(int $userid): array` returns `['mode' => 'empty'|'continue'|'start'|'done', 'course' => ?array, 'cm' => ?array, 'onward' => ['pathways' => [], 'mentors' => [], 'community' => null]]`. For now it is `empty` when `published_courses()` is empty, and `done` otherwise.
   - `applies(int $userid): bool` is false for a user with `moodle/site:config` at system context (R12).
@@ -197,7 +197,7 @@ and V3.
 
 > Write these first and confirm they fail before implementing T020–T032.
 
-- [ ] T012 [P] [US1] In `tests/test_site_config.py`, update the spec 011 classes for the new tracked files.
+- [X] T012 [P] [US1] In `tests/test_site_config.py`, update the spec 011 classes for the new tracked files.
   - `Events` appends a `BLOCK_PIN` to `SITE`, built like `SCHEDULER_PIN`: `- component: block_ltuse`, `version:` read with `sc._php_stamp(<moodle/block_ltuse/version.php>, 'version')`, `source: {path: moodle/block_ltuse}`.
   - `test_the_tracked_declaration_is_accepted_and_rendered` now asserts:
     - `decl['dashboard'] == [{'block': 'ltuse', 'region': 'content', 'weight': 0}, {'block': 'myoverview', 'region': 'content', 'weight': 1}, {'block': 'calendar_upcoming', 'region': 'side-pre'}]`;
@@ -205,7 +205,7 @@ and V3.
     - `payload['dashboard_personal'] == 'reset'`.
   - `EventsAbsent` also asserts `payload['dashboard_complete'] is False` and `payload['dashboard_personal'] == 'keep'`.
   - The key-order assertion (`list(payload)[-11:]`, about L1515) becomes the last 13 keys, with `'dashboard', 'dashboard_complete', 'dashboard_personal'` before `'protection'`.
-- [ ] T013 [US1] Add `class Dashboard007(Events)` to `tests/test_site_config.py` (after T012, same file). It inherits `Events.setUp` (`SCHEDULER_PIN`, `NO_TIMEZONE_IGNORE`, `MENTORING_CATEGORY` and the tracked office-hours, dashboard, calendar and scheduler files) with T012's `BLOCK_PIN`. Its `setUp` calls `super().setUp()` and also copies the tracked `settings/learner-experience.yaml`. Each case calls `self.reset()` and then one `edit()`, inside a `subTest`, with `assertRejected()` / `assertInvalid(needle)`:
+- [X] T013 [US1] Add `class Dashboard007(Events)` to `tests/test_site_config.py` (after T012, same file). It inherits `Events.setUp` (`SCHEDULER_PIN`, `NO_TIMEZONE_IGNORE`, `MENTORING_CATEGORY` and the tracked office-hours, dashboard, calendar and scheduler files) with T012's `BLOCK_PIN`. Its `setUp` calls `super().setUp()` and also copies the tracked `settings/learner-experience.yaml`. Each case calls `self.reset()` and then one `edit()`, inside a `subTest`, with `assertRejected()` / `assertInvalid(needle)`:
   - (a) the tracked files are accepted;
   - (b) site.yaml rewritten as `SITE.format(ver=VER, sha='a'*64) + SCHEDULER_PIN`, without `BLOCK_PIN`, so `block: ltuse` is refused: `assertInvalid('site.yaml')`;
   - (c) an unknown core-looking block (`block: nosuchblock`) is refused;
@@ -221,7 +221,7 @@ and V3.
   - (m) `value: #005CB9` (unquoted) for `theme_boost/brandcolor` gives "no value";
   - (n) `defaulthomepage` declared again in `settings/test.yaml` is refused as a second home (FR-011 of spec 001);
   - (o) the tracked `settings/learner-experience.yaml` declares `supportemail` with a value starting `env:`, never a literal address (Principle III).
-- [ ] T014 [P] [US1] Create `tests/dashboard_plan_harness.php`. It requires `../moodle/local_ltuse/classes/siteconfig/dashboard_plan.php` and tests `dashboard_plan::plan(array $declared, array $live, bool $complete, string $personal, bool $editingprevented, int $personalcount): array`. `plan()` is pure, so its caller decides when to call it (`dashboard.php` calls it in `check()` and again at the start of `apply()`). The arguments:
+- [X] T014 [P] [US1] Create `tests/dashboard_plan_harness.php`. It requires `../moodle/local_ltuse/classes/siteconfig/dashboard_plan.php` and tests `dashboard_plan::plan(array $declared, array $live, bool $complete, string $personal, bool $editingprevented, int $personalcount): array`. `plan()` is pure, so its caller decides when to call it (`dashboard.php` calls it in `check()` and again at the start of `apply()`). The arguments:
   - `$declared` is `[{block, region, weight?}]`;
   - `$live` is `[{id, block, region, weight}]`, every instance on the default page.
 
@@ -243,7 +243,7 @@ and V3.
   - (o) `complete=false` with two live `myoverview`: no delete.
 
   Wire it into `.github/workflows/site-config.yml` in the same edit: add `'tests/dashboard_plan_harness.php'` to both path lists, and a `php tests/dashboard_plan_harness.php` run step after T009's. Run it and see it fail.
-- [ ] T015 [P] [US1] Extend `tests/learner_home_harness.php` with the continue rule (R3, data-model §2).
+- [X] T015 [P] [US1] Extend `tests/learner_home_harness.php` with the continue rule (R3, data-model §2).
   - `learner_home_rules::order_candidates(array $courses): array`, where `$courses` is `[{id, lastaccess, enroltime, complete}]`. It orders by `lastaccess` descending (0 = never accessed, sorts last), then `enroltime` descending, then `id` ascending.
   - `learner_home_rules::first_incomplete(array $cms): ?array`, where `$cms` is `[{id, name, url, uservisible, stealth, hasurl, tracked, complete}]` in course order. It returns the first with `uservisible && !stealth && hasurl && tracked && !complete`. A hidden cm, or one in the Retired section, is skipped (FR-013), and so are an untracked cm and a completed one.
   - `learner_home_rules::choose(array $courses, callable $cmsof): ?array`. It orders with `order_candidates()`, skips courses whose `complete` is true, and calls `$cmsof((int) $course['id'])` (which returns the `first_incomplete()` shape) only as the walk reaches each course. It returns `{course_id, cm, anycomplete}` for the first course whose `first_incomplete()` is not null, `anycomplete` being whether any tracked cm in that course is complete; otherwise null. The callable keeps the class pure: the harness passes a closure over fixture arrays, and T029 passes one that reads Moodle.
@@ -262,12 +262,12 @@ and V3.
   - (f) zero published courses gives `empty`;
   - (g) the only published course has completion off, so it is no candidate: `done`. Recorded as accepted, because the publisher always enables completion (spec 004), unless the maintainer picks another rule;
   - (h) when the most recent course has an incomplete cm, `$cmsof` is called once (plan Performance Goals).
-- [ ] T016 [US1] Create `tests/test_learner_wording.py` (after T014, same workflow file), modelled on `tests/test_pathway_wording.py` (same `STRING` regex; assert every `$string` line was parsed). It covers `block_ltuse` only, so US1 passes without US2; the local_ltuse block is T038's.
+- [X] T016 [US1] Create `tests/test_learner_wording.py` (after T014, same workflow file), modelled on `tests/test_pathway_wording.py` (same `STRING` regex; assert every `$string` line was parsed). It covers `block_ltuse` only, so US1 passes without US2; the local_ltuse block is T038's.
   - It checks every string in `moodle/block_ltuse/lang/en/block_ltuse.php` with `cbc_wording.report_label_problems(text, strict=True)` (parametrized ids). It also has a teeth test (`'You are certified'` is refused).
   - A second test checks FR-012: every `get_string('<id>', 'block_ltuse')` in `moodle/block_ltuse/**/*.php`, every `{{#str}}<id>, block_ltuse{{/str}}` / `<%#str%><id>, block_ltuse<%/str%>` in its templates, and every `['<id>', 'block_ltuse']` pair in `moodle/block_ltuse/db/mobile.php` (when the file exists) names an id defined in the lang file.
 
   Wire it into `.github/workflows/site-config.yml` in the same edit: add `'tests/test_learner_wording.py'` to both path lists, and append it to the existing pytest command (after `tests/test_pathway_wording.py`).
-- [ ] T017 [P] [US1] Create `moodle/local_ltuse/tests/learner_home_test.php`: `namespace local_ltuse; final class learner_home_test extends \advanced_testcase`, with a docblock carrying `@package local_ltuse`, `@category test` and `@covers \local_ltuse\learner_home`, and the header comment "synthetic data only, never run on the shared host". Use the data generator for courses with `idnumber` `ltct:fixture-a`, `ltct:fixture-b` and `ltct:officehours`, completion on, and three page cms completing on view. Cases:
+- [X] T017 [P] [US1] Create `moodle/local_ltuse/tests/learner_home_test.php`: `namespace local_ltuse; final class learner_home_test extends \advanced_testcase`, with a docblock carrying `@package local_ltuse`, `@category test` and `@covers \local_ltuse\learner_home`, and the header comment "synthetic data only, never run on the shared host". Use the data generator for courses with `idnumber` `ltct:fixture-a`, `ltct:fixture-b` and `ltct:officehours`, completion on, and three page cms completing on view. Cases:
   - `test_no_published_enrolment_is_empty`: enrolled only in `ltct:officehours` gives `empty`;
   - `test_a_new_learner_is_offered_the_first_lesson`: `start`, cm = the first page;
   - `test_after_two_lessons_the_third_is_offered`: mark two complete gives `continue`, cm = the third;
@@ -275,7 +275,7 @@ and V3.
   - `test_a_hidden_activity_is_never_offered`;
   - `test_a_hidden_course_is_never_offered`: a learner enrolled in a hidden `ltct:fixture-b` and a visible `ltct:fixture-a` is offered fixture-a, and with only the hidden course gets `empty`;
   - `test_a_site_admin_is_not_shown_the_block`: `applies()` is false.
-- [ ] T018 [P] [US1] Create `moodle/local_ltuse/tests/siteconfig_dashboard_test.php`: `namespace local_ltuse; final class siteconfig_dashboard_test extends \advanced_testcase`, docblock `@package local_ltuse`, `@category test`, `@covers \local_ltuse\siteconfig\dashboard`, synthetic data only, `resetAfterTest()`. Build the dashboard as `new siteconfig\dashboard($entries, $complete, $personal, new siteconfig\inspector($declaration))` and the report as `recognition_test` does (`new siteconfig\report('apply', true, function() {})`, read back with `items()`). On the default page that install creates:
+- [X] T018 [P] [US1] Create `moodle/local_ltuse/tests/siteconfig_dashboard_test.php`: `namespace local_ltuse; final class siteconfig_dashboard_test extends \advanced_testcase`, docblock `@package local_ltuse`, `@category test`, `@covers \local_ltuse\siteconfig\dashboard`, synthetic data only, `resetAfterTest()`. Build the dashboard as `new siteconfig\dashboard($entries, $complete, $personal, new siteconfig\inspector($declaration))` and the report as `recognition_test` does (`new siteconfig\report('apply', true, function() {})`, read back with `items()`). On the default page that install creates:
   - (1) `check()` with `complete=false` reports no `extra` item;
   - (2) `complete=true` removes `timeline` and a block added to `side-post` on the default page, and leaves a block on a generated user's private `my-index` page and a block on a course page untouched;
   - (3) a declared `myoverview` at weight 1 is reweighted to 1, and an added block carries its declared weight;
@@ -285,7 +285,7 @@ and V3.
   - (7) a second `apply()` reports no `changed` item.
 
   It runs in the existing local_ltuse plugin-CI job.
-- [ ] T019 [P] [US1] Create `moodle/block_ltuse/tests/block_test.php`: `namespace block_ltuse; final class block_test extends \advanced_testcase`, with a docblock carrying `@package block_ltuse` and `@covers \block_ltuse`, synthetic data only. Every string is asserted escaped as the template outputs it, `assertStringContainsString(s(get_string(...)), $content->text)`, because mustache escapes the apostrophe in `empty:who`. Cases:
+- [X] T019 [P] [US1] Create `moodle/block_ltuse/tests/block_test.php`: `namespace block_ltuse; final class block_test extends \advanced_testcase`, with a docblock carrying `@package block_ltuse` and `@covers \block_ltuse`, synthetic data only. Every string is asserted escaped as the template outputs it, `assertStringContainsString(s(get_string(...)), $content->text)`, because mustache escapes the apostrophe in `empty:who`. Cases:
   - `test_empty_state_names_who_to_ask_and_links_support`: content contains the `empty` and `empty:who` strings and a link equal to `(new moodle_url('/user/contactsitesupport.php'))->out(false)`;
   - `test_start_button_links_to_the_first_lesson`;
   - `test_site_admin_sees_nothing`;
@@ -293,7 +293,7 @@ and V3.
 
 ### Implementation for User Story 1
 
-- [ ] T020 [P] [US1] Create `moodle/site/settings/learner-experience.yaml`: `rows: [13]`, a `purpose:` along the lines of "What a learner lands on and the colour the site wears: the Dashboard, one way into a course, a short course list, and who to ask", and `settings:`, each `why:` taken from the research item named:
+- [X] T020 [P] [US1] Create `moodle/site/settings/learner-experience.yaml`: `rows: [13]`, a `purpose:` along the lines of "What a learner lands on and the colour the site wears: the Dashboard, one way into a course, a short course list, and who to ask", and `settings:`, each `why:` taken from the research item named:
   - `defaulthomepage: 1` (R1, HOMEPAGE_MY: the Dashboard is the only page that carries Continue beside the course list, and it is the app's Home tab);
   - `enabledashboard: 1` (R1);
   - `enablemycourses: 0` (R1: a second list of the same courses);
@@ -309,9 +309,9 @@ and V3.
   - that `HOMEPAGE_MY` is 1.
 
   Do not declare `block_myoverview/layouts` (core default, R2). No absolute URL is allowed in a settings file. Run `python scripts/site_config.py validate`.
-- [ ] T021 [P] [US1] In `moodle/site/roles.yaml`, add `moodle/my:manageblocks: prevent` under the `user` entry's `capabilities:`. Extend its `why:` with: "#13 (spec 007 R4): a learner cannot customise the Dashboard, so every learner keeps the declared default and a future change reaches them. `prevent`, not `prohibit`, so managers keep editing through their archetype." Run `python scripts/site_config.py validate`.
-- [ ] T022 [P] [US1] In `moodle/site/settings/completion.yaml`, replace the comment at L19-20 ("block_myoverview grouping settings: added only if quickstart V8 shows …") with one line: "block_myoverview grouping settings are declared in learner-experience.yaml (spec 007 R2)." Run `python scripts/site_config.py validate`.
-- [ ] T023 [US1] Extend `scripts/site_config.py` for the amended dashboard contract (T003).
+- [X] T021 [P] [US1] In `moodle/site/roles.yaml`, add `moodle/my:manageblocks: prevent` under the `user` entry's `capabilities:`. Extend its `why:` with: "#13 (spec 007 R4): a learner cannot customise the Dashboard, so every learner keeps the declared default and a future change reaches them. `prevent`, not `prohibit`, so managers keep editing through their archetype." Run `python scripts/site_config.py validate`.
+- [X] T022 [P] [US1] In `moodle/site/settings/completion.yaml`, replace the comment at L19-20 ("block_myoverview grouping settings: added only if quickstart V8 shows …") with one line: "block_myoverview grouping settings are declared in learner-experience.yaml (spec 007 R2)." Run `python scripts/site_config.py validate`.
+- [X] T023 [US1] Extend `scripts/site_config.py` for the amended dashboard contract (T003).
   - `TOP_FILES[DASHBOARD_FILE]` becomes `({'rows', 'default_blocks'}, {'purpose', 'complete', 'personal_dashboards'})`.
   - Add `"dashboard_complete": False, "dashboard_personal": "keep"` to the initial `decl` dict in `validate()` (about L528-533), so a declaration without `dashboard.yaml` still builds a payload.
   - Change `_validate_dashboard(where, data, rows, problems)` to `_validate_dashboard(where, data, rows, decl, problems)`, and update its call (about L917-919). It still runs after `site.yaml`, `roles.yaml` and the settings files are read. It sets `decl['dashboard_complete']` and `decl['dashboard_personal']` itself and returns the block list. Rules:
@@ -327,7 +327,7 @@ and V3.
   - `_summary` prints `N dashboard blocks` plus `, complete` and `, personal dashboards reset` when set.
 
   Make T013 (b)–(o) pass.
-- [ ] T024 [US1] Rewrite `moodle/site/dashboard.yaml` per the contract.
+- [X] T024 [US1] Rewrite `moodle/site/dashboard.yaml` per the contract.
   - The header comment: rows #13 and #21; read by `site_config.py` (contracts: 011's declaration, amended by `specs/007-learner-experience/contracts/dashboard-declaration.md`); complete: apply removes any block on the default page that is not listed; it never touches a user's own dashboard except the declared reset.
   - `rows: [13, 21]`; `purpose:` the contract's text; `complete: true`.
   - `default_blocks`:
@@ -337,8 +337,8 @@ and V3.
   - `personal_dashboards: reset` (why in a comment: R4, plan decision 2).
 
   Run `python scripts/site_config.py validate` and `python -m pytest -q tests/test_site_config.py`. Make T012 and T013 (a) pass.
-- [ ] T025 [US1] Create `moodle/local_ltuse/classes/siteconfig/dashboard_plan.php`: `namespace local_ltuse\siteconfig; final class dashboard_plan`, with one pure static `plan()` exactly as T014 specifies (no Moodle calls), and a docblock saying `dashboard.php` is its only caller. Make T014 pass.
-- [ ] T026 [US1] Extend `moodle/local_ltuse/classes/siteconfig/dashboard.php` to drive `dashboard_plan::plan()`.
+- [X] T025 [US1] Create `moodle/local_ltuse/classes/siteconfig/dashboard_plan.php`: `namespace local_ltuse\siteconfig; final class dashboard_plan`, with one pure static `plan()` exactly as T014 specifies (no Moodle calls), and a docblock saying `dashboard.php` is its only caller. Make T014 pass.
+- [X] T026 [US1] Extend `moodle/local_ltuse/classes/siteconfig/dashboard.php` to drive `dashboard_plan::plan()`.
 
   **First, confirm each API on `MOODLE_502_STABLE` and record the file:line for T070:**
   - `blocks_delete_instance()` (`lib/blocklib.php`): its signature, and that it removes the instance's `block_positions` and context;
@@ -371,13 +371,13 @@ and V3.
   - Rewrite the class docblock: it is no longer "additive … never removes one, and never calls `my_reset_page_for_all_users()`".
 
   Run `php -l`. Make T018 pass in plugin CI.
-- [ ] T027 [US1] In `moodle/local_ltuse/classes/siteconfig/inspector.php`:
+- [X] T027 [US1] In `moodle/local_ltuse/classes/siteconfig/inspector.php`:
   - `dashboard()` passes `(bool) ($this->declaration['dashboard_complete'] ?? false)`, `(string) ($this->declaration['dashboard_personal'] ?? 'keep')` and `$this` as the fourth argument, so an older payload still works and `editing_prevented()` can read the live role;
   - the header doc (about L65-70) names `dashboard [{block, region, weight?}]`, `dashboard_complete` and `dashboard_personal`.
 
   In `moodle/local_ltuse/classes/siteconfig/applier.php`, rewrite the header (about L57-60 and L135-147, "Never deletes … a block"). It now says: apply deletes undeclared blocks from the default Dashboard page only when `dashboard.yaml` says `complete`, and resets personal dashboards only when it says `reset` and editing is prevented live. Run `php -l` on both.
-- [ ] T028 [US1] Add `order_candidates()`, `first_incomplete()`, `choose()` and `mode()` to `moodle/local_ltuse/classes/learner_home_rules.php`, exactly as T015 specifies. Make `php tests/learner_home_harness.php` pass.
-- [ ] T029 [US1] Fill in `learner_home::state()` in `moodle/local_ltuse/classes/learner_home.php` for the four modes of data-model §2.
+- [X] T028 [US1] Add `order_candidates()`, `first_incomplete()`, `choose()` and `mode()` to `moodle/local_ltuse/classes/learner_home_rules.php`, exactly as T015 specifies. Make `php tests/learner_home_harness.php` pass.
+- [X] T029 [US1] Fill in `learner_home::state()` in `moodle/local_ltuse/classes/learner_home.php` for the four modes of data-model §2.
 
   **First, confirm on `MOODLE_502_STABLE`:**
   - how `course_get_recent_courses()` and `user_lastaccess` read the last access;
@@ -395,7 +395,7 @@ and V3.
   - `cm` is `{id, name: format_string(…), url}`.
 
   Make T017 pass.
-- [ ] T030 [US1] Add the US1 strings to `moodle/block_ltuse/lang/en/block_ltuse.php`, alphabetised as Moodle requires:
+- [X] T030 [US1] Add the US1 strings to `moodle/block_ltuse/lang/en/block_ltuse.php`, alphabetised as Moodle requires:
   - `continue` = `'Continue: {$a}'`;
   - `start` = `'Start: {$a}'`;
   - `coursename` = `'Course: {$a}'`;
@@ -405,7 +405,7 @@ and V3.
   - `done` = `'You have finished your courses.'`.
 
   Make `python -m pytest -q tests/test_learner_wording.py` pass.
-- [ ] T031 [US1] Render the block on the web.
+- [X] T031 [US1] Render the block on the web.
   - Create `moodle/block_ltuse/templates/block.mustache`: a docblock with `@template block_ltuse/block`, a description and a **valid** "Example context (json)" (it is linted by `moodle-plugin-ci mustache`), and the markup:
     - `<div class="ltuse-home">`;
     - for `continue` / `start`: the course name in a small line, then one `a.btn.btn-primary` to the cm url;
@@ -419,13 +419,13 @@ and V3.
     - takes every visible word from `get_string()`.
 
   Make T019 pass.
-- [ ] T032 [US1] In `moodle/local_ltuse/styles.css`, add the block panel per R11:
+- [X] T032 [US1] In `moodle/local_ltuse/styles.css`, add the block panel per R11:
   - `div.ltuse-home { background: rgba(0, 92, 185, 0.08); border-left: 4px solid #005CB9; padding: 1rem 1.25rem; margin-bottom: 1rem; }`;
   - `div.ltuse-home .btn { white-space: normal; max-width: 100%; }`, so the course name and the button fit at the narrowest phone width (V1 step 3);
   - `div.ltuse-home .ltuse-onward { border-top: 1px solid rgba(0, 92, 185, 0.20); margin-top: 1rem; padding-top: 0.75rem; }`, used in US4.
 
   No `color:` declaration and no `prefers-color-scheme` block. Amend the header comment: the rules are scoped to `.local-ltuse-page`, to spec 006's `.local-ltuse-pathways` / `.local-ltuse-pathway`, and to spec 007's `div.ltuse-home` and `div.ltuse-next`, so nothing affects another page. Do **not** bump `mobilecssurl` here (T066).
-- [ ] T033 [US1] Run the US1 gate:
+- [X] T033 [US1] Run the US1 gate:
   - `python scripts/site_config.py validate`;
   - `python -m pytest -q tests/test_site_config.py tests/test_cbc_wording.py tests/test_pathway_wording.py tests/test_protection_declaration.py tests/test_learner_wording.py`;
   - every `php tests/*_harness.php`;
@@ -453,7 +453,7 @@ passes. `python scripts/publish_moodle.py --slug paratext-quotation-rules --dry-
 
 > Write these first and confirm they fail before implementing T039–T046.
 
-- [ ] T034 [P] [US2] Create `tests/test_payload_time_text.py` (pytest, the `tests/test_payload_completion.py` style). It builds a throwaway course in `tmp_path` and monkeypatches `cmp.MODULES`; it never reads `modules/`. Cases:
+- [X] T034 [P] [US2] Create `tests/test_payload_time_text.py` (pytest, the `tests/test_payload_completion.py` style). It builds a throwaway course in `tmp_path` and monkeypatches `cmp.MODULES`; it never reads `modules/`. Cases:
   - (a) a lesson with `**Estimated time:** 30 minutes` gives `time_text == '<p><strong>Estimated time:</strong> 30 minutes</p>'`, equal to `moodle_payload.render('**Estimated time:** 30 minutes')`, and not wrapped in `local-ltuse-page`;
   - (b) a header followed directly by `**Target Audience:** …` on the next line (no blank line) gives only the header line;
   - (c) a scenario bank with `**Estimated time:** 15 minutes to read through and orient (…)` keeps the trailing text;
@@ -463,7 +463,7 @@ passes. `python scripts/publish_moodle.py --slug paratext-quotation-rules --dry-
   - (g) Principle II: every `manifest['sections']` entry has the key `time_text` and has neither a `summary` nor a `summaryformat` key; and the manifest text contains no `"summaryformat"` and no `"summary":` (checked with the quotes and colon, so the existing `summary_html` key is not matched).
 
   Wire it into `.github/workflows/publisher-tests.yml` in the same edit, in its three places: `push.paths`, `pull_request.paths` and the `python -m pytest -q …` command.
-- [ ] T035 [P] [US2] Extend `tests/test_publish_moodle.py`.
+- [X] T035 [P] [US2] Extend `tests/test_publish_moodle.py`.
   - `FakeClient` gains a `local_ltuse_update_sections` branch returning `{courseid, sectionsbefore, sectionsafter, renamed, summaries}`, and a `sections_error` attribute. When it is set, that branch raises `MoodleError('local_ltuse_update_sections', {'errorcode': 'invalidparameter', 'message': 'Invalid parameter value detected'})`, with no debuginfo, as a production server sends it.
   - `PublishBase.write_manifest()` keeps writing sections **without** `time_text` for old-manifest coverage, and a new helper writes them with it.
   - Cases:
@@ -471,7 +471,7 @@ passes. `python scripts/publish_moodle.py --slug paratext-quotation-rules --dry-
     - (b) an old manifest without `time_text` sends no `summary` key at all, so the server leaves summaries untouched;
     - (c) the output has `  summaries %d` on the line after `  sections  %d`, counted from what was **sent** in dry run (`client.calls`) and from the reply's `summaries` otherwise, read with `.get()`;
     - (d) with `sections_error` set and summaries sent, the publish exits 1 and stderr holds the hint "the server's local_ltuse predates spec 007; deploy it before publishing" plus the original error.
-- [ ] T036 [P] [US2] Extend `tests/learner_home_harness.php` with the next-lesson rule (R6, data-model §4).
+- [X] T036 [P] [US2] Extend `tests/learner_home_harness.php` with the next-lesson rule (R6, data-model §4).
   - `learner_home_rules::next_cm(array $cms, int $currentid): ?array`, with `$cms` as `[{id, name, url, uservisible, stealth, hasurl}]` in `get_cms()` order. It returns the first after `$currentid` that is `uservisible && !stealth && hasurl`, and null at the end. When `$currentid` is absent, it returns `['absent' => true]`, which the hook treats as "render nothing". Cases:
     - (1) the next visible cm is returned;
     - (2) a hidden cm is skipped;
@@ -484,7 +484,7 @@ passes. `python scripts/publish_moodle.py --slug paratext-quotation-rules --dry-
     - (9) the same certificate unlocked: the certificate;
     - (10) a current cm that is itself hidden (a teacher's view) still finds the next one.
   - `learner_home_rules::applies_next(string $pagelayout, string $pagetype, bool $modulecontext, string $idnumber): bool`, true only for `incourse` + `^mod-[a-z0-9]+-view$` + module context + `is_published_course()`. False for `mod-quiz-attempt`, `mod-quiz-review`, `mod-forum-discuss`, a `ltct:officehours` scheduler view, `course-view-topics`, and a course with `idnumber` `''`.
-- [ ] T037 [P] [US2] Create `moodle/local_ltuse/tests/update_sections_test.php`: `namespace local_ltuse; final class update_sections_test extends \advanced_testcase`, docblock `@package local_ltuse`, `@category test`, `@covers \local_ltuse\external\update_sections`, synthetic data only, `resetAfterTest()`. A generated course with `idnumber` `ltct:fixture-a`, called as `setAdminUser()` (who holds `local/ltuse:publish` and `moodle/course:update`). Cases:
+- [X] T037 [P] [US2] Create `moodle/local_ltuse/tests/update_sections_test.php`: `namespace local_ltuse; final class update_sections_test extends \advanced_testcase`, docblock `@package local_ltuse`, `@category test`, `@covers \local_ltuse\external\update_sections`, synthetic data only, `resetAfterTest()`. A generated course with `idnumber` `ltct:fixture-a`, called as `setAdminUser()` (who holds `local/ltuse:publish` and `moodle/course:update`). Cases:
   - (1) a first call with names and summaries returns `renamed` N and `summaries` N;
   - (2) the same call again returns `renamed` 0 and `summaries` 0;
   - (3) an item without a `summary` key leaves a stored summary unchanged;
@@ -494,23 +494,23 @@ passes. `python scripts/publish_moodle.py --slug paratext-quotation-rules --dry-
   - (7) a section whose stored `name` is NULL, sent `name: ''`, writes nothing.
 
   It runs in the existing local_ltuse plugin-CI job.
-- [ ] T038 [P] [US2] Extend `tests/test_learner_wording.py` (T016; if US2 is built before US1, create it as T016 describes, CI wiring included) with the spec 007 local_ltuse block: every string between `// Spec 007: learner experience.` and `// End of the spec 007 learner experience block.` in `moodle/local_ltuse/lang/en/local_ltuse.php` is held to `cbc_wording.report_label_problems(text, strict=True)`, the block must exist (the `test_pathway_wording.py` `_block()` assertion), and every `get_string('nextlesson'|'backtocourse', 'local_ltuse')` in `moodle/local_ltuse/**/*.php` names an id defined there.
+- [X] T038 [P] [US2] Extend `tests/test_learner_wording.py` (T016; if US2 is built before US1, create it as T016 describes, CI wiring included) with the spec 007 local_ltuse block: every string between `// Spec 007: learner experience.` and `// End of the spec 007 learner experience block.` in `moodle/local_ltuse/lang/en/local_ltuse.php` is held to `cbc_wording.report_label_problems(text, strict=True)`, the block must exist (the `test_pathway_wording.py` `_block()` assertion), and every `get_string('nextlesson'|'backtocourse', 'local_ltuse')` in `moodle/local_ltuse/**/*.php` names an id defined there.
 
 ### Implementation for User Story 2
 
-- [ ] T039 [US2] In `scripts/moodle_payload.py`, add `time_text_of(raw: str) -> str`:
+- [X] T039 [US2] In `scripts/moodle_payload.py`, add `time_text_of(raw: str) -> str`:
   - `m = TIME_RE.search(raw)`;
   - if `m` is none, return `''`;
   - otherwise take the **whole source line** that holds `m` (from the newline before `m.start()` to the next newline), `.strip()` it, and return `render(line)`, never `wrap()`, because a section summary is outside the page.
 
   Add `"time_text": time_text_of(raw)` to each of the three `sections.append` calls in `Payload.build()` (lessons about L297-302, the quiz branch about L310-312, the page branch about L317-318), beside the unchanged `minutes`. Make T034 (a)–(e) and (g) pass.
-- [ ] T040 [US2] In `scripts/check_moodle_payload.py`, add check 11, `check_section_summaries(slug, manifest) -> list[str]`, called in the structural block on every view. Every section must carry `time_text` as a `str` (fail closed if a builder forgets it), equal to `''` or fully matching `^<p><strong>Estimated time:</strong>\s*\d+\s*minutes[^<>\n]*</p>$`. That pattern allows the scenario bank's trailing plain text and entities like `&amp;`, and refuses any second element or newline. Messages are `'%s: section %d time_text is not the Estimated time line' % (slug, n)`. In the same edit, fix the numbering:
+- [X] T040 [US2] In `scripts/check_moodle_payload.py`, add check 11, `check_section_summaries(slug, manifest) -> list[str]`, called in the structural block on every view. Every section must carry `time_text` as a `str` (fail closed if a builder forgets it), equal to `''` or fully matching `^<p><strong>Estimated time:</strong>\s*\d+\s*minutes[^<>\n]*</p>$`. That pattern allows the scenario bank's trailing plain text and entities like `&amp;`, and refuses any second element or newline. Messages are `'%s: section %d time_text is not the Estimated time line' % (slug, n)`. In the same edit, fix the numbering:
   - the module docstring lists checks 1–11 and says "Five disclosure checks" and "six structural checks";
   - the block comment `--- 6 and 7. structural` becomes `--- 6 to 11. structural`;
   - `check_target_level`'s docstring says Check 10.
 
   Optionally name the new check in the success sentence (about L427-430). Make T034 (f) pass.
-- [ ] T041 [US2] Extend `moodle/local_ltuse/classes/external/update_sections.php` per the amended contract (T004).
+- [X] T041 [US2] Extend `moodle/local_ltuse/classes/external/update_sections.php` per the amended contract (T004).
 
   **First, confirm on `MOODLE_502_STABLE`:**
   - that `course_update_section()` (`course/lib.php`) accepts `summary` and `summaryformat` in its data argument, and whether it takes an array or an object (the existing call passes `(object)`; match what the source accepts);
@@ -527,7 +527,7 @@ passes. `python scripts/publish_moodle.py --slug paratext-quotation-rules --dry-
   - Update the class docblock: an unchanged republish writes no section.
 
   Run `php -l`. Make T037 pass in plugin CI.
-- [ ] T042 [US2] In `scripts/publish_moodle.py`, change `ensure_sections(client, courseidnumber, count, names)` to `ensure_sections(client, courseidnumber, count, sections)`, taking `manifest["sections"]`.
+- [X] T042 [US2] In `scripts/publish_moodle.py`, change `ensure_sections(client, courseidnumber, count, names)` to `ensure_sections(client, courseidnumber, count, sections)`, taking `manifest["sections"]`.
   - Send one item per section: `{"number": n, "name": s["name"]}`, plus `"summary": s["time_text"]` only when the section has the key (`s.get`), so an old manifest sends none.
   - Return `(sent_summaries, reply)`.
   - In `publish()` (about L406-409), drop the `names =` line (and its missing space), and print `  sections  %d`, then `  summaries %d`. The count is the number sent in dry run and `reply.get("summaries", sent)` otherwise.
@@ -535,9 +535,9 @@ passes. `python scripts/publish_moodle.py --slug paratext-quotation-rules --dry-
   - Catch `MoodleError` around the `update_sections` call. When `e.function == 'local_ltuse_update_sections'`, `e.errorcode == 'invalidparameter'` and at least one item carried `summary`, print to stderr "the server's local_ltuse predates spec 007; deploy it before publishing" plus the original error, and exit 1. The test is the errorcode, not the message: a server without debugging returns only "Invalid parameter value detected", and the key name appears only in debuginfo (confirm in `MOODLE_502_STABLE` `webservice/rest/locallib.php` that debuginfo is sent only under debugging, and record it for T070).
 
   Make T035 pass, and confirm `python -m pytest -q tests/test_publish_moodle.py tests/test_payload_completion.py` is green.
-- [ ] T043 [US2] Add `next_cm()` and `applies_next()` to `moodle/local_ltuse/classes/learner_home_rules.php`, exactly as T036 specifies. Make `php tests/learner_home_harness.php` pass.
-- [ ] T044 [US2] In `moodle/local_ltuse/lang/en/local_ltuse.php`, add a block opened by `// Spec 007: learner experience. Learner-facing navigation; no string here names a CBC level or says "certified".` and closed by `// End of the spec 007 learner experience block.`, appended after the spec 008 blocks. It holds `$string['backtocourse'] = 'Back to the course';` and `$string['nextlesson'] = 'Next: {$a}';`. Make `python -m pytest -q tests/test_learner_wording.py` (T038) pass.
-- [ ] T045 [US2] Add the next-lesson button.
+- [X] T043 [US2] Add `next_cm()` and `applies_next()` to `moodle/local_ltuse/classes/learner_home_rules.php`, exactly as T036 specifies. Make `php tests/learner_home_harness.php` pass.
+- [X] T044 [US2] In `moodle/local_ltuse/lang/en/local_ltuse.php`, add a block opened by `// Spec 007: learner experience. Learner-facing navigation; no string here names a CBC level or says "certified".` and closed by `// End of the spec 007 learner experience block.`, appended after the spec 008 blocks. It holds `$string['backtocourse'] = 'Back to the course';` and `$string['nextlesson'] = 'Next: {$a}';`. Make `python -m pytest -q tests/test_learner_wording.py` (T038) pass.
+- [X] T045 [US2] Add the next-lesson button.
 
   **First, confirm on `MOODLE_502_STABLE`:**
   - `core\hook\output\after_standard_main_region_html_generation` (`lib/classes/hook/output/`, dispatched at `core_renderer.php:586`), its `add_html()` and `renderer` members;
@@ -553,8 +553,8 @@ passes. `python scripts/publish_moodle.py --slug paratext-quotation-rules --dry-
     - it calls `next_cm()`, and renders nothing on `absent`;
     - otherwise it adds `<div class="ltuse-next">`, holding either an `html_writer::link($next['url'], get_string('nextlesson', 'local_ltuse', format_string($next['name'])), ['class' => 'btn btn-primary'])`, or a `btn btn-secondary` link to `course_get_url($PAGE->course)` with `backtocourse`.
   - Its docblock cites the core dispatch line. Run `php -l`, and `python -m pytest -q tests/test_learner_wording.py`.
-- [ ] T046 [US2] In `moodle/local_ltuse/styles.css`, add `div.ltuse-next { margin-top: 1.5rem; text-align: end; }` and `div.ltuse-next .btn { white-space: normal; max-width: 100%; }`. Layout only: no colour, and no `prefers-color-scheme`. After T032 when US1 is in flight (same file).
-- [ ] T047 [US2] Run the US2 gate:
+- [X] T046 [US2] In `moodle/local_ltuse/styles.css`, add `div.ltuse-next { margin-top: 1.5rem; text-align: end; }` and `div.ltuse-next .btn { white-space: normal; max-width: 100%; }`. Layout only: no colour, and no `prefers-color-scheme`. After T032 when US1 is in flight (same file).
+- [X] T047 [US2] Run the US2 gate:
   - `python -m pytest -q tests/test_payload_time_text.py tests/test_publish_moodle.py tests/test_payload_completion.py tests/test_learner_wording.py`;
   - `php tests/learner_home_harness.php`;
   - `php -l` on the changed PHP;
@@ -582,7 +582,7 @@ post-merge) quickstart V6 and V7.
 
 ### Tests for User Story 3
 
-- [ ] T048 [US3] Extend `moodle/block_ltuse/tests/block_test.php`:
+- [X] T048 [US3] Extend `moodle/block_ltuse/tests/block_test.php`:
   - `test_app_view_returns_the_same_mode_as_the_web`: `block_ltuse\output\mobile::mobile_block_view([])` for a `start` learner returns one template whose HTML holds the same `start` string and cm URL as `get_content()`, plus both `offline:course` and `offline:quiz`;
   - `test_app_view_is_empty_for_a_site_admin`: the returned `templates[0]['html']` is `''`;
   - `test_web_view_has_no_offline_hint`.
@@ -591,29 +591,29 @@ post-merge) quickstart V6 and V7.
 
 ### Implementation for User Story 3
 
-- [ ] T049 [US3] Research task (constitution X, XI). Look up the following for the Moodle app 5.2.x on moodledev.io (ctx7 `/websites/moodledev_io_5_2_apis`, then the "Moodle App Plugins Development Guide"):
+- [X] T049 [US3] Research task (constitution X, XI). Look up the following for the Moodle app 5.2.x on moodledev.io (ctx7 `/websites/moodledev_io_5_2_apis`, then the "Moodle App Plugins Development Guide"):
   - the `CoreBlockDelegate` handler keys in a block's `db/mobile.php` (`delegate`, `method`, `displaydata`, and whether `title`, `class` and `type` are needed);
   - the site-plugin method's signature for a `CoreBlockDelegate` handler: the `$args` keys it receives, whether `$USER` is the learner in that call, and the return keys (`templates`, `javascript`, `otherdata`);
   - the `core-link` directive and its `capture` attribute in the app 5.2.x;
   - `core_block_get_dashboard_blocks`' return shape for a plugin block (`MOODLE_502_STABLE` `blocks/classes/external/` or `lib/external`).
 
   Record what was confirmed and where, for T070, and amend `contracts/learner-ui.md`'s handler sketch if a key differs.
-- [ ] T050 [US3] Add the app strings to `moodle/block_ltuse/lang/en/block_ltuse.php`:
+- [X] T050 [US3] Add the app strings to `moodle/block_ltuse/lang/en/block_ltuse.php`:
   - `offline:course` = `'To use a course without a connection: open it, tap ⋮, then Download course.'`;
   - `offline:quiz` = `'Open the quiz once while you are online; then you can finish it offline.'`.
 
   The exact menu wording is re-checked against the app at T077. Run `python -m pytest -q tests/test_learner_wording.py`.
-- [ ] T051 [US3] Create `moodle/block_ltuse/db/mobile.php` with `$addons['block_ltuse']`:
+- [X] T051 [US3] Create `moodle/block_ltuse/db/mobile.php` with `$addons['block_ltuse']`:
   - `handlers` → `ltuse` → `delegate: 'CoreBlockDelegate'`, `method: 'mobile_block_view'`, and the `displaydata` keys confirmed at T049;
   - `lang`, listing `[id, 'block_ltuse']` for every learner-visible string defined so far: `continue`, `start`, `coursename`, `empty`, `empty:who`, `contactsupport`, `done`, `offline:course`, `offline:quiz`. The onward ids are added by T059 (US4).
 
   Model it on `moodle/local_ltuse/db/mobile.php`. Run `python -m pytest -q tests/test_learner_wording.py` (T016's `db/mobile.php` check).
-- [ ] T052 [US3] Create `moodle/block_ltuse/classes/output/mobile.php`: `namespace block_ltuse\output; class mobile`, with `public static function mobile_block_view(array $args): array`, using the `$args` and return shape confirmed at T049.
+- [X] T052 [US3] Create `moodle/block_ltuse/classes/output/mobile.php`: `namespace block_ltuse\output; class mobile`, with `public static function mobile_block_view(array $args): array`, using the `$args` and return shape confirmed at T049.
   - For a user without `learner_home::applies($USER->id)`, it returns `['templates' => [['id' => 'main', 'html' => '']], 'javascript' => '', 'otherdata' => '']`.
   - Otherwise it returns `['templates' => [['id' => 'main', 'html' => $OUTPUT->render_from_template('block_ltuse/mobile_block', \block_ltuse\output\home::context(learner_home::state($USER->id)) + ['app' => true])]], 'javascript' => '', 'otherdata' => '']`.
 
   It uses the same data class and context builder as the web, which is the parity rule `local_ltuse\output\mobile` follows. Make T048 pass.
-- [ ] T053 [US3] Create `moodle/block_ltuse/templates/mobile_block.mustache` in the `mobile_pathways.mustache` style:
+- [X] T053 [US3] Create `moodle/block_ltuse/templates/mobile_block.mustache` in the `mobile_pathways.mustache` style:
   - a docblock with `@template` and an example context, then `{{=<% %>=}}`;
   - Ionic markup: an `ion-item class="ion-text-wrap"` holding the course name and an `ion-button` link `<a href="<% url %>" core-link capture="true">` (the directive as confirmed at T049), so the lesson opens in the app's module page and not the browser;
   - the empty state, with the support link via `core-link`;
@@ -623,7 +623,7 @@ post-merge) quickstart V6 and V7.
   - Learner text carries `ngNonBindable`; strings use `<%#str%>id, block_ltuse<%/str%>`.
 
   Its name starts `mobile_`, so `MUSTACHE_IGNORE_NAMES` skips it in CI (T002).
-- [ ] T054 [US3] Run the US3 gate: `php -l` on the new files, `python -m pytest -q tests/test_learner_wording.py`, and (via T002 in CI) `moodle-plugin-ci validate` and `phpunit` for `block_ltuse`.
+- [X] T054 [US3] Run the US3 gate: `php -l` on the new files, `python -m pytest -q tests/test_learner_wording.py`, and (via T002 in CI) `moodle-plugin-ci validate` and `phpunit` for `block_ltuse`.
 
 **Checkpoint**: US3 code complete. If V6 shows the app does not render a site-plugin block on the
 Home tab, or only on the Premium plan, the fallback is a `CoreMainMenuDelegate` "Start here"
@@ -646,16 +646,16 @@ Each is absent, never empty or broken, when its source has nothing (FR-008).
 
 ### Tests for User Story 4
 
-- [ ] T055 [P] [US4] Extend `tests/learner_home_harness.php` with `learner_home_rules::onward(array $pathways, array $mentors, ?array $community): ?array`. It returns null when all three are empty, so the "Where next" heading is never shown alone. Otherwise it returns `{pathways, mentors, community}` with empty parts dropped and pathway lines without a `nextcourse` removed. Cover: all empty gives null; only a mentor; a pathway whose `nextcourse` is null is dropped; `community` null is omitted.
-- [ ] T056 [P] [US4] Extend `moodle/local_ltuse/tests/learner_home_test.php`:
+- [X] T055 [P] [US4] Extend `tests/learner_home_harness.php` with `learner_home_rules::onward(array $pathways, array $mentors, ?array $community): ?array`. It returns null when all three are empty, so the "Where next" heading is never shown alone. Otherwise it returns `{pathways, mentors, community}` with empty parts dropped and pathway lines without a `nextcourse` removed. Cover: all empty gives null; only a mentor; a pathway whose `nextcourse` is null is dropped; `community` null is omitted.
+- [X] T056 [P] [US4] Extend `moodle/local_ltuse/tests/learner_home_test.php`:
   - `test_a_mentor_is_offered_as_a_message_route`: local_ltuse has no data generator and no `mentoring_test.php`, so create spec 003's mentor role with `$this->getDataGenerator()->create_role(['shortname' => 'mentor', 'name' => 'Mentor'])` and assign it with `role_assign($roleid, $mentor->id, \context_user::instance($learner->id)->id)`, as `admin_test::mentoring()` (admin_test.php:481) does. Assert `onward['mentors'][0]['url'] === (new moodle_url('/message/index.php', ['id' => $mentor->id]))->out(false)`;
   - `test_pathway_lines_are_absent_when_levels_are_not_applied`: `pathway\view::levels()` is null, so no pathway entry and no exception;
   - `test_no_community_line_without_spec_005`.
 
 ### Implementation for User Story 4
 
-- [ ] T057 [US4] In `moodle/local_ltuse/classes/mentoring.php`, make `mentors(int $userid)` `public`, with an unchanged body. Its docblock says spec 007's `learner_home` calls it, and it returns `[{id, fullname, firstname, lastname, messageurl}]` sorted by last name. Confirm `tests/mentoring_harness.php` still passes.
-- [ ] T058 [US4] In `moodle/local_ltuse/classes/learner_home.php`, fill `state()['onward']` through `learner_home_rules::onward()`:
+- [X] T057 [US4] In `moodle/local_ltuse/classes/mentoring.php`, make `mentors(int $userid)` `public`, with an unchanged body. Its docblock says spec 007's `learner_home` calls it, and it returns `[{id, fullname, firstname, lastname, messageurl}]` sorted by last name. Confirm `tests/mentoring_harness.php` still passes.
+- [X] T058 [US4] In `moodle/local_ltuse/classes/learner_home.php`, fill `state()['onward']` through `learner_home_rules::onward()`:
   - **pathways**: only when `pathway\view::levels() !== null`. Inside a `try { … } catch (\moodle_exception $e) { /* absent */ }`, read `pathway\view::summaries($userid, assignments::pathways_for_user($userid))` and keep `{title, nextcourse: {fullname, url}}` per pathway whose `nextcourse` is set.
   - **mentors**: from `mentoring::mentors($userid)`, as `{fullname, url: messageurl}`. These are the only other users the block may name.
 
@@ -663,15 +663,15 @@ Each is absent, never empty or broken, when its source has nothing (FR-008).
   - **community**: always `null`, with a comment "spec 005 declares the community space; until then this route is absent (FR-008)".
 
   Make T055 and T056 pass.
-- [ ] T059 [US4] Add the onward strings to `moodle/block_ltuse/lang/en/block_ltuse.php`: `onward` = `'Where next'`, `onward:pathway` = `'Next on your pathway: {$a}'`, `onward:mentor` = `'Message {$a}'`, `onward:community` = `'Community: {$a}'`. When `moodle/block_ltuse/db/mobile.php` exists (US3), also add the four ids to its `lang` list. Run `python -m pytest -q tests/test_learner_wording.py`.
-- [ ] T060 [US4] Fill the `{{#onward}}` section in `moodle/block_ltuse/templates/block.mustache` and in `moodle/block_ltuse/templates/mobile_block.mustache`, and extend `\block_ltuse\output\home::context()`:
+- [X] T059 [US4] Add the onward strings to `moodle/block_ltuse/lang/en/block_ltuse.php`: `onward` = `'Where next'`, `onward:pathway` = `'Next on your pathway: {$a}'`, `onward:mentor` = `'Message {$a}'`, `onward:community` = `'Community: {$a}'`. When `moodle/block_ltuse/db/mobile.php` exists (US3), also add the four ids to its `lang` list. Run `python -m pytest -q tests/test_learner_wording.py`.
+- [X] T060 [US4] Fill the `{{#onward}}` section in `moodle/block_ltuse/templates/block.mustache` and in `moodle/block_ltuse/templates/mobile_block.mustache`, and extend `\block_ltuse\output\home::context()`:
   - a `div.ltuse-onward` (web) or `ion-item-divider` (app) titled by `onward`;
   - one link per pathway, one per mentor, and the community line when set;
   - app links use `core-link capture="true"`;
   - the web example context includes an onward section, so the mustache lint covers it.
 
   Make T019, T048 and T056 still pass.
-- [ ] T061 [US4] Run the US4 gate: every `php tests/*_harness.php`, `python -m pytest -q tests/test_learner_wording.py`, `php -l`, and plugin CI for both plugins.
+- [X] T061 [US4] Run the US4 gate: every `php tests/*_harness.php`, `python -m pytest -q tests/test_learner_wording.py`, `php -l`, and plugin CI for both plugins.
 
 **Checkpoint**: All four stories are code complete.
 
@@ -682,12 +682,12 @@ Each is absent, never empty or broken, when its source has nothing (FR-008).
 **Purpose**: The one version bump, documentation, cross-spec pointers, the requirements row,
 and the live checks that verify row #13.
 
-- [ ] T062 Bump `$plugin->version` in `moodle/local_ltuse/version.php` once for this merge (the next `YYYYMMDDXX` after `2026100900`), add a line to its running comment chain naming spec 007, and raise `release` to `'0.14.0'`. No schema, so no `db/upgrade.php` savepoint. In the same commit:
+- [X] T062 Bump `$plugin->version` in `moodle/local_ltuse/version.php` once for this merge (the next `YYYYMMDDXX` after `2026100900`), add a line to its running comment chain naming spec 007, and raise `release` to `'0.14.0'`. No schema, so no `db/upgrade.php` savepoint. In the same commit:
   - move the `local_ltuse` `version:` pin in `moodle/site/site.yaml` to the same value;
   - set `moodle/block_ltuse/version.php` `dependencies` to `['local_ltuse' => <that value>]`.
 
   Run `python scripts/site_config.py validate` and `python -m pytest -q tests/test_site_config.py`.
-- [ ] T063 [P] Update `moodle/local_ltuse/README.md`:
+- [X] T063 [P] Update `moodle/local_ltuse/README.md`:
   - a **Spec 007** section in the per-spec style, with a components table:
     - Next button: `db/hooks.php`, `classes/hook_callbacks.php` `after_main_region`, `classes/learner_home_rules.php`;
     - Learner state: `classes/learner_home.php`;
@@ -703,29 +703,29 @@ and the live checks that verify row #13.
   - a direct-writes entry only if T026 needed the `defaultweight` fallback;
   - L728 "It never deletes anything" is qualified for the dashboard;
   - the "Install" section gains the `block_ltuse` copy to `public/blocks/ltuse`, the order (local_ltuse first, then the block, then `upgrade.php`, then `apply`) and the LF archive command.
-- [ ] T064 [P] Create `moodle/block_ltuse/README.md`:
+- [X] T064 [P] Create `moodle/block_ltuse/README.md`:
   - what the block does (four modes, onward routes, app view);
   - its components: `block_ltuse.php`, `classes/output/home.php` (the shared context builder), `classes/output/mobile.php`, `db/mobile.php`, `templates/`;
   - that it holds no data and depends on local_ltuse;
   - install, pinned in `site.yaml` and placed by `dashboard.yaml`, never by hand;
   - what it relies on (`block_base`, `CoreBlockDelegate`), and that it is verified against Moodle 5.2.3+;
   - what it deliberately does not do: no level, no "certified", no link into a hidden section, nothing for site admins.
-- [ ] T065 [P] Update `moodle/site/README.md`:
+- [X] T065 [P] Update `moodle/site/README.md`:
   - the file table row for `dashboard.yaml` (L22) now reads "The whole default Dashboard: the learner home block, the course list, Upcoming events (specs 007, 011)", and there is a row for `settings/learner-experience.yaml`;
   - a new `## The learner experience` section after `## Office hours`: what a learner lands on, why editing is prevented, what `complete` and `personal_dashboards: reset` do, and that `MOODLE_SUPPORT_EMAIL` is a provisioning value;
   - "Expected differences" (L117) gains `supportemail` (`MOODLE_SUPPORT_EMAIL` unset in this shell), as for `badges_defaultissuercontact`, and notes that once applied, `personal dashboards` does not appear;
   - "Changing something" (L64) documents the `{path: moodle/<plugin>}` pin for our own plugins beside the `url` + `sha256` one.
-- [ ] T066 In `moodle/site/settings/mobile.yaml`, change `mobilecssurl`'s value to `env:MOODLE_URL/local/ltuse/styles.css?v=3`. This is this merge's one bump, covering T032 and T046. Its `why:` already says to raise `v=` whenever `styles.css` changes; the app re-reads it only after logout and login. Run `python scripts/site_config.py validate`.
-- [ ] T067 [P] In `specs/001-site-config-as-code/contracts/declaration.md`:
+- [X] T066 In `moodle/site/settings/mobile.yaml`, change `mobilecssurl`'s value to `env:MOODLE_URL/local/ltuse/styles.css?v=3`. This is this merge's one bump, covering T032 and T046. Its `why:` already says to raise `v=` whenever `styles.css` changes; the app re-reads it only after logout and login. Run `python scripts/site_config.py validate`.
+- [X] T067 [P] In `specs/001-site-config-as-code/contracts/declaration.md`:
   - add a 007 row to the Extensions table (L21-40): `settings/learner-experience.yaml`; `roles.yaml` `user` `moodle/my:manageblocks: prevent`; `site.yaml` `block_ltuse` path pin; the `dashboard.yaml` `complete` / `weight` / `personal_dashboards` amendment;
   - add a "Spec 007 extends it again" paragraph;
   - qualify the spec 011 paragraph's "Apply never deletes … a dashboard block" with "unless `dashboard.yaml` declares `complete` (spec 007)".
-- [ ] T068 [P] In `specs/011-events-calendar/contracts/declaration.md`, add a pointer to `specs/007-learner-experience/contracts/dashboard-declaration.md` at L10, in "Payload arrays" (L37: `dashboard` items may carry `weight`, and the sibling keys `dashboard_complete` and `dashboard_personal` follow), at L45 ("never removes a block, never resets a user's own dashboard": now unless 007's keys say so), and in Validation (L71).
-- [ ] T069 [P] Close spec 004's handoff:
+- [X] T068 [P] In `specs/011-events-calendar/contracts/declaration.md`, add a pointer to `specs/007-learner-experience/contracts/dashboard-declaration.md` at L10, in "Payload arrays" (L37: `dashboard` items may carry `weight`, and the sibling keys `dashboard_complete` and `dashboard_personal` follow), at L45 ("never removes a block, never resets a user's own dashboard": now unless 007's keys say so), and in Validation (L71).
+- [X] T069 [P] Close spec 004's handoff:
   - in `specs/004-progress-reporting/research.md` R6, change the "**Status**" line to say spec 007 builds the continue link (007 plan decision 1, research R3) and owns the myoverview groupings (007 R2);
   - in `specs/004-progress-reporting/plan.md` "Decisions on the plan's limits" row 1, point to spec 007 the same way, leaving the maintainer's confirmation of 007 decision 1 as the open item.
-- [ ] T070 [P] In `specs/007-learner-experience/research.md` R13, move each API confirmed at T007, T011, T020, T026, T029, T041, T042, T045, T049 and T058 from "To confirm" to "Confirmed", with the `MOODLE_502_STABLE` file:line read. Any that turned out different from the plan is noted with what changed.
-- [ ] T071 Update `moodle/REQUIREMENTS.md`:
+- [X] T070 [P] In `specs/007-learner-experience/research.md` R13, move each API confirmed at T007, T011, T020, T026, T029, T041, T042, T045, T049 and T058 from "To confirm" to "Confirmed", with the `MOODLE_502_STABLE` file:line read. Any that turned out different from the plan is noted with what changed.
+- [X] T071 Update `moodle/REQUIREMENTS.md`:
   - row #13 to **Built ([spec 007](../specs/007-learner-experience/spec.md)), <date>; not yet verified on the instance.**, then one sentence each:
     - the Dashboard as home, with three declared blocks and learners unable to customise;
     - the learner home block (Start/Continue, the empty state with Contact site support, onward routes, app Home tab);
@@ -734,8 +734,8 @@ and the live checks that verify row #13.
     - SIL Blue as Boost's brand colour;
   - **Still pending:** quickstart V1–V8, 2–3 real partner learners (V9, FR-014), and SC-005's full rebuild-and-restore check, which is spec 015's. Claim no live success criterion as met;
   - in row #7's bullet (L38), replace "if learners can't find it, spec 007 adds one" with "spec 007 adds it (the learner home block's Continue)".
-- [ ] T072 Confirm `scripts/moodle_client.py` `REQUIRED_FUNCTIONS` (L254, the list `--whoami` checks) needs no change: spec 007 adds no web service function, only a parameter. Its comment (L251-253) gains "spec 007 added a parameter to update_sections". Record that in the PR.
-- [ ] T073 Run the full local gate before merge:
+- [X] T072 Confirm `scripts/moodle_client.py` `REQUIRED_FUNCTIONS` (L254, the list `--whoami` checks) needs no change: spec 007 adds no web service function, only a parameter. Its comment (L251-253) gains "spec 007 added a parameter to update_sections". Record that in the PR.
+- [X] T073 Run the full local gate before merge:
   - `python -m pytest -q tests/`;
   - every `php tests/*_harness.php`;
   - `python scripts/site_config.py validate`;

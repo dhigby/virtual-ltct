@@ -67,7 +67,13 @@ use core_plugin_manager;
  * two more, checked last:
  *
  *   officehours   {course {...}, scheduler {...}, groups {name_template}}   officehours
- *   dashboard     [{block, region}]                                        dashboard
+ *   dashboard     [{block, region, weight?}]                               dashboard
+ *
+ * with, from spec 007 (specs/007-learner-experience/contracts/dashboard-declaration.md), two
+ * siblings the dashboard reads, defaulting to 011's additive behaviour when absent:
+ *
+ *   dashboard_complete   bool: the list is the whole default page                dashboard
+ *   dashboard_personal   'reset' or 'keep': what apply does with personal dashboards  dashboard
  *
  * and, from spec 002's amendment (2026-10-02, research R11), the organisation-only courses
  * moodle/site/org-courses.yaml declares, read only by check_course_placement() for drift:
@@ -432,13 +438,17 @@ class inspector {
     }
 
     /**
-     * The default dashboard's checker, or null when the payload declares no blocks.
+     * The default dashboard's checker, or null when the payload declares no blocks. An older
+     * payload without spec 007's two siblings gets 011's behaviour: additive, and keep. The
+     * checker reads the user role's live permission through this inspector before a reset.
      *
      * @return dashboard|null
      */
     public function dashboard(): ?dashboard {
         if ($this->dashboard === null && self::entries($this->declaration['dashboard'] ?? [])) {
-            $this->dashboard = new dashboard(self::entries($this->declaration['dashboard']));
+            $this->dashboard = new dashboard(self::entries($this->declaration['dashboard']),
+                (bool)($this->declaration['dashboard_complete'] ?? false),
+                (string)($this->declaration['dashboard_personal'] ?? 'keep'), $this);
         }
         return $this->dashboard;
     }

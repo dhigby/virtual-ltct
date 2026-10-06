@@ -35,6 +35,11 @@ on:
       - 'tests/org_access_harness.php'
       - 'tests/mentoring_harness.php'
       - 'tests/mentor_admin_harness.php'
+      # Spec 007: site.yaml pins block_ltuse's version.php; the wording test reads its lang file.
+      - 'moodle/block_ltuse/**'
+      - 'tests/learner_home_harness.php'
+      - 'tests/dashboard_plan_harness.php'
+      - 'tests/test_learner_wording.py'
   pull_request:
     paths:
       - 'moodle/site/**'
@@ -69,6 +74,11 @@ on:
       - 'tests/org_access_harness.php'
       - 'tests/mentoring_harness.php'
       - 'tests/mentor_admin_harness.php'
+      # Spec 007: site.yaml pins block_ltuse's version.php; the wording test reads its lang file.
+      - 'moodle/block_ltuse/**'
+      - 'tests/learner_home_harness.php'
+      - 'tests/dashboard_plan_harness.php'
+      - 'tests/test_learner_wording.py'
 
 jobs:
   validate:
@@ -82,7 +92,7 @@ jobs:
       - name: Validate the Moodle site declaration
         run: python scripts/site_config.py validate
       - name: Unit tests for site_config.py and the CBC wording rule
-        run: python -m pytest -q tests/test_site_config.py tests/test_cbc_wording.py tests/test_pathway_wording.py tests/test_protection_declaration.py
+        run: python -m pytest -q tests/test_site_config.py tests/test_cbc_wording.py tests/test_pathway_wording.py tests/test_learner_wording.py tests/test_protection_declaration.py
       # local_ltuse's pure completion classes, and the guard that set_course_completion
       # never names core's wipe functions. Needs no Moodle; the runner image ships PHP.
       - name: Completion rule and criteria diff harness
@@ -128,3 +138,11 @@ jobs:
         run: |
           php tests/mentoring_harness.php
           php tests/mentor_admin_harness.php
+      # Spec 007: the published-course rule the learner home block and the next-lesson hook
+      # share. Needs no Moodle.
+      - name: Learner home harness
+        run: php tests/learner_home_harness.php
+      # Spec 007: what apply changes on the default Dashboard page (adds, deletes, weights and
+      # the personal-dashboard reset), as a pure plan. Needs no Moodle.
+      - name: Dashboard plan harness
+        run: php tests/dashboard_plan_harness.php

@@ -113,4 +113,59 @@ class hook_callbacks {
             get_string($notice['string'], 'local_ltuse', s($notice['zone'])) . ' ' . $link,
             \core\output\notification::NOTIFY_INFO, false));
     }
+
+    /**
+     * End a lesson page with one button: "Next: <name>" for the next lesson, or "Back to the
+     * course" on the last one (spec 007, research R6; contracts/learner-ui.md). Boost's course
+     * index hides core's own previous/next links (core_renderer::activity_navigation(),
+     * lib/classes/output/core_renderer.php:488-493 on MOODLE_502_STABLE), so without this a
+     * lesson page has no way on but a menu. Only on a module's view page in a published course
+     * (learner_home_rules::applies_next()), and the next cm follows activity_navigation()'s own
+     * rule (:497-505). The hook is built and dispatched in core_renderer::footer() (:965-967),
+     * before container_end_all(), so the button lands inside div[role=main] under the lesson,
+     * in the content column. (after_standard_main_region_html_generation would not: Boost
+     * prints it after the page footer, outside #page; theme/boost/templates/drawers.mustache:181.)
+     * Web only: the app has its own module navigation.
+     *
+     * @param \core\hook\output\before_footer_html_generation $hook
+     */
+    public static function before_footer(\core\hook\output\before_footer_html_generation $hook): void {
+        global $PAGE;
+        if (!isloggedin() || isguestuser() || during_initial_install()) {
+            return;
+        }
+        // A plain read: moodle_page has __get but no __isset (lib/pagelib.php), so `??` would
+        // always give null. magic_get_cm() returns null on a page with no module.
+        $cm = $PAGE->cm;
+        if (!$cm || !learner_home_rules::applies_next((string)$PAGE->pagelayout, (string)$PAGE->pagetype,
+                $PAGE->context->contextlevel == CONTEXT_MODULE, (string)$PAGE->course->idnumber)) {
+            return;
+        }
+        $cms = [];
+        foreach (get_fast_modinfo($PAGE->course)->get_cms() as $other) {
+            $cms[] = [
+                'id' => (int)$other->id,
+                'name' => $other->name,
+                'url' => $other->url,
+                'uservisible' => (bool)$other->uservisible,
+                'stealth' => (bool)$other->is_stealth(),
+                // activity_navigation() also passes over a module type that never shows on the
+                // course page (mod_qbank), so this does too.
+                'hasurl' => $other->url !== null && $other->is_of_type_that_can_display(),
+            ];
+        }
+        $next = learner_home_rules::next_cm($cms, (int)$cm->id);
+        if (!empty($next['absent'])) {
+            return;
+        }
+        if ($next !== null) {
+            $link = \html_writer::link($next['url'],
+                get_string('nextlesson', 'local_ltuse', format_string($next['name'])),
+                ['class' => 'btn btn-primary']);
+        } else {
+            $link = \html_writer::link(course_get_url($PAGE->course), get_string('backtocourse', 'local_ltuse'),
+                ['class' => 'btn btn-secondary']);
+        }
+        $hook->add_html(\html_writer::div($link, 'ltuse-next'));
+    }
 }

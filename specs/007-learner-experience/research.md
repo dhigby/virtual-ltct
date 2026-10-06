@@ -21,8 +21,9 @@ default dashboard's blocks. No learner data was read.
 - The default dashboard (`my_pages` `__default`, id 2) carries, in this order:
   `myoverview` (content, 0), `timeline` (content, 1), `calendar_month` (side-post, 0),
   `recentlyaccesseditems` (side-post, 1), `calendar_upcoming` (side-pre, 0; spec 011).
-- Six users have a dashboard of their own (`my_pages` rows with a `userid`). The query
-  counted them and read nothing else. Who they are is not recorded here (Principle III).
+- Some users have a dashboard of their own (`my_pages` rows with a `userid`). The query
+  counted them and read nothing else. Neither how many nor who is recorded here
+  (Principle III); `drift` reports the count.
   On a site with no learners yet they are presumably staff and test accounts; R4 says what
   happens to them.
 - `moodle/my:manageblocks` is allowed to the `user` archetype (`lib/db/access.php:1817`), so
@@ -64,10 +65,12 @@ and the 011 contract gets a pointer to it. The change still never touches a user
 dashboard (R4 handles those).
 
 **myoverview groupings**: The live state offers All, In progress, Future, Past, Starred and
-Removed from view. A learner needs only the default view. Declared:
+Removed from view. A learner needs only the default view. The decision covers **every**
+`block_myoverview/displaygrouping*` setting. Declared:
 `block_myoverview/displaygroupingall = 1`, `displaygroupinginprogress = 1`,
 `displaygroupingpast = 1`, and `displaygroupingfuture = 0`, `displaygroupingfavourites = 0`,
-`displaygroupinghidden = 0`. Future is empty here, because published courses have no start
+`displaygroupinghidden = 0`, `displaygroupingallincludinghidden = 0`,
+`displaygroupingcustomfield = 0`. Future is empty here, because published courses have no start
 date in the future. Starred and Removed-from-view are list-management features that a
 learner on two courses does not need. `layouts` stays `card,list,summary`, the core default.
 Spec 004 R6 left "which grouping comes first" to this spec. The first-view grouping is a
@@ -110,8 +113,13 @@ FR-008, so the link costs one query. **Recorded for confirmation** as plan decis
 
 **Decision**: The `user` role's entry in `roles.yaml` sets `moodle/my:manageblocks: prevent`.
 That removes "Customise this page" for everyone who has only the authenticated-user role.
-Managers keep editing through their archetype. `prohibit` was rejected because it would bind
-the site team too. `inherit` was rejected because it only removes the system-context
+The site team edits the default Dashboard through `moodle/my:configsyspages` (the manager
+archetype's, `lib/db/access.php:640-648`; `my/indexsys.php:49`), which this does not touch.
+Only the user archetype grants `manageblocks` (`lib/db/access.php:1817-1822`), so a non-admin
+manager's own Dashboard is locked too. `prohibit` was rejected because nothing can override
+it, where a role that explicitly allows the capability can still give editing back over a
+`prevent`. (Corrected 2026-10-06 in review: this said managers keep editing through their
+archetype, which no archetype grants.) `inherit` was rejected because it only removes the system-context
 permission, which leaves the archetype's allow in place.
 
 With editing gone, a personal dashboard can only be a leftover from before. When it applies
@@ -119,8 +127,8 @@ a changed dashboard declaration, apply resets every leftover with core's
 `my_reset_page_for_all_users(MY_PAGE_PRIVATE, 'my-index')` (`my/lib.php:232`). Drift reports how many
 there are, as a count, never as people.
 
-The reset is irreversible for those six dashboards. On today's site they predate any
-learner. **Recorded for confirmation** as plan decision 2.
+The reset is irreversible for the personal dashboards that exist on the server today. On
+today's site they predate any learner. **Recorded for confirmation** as plan decision 2.
 
 **Alternatives**:
 - Leave editing on and reset nothing. Every learner who moves a block then detaches from
@@ -128,8 +136,8 @@ learner. **Recorded for confirmation** as plan decision 2.
   holding for them.
 - `forcedefaultmymoodle`. It is not a setting on 5.2 (`cfg.php` reports no such variable).
 
-**Verify**: V2 (a learner sees no "Customise this page"; drift reports 0 personal
-dashboards after apply).
+**Verify**: V2 (a learner sees no "Customise this page"; after apply, drift shows no
+personal dashboards line).
 
 ## R5. One small block of our own: `block_ltuse`
 
@@ -180,8 +188,12 @@ index and the format supports it (`:488-493`). Boost sets `$THEME->usescourseind
 on-page "next" at all. The only route is the course index drawer, which is Moodle
 navigation (FR-004 forbids relying on it).
 
-**Decision**: local_ltuse adds a callback for `core\hook\output\after_standard_main_region_html_generation`
-(dispatched from `core_renderer::standard_after_main_region_html()`, `:584-586`). On an
+**Decision**: local_ltuse adds a callback for `core\hook\output\before_footer_html_generation`
+(built and dispatched in `core_renderer::footer()`, `:965-967`, before `container_end_all()`, so
+its HTML lands inside `div[role=main]`). **Changed 2026-10-06** (review):
+`after_standard_main_region_html_generation` was planned, but Boost prints it after the page
+footer and outside `#page` (`theme/boost/templates/drawers.mustache:181`), not beneath the
+content. On an
 `incourse` page of a module in a published course (course `idnumber` `ltct:*`), it renders
 one button beneath the content:
 - "Next: <name>" for the next visible, available `cm` in course order;
@@ -240,10 +252,14 @@ per-section download icons. Spec 009 keeps these enabled (`tool_mobile/disabledf
 empty). 009 R4 and this spec's assumptions add one learner-facing fact: open a quiz once
 while online, because downloading it starts the attempt.
 
-**Decision**: Two lang strings, shown only in the app view of `block_ltuse` (R7) and on the
-course page's top section in the app:
+**Decision**: Two lang strings, shown only in the app view of `block_ltuse` (R7):
 - "To use this course without a connection: open it, tap ⋮, then Download course."
 - "Open the quiz once while you are online, then you can finish it offline."
+
+The course-page hint first planned here is dropped ([contracts/learner-ui.md](contracts/learner-ui.md)
+(g)): the contract has no mechanism for it. FR-007 inside a course is met by the app's native
+course-menu Download course, which spec 009 keeps enabled (`tool_mobile/disabledfeatures`
+empty) and V6 step 3 verifies. The Home-tab hint tells the learner where it is.
 
 Spec 009's V7 confirmed the sync behaviour: syncing by hand is the fallback, not the main
 path. So the strings do not mention it. The exact menu wording ("⋮", "Download course") is
@@ -274,7 +290,7 @@ address).
 ## R10. A course reads as its lessons, with times
 
 **Found**: The publisher already makes a `topics` course with one section per lesson, named
-after the lesson (`publish_moodle.py:222-224`, `ensure_sections`). It hides the Retired
+after the lesson (`ensure_sections`, `publish_moodle.py:102-119`, called at `:406-409`). It hides the Retired
 section completely. Each page completes on view (spec 004). With `showcompletionconditions =
 1`, each lesson shows Done or To do. The payload already computes each lesson's minutes
 (`moodle_payload.py:96, 300`), but nothing sends them, so a learner never sees the time
@@ -358,14 +374,106 @@ spec.)
 
 ## R13. APIs to confirm in `MOODLE_502_STABLE` before each task closes
 
-Confirmed 2026-10-05 in the server's source: `after_standard_main_region_html_generation`
-(`lib/classes/hook/output/`, dispatched at `core_renderer.php:586`); `activity_navigation()`'s
-course-index rule (`:488-493`); `my_reset_page_for_all_users()` (`my/lib.php:232`);
+Every API this plan depends on is now confirmed in the server's read-only `MOODLE_502_STABLE`
+(5.2.3+) source, paths under `public/`. Nothing is left to confirm. Where the source differed
+from what the plan assumed, the item says what changed.
+
+**Confirmed 2026-10-05** (planning): `after_standard_main_region_html_generation`
+(`lib/classes/hook/output/`; since replaced by `before_footer_html_generation`, T045
+below); `activity_navigation()`'s course-index rule (`core_renderer.php:488-494`); `my_reset_page_for_all_users()` (`my/lib.php:232`);
 `moodle/my:manageblocks` default (`lib/db/access.php:1817`); the primary navigation's three
 switches (`views/primary.php:43-71`).
 
-To confirm before use: `course_get_recent_courses()` and `user_lastaccess` semantics;
-`completion_info::get_data()` signature; `block_base` and `get_content()` on 5.2;
-`core_block_get_dashboard_blocks` return shape for a plugin block; the block's
-`db/mobile.php` handler keys (`CoreBlockDelegate`, `displaydata`); `course_update_section()`
-accepting `summary` and `summaryformat`; `core_message` URL for a one-to-one conversation.
+**Confirmed 2026-10-06** (implementation, by task):
+
+- **The block (T007)**: `block_base` at `blocks/moodleblock.class.php:46`. It has no `init()`
+  of its own; the constructor calls `$this->init()` (`:115-116`). `$content` is `:76`,
+  `get_content()` `:146` (NULL by default), `is_empty()` `:183` (empty text and footer),
+  `has_config()` `:386`, `applicable_formats()` `:401`, `hide_header()` `:411`,
+  `instance_allow_multiple()` `:506`, `get_content_for_external()` `:286`. The content shape
+  is `->text` and `->footer`.
+- **Published courses (T011)**: `enrol_get_all_users_courses($userid, $onlyactive = false,
+  $fields = null, $sort = null)`, `lib/enrollib.php:1061`. `$onlyactive` filters only the
+  enrolment (`:1112-1113`: active user enrolment, enabled instance, started, not ended).
+  **It does not filter hidden courses.** `enrol_get_users_courses()` (`:949`) does, at
+  `:955-967`, and `enrol_get_my_courses()` (`:598`) does for `$USER` only, so
+  `published_courses()` uses the first and copies the second's hidden-course test.
+  `has_capability()` `lib/accesslib.php:432`; `context_helper::preload_from_record()`
+  `lib/classes/context_helper.php:392`.
+- **Settings (T020)**: `HOMEPAGE_MY` = 1 (`lib/moodlelib.php:530`);
+  `CONTACT_SUPPORT_AUTHENTICATED` = 1 (`:606`); `supportemail` and `supportavailability`
+  (`admin/settings/server.php:62`, `:68`); `theme_boost/brandcolor`
+  (`theme/boost/settings.php:84`); `defaulthomepage` and `enablemyhome` / `enabledashboard` /
+  `enablemycourses` (`admin/settings/appearance.php:182`, `:145-161`). There are eight
+  `block_myoverview/displaygrouping*` settings (`blocks/myoverview/settings.php:60-119`), and
+  all eight are declared.
+- **Dashboard apply (T026)**: `blocks_delete_instance($instance, $nolongerused = false,
+  $skipblockstables = false)`, `lib/blocklib.php:2545`, deletes the block context (`:2560`)
+  and its `block_positions` and `block_instances` rows (`:2563-2564`).
+  `my_reset_page_for_all_users(int $private, string $pagetype, ?progress_bar $progressbar,
+  string $pagename)`: the page name is the **4th** argument, not a 3rd, and it deletes every
+  private page of the users it selects (`my/lib.php:245`, `:287`); the `__courses` page
+  survives because it is public (`MY_PAGE_*` at `my/lib.php:30-33`). A block's effective
+  weight is `COALESCE(bp.weight, bs.weight, bi.defaultweight)` (`lib/blocklib.php:760-761`),
+  so a `block_positions` row overrides `defaultweight`. **Changed**: `reposition_block()`
+  (`:990`) is not used. It needs the page's blocks loaded, which starts the theme and output
+  in a CLI run (`:673-676`), so `set_weight()` makes the same two writes it makes
+  (`:1000-1013`): `defaultweight` and, when one exists, the default page's
+  `block_positions.weight`. `assign_capability()` (`lib/accesslib.php:1411`) keeps an
+  existing row unless `$overwrite` is true (`:1437`), so the T018 fixture passes true.
+- **Learner state (T029)**: `course_get_recent_courses()` (`course/lib.php:3880`) joins
+  `user_lastaccess` but keeps only `c.visible = 1` (`:3942`, `:3947`). **Changed**: because
+  `published_courses()` also keeps a hidden course the learner may see, `last_access()` reads
+  `user_lastaccess` by userid directly, and `enrol_times()` reads `user_enrolments` and
+  `enrol` with `enrol_get_all_users_courses`' active conditions. `user_lastaccess` is written
+  by `user_accesstime_log()` (`lib/datalib.php:1588`). `completion_info`: constructor
+  `lib/completionlib.php:270`, `is_enabled()` `:296`, `is_course_complete($user_id)` `:521`,
+  `get_data($cm, $wholecourse = false, $userid = 0, $unused = null)` `:1008`. Only
+  `COMPLETION_COMPLETE` and `COMPLETION_COMPLETE_PASS` count
+  (`completion/criteria/completion_criteria_activity.php:159`), so a failed quiz is offered
+  again. `cm_info` (`course/classes/cm_info.php`): `$uservisible` `:162`, `$url` `:170`,
+  `get_url()` `:740`, `is_stealth()` `:1583`. `modinfo::get_cms()`
+  `course/classes/modinfo.php:248`; `get_fast_modinfo()` `lib/modinfolib.php:58`.
+  `render_from_template()` `lib/classes/output/renderer_base.php:164`. **Changed**: the
+  `{{#str}}` helper returns `get_string()` unescaped
+  (`lib/classes/output/mustache_string_helper.php:47-67`), so the block builds its strings in
+  `home::context()` and `{{ }}` escapes them.
+- **Section summaries (T041)**: `course_update_section($courseorid, $section, $data): void`,
+  `course/lib.php:1049`, hands `$data` to `sectionactions::update(section_info $sectioninfo,
+  array|stdClass $fields)` (`course/format/classes/local/sectionactions.php:371`), which takes
+  any field but id, course, section and sequence (`:377`), `summary` and `summaryformat`
+  included. `external_api::validate_parameters()`
+  (`lib/external/classes/external_api.php:316`) leaves an absent `VALUE_OPTIONAL` key absent
+  (`:342-355`) and refuses an unknown key as "Unexpected keys" (`:366-369`), which is how a
+  pre-007 plugin refuses `summary`.
+- **The deploy-order hint (T042)**: `webservice/rest/locallib.php:182-184` sends `debuginfo`
+  only under `debugging()`, and `invalid_parameter_exception`'s errorcode is
+  `invalidparameter` (`lib/classes/exception/invalid_parameter_exception.php:37`), so the
+  publisher tests the errorcode, as planned.
+- **Next lesson (T045)**: **Changed** (review, 2026-10-06): the hook is
+  `lib/classes/hook/output/before_footer_html_generation.php:30`, with `renderer` and
+  `add_html()`; `core_renderer::footer()` builds it at `:965` and dispatches it at `:967`,
+  before `container_end_all(true)` (`:968`), so the button lands inside `div[role=main]`.
+  `after_standard_main_region_html_generation` (`:586`/`:594`), the first choice, is printed
+  by Boost after `theme_boost/footer`, outside `#page` (`drawers.mustache:179-181`).
+  `activity_navigation()` is `:469`; its filter (`:505`) also skips a module type that never
+  displays (`cm_info::is_of_type_that_can_display()`, `cm_info.php:1569`; mod_qbank), so the
+  hook mirrors that too. Boost sets `usescourseindex` (`theme/boost/config.php:187`).
+- **The app (T049)**: `tool_mobile` `external::get_content()` runs as the token's user and
+  calls the method (`admin/tool/mobile/classes/external.php:428`), returning `templates`,
+  `javascript`, `otherdata`, `files`, `restrict`, `disabled` (`:430-448`); `db/mobile.php`
+  is read and its lang ids resolved at `admin/tool/mobile/classes/api.php:113-133`.
+  `core_block_get_dashboard_blocks` (`lib/db/services.php:2857`;
+  `blocks/classes/external.php:248`, structure `:58-89`) lists blocks through
+  `get_content_for_all_regions()` (`:112`), which skips a block whose content is empty
+  (`lib/blocklib.php:1263-1266`), so a block empty on the web never reaches the app. From the
+  Moodle app source, tag `v5.2.1`: `displaydata` is `{title?, class?, type?}`
+  (`src/core/features/siteplugins/services/siteplugins.ts:961-968`); the method receives
+  `{contextlevel, instanceid, blockid}` plus the default args, `userid` among them
+  (`src/core/features/siteplugins/components/block/block.ts:65-69`,
+  `siteplugins.ts:95-106`); `[core-link]` takes `capture` as a boolean input (`src/core/directives/link.ts:38`, `:46`). **Changed**:
+  `displaydata` carries `title: 'pluginname'`, which the documentation marks required.
+- **Onward routes (T058)**: `/message/index.php?id=` is still the one-to-one route
+  (`message/index.php:38`, conversation at `:50-51`), kept unchanged. **Changed**:
+  `get_role_users()` (`lib/accesslib.php:4062`) matches every role when the role id is empty
+  (`:4103`), so the block reads mentors only when the mentor role exists.

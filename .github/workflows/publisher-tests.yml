@@ -20,6 +20,8 @@ on:
       - 'tests/test_payload_assets.py'
       - 'tests/test_payload_completion.py'
       - 'tests/test_payload_recognition.py'
+      # Spec 007: each section's estimated-time line.
+      - 'tests/test_payload_time_text.py'
       - 'competencies.yaml'
       - 'tests/test_publish_moodle.py'
       # Spec 012: the mentor-only marker and the course discussion in the payload.
@@ -51,6 +53,8 @@ on:
       - 'tests/test_payload_assets.py'
       - 'tests/test_payload_completion.py'
       - 'tests/test_payload_recognition.py'
+      # Spec 007: each section's estimated-time line.
+      - 'tests/test_payload_time_text.py'
       - 'competencies.yaml'
       - 'tests/test_publish_moodle.py'
       # Spec 012: the mentor-only marker and the course discussion in the payload.
@@ -77,6 +81,7 @@ jobs:
         run: >-
           python -m pytest -q tests/test_image_reduce.py tests/test_payload_assets.py
           tests/test_payload_completion.py tests/test_payload_recognition.py
+          tests/test_payload_time_text.py
           tests/test_publish_moodle.py
           tests/test_disclosure_mentor_only.py tests/test_moodle_payload_discussion.py
           tests/test_ltct_admin.py

@@ -8,10 +8,16 @@ app version. V9 is the real-learner pilot that makes row #13 done.
 
 ## Prerequisites
 
-- `main` is fast-forwarded to `origin/main` before any deploy or apply, so apply never
-  enforces a stale declaration: `git log main..origin/main` is empty.
-- `local_ltuse` and `block_ltuse` are deployed with LF line endings
-  (`git -c core.autocrlf=false archive`).
+- The deploy order, done exactly in this order:
+  1. Fast-forward `main` to `origin/main`, so apply never enforces a stale declaration:
+     `git log main..origin/main` is empty.
+  2. Archive and copy `moodle/local_ltuse` to `public/local/ltuse`, and `moodle/block_ltuse`
+     to `public/blocks/ltuse`, each with `git -c core.autocrlf=false archive`, so both are
+     deployed with LF line endings.
+  3. Run `php -d max_input_vars=5000 admin/cli/upgrade.php --non-interactive`.
+  4. Then run `site_config.py apply` (below).
+  5. Only then publish with the new publisher. A server still on the old local_ltuse
+     rejects the new `summary` key ([contracts/update-sections.md](contracts/update-sections.md)).
 - `MOODLE_URL`, `MOODLE_TOKEN` and `MOODLE_SUPPORT_EMAIL` are in the environment, never in a file.
 - One published pipeline course with at least three lessons and a quiz, for example
   `paratext-quotation-rules`.
@@ -26,12 +32,18 @@ app version. V9 is the real-learner pilot that makes row #13 done.
 
 ```powershell
 python scripts/site_config.py validate
-python scripts/site_config.py drift      # expect: the dashboard, nav, myoverview, brand and support lines
+python scripts/site_config.py drift      # expect: the dashboard, myoverview grouping, brandcolor and supportemail lines
 python scripts/site_config.py apply
-python scripts/site_config.py drift      # expect: nothing
+python scripts/site_config.py drift      # expect: only the documented Expected differences
 ```
 
-**Pass**: The second drift is empty, and it reports `personal dashboards: 0`.
+The first drift lists dashboard, myoverview grouping, brandcolor and supportemail lines, and
+no nav line, because R1 declares the four navigation settings at their live values. It also
+exits 1 in a shell without `MOODLE_SUPPORT_EMAIL`, as it does for
+`badges_defaultissuercontact`.
+
+**Pass**: The second drift shows only the documented Expected differences: no dashboard line
+and no `dashboard personal dashboards` line.
 
 ## V1. First login, enrolled and not (US1-1, US1-3, FR-001, FR-002)
 
@@ -63,11 +75,11 @@ As **A**, open lessons 1 and 2, then return to the Dashboard.
 As **A**, open the course page.
 **Expect**:
 - Each lesson is a section named for the lesson.
-- Each section shows its "Estimated time: N minutes" line.
+- Each lesson section shows its "Estimated time: N minutes" line; a quiz section shows none.
 - Each lesson shows Done or To do.
-- The quiz sits in its lesson.
+- The quiz sits in its own section after the lessons, where the publisher places it.
 
-Then open lesson 1. **Expect**: "Next: <lesson 2>" beneath the content. Following "Next"
+Then open lesson 1. **Expect**: "Next: <lesson 2>" beneath the content. Following Next twice
 reaches lesson 3 with no use of the course index or any menu. On the last module the
 button reads "Back to the course".
 

@@ -37,8 +37,8 @@ Five disclosure checks, all fail-closed:
                           heavier than its source; and a file delivered unreduced must be
                           byte-identical to what is committed.
 
-And two structural checks, on every view, because a publish without them is wrong in
-Moodle even when it leaks nothing (spec 004):
+And six structural checks, on every view, because a publish without them is wrong in
+Moodle even when it leaks nothing (spec 004 onwards):
 
   6. Completion        -- every module carries a completion rule (view, submit or pass)
                           and the course's is "all". A missing one would leave a module
@@ -60,6 +60,11 @@ Moodle even when it leaks nothing (spec 004):
                           outcome-levels.yaml's course_target_levels labels, verbatim. The
                           publisher sends its leading digit as the course's pathway level,
                           so a label it cannot read a digit from must never reach Moodle.
+ 11. Section summaries -- spec 007: every section carries time_text, and it is "" or the
+                          lesson's **Estimated time:** line rendered on its own: one
+                          paragraph, no newline, no markup but the header's. The publisher
+                          sends it as the section summary, outside the page, so nothing else
+                          from the lesson may ride along with it.
 
 Usage:
   python scripts/check_moodle_payload.py --payload <dir> --slug <slug>
@@ -103,6 +108,10 @@ IDNUMBER_MAX = 100                                 # course_modules.idnumber
 PLACEHOLDER = re.compile(r"\{([^{}]*)\}")
 # An organisation's category (spec 002 R11); the key as site_config.KEY allows it.
 ORG_CATEGORY = re.compile(r"^ltct:org:[a-z][a-z0-9-]*$")
+# A section's time_text (spec 007), as moodle_payload.time_text_of() renders the header line:
+# trailing plain text and entities allowed, a second element never. Its own pattern, because
+# this gate imports neither moodle_payload nor markdown.
+TIME_TEXT = re.compile(r"^<p><strong>Estimated time:</strong>\s*\d+\s*minutes[^<>\n]*</p>$")
 
 
 def normalise(text):
@@ -129,12 +138,13 @@ def check(payload_dir):
     problems, warnings = [], []
     slug = manifest["slug"]
 
-    # --- 6 and 7. structural, on every view ----------------------------------------------
+    # --- 6 to 11. structural, on every view ----------------------------------------------
     problems += check_completion(slug, manifest)
     problems += check_competencies(slug, manifest)
     problems += check_recognition(slug, manifest)
     problems += check_placement(slug, manifest)
     problems += check_target_level(slug, manifest)
+    problems += check_section_summaries(slug, manifest)
 
     if manifest["view"] != "learner":
         warnings.append("%s: payload is the '%s' view -- this check only certifies the "
@@ -238,6 +248,24 @@ def check_placement(slug, manifest):
     return []
 
 
+def check_section_summaries(slug, manifest):
+    """Check 11. Every section carries time_text: "" or the Estimated time line alone.
+
+    A missing key is refused, never defaulted: a builder that forgot it would publish with
+    every summary left as it was.
+    """
+    problems = []
+    for section in manifest.get("sections") or []:
+        text = section.get("time_text")
+        # fullmatch, since $ also matches before a trailing newline; \s* could span one.
+        ok = isinstance(text, str) and (text == "" or (
+            "\n" not in text and "\r" not in text and TIME_TEXT.fullmatch(text)))
+        if not ok:
+            problems.append("%s: section %d time_text is not the Estimated time line"
+                            % (slug, section.get("number", 0)))
+    return problems
+
+
 def check_completion(slug, manifest):
     """Check 6. Every module, and every quiz definition, names one of the three rules."""
     problems = []
@@ -336,7 +364,7 @@ def check_recognition(slug, manifest, site=SITE):
 
 
 def check_target_level(slug, manifest):
-    """Check 9. A present target_outcome_level is a course_target_levels label, verbatim."""
+    """Check 10. A present target_outcome_level is a course_target_levels label, verbatim."""
     level = manifest.get("target_outcome_level")
     if level is None:
         return []
@@ -430,7 +458,7 @@ def main():
         return 1
     print("\n%d course payload(s) clean: no excluded sources, no answer-key text in any "
           "page, every question keyed, every module's completion set, every competency "
-          "in the framework." % len(targets))
+          "in the framework, every section summary its estimated time." % len(targets))
     return 0
 
 

@@ -65,7 +65,10 @@ read at render time.
   - the continue rule;
   - the next-`cm` rule;
   - the dashboard applier's complete and reset paths.
-- A PHP unit test (`block_ltuse/tests/`) asserts the lang file holds no forbidden CBC wording.
+- The wording test is `tests/test_learner_wording.py` (pytest), not a PHP unit test: it holds
+  every block_ltuse string and the spec 007 local_ltuse block to
+  `cbc_wording.report_label_problems(strict=True)`.
+- PHPUnit tests in `block_ltuse/tests/` for the block itself, run in CI.
 - Live checks: [quickstart.md](quickstart.md) V1–V8. The pilot: V9.
 
 **Target Platform**:
@@ -115,8 +118,9 @@ The plan proceeds on these defaults. Each is reversible and is recorded in resea
 
 1. **Build "Continue" now** (R3). Spec 004 R6 proposed waiting for the pilot to show the
    need. Spec 007 US1-2 asks for it, and the block exists anyway for FR-002 and FR-008.
-2. **Prevent dashboard editing for learners, and reset the six personal dashboards on
-   ltuse.net** (R4). The reset is irreversible for those six. They predate any learner.
+2. **Prevent dashboard editing for learners, and reset the personal dashboards that exist
+   on the server today** (R4). The reset is irreversible for them. On today's site they
+   predate any learner; `drift` reports how many, as a count, never as people.
 3. **The section-summary change is a publisher change, not a content-model change** (R10).
    If you read constitution X as covering it, US2's time display waits for your approval of
    the design in contracts/update-sections.md.
@@ -156,11 +160,11 @@ moodle/
 │   ├── classes/output/mobile.php    # mobile_block_view
 │   ├── templates/                   # block.mustache, mobile_block.mustache
 │   ├── lang/en/block_ltuse.php      # every visible string
-│   ├── tests/                       # wording test
+│   ├── tests/                       # the block's PHPUnit tests (the wording test is pytest)
 │   └── README.md
 ├── local_ltuse/
 │   ├── classes/learner_home.php     # NEW: the learner state of data-model §2 (one class, both views)
-│   ├── classes/hook_callbacks.php   # + after_main_region (next-lesson button, R6)
+│   ├── classes/hook_callbacks.php   # + before_footer (next-lesson button, R6)
 │   ├── db/hooks.php                 # + registration
 │   ├── classes/external/update_sections.php   # + optional summary (contract)
 │   ├── classes/siteconfig/dashboard.php       # + complete, weight, reset (contract)
@@ -185,6 +189,7 @@ tests/
 ├── test_payload_time_text.py        # NEW
 ├── test_publish_moodle.py           # + summary send
 ├── test_site_config.py              # + dashboard and settings validation
+├── test_learner_wording.py          # NEW: block_ltuse and local_ltuse strings vs cbc_wording
 └── learner_home_harness.php         # NEW: continue rule, next-cm rule, modes
 ```
 

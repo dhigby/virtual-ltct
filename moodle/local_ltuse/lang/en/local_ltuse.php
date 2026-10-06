@@ -433,3 +433,8 @@ $string['privacy:metadata:course_mentor:usermodified'] = 'Who recorded it.';
 $string['privacy:metadata:course_mentor:timecreated'] = 'When it was recorded.';
 $string['privacy:metadata:course_mentor:timemodified'] = 'When it last changed.';
 $string['privacy:path:coursementors'] = 'Course mentors';
+
+// Spec 007: learner experience. Learner-facing navigation; no string here names a CBC level or says "certified".
+$string['backtocourse'] = 'Back to the course';
+$string['nextlesson'] = 'Next: {$a}';
+// End of the spec 007 learner experience block.

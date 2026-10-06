@@ -158,7 +158,7 @@ short and clean may simply have its denied items switched out of view. Turn on
 ![A denied error at MAT 2:5 shown with strikethrough text: "Text of marker/style does not begin with a capital: w".](assets/ss-04-denied-error-strikethrough.png)
 *Denied errors are struck through — but only if this view option is on.*
 
-![A Basic Checks results list with the top item reading "Denied message(s) not shown."](assets/ss-04-denied-error-not-shown.png)
+![A Basic Checks results list for Matthew with the top item reading "Denied message(s) not shown."](assets/ss-04-denied-error-not-shown.png)
 *With the view option off, the list simply tells you denied messages exist without showing them.*
 
 > **WARNING — watch for a false-clean result here too:** A Basic Checks run showing zero

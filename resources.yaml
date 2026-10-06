@@ -1,0 +1,1387 @@
+# The resource library (spec 014): its only source of truth. One entry per resource.
+# Rules: specs/014-resource-library/contracts/resources-yaml.md, checked by
+# scripts/check_competency_descriptors.py. Rendered by scripts/gen_site.py as /library/
+# and as each competency page's Further Information section.
+
+- title: Creative Commons Licenses
+  url: https://creativecommons.org/licenses/
+  description: Directory of Creative Commons licenses by version, with legal deeds; use it to pick and
+    explain a licence for published materials.
+  type: site
+  competencies:
+  - Archiving and Copyright Tools
+  language: English
+- title: SIL Language and Culture Archives
+  url: https://www.sil.org/resources/language-culture-archives
+  description: SIL Language and Culture Archives page; use it to find where SIL archives and shares language
+    materials.
+  type: site
+  competencies:
+  - Archiving and Copyright Tools
+  language: English
+- title: Introducing RAMP
+  url: https://www.sil.org/resources/archives/43211
+  description: Introductory resource on RAMP, SIL's tool for preparing and submitting materials to the
+    archive.
+  type: document
+  competencies:
+  - Archiving and Copyright Tools
+  language: English
+- title: REAP
+  url: https://reap.sil.org/
+  description: News and resources for the SIL Archives, covering the REAP preservation system and RAMP
+    submission software.
+  type: site
+  competencies:
+  - Archiving and Copyright Tools
+  language: English
+- title: Claude prompting guide
+  url: https://docs.claude.com/en/docs/build-with-claude/prompt-engineering/overview
+  description: Overview of when and how to improve prompts for Claude, with links to best practices and
+    interactive tutorials.
+  type: guide
+  competencies:
+  - Artificial Intelligence (AI) Tools
+  language: English
+- title: OpenAI Academy
+  url: https://academy.openai.com
+  description: OpenAI's learning platform of AI skills courses and events; use it to build general AI
+    literacy.
+  type: site
+  competencies:
+  - Artificial Intelligence (AI) Tools
+  language: English
+- title: Google AI Essentials / Google AI for Education
+  url: https://ai.google
+  description: Google's AI portal listing its AI products, productivity tools and developer resources.
+  type: site
+  competencies:
+  - Artificial Intelligence (AI) Tools
+  language: English
+- title: Scripture Forge
+  url: https://software.sil.org/scriptureforge/
+  description: Product page for Scripture Forge, a web app for collaborative Bible translation with AI
+    drafting and community checking.
+  type: site
+  competencies:
+  - Artificial Intelligence (AI) Tools
+  language: English
+- title: Scripture Forge software
+  url: https://scriptureforge.org/
+  description: Scripture Forge itself, the online platform for team translation with AI help and community
+    review tools.
+  type: site
+  competencies:
+  - Artificial Intelligence (AI) Tools
+  language: English
+- title: SIL AI and NLP
+  url: https://ai.sil.org/
+  description: SIL's AI and NLP site describing its language AI initiatives; use it to see what SIL is
+    building and why.
+  type: site
+  competencies:
+  - Artificial Intelligence (AI) Tools
+  language: English
+- title: Hugging Face
+  url: https://huggingface.co
+  description: Community platform for sharing and finding machine learning models, datasets and demo applications.
+  type: site
+  competencies:
+  - Artificial Intelligence (AI) Tools
+  language: English
+- title: TAUS
+  url: https://www.taus.net
+  description: TAUS site, now centred on its API for translation quality estimation and automated post-editing.
+  type: site
+  competencies:
+  - Artificial Intelligence (AI) Tools
+  language: English
+- title: Professional Networking Resources
+  url: https://consultantcompetencies.org/relating-to-other-organisations/
+  description: Resource page of recommended tools and organisations for building effective partnerships
+    with other organisations.
+  type: guide
+  competencies:
+  - Community of Practice Involvement
+  language: English
+- title: Advocacy Principles and Practices (video)
+  url: https://vimeo.com/showcase/7563286/video/458673671
+  description: Language Technology Academy video on advocacy principles and practices.
+  type: video
+  competencies:
+  - Community of Practice Involvement
+  language: English
+- title: Networking (video)
+  url: https://vimeo.com/showcase/7563286/video/458683787
+  description: Language Technology Academy video on professional networking.
+  type: video
+  competencies:
+  - Community of Practice Involvement
+  language: English
+- title: How to network?
+  url: https://www.wikihow.com/Network
+  description: wikiHow article on how to network professionally.
+  type: guide
+  competencies:
+  - Community of Practice Involvement
+  language: English
+- title: Get an Advocacy Campaign off the ground
+  url: https://ctb.ku.edu/en/table-of-contents/advocacy/advocacy-principles/overview/main
+  description: 'Community Tool Box guide to starting an advocacy campaign: what advocacy is, when to use
+    it, and planning it.'
+  type: guide
+  competencies:
+  - Community of Practice Involvement
+  language: English
+- title: Problem Solving Skills of Great Software Developers
+  url: https://dev.to/lpasqualis/the-5-problem-solving-skills-of-great-software-developers-4e6
+  description: Article on five problem-solving habits of good developers, such as decomposition, abstraction
+    and code reuse.
+  type: guide
+  competencies:
+  - Computational and Corpus Linguistics
+  - Software Development
+  language: English
+- title: SIL Language Software Development on Github
+  url: https://github.com/sillsdev
+  description: SIL Language Software Development's GitHub organisation, hosting source code for its linguistics
+    and translation tools.
+  type: site
+  competencies:
+  - Computational and Corpus Linguistics
+  - Software Development
+  language: English
+- title: SIL's Keyman on GitHub (Multiplatform Keyboards)
+  url: https://github.com/keymanapp
+  description: GitHub organisation for Keyman, the open-source multiplatform keyboarding system; use it
+    for source and issue tracking.
+  type: site
+  competencies:
+  - Computational and Corpus Linguistics
+  - Software Development
+  language: English
+- title: Learn C# online
+  url: https://codeasy.net/
+  description: Online course for learning C# programming.
+  type: site
+  competencies:
+  - Computational and Corpus Linguistics
+  - Software Development
+  language: English
+- title: C# Tutorial
+  url: https://www.tutorialspoint.com/csharp/index.htm
+  description: C# tutorial running from basic syntax and data types to object-oriented and asynchronous
+    programming.
+  type: guide
+  competencies:
+  - Computational and Corpus Linguistics
+  - Software Development
+  language: English
+- title: W3schools - C# tutorial
+  url: https://www.w3schools.com/cs/
+  description: W3Schools introductory C# tutorial with short lessons and examples for beginners.
+  type: guide
+  competencies:
+  - Computational and Corpus Linguistics
+  - Software Development
+  language: English
+- title: SIL Writing Systems Technology
+  url: https://github.com/silnrsi
+  description: GitHub organisation of SIL Writing Systems Technology, hosting its smart font and writing-system
+    tools.
+  type: site
+  competencies:
+  - Computational and Corpus Linguistics
+  - Software Development
+  language: English
+- title: Github (An open-source programming community)
+  url: https://github.com
+  description: GitHub, the platform for hosting, collaborating on and tracking issues in software projects.
+  type: site
+  competencies:
+  - Computational and Corpus Linguistics
+  - Software Development
+  language: English
+- title: Sourceforge (Another open-source programming community)
+  url: http://www.sourceforge.com
+  description: SourceForge, a site for hosting and downloading open-source software projects.
+  type: site
+  competencies:
+  - Computational and Corpus Linguistics
+  - Software Development
+  language: English
+- title: Praat on Github
+  url: https://github.com/praat
+  description: GitHub organisation for Praat, the phonetics analysis program; use it for source code and
+    releases.
+  type: site
+  competencies:
+  - Computational and Corpus Linguistics
+  - Software Development
+  language: English
+- title: iFixit (Repair manuals for many devices)
+  url: https://www.ifixit.com/
+  description: Free repair manuals with step-by-step guides, parts and tools for fixing computers and
+    other devices.
+  type: site
+  competencies:
+  - Computer Hardware
+  language: English
+- title: Identifying Failing Components
+  url: https://www.howtogeek.com/174068/how-to-identify-which-hardware-component-is-failing-in-your-computer/
+  description: 'How to work out which hardware part is failing: drive SMART status, RAM tests, temperatures
+    and stress tests.'
+  type: guide
+  competencies:
+  - Computer Hardware
+  language: English
+- title: Windows 10 Hardware Troubleshooting
+  url: https://www.techrepublic.com/article/how-to-more-effectively-troubleshoot-hardware-issues-in-windows-10-with-device-managers-views/
+  description: Article on using Device Manager views to troubleshoot hardware problems in Windows 10.
+  type: guide
+  competencies:
+  - Computer Hardware
+  language: English
+- title: CompTIA A+ Certification Video for more advance users
+  url: https://www.youtube.com/watch?v=2eLe7uz-7CM
+  description: CompTIA A+ certification video course for more advanced users learning hardware troubleshooting.
+  type: video
+  competencies:
+  - Computer Hardware
+  language: English
+- title: Computer Basic Parts
+  url: https://edu.gcfglobal.org/en/computerbasics/basic-parts-of-a-computer/1/
+  description: Beginner lesson on the basic parts of a computer.
+  type: guide
+  competencies:
+  - Computer Hardware
+  language: English
+- title: Net Literacy
+  url: https://drive.google.com/file/d/1sVyGCUqFEVLMSbajZw8hnRr4anSkcn7A/view
+  description: Net Literacy document on computer hardware basics, shared on Google Drive.
+  type: document
+  competencies:
+  - Computer Hardware
+  language: English
+- title: Regular Expressions.info (Jan Goyvaerts)
+  url: http://www.regular-expressions.info/
+  description: Comprehensive tutorial and reference on regular expression syntax across many tools and
+    languages.
+  type: guide
+  competencies:
+  - Data Conversion
+  language: English
+- title: Regex Golf (Game)
+  url: https://alf.nu/RegexGolf
+  description: Regex Golf, a puzzle game for practising writing regular expressions.
+  type: site
+  competencies:
+  - Data Conversion
+  language: English
+- title: RegexOne tutorial
+  url: https://regexone.com/
+  description: Interactive step-by-step lessons that teach regular expressions from the basics.
+  type: guide
+  competencies:
+  - Data Conversion
+  language: English
+- title: Notepad++ - Regular Expressions
+  url: https://npp-user-manual.org/docs/searching/#regular-expressions
+  description: Notepad++ manual section on regular expression syntax for advanced search and replace.
+  type: guide
+  competencies:
+  - Data Conversion
+  language: English
+- title: Python Documentation
+  url: https://docs.python.org/
+  description: Official Python documentation hub with the tutorial, library reference and language guides.
+  type: site
+  competencies:
+  - Data Conversion
+  language: English
+- title: Beginner's Guide to Python
+  url: https://wiki.python.org/moin/BeginnersGuide
+  description: Python wiki beginners' guide covering installation, tutorials and learning paths for new
+    programmers.
+  type: guide
+  competencies:
+  - Data Conversion
+  language: English
+- title: SIL Converters
+  url: https://software.sil.org/silconverters/
+  description: Home of SIL Converters, tools that change the encoding, font or script of text in Word
+    and other documents.
+  type: site
+  competencies:
+  - Data Conversion
+  language: English
+- title: SIL Converters 4.0
+  url: https://scripts.sil.org/cms/scripts/page.php?site_id=nrsi&id=enccnvtrs
+  description: Archived page on SIL Converters 4.0, a toolkit for converting text encoding, fonts and
+    scripts in documents.
+  type: site
+  competencies:
+  - Data Conversion
+  language: English
+- title: Learn Python the Hard Way
+  url: https://learnpythonthehardway.org/book/
+  description: Contents and purchase page for Learn Python the Hard Way, a paid exercise-based Python
+    course.
+  type: site
+  competencies:
+  - Data Conversion
+  language: English
+- title: Consistent Changes Program
+  url: https://software.sil.org/cc/
+  description: Home of Consistent Changes, a program for finding and changing text consistently across
+    one or many files.
+  type: site
+  competencies:
+  - Data Conversion
+  language: English
+- title: PTXprint
+  url: https://software.sil.org/ptxprint/
+  description: Home of PTXprint, free software for typesetting Scripture publications from Paratext or
+    USFM files.
+  type: site
+  competencies:
+  - Digital and Print Publishing
+  - Typesetting
+  language: English
+- title: Scripture App Builder
+  url: https://software.sil.org/scriptureappbuilder/
+  description: Home of Scripture App Builder, for creating customized mobile Scripture apps with synchronized
+    text and audio.
+  type: site
+  competencies:
+  - Digital and Print Publishing
+  - Typesetting
+  language: English
+- title: Scripture App Builder (video)
+  url: https://vimeo.com/showcase/7563286/video/637109085
+  description: Language Technology Academy video on Scripture App Builder, for learning to build Scripture
+    apps.
+  type: video
+  competencies:
+  - Digital and Print Publishing
+  - Typesetting
+  language: English
+- title: App Builder Series (video)
+  url: https://vimeo.com/channels/1577299
+  description: Vimeo channel of App Builder training videos covering SIL's Scripture, Reading and Dictionary
+    App Builders.
+  type: video
+  competencies:
+  - Digital and Print Publishing
+  - Typesetting
+  language: English
+- title: Dictionary App Builder
+  url: https://software.sil.org/dictionaryappbuilder/
+  description: Home of Dictionary App Builder, for creating mobile dictionary apps with pictures, search
+    and audio.
+  type: site
+  competencies:
+  - Digital and Print Publishing
+  - Typesetting
+  language: English
+- title: Reading App Builder
+  url: https://software.sil.org/readingappbuilder/
+  description: Home of Reading App Builder, for creating customized mobile reading apps with synchronized
+    text and audio.
+  type: site
+  competencies:
+  - Digital and Print Publishing
+  - Literacy Tools
+  - Typesetting
+  language: English
+- title: Scriptoria
+  url: https://software.sil.org/scriptureappbuilder/service/
+  description: Page describing Scriptoria, the service for building and publishing Scripture App Builder
+    apps.
+  type: site
+  competencies:
+  - Digital and Print Publishing
+  - Typesetting
+  language: English
+- title: Webonary
+  url: https://www.webonary.org/
+  description: Webonary, an SIL site for publishing dictionaries online, used to put a team's lexicon
+    on the web.
+  type: site
+  competencies:
+  - Digital and Print Publishing
+  - Typesetting
+  language: English
+- title: SIL Xlingpaper
+  url: https://software.sil.org/xlingpaper/
+  description: Home of XLingPaper, a tool for authoring, archiving and publishing linguistic research
+    documents in XML.
+  type: site
+  competencies:
+  - Digital and Print Publishing
+  - Typesetting
+  language: English
+- title: OpenOffice Linguistic Tools
+  url: https://software.sil.org/oolt/
+  description: Home of SIL's LibreOffice Tools (formerly OpenOffice Linguistic Tools) for language write-ups
+    in minority languages.
+  type: site
+  competencies:
+  - Digital and Print Publishing
+  - Typesetting
+  language: English
+- title: SIL Pathway
+  url: https://software.sil.org/pathway/
+  description: Home of Pathway, a tool for preparing dictionary and Scripture data for distribution in
+    various formats.
+  type: site
+  competencies:
+  - Digital and Print Publishing
+  - Typesetting
+  language: English
+- title: SILAS (Smart Interactive Layout Assistant for Scripture)
+  url: http://lingtransoft.info/apps/silas-smart-interactive-layout-assistant-scripture
+  description: Listing for SILAS, a layout assistant for typesetting Scripture.
+  type: site
+  competencies:
+  - Digital and Print Publishing
+  - Typesetting
+  language: English
+- title: CLDR - Common Repository for Locales
+  url: http://cldr.unicode.org/
+  description: Home of the Unicode CLDR project, the common repository of locale data software uses to
+    support languages.
+  type: site
+  competencies:
+  - Digital Vitality
+  language: English
+- title: SLDR - SIL's Repository for Minority Language Locales
+  url: https://github.com/silnrsi/sldr
+  description: GitHub repository of the SIL Locale Data Repository, which holds locale data for minority
+    languages.
+  type: site
+  competencies:
+  - Digital Vitality
+  language: English
+- title: UNICODE LOCALE DATA MARKUP LANGUAGE (LDML)
+  url: http://unicode.org/reports/tr35/
+  description: Unicode technical standard defining LDML, the XML format for locale data, for reference
+    on locale files.
+  type: document
+  competencies:
+  - Digital Vitality
+  language: English
+- title: Common European Framework of Reference (CEFR)
+  url: https://www.coe.int/en/web/common-european-framework-reference-languages
+  description: Council of Europe page on the CEFR, the framework for describing language proficiency levels.
+  type: site
+  competencies:
+  - English Language
+  language: English
+- title: Grammarly (Online Grammar Checker)
+  url: https://www.grammarly.com/
+  description: Grammarly, an online writing assistant for checking English grammar and spelling.
+  type: site
+  competencies:
+  - English Language
+  language: English
+- title: Antidote (Spelling and Grammar Checker, French and English)
+  url: https://www.antidote.info/
+  description: Antidote, a writing assistance suite with correctors, dictionaries and guides for English
+    and French.
+  type: site
+  competencies:
+  - English Language
+  language: English
+- title: DeepL Translator (Excellent Translation to andf rom English)
+  url: http://www.deepl.com
+  description: DeepL, an online translation service for translating text and documents to and from English.
+  type: site
+  competencies:
+  - English Language
+  language: English
+- title: Microsoft Translator (Very good translation for technical documents)
+  url: https://www.bing.com/translator
+  description: Microsoft Translator, for quickly translating words and phrases between English and over
+    100 languages.
+  type: site
+  competencies:
+  - English Language
+  language: English
+- title: WordReference (Translating Concepts)
+  url: http://www.wordreference.com/
+  description: WordReference, an online bilingual dictionary and forum for translating words and concepts.
+  type: site
+  competencies:
+  - English Language
+  language: English
+- title: Linguee (Translating Expressions)
+  url: https://www.linguee.com/
+  description: Linguee, a dictionary with example translations in context, for translating expressions.
+  type: site
+  competencies:
+  - English Language
+  language: English
+- title: Assessment Grid
+  url: https://rm.coe.int/CoERMPublicCommonSearchServices/DisplayDCTMContent?documentId=090000168045bb52
+  description: Council of Europe CEFR self-assessment grid, for rating language proficiency by level.
+  type: document
+  competencies:
+  - English Language
+  language: English
+- title: UNICODE
+  url: http://www.unicode.org/versions/latest/
+  description: The latest version of the Unicode Standard, for reference on characters and encoding.
+  type: document
+  competencies:
+  - Fonts & Encoding
+  language: English
+- title: ScriptSource - Info on the World's writing systems
+  url: https://www.scriptsource.org/
+  description: ScriptSource has been retired; this page explains the move of its writing system content
+    to writingsystems.info.
+  type: site
+  competencies:
+  - Fonts & Encoding
+  language: English
+- title: SIL Fonts
+  url: https://software.sil.org/fonts/
+  description: SIL's font catalogue, for finding and downloading SIL fonts that support many scripts.
+  type: site
+  competencies:
+  - Fonts & Encoding
+  language: English
+- title: Google Web Fonts
+  url: https://fonts.google.com/
+  description: Google Fonts, a catalogue of free open fonts to browse and download.
+  type: site
+  competencies:
+  - Fonts & Encoding
+  language: English
+- title: Character Name index
+  url: https://www.unicode.org/charts/charindex.html
+  description: Unicode index of character names, for finding a character's code chart by name.
+  type: site
+  competencies:
+  - Fonts & Encoding
+  language: English
+- title: Unicode Code Charts
+  url: https://www.unicode.org/charts/index.html
+  description: Unicode code charts, for looking up characters by script and block.
+  type: site
+  competencies:
+  - Fonts & Encoding
+  language: English
+- title: Unicode Surrogates and Supplementary Characters
+  url: https://docs.microsoft.com/en-us/windows/win32/intl/surrogates-and-supplementary-characters
+  description: Microsoft article explaining surrogate pairs and supplementary characters beyond the Basic
+    Multilingual Plane in Windows.
+  type: guide
+  competencies:
+  - Fonts & Encoding
+  language: English
+- title: To the BMP and beyond
+  url: https://www.unicode.org/notes/tn23/Muller-Slides.pdf
+  description: Slide presentation on using Unicode characters beyond the Basic Multilingual Plane.
+  type: document
+  competencies:
+  - Fonts & Encoding
+  language: English
+- title: SIL Translation
+  url: https://www.sil.org/training/translation
+  description: SIL page describing translation roles and the training needed to serve in them.
+  type: site
+  competencies:
+  - General
+  - Translation
+  language: English
+- title: SIL Training in Translation
+  url: https://www.sil.org/translation/training-translation
+  description: SIL page listing translation training courses offered by organizations around the world.
+  type: site
+  competencies:
+  - General
+  language: English
+- title: SIL Literacy and Education
+  url: https://www.sil.org/training/literacy-and-education
+  description: SIL page describing literacy and education roles and the training they require.
+  type: site
+  competencies:
+  - General
+  - Literacy or MLE
+  language: English
+- title: SIL Training in Literacy and Education
+  url: https://www.sil.org/literacy-education/training-literacy-and-education-work
+  description: SIL page on background and training useful for international literacy and education work.
+  type: site
+  competencies:
+  - General
+  - Literacy or MLE
+  language: English
+- title: SIL Training in Scripture Engagement
+  url: https://www.sil.org/training/scripture-use-and-impact
+  description: SIL page describing Scripture Use roles and the training they require.
+  type: site
+  competencies:
+  - General
+  - Scripture Engagement
+  language: English
+- title: Scripture Engagement
+  url: https://www.sil.org/translation/scripture-use-and-impact
+  description: SIL page explaining Scripture engagement and how Scripture Use staff work with teams and
+    churches.
+  type: site
+  competencies:
+  - General
+  - Scripture Engagement
+  language: English
+- title: SIL Training
+  url: https://www.sil.org/training
+  description: SIL overview of training in linguistics, literacy, translation and related language development
+    fields.
+  type: site
+  competencies:
+  - General
+  - Linguistics
+  language: English
+- title: Dallas International University
+  url: https://www.diu.edu/
+  description: Dallas International University, offering accredited programs in language, culture and
+    Bible.
+  type: site
+  competencies:
+  - General
+  language: English
+- title: Canada Institute of LInguistics
+  url: https://www.canil.ca/
+  description: Canada Institute of Linguistics, which trains linguists for language development and Scripture
+    translation.
+  type: site
+  competencies:
+  - General
+  language: English
+- title: SIL Linguistics
+  url: https://www.sil.org/linguistics
+  description: SIL page introducing linguistics as a foundation for language development work.
+  type: site
+  competencies:
+  - General
+  - Linguistics
+  language: English
+- title: FLEx Parsing Manual (Andy Black)
+  url: http://downloads.sil.org/FieldWorks/WW-ConceptualIntro/ConceptualIntroduction.htm
+  description: Conceptual introduction to morphological parsing in FieldWorks Language Explorer, for understanding
+    the FLEx parser.
+  type: guide
+  competencies:
+  - Grammar Tools
+  language: English
+- title: FLEx Grammar
+  url: https://software.sil.org/fieldworks/features/orientation-to-fieldworks/grammar/
+  description: FieldWorks orientation page on the Grammar area of FLEx.
+  type: guide
+  competencies:
+  - Grammar Tools
+  language: English
+- title: The SIL FieldWorks Language Explorer Approach to Morphological Parsing
+  url: https://scholars.sil.org/sites/scholars/files/gary_f_simons/preprint/flexparser_preprint.pdf
+  description: Preprint paper describing FieldWorks Language Explorer's approach to morphological parsing.
+  type: document
+  competencies:
+  - Grammar Tools
+  language: English
+- title: Linguistic Society of America
+  url: https://www.lsadc.org/
+  description: Home of the Linguistic Society of America, a professional society for linguists.
+  type: site
+  competencies:
+  - Grammar Tools
+  language: English
+- title: Keyman
+  url: https://keyman.com/
+  description: Home of Keyman, free open-source keyboard software for typing many languages on Windows,
+    macOS, Linux, iOS and Android.
+  type: site
+  competencies:
+  - Keyboard Development
+  - Keyboards
+  language: English
+- title: Keyman Unicode Keyboards
+  url: http://scripts.sil.org/cms/scripts/page.php?site_id=nrsi&id=KeymanKeyboardLinks
+  description: Archived SIL list of Unicode Keyman keyboards by region, for locating an existing keyboard
+    before building one.
+  type: site
+  competencies:
+  - Keyboard Development
+  - Keyboards
+  language: English
+- title: How to Identify International Physical Keyboards
+  url: https://keyshorts.com/blogs/blog/44712961-how-to-identify-laptop-keyboard-localization
+  description: Illustrated guide to about 80 Windows keyboard layouts, for identifying which physical
+    keyboard layout a laptop has.
+  type: guide
+  competencies:
+  - Keyboard Development
+  - Keyboards
+  language: English
+- title: Dell Keyboard Troubleshooting
+  url: http://www.dell.com/support/article/us/en/19/sln305029/keyboard-usage-and-troubleshooting-guide?lang=en
+  description: Dell guide to keyboard use and troubleshooting, covering unresponsive keys, connection
+    problems and wrong characters appearing.
+  type: guide
+  competencies:
+  - Keyboard Development
+  - Keyboards
+  language: English
+- title: How to change keyboard layouts in Windows 11
+  url: https://windowsreport.com/keyboard-layout-windows-11/
+  description: Article on changing keyboard layouts in Windows 11, useful when adding or switching input
+    languages.
+  type: guide
+  competencies:
+  - Keyboard Development
+  - Keyboards
+  language: English
+- title: Language Documentation & Conservation
+  url: http://nflrc.hawaii.edu/ldc/
+  description: Home of Language Documentation & Conservation, a peer-reviewed open-access journal on documenting
+    and conserving languages.
+  type: site
+  competencies:
+  - Language Documentation
+  language: English
+- title: SIL Language Documentation
+  url: https://www.sil.org/language-culture-documentation/language-documentation
+  description: SIL overview page on its language documentation work and approach.
+  type: site
+  competencies:
+  - Language Documentation
+  language: English
+- title: Wikipedia Language Documentation
+  url: https://en.wikipedia.org/wiki/Language_documentation
+  description: Wikipedia overview of language documentation, the linguistics subfield that records the
+    grammar and use of languages.
+  type: site
+  competencies:
+  - Language Documentation
+  language: English
+- title: SayMore
+  url: https://software.sil.org/saymore/
+  description: 'Home of SayMore, SIL software for managing language documentation sessions: recording,
+    file conversion and annotation.'
+  type: site
+  competencies:
+  - Language Documentation
+  language: English
+- title: Technical Notes on SFM Database Import
+  url: https://software.sil.org/fieldworks/wp-content/uploads/sites/38/2016/10/Technical-Notes-on-SFM-Database-Import.pdf
+  description: Technical notes PDF on importing Standard Format (SFM) databases into FieldWorks, for planning
+    a lexical import.
+  type: document
+  competencies:
+  - Lexical Import
+  language: English
+- title: Request Help with Dictionary Conversion into FLEx
+  url: https://www.webonary.org/request-help-with-dictionary-conversion-into-flex/
+  description: Webonary page for requesting help converting an existing dictionary into FLEx.
+  type: site
+  competencies:
+  - Lexical Import
+  language: English
+- title: Solid
+  url: https://software.sil.org/solid/
+  description: Home of Solid, SIL software that checks and cleans SFM lexicon files and exports them to
+    LIFT before import.
+  type: site
+  competencies:
+  - Lexical Import
+  language: English
+- title: Sheetsweeper
+  url: https://software.sil.org/sheetswiper/
+  description: Home of SheetSwiper, which converts spreadsheets of linguistic data to Standard Format
+    for import into lexical tools.
+  type: site
+  competencies:
+  - Lexical Import
+  language: English
+- title: SIL Dictionaries & Lexicography
+  url: https://www.sil.org/dictionaries-lexicography
+  description: SIL overview page on its dictionary and lexicography work.
+  type: site
+  competencies:
+  - Lexical Tools
+  language: English
+- title: SIL Fieldworks
+  url: https://software.sil.org/fieldworks/
+  description: Home of FieldWorks Language Explorer (FLEx), for building dictionaries, analysing texts
+    and publishing lexicons; downloads and help.
+  type: site
+  competencies:
+  - Lexical Tools
+  language: English
+- title: RapidWords.net (Rapid Dictionary Development)
+  url: http://rapidwords.net/
+  description: Rapid Words site on the Rapid Dictionary Development method of collecting words by semantic
+    domain.
+  type: site
+  competencies:
+  - Lexical Tools
+  language: English
+- title: Introduction to Lexicography for FLEx
+  url: https://downloads.languagetechnology.org/fieldworks/Documentation/Intro%20to%20Lexicography/Introduction%20to%20Lexicography.htm
+  description: Long guide to lexicography for FLEx users, covering dictionary planning, key concepts and
+    step-by-step procedures.
+  type: guide
+  competencies:
+  - Lexical Tools
+  language: English
+- title: WeSay
+  url: https://software.sil.org/wesay/
+  description: Home of WeSay, a simple dictionary tool that lets non-linguist speakers collect words in
+    their own language.
+  type: site
+  competencies:
+  - Lexical Tools
+  language: English
+- title: Language Forge
+  url: https://languageforge.org/
+  description: Language Forge, a web-based collaborative dictionary tool that syncs with FieldWorks; now
+    in maintenance mode.
+  type: site
+  competencies:
+  - Lexical Tools
+  language: English
+- title: Lexique Pro
+  url: https://software.sil.org/lexiquepro/
+  description: Home of Lexique Pro, a discontinued lexicon viewer and editor; the page points to FieldWorks
+    and Dictionary App Builder instead.
+  type: site
+  competencies:
+  - Lexical Tools
+  language: English
+- title: SIL Field Linguist's Toolbox
+  url: https://software.sil.org/toolbox/
+  description: Home of Field Linguist's Toolbox, SIL software for managing and analysing language data
+    in Standard Format.
+  type: site
+  competencies:
+  - Lexical Tools
+  language: English
+- title: MLE 4000 wordlist in WeSay
+  url: https://lingtran.net/MLE4000-Wordlist-in-WeSay
+  description: How to use the MLE 4000 word list, with grammatical info and semantic domains, as a starting
+    point in WeSay.
+  type: guide
+  competencies:
+  - Lexical Tools
+  language: English
+- title: MLE 4000 wordlist in FLEx
+  url: https://lingtran.net/MLE4000-Wordlist-in-FLEx
+  description: Step-by-step instructions for importing the MLE 4000 word list LIFT file into a new FLEx
+    project.
+  type: guide
+  competencies:
+  - Lexical Tools
+  language: English
+- title: SILCAWL Starter database for FLEx
+  url: https://lingtran.net/CAWL+in+FLEx
+  description: Instructions for installing the SIL Comparative African Wordlist into a new or existing
+    FLEx project and setting up its display.
+  type: guide
+  competencies:
+  - Lexical Tools
+  language: English
+- title: Multi-Dictionary Formatter (MDF)
+  url: https://software.sil.org/shoebox/mdf/
+  description: Page on Multi-Dictionary Formatter (MDF), which turns a Toolbox or Shoebox lexical database
+    into a printable dictionary.
+  type: site
+  competencies:
+  - Lexical Tools
+  language: English
+- title: Making Dictionaries. A Guide to Lexicography and the Multi-Dictionary Formatter
+  url: https://archive.org/details/mdf-2000_202306
+  description: Internet Archive copy of Making Dictionaries, a manual on lexicography principles and using
+    MDF with Toolbox or Shoebox.
+  type: document
+  competencies:
+  - Lexical Tools
+  language: English
+- title: LIFT standard
+  url: https://code.google.com/archive/p/lift-standard/
+  description: Google Code Archive project for the LIFT standard, the XML format for exchanging lexicon
+    data between tools.
+  type: site
+  competencies:
+  - Lexical Tools
+  language: English
+- title: Computational Lexicography
+  url: https://typecraft.org/tc2wiki/Computational_Lexicography
+  description: TypeCraft wiki article on computational lexicography.
+  type: site
+  competencies:
+  - Lexical Tools
+  language: English
+- title: SIL Literacy and Education
+  url: https://www.sil.org/literacy-education
+  description: SIL overview page on its literacy and education work.
+  type: site
+  competencies:
+  - Literacy Tools
+  language: English
+- title: SIL Literacy and Education (ILS)
+  url: https://sites.google.com/d/1WRbBXpgVYdTHgcS0jLOdXOSggI17FruM/p/1Kx_uPz4kEIYT2iMXVr7q8gNsonSGXzfJ/edit
+  description: Google Site on SIL literacy and education resources (ILS).
+  type: site
+  competencies:
+  - Literacy Tools
+  language: English
+- title: Bloom Library
+  url: http://bloomlibrary.org
+  description: Bloom Library, an online collection of Bloom books to browse, download and share.
+  type: site
+  competencies:
+  - Literacy Tools
+  language: English
+- title: Bloom 4 Training Plan
+  url: https://lingtran.net/Bloom-4
+  description: Training plan for teaching literacy workers to use Bloom 4 to produce vernacular books.
+  type: guide
+  competencies:
+  - Literacy Tools
+  language: English
+- title: PrimerPro
+  url: https://software.sil.org/primerpro/
+  description: Home of PrimerPro, SIL software that helps literacy workers create primers for a language.
+  type: site
+  competencies:
+  - Literacy Tools
+  language: English
+- title: PrimerPro training videos
+  url: https://vimeo.com/showcase/3521179
+  description: Vimeo showcase of PrimerPro training videos.
+  type: video
+  competencies:
+  - Literacy Tools
+  language: English
+- title: PrimerPrep
+  url: https://software.sil.org/primerprep/
+  description: Home of PrimerPrep, free software that analyses text files to suggest a letter-teaching
+    order and example words for primers.
+  type: site
+  competencies:
+  - Literacy Tools
+  language: English
+- title: SIL Africa learning and Development
+  url: https://africa.sil.org/
+  description: SIL Africa home page describing its language and learning work with African communities.
+  type: site
+  competencies:
+  - Literacy Tools
+  language: English
+- title: What is malware?
+  url: https://www.mcafee.com/en-us/antivirus/malware.html
+  description: McAfee explainer on what malware is.
+  type: site
+  competencies:
+  - Malware
+  language: English
+- title: Understanding malware & other threats
+  url: https://learn.microsoft.com/en-us/defender-endpoint/malware/understanding-malware
+  description: Microsoft overview of malware types such as ransomware, trojans and phishing, with links
+    on prevention and removal.
+  type: guide
+  competencies:
+  - Malware
+  language: English
+- title: TrendMicro Threat Encyclopedia
+  url: https://www.trendmicro.com/vinfo/us/threat-encyclopedia/
+  description: Trend Micro searchable database of malware, vulnerabilities and spam, for looking up a
+    specific threat.
+  type: site
+  competencies:
+  - Malware
+  language: English
+- title: Avast Antivirus Blog
+  url: https://blog.avast.com/
+  description: Avast blog with articles on scams, privacy and current security threats.
+  type: site
+  competencies:
+  - Malware
+  language: English
+- title: Social Engineering
+  url: https://www.knowbe4.com/what-is-social-engineering/
+  description: KnowBe4 explainer on social engineering attacks such as phishing, pretexting and baiting,
+    and how to prevent them.
+  type: guide
+  competencies:
+  - Malware
+  language: English
+- title: What is two factor authentication?
+  url: https://authy.com/what-is-2fa/
+  description: Explains two-factor authentication, why passwords alone are weak, and methods such as SMS,
+    apps and hardware tokens.
+  type: guide
+  competencies:
+  - Malware
+  language: English
+- title: Two factor authentication
+  url: https://www.techtarget.com/cybersecurity/definition/What-is-two-factor-authentication-2FA
+  description: TechTarget definition of two-factor authentication covering how it works, factor types
+    and methods.
+  type: guide
+  competencies:
+  - Malware
+  language: English
+- title: Windows 11 tutorial
+  url: https://www.geeksforgeeks.org/techtips/windows-11-tutorial/
+  description: Windows 11 tutorial covering installation, setup, customisation and troubleshooting for
+    beginner and advanced users.
+  type: guide
+  competencies:
+  - OS Basics
+  language: English
+- title: Windows help and learning
+  url: https://support.microsoft.com/en-us/windows/
+  description: Microsoft's Windows help hub on installation, drivers, networking, security and troubleshooting,
+    for looking up Windows problems.
+  type: site
+  competencies:
+  - OS Basics
+  language: English
+- title: Basic Computer Skills
+  url: https://lingtran.net/Basic-Computer-Skills
+  description: A ten-session training plan covering Windows, file management, Office, browser and email
+    basics, for teaching basic computer skills.
+  type: guide
+  competencies:
+  - OS Basics
+  language: English
+- title: Nepals basic computer course
+  url: https://docs.google.com/document/d/12ZmXEZWhTuhFCLqoLD2hYoVl4MvHpcNIISmuXLFZWmQ/edit
+  description: A basic computer course document from Nepal, possibly usable as a model for teaching computer
+    fundamentals.
+  type: document
+  competencies:
+  - OS Basics
+  language: English
+- title: Ubuntu commands for Beginners (Wasta is an Ubuntu based OS)
+  url: https://ubuntu.com/tutorials/command-line-for-beginners#1-overview
+  description: Beginner tutorial on the Linux command line, covering navigation, file handling, pipes
+    and superuser use, useful for Wasta and Ubuntu support.
+  type: guide
+  competencies:
+  - OS Basics
+  language: English
+- title: NetLiteracy.org
+  url: https://drive.google.com/open?id=1sVyGCUqFEVLMSbajZw8hnRr4anSkcn7A
+  description: NetLiteracy.org material on basic computer and internet literacy, stored in Google Drive.
+  type: document
+  competencies:
+  - OS Basics
+  language: English
+- title: Klient Slutech
+  url: http://www.klientsolutech.com/online-basic-computer-courses-
+  description: Article recommending online courses in computer fundamentals, Microsoft Office and related
+    skills, for pointing beginners to self-study options.
+  type: guide
+  competencies:
+  - OS Basics
+  language: English
+- title: Cambridge Journal of Phonology
+  url: https://www.cambridge.org/core/journals/phonology
+  description: Home page of the peer-reviewed journal Phonology from Cambridge, for finding academic phonology
+    research.
+  type: site
+  competencies:
+  - Phonetic Tools
+  - Phonology Tools
+  language: English
+- title: Phonology Assistant
+  url: https://software.sil.org/phonologyassistant/
+  description: Product site for Phonology Assistant, which charts sounds from phonetic data and works
+    with FieldWorks, Toolbox and Speech Analyzer.
+  type: site
+  competencies:
+  - Phonetic Tools
+  - Phonology Tools
+  language: English
+- title: Phonology Assistant 3
+  url: http://lingtransoft.info/apps/phonology-assistant-3
+  description: LingTranSoft page about Phonology Assistant 3, for finding information and materials on
+    the program.
+  type: site
+  competencies:
+  - Phonetic Tools
+  - Phonology Tools
+  language: English
+- title: Dekereke Tutorials and Help Materials
+  url: http://casali.canil.ca/DekerekeTutorials/tutorials.html
+  description: Video tutorials for Dekereke covering installation, display settings, data restrictions
+    and sound files, plus a paper on importing and exporting data.
+  type: guide
+  competencies:
+  - Phonetic Tools
+  - Phonology Tools
+  language: English
+- title: 'Speech Analyzer: a computer program for acoustic analysis'
+  url: https://software.sil.org/speech-analyzer/
+  description: Product site for Speech Analyzer, SIL's acoustic speech analysis tool, with downloads,
+    documentation and support links.
+  type: site
+  competencies:
+  - Phonology Tools
+  language: English
+- title: Audacity
+  url: https://www.audacityteam.org/
+  description: Home page of Audacity, the free audio recording and editing program, with downloads for
+    each operating system and plugins.
+  type: site
+  competencies:
+  - Phonology Tools
+  - Recording Tools
+  language: English
+- title: Praat
+  url: https://www.fon.hum.uva.nl/praat/
+  description: Home page of Praat, software for phonetic analysis and speech synthesis, with downloads
+    for multiple platforms.
+  type: site
+  competencies:
+  - Phonology Tools
+  language: English
+- title: What is problem solving?
+  url: https://www.mindtools.com/pages/article/newTMC_00.htm
+  description: Mind Tools introduction to problem solving, with an overview of tools and approaches for
+    simple and complex problems.
+  type: guide
+  competencies:
+  - Problem Solving
+  language: English
+- title: Problem Solving on SkiilsYouNeed.com
+  url: https://www.skillsyouneed.com/ips/problem-solving.html
+  description: Introduction to problem solving that outlines a six-stage approach from identifying a problem
+    to monitoring the outcome.
+  type: guide
+  competencies:
+  - Problem Solving
+  language: English
+- title: Introduction to Problem Solving Skills
+  url: https://ccmit.mit.edu/problem-solving/
+  description: MIT introduction to problem solving, defining the process and why it matters in personal
+    and professional work.
+  type: guide
+  competencies:
+  - Problem Solving
+  language: English
+- title: The Problem-Solving Process
+  url: https://asq.org/quality-resources/problem-solving
+  description: ASQ overview of the problem-solving process, as a structured model for troubleshooting.
+  type: guide
+  competencies:
+  - Problem Solving
+  language: English
+- title: What arer problem-solving skills and why are they important?
+  url: https://www.careerbuilder.com/advice/what-are-problemsolving-skills-and-why-are-they-important
+  description: CareerBuilder article on what problem-solving skills are and why they matter at work.
+  type: guide
+  competencies:
+  - Problem Solving
+  language: English
+- title: How to improve your problems solving skills
+  url: https://www.topuniversities.com/blog/how-improve-your-problem-solving-skills
+  description: Blog article with advice on improving problem-solving skills.
+  type: guide
+  competencies:
+  - Problem Solving
+  language: English
+- title: Six ways to enhance your problem solving skills
+  url: https://www.lifehack.org/articles/productivity/6-ways-to-enhance-your-problem-solving-skills.html
+  description: Article giving six problem-solving techniques, including the 5 Whys, simplifying, brainstorming
+    and lateral thinking.
+  type: guide
+  competencies:
+  - Problem Solving
+  language: English
+- title: Building Students' Problem-Solving Skills Through Complex Challenges
+  url: http://www.ascd.org/Publications/Books/Overview/What-If-Building-Students-Problem-Solving-Skills-Through-Complex-Challenges.aspx
+  description: ASCD book overview on building problem-solving skills through complex challenges.
+  type: site
+  competencies:
+  - Problem Solving
+  language: English
+- title: HearThis
+  url: https://software.sil.org/hearthis/
+  description: Product site for HearThis, software for recording Scripture audio with Paratext integration,
+    for supporting audio recording projects.
+  type: site
+  competencies:
+  - Recording Tools
+  language: English
+- title: Glyssen
+  url: https://software.sil.org/glyssen/
+  description: Product site for Glyssen, which prepares scripts and cast assignments for dramatized Scripture
+    recordings.
+  type: site
+  competencies:
+  - Recording Tools
+  language: English
+- title: Transcriber
+  url: https://software.sil.org/siltranscriber/
+  description: Product site for SIL Transcriber, a web and desktop app for transcribing speech audio,
+    with team features and Paratext integration.
+  type: site
+  competencies:
+  - Recording Tools
+  language: English
+- title: Audio Project Manager
+  url: https://software.sil.org/audioprojectmanager/
+  description: Product site for Audio Project Manager, a web and desktop app for managing speech audio
+    files in oral translation projects.
+  type: site
+  competencies:
+  - Recording Tools
+  language: English
+- title: Voice over tips for better sounding voice over
+  url: https://www.youtube.com/watch?v=fSPWpIWUuJA
+  description: Video giving nine tips for recording better sounding voice over, useful when advising teams
+    on recording quality.
+  type: video
+  competencies:
+  - Recording Tools
+  language: English
+- title: How to write good bug report?
+  url: https://musescore.org/en/node/309537
+  description: MuseScore guide on how to write a good bug report, useful when reporting software problems
+    to developers.
+  type: guide
+  competencies:
+  - Responsive Feedback
+  language: English
+- title: What makes a good bug report?
+  url: https://www.boxuk.com/insight/what-makes-a-good-bug-report/
+  description: 'Article on the parts of a good bug report: title, description, steps to reproduce, screenshots
+    and severity.'
+  type: guide
+  competencies:
+  - Responsive Feedback
+  language: English
+- title: A Humorous but true article on Bug Reporting (Simon Tatham)
+  url: https://www.chiark.greenend.org.uk/~sgtatham/bugs.html
+  description: Simon Tatham's essay on how to report bugs effectively, for learning what developers need
+    in a bug report.
+  type: guide
+  competencies:
+  - Responsive Feedback
+  language: English
+- title: Github Issues
+  url: https://guides.github.com/features/issues/
+  description: GitHub documentation on issues, for tracking bugs and feature requests in a GitHub repository.
+  type: guide
+  competencies:
+  - Responsive Feedback
+  language: English
+- title: Paratext Support
+  url: https://paratext.org/support/
+  description: Paratext support page for getting help with Paratext.
+  type: site
+  competencies:
+  - Translation Tools
+  language: English
+- title: Paratext training videos
+  url: https://paratext.org/videos/
+  description: Collection of Paratext tutorial videos, for learning and teaching Paratext features.
+  type: video
+  competencies:
+  - Translation Tools
+  language: English
+- title: Paratext training materials
+  url: https://lingtran.net/Paratext
+  description: LingTranSoft hub of training plans and tutorials for Paratext 9, 8 and 7.1, for preparing
+    Paratext training.
+  type: guide
+  competencies:
+  - Translation Tools
+  language: English
+- title: Paratext 9 training materials
+  url: https://lingtran.net/Paratext-9-Materials
+  description: Paratext 9 training materials including a course handbook, an overview and video summaries
+    by topic.
+  type: guide
+  competencies:
+  - Translation Tools
+  language: English
+- title: Bibledit
+  url: https://bibledit.org/
+  description: Home page of Bibledit, free Bible translation software, covering installation, features,
+    Bibledit Cloud and tutorials.
+  type: site
+  competencies:
+  - Translation Tools
+  language: English
+- title: Render Admin Setup
+  url: https://lingtran.net/Render-Admin-Setup
+  description: Guide to preparing Windows, installing and configuring Render oral translation software,
+    and testing the setup.
+  type: guide
+  competencies:
+  - Translation Tools
+  language: English
+- title: Render YouTube Channel
+  url: https://www.youtube.com/channel/UCKBaokWhs4MkTmBHnpBxrBA
+  description: YouTube channel for Render, the oral translation software, for its training videos.
+  type: video
+  competencies:
+  - Translation Tools
+  language: English
+- title: BART
+  url: https://www.sil.org/resources/publications/tw/bart
+  description: SIL publication page for BART, a translation-related resource.
+  type: site
+  competencies:
+  - Translation Tools
+  language: English
+- title: Logos 4 Video Tutorials
+  url: https://wiki.logos.com/Logos_4_Video_Tutorials
+  description: Logos wiki page of video tutorials for Logos 4 Bible software.
+  type: video
+  competencies:
+  - Translation Tools
+  language: English
+- title: Logos Bible Software Wiki
+  url: https://wiki.logos.com/Logos_Bible_Software_Wiki
+  description: Community wiki for Logos Bible Software, for looking up features and help.
+  type: site
+  competencies:
+  - Translation Tools
+  language: English
+- title: USFM documentation
+  url: https://ubsicap.github.io/usfm/
+  description: USFM 3.0 reference documentation for the markers that encode Scripture text, for checking
+    marker usage in Paratext projects.
+  type: guide
+  competencies:
+  - Translation Tools
+  language: English
+- title: Scripture Encoding Standards
+  url: http://markups.paratext.org/
+  description: Documentation hub for the USFM and USX Scripture encoding standards, for reference on how
+    translation text is marked up.
+  type: site
+  competencies:
+  - Translation Tools
+  language: English
+- title: Unified Standard Format Markers
+  url: https://paratext.org/usfm/
+  description: Paratext page on Unified Standard Format Markers, for understanding the markup used in
+    Paratext projects.
+  type: guide
+  competencies:
+  - Translation Tools
+  language: English
+- title: SIL Translation
+  url: https://www.sil.org/translation
+  description: SIL page on its translation work.
+  type: site
+  competencies:
+  - Translation
+  language: English

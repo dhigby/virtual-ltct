@@ -11,15 +11,6 @@ outcome_levels:
   - "2 - With Assistance"
   - "3 - Independent"
   - "4 - Expert"
-resources:
-  - title: FLEx Parsing Manual (Andy Black)
-    url: http://downloads.sil.org/FieldWorks/WW-ConceptualIntro/ConceptualIntroduction.htm
-  - title: FLEx Grammar
-    url: https://software.sil.org/fieldworks/features/orientation-to-fieldworks/grammar/
-  - title: The SIL FieldWorks Language Explorer Approach to Morphological Parsing
-    url: https://scholars.sil.org/sites/scholars/files/gary_f_simons/preprint/flexparser_preprint.pdf
-  - title: Linguistic Society of America
-    url: https://www.lsadc.org/
 source: Lang Tech Competencies.xlsx
 last_updated: 2026-09-02
 ---

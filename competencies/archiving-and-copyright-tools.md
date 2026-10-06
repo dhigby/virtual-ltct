@@ -11,15 +11,6 @@ outcome_levels:
   - "2 - With Assistance"
   - "3 - Independent"
   - "4 - Expert"
-resources:
-  - title: Creative Commons Licenses
-    url: https://creativecommons.org/licenses/
-  - title: SIL Language and Culture Archives
-    url: https://www.sil.org/resources/language-culture-archives
-  - title: Introducing RAMP
-    url: https://www.sil.org/resources/archives/43211
-  - title: REAP
-    url: https://reap.sil.org/
 source: Lang Tech Competencies.xlsx
 last_updated: 2026-07-01
 ---

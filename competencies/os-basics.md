@@ -10,21 +10,6 @@ outcome_levels:
   - "1 - Has Knowledge"
   - "2 - With Assistance"
   - "3 - Independent"
-resources:
-  - title: Windows 11 tutorial
-    url: https://www.geeksforgeeks.org/techtips/windows-11-tutorial/
-  - title: Windows help and learning
-    url: https://support.microsoft.com/en-us/windows/
-  - title: Basic Computer Skills
-    url: https://lingtran.net/Basic-Computer-Skills
-  - title: Nepals basic computer course
-    url: https://docs.google.com/document/d/12ZmXEZWhTuhFCLqoLD2hYoVl4MvHpcNIISmuXLFZWmQ/edit
-  - title: Ubuntu commands for Beginners (Wasta is an Ubuntu based OS)
-    url: https://ubuntu.com/tutorials/command-line-for-beginners#1-overview
-  - title: NetLiteracy.org
-    url: https://drive.google.com/open?id=1sVyGCUqFEVLMSbajZw8hnRr4anSkcn7A
-  - title: Klient Slutech
-    url: http://www.klientsolutech.com/online-basic-computer-courses-
 source: Lang Tech Competencies.xlsx
 last_updated: 2026-09-03
 ---

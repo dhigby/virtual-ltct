@@ -4,8 +4,6 @@ category: Core
 slug: interpersonal-skills
 source_label: Interpersonal Competencies
 in_framework: true
-resources:
-  []
 source: CBC Guide for Non-technical Competencies in Language Technology.md
 last_updated: 2026-07-01
 ---

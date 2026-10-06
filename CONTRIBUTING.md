@@ -128,6 +128,35 @@ A diagram works the same way — save it as an `.svg` in `assets/`, with the sam
 the same description. (Don't write a ` ```mermaid ` block: nothing in this repo draws
 those, so it would appear on the published page as a lump of code.)
 
+## Adding or fixing a library resource
+
+The [resource library](https://competencies.languagetechnology.org/library/) lists guides,
+how-tos, tool documentation and other reference material outside any course. Every entry
+lives in one file, [`resources.yaml`](resources.yaml), and the library page and each
+competency's *Further Information* list are built from it.
+
+To add one, open the repo in Claude Code and say something like:
+
+```
+Add a library resource: "Installing Keyman on Android", https://help.keyman.com/...,
+one line saying what it covers, for the Keyboards competency.
+```
+
+Give it the **title**, the **link**, a **one-line description** and the **competencies** it
+supports. Claude Code fills in the type and language, checks the competency names against
+the framework, and opens the change for review. You don't need to know git. The resource
+appears on the site a few minutes after the change merges. To fix a broken link or a wrong
+description, say which resource and what's wrong in the same way.
+
+A few rules:
+
+- Link to where the material lives. Don't put a video or a big PDF into the repo.
+- Only public material. Anything partner-only can't go on the public site.
+- If a description would say something about a particular language's script or
+  spelling, write it yourself or ask the person who knows. Don't let Claude Code guess.
+
+A weekly check opens a **Broken resource links** issue when a link stops working.
+
 ## What not to commit
 
 - Large video files. Link to Vimeo or Google Drive instead (put the URL under

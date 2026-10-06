@@ -5,12 +5,16 @@ on:
     paths:
       - 'competencies/**'
       - 'competencies.yaml'
+      - 'resources.yaml'
+      - 'scripts/library.py'
       - 'scripts/check_competency_descriptors.py'
       - 'import-seeds/import_competency_descriptors.py'
   pull_request:
     paths:
       - 'competencies/**'
       - 'competencies.yaml'
+      - 'resources.yaml'
+      - 'scripts/library.py'
       - 'scripts/check_competency_descriptors.py'
       - 'import-seeds/import_competency_descriptors.py'
 

@@ -10,11 +10,6 @@ outcome_levels:
   - "1 - Has Knowledge"
   - "2 - With Assistance"
   - "3 - Independent"
-resources:
-  - title: SIL Training in Linguistics
-    url:  https://www.sil.org/training
-  - title: SIL Linguistics
-    url:  https://www.sil.org/linguistics
 source: Lang Tech Competencies.xlsx
 last_updated: 2026-09-17
 ---

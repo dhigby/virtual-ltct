@@ -11,6 +11,7 @@ duplicated in git:
   * <category>/<slug>.md     — one page per competency
   * all-competencies.md      — the whole framework as one filterable table
   * how-to-read-levels.md    — the CBC scale and the offset, explained once
+  * library.md               — the resource library, from resources.yaml (spec 014)
   * coverage.md              — COVERAGE.md re-rendered with per-category progress bars
   * SUMMARY.md               — the nav tree (consumed by mkdocs-literate-nav)
 
@@ -25,13 +26,18 @@ Each competency page's edit link points back to the real competencies/<slug>.md 
 site's edit button lands on the source of truth.
 """
 import re
+import sys
 import pathlib
 
 import yaml
 import mkdocs_gen_files
 
+sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent))
+import library  # noqa: E402
+
 ROOT = pathlib.Path(__file__).resolve().parent.parent
 CATS = yaml.safe_load((ROOT / "competencies.yaml").read_text(encoding="utf-8"))
+RESOURCES = library.load(ROOT / "resources.yaml")
 LEVELS = yaml.safe_load(
     (ROOT / "outcome-levels.yaml").read_text(encoding="utf-8"))["levels"]
 
@@ -218,30 +224,6 @@ def transform_subcompetencies(section_body):
     return body
 
 
-def resources_section(resources):
-    """Render a descriptor's frontmatter `resources:` as a Further Information section.
-
-    Entries are `{title, url}` mappings. A bare URL string is also accepted — a hand-edit
-    that drops the title still renders (labelled with the URL) rather than failing the
-    build. Returns "" when there are no resources, so those pages are left unchanged.
-    """
-    items = []
-    for r in resources or []:
-        if isinstance(r, dict):
-            url = str(r.get("url") or "").strip()
-            label = str(r.get("title") or url).strip()
-        else:
-            url = label = str(r).strip()
-        if url:
-            label = label.replace("]", "\\]")  # a bracket in a title would break the link
-            host = re.sub(r"^www\.", "", re.sub(r"^https?://([^/]+).*$", r"\1", url))
-            items.append(f'- [{label}]({url})<span class="cx-link__host">{host}</span>')
-    if not items:
-        return ""
-    return ('\n## Further Information\n\n<div class="cx-links" markdown>\n\n'
-            + "\n".join(items) + "\n\n</div>\n")
-
-
 # --------------------------------------------------------------------------------------
 # Competency page assembly
 # --------------------------------------------------------------------------------------
@@ -309,7 +291,7 @@ def render_competency(name, fm, body):
         if title not in known:
             out += [f"## {title}", section.strip(), ""]
 
-    out.append(resources_section(fm.get("resources")))
+    out.append(library.further_information(RESOURCES, name))
 
     updated = fm.get("last_updated")
     if updated:
@@ -634,6 +616,13 @@ def coverage_page():
 
 
 cov_md = coverage_page()
+
+# The resource library (spec 014). Its URL is cited by Moodle and by lessons, so moving
+# it needs a redirect in mkdocs.yml, as a competency page does.
+with mkdocs_gen_files.open("library.md", "w") as f:
+    f.write(library.library_page(RESOURCES, CATS, page_by_name))
+mkdocs_gen_files.set_edit_path("library.md", "resources.yaml")
+nav_lines.append("* [Library](library.md)")
 
 nav_lines.append("* Framework")
 nav_lines.append("    * [All competencies](all-competencies.md)")

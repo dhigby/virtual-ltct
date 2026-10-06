@@ -1,11 +1,24 @@
 # Row #13: what a learner lands on (spec 007, research R1, R2, R9 and R11). The Dashboard's
 # blocks are in dashboard.yaml; who may edit it is in roles.yaml.
 
-rows: [13]
+rows: [13, 24]
 purpose: >-
   What a learner lands on and the colour the site wears: the Dashboard, one way into a course,
   a short course list, and who to ask.
 settings:
+  # Row #24 (spec 014, research R7): the resource library lives on the public competency
+  # site, not on this server, so its address is fixed rather than built from MOODLE_URL.
+  - name: custommenuitems
+    value: Library|https://competencies.languagetechnology.org/library/
+    why: >-
+      One tap from any page to the resource library (SC-003). Core reads it into Boost's
+      primary navigation on desktop and phone (spec 014 R7).
+  - name: tool_mobile/custommenuitems
+    value: Library|https://competencies.languagetechnology.org/library/|inappbrowser
+    why: >-
+      The same link in the Moodle app's main menu, opened in the in-app browser because the
+      library is a web page, not Moodle content (R7). Free in core; one item fits any app
+      plan.
   - name: defaulthomepage
     value: 1
     why: >-

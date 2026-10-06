@@ -10,23 +10,6 @@ outcome_levels:
   - "1 - Has Knowledge"
   - "2 - With Assistance"
   - "3 - Independent"
-resources:
-  - title: Common European Framework of Reference (CEFR)
-    url: https://www.coe.int/en/web/common-european-framework-reference-languages
-  - title: Grammarly (Online Grammar Checker)
-    url: https://www.grammarly.com/
-  - title: Antidote (Spelling and Grammar Checker, French and English)
-    url: https://www.antidote.info/
-  - title: DeepL Translator (Excellent Translation to andf rom English)
-    url: http://www.deepl.com
-  - title: Microsoft Translator (Very good translation for technical documents)
-    url: https://www.bing.com/translator
-  - title: WordReference (Translating Concepts)
-    url: http://www.wordreference.com/
-  - title: Linguee (Translating Expressions)
-    url: https://www.linguee.com/
-  - title: Assessment Grid
-    url: https://rm.coe.int/CoERMPublicCommonSearchServices/DisplayDCTMContent?documentId=090000168045bb52
 source: Lang Tech Competencies.xlsx
 last_updated: 2026-09-17
 ---

@@ -11,15 +11,6 @@ outcome_levels:
   - "2 - With Assistance"
   - "3 - Independent"
   - "4 - Expert"
-resources:
-  - title: Cambridge Journal of Phonology
-    url: https://www.cambridge.org/core/journals/phonology
-  - title: Phonology Assistant
-    url: https://software.sil.org/phonologyassistant/
-  - title: Phonology Assistant 3
-    url: http://lingtransoft.info/apps/phonology-assistant-3
-  - title: Dekereke Tutorials and Help Materials
-    url: http://casali.canil.ca/DekerekeTutorials/tutorials.html
 source: Lang Tech Competencies.xlsx
 last_updated: 2026-09-03
 ---

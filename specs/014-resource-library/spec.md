@@ -6,6 +6,12 @@
 
 **Status**: Draft
 
+## Clarifications
+
+### Session 2026-10-06
+
+- Q: Where does the library live (FR-009)? → A: On the public competency site (option A). Restricted resources are out of scope.
+
 **Input**: User description: "Deliver row #24 of moodle/REQUIREMENTS.md (Searchable resource library, Pref): a place where consultants find reference material — guides, how-tos, external links, tool documentation — outside any one course, by searching or browsing by competency and topic. The spec states the needs; two ways to meet them are open: a library inside Moodle, or the public GitHub Pages competency site (already searchable, already carrying per-competency Further Information links) hosting it with Moodle linking to it."
 
 ## User Scenarios & Testing *(mandatory)*
@@ -90,7 +96,7 @@ A contributor who has found a useful guide adds it to the library, or fixes a br
 - **FR-006**: Library pages MUST be light enough for low-bandwidth Android use; no resource may be available only as video.
 - **FR-007**: External links MUST be checked on a schedule and broken ones reported; committed images MUST NOT be hotlinked.
 - **FR-008**: Adding or correcting a resource MUST NOT require git knowledge from the contributor.
-- **FR-009**: The library MUST be hosted [NEEDS CLARIFICATION: where the library lives — (A) on the public competency site, extending its existing per-competency Further Information links and site search, with Moodle linking to it; or (B) inside Moodle as a library space using Moodle's own search; or (A) for public resources plus (B) only for restricted ones. A is cheaper to run and reaches CBC students, but cannot hold restricted material and needs a connection; B keeps learners in one place and can restrict access, but adds a search service to operate and a second copy of resource metadata to keep in step.]
+- **FR-009**: The library MUST be hosted on the public competency site, extending its per-competency Further Information lists and its site search; Moodle links to it. Restricted (partner-only) resources are out of scope for this spec. (Decided by the maintainer, 2026-10-06.)
 - **FR-010**: Whichever host is chosen, publishing MUST be one-way from the repo; resources edited on the host are overwritten by the next publish.
 - **FR-011**: Moving a published library page MUST follow the citation rule: its old path is redirected in the same change.
 - **FR-012**: The library MUST NOT carry answer keys, mentor guides, design docs or video scripts.

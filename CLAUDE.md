@@ -208,9 +208,14 @@ source of truth for that content, and it is published to GitHub Pages (see below
 
 - **Edit `competencies/*.md` directly.** A frontmatter `name:` MUST match
   `competencies.yaml` exactly (copy verbatim, incl. `&`/capitalization), or CI fails.
-- **`resources:` entries are `{title, url}` mappings**, not bare URLs — `gen_site.py`
-  renders them as each page's **Further Information** section, and the descriptor check
-  rejects any other shape. They are hand-maintained (no upstream sync); use `[]` for none.
+- **Resources live in [`resources.yaml`](resources.yaml), not in descriptors** (spec 014).
+  One entry per resource: `title`, `url`, one-line `description`, `type`
+  (`guide`/`video`/`site`/`document`), `competencies` (verbatim framework names) and
+  `language`. `gen_site.py` builds the **`/library/`** page and each competency page's
+  **Further Information** section from it. The descriptor check fails on a bad entry, an
+  unknown competency name, or a descriptor that still carries `resources:`. A description
+  about a named language's script or orthography comes from a human, never from reading
+  the page. Public material only: the site is public.
 - The files were first seeded from `import-seeds/` (`Lang Tech Competencies.xlsx` +
   `CBC Guide for Non-technical Competencies…md`) via
   `import-seeds/import_competency_descriptors.py`. That importer is retained for
@@ -231,15 +236,17 @@ the competency scripts.
 The competency content is published as a MkDocs Material site. On push to `main`,
 [`.github/workflows/pages.yml`](.github/workflows/pages.yml) builds it (nav + pages are
 generated at build time by [`scripts/gen_site.py`](scripts/gen_site.py) straight from
-`competencies.yaml`, `outcome-levels.yaml`, `competencies/` and `COVERAGE.md` — nothing is
+`competencies.yaml`, `outcome-levels.yaml`, `competencies/`, `resources.yaml` and
+`COVERAGE.md` — nothing is
 duplicated in git) and deploys to the `gh-pages` branch. Preview locally with
 `pip install -r docs-requirements.txt && mkdocs serve`.
 
 The build is `strict: true`, so a broken internal link fails it rather than shipping.
 Beyond one page per competency, `gen_site.py` generates the landing page, a per-category
-overview page, `all-competencies` (one filterable table), `how-to-read-levels`, and the
-coverage page. A competency page is *not* a copy of its descriptor: the descriptor's level
-tables are re-rendered as a stepped ladder component. **To change how the site looks,
+overview page, `all-competencies` (one filterable table), `how-to-read-levels`, the
+coverage page and the resource `library` (its URL is cited from Moodle's menu and from
+lessons, so moving it needs a redirect). A competency page is *not* a copy of its
+descriptor: the descriptor's level tables are re-rendered as a stepped ladder component. **To change how the site looks,
 edit `gen_site.py` (structure) and [`docs/stylesheets/extra.css`](docs/stylesheets/extra.css)
 (presentation, `cx-`-prefixed classes, brand colours in one block at the top) — not the
 descriptors.** Anything in `docs/` is published, so keep repo reference material out of it
@@ -403,7 +410,12 @@ constructing it — the host changes when the server moves.
 - `gen_site.py` — `mkdocs-gen-files` build hook; generates the site pages + nav from
   `competencies.yaml` and `competencies/*.md`. Not run by hand; invoked by `mkdocs`.
 - `check_competency_descriptors.py` — validates descriptors stay in sync with the
-  framework (run by CI). Requires `pyyaml`.
+  framework, and validates `resources.yaml` (run by CI). Requires `pyyaml`.
+- `library.py` — the resource library's rules (load, validate, render), defined once and
+  imported by the check and `gen_site.py`. Not run directly.
+- `check_resource_links.py` — reports broken links in `resources.yaml`; a weekly workflow
+  keeps one **Broken resource links** issue open while any are broken. Bot-screen answers
+  (401/403/418/429) count as alive.
 - `export_from_notion.py` — idempotent export from the old Notion DB; won't overwrite
   content authored here.
 - `bootstrap_github.py` — creates labels, issues, and Project fields from the export.

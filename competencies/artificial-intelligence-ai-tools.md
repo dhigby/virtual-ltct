@@ -51,7 +51,7 @@ _Each row is a level a learner is **at**; its activities are what they do to rea
 | --- | --- | --- |
 | **0 - No Competency** | Can explain which categories of specialized AI tools apply to which language-work tasks — e.g., neural machine translation, automated quality assessment (AQuA), Greek/Hebrew study tools (Greek Room), automatic speech recognition for low-resource languages (MMS, Whisper), text-to-speech, OCR for non-Latin scripts, alignment, and back-translation tools. | 1 - Has Knowledge |
 | **1 - Has Knowledge** | Uses available specialized AI tools, including SIL-internal tools, for concrete tasks with guidance. | 2 - With Assistance |
-| **2 - With Assistance** | Uses available specialized AI tools, including SIL-internal tools, for concrete tasks with guidance. | 3 - Independent |
+| **2 - With Assistance** | Is able to assist users in different domains to use the specialized AI tools available. | 3 - Independent |
 | **3 - Independent** | Trains and supports users across language teams and domains in adopting specialized AI tools. Provides structured feedback to tool developers and shares best practices across the consultant community. | 4 - Expert |
 | **4 - Expert** | — | — |
 

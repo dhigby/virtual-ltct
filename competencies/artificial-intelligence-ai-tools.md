@@ -21,7 +21,7 @@ last_updated: 2026-09-17
 
 ## Description
 
-Knowledge of general and specialized Artificial Intelligence tools
+Knowledge of general and specialized Artificial Intelligence tools.
 
 ## Why it matters
 
@@ -52,7 +52,7 @@ _Each row is a level a learner is **at**; its activities are what they do to rea
 | **0 - No Competency** | Can explain which categories of specialized AI tools apply to which language-work tasks — e.g., neural machine translation, automated quality assessment (AQuA), Greek/Hebrew study tools (Greek Room), automatic speech recognition for low-resource languages (MMS, Whisper), text-to-speech, OCR for non-Latin scripts, alignment, and back-translation tools. | 1 - Has Knowledge |
 | **1 - Has Knowledge** | Uses available specialized AI tools, including SIL-internal tools, for concrete tasks with guidance. | 2 - With Assistance |
 | **2 - With Assistance** | Uses available specialized AI tools, including SIL-internal tools, for concrete tasks with guidance. | 3 - Independent |
-| **3 - Independent** | Trains and supports users across language teams and domains in adopting specialized AI tools. Provides structured feedback to tool developers and shares best practices across the consultant community | 4 - Expert |
+| **3 - Independent** | Trains and supports users across language teams and domains in adopting specialized AI tools. Provides structured feedback to tool developers and shares best practices across the consultant community. | 4 - Expert |
 | **4 - Expert** | — | — |
 
 ### 3.0 — Critical Evaluation and Quality Assurance of AI Output
@@ -60,7 +60,7 @@ _Each row is a level a learner is **at**; its activities are what they do to rea
 | Current level | Suggested activities | Reaches |
 | --- | --- | --- |
 | **0 - No Competency** | Recognizes that AI outputs can be wrong, biased, or fabricated — and that this risk is heightened for low-resource languages and for theological, cultural, and named-entity content. | 1 - Has Knowledge |
-| **1 - Has Knowledge** | Routinely verifies AI-generated content against authoritative sources. Identifies common failure modes (hallucinated citations, mistranslated proper nouns, dropped negations, register drift, doctrinal inaccuracy, fluent-but-wrong output) | 2 - With Assistance |
+| **1 - Has Knowledge** | Routinely verifies AI-generated content against authoritative sources. Identifies common failure modes (hallucinated citations, mistranslated proper nouns, dropped negations, register drift, doctrinal inaccuracy, fluent-but-wrong output). | 2 - With Assistance |
 | **2 - With Assistance** | Designs and applies systematic review processes for AI-assisted work — spot-checking, back-translation comparison, reference-matching, and human-in-the-loop validation appropriate to the stakes of the task. | 3 - Independent |
 | **3 - Independent** | Trains others in evaluation methods and helps establish quality-assurance standards for AI use within their team or project. | 4 - Expert |
 | **4 - Expert** | — | — |

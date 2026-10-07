@@ -4,7 +4,7 @@ category: Education
 slug: general
 source_label: Domain-specific education
 in_framework: true
-target_statement: "Has pursue domain specific knowledge via formal education or equivalent in one of the following: translation, linguistics, literacy / education or scripture engagment."
+target_statement: "Has pursued domain specific knowledge via formal education or equivalent in one of the following: translation, linguistics, literacy / education or scripture engagement."
 outcome_levels:
   - "0 - No Competency"
   - "1 - Has Knowledge"
@@ -30,7 +30,7 @@ Have a good understanding of one of the language domains used for Bible translat
 
 ## Target competency
 
-> Has pursue domain specific knowledge via formal education or equivalent in one of the following: translation, linguistics, literacy / education or scripture engagment.
+> Has pursued domain specific knowledge via formal education or equivalent in one of the following: translation, linguistics, literacy / education or scripture engagement.
 
 ## Progression by component
 

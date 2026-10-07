@@ -21,11 +21,11 @@ last_updated: 2026-09-02
 
 ## Description
 
-Knowledge of the tools that assist literacy and education workers in their work and can consult others in their use.  This includes primer development and easy reader development
+Knowledge of the tools that assist literacy and education workers in their work and can consult others in their use. This includes primer development and easy reader development.
 
 ## Why it matters
 
-This competency covers the usage and training of users to use the current literacy and education tools to produce primers and easy readers..
+This competency covers the usage and training of users to use the current literacy and education tools to produce primers and easy readers.
 
 ## Target competency
 
@@ -50,26 +50,26 @@ _Each row is a level a learner is **at**; its activities are what they do to rea
 | Current level | Suggested activities | Reaches |
 | --- | --- | --- |
 | **0 - No Competency** | Learn to create and translate simple books with illustrations using recommended software. | 1 - Has Knowledge |
-| **1 - Has Knowledge** | Learn advanced formatting and customization of simple books with illustrations | 2 - With Assistance |
-| **2 - With Assistance** | Help individuals to write, translate, and publish simple books through Literacy software. | 3 - Independent |
-| **3 - Independent** | Train a group to write, translate, and publish simple books in Literacy Software | 4 - Expert |
-| **4 - Expert** | Train trainers to teach users to write, translate, and publish simple books through Literacy Software. | — |
+| **1 - Has Knowledge** | Learn advanced formatting and customization of simple books with illustrations. | 2 - With Assistance |
+| **2 - With Assistance** | Help individuals to write, translate, and publish simple books through literacy software. | 3 - Independent |
+| **3 - Independent** | Train a group to write, translate, and publish simple books in literacy software. | 4 - Expert |
+| **4 - Expert** | Train trainers to teach users to write, translate, and publish simple books through literacy software. | — |
 
 ### 3.0 — Creating primers, decodable or leveled readers
 
 | Current level | Suggested activities | Reaches |
 | --- | --- | --- |
-| **0 - No Competency** | Learn the tools used to create primers, decodable and leveled readers | 1 - Has Knowledge |
+| **0 - No Competency** | Learn the tools used to create primers, decodable and leveled readers. | 1 - Has Knowledge |
 | **1 - Has Knowledge** | Learn to create primers, decodable readers, leveled readers, and comics using recommended software. | 2 - With Assistance |
 | **2 - With Assistance** | Learn to determine teaching order of graphemes and to advise others on the appropriate order for literacy publications. | 3 - Independent |
-| **3 - Independent** | Help individuals to create primers, decodable readers, leveled readers, and comics through Literacy software. | 4 - Expert |
-| **4 - Expert** | Train a group to create primers, decodable readers, leveled readers, and comics in Literacy Software. Help a group to use tools to determine a teaching order for letters | — |
+| **3 - Independent** | Help individuals to create primers, decodable readers, leveled readers, and comics through literacy software. | 4 - Expert |
+| **4 - Expert** | Train a group to create primers, decodable readers, leveled readers, and comics in literacy software. Help a group to use tools to determine a teaching order for letters. | — |
 
 ### 4.0 — Interactive Literacy Publications
 
 | Current level | Suggested activities | Reaches |
 | --- | --- | --- |
-| **0 - No Competency** | Learn available tools that make literacy interactive publication | 1 - Has Knowledge |
+| **0 - No Competency** | Learn available tools that make interactive literacy publications | 1 - Has Knowledge |
 | **1 - Has Knowledge** | Create an audio book with highlighted text | 2 - With Assistance |
 | **2 - With Assistance** | Create an interactive literacy publication | 3 - Independent |
 | **3 - Independent** | Train someone to use available tools for making interactive literacy publications | 4 - Expert |

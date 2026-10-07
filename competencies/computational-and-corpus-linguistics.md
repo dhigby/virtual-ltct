@@ -25,7 +25,7 @@ Knowledge of the computational tools for corpus and data analysis.
 
 ## Why it matters
 
-This competency promotes the use of natural language processing tools for the advancement of the development of language ands its community.
+This competency promotes the use of natural language processing tools for the advancement of the development of language and its community.
 
 ## Target competency
 

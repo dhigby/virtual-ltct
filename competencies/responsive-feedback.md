@@ -39,7 +39,7 @@ _Each row is a level a learner is **at**; its activities are what they do to rea
 | Current level | Suggested activities | Reaches |
 | --- | --- | --- |
 | **0 - No Competency** | Learn what should be included in a bug report. | 1 - Has Knowledge |
-| **1 - Has Knowledge** | Submit a well defined bug report or a new feature request for developers to act upon. Follow the report or request through the process. | 2 - With Assistance |
+| **1 - Has Knowledge** | Submit a well-defined bug report or a new feature request for developers to act upon. Follow the report or request through the process. | 2 - With Assistance |
 | **2 - With Assistance** | Actively participate as a beta tester for a language technology tool. | 3 - Independent |
-| **3 - Independent** | Represents the user community on software development prioritization committees, UX design, or in championing new products. | 4 - Expert |
+| **3 - Independent** | Represent the user community on software development prioritization committees, UX design, or in championing new products. | 4 - Expert |
 

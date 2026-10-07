@@ -20,7 +20,7 @@ last_updated: 2026-09-03
 
 ## Description
 
-Knowledge of the techniques to create effective,and efficient solutions to complex problems
+Knowledge of the techniques to create effective and efficient solutions to complex problems
 
 ## Why it matters
 

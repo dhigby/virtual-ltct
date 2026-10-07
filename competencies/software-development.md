@@ -25,7 +25,7 @@ Knowledge of the tools and languages for developing software
 
 ## Why it matters
 
-While not every Language Technologist will chose this path, the best way to learn how a programmer thinks is to become one. This will permit you to quickly draft a software solution to a problem or to help find and test the relevant code in a bug report.
+While not every Language Technologist will choose this path, the best way to learn how a programmer thinks is to become one. This will permit you to quickly draft a software solution to a problem or to help find and test the relevant code in a bug report.
 
 ## Target competency
 
@@ -40,7 +40,7 @@ _Each row is a level a learner is **at**; its activities are what they do to rea
 | Current level | Suggested activities | Reaches |
 | --- | --- | --- |
 | **0 - No Competency** | Find out what languages are used to program the tools you use. Explore a programming language that may be applicable to your work. | 1 - Has Knowledge |
-| **1 - Has Knowledge** | Start to learn a the basic levels of a programming language, for example, Python, Perl or Javascript. | 2 - With Assistance |
+| **1 - Has Knowledge** | Start to learn the basic levels of a programming language, for example, Python, Perl or JavaScript. | 2 - With Assistance |
 | **2 - With Assistance** | Plan and develop a utility or participate in open source projects to apply your new skills. | 3 - Independent |
 | **3 - Independent** | Work with others to maintain a complex application, complete with proper error handling and documentation. | 4 - Expert |
 | **4 - Expert** | — | — |

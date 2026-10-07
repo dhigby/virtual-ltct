@@ -41,5 +41,5 @@ _Each row is a level a learner is **at**; its activities are what they do to rea
 | **0 - No Competency** | Identify the various hardware components of a computer and understand their function. | 1 - Has Knowledge |
 | **1 - Has Knowledge** | Spend time with an IT professional while they troubleshoot computer hardware issues. | 2 - With Assistance |
 | **2 - With Assistance** | Troubleshoot hardware issues, and recommend appropriate hardware for language program use. | 3 - Independent |
-| **3 - Independent** | Research the latest hardware components | 4 - Expert |
+| **3 - Independent** | Research the latest hardware components. | 4 - Expert |
 

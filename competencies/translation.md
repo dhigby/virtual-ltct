@@ -4,7 +4,7 @@ category: Education
 slug: translation
 source_label: Domain-specific education
 in_framework: true
-target_statement: "Has pursue domain specific knowledge via formal education or equivalent in one of the following: translation, linguistics, literacy / education or scripture engagment."
+target_statement: "Has pursued domain-specific knowledge via formal education or equivalent in one of the following: translation, linguistics, literacy / education or scripture engagement."
 outcome_levels:
   - "0 - No Competency"
   - "1 - Has Knowledge"
@@ -16,7 +16,7 @@ last_updated: 2026-09-17
 
 # Translation
 
-**Category:** Education · 
+**Category:** Education
 
 > This applies the workbook's single **Domain-specific education** ladder to the **Translation** domain; the framework calls out each domain separately, so the rationale and activities below are shared across them.
 
@@ -30,7 +30,7 @@ Have a good understanding of translation used for Bible translation and language
 
 ## Target competency
 
-> Has pursue knowledge in translation via formal education or equivalent.
+> Has pursued knowledge in translation via formal education or equivalent.
 
 ## Progression by component
 
@@ -40,8 +40,8 @@ _Each row is a level a learner is **at**; its activities are what they do to rea
 
 | Current level | Suggested activities | Reaches |
 | --- | --- | --- |
-| **0 - No Competency** | Complete a semester of university level courses in translation. Alternately, gain significant practical experience in translation from working in a language program. | 1 - Has Knowledge |
-| **1 - Has Knowledge** | Complete a bachelor's program or a semester of post graduate level courses in translation. Alternately, gain significant practical experience in translation from working in a language program. | 2 - With Assistance |
+| **0 - No Competency** | Complete a semester of university-level courses in translation. Alternately, gain significant practical experience in translation from working in a language program. | 1 - Has Knowledge |
+| **1 - Has Knowledge** | Complete a bachelor's program or a semester of postgraduate-level courses in translation. Alternately, gain significant practical experience in translation from working in a language program. | 2 - With Assistance |
 | **2 - With Assistance** | Complete a Master's program in translation or demonstrate a thorough understanding and respected contribution to the field. | 3 - Independent |
 | **3 - Independent** | Complete a Doctoral program (PhD, EdD) in translation. | 4 - Expert |
 

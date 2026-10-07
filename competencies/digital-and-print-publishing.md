@@ -25,7 +25,7 @@ Knowledge of the tools that assist language workers to publish their work electr
 
 ## Why it matters
 
-This competency covers the usage and training of users that help them to publish work in print form and digitially.
+This competency covers the usage and training of users that help them to publish work in print form and digitally.
 
 ## Target competency
 

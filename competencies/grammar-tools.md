@@ -4,7 +4,7 @@ category: Technology Domain
 slug: grammar-tools
 source_label: Grammar Tools
 in_framework: true
-target_statement: Is able to consult others in the effective use of grammar tools. This include interlinear and parsing tools.
+target_statement: Is able to consult others in the effective use of grammar tools. This includes interlinear and parsing tools.
 outcome_levels:
   - "0 - No Competency"
   - "1 - Has Knowledge"
@@ -19,9 +19,9 @@ last_updated: 2026-09-02
 
 **Category:** Technology Domain
 
-##Description
+## Description
 
-Knowledgable in the use of grammar tools.  This includes interlinear and parsing tools.
+Knowledgeable in the use of grammar tools. This includes interlinear and parsing tools.
 
 ## Why it matters
 
@@ -29,7 +29,7 @@ This competency covers the usage and training of users to use the current gramma
 
 ## Target competency
 
-> Is able to consult others in the effective use of grammar tools. This include interlinear and parsing tools.
+> Is able to consult others in the effective use of grammar tools. This includes interlinear and parsing tools.
 
 ## Progression by component
 
@@ -39,10 +39,10 @@ _Each row is a level a learner is **at**; its activities are what they do to rea
 
 | Current level | Suggested activities | Reaches |
 | --- | --- | --- |
-| **0 - No Competency** | Understand the grammatical components of languages and how they work | 1 - Has Knowledge |
+| **0 - No Competency** | Understand the grammatical components of languages and how they work. | 1 - Has Knowledge |
 | **1 - Has Knowledge** | Able to identify and describe grammatical components in a particular language. | 2 - With Assistance |
 | **2 - With Assistance** | Participate in a training event as a teaching assistant for grammar tools. | 3 - Independent |
-| **3 - Independent** | Prepare and teach grammatical analysis tools (or parsing) module as part of a training event | 4 - Expert |
+| **3 - Independent** | Prepare and teach a grammatical analysis tools (or parsing) module as part of a training event. | 4 - Expert |
 | **4 - Expert** | Prepare and teach a grammar tools training event. | — |
 
 ### 2.0 — Interlinear Tools
@@ -50,19 +50,19 @@ _Each row is a level a learner is **at**; its activities are what they do to rea
 | Current level | Suggested activities | Reaches |
 | --- | --- | --- |
 | **0 - No Competency** | Identify the interlinear tools that are appropriate for activities such as back translation, analysis, and adaptation. | 1 - Has Knowledge |
-| **1 - Has Knowledge** | Able to use interlinear tools | 2 - With Assistance |
+| **1 - Has Knowledge** | Able to use interlinear tools. | 2 - With Assistance |
 | **2 - With Assistance** | Test interlinear tools in a language pair that you understand. Learn how to separate and combine items, and how to export the output. | 3 - Independent |
 | **3 - Independent** | Train and assist users who are interlinearizing text. | 4 - Expert |
-| **4 - Expert** | Train consultants to teach others to interlinearize text | — |
+| **4 - Expert** | Train consultants to teach others to interlinearize text. | — |
 
 ### 3.0 — Automated Parsing
 
 | Current level | Suggested activities | Reaches |
 | --- | --- | --- |
 | **0 - No Competency** | Read FLEx's Introduction to Parsing to understand how to break and classify words into morphemes. | 1 - Has Knowledge |
-| **1 - Has Knowledge** | Able to apply parsing methods to separate words into morphemes | 2 - With Assistance |
+| **1 - Has Knowledge** | Able to apply parsing methods to separate words into morphemes. | 2 - With Assistance |
 | **2 - With Assistance** | Learn to write rules to categorize and configure affixes so that the parser can reliably offer possible analyses. | 3 - Independent |
-| **3 - Independent** | Explore the advantages of each of the two parsers in FLEx. Help someone to configure the parser in FLEx to break down and sugest analysis for morphemes. | 4 - Expert |
+| **3 - Independent** | Explore the advantages of each of the two parsers in FLEx. Help someone to configure the parser in FLEx to break down and suggest analyses for morphemes. | 4 - Expert |
 | **4 - Expert** | Explore solutions for dealing with auto-segmental features (such as tone, stress, or timing). | — |
 
 _Level 4 activities aim past the top of the CBC scale (the source spreadsheet's "level 5"), which CBC does not define._

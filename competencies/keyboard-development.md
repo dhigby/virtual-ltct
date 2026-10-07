@@ -4,7 +4,7 @@ category: Technology Domain
 slug: keyboard-development
 source_label: Keyboard Development
 in_framework: true
-target_statement: Can develop and trains others to develop custom keyboard and data-entry tools.
+target_statement: Can develop and train others to develop custom keyboard and data-entry tools.
 outcome_levels:
   - "0 - No Competency"
   - "1 - Has Knowledge"
@@ -25,11 +25,11 @@ Knowledge of the tools to develop custom keyboards and data-entry tools.
 
 ## Why it matters
 
-If keyboarding solutions are non-existent or poorly adapted to input of local languages, a Language Technologist may be needed to develop a new solution,
+If keyboarding solutions are non-existent or poorly adapted to input of local languages, a Language Technologist may be needed to develop a new solution.
 
 ## Target competency
 
-> Can develop and trains others to develop custom keyboard and data-entry tools.
+> Can develop and train others to develop custom keyboard and data-entry tools.
 
 ## Progression by component
 
@@ -40,8 +40,8 @@ _Each row is a level a learner is **at**; its activities are what they do to rea
 | Current level | Suggested activities | Reaches |
 | --- | --- | --- |
 | **0 - No Competency** | Examine local and nearby keyboards to learn the strategies used for text input. | 1 - Has Knowledge |
-| **1 - Has Knowledge** | Learn the keyboard coding environment and how to compile a typing keyboard | 2 - With Assistance |
-| **2 - With Assistance** | Create and distribute a custom typing keyboard solution | 3 - Independent |
+| **1 - Has Knowledge** | Learn the keyboard coding environment and how to compile a typing keyboard. | 2 - With Assistance |
+| **2 - With Assistance** | Create and distribute a custom typing keyboard solution. | 3 - Independent |
 | **3 - Independent** | Work with individuals to create custom typing keyboarding solutions. Submit keyboards to appropriate repositories for web distribution. | 4 - Expert |
 | **4 - Expert** | Teach a group how to create custom keyboard solutions for redistribution. Create and submit OS-native keyboards to appropriate repositories. | — |
 
@@ -50,8 +50,8 @@ _Each row is a level a learner is **at**; its activities are what they do to rea
 | Current level | Suggested activities | Reaches |
 | --- | --- | --- |
 | **0 - No Competency** | Examine local and nearby keyboards to learn the strategies used for text input on mobile devices. | 1 - Has Knowledge |
-| **1 - Has Knowledge** | Learn the keyboard coding environment and how to compile a touch keyboard | 2 - With Assistance |
-| **2 - With Assistance** | Create and distribute a custom touch keyboard solution | 3 - Independent |
+| **1 - Has Knowledge** | Learn the keyboard coding environment and how to compile a touch keyboard. | 2 - With Assistance |
+| **2 - With Assistance** | Create and distribute a custom touch keyboard solution. | 3 - Independent |
 | **3 - Independent** | Work with individuals to create custom touch keyboarding solutions. Submit keyboards to appropriate repositories for web distribution. | 4 - Expert |
 | **4 - Expert** | Teach a group how to create custom touch keyboard solutions for redistribution. | — |
 
@@ -59,8 +59,8 @@ _Each row is a level a learner is **at**; its activities are what they do to rea
 
 | Current level | Suggested activities | Reaches |
 | --- | --- | --- |
-| **0 - No Competency** | Learn how to create ordered word lists with frequency counts | 1 - Has Knowledge |
-| **1 - Has Knowledge** | Collect texts and use a tool to create a language model | 2 - With Assistance |
+| **0 - No Competency** | Learn how to create ordered word lists with frequency counts. | 1 - Has Knowledge |
+| **1 - Has Knowledge** | Collect texts and use a tool to create a language model. | 2 - With Assistance |
 | **2 - With Assistance** | Create a predictive keyboard by adding a language model to an existing keyboard. | 3 - Independent |
 | **3 - Independent** | Work with individuals to create language models for text entry. Submit language models to appropriate repositories for web distribution. | 4 - Expert |
 | **4 - Expert** | Teach a group how to create language models for redistribution. Explore configuration of morphological options in language models. | — |

@@ -21,7 +21,7 @@ last_updated: 2026-09-03
 
 ## Description
 
-Knowledgable about current phonetic tools.
+Knowledgeable about current phonetic tools.
 
 ## Why it matters
 
@@ -49,10 +49,10 @@ _Each row is a level a learner is **at**; its activities are what they do to rea
 
 | Current level | Suggested activities | Reaches |
 | --- | --- | --- |
-| **0 - No Competency** | Learn to use a phonetic analysis tool (i.e. Speech Analyzer) to open audio files. | 1 - Has Knowledge |
+| **0 - No Competency** | Learn to use a phonetic analysis tool (e.g., Speech Analyzer) to open audio files. | 1 - Has Knowledge |
 | **1 - Has Knowledge** | Work with a linguist to learn to configure views in a phonology tool so that they can identify and annotate segments and "interesting" features. | 2 - With Assistance |
 | **2 - With Assistance** | Work with a linguist to learn to visually interpret audio files in a phonetic analysis tool. | 3 - Independent |
-| **3 - Independent** | Prepare and teach phonetics tools module as part of a training event | 4 - Expert |
-| **4 - Expert** | Train someone to teach a phonetic tools module | — |
+| **3 - Independent** | Prepare and teach a phonetics tools module as part of a training event. | 4 - Expert |
+| **4 - Expert** | Train someone to teach a phonetic tools module. | — |
 
 _Level 4 activities aim past the top of the CBC scale (the source spreadsheet's "level 5"), which CBC does not define._

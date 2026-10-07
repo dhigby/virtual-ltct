@@ -4,7 +4,7 @@ category: Education
 slug: literacy-or-mle
 source_label: Domain-specific education
 in_framework: true
-target_statement: "Has pursue domain specific knowledge in literacy or MLE via formal education or equivalent."
+target_statement: "Has pursued domain-specific knowledge in literacy or MLE via formal education or equivalent."
 outcome_levels:
   - "0 - No Competency"
   - "1 - Has Knowledge"
@@ -22,7 +22,7 @@ last_updated: 2026-09-17
 
 ## Description
 
-Domain-specific knowledge in literacy or MLE
+Domain-specific knowledge in literacy or MLE.
 
 ## Why it matters
 
@@ -30,7 +30,7 @@ Have a good understanding of literacy or MLE used for Bible translation and lang
 
 ## Target competency
 
-> Has pursue domain specific knowledge in literacy or MLE via formal education or equivalent.
+> Has pursued domain-specific knowledge in literacy or MLE via formal education or equivalent.
 
 ## Progression by component
 
@@ -40,8 +40,8 @@ _Each row is a level a learner is **at**; its activities are what they do to rea
 
 | Current level | Suggested activities | Reaches |
 | --- | --- | --- |
-| **0 - No Competency** | Complete a semester of university level courses in literacy or MLE. Alternately, gain significant practical experience in literacy or MLE from working in a language program. | 1 - Has Knowledge |
-| **1 - Has Knowledge** | Complete a bachelor's program or a semester of post graduate level courses in literacy or MLE. Alternately, gain significant practical experience in literacy or MLE from working in a language program. | 2 - With Assistance |
-| **2 - With Assistance** | Complete a Master's program in literacy or MLE or demonstrate a thorough understanding and respected contribution to the field. | 3 - Independent |
-| **3 - Independent** | Complete a Doctoral program (PhD, EdD) in literacy or MLE. | 4 - Expert |
+| **0 - No Competency** | Complete a semester of university-level courses in literacy or MLE. Alternately, gain significant practical experience in literacy or MLE from working in a language program. | 1 - Has Knowledge |
+| **1 - Has Knowledge** | Complete a bachelor's program or a semester of postgraduate-level courses in literacy or MLE. Alternately, gain significant practical experience in literacy or MLE from working in a language program. | 2 - With Assistance |
+| **2 - With Assistance** | Complete a master's program in literacy or MLE or demonstrate a thorough understanding and respected contribution to the field. | 3 - Independent |
+| **3 - Independent** | Complete a doctoral program (PhD, EdD) in literacy or MLE. | 4 - Expert |
 

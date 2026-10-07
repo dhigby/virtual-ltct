@@ -31,19 +31,23 @@ activity ladder or sub-competencies with observable criteria.
   display metadata only; the URL follows `competencies.yaml`.
 - **Browse the rendered site:** <https://dhigby.github.io/virtual-ltct/> — the published
   version of everything here, grouped by category with search.
-- **`resources:` is the reading list**, hand-maintained here and rendered as each page's
-  **Further Information** section. One entry per link, `title` then `url`; use `[]` when a
-  competency has none:
+- **Resources live in [`resources.yaml`](../resources.yaml), not in these files.** Each
+  entry there names the competencies it serves, and `gen_site.py` renders it into the
+  site-wide **Library** page and into each competency page's **Further Information**
+  section. A descriptor must not carry a `resources:` key; the sync check fails if one
+  does. To add, drop or fix a link, edit `resources.yaml`:
 
   ```yaml
-  resources:
-    - title: Keyman
-      url: https://keyman.com/
+  - title: Keyman
+    url: https://keyman.com/
+    description: One line on what it is and when to use it.
+    type: site            # guide | video | site | document
+    competencies:
+    - Keyboards           # verbatim framework names
+    language: English
   ```
 
-  These were originally a single pointer to the competency's page on lingtransoft.info; the
-  links that page listed are now recorded here directly, so this repo is the source of
-  truth. Add, drop, or fix a link by editing the list — nothing re-syncs from upstream.
+  The site is public, so list public material only.
 - The files were first seeded from the source documents in
   [`../import-seeds/`](../import-seeds/) (a spreadsheet and the CBC guide); that importer is
   retained for provenance only and is no longer the editing surface.

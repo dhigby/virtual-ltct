@@ -21,11 +21,11 @@ last_updated: 2026-07-01
 
 ## Description
 
-Knowledge of the archiving and copyright tools
+Knowledge of the archiving and copyright tools.
 
 ## Why it matters
 
-Perservation of our data is important. It prevents data loss, meets legal requirements and increases secuity.
+Preservation of our data is important. It prevents data loss, meets legal requirements and increases security.
 
 ## Target competency
 

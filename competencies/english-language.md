@@ -38,8 +38,8 @@ _Each row is a level a learner is **at**; its activities are what they do to rea
 
 | Current level | Suggested activities | Reaches |
 | --- | --- | --- |
-| **0 - No Competency** | Level A2 in reading on Common European Framework of Reference for Languages | 1 - Has Knowledge |
-| **1 - Has Knowledge** | Level B1 in reading on Common European Framework of Reference for Languages | 2 - With Assistance |
-| **2 - With Assistance** | Level B2 in reading on Common European Framework of Reference for Languages | 3 - Independent |
-| **3 - Independent** | Level C1 in reading on Common European Framework of Reference for Languages | 4 - Expert |
+| **0 - No Competency** | Level A2 in reading on the Common European Framework of Reference for Languages | 1 - Has Knowledge |
+| **1 - Has Knowledge** | Level B1 in reading on the Common European Framework of Reference for Languages | 2 - With Assistance |
+| **2 - With Assistance** | Level B2 in reading on the Common European Framework of Reference for Languages | 3 - Independent |
+| **3 - Independent** | Level C1 in reading on the Common European Framework of Reference for Languages | 4 - Expert |
 

@@ -39,7 +39,7 @@ _Each row is a level a learner is **at**; its activities are what they do to rea
 | Current level | Suggested activities | Reaches |
 | --- | --- | --- |
 | **0 - No Competency** | Install appropriate virtual keyboarding solutions on user computers. | 1 - Has Knowledge |
-| **1 - Has Knowledge** | Configure applications to work with the appropriate keyboards, through system language association and switching | 2 - With Assistance |
+| **1 - Has Knowledge** | Configure applications to work with the appropriate keyboards, through system language association and switching. | 2 - With Assistance |
 | **2 - With Assistance** | Work with individuals to install and configure custom keyboarding solutions. | 3 - Independent |
 | **3 - Independent** | Teach a group how to configure custom keyboard solutions. | 4 - Expert |
 

@@ -38,15 +38,15 @@ _Each row is a level a learner is **at**; its activities are what they do to rea
 | Current level | Suggested activities | Reaches |
 | --- | --- | --- |
 | **0 - No Competency** | Learn to identify the operating system and configure basic options. | 1 - Has Knowledge |
-| **1 - Has Knowledge** | Spend time with an IT professional Installing, activating and configuring an operating system. | 2 - With Assistance |
+| **1 - Has Knowledge** | Spend time with an IT professional installing, activating and configuring an operating system. | 2 - With Assistance |
 | **2 - With Assistance** | Explore and use the latest appropriate operating system, then help users adjust when they upgrade. | 3 - Independent |
-| **3 - Independent** | Research and test alternative Operating Systems, like Linux, that may serve some users. | 4 - Expert |
+| **3 - Independent** | Research and test alternative operating systems, like Linux, that may serve some users. | 4 - Expert |
 
 ### 2.0 — Configuration for Success
 
 | Current level | Suggested activities | Reaches |
 | --- | --- | --- |
-| **0 - No Competency** | Identify user needs, such as language, display, accessibility, and preferences | 1 - Has Knowledge |
+| **0 - No Competency** | Identify user needs, such as language, display, accessibility, and preferences. | 1 - Has Knowledge |
 | **1 - Has Knowledge** | Learn to configure OS language and display options on your own devices. | 2 - With Assistance |
 | **2 - With Assistance** | Assist users to configure their devices for display and preferences. | 3 - Independent |
 | **3 - Independent** | Research assistive technologies for those with disabilities. | 4 - Expert |

@@ -40,7 +40,7 @@ _Each row is a level a learner is **at**; its activities are what they do to rea
 | Current level | Suggested activities | Reaches |
 | --- | --- | --- |
 | **0 - No Competency** | Examine published dictionaries to identify elements of style, formatting, editing and spacing. | 1 - Has Knowledge |
-| **1 - Has Knowledge** | Learn to filter and format entries for publication in the current lexical software | 2 - With Assistance |
+| **1 - Has Knowledge** | Learn to filter and format entries for publication in the current lexical software. | 2 - With Assistance |
 | **2 - With Assistance** | Assist a team or researcher to publish a print dictionary locally. | 3 - Independent |
 | **3 - Independent** | Train others to typeset dictionaries. | 4 - Expert |
 | **4 - Expert** | — | — |

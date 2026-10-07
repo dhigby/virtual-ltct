@@ -4,7 +4,7 @@ category: Technology Domain
 slug: recording-tools
 source_label: Recording Tools
 in_framework: true
-target_statement: is able to use the tools that assist language workers to record their work, either audio and/or video and is able to consult others on their use
+target_statement: Is able to use the tools that assist language workers to record their work, whether audio, video, or both, and is able to consult others on their use.
 outcome_levels:
   - "0 - No Competency"
   - "1 - Has Knowledge"
@@ -21,15 +21,15 @@ last_updated: 2026-09-03
 
 ## Description
 
-Knowledge of the tools that assist language workers to record their work, either audio and/or video, and can consult others on their use.
+Knowledge of the tools that assist language workers to record their work, whether audio, video, or both, and the ability to consult others on their use.
 
 ## Why it matters
 
-In recent years, audio and video have become an integral part of each domain that we teach. As a result, it is increasingly important that a Language Technologists be able to identify quality recordings and proper recording techniques.
+In recent years, audio and video have become an integral part of each domain that we teach. As a result, it is increasingly important that a Language Technologist be able to identify quality recordings and proper recording techniques.
 
 ## Target competency
 
-> is able to use the tools that assist language workers to record their work, either audio and/or video and is able to consult others on their use
+> Is able to use the tools that assist language workers to record their work, whether audio, video, or both, and is able to consult others on their use.
 
 ## Progression by component
 
@@ -39,10 +39,10 @@ _Each row is a level a learner is **at**; its activities are what they do to rea
 
 | Current level | Suggested activities | Reaches |
 | --- | --- | --- |
-| **0 - No Competency** | Listen to various audio recordings to identify various audio problems (low volume, clipping, noise, low quality, etc). Try to figure out how they could have been improved. | 1 - Has Knowledge |
-| **1 - Has Knowledge** | Can use audio software to produce optimal audio recording with minimal noise. | 2 - With Assistance |
+| **0 - No Competency** | Listen to various audio recordings to identify various audio problems (low volume, clipping, noise, low quality, etc.). Try to figure out how they could have been improved. | 1 - Has Knowledge |
+| **1 - Has Knowledge** | Can use audio software to produce an optimal audio recording with minimal noise. | 2 - With Assistance |
 | **2 - With Assistance** | Learn the tools and techniques to make clean audio recordings and improve quality of existing recordings. | 3 - Independent |
-| **3 - Independent** | Train someone to use audio software to produce quality audio recordings | 4 - Expert |
+| **3 - Independent** | Train someone to use audio software to produce quality audio recordings. | 4 - Expert |
 | **4 - Expert** | — | — |
 
 ### 2.0 — Video
@@ -50,7 +50,7 @@ _Each row is a level a learner is **at**; its activities are what they do to rea
 | Current level | Suggested activities | Reaches |
 | --- | --- | --- |
 | **0 - No Competency** | Watch various video recordings to identify various video problems (framing, lighting, zoom, reflections, etc.). Try to figure out how they could have been improved. | 1 - Has Knowledge |
-| **1 - Has Knowledge** | Can use video software to produce an high quality video recording | 2 - With Assistance |
+| **1 - Has Knowledge** | Can use video software to produce a high-quality video recording. | 2 - With Assistance |
 | **2 - With Assistance** | Learn the tools and techniques to make and edit quality video recordings. | 3 - Independent |
 | **3 - Independent** | Train someone to use video software to make and edit quality video recordings. | 4 - Expert |
 | **4 - Expert** | — | — |

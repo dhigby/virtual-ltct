@@ -53,6 +53,8 @@ Reports per space: missing course, missing forum, a third forum or any other add
 
 `\mod_forum\event\discussion_created` and `\mod_forum\event\post_created` in an `ltct:<slug>` course → when the author is a synced mentee of mentor M in that course, `subscriptions::subscribe_user_to_discussion()` for M (Q10, "start or post in" as changed by Doug on 2026-10-07); then, if the stored `forum_discussion_subs.preference` is later than the discussion's first post `created` (read from `forum_posts`, a raw read), set it to that `created` (direct write, listed in `moodle/local_ltuse/README.md`, R10). In a teaching space the Auto subscription already covers mentors through the `role_assigned` observer; in an Area space nobody's mail is overridden. The observer returns early for `ltct:site:` courses.
 
+**A mentor's own unfollow is kept (Doug, 2026-10-07).** Where the mentor has unsubscribed from a discussion themselves (a `forum_discussion_subs` row with `preference = -1`), neither the observer nor sync's `existing_for_mentor()` subscribes them to it again, however many more posts their mentees make there.
+
 ## Roles (`roles.yaml`, applied by the existing roles kind)
 
 - `spacemember`: new, archetype student, course context; keeps participants, user details and messaging (Q6, Q17).

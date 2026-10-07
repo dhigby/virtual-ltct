@@ -1,0 +1,35 @@
+# Rows #25, #10, #20: the site-wide forum settings every forum inherits (spec 005, FR-011,
+# research R8). The per-user forum defaults (digest, subscribe on posting, read tracking) are
+# notification preferences, so they live in notifications.yaml.
+
+rows: [10, 20, 25]
+purpose: >-
+  How every forum on the site behaves, in cohort spaces and course forums alike. No forum
+  publishes an RSS feed, no post can be sent to a portfolio, a post can be edited for 30
+  minutes after it is written, and posts can be tagged.
+settings:
+  - name: enablerssfeeds
+    value: 0
+    why: >-
+      An RSS URL is a bearer key: it carries a per-user token and is read without a session,
+      so anyone holding the link reads the forum (research R8).
+  - name: forum_enablerssfeeds
+    value: 0
+    why: >-
+      The forum module's own RSS switch, off with the site one, so turning one back on alone
+      still publishes no feed (research R8).
+  - name: enableportfolios
+    value: 0
+    why: >-
+      Q14: learners' student role still holds mod/forum:exportownpost, which portfolios
+      would expose. site_config.py validate refuses any other value (FR-011).
+  - name: maxeditingtime
+    value: 1800   # seconds
+    why: >-
+      Q11: the 30-minute editing window, and the delay before a post is mailed, so a writer
+      can fix a typo before anyone gets it. Core's default, declared so drift reports a change.
+  - name: usetags
+    value: 1
+    why: >-
+      Q19: forum tags stay on, so a space's mentor and members can label a post by topic.
+      Core's default, declared so drift reports a change.

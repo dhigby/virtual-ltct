@@ -1,0 +1,24 @@
+# Rows #11, #25: the incoming-mail handlers (spec 005, research R2, contract
+# specs/005-community-space/contracts/inbound-mail.md).
+#
+# Core keeps each handler's state in the messageinbound_handlers table, not in config, so
+# local_ltuse applies and drift-checks this file as its own kind. Classnames carry the leading
+# backslash, as core stores them, and are single-quoted: in a double-quoted YAML string, \m is
+# an escape. Only core's two handlers are accepted, and private_files_handler stays disabled.
+# The handler can be on while settings/inbound-mail.yaml keeps messageinbound_enabled at 0:
+# no reply address is issued until that switch is on.
+
+rows: [11, 25]
+purpose: >-
+  Switch on the forum reply handler (core keeps it in a table, not config), so a forum post
+  email carries a reply address and the reply lands as a post.
+handlers:
+  - classname: '\mod_forum\message\inbound\reply_handler'
+    enabled: 1
+    defaultexpiration: 604800   # seconds: one week (Q20)
+    validateaddress: 1
+why: >-
+  A mentor answers a mentee's post from their inbox, and the reply appears in the course as a
+  post the mentee is pushed in the app (FR-001-FR-005a). A reply address expires after a week
+  (Q20): a reply to an older email gets core's confirmation email instead, as does one from an
+  address that is not the person's registered address (validateaddress, R3).

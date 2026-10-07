@@ -34,5 +34,6 @@
 - Items marked incomplete require spec updates before `/speckit-clarify` or `/speckit-plan`
 - Validated in two passes (2026-09-30). No [NEEDS CLARIFICATION] markers.
 - INTENT's default (start inside Moodle) is taken as decided; the spec defines the engagement signal and reconsideration trigger in its own section. Thresholds are informed starting points recorded in Assumptions.
-- Deliberately left: who moderates (a recurring human burden with no owner yet) and the Moodle operator (015); named in the Constitution Check, not claimed covered. Any bolt-on is a separate future spec.
+- Deliberately left: the Moodle operator (015); named in the Constitution Check, not claimed covered. Moderation is now each space's recorded mentor (Q13). Any bolt-on is a separate future spec.
+- 2026-10-07: both rounds of maintainer decisions applied (plan.md, "Decisions" and "Round 2"); no [NEEDS CLARIFICATION] or [NEEDS DOUG] markers remain.
 - Automatic membership, room isolation and offline posting in the app are verification tasks for the plan (constitution X).

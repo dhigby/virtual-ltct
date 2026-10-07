@@ -312,5 +312,27 @@ function xmldb_local_ltuse_upgrade($oldversion) {
         upgrade_plugin_savepoint(true, 2026100900, 'local', 'ltuse');
     }
 
+    // Community space (spec 005, round 2): the per-forum digest overrides course-mentor sync
+    // wrote, and the ones a person set back to their default, so removing an override never
+    // erases a personal choice. Moodle data, never the repo's.
+    if ($oldversion < 2026101000) {
+        $table = new xmldb_table('local_ltuse_digest_override');
+        $table->add_field('id', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, XMLDB_SEQUENCE, null);
+        $table->add_field('userid', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, null);
+        $table->add_field('forumid', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, null);
+        $table->add_field('value', XMLDB_TYPE_INTEGER, '2', null, XMLDB_NOTNULL, null, null);
+        $table->add_field('released', XMLDB_TYPE_INTEGER, '1', null, XMLDB_NOTNULL, null, '0');
+        $table->add_field('timecreated', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, null);
+        $table->add_key('primary', XMLDB_KEY_PRIMARY, ['id']);
+        $table->add_key('userid', XMLDB_KEY_FOREIGN, ['userid'], 'user', ['id']);
+        $table->add_key('forumid', XMLDB_KEY_FOREIGN, ['forumid'], 'forum', ['id']);
+        $table->add_index('userid-forumid', XMLDB_INDEX_UNIQUE, ['userid', 'forumid']);
+        if (!$dbman->table_exists($table)) {
+            $dbman->create_table($table);
+        }
+
+        upgrade_plugin_savepoint(true, 2026101000, 'local', 'ltuse');
+    }
+
     return true;
 }

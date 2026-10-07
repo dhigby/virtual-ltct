@@ -27,6 +27,24 @@ use stdClass;
  *              added with component local_ltuse, which local_ltuse_allow_group_member_remove()
  *              protects in the interface. Groups are only ever created
  *
+ * Spec 005 adds, in delivery (ltct:<slug>) courses only, the only courses this class syncs:
+ *
+ *   digests        every run, override 0 (each post by email) on every forum of the course for
+ *                  each course mentor and each of their synced mentees, through
+ *                  digest_overrides::set_for_course() (set() for the whole course in one read),
+ *                  which keeps a person's own choice. In the removerole
+ *                  step, before role_unassign() (the write needs mod/forum:viewdiscussion), a
+ *                  removed mentor's overrides go, and so do those of anyone actively enrolled who
+ *                  is no longer anyone's mentee here. Only overrides sync recorded are removed; a
+ *                  person whose enrolment was suspended keeps theirs (data-model "Mail state")
+ *   subscriptions  when a mentor is added, or gains a mentee, mentor_subscriptions subscribes them
+ *                  to the discussions their mentees started or posted in (research R10)
+ *
+ * Enrolment, role and group outcomes are exactly spec 008's. The spec 005 raw reads are this
+ * plugin's own local_ltuse_digest_override, by forum, and those digest_overrides lists. A spec
+ * 005 step that fails is counted (overridefailures, subscribefailures) and skipped; it never
+ * stops the removals.
+ *
  * Not the manual method: enrol_manual_enrol_users takes the first manual instance, so a mentor
  * instance could capture the pilot coordinator's enrolments, and spec 004 counts manual as
  * pilot.
@@ -192,7 +210,8 @@ class course_mentor_sync {
 
     /**
      * Every ltct: course, then any Teacher assignment local_ltuse gave in a course that is no
-     * longer one, then records whose course, cohort or people are gone. For the hourly task.
+     * longer one, then records whose course, cohort or people are gone, and spec 005's digest
+     * override records whose forum or person is gone. For the hourly task.
      *
      * @return array counts; [] when switched off
      */
@@ -207,6 +226,7 @@ class course_mentor_sync {
         $counts['courses'] = count($courseids);
         $counts['strayroles'] = self::remove_stray_roles();
         $counts['orphanrecords'] = self::remove_orphan_records();
+        $counts['orphanoverrides'] = digest_overrides::remove_orphans();   // Spec 005.
         return $counts;
     }
 
@@ -286,6 +306,40 @@ class course_mentor_sync {
                 groups_remove_member($groups[$mentorid]->id, $userid);
             }
         }
+        // Spec 005: after the groups, which mentor_subscriptions reads to find a mentor's mentees.
+        // Each step is caught on its own, so one failure skips only that step, and is counted in
+        // overridefailures or subscribefailures so the reconcile reports it. None stops spec 008's
+        // removals below: Teacher must not outlive its reason (spec 016's identity entitlement).
+        // A removal that fails is not lost for good: if the person is then unenrolled for the last
+        // time, core deletes their forum_digests rows and forget_course() their records.
+        $digests = ['overrides' => 0, 'overridesremoved' => 0, 'overridefailures' => 0, 'subscribefailures' => 0];
+        $forums = null;
+        try {
+            $forums = self::forums($courseid);
+            $digests['overrides'] = self::set_digests($target, $forums);
+        } catch (\Throwable $e) {
+            $digests['overridefailures']++;
+            debugging('local_ltuse: could not give the course mentors their forum mail: ' . $e->getMessage(),
+                DEBUG_DEVELOPER);
+        }
+        try {
+            self::subscribe_added_mentors($diff, $courseid);
+        } catch (\Throwable $e) {
+            $digests['subscribefailures']++;
+            debugging('local_ltuse: could not subscribe the course mentors to discussions: ' . $e->getMessage(),
+                DEBUG_DEVELOPER);
+        }
+        try {
+            // The overrides go before Teacher does, while the person can still see the forums;
+            // digest_overrides skips anyone who already cannot.
+            $forums = $forums ?? self::forums($courseid);
+            $digests['overridesremoved'] = self::remove_digests($target, $diff['removerole'], array_keys($forums),
+                $context);
+        } catch (\Throwable $e) {
+            $digests['overridefailures']++;
+            debugging('local_ltuse: could not take away the course mentors\' forum mail: ' . $e->getMessage(),
+                DEBUG_DEVELOPER);
+        }
         // Teacher goes before the enrolment, so it never outlives its reason even if the
         // unenrolment then fails. A Teacher assignment tied to another instance (one deleted
         // and made again) has no reason by definition.
@@ -300,7 +354,106 @@ class course_mentor_sync {
         }
         $counts = course_mentor_rules::counts($diff);
         $counts['removerole'] += count($stray);
-        return $counts;
+        return $counts + $digests;
+    }
+
+    // --- spec 005: digest overrides and discussion subscriptions -------------------------------
+
+    /**
+     * Every forum of the course, from core's course cache.
+     *
+     * @param int $courseid
+     * @return int[] forum instance id => course module id
+     */
+    protected static function forums(int $courseid): array {
+        $forums = [];
+        foreach (get_fast_modinfo($courseid)->get_instances_of('forum') as $cm) {
+            $forums[(int)$cm->instance] = (int)$cm->id;
+        }
+        return $forums;
+    }
+
+    /**
+     * Override 0 on every forum for each course mentor and each of their synced mentees. A
+     * person's own setting, an override they set back to their default, and a person who
+     * cannot see the forum are all left alone by digest_overrides::set_for_course(), which reads
+     * the course's records and forum_digests rows once rather than once per person and forum.
+     *
+     * @param array $target course_mentor_rules::target()'s result
+     * @param int[] $forums forum id => course module id
+     * @return int how many were written this run
+     */
+    protected static function set_digests(array $target, array $forums): int {
+        $people = [];
+        foreach ($target['mentors'] as $mentorid => $learnerids) {
+            $people[(int)$mentorid] = true;
+            foreach ($learnerids as $learnerid) {
+                $people[(int)$learnerid] = true;
+            }
+        }
+        return digest_overrides::set_for_course(array_keys($people), $forums, 0);
+    }
+
+    /**
+     * Take away the overrides sync recorded for each mentor being removed, and for each person
+     * still actively enrolled here who is now nobody's mentee and no mentor. Someone whose
+     * enrolment is suspended or gone has left: they keep theirs (data-model "Mail state").
+     *
+     * @param array $target course_mentor_rules::target()'s result
+     * @param int[] $removed the mentors losing Teacher this run
+     * @param int[] $forumids
+     * @param \context_course $context
+     * @return int how many overrides were reset
+     */
+    protected static function remove_digests(array $target, array $removed, array $forumids,
+            \context_course $context): int {
+        global $DB;
+        if (!$forumids) {
+            return 0;
+        }
+        $removed = array_map('intval', $removed);
+        $keep = $target['learners'];
+        foreach (array_keys($target['mentors']) as $mentorid) {
+            $keep[(int)$mentorid] = true;
+        }
+        // This plugin's own table: who holds a recorded override on these forums.
+        [$in, $params] = $DB->get_in_or_equal($forumids, SQL_PARAMS_NAMED);
+        $holders = array_map('intval', $DB->get_fieldset_select(digest_overrides::TABLE, 'DISTINCT userid',
+            "forumid $in", $params));
+        $count = 0;
+        foreach ($holders as $userid) {
+            if (isset($keep[$userid])) {
+                continue;
+            }
+            if (!in_array($userid, $removed, true) && !is_enrolled($context, $userid, '', true)) {
+                continue;
+            }
+            foreach ($forumids as $forumid) {
+                if (digest_overrides::remove($userid, $forumid) === 'removed') {
+                    $count++;
+                }
+            }
+        }
+        return $count;
+    }
+
+    /**
+     * Subscribe each mentor added this run, and each mentor who gained a mentee, to the
+     * discussions their mentees started or posted in. Idempotent.
+     *
+     * @param array $diff course_mentor_rules::diff()'s result
+     * @param int $courseid
+     */
+    protected static function subscribe_added_mentors(array $diff, int $courseid): void {
+        $mentors = array_fill_keys(array_map('intval', $diff['addrole']), true);
+        foreach ($diff['add'] as [$mentorid, $userid]) {
+            if ((int)$mentorid !== (int)$userid) {
+                $mentors[(int)$mentorid] = true;
+            }
+        }
+        foreach (array_keys($mentors) as $mentorid) {
+            \local_ltuse\mentor_subscriptions::existing_for_mentor($mentorid, $courseid);
+        }
     }
 
     /**

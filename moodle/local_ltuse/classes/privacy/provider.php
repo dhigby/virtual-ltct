@@ -16,10 +16,11 @@ use core_privacy\local\request\writer;
 /**
  * Privacy provider for local_ltuse.
  *
- * The plugin keeps one table of personal data, local_ltuse_mentor_contact (spec 003): which
- * mentor-learner message contacts it made. Each row belongs to both people, so it is reported
- * in each one's user context. The mentor relationship itself (core role_assignments) and the
- * message contact (core message_contacts) are core's to export and delete.
+ * The plugin keeps several tables of personal data, one or two per spec below. The first was
+ * local_ltuse_mentor_contact (spec 003): which mentor-learner message contacts it made. Each
+ * row belongs to both people, so it is reported in each one's user context. The mentor
+ * relationship itself (core role_assignments) and the message contact (core
+ * message_contacts) are core's to export and delete.
  *
  * Spec 011 adds local_ltuse_booking: each office-hours booking's last notified time, which
  * belongs to the learner and the mentor alike and is reported in each one's user context. The
@@ -47,6 +48,12 @@ use core_privacy\local\request\writer;
  * user_deleted observer also runs: the user's own rows go, and wherever they acted their id is
  * set to 0. The protectionchanged notification is core messaging's.
  *
+ * Spec 005 adds local_ltuse_digest_override: each per-forum digest override course-mentor
+ * sync wrote for a person, and whether they have since set that forum back to their default.
+ * A row belongs to its person and is reported in their user context. The override itself
+ * (forum_digests) is mod_forum's to export and delete; deleting the record only means sync
+ * can no longer tell its own override from the person's choice, so it leaves that alone.
+ *
  * Its other tables hold nothing about a person: the competency framework, which courses aim
  * at which competency (spec 004), and which badge is each course's (spec 013). The
  * per-competency report counts enrolments and completions from core's tables at query time
@@ -73,6 +80,8 @@ class provider implements
     const PATHWAY_COHORT = 'local_ltuse_pathway_cohort';
     /** Spec 008: one-course and cohort mentors (research R10). */
     const COURSE_MENTOR = 'local_ltuse_course_mentor';
+    /** Spec 005: the digest overrides course-mentor sync wrote (round 2). */
+    const DIGEST_OVERRIDE = 'local_ltuse_digest_override';
 
     /**
      * @param collection $collection
@@ -137,6 +146,13 @@ class provider implements
             'timecreated' => 'privacy:metadata:course_mentor:timecreated',
             'timemodified' => 'privacy:metadata:course_mentor:timemodified',
         ], 'privacy:metadata:course_mentor');
+        $collection->add_database_table(self::DIGEST_OVERRIDE, [
+            'userid' => 'privacy:metadata:local_ltuse_digest_override:userid',
+            'forumid' => 'privacy:metadata:local_ltuse_digest_override:forumid',
+            'value' => 'privacy:metadata:local_ltuse_digest_override:value',
+            'released' => 'privacy:metadata:local_ltuse_digest_override:released',
+            'timecreated' => 'privacy:metadata:local_ltuse_digest_override:timecreated',
+        ], 'privacy:metadata:local_ltuse_digest_override');
         // The plugin also writes into core messaging: it makes mentor and learner contacts.
         $collection->add_subsystem_link('core_message', [], 'privacy:metadata:core_message');
         return $collection;
@@ -165,12 +181,14 @@ class provider implements
                         OR EXISTS (SELECT 1 FROM {" . self::PROTECTIONLOG . "} pl
                                     WHERE pl.userid = :pluserid OR pl.actorid = :plactor)
                         OR EXISTS (SELECT 1 FROM {" . self::COURSE_MENTOR . "} cm
-                                    WHERE cm.mentorid = :cmmentorid OR cm.learnerid = :cmlearnerid))";
+                                    WHERE cm.mentorid = :cmmentorid OR cm.learnerid = :cmlearnerid)
+                        OR EXISTS (SELECT 1 FROM {" . self::DIGEST_OVERRIDE . "} dov
+                                    WHERE dov.userid = :dovuserid))";
         $contextlist->add_from_sql($sql, ['level' => CONTEXT_USER, 'userid' => $userid,
             'mentorid' => $userid, 'learnerid' => $userid, 'bmentorid' => $userid, 'blearnerid' => $userid,
             'omanagerid' => $userid, 'omemberid' => $userid, 'pcuserid' => $userid,
             'puserid' => $userid, 'pmodified' => $userid, 'pluserid' => $userid, 'plactor' => $userid,
-            'cmmentorid' => $userid, 'cmlearnerid' => $userid]);
+            'cmmentorid' => $userid, 'cmlearnerid' => $userid, 'dovuserid' => $userid]);
         return $contextlist;
     }
 
@@ -203,6 +221,7 @@ class provider implements
             self::export_org_contacts($context, $userid);
             self::export_pathway_links($context, $userid);
             self::export_course_mentors($context, $userid);
+            self::export_digest_overrides($context, $userid);
             self::export_protection($context, $userid);
             $rows = $DB->get_records_select(self::TABLE, 'mentorid = :mentorid OR learnerid = :learnerid',
                 ['mentorid' => $userid, 'learnerid' => $userid], 'timecreated, id');
@@ -272,6 +291,7 @@ class provider implements
                 ['managerid' => $userid, 'memberid' => $userid])
             || $DB->record_exists(self::PATHWAY_COHORT, ['usermodified' => $userid])
             || $DB->record_exists_select(self::COURSE_MENTOR, 'mentorid = :mentorid OR learnerid = :learnerid', $params)
+            || $DB->record_exists(self::DIGEST_OVERRIDE, ['userid' => $userid])
             || self::has_protection_rows($userid);
     }
 
@@ -418,6 +438,8 @@ class provider implements
         // enrolment that rested on a deleted record.
         $DB->delete_records_select(self::COURSE_MENTOR, 'mentorid = :mentorid OR learnerid = :learnerid',
             ['mentorid' => $userid, 'learnerid' => $userid]);
+        // Spec 005. The overrides themselves are mod_forum's (forum_digests); only the record goes.
+        $DB->delete_records(self::DIGEST_OVERRIDE, ['userid' => $userid]);
         \local_ltuse\protection\service::delete_user_data($userid);   // Spec 016: the shared routine.
     }
 
@@ -475,5 +497,30 @@ class provider implements
         }
         writer::with_context($context)->export_data(
             [get_string('privacy:path:coursementors', 'local_ltuse')], (object)['coursementors' => $records]);
+    }
+
+    /**
+     * Export the digest overrides course-mentor sync recorded for the user (spec 005).
+     *
+     * @param context_user $context
+     * @param int $userid
+     */
+    protected static function export_digest_overrides(context_user $context, int $userid): void {
+        global $DB;
+        $rows = $DB->get_records(self::DIGEST_OVERRIDE, ['userid' => $userid], 'timecreated, id');
+        if (!$rows) {
+            return;
+        }
+        $overrides = [];
+        foreach ($rows as $row) {
+            $overrides[] = (object)[
+                'forumid' => (int)$row->forumid,
+                'value' => (int)$row->value,
+                'released' => transform::yesno((int)$row->released === 1),
+                'timecreated' => transform::datetime($row->timecreated),
+            ];
+        }
+        writer::with_context($context)->export_data(
+            [get_string('privacy:path:digestoverrides', 'local_ltuse')], (object)['overrides' => $overrides]);
     }
 }

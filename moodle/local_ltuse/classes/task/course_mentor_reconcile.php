@@ -13,7 +13,9 @@ defined('MOODLE_INTERNAL') || die();
  * anything they missed: a change made while an observer failed, a role or group changed by
  * hand, a course whose idnumber changed. It also takes away any Teacher assignment local_ltuse
  * gave in a course that is no longer an ltct: course, and deletes course-mentor records whose
- * course, cohort or people are gone. The course-mentor part does nothing while
+ * course, cohort or people are gone, and spec 005's digest override records whose forum or
+ * person is gone (orphanoverrides). A spec 005 step that failed in a course is reported as
+ * overridefailures or subscribefailures. The course-mentor part does nothing while
  * local_ltuse/coursementorsync is 0 (plan decision 11).
  *
  * The pathway part runs whatever that setting says, because it is not about course mentors:

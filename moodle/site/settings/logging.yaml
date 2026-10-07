@@ -1,0 +1,16 @@
+# Rows #9, #25: how long the standard log keeps its events (spec 005, FR-011b, research R18).
+# Moodle 5.2 has no core loglifetime: retention is the standard log store's own setting
+# (public/admin/tool/log/store/standard/settings.php, MOODLE_502_STABLE).
+
+rows: [9, 25]
+purpose: >-
+  How long the site keeps its activity log. A year, so the quarterly engagement review can
+  read a whole quarter's forum activity well after the quarter ends.
+settings:
+  - name: logstore_standard/loglifetime
+    value: 365   # days; 0 never deletes
+    why: >-
+      Q21: a quarterly engagement review run well after quarter end (FR-011b). Moodle 5.2
+      keeps standard-log retention as this plugin setting; there is no core `loglifetime`.
+      site_config.py validate refuses a value from 1 to 119 days, which would cut a quarter
+      short.

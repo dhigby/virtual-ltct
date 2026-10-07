@@ -946,6 +946,43 @@ The dashboard's are in the spec 011 table under
 | `user_lastaccess` | `userid`; returns `courseid`, `timeaccess` | When the learner last opened each course. `course_get_recent_courses()` reads the same table but keeps visible courses only, and a hidden course the learner may see still counts. |
 | `user_enrolments` joined to `enrol` | `ue.userid`, `ue.status`, `ue.timestart`, `ue.timeend`, `e.status`; the latest `timestart`, or `timecreated`, per course | When the learner was given each course, so one never opened is started in enrolment order. `enrol_get_all_users_courses()` returns courses, not enrolment times. |
 
+## Community space (spec 005)
+
+Built in stages; **not yet verified on the instance** (constitution X). This section grows as
+spec 005's stories land (its task T093 completes it). So far: the record of the digest
+overrides course-mentor sync writes, the one-off that turns read tracking on for existing
+accounts, and US1's mentor route in delivery courses (the reply handler, the mentor's and
+mentees' per-post overrides, and the mentor's discussion subscriptions).
+
+| Piece | Where | Does |
+|---|---|---|
+| Digest overrides | `classes/admin/digest_overrides.php`, table `local_ltuse_digest_override` | The one place that writes and removes a per-forum digest override, through core's `forum_set_user_maildigest()`. It writes only where the person has no `forum_digests` row and no record, records every write, marks a record released when the person sets the forum back to their default, and on removal resets only an override still equal to what it wrote. A person without `mod/forum:viewdiscussion` is skipped and nothing changes. Sync calls `set_for_course()`, which reads a course's records and `forum_digests` rows once per chunk of people and calls core only for a pair that needs a write. Core deletes a person's `forum_digests` rows for a course on their last unenrolment (`mod_forum_observer::user_enrolment_deleted`, `mod/forum/classes/observer.php` L37-54), so an observer on `\core\event\user_enrolment_deleted` deletes their records for the same forums (`forget_course()`); otherwise the stranded record would read as "set back to their default" and the override would never be written again. `user_deleted` deletes a person's records, and the hourly reconcile deletes any whose forum or person is gone (`orphanoverrides`). |
+| Read tracking for existing accounts | `classes/trackforums.php`, `cli/trackforums_existing.php` | Sets `trackforums = 1` through `user_update_user()` for every non-deleted, non-guest account that has it off. Prints `seen N, changed M` only. Idempotent. |
+| Forum reply handler | `classes/siteconfig/inbound.php`, payload `inbound_handlers` (`moodle/site/inbound-mail.yaml`) | site_config apply switches `\mod_forum\message\inbound\reply_handler` on with the declared expiry and address check, writing a field only where the handler's `can_change_*()` allows it (otherwise `[skip] blocked`); drift reports a hand change or a missing row. Never creates or deletes a handler row. |
+| Mentor overrides in delivery courses | `classes/admin/course_mentor_sync.php` | Each sync run gives every course mentor and their synced mentees override 0 on every forum of the `ltct:<slug>` course, through `digest_overrides`. In the removerole step, before `role_unassign()`, it removes a leaving mentor's recorded overrides, and those of anyone still actively enrolled who is no longer a mentee there. Each spec 005 step is caught on its own and counted (`overridefailures`, `subscribefailures`), so the reconcile reports a failure; none stops the removals. Spec 008's enrolment, role and group outcomes are unchanged. |
+| Mentor discussion subscriptions | `classes/mentor_subscriptions.php`, observers on `\mod_forum\event\discussion_created` and `post_created` | When a mentee starts or posts in a discussion in an `ltct:<slug>` course, each of their course mentors is subscribed to that discussion only, and the subscription time is set back to the first post's `created` so the forum cron still sends the opening post. When sync adds a mentor, or the mentor gains a mentee, it does the same for the mentees' existing discussions. Never in an `ltct:site:` course. A mentor's own opt-out row (-1) is respected. |
+
+**Raw reads added by spec 005** so far, all of stable core tables by their keys or indexed
+columns; the `user` read is a one-off scan. The two direct writes follow.
+
+| Table | Read by | Why there is no API |
+|---|---|---|
+| `forum_digests` | `userid` and `forum`, one pair, or a course's forums by a chunk of user ids; returns `maildigest` or the rows (`admin\digest_overrides`) | Whether the person has their own setting for the forum, which must never be overwritten or recorded. `forum_get_user_maildigest_bulk()` folds "no row" into the account default, so it cannot tell a personal choice from none. |
+| `user` | `deleted = 0`, `id` not the guest, `trackforums = 0`; returns ids and a count (`trackforums`) | The accounts to switch on. Core has no API that lists accounts by a preference column. The writes go through `user_update_user()`. |
+| `forum_posts`, `forum_discussions` | a post by `id`; a discussion by `id`; the discussions of a course with a post by any of a mentor's mentees (`d.course`, `p.userid`); the first post's `created` by `id`; a discussion's `firstpost` by `id` (`mentor_subscriptions::for_discussion()`, from the `discussion_created` observer) | Which discussions a mentor's mentees started or posted in, and when the opening post was made. Core's forum vaults return posts for display to one user, with capability checks for that user, not by author across a course. |
+| `groups`, `groups_members` | by course, `ltct:mentorgroup:` idnumber and component `local_ltuse` (`mentor_subscriptions`) | A post author's course mentors, from course-mentor sync's own groups, which hold exactly the learners each mentor assesses. The same read `course_mentor_sync` already makes. |
+| `role_assignments` | by context, role (Teacher), user and component `local_ltuse` (`mentor_subscriptions`) | That a group's mentor still holds the Teacher role sync gave. `user_has_role_assignment()` cannot filter by component. |
+| `forum_discussion_subs` | by `userid` and `discussion` (`mentor_subscriptions`) | Whether the mentor has opted out of the discussion, and the subscription time `subscribe_user_to_discussion()` stored. `subscriptions::is_subscribed()` returns a boolean, not the row. |
+| `course` | `idnumber` by `id` (`mentor_subscriptions`) | Whether the post is in a delivery course; a space or office hours is skipped. |
+| `forum`, `user` | `forum.id` by `course` (`admin\digest_overrides::forget_course()`); this plugin's records left-joined to `forum` by id and `user` by id and `deleted = 0` (`remove_orphans()`) | The forums whose `forum_digests` rows core has just deleted on a last unenrolment: the same `{forum}` by course read core's observer makes. The orphan sweep finds records whose forum or person is gone; no API lists those. Every delete is of this plugin's own table. |
+
+**Direct writes added by spec 005** so far:
+
+| Write | Why there is no API | Watch for |
+|---|---|---|
+| `messageinbound_handlers`: `enabled`, `defaultexpiration`, `validateaddress` of one row, through `$DB->update_record()` (`siteconfig\inbound`) | Core has no API to change a handler; this is exactly what core's own edit page does (`admin/tool/messageinbound/index.php` L55-79), after `get_handler()` and `record_from_handler()`, each field only where `can_change_*()` is true. | A core upgrade's `update_handlers_for_component()` only adds and removes rows, so it never resets ours; drift would show it if it did. |
+| `forum_discussion_subs.preference` of one row, set back to the discussion's first post's `created` when `subscribe_user_to_discussion()` stored a later time, then `subscriptions::reset_discussion_cache()` (`mentor_subscriptions`, research R10) | `subscribe_user_to_discussion()` always stores `time()`, and the forum cron drops any post created before the subscription time (`cron_task.php` L465-471), so the opening post, whose `created` is set before attachments are saved and the event fires, would be lost. | A change to how the cron compares the subscription time with `created`, or to the column's meaning. |
+
 ## Verified against Moodle 5.2.3+ (2026-09-29)
 
 Installed and exercised end to end on Moodle 5.2.3+ (Build 20260928), PHP 8.3, PostgreSQL

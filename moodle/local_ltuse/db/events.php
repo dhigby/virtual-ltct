@@ -122,4 +122,22 @@ $observers = [
         'eventname' => '\core\event\user_updated',
         'callback' => '\local_ltuse\admin\observer::user_updated',
     ],
+
+    // Spec 005 (research R10): a mentee who starts or posts in a discussion in a delivery course
+    // has their course mentors subscribed to that discussion only. Internal (the default), so
+    // the subscription is in place before the forum cron reads it. Nothing in a space.
+    [
+        'eventname' => '\mod_forum\event\discussion_created',
+        'callback' => '\local_ltuse\observer::forum_discussion_created',
+    ],
+    [
+        'eventname' => '\mod_forum\event\post_created',
+        'callback' => '\local_ltuse\observer::forum_post_created',
+    ],
+    // Spec 005: on a last unenrolment, mod_forum_observer deletes the person's forum_digests rows
+    // for the course (mod/forum/classes/observer.php L37-54); sync's records of them go too.
+    [
+        'eventname' => '\core\event\user_enrolment_deleted',
+        'callback' => '\local_ltuse\observer::user_enrolment_deleted',
+    ],
 ];

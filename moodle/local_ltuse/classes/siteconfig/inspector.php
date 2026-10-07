@@ -80,6 +80,11 @@ use core_plugin_manager;
  *
  *   org_courses   [{slug, course_idnumber?, category_idnumber}]   course_idnumber defaults to ltct:<slug>
  *
+ * and, from spec 005 (specs/005-community-space/contracts/inbound-mail.md), the incoming-mail
+ * handlers core keeps in a table rather than config, checked right after settings:
+ *
+ *   inbound_handlers  [{classname, enabled, defaultexpiration, validateaddress}]   inbound
+ *
  * A spec 004 result may carry `blocking` => report::BLOCKS_REPORT, which leaves only its own
  * report unwritten; has_blocking() delegates to report::has_blocking() so such a result does
  * not stop the run.
@@ -220,6 +225,9 @@ class inspector {
 
     /** @var protection|null checks the payload's protection levels (spec 016) */
     protected $protection = null;
+
+    /** @var inbound|null checks the payload's incoming-mail handlers (spec 005) */
+    protected $inbound = null;
 
     /**
      * @param array $declaration the decoded JSON payload (associative arrays throughout)
@@ -378,6 +386,21 @@ class inspector {
             $this->reports = new reports(self::entries($this->declaration['reports'] ?? []));
         }
         return $this->reports;
+    }
+
+    // --- spec 005 checker -----------------------------------------------------------------
+
+    /**
+     * The incoming-mail handler checker, or null when the payload declares none (a payload
+     * from before spec 005, or a site with no inbound-mail.yaml).
+     *
+     * @return inbound|null
+     */
+    public function inbound(): ?inbound {
+        if ($this->inbound === null && self::entries($this->declaration['inbound_handlers'] ?? [])) {
+            $this->inbound = new inbound(self::entries($this->declaration['inbound_handlers']));
+        }
+        return $this->inbound;
     }
 
     // --- spec 016 checker -----------------------------------------------------------------
@@ -570,6 +593,11 @@ class inspector {
         }
         foreach ($this->declaration['settings'] ?? [] as $setting) {
             $items[] = $this->check_setting($setting);
+        }
+        // Spec 005, after settings, in apply's order. Never blocking: a handler field core
+        // will not change is a warning, and a missing row a non-blocking fail.
+        if ($this->inbound()) {
+            $items = array_merge($items, $this->inbound()->check());
         }
         // In the preflight, so apply writes nothing while a managers cohort reaches a shared
         // course (spec 002 R2). Run the open-courses migration CLI first.

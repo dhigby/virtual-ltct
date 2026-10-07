@@ -43,6 +43,11 @@ use core_message\api;
  *   user_deleted           also forgets the organisation contact records
  *
  * The work is organisation\contacts'; these only route the event and keep failures out of core.
+ *
+ * Spec 005 (research R10) adds:
+ *
+ *   discussion_created  the opening post's author's course mentors are subscribed to the
+ *   post_created        discussion, in delivery courses only (mentor_subscriptions::for_post())
  */
 class observer {
 
@@ -248,6 +253,11 @@ class observer {
         } catch (\Throwable $e) {
             debugging('local_ltuse: could not clear course mentors: ' . $e->getMessage(), DEBUG_DEVELOPER);
         }
+        try {
+            admin\digest_overrides::forget_user((int)$event->objectid);   // Spec 005: their override records.
+        } catch (\Throwable $e) {
+            debugging('local_ltuse: could not clear digest override records: ' . $e->getMessage(), DEBUG_DEVELOPER);
+        }
     }
 
     // --- spec 002: organisation membership ------------------------------------------------
@@ -291,6 +301,56 @@ class observer {
         } catch (\Throwable $e) {
             debugging('local_ltuse: could not unassign a deleted cohort\'s pathways: ' . $e->getMessage(),
                 DEBUG_DEVELOPER);
+        }
+    }
+
+    /**
+     * A discussion was started: subscribe its author's course mentors to it (spec 005, R10).
+     * The event names the discussion; mentor_subscriptions reads its first post.
+     *
+     * @param \mod_forum\event\discussion_created $event
+     */
+    public static function forum_discussion_created(\mod_forum\event\discussion_created $event): void {
+        try {
+            mentor_subscriptions::for_discussion((int)$event->objectid);
+        } catch (\Throwable $e) {
+            debugging('local_ltuse: could not subscribe the course mentors to a discussion: ' . $e->getMessage(),
+                DEBUG_DEVELOPER);
+        }
+    }
+
+    /**
+     * A post was made: subscribe its author's course mentors to its discussion (spec 005, R10).
+     *
+     * @param \mod_forum\event\post_created $event
+     */
+    public static function forum_post_created(\mod_forum\event\post_created $event): void {
+        try {
+            mentor_subscriptions::for_post((int)$event->objectid);
+        } catch (\Throwable $e) {
+            debugging('local_ltuse: could not subscribe the course mentors to a discussion: ' . $e->getMessage(),
+                DEBUG_DEVELOPER);
+        }
+    }
+
+    /**
+     * A person's last enrolment in a course was deleted, so mod_forum's own observer has deleted
+     * their forum_digests rows for its forums (spec 005): delete sync's records for the same
+     * forums, or a record with no row would read as "set back to their default" and the override
+     * would never be written again when they are enrolled again. Whatever the course-mentor
+     * switch says, because core clears the rows whatever it says.
+     *
+     * @param \core\event\user_enrolment_deleted $event
+     */
+    public static function user_enrolment_deleted(\core\event\user_enrolment_deleted $event): void {
+        try {
+            $ue = (array)($event->other['userenrolment'] ?? []);
+            if (!empty($ue['lastenrol'])) {
+                admin\digest_overrides::forget_course((int)($ue['userid'] ?? $event->relateduserid),
+                    (int)($ue['courseid'] ?? $event->courseid));
+            }
+        } catch (\Throwable $e) {
+            debugging('local_ltuse: could not clear digest override records: ' . $e->getMessage(), DEBUG_DEVELOPER);
         }
     }
 

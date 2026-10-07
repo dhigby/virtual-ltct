@@ -2540,3 +2540,204 @@ class AdminRole(Base):
         self.write("settings/admin.yaml",
                    (REPO / "moodle" / "site" / "settings" / "admin.yaml").read_text())
         self.assertAccepted()
+
+
+class SiteForum005(Base):
+    """Spec 005 (T009, FR-011, FR-011a, FR-011b): the site-wide forum, logging and
+    notification settings, the Course mentor's export prevents and the spacemember role."""
+
+    FILES = ("settings/forums.yaml", "settings/logging.yaml", "settings/notifications.yaml")
+
+    def setUp(self):
+        super().setUp()
+        site = REPO / "moodle" / "site"
+        for rel in self.FILES:
+            self.write(rel, (site / rel).read_text(encoding="utf-8"))
+
+    def test_the_tracked_settings_are_accepted_and_rendered(self):
+        self.assertAccepted()
+        payload = sc.build_payload(sc.validate(self.dir)[0], "apply", {})
+        values = {s["name"]: s.get("value") for s in payload["settings"]}
+        want = {"enablerssfeeds": "0", "forum_enablerssfeeds": "0", "enableportfolios": "0",
+                "maxeditingtime": "1800", "usetags": "1",
+                "logstore_standard/loglifetime": "365",
+                "defaultpreference_autosubscribe": "1", "defaultpreference_trackforums": "1",
+                "defaultpreference_mailformat": "1", "defaultpreference_maildigest": "1"}
+        for name, value in want.items():
+            with self.subTest(name=name):
+                self.assertEqual(values.get(name), value)
+
+    def test_portfolios_stay_off(self):
+        self.edit("settings/forums.yaml", "name: enableportfolios\n    value: 0",
+                  "name: enableportfolios\n    value: 1")
+        self.assertInvalid("enableportfolios")
+
+    def test_log_retention_floor(self):
+        for value, ok in (("119", False), ("1", False), ("120", True), ("0", True)):
+            with self.subTest(value=value):
+                self.reset()
+                self.edit("settings/logging.yaml", "value: 365", "value: " + value)
+                if ok:
+                    self.assertAccepted()
+                else:
+                    self.assertInvalid("logstore_standard/loglifetime")
+
+    def test_course_mentor_cannot_export_posts(self):
+        roles = {r["shortname"]: r for r in sc.validate(self.dir)[0]["roles"]}
+        caps = roles["teacher"]["capabilities"]
+        self.assertEqual(caps.get("mod/forum:exportforum"), "prohibit")
+        for cap in ("mod/forum:exportdiscussion", "mod/forum:exportpost",
+                    "mod/forum:exportownpost"):
+            with self.subTest(cap=cap):
+                self.assertEqual(caps.get(cap), "prevent")
+        self.assertNotIn("mod/forum:postprivatereply", caps)   # the private reply stays (Q14)
+
+    def test_spacemember_role(self):
+        roles = {r["shortname"]: r for r in sc.validate(self.dir)[0]["roles"]}
+        self.assertIn("spacemember", roles)
+        self.assertEqual(roles["spacemember"]["archetype"], "student")
+        self.assertIn("course", roles["spacemember"]["contextlevels"])
+        self.assertEqual(roles["spacemember"]["capabilities"], {})
+
+
+class InboundMail005(Base):
+    """Spec 005 (T023, contract inbound-mail "Rules"): the incoming-mail settings, the forum
+    reply handler's row, and the cross-file rule on allowedemaildomains."""
+
+    FILES = ("settings/inbound-mail.yaml", "inbound-mail.yaml", "settings/identity.yaml")
+    REPLY = r"'\mod_forum\message\inbound\reply_handler'"
+    PRIVATE = r"'\core\message\inbound\private_files_handler'"
+
+    def setUp(self):
+        super().setUp()
+        site = REPO / "moodle" / "site"
+        for rel in self.FILES:
+            self.write(rel, (site / rel).read_text(encoding="utf-8"))
+
+    def add_setting(self, name, value):
+        p = self.dir / "settings" / "inbound-mail.yaml"
+        p.write_text(p.read_text() + "  - name: %s\n    value: %s\n    why: test\n"
+                     % (name, value))
+
+    def add_handler(self, classname, enabled, expiration):
+        self.edit("inbound-mail.yaml", "handlers:\n",
+                  "handlers:\n  - classname: %s\n    enabled: %d\n    defaultexpiration: %d\n"
+                  "    validateaddress: 1\n" % (classname, enabled, expiration))
+
+    def test_the_tracked_files_are_accepted(self):
+        self.assertAccepted()
+
+    def test_absent_top_file_is_skipped(self):
+        (self.dir / "inbound-mail.yaml").unlink()
+        self.assertAccepted()
+        self.assertEqual(sc.validate(self.dir)[0]["inbound_handlers"], [])
+
+    def test_password_is_a_secret_env_reference(self):
+        cases = (("value: env:MOODLE_INBOUND_PASS\n    secret: true", "value: hunter2"),
+                 ("value: env:MOODLE_INBOUND_PASS\n    secret: true",
+                  "value: env:MOODLE_INBOUND_PASS"))
+        for old, new in cases:
+            with self.subTest(new=new):
+                self.reset()
+                self.edit("settings/inbound-mail.yaml", old, new)
+                self.assertInvalid("messageinbound_hostpass")
+
+    def test_mailbox_length(self):
+        for value, ok in (("a" * 15, True), ("a" * 16, False)):
+            with self.subTest(length=len(value)):
+                self.reset()
+                self.add_setting("messageinbound_mailbox", value)
+                if ok:
+                    self.assertAccepted()
+                else:
+                    self.assertInvalid("messageinbound_mailbox")
+
+    def test_placeholders_are_refused(self):
+        for name, value in (("messageinbound_mailbox", "<mailbox>"),
+                            ("messageinbound_domain", '"(from 015)"'),
+                            ("messageinbound_host", "<host>")):
+            with self.subTest(name=name, value=value):
+                self.reset()
+                self.add_setting(name, value)
+                self.assertInvalid("placeholder")
+
+    def test_double_quoted_classname_is_refused(self):
+        self.edit("inbound-mail.yaml", self.REPLY,
+                  r'"\\mod_forum\\message\\inbound\\reply_handler"')   # valid YAML, wrong style
+        self.assertInvalid("single-quoted")
+
+    def test_validateaddress_stays_on(self):
+        self.edit("inbound-mail.yaml", "validateaddress: 1", "validateaddress: 0")
+        self.assertInvalid("validateaddress")
+
+    def test_reply_addresses_expire(self):
+        self.edit("inbound-mail.yaml", "defaultexpiration: 604800", "defaultexpiration: 0")
+        self.assertInvalid("defaultexpiration")
+
+    def test_only_core_handlers(self):
+        with self.subTest("unknown classname"):
+            self.edit("inbound-mail.yaml", self.REPLY,
+                      r"'\mod_forum\message\inbound\other_handler'")
+            self.assertInvalid("not a core handler")
+        with self.subTest("no leading backslash"):
+            self.reset()
+            self.edit("inbound-mail.yaml", self.REPLY,
+                      r"'mod_forum\message\inbound\reply_handler'")
+            self.assertInvalid("not a core handler")
+        with self.subTest("private files handler disabled"):
+            self.reset()
+            self.add_handler(self.PRIVATE, 0, 0)
+            self.assertAccepted()
+        with self.subTest("private files handler enabled"):
+            self.reset()
+            self.add_handler(self.PRIVATE, 1, 0)
+            self.assertInvalid("private_files_handler")
+        with self.subTest("declared twice"):
+            self.reset()
+            self.add_handler(self.REPLY, 1, 604800)
+            self.assertInvalid("declared twice")
+
+    def test_enabling_needs_the_mailbox(self):
+        self.edit("settings/inbound-mail.yaml", "value: 0", "value: 1")
+        self.assertInvalid("messageinbound_mailbox")
+        for name, value in (("messageinbound_mailbox", "ltct"),
+                            ("messageinbound_domain", "mail.example.org"),
+                            ("messageinbound_host", "imap.example.org")):
+            self.add_setting(name, value)
+        self.assertAccepted()
+        self.edit("settings/inbound-mail.yaml", "- name: messageinbound_hostuser",
+                  "- name: messageinbound_unused")
+        self.assertInvalid("needs messageinbound_hostuser")
+
+    def test_no_allowed_email_domains_while_enabled(self):
+        self.edit("settings/identity.yaml", 'name: allowedemaildomains\n    value: ""',
+                  "name: allowedemaildomains\n    value: example.org")
+        with self.subTest("handler enabled"):
+            self.assertInvalid("allowedemaildomains")
+        with self.subTest("inbound mail off"):
+            self.edit("inbound-mail.yaml", "enabled: 1", "enabled: 0")
+            self.assertAccepted()
+
+    def test_payload_carries_the_handler_and_hides_the_password(self):
+        payload = sc.build_payload(sc.validate(self.dir)[0], "apply", {})
+        self.assertEqual(payload["inbound_handlers"], [
+            {"classname": r"\mod_forum\message\inbound\reply_handler", "enabled": 1,
+             "defaultexpiration": 604800, "validateaddress": 1}])
+        rc, out, _ = self.run_main("render", environ={"MOODLE_INBOUND_PASS": "s3cr3t-value"})
+        self.assertEqual(rc, 0, out)
+        self.assertNotIn("s3cr3t-value", out)
+        s = {x["name"]: x for x in json.loads(out)["settings"]}
+        self.assertEqual(s["messageinbound_hostpass"]["value"], "<secret>")
+
+    def test_top_file_needs_rows_and_why(self):
+        p = self.dir / "inbound-mail.yaml"
+        text = p.read_text()
+        for key in ("rows", "why"):
+            with self.subTest(key=key):
+                lines = text.splitlines(keepends=True)
+                start = next(i for i, l in enumerate(lines) if l.startswith(key + ":"))
+                end = next((i for i in range(start + 1, len(lines))
+                            if lines[i][:1] not in (" ", "\n", "")), len(lines))
+                p.write_text("".join(lines[:start] + lines[end:]))
+                self.assertInvalid("missing required key %r" % key)
+                p.write_text(text)

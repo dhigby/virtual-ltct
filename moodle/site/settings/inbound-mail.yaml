@@ -1,0 +1,37 @@
+# Rows #11, #25: incoming mail, so a mentor can answer a forum post email by email (spec 005,
+# research R1-R3, contract specs/005-community-space/contracts/inbound-mail.md).
+#
+# The forum reply handler's own row (enabled, expiry, address check) is not config: core keeps
+# it in a table, so it is declared in ../inbound-mail.yaml. This file holds the config settings.
+#
+# messageinbound_mailbox, messageinbound_domain and messageinbound_host are left out on purpose
+# until spec 015 provisions the mailbox (its operator task, Q8). validate refuses a placeholder
+# such as <mailbox> or (from 015), and refuses messageinbound_enabled: 1 while any of the three
+# is missing, so they are added with their real values, or as env: references, only then.
+# Neither credential is ever written here: both come from the operator's environment.
+
+rows: [11, 25]
+purpose: >-
+  Let a mentor reply by email to a forum post email (spec 005, purpose 1). Off until the host
+  provides the mailbox.
+settings:
+  - name: messageinbound_enabled
+    value: 0   # 1 once spec 015 provisions the mailbox and instance check V2 passes
+    why: >-
+      Off until the host provides the mailbox (Q8, spec 015 operator task) and V2 passes.
+  - name: messageinbound_hostssl
+    value: ssl
+    why: >-
+      The mailbox is read over an encrypted connection, so the account's password and the
+      replies it collects never cross the network in the clear (R2).
+  - name: messageinbound_hostuser
+    value: env:MOODLE_INBOUND_USER   # not secret, but kept out of the public repo
+    why: >-
+      The account Moodle signs in to the mailbox as. It names the host's account, so it comes
+      from the operator's environment rather than this public repo (R2).
+  - name: messageinbound_hostpass
+    value: env:MOODLE_INBOUND_PASS
+    secret: true
+    why: >-
+      The mailbox password. A secret: resolved only in memory at apply and compared by drift
+      only as set or empty (R2, FR-006).

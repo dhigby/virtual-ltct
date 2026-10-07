@@ -2,8 +2,8 @@
   "workflow": "speckit",
   "specName": "Community Space Beyond Courses",
   "branch": "specs/moodle-requirements",
-  "currentStep": "specify",
-  "status": "specified",
+  "currentStep": "plan",
+  "status": "planned",
   "history": [
     {
       "step": "specify",
@@ -11,7 +11,28 @@
       "kind": "start",
       "by": "extension",
       "at": "2026-09-30T20:46:59.683Z"
+    },
+    {
+      "step": "plan",
+      "substep": null,
+      "kind": "complete",
+      "by": "extension",
+      "at": "2026-10-07T01:43:08.447Z"
     }
   ],
-  "telemetryInstanceId": "901f4c5d-8e75-42bf-b800-67f642aefbe2"
+  "telemetryInstanceId": "901f4c5d-8e75-42bf-b800-67f642aefbe2",
+  "decisions": [
+    {
+      "decision": "Cohort spaces for both teaching cohorts and Area cohorts; site-wide space deferred (Doug 2026-10-07)"
+    },
+    {
+      "decision": "One course per cohort, allowed by INTENT decision + MINOR constitution amendment (Doug 2026-10-07)"
+    },
+    {
+      "decision": "Mentoring in open forum threads so mentors reply by email; per-post email auto for mentors and mentees; IMAP mailbox planned (Doug 2026-10-07)"
+    },
+    {
+      "decision": "Cohort mentor moderates; members see and message each other; beside WhatsApp; read tracking on; logs 365d; portfolios off; teacher loses forum export (Doug 2026-10-07)"
+    }
+  ]
 }

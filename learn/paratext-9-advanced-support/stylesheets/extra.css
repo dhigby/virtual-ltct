@@ -683,6 +683,12 @@
   text-decoration: none;
 }
 
+.cx-link__desc {
+  display: block;
+  margin-top: 0.2rem;
+  font-size: 0.7rem;
+}
+
 .cx-link__host {
   display: block;
   margin-top: 0.15rem;

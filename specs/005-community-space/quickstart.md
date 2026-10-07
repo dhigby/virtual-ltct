@@ -123,3 +123,15 @@ On a freshly rebuilt test server (015), run apply. Spaces, forums, the space-men
 ## SC-003: real users
 
 2–3 real partner learners and one real mentor use a cohort space and the mentor route without help. Record their findings without identifying them.
+
+## Results
+
+Pass/fail only; no names, addresses or live counts (Principle III).
+
+| Check | Date | Result |
+|---|---|---|
+| T022 deploy (local_ltuse 2026101000, upgrade, caches purged) | 2026-10-07 | Pass. Server plugin matched `main` before the copy; backup kept on the server. |
+| T022 apply | 2026-10-07 | Pass. `teacher` loses forum export, `spacemember` created, `logstore_standard/loglifetime` 365, `defaultpreference_trackforums` 1, forum reply handler row enabled (site-wide `messageinbound_enabled` stays 0). Drift after apply shows none of these. |
+| T022 drift side effect | 2026-10-07 | Creating `spacemember` (archetype student) surfaced three unmanaged settings: `gradebookroles`, `profileroles`, `enrol_flatfile/map_<spacemember id>`. To be declared or ignored (follow-up). |
+| Read tracking for existing accounts | 2026-10-07 | Pass. First run switched it on for every account that had it off; second run changed none. |
+| T004 core probes (V3, V4 core part) | | Pending: run by the maintainer with test accounts. |

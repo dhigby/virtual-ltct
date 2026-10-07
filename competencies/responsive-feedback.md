@@ -10,15 +10,6 @@ outcome_levels:
   - "1 - Has Knowledge"
   - "2 - With Assistance"
   - "3 - Independent"
-resources:
-  - title: How to write good bug report?
-    url: https://musescore.org/en/node/309537
-  - title: What makes a good bug report?
-    url: https://www.boxuk.com/insight/what-makes-a-good-bug-report/
-  - title: A Humorous but true article on Bug Reporting (Simon Tatham)
-    url: https://www.chiark.greenend.org.uk/~sgtatham/bugs.html
-  - title: Github Issues
-    url: https://guides.github.com/features/issues/
 source: Lang Tech Competencies.xlsx
 last_updated: 2026-09-03
 ---

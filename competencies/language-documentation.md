@@ -11,15 +11,6 @@ outcome_levels:
   - "2 - With Assistance"
   - "3 - Independent"
   - "4 - Expert"
-resources:
-  - title: Language Documentation & Conservation
-    url: http://nflrc.hawaii.edu/ldc/
-  - title: SIL Language Documentation
-    url: https://www.sil.org/language-culture-documentation/language-documentation
-  - title: Wikipedia Language Documentation
-    url: https://en.wikipedia.org/wiki/Language_documentation
-  - title: SayMore
-    url: https://software.sil.org/saymore/
 source: Lang Tech Competencies.xlsx
 last_updated: 2026-09-02
 ---

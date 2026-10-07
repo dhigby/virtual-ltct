@@ -11,23 +11,6 @@ outcome_levels:
   - "2 - With Assistance"
   - "3 - Independent"
   - "4 - Expert"
-resources:
-  - title: Claude prompting guide 
-    url: https://docs.claude.com/en/docs/build-with-claude/prompt-engineering/overview
-  - title: OpenAI Academy
-    url: https://academy.openai.com
-  - title: Google AI Essentials / Google AI for Education 
-    url: https://ai.google
-  - title: Scripture Forge 
-    url: https://software.sil.org/scriptureforge/
-  - title: Scripture Forge software
-    url: https://scriptureforge.org/
-  - title: SIL AI and NLP 
-    url: https://ai.sil.org/
-  - title: Hugging Face
-    url: https://huggingface.co
-  - title: TAUS
-    url: https://www.taus.net
 source: Lang Tech Competencies.xlsx
 last_updated: 2026-09-17
 ---

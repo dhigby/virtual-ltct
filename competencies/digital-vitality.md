@@ -11,13 +11,6 @@ outcome_levels:
   - "2 - With Assistance"
   - "3 - Independent"
   - "4 - Expert"
-resources:
-  - title: CLDR - Common Repository for Locales
-    url: http://cldr.unicode.org/
-  - title: SLDR - SIL's Repository for Minority Language Locales
-    url: https://github.com/silnrsi/sldr
-  - title: UNICODE LOCALE DATA MARKUP LANGUAGE (LDML)
-    url: http://unicode.org/reports/tr35/
 source: Lang Tech Competencies.xlsx
 last_updated: 2026-08-31
 ---

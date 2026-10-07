@@ -4,8 +4,6 @@ category: Core
 slug: program-design-and-engagement
 source_label: Program Design and Mobilization
 in_framework: true
-resources:
-  []
 source: CBC Guide for Non-technical Competencies in Language Technology.md
 last_updated: 2026-07-01
 ---

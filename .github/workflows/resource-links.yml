@@ -1,0 +1,54 @@
+name: Resource links
+
+# Weekly check of every link in resources.yaml (spec 014, FR-007, SC-004: broken links
+# reported within 7 days). Keeps one open issue, "Broken resource links": opened or updated
+# while links are broken, closed once they all answer. Never opens a second one.
+
+on:
+  schedule:
+    - cron: '17 6 * * 1'   # Mondays 06:17 UTC
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  links:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install pyyaml
+      - name: Check links
+        id: check
+        run: |
+          set +e
+          python scripts/check_resource_links.py > report.txt
+          echo "code=$?" >> "$GITHUB_OUTPUT"
+          cat report.txt
+      - name: Report
+        env:
+          GH_TOKEN: ${{ github.token }}
+          CODE: ${{ steps.check.outputs.code }}
+        run: |
+          title="Broken resource links"
+          existing=$(gh issue list --state open --search "\"$title\" in:title" --json number,title \
+            --jq ".[] | select(.title == \"$title\") | .number" | head -1)
+          if [ "$CODE" = "2" ]; then
+            echo "resources.yaml could not be read"; exit 1
+          fi
+          if [ "$CODE" = "1" ]; then
+            { echo "The weekly check found links in \`resources.yaml\` that no longer answer."
+              echo "Fix or remove each one (ask Claude Code: \"fix the broken library links\")."
+              echo; echo '```'; cat report.txt; echo '```'; } > body.md
+            if [ -n "$existing" ]; then
+              gh issue edit "$existing" --body-file body.md
+            else
+              gh issue create --title "$title" --body-file body.md
+            fi
+          elif [ -n "$existing" ]; then
+            gh issue close "$existing" --comment "All resource links answer again: $(tail -1 report.txt)"
+          fi

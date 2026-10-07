@@ -11,19 +11,6 @@ outcome_levels:
   - "2 - With Assistance"
   - "3 - Independent"
   - "4 - Expert"
-resources:
-  - title: HearThis
-    url: https://software.sil.org/hearthis/
-  - title: Audacity
-    url: https://www.audacityteam.org/
-  - title: Glyssen
-    url: https://software.sil.org/glyssen/
-  - title: Transcriber
-    url: https://software.sil.org/siltranscriber/
-  - title: Audio Project Manager
-    url: https://software.sil.org/audioprojectmanager/
-  - title: Voice over tips for better sounding voice over
-    url: https://www.youtube.com/watch?v=fSPWpIWUuJA
 source: Lang Tech Competencies.xlsx
 last_updated: 2026-09-03
 ---

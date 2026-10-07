@@ -4,8 +4,6 @@ category: Core
 slug: technology-for-consulting
 source_label: Technologies Used for Consulting
 in_framework: true
-resources:
-  []
 source: CBC Guide for Non-technical Competencies in Language Technology.md
 last_updated: 2026-07-01
 ---

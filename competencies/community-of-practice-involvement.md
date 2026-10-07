@@ -10,17 +10,6 @@ outcome_levels:
   - "1 - Has Knowledge"
   - "2 - With Assistance"
   - "3 - Independent"
-resources:
-  - title: Professional Networking Resources
-    url: https://consultantcompetencies.org/relating-to-other-organisations/
-  - title: Advocacy Principles and Practices (video)
-    url: https://vimeo.com/showcase/7563286/video/458673671
-  - title: Networking (video)
-    url: https://vimeo.com/showcase/7563286/video/458683787
-  - title: How to network?
-    url: https://www.wikihow.com/Network
-  - title: Get an Advocacy Campaign off the ground
-    url: https://ctb.ku.edu/en/table-of-contents/advocacy/advocacy-principles/overview/main
 source: Lang Tech Competencies.xlsx
 last_updated: 2026-07-01
 ---

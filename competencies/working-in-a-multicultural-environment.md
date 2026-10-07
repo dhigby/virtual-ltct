@@ -3,8 +3,6 @@ name: Working in a Multicultural Environment
 category: Core
 slug: working-in-a-multicultural-environment
 in_framework: true
-resources:
-  []
 source: CBC Guide for Non-technical Competencies in Language Technology.md
 last_updated: 2026-07-01
 ---

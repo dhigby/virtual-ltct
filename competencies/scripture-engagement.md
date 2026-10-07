@@ -10,11 +10,6 @@ outcome_levels:
   - "1 - Has Knowledge"
   - "2 - With Assistance"
   - "3 - Independent"
-resources:
-  - title: SIL Training in Scripture Engagement
-    url:  https://www.sil.org/training/scripture-use-and-impact
-  - title: Scripture Use and Impact
-    url:  https://www.sil.org/translation/scripture-use-and-impact
 source: Lang Tech Competencies.xlsx
 last_updated: 2026-09-17
 ---

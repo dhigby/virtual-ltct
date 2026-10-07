@@ -10,11 +10,6 @@ outcome_levels:
   - "1 - Has Knowledge"
   - "2 - With Assistance"
   - "3 - Independent"
-resources:
-  - title: SIL Translation
-    url:  https://www.sil.org/translation
-  - title: SIL Training in Translation
-    url:  https://www.sil.org/training/translation
 source: Lang Tech Competencies.xlsx
 last_updated: 2026-09-17
 ---

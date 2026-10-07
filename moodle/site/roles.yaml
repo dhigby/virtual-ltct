@@ -169,7 +169,19 @@ roles:
       mod/scheduler:canseeotherteachersbooking: inherit
       local/ltuse:viewidentity: allow          # spec 016 R7 path 4: real identities of the protected learners in the mentor's own group
       moodle/backup:downloadfile: prohibit     # spec 016 R14: not in the archetype; prohibit so no course override grants it
+      # Spec 005 (FR-011a, Q14): a Course mentor cannot export forum posts. exportforum is
+      # not gated by portfolios, so it is prohibited; the other three are prevented.
+      mod/forum:exportforum: prohibit
+      mod/forum:exportdiscussion: prevent
+      mod/forum:exportpost: prevent
+      mod/forum:exportownpost: prevent
     why: >-
+      #10, #25 (spec 005, FR-011a, Q14, round 2 item 7): a Course mentor sees every post in a
+      cohort space and a course forum, so they cannot export them: mod/forum:exportforum is
+      prohibited, because portfolios do not gate it, and exportdiscussion, exportpost and
+      exportownpost are prevented (portfolios stay off, settings/forums.yaml). The private
+      reply (mod/forum:postprivatereply) is kept and not declared. Specs 012 and 016 use this
+      role, so their role tests run with this change (spec 005 T021).
       #26 (spec 016, FR-006, Doug 2026-10-04): a course mentor sees the real identity of the
       protected learners they assess in an ltct: course, while both hold their roles: only a
       learner in the mentor's own group there, idnumber ltct:mentorgroup:<mentor id> (spec
@@ -197,6 +209,23 @@ roles:
       4). A role with an archetype has only its listed capabilities managed, so accessallgroups
       is declared explicitly (as the archetype default, inherit) for drift to catch it being
       granted by hand.
+
+  # Spec 005: cohort spaces.
+  - shortname: spacemember
+    name: Space member
+    description: >-
+      A member of a cohort space, enrolled by the space's cohort sync. Sees the participant
+      list and messages the other members. Declared in moodle/site/roles.yaml and applied by
+      scripts/site_config.py -- edit that file rather than this role.
+    archetype: student
+    contextlevels: [course]   # assigned only by a space's enrol_cohort instance
+    why: >-
+      #9, #10, #20 (spec 005, Q6, Q17, data-model "Member role spacemember"). Archetype
+      student. Keeps moodle/course:viewparticipants, moodle/user:viewdetails and messaging, so
+      members see the participant list and message each other (Q6). Keeps
+      mod/forum:allowforcesubscribe. Its only purpose beside student is that the progress,
+      programme and pilots reports, which filter on role student, do not show spaces (Q17).
+      No capability overrides: the student archetype's defaults are what a member needs.
 
   - shortname: mentor
     name: Mentor

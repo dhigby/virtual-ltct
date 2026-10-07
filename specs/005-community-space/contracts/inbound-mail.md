@@ -59,7 +59,7 @@ Values for mailbox, domain and host come from spec 015 provisioning; they are fi
 - `messageinbound_mailbox` ≤ 15 characters.
 - Any value matching `^<.*>$` or `(from 015)` is refused (placeholders are never applied).
 - Classnames are compared with the leading backslash, as `record_from_handler()` stores them; double-quoted classnames are refused (a `\m` is a YAML escape).
-- `validateaddress` must be 1. `defaultexpiration` must be > 0 (0 means never expires).
+- `validateaddress` must be 1. `defaultexpiration` must be > 0 (0 means never expires), except that `private_files_handler`'s is fixed at 0 by core (`lib/db/messageinbound_handlers.php`; its `can_change_defaultexpiration()` is false, R18), so when declared it must be declared as 0 and any other value is refused.
 - Only handler classnames that exist in core (`\mod_forum\message\inbound\reply_handler`, `\core\message\inbound\private_files_handler`) are accepted; `private_files_handler` stays disabled.
 - `identity.yaml` `allowedemaildomains` must be empty while this file is enabled.
 - `messageinbound_enabled: 1` is refused while any of mailbox, domain, host or hostuser is missing.

@@ -47,7 +47,9 @@ class report {
         // Spec 012 course discussions (contracts/site-declaration.md).
         'differs',
         // Spec 002 amendment 2026-10-02: a managers cohort synced into a shared course (R2).
-        'shared-managers'];
+        'shared-managers',
+        // Spec 005: a handler field core does not allow to change (contracts/inbound-mail.md).
+        'blocked'];
 
     /**
      * Kinds that are only ever reported with one status. `adopted` is a category given its

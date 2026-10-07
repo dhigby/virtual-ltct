@@ -22,6 +22,8 @@ defined('MOODLE_INTERNAL') || die();
  *   roles     create_role(), set_role_contextlevels(), assign_capability(), unassign_capability(),
  *             then core_role_set_assign_allowed() for each declared allow-assign pair (spec 003)
  *   discussions  ensure_discussion::apply_groupmode(), the publisher's own path (spec 012)
+ *   inbound   inbound::apply(), right after settings: core's handler-edit write, per field
+ *             only where can_change_*() allows it (spec 005, contracts/inbound-mail.md)
  *
  * After settings come spec 002's four arrays, each handed to its own class, in the order the
  * contract fixes (specs/002-org-structure-cohorts/contracts/declaration.md "Output additions"):
@@ -119,6 +121,10 @@ class applier {
         }
         foreach ($this->declaration['settings'] ?? [] as $setting) {
             $this->apply_setting($setting);
+        }
+        // Spec 005: the forum reply handler, after the messageinbound_* settings it works with.
+        if ($this->inspector->inbound()) {
+            $this->inspector->inbound()->apply($this->report);
         }
         $this->apply_structure();
         // The course's group mode before its forum's, so a course never forces separate

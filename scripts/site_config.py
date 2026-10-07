@@ -74,6 +74,7 @@ OFFICEHOURS_FILE = "office-hours.yaml"       # spec 011
 PROTECTION_FILE = "protection.yaml"          # spec 016
 DASHBOARD_FILE = "dashboard.yaml"            # spec 011
 PATHWAYS_FILE = "pathways.yaml"              # spec 006
+INBOUND_FILE = "inbound-mail.yaml"           # spec 005
 REQUIREMENTS = REPO / "moodle" / "REQUIREMENTS.md"
 LTUSE_VERSION = REPO / "moodle" / "local_ltuse" / "version.php"
 CLI_PATH = "public/local/ltuse/cli/site_config.php"   # under $MOODLE_DIR (research R1)
@@ -273,6 +274,10 @@ TOP_FILES = {
     # Spec 006: role pathways. Optional; missing is roles: [] (specs/006-learning-pathways/
     # contracts/declaration.md).
     PATHWAYS_FILE: ({"rows", "purpose", "roles"}, set()),
+    # Spec 005: the incoming-mail handlers, whose state core keeps in a table, not config.
+    # Optional; missing is no handler declared (specs/005-community-space/contracts/
+    # inbound-mail.md).
+    INBOUND_FILE: ({"rows", "purpose", "handlers", "why"}, set()),
 }
 
 # --- spec 002: organisations, categories, cohorts and profile fields ---------------------
@@ -534,7 +539,8 @@ def validate(site_dir=SITE_DIR, modules_dir=None):
             "badge_template": None, "certificate_template": None,
             "officehours": None, "dashboard": [],
             "dashboard_complete": False, "dashboard_personal": "keep",
-            "levels": [], "role_pathways": [], "protection": None}
+            "levels": [], "role_pathways": [], "protection": None,
+            "inbound_handlers": []}
     if not site_dir.is_dir():
         problems.add(_rel(site_dir), "declaration directory not found")
         return decl, problems
@@ -546,9 +552,10 @@ def validate(site_dir=SITE_DIR, modules_dir=None):
             problems.add(_rel(path), "unexpected file; the declaration is site.yaml, "
                          "ignore.yaml, roles.yaml, organisations.yaml, "
                          "profile-fields.yaml, %s, course-fields.yaml, reports.yaml, "
-                         "badges.yaml, certificate/template.yaml, %s, %s, %s, %s and "
+                         "badges.yaml, certificate/template.yaml, %s, %s, %s, %s, %s and "
                          "settings/*.yaml" % (ORG_COURSES_FILE, OFFICEHOURS_FILE,
-                                              DASHBOARD_FILE, PATHWAYS_FILE, PROTECTION_FILE))
+                                              DASHBOARD_FILE, PATHWAYS_FILE, PROTECTION_FILE,
+                                              INBOUND_FILE))
 
     loaded = {}
     for name, (required, optional) in TOP_FILES.items():
@@ -921,6 +928,9 @@ def validate(site_dir=SITE_DIR, modules_dir=None):
         path, data = loaded[DASHBOARD_FILE]
         decl["dashboard"] = _validate_dashboard(_rel(path), data, rows, decl, problems)
     _check_calendar_settings(decl, problems)
+    _check_forum_settings(decl, problems)
+    # Spec 005: the incoming-mail handlers, then the rules on the incoming-mail settings.
+    decl["inbound_handlers"] = _validate_inbound(decl, loaded.get(INBOUND_FILE), rows, problems)
 
     # Spec 016: protection.yaml, then what it needs from the rest of the declaration.
     if PROTECTION_FILE in loaded:
@@ -2883,6 +2893,165 @@ def _check_calendar_settings(decl, problems):
                      "where a learner sees and changes their zone (spec 011 R14)")
 
 
+# Spec 005 (FR-011, FR-011b): portfolios stay off, and the standard log keeps at least one
+# quarter plus a month, so the quarterly engagement review can still read its quarter.
+PORTFOLIOS_SETTING = "enableportfolios"
+LOG_LIFETIME_SETTING = "logstore_standard/loglifetime"
+LOG_LIFETIME_FLOOR = 120                   # days; 0 means never delete, which keeps every log
+
+
+def _check_forum_settings(decl, problems):
+    """Spec 005's rules on settings declared anywhere: portfolios and log retention."""
+    declared = {s["name"]: s for s in decl["settings"]}
+    portfolios = declared.get(PORTFOLIOS_SETTING)
+    if portfolios and str(portfolios["value"]) != "0":
+        problems.add(portfolios["file"], "%s must be 0: learners' student role still holds "
+                     "mod/forum:exportownpost, which portfolios would expose (spec 005 FR-011)"
+                     % PORTFOLIOS_SETTING)
+    life = declared.get(LOG_LIFETIME_SETTING)
+    if life and not life["env"]:
+        days = life["value"]
+        if not _is_int(days) or days < 0:
+            problems.add(life["file"], "%s is a whole number of days, or 0 to never delete"
+                         % LOG_LIFETIME_SETTING)
+        elif 0 < days < LOG_LIFETIME_FLOOR:
+            problems.add(life["file"], "%s must be 0 or at least %d days, so the quarterly "
+                         "engagement review can read a whole quarter (spec 005 FR-011b)"
+                         % (LOG_LIFETIME_SETTING, LOG_LIFETIME_FLOOR))
+
+
+# Spec 005 (research R1-R3, contracts/inbound-mail.md "Rules"): incoming mail, so a forum post
+# email can be answered by email. Classnames as record_from_handler() stores them, with the
+# leading backslash; True where the handler may be enabled. private_files_handler stays off,
+# and core fixes its defaultexpiration at 0 (lib/db/messageinbound_handlers.php, R18).
+INBOUND_HANDLERS = {"\\mod_forum\\message\\inbound\\reply_handler": True,
+                    "\\core\\message\\inbound\\private_files_handler": False}
+INBOUND_FIXED_EXPIRY = {"\\core\\message\\inbound\\private_files_handler": 0}
+INBOUND_PREFIX = "messageinbound_"
+INBOUND_ENABLED = "messageinbound_enabled"
+INBOUND_PASS = "messageinbound_hostpass"
+INBOUND_MAILBOX = "messageinbound_mailbox"
+INBOUND_MAILBOX_MAX = 15                   # the local part before +<code> (R2)
+# manager::is_enabled() also needs mailbox and domain; the host and its account are pickup's.
+INBOUND_NEEDS = ("messageinbound_mailbox", "messageinbound_domain", "messageinbound_host",
+                 "messageinbound_hostuser")
+INBOUND_PLACEHOLDER = re.compile(r"^<.*>$|\(from 015\)")
+ALLOWED_DOMAINS_SETTING = "allowedemaildomains"
+
+
+def _double_quoted(path, key):
+    """Line numbers where `key` has a double-quoted scalar value; the loader drops the style."""
+    try:
+        with open(path, encoding="utf-8") as fh:
+            root = yaml.compose(fh, Loader=_Loader)
+    except (yaml.YAMLError, OSError):
+        return []   # _load() has already reported it
+    found, stack = [], [root]
+    while stack:
+        node = stack.pop()
+        if isinstance(node, yaml.MappingNode):
+            for k, v in node.value:
+                if isinstance(k, yaml.ScalarNode) and k.value == key and \
+                        isinstance(v, yaml.ScalarNode) and v.style == '"':
+                    found.append(v.start_mark.line + 1)
+                stack.append(v)
+        elif isinstance(node, yaml.SequenceNode):
+            stack.extend(node.value)
+    return sorted(found)
+
+
+def _validate_inbound(decl, loaded, rows, problems):
+    """Spec 005's incoming-mail rules. Returns the handler rows for the payload."""
+    handlers = []
+    if loaded is not None:
+        path, data = loaded
+        where = _rel(path)
+        _check_hosts(where, data, problems)
+        _check_rows(where, data, rows, problems)
+        for key in ("purpose", "why"):
+            if not _text(data.get(key)):
+                problems.add(where, "%s must say what this file is for" % key)
+        for line in _double_quoted(path, "classname"):
+            problems.add(where, "line %d: a classname is single-quoted; in double quotes \\m "
+                         "is a YAML escape" % line)
+        entries = data.get("handlers")
+        if not isinstance(entries, list):
+            problems.add(where, "handlers must be a list")
+            entries = []
+        seen = set()
+        for i, entry in enumerate(entries):
+            hwhere = "%s handlers[%d]" % (where, i)
+            if not _check_keys(hwhere, entry, {"classname", "enabled", "defaultexpiration",
+                                               "validateaddress"}, set(), problems):
+                continue
+            name = entry.get("classname")
+            if name not in INBOUND_HANDLERS:
+                problems.add(hwhere, "%r is not a core handler; accepted are %s, with the "
+                             "leading backslash" % (name, ", ".join(sorted(INBOUND_HANDLERS))))
+                continue
+            hwhere = "%s %s" % (where, name)
+            if name in seen:
+                problems.add(hwhere, "declared twice")
+                continue
+            seen.add(name)
+            ok = True
+            for key in ("enabled", "validateaddress"):
+                if not (_is_int(entry[key]) and entry[key] in (0, 1)):
+                    problems.add(hwhere, "%s is 1 or 0" % key)
+                    ok = False
+            expiry = entry["defaultexpiration"]
+            if not _is_int(expiry):
+                problems.add(hwhere, "defaultexpiration is a whole number of seconds")
+                ok = False
+            elif name in INBOUND_FIXED_EXPIRY:
+                if expiry != INBOUND_FIXED_EXPIRY[name]:
+                    problems.add(hwhere, "defaultexpiration is fixed at %d by core"
+                                 % INBOUND_FIXED_EXPIRY[name])
+            elif expiry <= 0:
+                problems.add(hwhere, "defaultexpiration must be more than 0; 0 means a reply "
+                             "address never expires (Q20)")
+            if ok and entry["validateaddress"] != 1:
+                problems.add(hwhere, "validateaddress must be 1, so a reply from an address "
+                             "that is not the person's own is confirmed first (R3)")
+            if ok and entry["enabled"] == 1 and not INBOUND_HANDLERS[name]:
+                problems.add(hwhere, "private_files_handler stays disabled (spec 005 R1)")
+            if ok:
+                handlers.append({"classname": name, "enabled": entry["enabled"],
+                                 "defaultexpiration": expiry,
+                                 "validateaddress": entry["validateaddress"]})
+
+    declared = {s["name"]: s for s in decl["settings"]}
+    for s in decl["settings"]:
+        if s["name"].startswith(INBOUND_PREFIX) and isinstance(s["value"], str) and \
+                not s["env"] and INBOUND_PLACEHOLDER.search(s["value"]):
+            problems.add(s["file"], "%s: %r is a placeholder; leave the setting out until spec "
+                         "015 provides its value" % (s["name"], s["value"]))
+    secret = declared.get(INBOUND_PASS)
+    if secret and not (secret["env"] and secret["secret"]):
+        problems.add(secret["file"], "%s must be env:NAME with secret: true" % INBOUND_PASS)
+    mailbox = declared.get(INBOUND_MAILBOX)
+    if mailbox and not mailbox["env"] and len(str(mailbox["value"])) > INBOUND_MAILBOX_MAX:
+        problems.add(mailbox["file"], "%s is at most %d characters" % (INBOUND_MAILBOX,
+                                                                       INBOUND_MAILBOX_MAX))
+    switch = declared.get(INBOUND_ENABLED)
+    if switch and str(switch["value"]) not in ("0", "1"):
+        problems.add(switch["file"], "%s is 1 or 0" % INBOUND_ENABLED)
+    on = bool(switch) and str(switch["value"]) == "1"
+    if on:
+        for name in INBOUND_NEEDS:
+            if name not in declared:
+                problems.add(switch["file"], "%s: 1 needs %s, which spec 015 provides"
+                             % (INBOUND_ENABLED, name))
+    # From stays the no-reply address while replies come back by email (contract "Rules").
+    # Undeclared is core's default, empty, and drift reports a hand change.
+    domains = declared.get(ALLOWED_DOMAINS_SETTING)
+    if (on or any(h["enabled"] for h in handlers)) and domains and \
+            (domains["env"] or domains["value"] != ""):
+        problems.add(domains["file"], "%s must be empty while incoming mail is enabled "
+                     "(spec 005)" % ALLOWED_DOMAINS_SETTING)
+    return handlers
+
+
 # ---------------------------------------------------------------------------------------
 # The payload: the declaration as the JSON site_config.php reads (data-model "Rendered
 # payload"). Built in memory; the resolved form is only ever written to the child's stdin.
@@ -3078,6 +3247,8 @@ def build_payload(decl, mode, environ, redact=False):
         "roles": decl["roles"],
         "settings": [],
         "failed_env": [],
+        # Spec 005, applied after the settings: the incoming-mail handler rows.
+        "inbound_handlers": decl["inbound_handlers"],
         # Spec 002, already expanded: PHP never sees an "organisation".
         "categories": decl["categories"],
         "cohorts": decl["cohorts"],
@@ -3183,7 +3354,7 @@ def _summary(decl):
             "%d categories, %d cohorts, %d profile fields, %d cohort rules, "
             "%d organisation-only courses, %d course fields, %d competencies, %d reports, "
             "%d badge template, %d certificate template, %d office-hours course, "
-            "%d dashboard blocks%s, %d protection levels"
+            "%d dashboard blocks%s, %d protection levels, %d inbound handlers"
             % (len(decl["settings"]), files, len(decl["plugins"]), len(decl["roles"]),
                len(decl["ignore"]), len(decl["categories"]), len(decl["cohorts"]),
                len(decl["profile_fields"]), len(decl["cohort_rules"]),
@@ -3192,7 +3363,8 @@ def _summary(decl):
                decl["officehours"] is not None, len(decl["dashboard"]),
                (", complete" if decl["dashboard_complete"] else "")
                + (", personal dashboards reset" if decl["dashboard_personal"] == "reset" else ""),
-               len(decl["protection"]["levels"]) if decl["protection"] else 0))
+               len(decl["protection"]["levels"]) if decl["protection"] else 0,
+               len(decl["inbound_handlers"])))
 
 
 def main(argv=None, environ=None):

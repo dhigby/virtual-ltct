@@ -433,6 +433,13 @@ $string['privacy:metadata:course_mentor:usermodified'] = 'Who recorded it.';
 $string['privacy:metadata:course_mentor:timecreated'] = 'When it was recorded.';
 $string['privacy:metadata:course_mentor:timemodified'] = 'When it last changed.';
 $string['privacy:path:coursementors'] = 'Course mentors';
+$string['privacy:metadata:local_ltuse_digest_override'] = 'The per-forum email digest settings the course-mentor sync set for a person, so that removing them never undoes a choice the person made themselves.';
+$string['privacy:metadata:local_ltuse_digest_override:userid'] = 'The person the setting was made for.';
+$string['privacy:metadata:local_ltuse_digest_override:forumid'] = 'The forum the setting is on.';
+$string['privacy:metadata:local_ltuse_digest_override:value'] = 'The email digest setting the sync made.';
+$string['privacy:metadata:local_ltuse_digest_override:released'] = 'Whether the person has since set the forum back to their own default, so the sync never sets it again.';
+$string['privacy:metadata:local_ltuse_digest_override:timecreated'] = 'When the setting was made.';
+$string['privacy:path:digestoverrides'] = 'Forum email settings made by the course-mentor sync';
 
 // Spec 007: learner experience. Learner-facing navigation; no string here names a CBC level or says "certified".
 $string['backtocourse'] = 'Back to the course';

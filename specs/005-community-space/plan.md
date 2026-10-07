@@ -112,13 +112,20 @@ moodle/local_ltuse/classes/admin/course_mentor_sync.php    # accept ltct:site:co
 moodle/local_ltuse/classes/admin/course_mentor_rules.php   # test: spacemember counts in a space, never in ltct:<slug>
 moodle/local_ltuse/classes/admin/course_mentor_records.php # accept a space course for cohort-mentor rows naming the space's own cohort only
 moodle/local_ltuse/classes/admin/enrolment_rules.php       # explicit refusal of ltct:site:* for ltct_admin cohort enrolment
-moodle/local_ltuse/classes/observer.php, db/events.php     # discussion_created + post_created → subscribe the author's mentors in delivery courses (R10, Q10)
-moodle/local_ltuse/classes/cohortspaces observer             # cohort_created / cohort_updated → space for a matching teaching cohort, name kept in step; cohort_deleted → space, posts and mentor kept (round 2) (or reconcile task)
+moodle/local_ltuse/classes/observer.php, db/events.php     # existing file (already has cohort_deleted): discussion_created + post_created → subscribe the author's mentors in delivery courses (R10, Q10); the cohort-space callbacks also go here: cohort_created / cohort_updated → space for a matching teaching cohort, name kept in step; cohort_deleted → space, posts and mentor kept (round 2) (or reconcile task)
+moodle/local_ltuse/classes/mentor_subscriptions.php        # new helper: subscribe a mentor to their mentees' discussions, with the first-post `created` race fix (R10)
+moodle/local_ltuse/classes/trackforums.php                 # new helper: enable_existing(), read tracking on for existing accounts through user_update_user(), counts only
+moodle/local_ltuse/classes/admin/digest_overrides.php      # new helper: write, record and release the per-forum digest overrides (R4, round 2)
+moodle/local_ltuse/classes/util.php                        # existing: util::upsert_module() (L167), reused by cohortspaces to create and restore space forums
+moodle/local_ltuse/classes/privacy/provider.php            # existing: declare local_ltuse_digest_override (T019)
+moodle/local_ltuse/classes/task/course_mentor_reconcile.php # existing: orphan-record removal keeps a space's row while its course exists (T062)
+moodle/local_ltuse/classes/external/admin_preview_course_mentors.php # existing: space rows in the preview (T057)
+moodle/local_ltuse/classes/siteconfig/drift.php            # existing: drift exclusion for spaces and teaching cohorts (T061)
 moodle/local_ltuse/db/install.xml, db/upgrade.php           # new table local_ltuse_digest_override (userid, forumid, value, released, timecreated): the overrides sync wrote, and the ones a person reset (round 2)
 moodle/local_ltuse/cli/trackforums_existing.php            # new one-off: read tracking on for existing accounts (round 2); run on the server by the site team; prints counts only
 moodle/local_ltuse/classes/learner_home.php                # "Your cohort" onward route [spec 007 deliverable: add the slot through 007's onward-route mechanism; 007's harness tests must pass unchanged]; mentor link unchanged (Q22)
 moodle/local_ltuse/classes/learner_home_rules.php          # new `cohorts` list
-moodle/blocks/ltuse (block_ltuse): classes/output/home.php, templates/block.mustache and mobile_block.mustache doc comments, lang string onward:cohort, tests/block_test.php
+moodle/block_ltuse/ (block_ltuse): classes/output/home.php, templates/block.mustache and mobile_block.mustache doc comments, lang string onward:cohort, tests/block_test.php
 moodle/local_ltuse/classes/external/community_engagement.php  # new: aggregate-only WS on ltuse_admin (Q21)
 moodle/local_ltuse/db/services.php, db/access.php, version.php, lang/en/local_ltuse.php
 moodle/local_ltuse/README.md                   # direct writes: messageinbound_handlers, forum_discussion_subs.preference; raw reads: forum_digests, forum_discussions, forum_posts (sync and observer), forum (space forum settings, apply and drift) and the engagement reads
@@ -128,8 +135,15 @@ tests/test_engagement_review.py                # new
 tests/learner_home_harness.php                 # cohort route
 moodle/local_ltuse/tests/siteconfig_cohortspaces_test.php  # new
 moodle/local_ltuse/tests/siteconfig_inbound_test.php       # new
-moodle/local_ltuse/tests/course_mentor_sync_test.php       # extended: spaces, shapes, mentor and mentee overrides, personal choice kept, a reset kept, a leaver's override kept with no exception, members' overrides after the last mentor goes, a deleted teaching cohort's mentor kept with access (round 2), subscriptions, mentor gate from disabled to open
+moodle/local_ltuse/tests/course_mentor_sync_test.php       # new (spec 008's sync tests stay in admin_test.php, unchanged): spaces, shapes, mentor and mentee overrides, personal choice kept, a reset kept, a leaver's override kept with no exception, members' overrides after the last mentor goes, a deleted teaching cohort's mentor kept with access (round 2), subscriptions, mentor gate from disabled to open
 moodle/local_ltuse/tests/community_engagement_test.php     # new
+moodle/local_ltuse/tests/mentor_subscriptions_test.php     # new
+moodle/local_ltuse/tests/trackforums_test.php              # new
+moodle/local_ltuse/tests/admin_test.php                    # existing: spec 008's sync tests, unchanged
+scripts/ltct_admin.py                                      # existing: space rows for course mentors (T055)
+scripts/publish_moodle.py                                  # existing: reserved slugs refused, if needed (T054)
+moodle/site/README.md                                      # existing: removing a space's mentor after its cohort is deleted (T079); operator notes (T094)
+.github/workflows/site-config.yml                          # existing: wire the new Python tests (T087)
 moodle/REQUIREMENTS.md                         # rows #9, #10, #11, #19, #20, #25
 INTENT.md                                      # Decisions: "Community starts inside Moodle, per cohort" and the cohort-space course ruling, citing Doug 2026-10-07 (Q3); site-wide space deferred (Q1)
 .specify/memory/constitution.md                # MINOR amendment 2.1.1 → 2.2.0, bullets in II, Platform & Delivery and VII (Summary), citing 2026-10-07; drafted in this PR

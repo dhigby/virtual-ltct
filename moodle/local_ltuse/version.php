@@ -9,7 +9,18 @@
 defined('MOODLE_INTERNAL') || die();
 
 $plugin->component = 'local_ltuse';
-$plugin->version   = 2026100901;   // Simple learner experience (spec 007): the Next button
+$plugin->version   = 2026101000;   // Community space (spec 005), first bump. It ships:
+                                   // the local_ltuse_digest_override table (savepoint
+                                   // 2026101000), admin\digest_overrides, trackforums and
+                                   // cli/trackforums_existing.php; the db/events.php
+                                   // observers on \mod_forum\event\discussion_created,
+                                   // post_created and \core\event\user_enrolment_deleted
+                                   // (digest record clean-up); mentor_subscriptions;
+                                   // course_mentor_sync's overrides and subscriptions; and
+                                   // the siteconfig\inbound kind. Once this stamp is
+                                   // deployed, any later 005 change to db/ raises it
+                                   // again. Before it, 2026100901:
+                                   // simple learner experience (spec 007): the Next button
                                    // (the before_footer_html_generation
                                    // hook), learner_home, the dashboard declaration and
                                    // update_sections' summary parameter. No schema, so no

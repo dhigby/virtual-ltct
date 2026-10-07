@@ -4,7 +4,7 @@ category: Professional
 slug: problem-solving
 source_label: Problem Solving
 in_framework: true
-target_statement: Demonstrates use of creative, effective, and efficient solutions to complex problems
+target_statement: Demonstrates use of creative, effective, and efficient solutions to complex problems.
 outcome_levels:
   - "0 - No Competency"
   - "1 - Has Knowledge"
@@ -20,7 +20,7 @@ last_updated: 2026-09-03
 
 ## Description
 
-Knowledge of the techniques to create effective and efficient solutions to complex problems
+Knowledge of the techniques to create effective and efficient solutions to complex problems.
 
 ## Why it matters
 
@@ -28,7 +28,7 @@ Problem solving is an important skill for dealing with language technology issue
 
 ## Target competency
 
-> Demonstrates use of creative, effective, and efficient solutions to complex problems
+> Demonstrates use of creative, effective, and efficient solutions to complex problems.
 
 ## Progression by component
 

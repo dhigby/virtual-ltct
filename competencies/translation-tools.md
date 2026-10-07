@@ -25,7 +25,7 @@ Knowledge of current recommended translation tools.
 
 ## Why it matters
 
-For many Language Technologists, the input, verification, management and publishing of translated data will be a core activity of the parent organisations. As LT responds to the needs of other domains, this means that this competency is among the first competencies that should be studied.
+For many Language Technologists, the input, verification, management and publishing of translated data will be a core activity of the parent organisations. As LT responds to the needs of other domains, this is among the first competencies to study.
 
 ## Target competency
 
@@ -84,14 +84,14 @@ _Scripture translation will be a priority for most Language Technologists. Scrip
 | **0 - No Competency** | Identify the common methods of digital collaboration in Scripture translation projects. Learn about Project Plans in use in your context. | 1 - Has Knowledge |
 | **1 - Has Knowledge** | Use the common methods of digital collaboration in Scripture translation projects. | 2 - With Assistance |
 | **2 - With Assistance** | Advise users in best practices for collaboration and data safety (within the team and remotely), such as the use of Send/Receive. Assist users to configure plans and tasks in a way that helps them. | 3 - Independent |
-| **3 - Independent** | Train users in best practices for collaboration and data safety (within the team and remotely), such as the use of Send/Receive, Paratext Live, and ScriptureForge. | 4 - Expert |
+| **3 - Independent** | Train users in best practices for collaboration and data safety (within the team and remotely), such as the use of Send/Receive, Paratext Live, and Scripture Forge. | 4 - Expert |
 | **4 - Expert** | Train consultants to do remote checking sessions using all available technologies. | — |
 
 ### 6.0 — Translation Resource Tools
 
 | Current level | Suggested activities | Reaches |
 | --- | --- | --- |
-| **0 - No Competency** | Acquire and explore a translation resource package (e.g., Translator's Workplace Logos or BdT). | 1 - Has Knowledge |
+| **0 - No Competency** | Acquire and explore a translation resource package (e.g., Translator's Workplace, Logos, or BdT). | 1 - Has Knowledge |
 | **1 - Has Knowledge** | Optimally configure translation resource packages for exegesis. | 2 - With Assistance |
 | **2 - With Assistance** | Advise users to open and navigate to specific translation resources. | 3 - Independent |
 | **3 - Independent** | Train users to use customization, search and filters to target specific translation resources. | 4 - Expert |

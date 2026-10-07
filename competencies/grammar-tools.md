@@ -25,7 +25,7 @@ Knowledgeable in the use of grammar tools. This includes interlinear and parsing
 
 ## Why it matters
 
-This competency covers the usage and training of users to use the current grammar tools to interlinearize and parse texts
+This competency covers using the current grammar tools to interlinearize and parse texts, and training others to use them.
 
 ## Target competency
 

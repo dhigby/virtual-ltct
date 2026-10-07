@@ -26,7 +26,7 @@ Domain-specific knowledge in literacy or MLE.
 
 ## Why it matters
 
-Have a good understanding of literacy or MLE used for Bible translation and language development work.
+A Language Technologist needs a good understanding of literacy or MLE as they are used in Bible translation and language development work.
 
 ## Target competency
 

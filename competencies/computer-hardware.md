@@ -20,7 +20,7 @@ last_updated: 2026-07-01
 
 ## Description
 
-Familiarity with basic components of a computer
+Familiarity with basic components of a computer.
 
 ## Why it matters
 

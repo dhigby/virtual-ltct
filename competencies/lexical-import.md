@@ -4,7 +4,7 @@ category: Technology Domain
 slug: lexical-import
 source_label: Lexical Import
 in_framework: true
-target_statement: Can disambiguate and import language data into current lexical software
+target_statement: Can disambiguate and import language data into current lexical software.
 outcome_levels:
   - "0 - No Competency"
   - "1 - Has Knowledge"
@@ -29,7 +29,7 @@ Lexicons are, by nature, structured documents. Various standards have been propo
 
 ## Target competency
 
-> Can disambiguate and import language data into current lexical software
+> Can disambiguate and import language data into current lexical software.
 
 ## Progression by component
 

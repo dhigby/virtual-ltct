@@ -21,7 +21,7 @@ last_updated: 2026-07-01
 
 ## Description
 
-Knowledge of the archiving and copyright tools
+Knowledge of the archiving and copyright tools.
 
 ## Why it matters
 

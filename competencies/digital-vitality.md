@@ -4,7 +4,7 @@ category: Technology Domain
 slug: digital-vitality
 source_label: Digital Vitality
 in_framework: true
-target_statement: Demonstrates the ability to inform and assist communities in the digitization of their language
+target_statement: Demonstrates the ability to inform and assist communities in the digitization of their language.
 outcome_levels:
   - "0 - No Competency"
   - "1 - Has Knowledge"
@@ -29,7 +29,7 @@ Promoting a language digitally is important to its use and survival.
 
 ## Target competency
 
-> Demonstrates the ability to inform and assist communities in the digitization of their language
+> Demonstrates the ability to inform and assist communities in the digitization of their language.
 
 ## Progression by component
 

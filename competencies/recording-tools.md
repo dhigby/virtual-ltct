@@ -4,7 +4,7 @@ category: Technology Domain
 slug: recording-tools
 source_label: Recording Tools
 in_framework: true
-target_statement: Is able to use the tools that assist language workers to record their work, either audio and/or video and is able to consult others on their use
+target_statement: Is able to use the tools that assist language workers to record their work, whether audio, video, or both, and is able to consult others on their use.
 outcome_levels:
   - "0 - No Competency"
   - "1 - Has Knowledge"
@@ -21,7 +21,7 @@ last_updated: 2026-09-03
 
 ## Description
 
-Knowledge of the tools that assist language workers to record their work, either audio and/or video, and can consult others on their use.
+Knowledge of the tools that assist language workers to record their work, whether audio, video, or both, and the ability to consult others on their use.
 
 ## Why it matters
 
@@ -29,7 +29,7 @@ In recent years, audio and video have become an integral part of each domain tha
 
 ## Target competency
 
-> Is able to use the tools that assist language workers to record their work, either audio and/or video and is able to consult others on their use
+> Is able to use the tools that assist language workers to record their work, whether audio, video, or both, and is able to consult others on their use.
 
 ## Progression by component
 

@@ -22,11 +22,11 @@ last_updated: 2026-09-17
 
 ## Description
 
-Domain-specific knowledge in Scripture Engagement
+Domain-specific knowledge in Scripture Engagement.
 
 ## Why it matters
 
-Have a good understanding of Scripture Engagement used for Bible translation and language development work.
+A Language Technologist needs a good understanding of Scripture Engagement as it relates to Bible translation and language development work.
 
 ## Target competency
 

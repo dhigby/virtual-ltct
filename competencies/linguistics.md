@@ -22,11 +22,11 @@ last_updated: 2026-09-17
 
 ## Description
 
-Domain-specific knowledge in linguistics
+Domain-specific knowledge in linguistics.
 
 ## Why it matters
 
-Have a good understanding of linguistics used for Bible translation and language development work.
+A Language Technologist needs a good understanding of linguistics as it is used in Bible translation and language development work.
 
 ## Target competency
 

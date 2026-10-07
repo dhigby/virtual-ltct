@@ -4,7 +4,7 @@ category: Technology Domain
 slug: phonology-tools
 source_label: Phonology Tools
 in_framework: true
-target_statement: Is able to use the tools for doing phonological analysis and is able to consult others in their use
+target_statement: Is able to use the tools for doing phonological analysis and is able to consult others in their use.
 outcome_levels:
   - "0 - No Competency"
   - "1 - Has Knowledge"
@@ -25,17 +25,17 @@ Knowledgeable about the current phonology tools.
 
 ## Why it matters
 
-This competency covers the usage and training of users to use the current phonology tools to produce a phonology sketch and to determine the orthography of a language.
+This competency covers using the current phonology tools to produce a phonology sketch and determine the orthography of a language, and training others to use them.
 
 ## Target competency
 
-> Is able to use the tools for doing phonological analysis and is able to consult others in their use
+> Is able to use the tools for doing phonological analysis and is able to consult others in their use.
 
 ## Progression by component
 
 _Each row is a level a learner is **at**; its activities are what they do to reach the level in the final column._
 
-### 1.0 — Can teach others to use text-based Phonology Tools
+### 1.0 — Can teach others to use text-based phonology tools
 
 | Current level | Suggested activities | Reaches |
 | --- | --- | --- |

@@ -21,11 +21,11 @@ last_updated: 2026-09-02
 
 ## Description
 
-Knowledge of the tools that assist literacy and education workers in their work and can consult others in their use. This includes primer development and easy reader development.
+Knowledge of the tools that assist literacy and education workers in their work, and the ability to consult others in their use. This includes primer development and easy reader development.
 
 ## Why it matters
 
-This competency covers the usage and training of users to use the current literacy and education tools to produce primers and easy readers.
+This competency covers using the current literacy and education tools to produce primers and easy readers, and training others to use them.
 
 ## Target competency
 

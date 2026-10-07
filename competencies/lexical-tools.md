@@ -17,15 +17,15 @@ last_updated: 2026-08-28
 
 # Lexical Tools
 
-**Category:** LT Domain
+**Category:** Technology Domain
 
 ## Description
 
-Knowledge of current tools for building lexicons
+Knowledge of current tools for building lexicons.
 
 ## Why it matters
 
-This competency covers the usage and training of users to use current lexicography tools to create, fill, edit, and link lexical entries.
+This competency covers using current lexicography tools to create, fill, edit, and link lexical entries, and training others to use them.
 
 ## Target competency
 

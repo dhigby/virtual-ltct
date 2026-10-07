@@ -21,7 +21,7 @@ last_updated: 2026-09-03
 
 ## Description
 
-Knowledge of the tools and languages for developing software
+Knowledge of the tools and languages for developing software.
 
 ## Why it matters
 

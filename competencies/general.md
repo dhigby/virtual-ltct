@@ -22,11 +22,11 @@ last_updated: 2026-09-02
 
 ## Description
 
-Domain-specific knowledge in one of the following: translation, linguistics, literacy/education or scripture engagement
+Domain-specific knowledge in one of the following: translation, linguistics, literacy/education or scripture engagement.
 
 ## Why it matters
 
-Have a good understanding of one of the language domains used for Bible translation and language development work.
+A Language Technologist needs a good understanding of at least one of the language domains used in Bible translation and language development work.
 
 ## Target competency
 

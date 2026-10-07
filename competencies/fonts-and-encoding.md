@@ -34,7 +34,7 @@ Some scripts and fonts reinforce cultural or community identity. A Language Tech
 
 _Each row is a level a learner is **at**; its activities are what they do to reach the level in the final column._
 
-### 1.0 — Can troubleshoot font issues.
+### 1.0 — Can troubleshoot font issues
 
 | Current level | Suggested activities | Reaches |
 | --- | --- | --- |
@@ -43,7 +43,7 @@ _Each row is a level a learner is **at**; its activities are what they do to rea
 | **2 - With Assistance** | Train others to use appropriate fonts. | 3 - Independent |
 | **3 - Independent** | Research alternate scripts. Learn to create and tweak fonts. | 4 - Expert |
 
-### 2.0 — Can identify and convert between common document formats.
+### 2.0 — Can identify and convert between common document formats
 
 | Current level | Suggested activities | Reaches |
 | --- | --- | --- |

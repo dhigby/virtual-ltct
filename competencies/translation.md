@@ -22,11 +22,11 @@ last_updated: 2026-09-17
 
 ## Description
 
-Domain-specific knowledge in translation
+Domain-specific knowledge in translation.
 
 ## Why it matters
 
-Have a good understanding of translation used for Bible translation and language development work.
+A Language Technologist needs a good understanding of translation as it is used in Bible translation and language development work.
 
 ## Target competency
 

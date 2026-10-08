@@ -6,7 +6,6 @@ in_framework: true
 source: CBC Guide for Non-technical Competencies in Language Technology.md
 last_updated: 2026-07-01
 ---
-
 # Working in a Multicultural Environment
 
 **Category:** Core
@@ -40,8 +39,3 @@ Works effectively in teams or projects involving people of diverse cultural back
 **Why it matters**
 
 - Understanding and valuing cultural differences contribute to a harmonious work environment and better project outcomes.
-- **Technical problem-solving**
-- **Interpersonal and intercultural competencies**
-- **Adult education** and **mentoring**
-- **Data organization, communication, and management**
-

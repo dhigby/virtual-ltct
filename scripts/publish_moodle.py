@@ -58,7 +58,7 @@ Environment:
     MOODLE_URL, MOODLE_TOKEN    see scripts/moodle_client.py
 
 Usage:
-  python scripts/publish_moodle.py --slug <slug> [--category <name>] [--dry-run]
+  python scripts/publish_moodle.py --slug <slug> [--dry-run]
 """
 import argparse
 import json
@@ -420,7 +420,7 @@ def ensure_recognition(client, manifest, problems):
         problems.append("recognition %s: %s" % (w.get("code"), w.get("message")))
 
 
-def publish(client, payload_dir, category_id):
+def publish(client, payload_dir):
     manifest = json.loads((payload_dir / "manifest.json").read_text(encoding="utf-8"))
     if not manifest["publishable"]:
         raise SystemExit("refusing to publish %s: %s"
@@ -429,7 +429,7 @@ def publish(client, payload_dir, category_id):
     # Anything that needs a person to decide, though the publish itself completed: each
     # is printed after the summary, and main() then exits 1.
     problems = []
-    courseid, created = ensure_course(client, manifest, category_id, problems=problems)
+    courseid, created = ensure_course(client, manifest, problems=problems)
     print("  course    %s (%s)" % (manifest["idnumber"],
                                    "created, hidden" if created else "updated"))
     ensure_placement(client, manifest)
@@ -668,8 +668,6 @@ def main():
     ap = argparse.ArgumentParser(description=__doc__,
                                  formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--slug", required=True, help="course folder name under modules/")
-    ap.add_argument("--category", type=int, default=1,
-                    help="Moodle course category id to create into (default 1, 'Misc')")
     ap.add_argument("--view", default="learner", choices=("learner", "reviewer"),
                     help="learner (default) holds back the design doc, mentor guide, "
                          "video scripts and every answer key")
@@ -715,7 +713,7 @@ def main():
 
     client = MoodleClient(dry_run=args.dry_run)
     try:
-        published, cmids, problems = publish(client, payload_dir, args.category)
+        published, cmids, problems = publish(client, payload_dir)
     except MoodleError as e:
         print("\nMoodle rejected the publish:\n  %s" % e, file=sys.stderr)
         return 1

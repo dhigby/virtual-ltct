@@ -68,11 +68,15 @@ Two refusals are normal and are not bugs to route around:
 ## 5. Publish
 
 ```bash
-python scripts/publish_moodle.py --slug <slug> --category <id>
+python scripts/publish_moodle.py --slug <slug>
 ```
 
-`--category` is the Moodle course category id. Use the pilot category at stage 7 and the
-published one at stage 8; ask the user which if you don't know, and don't assume.
+There is no category to choose: the publish works it out from the stage. Before the
+`moodle:` link is in the README it is a pilot, and the course goes to **LTC Pilots**; once
+the link is there it is the delivery, and the publish moves the course to **LTC
+Published**, where organisations can be enrolled. A course listed in
+`moodle/site/org-courses.yaml` goes to its organisation's category either way. The publish
+prints the outcome as `placement moved to …` or `placement … (already there)`.
 
 The publish is **idempotent** — every module is addressed by an idnumber derived from its
 source file's number, so running it again updates rather than duplicates. Re-running after a

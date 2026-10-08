@@ -55,7 +55,8 @@ Moodle even when it leaks nothing (spec 004 onwards):
                           and an organisation-only course names its organisation's
                           category, ltct:org:<key>, and nothing else. A malformed one would
                           leave an organisation-only course in a shared category, open to
-                          everyone, so it is refused.
+                          everyone, so it is refused. A shared course names ltct:pilots on a
+                          pilot publish and ltct:published on a delivery (issue #108).
  10. Target level      -- spec 006: a target_outcome_level that is present is one of
                           outcome-levels.yaml's course_target_levels labels, verbatim. The
                           publisher sends its leading digit as the course's pathway level,
@@ -242,9 +243,15 @@ def check_placement(slug, manifest):
     if org_only and not (isinstance(category, str) and ORG_CATEGORY.match(category)):
         return ["%s: an organisation-only course's placement.category_idnumber must be "
                 "ltct:org:<key>, not %r" % (slug, category)]
-    if not org_only and category is not None:
-        return ["%s: a shared course's placement.category_idnumber must be null, not %r"
-                % (slug, category)]
+    if not org_only:
+        # Pilots until the delivery publish, Published from it (issue #108), so a shared
+        # course is never left in Pilots, where no organisation can be enrolled.
+        delivery = (manifest.get("recognition") or {}).get("delivery") is True
+        expected = "ltct:published" if delivery else "ltct:pilots"
+        if category != expected:
+            return ["%s: a shared course's placement.category_idnumber must be %s on a %s "
+                    "publish, not %r" % (slug, expected, "delivery" if delivery else "pilot",
+                                         category)]
     return []
 
 

@@ -81,9 +81,6 @@ jobs:
         env:
           MOODLE_URL: ${{ secrets.MOODLE_URL }}
           MOODLE_TOKEN: ${{ secrets.MOODLE_TOKEN }}
-          # A course category id on the target server. Set MOODLE_CATEGORY as a repository
-          # variable; 1 is Moodle's default 'Miscellaneous'.
-          MOODLE_CATEGORY: ${{ vars.MOODLE_CATEGORY || '1' }}
           DRY_RUN: ${{ inputs.dry_run }}
         run: |
           set -euo pipefail
@@ -97,7 +94,8 @@ jobs:
           for slug in $slugs; do
             [ -d "modules/$slug" ] || continue
             echo "::group::$slug"
-            args="--slug $slug --category $MOODLE_CATEGORY"
+            # No category: the publisher places the course from its stage (issue #108).
+            args="--slug $slug"
             if [ "${DRY_RUN:-false}" = "true" ]; then
               args="$args --dry-run"
             fi

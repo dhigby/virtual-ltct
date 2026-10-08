@@ -30,11 +30,13 @@ competencies and target level go to two course fields, and the competencies also
 plugin's per-competency table; both are read back. Anything that needs a person is
 listed after the summary and the exit code is 1, though the publish itself completed.
 
-PLACEMENT (spec 002 R11). A course listed in moodle/site/org-courses.yaml is only for one
-organisation's people. Straight after the course is created or updated, and on every publish,
-local_ltuse_place_course puts it in that organisation's category, ltct:org:<key>, by
-idnumber, so a course moved by hand goes back. A shared course is never placed: it stays where
---category created it.
+PLACEMENT (spec 002 R11, issue #108). Straight after the course is created or updated, and
+on every publish, local_ltuse_place_course puts it in its category by idnumber, so a course
+moved by hand goes back. A course listed in moodle/site/org-courses.yaml is only for one
+organisation's people and goes to that organisation's category, ltct:org:<key>. A shared
+course goes to LTC Pilots, ltct:pilots, until its delivery publish (course_stage.py at stage
+8) moves it to LTC Published, ltct:published, where organisations can be enrolled. Nobody
+names a category: the payload works it out, so a forgotten flag cannot misplace a course.
 
 BADGE AND CERTIFICATE (spec 013). After completion, local_ltuse_set_course_recognition makes
 or rewords the course's badge from the template site_config.py apply stored. Only a delivery
@@ -58,7 +60,7 @@ Environment:
     MOODLE_URL, MOODLE_TOKEN    see scripts/moodle_client.py
 
 Usage:
-  python scripts/publish_moodle.py --slug <slug> [--category <name>] [--dry-run]
+  python scripts/publish_moodle.py --slug <slug> [--dry-run]
 """
 import argparse
 import json
@@ -183,6 +185,13 @@ FIELD_TARGET_LEVEL = "ltct_target_level"
 COMPETENCIES_FILE = REPO / "competencies.yaml"
 META_CATEGORY = "Meta"
 
+# Where core_course_create_courses puts a new course: Moodle's install-time default category.
+# It is only a waypoint for a course created hidden; ensure_placement() moves the course
+# to the category its payload names before any content is sent (issue #108). Core finds a
+# category by idnumber only for moodle/category:manage at system context, which the
+# publisher does not hold, so the course cannot be created in its real category directly.
+CREATE_CATEGORY = 1
+
 
 def unique_competencies(manifest):
     """The frontmatter competencies, each once, in first-seen order.
@@ -213,8 +222,11 @@ def course_fields(manifest):
     }
 
 
-def ensure_course(client, manifest, category_id, problems=None):
+def ensure_course(client, manifest, problems=None):
     """Find the course by idnumber, or create it. Returns (course id, created).
+
+    A new course is created in CREATE_CATEGORY and ensure_placement() moves it straight on,
+    since only the plugin can resolve a category's idnumber for the publisher.
 
     Moodle drops a custom field it does not know, or one the caller may not edit, with no
     warning and no error, so the values are read back and any that did not land is
@@ -249,7 +261,7 @@ def ensure_course(client, manifest, category_id, problems=None):
             "fullname": manifest["title"],
             "shortname": manifest["slug"],
             "idnumber": manifest["idnumber"],
-            "categoryid": category_id,
+            "categoryid": CREATE_CATEGORY,
             "summary": manifest["summary_html"],
             "summaryformat": 1,
             # Sections are the lessons, so a learner sees the course shape on one page.
@@ -284,17 +296,16 @@ def ensure_course(client, manifest, category_id, problems=None):
 
 
 def ensure_placement(client, manifest):
-    """Put an organisation-only course in its organisation's category (spec 002 R11).
+    """Put the course in the category its payload names (spec 002 R11, issue #108).
 
-    On every publish, after create and update alike, so the placement is re-asserted each
-    time. A shared course makes no call. The plugin moves the course only when it is
-    elsewhere, and says so; a refusal (a category that does not exist, or is not
-    ltct:org:<key>) is a MoodleError and stops the publish before any content is sent.
+    An organisation-only course goes to ltct:org:<key>; a shared one to ltct:pilots, then to
+    ltct:published from its delivery publish on. On every publish, after create and update
+    alike, so the placement is re-asserted each time and a course moved by hand goes back.
+    The plugin moves the course only when it is elsewhere, and says so; a refusal (a
+    category that does not exist, or is not one a course may be placed in) is a MoodleError
+    and stops the publish before any content is sent.
     """
-    placement = manifest["placement"]
-    if not placement["org_only"]:
-        return
-    category = placement["category_idnumber"]
+    category = manifest["placement"]["category_idnumber"]
     result = client.call("local_ltuse_place_course", courseidnumber=manifest["idnumber"],
                          categoryidnumber=category)
     if client.dry_run:
@@ -420,7 +431,7 @@ def ensure_recognition(client, manifest, problems):
         problems.append("recognition %s: %s" % (w.get("code"), w.get("message")))
 
 
-def publish(client, payload_dir, category_id):
+def publish(client, payload_dir):
     manifest = json.loads((payload_dir / "manifest.json").read_text(encoding="utf-8"))
     if not manifest["publishable"]:
         raise SystemExit("refusing to publish %s: %s"
@@ -429,7 +440,7 @@ def publish(client, payload_dir, category_id):
     # Anything that needs a person to decide, though the publish itself completed: each
     # is printed after the summary, and main() then exits 1.
     problems = []
-    courseid, created = ensure_course(client, manifest, category_id, problems=problems)
+    courseid, created = ensure_course(client, manifest, problems=problems)
     print("  course    %s (%s)" % (manifest["idnumber"],
                                    "created, hidden" if created else "updated"))
     ensure_placement(client, manifest)
@@ -668,8 +679,6 @@ def main():
     ap = argparse.ArgumentParser(description=__doc__,
                                  formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--slug", required=True, help="course folder name under modules/")
-    ap.add_argument("--category", type=int, default=1,
-                    help="Moodle course category id to create into (default 1, 'Misc')")
     ap.add_argument("--view", default="learner", choices=("learner", "reviewer"),
                     help="learner (default) holds back the design doc, mentor guide, "
                          "video scripts and every answer key")
@@ -715,7 +724,7 @@ def main():
 
     client = MoodleClient(dry_run=args.dry_run)
     try:
-        published, cmids, problems = publish(client, payload_dir, args.category)
+        published, cmids, problems = publish(client, payload_dir)
     except MoodleError as e:
         print("\nMoodle rejected the publish:\n  %s" % e, file=sys.stderr)
         return 1

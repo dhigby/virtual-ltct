@@ -28,6 +28,8 @@ assumed knowledge the learner doesn't have.
 
    The command dry-runs first, refuses to publish anything that fails the disclosure
    check, and creates the course **hidden** — make it visible when your learner is ready.
+   It puts the course in the **LTC Pilots** category by itself; there is no category to
+   pick.
    The design document, mentor guide, video scripts and every answer key are held back;
    the correct answers reach Moodle only inside the quiz, where Moodle protects them.
 

@@ -4,7 +4,7 @@ category: Education
 slug: scripture-engagement
 source_label: Domain-specific education
 in_framework: true
-target_statement: "Has pursue domain specific knowledge via formal education or equivalent in one of the following: translation, linguistics, literacy / education or scripture engagment."
+target_statement: "Has pursued domain-specific knowledge via formal education or equivalent in one of the following: translation, linguistics, literacy / education or scripture engagement."
 outcome_levels:
   - "0 - No Competency"
   - "1 - Has Knowledge"
@@ -22,15 +22,15 @@ last_updated: 2026-09-17
 
 ## Description
 
-Domain-specific knowledge in Scripture Engagement
+Domain-specific knowledge in Scripture Engagement.
 
 ## Why it matters
 
-Have a good understanding of Scripture Engagement used for Bible translation and language development work.
+A Language Technologist needs a good understanding of Scripture Engagement as it relates to Bible translation and language development work.
 
 ## Target competency
 
-> Has pursue Scripture Engagement  via formal education or equivalent.
+> Has pursued knowledge in Scripture Engagement via formal education or equivalent.
 
 ## Progression by component
 
@@ -40,8 +40,8 @@ _Each row is a level a learner is **at**; its activities are what they do to rea
 
 | Current level | Suggested activities | Reaches |
 | --- | --- | --- |
-| **0 - No Competency** | Complete a semester of university level courses Scripture Engagement. Alternately, gain significant practical experience in Scripture Engagement from working in a language program. | 1 - Has Knowledge |
-| **1 - Has Knowledge** | Complete a bachelor's program or a semester of post graduate level courses in Scripture Engagement. Alternately, gain significant practical experience Scripture Engagement from working in a language program. | 2 - With Assistance |
+| **0 - No Competency** | Complete a semester of university-level courses in Scripture Engagement. Alternately, gain significant practical experience in Scripture Engagement from working in a language program. | 1 - Has Knowledge |
+| **1 - Has Knowledge** | Complete a bachelor's program or a semester of postgraduate-level courses in Scripture Engagement. Alternately, gain significant practical experience in Scripture Engagement from working in a language program. | 2 - With Assistance |
 | **2 - With Assistance** | Complete a Master's program in Scripture Engagement or demonstrate a thorough understanding and respected contribution to the field. | 3 - Independent |
 | **3 - Independent** | Complete a Doctoral program (PhD, EdD) in Scripture Engagement. | 4 - Expert |
 

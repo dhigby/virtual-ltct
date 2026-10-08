@@ -25,7 +25,7 @@ Knowledge of the tools that assist language workers to publish their work electr
 
 ## Why it matters
 
-This competency covers the usage and training of users that help them to publish work in print form and digitially.
+This competency covers using the tools that help people publish their work in print and digitally, and training others to use them.
 
 ## Target competency
 
@@ -61,7 +61,7 @@ _Each row is a level a learner is **at**; its activities are what they do to rea
 | --- | --- | --- |
 | **0 - No Competency** | Learn how to configure software to synchronize audio and text | 1 - Has Knowledge |
 | **1 - Has Knowledge** | Use software to synchronize audio with text | 2 - With Assistance |
-| **2 - With Assistance** | Advise others on text and audio synchronization and to do micro adjustments to synchronized audio and text | 3 - Independent |
+| **2 - With Assistance** | Advise others on text and audio synchronization and on making micro-adjustments to synchronized audio and text. | 3 - Independent |
 | **3 - Independent** | Teach and mentor others to configure and use audio and text synchronization software | 4 - Expert |
 | **4 - Expert** | — | — |
 

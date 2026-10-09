@@ -1,0 +1,148 @@
+name: Site Config
+
+on:
+  push:
+    paths:
+      - 'moodle/site/**'
+      - 'moodle/local_ltuse/version.php'
+      - 'moodle/REQUIREMENTS.md'
+      - 'competencies.yaml'
+      - 'scripts/site_config.py'
+      - 'tests/test_site_config.py'
+      - 'moodle/local_ltuse/classes/**'
+      - 'tests/criteria_harness.php'
+      - 'scripts/cbc_wording.py'
+      - 'outcome-levels.yaml'
+      - 'modules/*/README.md'
+      - 'tests/test_cbc_wording.py'
+      - 'tests/recognition_harness.php'
+      - 'tests/calendar_notify_harness.php'
+      - 'tests/timezone_notice_harness.php'
+      - 'tests/officehours_harness.php'
+      - 'tests/booking_notice_harness.php'
+      - 'tests/protection_harness.php'
+      - 'tests/test_protection_declaration.py'
+      # Spec 006: competency slugs and urls come from the descriptors and mkdocs.yml.
+      - 'competencies/**'
+      - 'mkdocs.yml'
+      - 'moodle/local_ltuse/lang/**'
+      - 'tests/pathway_harness.php'
+      - 'tests/test_pathway_wording.py'
+      - 'tests/admin_harness.php'
+      - 'scripts/admin_files.py'
+      - 'tests/report_harness.php'
+      - 'tests/profile_access_harness.php'
+      - 'tests/org_access_harness.php'
+      - 'tests/mentoring_harness.php'
+      - 'tests/mentor_admin_harness.php'
+      # Spec 007: site.yaml pins block_ltuse's version.php; the wording test reads its lang file.
+      - 'moodle/block_ltuse/**'
+      - 'tests/learner_home_harness.php'
+      - 'tests/dashboard_plan_harness.php'
+      - 'tests/test_learner_wording.py'
+  pull_request:
+    paths:
+      - 'moodle/site/**'
+      - 'moodle/local_ltuse/version.php'
+      - 'moodle/REQUIREMENTS.md'
+      - 'competencies.yaml'
+      - 'scripts/site_config.py'
+      - 'tests/test_site_config.py'
+      - 'moodle/local_ltuse/classes/**'
+      - 'tests/criteria_harness.php'
+      - 'scripts/cbc_wording.py'
+      - 'outcome-levels.yaml'
+      - 'modules/*/README.md'
+      - 'tests/test_cbc_wording.py'
+      - 'tests/recognition_harness.php'
+      - 'tests/calendar_notify_harness.php'
+      - 'tests/timezone_notice_harness.php'
+      - 'tests/officehours_harness.php'
+      - 'tests/booking_notice_harness.php'
+      - 'tests/protection_harness.php'
+      - 'tests/test_protection_declaration.py'
+      # Spec 006: competency slugs and urls come from the descriptors and mkdocs.yml.
+      - 'competencies/**'
+      - 'mkdocs.yml'
+      - 'moodle/local_ltuse/lang/**'
+      - 'tests/pathway_harness.php'
+      - 'tests/test_pathway_wording.py'
+      - 'tests/admin_harness.php'
+      - 'scripts/admin_files.py'
+      - 'tests/report_harness.php'
+      - 'tests/profile_access_harness.php'
+      - 'tests/org_access_harness.php'
+      - 'tests/mentoring_harness.php'
+      - 'tests/mentor_admin_harness.php'
+      # Spec 007: site.yaml pins block_ltuse's version.php; the wording test reads its lang file.
+      - 'moodle/block_ltuse/**'
+      - 'tests/learner_home_harness.php'
+      - 'tests/dashboard_plan_harness.php'
+      - 'tests/test_learner_wording.py'
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install pyyaml pytest
+      - name: Validate the Moodle site declaration
+        run: python scripts/site_config.py validate
+      - name: Unit tests for site_config.py and the CBC wording rule
+        run: python -m pytest -q tests/test_site_config.py tests/test_cbc_wording.py tests/test_pathway_wording.py tests/test_learner_wording.py tests/test_protection_declaration.py
+      # local_ltuse's pure completion classes, and the guard that set_course_completion
+      # never names core's wipe functions. Needs no Moodle; the runner image ships PHP.
+      - name: Completion rule and criteria diff harness
+        run: php tests/criteria_harness.php
+      # Spec 013: local_ltuse's badge renderer, its wording backstop against cbc_wording.py's
+      # own deny patterns (read through Python, so PHP never holds a copy), and the
+      # certificate's availability. Runs after setup-python, which the harness calls.
+      - name: Recognition harness
+        run: php tests/recognition_harness.php
+      # Spec 011: local_ltuse's pure decisions for calendar change notices, the time zone
+      # notice, the office-hours group sync and the booking messages. Needs no Moodle.
+      - name: Events and office-hours harnesses
+        run: |
+          php tests/calendar_notify_harness.php
+          php tests/timezone_notice_harness.php
+          php tests/officehours_harness.php
+          php tests/booking_notice_harness.php
+      # Spec 016: identity protection's pure rules (levels, withheld fields, pseudonyms,
+      # usernames, member cohorts, the course-mentor course rule). Needs no Moodle.
+      - name: Protection harness
+        run: php tests/protection_harness.php
+      # Spec 006: the pathway layout (next course, no course yet, role totals) and who may see
+      # whose pathways. Needs no Moodle.
+      - name: Pathway harness
+        run: php tests/pathway_harness.php
+      # Spec 008: local_ltuse's pure administration rules and the server-side masking, which
+      # it compares with scripts/admin_files.py through Python. Needs no Moodle.
+      - name: Administration harness
+        run: php tests/admin_harness.php
+      # Spec 001: the site_config.php run report (secrets redacted, summary lines, exit codes).
+      # It reads the class on stdin. Needs no Moodle.
+      - name: Site config report harness
+        run: php tests/report_harness.php < moodle/local_ltuse/classes/siteconfig/report.php
+      # Spec 002: the profile decision and the shared organisation access check, with the
+      # organisation page's reset outcomes and cohort idnumbers. Needs no Moodle.
+      - name: Organisation access harnesses
+        run: |
+          php tests/profile_access_harness.php
+          php tests/org_access_harness.php
+      # Spec 003: the Mentoring page's progress status and course order, and who may assign
+      # and end a learner's mentors. Needs no Moodle.
+      - name: Mentor harnesses
+        run: |
+          php tests/mentoring_harness.php
+          php tests/mentor_admin_harness.php
+      # Spec 007: the published-course rule the learner home block and the next-lesson hook
+      # share. Needs no Moodle.
+      - name: Learner home harness
+        run: php tests/learner_home_harness.php
+      # Spec 007: what apply changes on the default Dashboard page (adds, deletes, weights and
+      # the personal-dashboard reset), as a pure plan. Needs no Moodle.
+      - name: Dashboard plan harness
+        run: php tests/dashboard_plan_harness.php

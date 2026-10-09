@@ -1,0 +1,40 @@
+# Row #7: the two course custom fields the publisher writes from each course's frontmatter.
+# Spec 004 (specs/004-progress-reporting/data-model.md "Course fields", research R11).
+#
+# Read only by scripts/site_config.py. The category is found by name among the core_course
+# course categories only, never a shared one. Fields are found by shortname. Apply creates a
+# field that is absent and sets back one that differs; it never deletes, so an undeclared
+# ltct_* field is reported as extra and kept. The values themselves are a copy of the
+# frontmatter, refreshed by scripts/publish_moodle.py on every publish; change the markdown,
+# never the course in Moodle.
+
+rows: [7]
+purpose: >-
+  Each course carries the competencies it aims at and the level it aims at, copied from its
+  frontmatter by the publisher, so both show beside the course on the course page and as
+  columns in the programme report. They describe the course, never any learner. Both are
+  locked, so only the publisher (moodle/course:changelockedcustomfields) and the site team
+  can change them, and visible to everyone, which report builder needs before it offers
+  them as columns.
+category: LTC curriculum
+fields:
+  - shortname: ltct_competencies
+    name: Competencies this course aims at
+    type: text
+    locked: 1
+    visibility: everyone
+    why: >-
+      The course's frontmatter competencies, each name verbatim and in brackets, for example
+      "[Translation Tools] [Paratext]", so a "contains [Translation]" filter does not also
+      match "Translation Tools" (R11). Shown in the programme report (FR-013). Counting per
+      competency is the competency-coverage report's job, not this field's (R15).
+
+  - shortname: ltct_target_level
+    name: Level this course aims at
+    type: text
+    locked: 1
+    visibility: everyone
+    why: >-
+      The course's frontmatter target_outcome_level, verbatim, for example "2 - With
+      Assistance" (R11). It is where the course aims to take a learner, never a record of
+      where any learner is (FR-010).

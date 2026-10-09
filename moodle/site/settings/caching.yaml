@@ -1,0 +1,30 @@
+# Row #5: pages stay light on repeat visits.
+
+rows: [5]
+purpose: >-
+  Browser and server caching on. Every value is Moodle's default, declared so drift catches
+  anyone who turns designer mode on or caching off -- each of which makes every page heavier
+  for every learner on a slow connection.
+settings:
+  - name: cachejs
+    value: 1
+    why: JavaScript is cached and minified. Off, every page view re-sends it unminified.
+  - name: yuicomboloading
+    value: 1
+    why: YUI modules arrive combined in a few requests instead of dozens, which matters most on a high-latency link.
+  - name: cachetemplates
+    value: 1
+    why: Mustache templates are cached in the browser rather than fetched again on every page.
+  - name: themedesignermode
+    value: 0
+    why: >-
+      When on, theme caching is off for every user and the full stylesheet is rebuilt and
+      re-sent on each page. Meant for theme development, never for a live site.
+  - name: langstringcache
+    value: 1
+    why: Server-side string cache. Off, every page rebuilds its interface strings and loads slower.
+  - name: slasharguments
+    value: 1
+    why: >-
+      Theme assets and files get revisioned path URLs, which browsers and proxies cache
+      more reliably than ?rev= query strings.

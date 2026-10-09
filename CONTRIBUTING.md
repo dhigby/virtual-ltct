@@ -25,7 +25,7 @@ inside it (`01-*.md`, …), capped at 90 minutes. Every course moves through eig
 each with a one-page how-to under [`process/stages/`](process/stages/):
 
 **Design → approve → draft → alignment check → SME fact-check → internal review → pilot →
-record & publish to Cypher.**
+record & publish to Moodle.**
 
 Each course has one **Course production tracker** issue (open one from the
 [issue template](.github/ISSUE_TEMPLATE/course-production.yml)); its checkboxes are the
@@ -56,7 +56,7 @@ Every content course ends up with this set of files — copy them from
 | `NN-scenario-bank.md` | Applied practice scenarios, foundational → complex. |
 | `NN-mentor-guide.md` | Facilitator notes and answer guidance for the scenario bank. |
 | `NN-quiz.md` | Assessment questions with a pass threshold and answer key in the body. |
-| `NN-video-script.md` | Script for the video-recording step before upload to Cypher. |
+| `NN-video-script.md` | Script for the video-recording step at stage 8. |
 
 Sub-files don't carry their own frontmatter — only `README.md` does. See
 `modules/_template/README.md` for the full explanation and a frontmatter example.
@@ -127,6 +127,35 @@ unpublished translation text, personal details or anything else that shouldn't b
 A diagram works the same way — save it as an `.svg` in `assets/`, with the same naming and
 the same description. (Don't write a ` ```mermaid ` block: nothing in this repo draws
 those, so it would appear on the published page as a lump of code.)
+
+## Adding or fixing a library resource
+
+The [resource library](https://competencies.languagetechnology.org/library/) lists guides,
+how-tos, tool documentation and other reference material outside any course. Every entry
+lives in one file, [`resources.yaml`](resources.yaml), and the library page and each
+competency's *Further Information* list are built from it.
+
+To add one, open the repo in Claude Code and say something like:
+
+```
+Add a library resource: "Installing Keyman on Android", https://help.keyman.com/...,
+one line saying what it covers, for the Keyboards competency.
+```
+
+Give it the **title**, the **link**, a **one-line description** and the **competencies** it
+supports. Claude Code fills in the type and language, checks the competency names against
+the framework, and opens the change for review. You don't need to know git. The resource
+appears on the site a few minutes after the change merges. To fix a broken link or a wrong
+description, say which resource and what's wrong in the same way.
+
+A few rules:
+
+- Link to where the material lives. Don't put a video or a big PDF into the repo.
+- Only public material. Anything partner-only can't go on the public site.
+- If a description would say something about a particular language's script or
+  spelling, write it yourself or ask the person who knows. Don't let Claude Code guess.
+
+A weekly check opens a **Broken resource links** issue when a link stops working.
 
 ## What not to commit
 

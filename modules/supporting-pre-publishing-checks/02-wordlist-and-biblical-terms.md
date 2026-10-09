@@ -35,7 +35,8 @@ prepares you to spot and address with the team.
 
 **Wordlist / spelling: a false-clean result, confirmed in the field.** This is the
 check area where "false-clean" isn't theoretical — it's a documented pattern from the
-SME interview behind this course:
+SME interview behind this course. Every word in the wordlist carries one of three
+spelling statuses: **Correct**, **Incorrect** or **Undecided**.
 
 - A wordlist of **thousands of words was blanket-approved** — every entry marked
   correct without genuine review.
@@ -65,8 +66,6 @@ review and correction.
 > ask the team directly whether blanket approval happened, and if there's any
 > uncertainty, reset the whole wordlist to Undecided and re-review it together rather
 > than trying to isolate "the relevant entries."
-> (Note: a word's spelling status is only ever Correct, Incorrect, or Undecided — there's
-> no "deny" action here. That's a Basic Checks concept, covered in Lesson 4.)
 
 **Biblical Terms: blank renderings are the default starting state.** Every term in
 Paratext's Biblical Terms tool starts out with a gloss (in English, or the source
@@ -75,6 +74,9 @@ orange in the UI) with placeholder text like "Double click to enter rendering(s)
 project text." This isn't a bug or a trap the tool is setting for the team; it's simply
 the tool's normal starting state, and the task is straightforward: work through the
 list and add the appropriate rendering for each term from the project's own text.
+
+![A Biblical Terms row still at its default state: orange highlight, "Double click to enter rendering(s) from project text."](assets/ss-02-blank-bt-row.png)
+*A term still at its default, unfilled state — not an error, just unfinished.*
 
 Where this becomes a false-clean risk is the same pattern as the wordlist above: a team
 can present a partially-completed Biblical Terms list as "done" without having actually
@@ -97,6 +99,9 @@ Found count shows as still present in the text versus which are stale leftovers.
 coach the fix: have the team review the full rendering list for a term, confirm which
 rendering(s) are current and correct, and remove the stale ones themselves — you're
 coaching this, not doing it at their keyboard.
+
+![A Biblical Terms row for "adikos" showing three candidate renderings ("da bad guys," "no on us," "no do da ting") but a Found count of only 2/11.](assets/ss-02-term-only-2-renderings-used.png)
+*Renderings pile up over time — the Found column tells you which one is actually live.*
 
 > **NOTE:** A related, less common pattern: a rendering that's just the verse's first
 > word, repeated across a term's occurrences, rather than an actual translation. Per a
@@ -141,13 +146,14 @@ expanded well beyond the terms the project actually uses, and advising the team 
 rather than the full reference list. Note also that the Open Biblical Terms List dialog holds
 several separate lists side by side (Major Biblical Terms, All Biblical Terms, NT Key
 Biblical Terms, Inclusive/Exclusive Pronouns, Younger/Older Siblings, and others),
-and — as covered in Lesson 3 — **Numbers** and **Measures** are two more separate
-entries there, not a single combined "Measures and Money and Numbers" list: Measures
-was never released as its own check, and its functionality is being folded into a new
-consolidated check covering numbers, weights, and measures together, replacing the
-older, separate Numbers check — though not every team's Paratext version has migrated
-to it yet. Don't assume every project's terms lists look identical, or that a list
+and — as covered in Lesson 3 — **Numbers** is another separate entry there. There is no
+Measures list: a new combined list covering numbers, weights, and measures together is
+replacing the older Numbers list, though not every team's Paratext version will have it
+at the same time. Don't assume every project's terms lists look identical, or that a list
 you've seen behave one way in one project will exist or behave the same way in another.
+
+![The Open Biblical Terms List dialog, showing Major Biblical Terms, All Biblical Terms, Numbers, and other lists as separate entries.](assets/ss-02-bt-choose-list.png)
+*Numbers is its own entry here, separate from the other lists.*
 
 **Key takeaways**
 - There's no technical way to detect a blanket-approved wordlist, and the Project Plan
@@ -167,9 +173,7 @@ you've seen behave one way in one project will exist or behave the same way in a
 answer first, then verify it against the Content section above.
 
 1. **Name the only three statuses** a word's spelling can carry in Paratext's
-   wordlist. Then say in one sentence why "denied" is not one of them, and which
-   check area that word actually belongs to. If you wrote down four statuses, re-read
-   the warning box in the wordlist section.
+   wordlist.
 2. **Two rows, two different problems.** Row A shows a highlighted rendering carrying
    the placeholder text "Double click to enter rendering(s) from project text." Row B
    shows five renderings on one term, most of them no longer found in the current

@@ -1,0 +1,17 @@
+# Dependencies for publishing courses to Moodle (scripts/publish_moodle.py and friends).
+# Separate from docs-requirements.txt because the two jobs are independent: you can build
+# the competency site without ever touching Moodle, and vice versa.
+#
+# HTTP is deliberately stdlib urllib, not requests -- including the multipart upload in
+# scripts/moodle_client.py. This repo has no package manifest and no lockfile, so every
+# dependency added here is one a contributor has to install by hand on a laptop somewhere
+# with poor connectivity.
+markdown
+pymdown-extensions
+pyyaml
+# Pillow makes the lighter copy of each screenshot that goes into the payload
+# (scripts/image_reduce.py). Needed only where a payload is built: the package check and
+# the review-site build never import it. Pinned EXACTLY because a Pillow upgrade can change
+# the delivered bytes, which costs one re-upload of every image -- so it moves only by a
+# deliberate change here (specs/009-low-bandwidth-delivery/research.md R1).
+pillow==12.3.0

@@ -1,0 +1,61 @@
+# Rows #14 and #11: what the site team's administration tool relies on (spec 008).
+
+rows: [14, 11]
+purpose: >-
+  scripts/ltct_admin.py brings learners on and keeps course mentors in step through
+  local_ltuse's administration service. These are the settings it owns. The others it
+  depends on stay where their specs declare them (enrol_cohort/unenrolaction in groups.yaml,
+  tool_dynamic_cohorts/realtime in cohorts.yaml), and "ltct_admin.py check" refuses to run if
+  any of them is wrong (research R13). It also holds the site's general account rules (who
+  can make an account, and how people sign in), which spec 016 first declared and its scope
+  review moved here as rules for everyone, not protection measures (Doug, 2026-10-05). The login
+  methods themselves are plugin entries in site.yaml (auth_webservice, auth_email), because
+  core keeps them in $CFG->auth, which no admin setting writes.
+settings:
+  - name: allowaccountssameemail
+    value: 0
+    why: >-
+      A backstop for core's own account-creation paths (signup, Upload users,
+      core_user_create_users), and what makes email login below unambiguous. The administration
+      tool does not rely on it: its intake matches
+      by email under a lock and never creates a second account for one address (research R2).
+  - name: authloginviaemail
+    value: 1
+    why: >-
+      Learners sign in with their email address, which is also the username an intake gives
+      most of them; nobody should have to remember the generated code a name-protected person
+      gets instead (Doug, 2026-10-05). Core accepts an email only when one live
+      account has it (lib/moodlelib.php, authenticate_user_login), which allowaccountssameemail
+      above and the intake's own email match guarantee. On by default in 5.2
+      (admin/settings/login.php); declared so drift catches it being turned off.
+  - name: protectusernames
+    value: 1
+    why: >-
+      A general account rule. With email as everyone's login, the forgotten-password form
+      must never confirm whether an address has an account here. Core's default
+      (admin/settings/security.php, MOODLE_502_STABLE); declared beside authloginviaemail so
+      drift catches it being turned off (Doug, 2026-10-05 (scope review)).
+  - name: registerauth
+    value: ""
+    why: >-
+      A general account rule: no self-registration. Accounts are made by the site team, through
+      intake (spec 002, this spec). Core's default (admin_setting_special_registerauth in
+      lib/adminlib.php, on admin/settings/login.php, MOODLE_502_STABLE); declared so drift
+      catches it being turned on (Doug, 2026-10-05 (scope review)).
+  - name: authpreventaccountcreation
+    value: 1
+    why: >-
+      A general account rule: no account is created by an outside login on first use, so every
+      account comes from intake, matched by email (research R2). Not core's default, which is 0
+      (admin/settings/plugins.php, MOODLE_502_STABLE) (Doug, 2026-10-05 (scope review)).
+  - name: local_ltuse/coursementorsync
+    value: 1
+    why: >-
+      On since 2026-10-05: spec 016 (#84, merged) narrowed its course-mentor path, so a course
+      mentor sees a protected learner's real identity only when they share a mentor group in
+      the course (plan decision 11, approved 2026-10-04).
+      At 1, each learner's course mentors are enrolled as Course mentor in the courses they
+      take and removed by event (research R10); at 0 the observers and the hourly reconcile do
+      nothing, and one-course and cohort mentors can still be recorded. Declared 1 since #97
+      (2026-10-05), before 008's instance checks V9 and V11-V13 (T067) had run, and they still
+      have not; accepted (Doug, 2026-10-05).

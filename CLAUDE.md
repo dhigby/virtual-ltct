@@ -1,8 +1,10 @@
 # CLAUDE.md
 
-Guidance for AI assistants working in this repo. This is a **content repository** for
-the Language Technology Consultant (LTC) training curriculum — markdown training modules,
-not an application. There is no build/test/run loop; the "checks" are content + coverage.
+Guidance for AI assistants working in this repo. It holds **two products**: the Language
+Technology Consultant (LTC) training **curriculum** — markdown training modules, with no
+build/test/run loop, where the "checks" are content + coverage — and the Moodle **training
+system** that delivers it (the publisher, `moodle/`, and the platform's configuration).
+Learner data lives only in Moodle, never in this public repo.
 
 **Read [`INTENT.md`](INTENT.md) before building or changing anything in this repo** — tooling,
 scripts, process, the sites. It states the problem this repo exists to solve, its hard
@@ -154,7 +156,9 @@ separate faithful-import workstream — see [`process/backfill.md`](process/back
      exact state shown, because it is the screen-reader text *and* the brief for whoever
      takes the shot — `![alt text](…)` is a defect. Diagrams are `.svg` files under the
      same rules; there is no mermaid renderer configured, so a ` ```mermaid ` fence would
-     publish as a block of code.
+     publish as a block of code. The publisher sends learners a lighter copy of every
+     screenshot; name a file `<name>.full.png` to send it unchanged, or `<name>.small.png`
+     to reduce it further, and put no other `.` in an asset's name.
    - **Videos** are referenced, never committed: `**Watch the video:** [title](url)`, or
      `**Watch the video:** _To be recorded at stage 8._` until it exists.
    - **Video scripts** are `NN-video-script.md` for the overview video, and the optional
@@ -204,9 +208,14 @@ source of truth for that content, and it is published to GitHub Pages (see below
 
 - **Edit `competencies/*.md` directly.** A frontmatter `name:` MUST match
   `competencies.yaml` exactly (copy verbatim, incl. `&`/capitalization), or CI fails.
-- **`resources:` entries are `{title, url}` mappings**, not bare URLs — `gen_site.py`
-  renders them as each page's **Further Information** section, and the descriptor check
-  rejects any other shape. They are hand-maintained (no upstream sync); use `[]` for none.
+- **Resources live in [`resources.yaml`](resources.yaml), not in descriptors** (spec 014).
+  One entry per resource: `title`, `url`, one-line `description`, `type`
+  (`guide`/`video`/`site`/`document`), `competencies` (verbatim framework names) and
+  `language`. `gen_site.py` builds the **`/library/`** page and each competency page's
+  **Further Information** section from it. The descriptor check fails on a bad entry, an
+  unknown competency name, or a descriptor that still carries `resources:`. A description
+  about a named language's script or orthography comes from a human, never from reading
+  the page. Public material only: the site is public.
 - The files were first seeded from `import-seeds/` (`Lang Tech Competencies.xlsx` +
   `CBC Guide for Non-technical Competencies…md`) via
   `import-seeds/import_competency_descriptors.py`. That importer is retained for
@@ -227,15 +236,17 @@ the competency scripts.
 The competency content is published as a MkDocs Material site. On push to `main`,
 [`.github/workflows/pages.yml`](.github/workflows/pages.yml) builds it (nav + pages are
 generated at build time by [`scripts/gen_site.py`](scripts/gen_site.py) straight from
-`competencies.yaml`, `outcome-levels.yaml`, `competencies/` and `COVERAGE.md` — nothing is
+`competencies.yaml`, `outcome-levels.yaml`, `competencies/`, `resources.yaml` and
+`COVERAGE.md` — nothing is
 duplicated in git) and deploys to the `gh-pages` branch. Preview locally with
 `pip install -r docs-requirements.txt && mkdocs serve`.
 
 The build is `strict: true`, so a broken internal link fails it rather than shipping.
 Beyond one page per competency, `gen_site.py` generates the landing page, a per-category
-overview page, `all-competencies` (one filterable table), `how-to-read-levels`, and the
-coverage page. A competency page is *not* a copy of its descriptor: the descriptor's level
-tables are re-rendered as a stepped ladder component. **To change how the site looks,
+overview page, `all-competencies` (one filterable table), `how-to-read-levels`, the
+coverage page and the resource `library` (its URL is cited from Moodle's menu and from
+lessons, so moving it needs a redirect). A competency page is *not* a copy of its
+descriptor: the descriptor's level tables are re-rendered as a stepped ladder component. **To change how the site looks,
 edit `gen_site.py` (structure) and [`docs/stylesheets/extra.css`](docs/stylesheets/extra.css)
 (presentation, `cx-`-prefixed classes, brand colours in one block at the top) — not the
 descriptors.** Anything in `docs/` is published, so keep repo reference material out of it
@@ -250,7 +261,12 @@ matters:**
 | URL | View | Who | Holds back |
 |---|---|---|---|
 | `…/review/<slug>/` | reviewer | SME (stage 5), internal reviewer (stage 6) | nothing |
-| `…/learn/<slug>/` | learner | **pilot learner (stage 7)** | design doc, mentor guide, video scripts, quiz answer key |
+| `…/learn/<slug>/` | learner | fallback for a pilot learner (stage 7) | design doc, mentor guide, video scripts, quiz answer key |
+
+**Pilot learners now go to Moodle** (see below); the `/learn/` view stays through the
+transition as a fallback and as the reference implementation of the disclosure boundary.
+The reviewer view is unaffected — reviewers should not need a Moodle account to read a
+draft.
 
 **Never send a pilot learner the `/review/` URL** — it contains the answer key. Get the URL
 from `course_stage.review_url()` (it is in `--json` and in `/next-step` from stage 4 on);
@@ -288,6 +304,75 @@ work across stages 5, 6 and 7, including across the stage-6 merge.
 > **Never run `mkdocs gh-deploy` locally.** It force-pushes the whole `gh-pages` branch and
 > would delete every course review site until the next CI run. Deploying is CI's job.
 
+## Delivery: Moodle
+
+Courses are delivered from a **self-hosted Moodle**. It costs nothing per learner — the
+constraint that ruled out Cypher for Business — and its Android app lets a consultant take
+a course offline in the field. Pilots (stage 7) and publishing (stage 8) both go there;
+`/publish-to-moodle <slug>` is the command.
+
+**The repo stays the source of truth and the publish is one-way.** Content edited in Moodle
+is overwritten by the next publish — change the markdown instead. Never copy content from
+Moodle back here; that would break the source-of-truth split everything else rests on.
+
+The publisher splits at a platform-neutral payload, which is how `INTENT.md`'s portability
+constraint is honoured in practice:
+
+- [`scripts/moodle_payload.py`](scripts/moodle_payload.py) knows courses and the disclosure
+  boundary, and nothing about Moodle's API.
+- [`scripts/check_moodle_payload.py`](scripts/check_moodle_payload.py) verifies that payload
+  **before anything leaves the machine**. There is no `--force`: once a page is on a server
+  learners can reach, a disclosure failure has already happened.
+- [`scripts/moodle_client.py`](scripts/moodle_client.py) and
+  [`scripts/moodle_xml.py`](scripts/moodle_xml.py) know Moodle and nothing about pedagogy.
+
+**The answer-key rules live in one place:** [`scripts/disclosure.py`](scripts/disclosure.py),
+shared by the authoring check, the review-site renderer, its gate and the Moodle publisher.
+Change the marker there and nowhere else. Answer keys *do* reach Moodle, but only inside
+question data, where Moodle's capabilities protect them — never in page HTML.
+
+**Identity is an `idnumber`, stored in Moodle, not in a repo state file:** `ltct:<slug>` for
+a course and `ltct:<slug>:<file number>` for a module (`03-…md` is `ltct:<slug>:03`; a file
+with no number keeps its stem). That is what makes republishing update rather than
+duplicate, and what makes moving to another Moodle server a re-publish rather than a data
+move. It is the number, not the whole filename, because Moodle stores an idnumber in 100
+characters; the publisher refuses one that won't fit, and two published files sharing a
+number.
+
+**Look up every Moodle API before using it; don't write it from memory.** Query Context7
+first (`/websites/moodledev_io_5_2_apis` for the API guides; `/moodle/moodle` for core's
+`UPGRADING.md` notes), then confirm the signature in upstream source on `MOODLE_502_STABLE`,
+since Context7 indexes `main` and misses some APIs. We run **open-source, self-hosted Moodle
+LMS**, so a documented feature may not be ours: Moodle Workplace, MoodleCloud and the paid
+app plans have features core does not, sometimes under the same name (Workplace "Programs"
+is not the free `tool_muprog`). If it isn't in core source or a free, verified plugin, we
+don't have it. Our plugins call Moodle's public APIs and
+never edit vendored code. See Principle XI of
+[the constitution](.specify/memory/constitution.md); issues #62–#65 are what skipping this
+step cost.
+
+**Every site setting, plugin pin and role lives in [`moodle/site/`](moodle/site/README.md)**, and is
+applied with `python scripts/site_config.py apply`. A setting clicked into the admin UI is not done;
+`drift` reports it. Settings `config.php` sets (`wwwroot`, `debug`) are provisioning's, not this folder's.
+
+**Shared courses have no organisation groups**: managers are scoped by their managers cohort through
+`local_ltuse\organisation\access`, never by groups, so never send `groupmode: 1` (spec 002 R3, R10).
+
+`MOODLE_URL` and `MOODLE_TOKEN` come from the environment. **The repo is public — never
+write a token into a file here.** The plugin the publisher depends on is
+[`moodle/local_ltuse/`](moodle/local_ltuse/README.md); Moodle has no core web service that
+writes a quiz, which is why it exists.
+
+The site team's admin tool, `scripts/ltct_admin.py` (`/manage-learners`), brings learners on,
+enrols, suspends, moves and assigns mentors through its own `ltuse_admin` service, with each
+operator's own `MOODLE_ADMIN_TOKEN`, never `MOODLE_TOKEN`; it refuses any file inside a git
+tree, so learner files stay outside every repo and worktree.
+
+A course reports stage 8 once its `README.md` frontmatter carries `external_links: moodle:`
+(or, for the legacy Cypher-delivered courses, `cypher:`). `course_stage.py` is still the only
+implementation of that, and reports the Moodle URL verbatim from frontmatter rather than
+constructing it — the host changes when the server moves.
+
 ## Maintainer scripts (`scripts/`)
 
 - `gen_coverage.py` — regenerates `COVERAGE.md` (also run by CI).
@@ -298,10 +383,39 @@ work across stages 5, 6 and 7, including across the stage-6 merge.
 - `build_review_sites.py` — builds every in-flight course into the deploy tree (CI).
 - `gen_course_site.py` — `mkdocs-gen-files` hook for `mkdocs-review.yml`; renders one course.
 - `check_learner_view.py` — CI gate: proves the learner view leaks no answer key.
+- `disclosure.py` — the answer-key marker, the strip and the excluded-file rules, defined
+  once and imported by everything that acts on them. Not run directly.
+- `quiz_parse.py` — parses a quiz markdown file into structured questions;
+  `--check-all` is a CI gate over every quiz in `modules/`.
+- `moodle_payload.py` — renders one course into a publish payload (the platform boundary).
+- `check_moodle_payload.py` — proves that payload leaks nothing, before it is pushed.
+- `image_reduce.py` — makes the lighter copy of each committed image that goes into a
+  payload (fit to a width, palette PNG; `.full`/`.small` suffixes override). Never writes
+  to the repo. Not run directly.
+- `cbc_wording.py` — the CBC wording rules, defined once: report labels name a level only
+  as an aim, and badge and certificate text never says "certified" or a CBC level held.
+  Imported by `site_config.py validate` and `check_moodle_payload.py`. Not run directly.
+- `moodle_xml.py` — serialises parsed questions to Moodle XML.
+- `moodle_client.py` — thin Moodle REST client; `--whoami` checks a server and token.
+- `publish_moodle.py` — build → verify → push. `--dry-run` sends nothing.
+- `site_config.py` — `validate` · `drift` · `apply` the Moodle site declaration in `moodle/site/`
+  (settings, plugin pins, roles). `drift` is read-only; `apply` changes only what differs.
+- `ltct_admin.py` — the site team's Moodle admin tool (spec 008): intake, cohort enrolment,
+  suspension, moves, managers, mentors, summaries. Every change previews first and applies
+  only with `--apply --confirm <code>`; people are masked unless `--show-people`.
+- `admin_files.py` — `ltct_admin.py`'s offline half: file validation, the path guard that
+  refuses any git tree, masking and the confirmation code. Not run directly.
+- `spec_status.py` — spec-kit progress (spec, plan, tasks done) for every spec across every
+  local branch and worktree; `--best` keeps each spec's most advanced state. Read-only.
 - `gen_site.py` — `mkdocs-gen-files` build hook; generates the site pages + nav from
   `competencies.yaml` and `competencies/*.md`. Not run by hand; invoked by `mkdocs`.
 - `check_competency_descriptors.py` — validates descriptors stay in sync with the
-  framework (run by CI). Requires `pyyaml`.
+  framework, and validates `resources.yaml` (run by CI). Requires `pyyaml`.
+- `library.py` — the resource library's rules (load, validate, render), defined once and
+  imported by the check and `gen_site.py`. Not run directly.
+- `check_resource_links.py` — reports broken links in `resources.yaml`; a weekly workflow
+  keeps one **Broken resource links** issue open while any are broken. Bot-screen answers
+  (401/403/418/429) count as alive.
 - `export_from_notion.py` — idempotent export from the old Notion DB; won't overwrite
   content authored here.
 - `bootstrap_github.py` — creates labels, issues, and Project fields from the export.

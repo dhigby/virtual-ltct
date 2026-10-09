@@ -1,0 +1,84 @@
+{
+  "workflow": "companion",
+  "specName": "Production Hosting and Operations",
+  "branch": "specs/moodle-requirements",
+  "currentStep": "plan",
+  "status": "planned",
+  "history": [
+    {
+      "step": "specify",
+      "substep": null,
+      "kind": "start",
+      "by": "extension",
+      "at": "2026-09-30T20:47:16.184Z"
+    },
+    {
+      "step": "plan",
+      "substep": null,
+      "kind": "start",
+      "by": "extension",
+      "at": "2026-10-01T13:43:01.234Z"
+    },
+    {
+      "step": "plan",
+      "substep": "research",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-01T13:48:58.033Z"
+    },
+    {
+      "step": "plan",
+      "substep": "design",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-01T13:51:48.629Z"
+    },
+    {
+      "step": "plan",
+      "substep": null,
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-01T13:52:03.726Z"
+    }
+  ],
+  "telemetryInstanceId": "aa25d703-263d-4cfe-88d3-e52a62a45921",
+  "decisions": [
+    {
+      "decision": "Doug operates production; a named backup operator who passes a restore drill is a go-live gate",
+      "why": "maintainer decision 2026-10-01, resolves FR-012",
+      "rejected": "managed Moodle host (restricts plugins/CLI that local_ltuse and spec 001 need)"
+    },
+    {
+      "decision": "Hetzner Cloud 4 vCPU/8 GB VPS, Ubuntu 24.04, Moodle from git on MOODLE_502_STABLE, PHP 8.3 + PostgreSQL 16",
+      "why": "flat monthly price, hourly billing for drill servers; versions confirmed in our 5.2 environment.xml",
+      "rejected": "tarball install and Ansible"
+    },
+    {
+      "decision": "Nightly pg_dump + moodledata via restic to Backblaze B2, 30-day retention",
+      "why": "encrypted, off-provider, covers provider failure",
+      "rejected": "Hetzner Storage Box (same provider), Moodle course backups (cannot restore a site)"
+    },
+    {
+      "decision": "Restore drills on throwaway VPS with noemailever, verified on standing test accounts",
+      "why": "keeps real learner data off the shared host and never messages learners",
+      "rejected": "drilling onto ltuse.net"
+    },
+    {
+      "decision": "UptimeRobot external check plus Healthchecks.io dead-man pings from check.sh and backup.sh",
+      "why": "catches both outside outages and silent cron/backup failures on free tiers",
+      "rejected": "self-hosted Uptime Kuma or Prometheus"
+    },
+    {
+      "decision": "ltuse.net becomes the upgrade test instance; security releases within 14 days after a test publish",
+      "why": "already exists and holds no real learner data",
+      "rejected": "a third staging server"
+    }
+  ],
+  "step_summaries": {
+    "plan": {
+      "summary": "Plan for dedicated production VPS with scripted provision/backup/restore/check under moodle/ops/, runbook, and flat-cost operations register",
+      "key_finding": "tool_task cronrunning check and admin/cli/checks.php exist on our 5.2.3+ source, so cron monitoring needs no plugin"
+    }
+  },
+  "approach": "Idempotent shell scripts and systemd units under moodle/ops/ provision a Hetzner VPS, back up nightly to B2 with restic, and feed free-tier monitors. A runbook and operations register name Doug as operator and gate go-live on a named backup operator passing a restore drill."
+}

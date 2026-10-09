@@ -1,0 +1,19 @@
+# Row #7: completion is switched on for the site and for every course (spec 004, research R4
+# and R6). The publisher also sends enablecompletion 1 on every publish, for courses created
+# before this file; the site switch has to come from here, because the update web service's
+# guard for it never fires.
+
+rows: [7]
+purpose: >-
+  Completion is on for the site and for every course, and a learner sees what each lesson needs.
+settings:
+  - name: enablecompletion
+    value: 1
+    why: Without it no course can track completion, and the course web service would not refuse it (R4).
+  - name: moodlecourse/enablecompletion
+    value: 1
+    why: New courses start with completion on (FR-001).
+  - name: moodlecourse/showcompletionconditions
+    value: 1
+    why: The course page shows each lesson's Done / To do (US2, R6).
+  # block_myoverview grouping settings are declared in learner-experience.yaml (spec 007 R2).

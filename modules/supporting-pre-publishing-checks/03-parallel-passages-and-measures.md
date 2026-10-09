@@ -47,17 +47,52 @@ decide the rendering yourself.
 Paratext's Parallel Passages tool opens as its own window and displays passages that
 should say the same thing (e.g. synoptic Gospel accounts, repeated Old Testament
 passages) **side by side**, including the original-language text/gloss for reference.
-It does **not** algorithmically detect or flag "inconsistencies" the way a wordlist or
-Biblical Terms check does — there is nothing for it to compute. The team looks at each
+It shows where the passages match (see the shading below), but it does **not** judge
+or flag "inconsistencies" the way a wordlist or Biblical Terms check does. The team looks at each
 pair of parallel passages themselves and decides whether the translation is consistent
-and acceptable. That judgment call — meaning versus form — is the team's from the
-start, not something the tool hands you pre-flagged.
+and acceptable. That judgment call — whether the translation is more harmonized than the
+original texts, or less consistent than they are — is the team's from the start, not
+something the tool hands you pre-flagged.
+
+**The shading.** The tool shades matching text in every text it shows: the project's
+translation as well as the Greek and any resources. Wherever the same three or more
+words appear in both parallel passages, they're shaded green, and text that differs is
+left unshaded. In the Greek, yellow marks words a biblical scholar has marked by hand
+as equivalent — usually a word with a different gloss. That means you can compare the
+shading of the Greek with the shading of the translation without reading either one.
+Where the Greek is unshaded, the originals differ there, so the translation may differ
+too. Two patterns are worth pointing out:
+
+- **The Greek is shaded but the translation isn't:** the translation differs where the
+  originals agree.
+- **The translation is shaded but the Greek isn't:** the translation may be more
+  harmonized than the originals.
+
+Either is a pattern to point out to the team, not an error. Not every language can
+word things the same way, so even where the originals agree, some variation in the
+translation is acceptable. Whether the difference is right is the team's decision.
+
+![The Parallel Passages tool comparing MAT 3:4 with MRK 1:6. In the GRK row, Greek words that match across the two passages are shaded green and words marked as equivalent are shaded yellow, each with an English gloss underneath. Below it, the project (PTP) row and the RSV resource row shade the words that match across the two passages; the unshaded words differ.](assets/ss-03-pp-source-shading.png)
+*Compare the shading, not the words: Greek, translation and resource are shaded the same way.*
 
 What the tool *does* track is **review status**, per verse, in a **Status column**:
 
 - A **checkmark** means that verse pairing has been reviewed and approved.
 - A red **question mark (?)** means the verse has been edited since it was last
   approved and needs to be looked at again.
+
+You can filter the list down to exactly the rows that need attention using the dropdown
+above the table:
+
+![The Parallel Passages filter dropdown, with "Changed text" selected below "All references" and "Unapproved references."](assets/ss-03-pp-changed-text-menu.png)
+
+![The Parallel Passages tool with the Status column showing a green checkmark on one row and a red "?" on another, plus the "Show differences" button.](assets/ss-03-pp-changed-text.png)
+*Checkmark = reviewed and approved; red "?" = edited since approval, needs another look.*
+
+Clicking the "Show differences" icon on a flagged row opens a side-by-side comparison of
+the two verses so you can see exactly what changed:
+
+![A Compare Versions dialog for two parallel verses, with the changed word highlighted in green on one side and pink on the other.](assets/ss-03-pp-compare.png)
 
 Your first job is simply to **open the Parallel Passages tool and check the Status
 column for outstanding red "?" marks** on the relevant verses — not to assume review
@@ -69,10 +104,9 @@ not the team notices.
 Once you can see which verses still show a red "?", your job is to **surface those to
 the team**, not to decide whether the passages are consistent yourself. The common
 mistake here, per the SME field material, is **over-harmonising**: a team (or an
-overzealous checker) forces every parallel passage to match exactly, erasing legitimate
-variation. Passages need to be consistent in **meaning**, not necessarily identical in
-**form** — two Gospel accounts of the same event can use different wording and still be
-a faithful, consistent translation. That judgment belongs to the team (and, where
+overzealous checker) makes parallel passages match more closely than the original texts
+do. Different biblical authors may relate a story differently, and parallel passages
+should not be more harmonized than the original texts. That judgment belongs to the team (and, where
 content-level Scripture questions are involved, potentially a Translation Consultant) —
 your role is to make sure every verse pairing that shows a red "?" was actually looked
 at and given a genuine decision, not left unreviewed or silently over-corrected.
@@ -105,7 +139,8 @@ In practice you'll meet one of two situations:
   consolidated check ships. Numbers has fairly limited scope; treat it the same way as
   any other check area — confirm it was actually run, not assumed clean from an earlier
   pass — and be honest with the team that there's currently no working check that can
-  catch weights/measures inconsistencies on their version.
+  catch weights/measures inconsistencies on their version, so the measure renderings
+  are theirs to find and review.
 
 Either way, your role follows the same reframed pattern as parallel passages:
 
@@ -120,10 +155,17 @@ Either way, your role follows the same reframed pattern as parallel passages:
 - When a check surfaces a gap or a contradiction — a rendering that doesn't match the
   team's documented approach, or inconsistency between two occurrences of the same
   measure — **refer it back to the team to resolve**, rather than deciding what the
-  correct rendering should be yourself. If a team is stuck on the old Numbers-only
-  check, flag any weights/measures inconsistency you spot informally the same way — as
-  something for the team to resolve against their documented approach, not something you
-  can confirm with a reliable tool yet.
+  correct rendering should be yourself.
+- If the team has **no documented approach** for a kind of measurement, that comes
+  first: the team agrees and documents its approach before anyone resolves individual
+  inconsistencies, because an inconsistency can't be judged without a standard to check
+  it against.
+- If a team is stuck on the old Numbers-only check, **don't try to compare the measure
+  renderings yourself.** It is possible to do some of this by hand, but it isn't easy and
+  ambiguous terms will slip past you. Instead, be honest that there's no reliable tool for
+  weights and measures on their version yet, and **ask the team to find and review their
+  own renderings of weights and measures** against their documented approach. Anything
+  inconsistent they turn up stays with them to resolve.
 - Numbers (and, once available, the consolidated check) appear as **separate entries**
   in Paratext's Open Biblical Terms List dialog, alongside other unrelated lists (Major
   Biblical Terms, All Biblical Terms, NT Key Biblical Terms, Inclusive/Exclusive
@@ -141,33 +183,36 @@ run it against the documented approach, and route gaps back to the team.
 - In both check areas, your job is process and routing — confirm every relevant item has
   actually been reviewed, and hand judgment calls about wording back to the team.
 - The Parallel Passages tool shows passages side by side (with original-language text)
-  for the team to judge themselves — it doesn't flag inconsistencies for you. Check the
-  Status column instead: a checkmark means reviewed and approved, a red "?" means edited
+  for the team to judge themselves — it doesn't flag inconsistencies for you. Compare
+  the shading of the Greek with the shading of the translation, and check the
+  Status column: a checkmark means reviewed and approved, a red "?" means edited
   since approval and needing another look.
-- Parallel passages need consistency of meaning, not identical form — watch for
+- Parallel passages should not be more harmonized than the original texts — watch for
   over-harmonising as the specific failure mode here.
 - A new consolidated check (numbers, weights, and measures together) is expected to
   replace the old, separate Numbers check — but not every team will be on a Paratext
   version that has it right away. Confirm what a specific team's version actually offers
   before relying on it, run whichever check is available against the team's own
-  documented approach, and route any gap back to the team; there's no established field
+  documented approach, and route any gap back to the team. Where no reliable measures
+  check exists, ask the team to review their measure renderings rather than comparing
+  them yourself. There's no established field
   "gotcha" for this area yet, so stay alert rather than assuming a known pattern.
 
 ## Challenge
 
-**✏️ Try this:** Five short exercises — recall, two discriminations, and one narrow
-tool check. Write each answer, then verify it against the Content section above.
+**✏️ Try this:** Five short exercises, including one narrow tool check. Write each answer, then verify it against the Content section above.
 
-1. **State what "consistent" means** for parallel passages in one sentence, and name
-   the specific failure mode that comes from getting it wrong. Then say which of the
-   two — consistency of meaning, or identity of form — you are actually able to judge
-   yourself, and why the other one isn't yours.
-2. **Write the general test** that tells a legitimate "these should differ" decision
-   apart from an unreviewed dismissal: what has to be true before a flagged difference
-   counts as *decided*? State it as a test you could apply to any flagged difference in
-   any project, not as a verdict on one passage. Two or three lines.
-3. **Two situations that look alike.** (a) A check flags an inconsistency between two
-   occurrences of the same measurement. (b) There is no documented, agreed approach for
+1. **State the standard parallel passages are held to** in one sentence, and name the
+   specific failure mode that comes from missing it. Then say who judges the
+   translation against that standard, and why it isn't you — even though you can spot
+   the shading patterns yourself.
+2. **Write the general test** for a legitimate "these should differ" decision: what in
+   the tool shows whether two parallel passages *may* differ, and what has to be true
+   before a difference counts as *decided*? State it as a test you could apply in any
+   project, not as a verdict on one passage. Two or three lines.
+3. **Two situations that look alike.** (a) A check, or the team's own review of their
+   renderings, turns up an inconsistency between two occurrences of the same
+   measurement. (b) There is no documented, agreed approach for
    that kind of measurement at all. Write one line per situation naming your next
    action, then one line on which one you have to settle first when both are true at
    once, and why.

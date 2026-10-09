@@ -1,0 +1,80 @@
+# Row #13: what a learner lands on (spec 007, research R1, R2, R9 and R11). The Dashboard's
+# blocks are in dashboard.yaml; who may edit it is in roles.yaml.
+
+rows: [13, 24]
+purpose: >-
+  What a learner lands on and the colour the site wears: the Dashboard, one way into a course,
+  a short course list, and who to ask.
+settings:
+  # Row #24 (spec 014, research R7): the resource library lives on the public competency
+  # site, not on this server, so its address is fixed rather than built from MOODLE_URL.
+  - name: custommenuitems
+    value: Library|https://competencies.languagetechnology.org/library/
+    why: >-
+      One tap from any page to the resource library (SC-003). Core reads it into Boost's
+      primary navigation on desktop and phone (spec 014 R7).
+  - name: tool_mobile/custommenuitems
+    value: Library|https://competencies.languagetechnology.org/library/|inappbrowser
+    why: >-
+      The same link in the Moodle app's main menu, opened in the in-app browser because the
+      library is a web page, not Moodle content (R7). Free in core; one item fits any app
+      plan.
+  - name: defaulthomepage
+    value: 1
+    why: >-
+      HOMEPAGE_MY, the Dashboard (R1). It is the only page that carries Continue beside the
+      course list, and it is the app's Home tab.
+  - name: enabledashboard
+    value: 1
+    why: The Dashboard is the landing page, so it must stay on (R1).
+  - name: enablemycourses
+    value: 0
+    why: My courses would be a second list of the same courses (R1).
+  - name: enablemyhome
+    value: 0
+    why: >-
+      The site home adds a Home item to the primary navigation that a learner does not need;
+      the Dashboard is their home (R1).
+  # R2: every grouping is declared, so a hand change that adds another "All" view or a
+  # custom-field filter shows in drift. Future is empty here, and Starred and Removed from
+  # view are list management a learner on two courses does not need.
+  - name: block_myoverview/displaygroupingall
+    value: 1
+    why: All, the course list's default view (R2).
+  - name: block_myoverview/displaygroupinginprogress
+    value: 1
+    why: In progress, the courses a learner is working through (R2).
+  - name: block_myoverview/displaygroupingpast
+    value: 1
+    why: Past, the courses a learner has finished (R2).
+  - name: block_myoverview/displaygroupingfuture
+    value: 0
+    why: Published courses never start in the future, so Future is always empty (R2).
+  - name: block_myoverview/displaygroupingfavourites
+    value: 0
+    why: Starred is list management a learner on two courses does not need (R2).
+  - name: block_myoverview/displaygroupinghidden
+    value: 0
+    why: Removed from view is list management a learner on two courses does not need (R2).
+  - name: block_myoverview/displaygroupingallincludinghidden
+    value: 0
+    why: A second "All" view, including removed courses, would be a third list of the same courses (R2).
+  - name: block_myoverview/displaygroupingcustomfield
+    value: 0
+    why: No course custom field is a filter a learner needs (R2).
+  - name: theme_boost/brandcolor
+    value: "#005CB9"   # quoted: an unquoted # starts a YAML comment
+    why: >-
+      SIL Blue, from the SIL Brand Manual v1.1 (R11). Boost makes it $primary, so buttons,
+      links and the active navigation item take it. White on it is about 6.5:1, which passes
+      WCAG AA for normal text.
+  - name: supportavailability
+    value: 1
+    why: >-
+      CONTACT_SUPPORT_AUTHENTICATED (R9): the Contact site support form the empty state links
+      to opens for logged-in users only, so it is never an anonymous spam route.
+  - name: supportemail
+    value: env:MOODLE_SUPPORT_EMAIL
+    why: >-
+      Where Contact site support sends (R9). A provisioning value each server is given, never
+      a person's address in this public repo (constitution III).

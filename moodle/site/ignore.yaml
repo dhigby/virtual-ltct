@@ -1,0 +1,29 @@
+# Undeclared settings that drift expects to differ from Moodle's default.
+#
+# Each one is a value an install, a registration or the site itself produces, so it differs
+# from one server to the next and declaring it would be wrong. Anything else that drift
+# reports as unmanaged is a hand change: declare it in settings/, or revert it.
+#
+# Seeded from the first drift run on the build host, 2026-10-01 (research R5).
+
+ignore:
+  - setting: calendar_exportsalt
+    reason: A random salt Moodle generates at install for calendar export URLs. Unique per site, and secret.
+  - setting: airnotifieraccesskey
+    reason: The Moodle app push key, issued per site when it registers with the app service. Secret, and tied to the site's URL. A new server needs it requested once (Site administration > Messaging > Mobile > Request access key) before push works; that is provisioning (spec 015).
+  - setting: badges_badgesalt
+    reason: A per-site salt Moodle derives from the site's creation time; every issued badge's recipient hash uses it. Changing it would break verification of every badge already issued (spec 013 R9), so it is never declared.
+  - setting: enrol_flatfile/map_9
+    reason: A role-mapping field keyed by role id (9 is ltcpublisher here). Role ids differ per site, and flat-file enrolment is not used.
+  - setting: enrol_flatfile/map_10
+    reason: The same role-mapping field for role id 10, which is orgmanager here (spec 002). Role ids differ per site, and flat-file enrolment is not used.
+  - setting: enrol_flatfile/map_11
+    reason: The same role-mapping field for role id 11, which is mentor here (spec 003). Role ids differ per site, and flat-file enrolment is not used.
+  - setting: enrol_flatfile/map_12
+    reason: The same role-mapping field for role id 12, which is ltctadmin here (spec 008). Role ids differ per site, and flat-file enrolment is not used.
+  - setting: folder/maxsizetodownload
+    reason: Stored as 0 where the default is empty. Both mean no limit.
+  - setting: mlbackend_python/port
+    reason: Stored as 0 where the default is empty. The Python ML backend is not used.
+  - setting: activitychooseractivefooter
+    reason: Shows the plugins-directory link in the activity chooser, an admin convenience set by hand on the build host. It does not affect learners or course authors' content.

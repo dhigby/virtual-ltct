@@ -50,6 +50,14 @@ that should be ordinary body text. That single missing marker can plausibly prod
 whole cluster of downstream-looking symptoms: an oversized or wrong-looking heading,
 verse numbers that appear to have vanished from the normal flow, and references that
 miscount because the checker is reading swallowed verse content as part of the heading.
+In Run Basic Checks it has a recognisable signature: **two errors for every swallowed
+verse** — "Verse number in heading" and "Marker cannot occur here: \v".
+
+![A section heading followed by a \p marker before verse 19, and another before verse 21, so verses 19-22 render as normal body text below the heading.](assets/ss-04-p-marker-in-place.png)
+
+![The same passage with the \p marker missing: verses 19 and 20 have been swallowed into the \s1 heading style, rendered in bold as if they were part of the heading title.](assets/ss-04-p-marker-missing.png)
+*One missing paragraph marker, and the verse numbers disappear into the heading.*
+
 If you start by fixing the errors at the bottom of a long list, you may be fixing
 symptoms of a single cause higher up. Work in this order instead:
 
@@ -58,6 +66,10 @@ symptoms of a single cause higher up. Work in this order instead:
    back clean before anything else, because every other check on this list reports its
    results by quoting a chapter and verse location, and those locations can't be trusted
    if the chapter/verse numbering itself has errors (such as a duplicate verse).
+
+![The Run Basic Checks dialog with Chapter/verse numbers checked, and the book-selection and OK controls numbered 1 through 4.](assets/ss-04-basic-checks-chapter-verse.png)
+*Confirm this one first — everything else on this list depends on it.*
+
 2. **Marker-pair census.** Paratext markers come in two kinds: **paragraph markers**
    (`\p`, `\s`, `\q`, etc.) that apply to a whole paragraph and stand alone, and
    **paired markers** (`\f...\f*`, `\x...\x*`, character styles, etc.) that wrap a span
@@ -65,6 +77,10 @@ symptoms of a single cause higher up. Work in this order instead:
    Checking Inventories > Markers Inventory) to confirm every paired marker actually
    closes. An unclosed pair is often the single cause behind a cluster of
    downstream-looking errors.
+
+![The Markers Inventory dialog listing markers, their counts, and style names (Chapter Number, Footnote, End Marker, and others).](assets/ss-04-markers-inventory.png)
+*This is where you check that every paired marker actually closes.*
+
 3. **Ghost markers.** Look for markers left behind with no content attached — often the
    debris of a deleted footnote or cross-reference where the marker itself wasn't
    removed. These can silently corrupt export and typesetting even when nothing visibly
@@ -75,20 +91,46 @@ symptoms of a single cause higher up. Work in this order instead:
    problem.
 5. **Section headings.** The marker itself is rarely the problem — most projects use
    `\s1` almost exclusively, with `\s2` only occasionally, so a wrong-level marker is
-   uncommon. The real issues to check for are missing headings, or headings that don't
-   match the text they introduce.
-6. **Book titles.** Inconsistent or incorrect book-name and book-title markup, especially
-   after a book has been renamed or reorganized mid-project.
+   uncommon. What you check is structure, not wording:
+   - Each heading is present, uses a heading marker, and hasn't swallowed verse text —
+     the missing-`\p` cascade above.
+   - Each heading falls where the headings in the LWC (Language of Wider Communication)
+     Bible fall, so a missing or misplaced heading shows up without your reading the
+     language. The LWC Bible is your main cross-check. A back translation only helps if
+     it was made manually, outside Paratext — one made in Paratext (e.g. as a
+     back-translation project based on the translation) carries the translation's own
+     headings, so comparing against it proves nothing.
+   - Whether a heading's wording fits its passage is the team's call — route that
+     question to them.
+6. **Book titles.** This is a consistency check. Each book's name appears in more than
+   one place in the project, and every place should name the book the same way. What
+   you look for is one book named differently in different places — in English, the
+   pattern would be "Mark" in one place and "The Gospel of Mark" in another. You can
+   spot that by comparing the forms side by side, without reading the language. It
+   often happens after a book has been renamed or reorganized mid-project.
+   - Point out each mismatch to the team.
+   - Which form is right is the team's call — many book names are names of people or
+     cities, so route the choice to them rather than picking one.
 7. **References** (`\r` shows parallel passages; `\xt` is the actual cross-reference
    marker) and the **table of contents.** Missed book-name checks, foreign-language `\r`
    abbreviations left unadjusted (a common source:
    bulk-copying `\r` lines from another NT project as a starting point, which carries over
    that project's abbreviations instead of the current project's own), and a table of
    contents that doesn't match the book titles actually in the text.
-8. **Footnotes.** Beyond the marker-pair check in step 2, confirm footnote content and
-   placement are sound — a footnote that survives the marker check can still be attached
-   to the wrong verse or duplicated. Note that an unclosed `\f` footnote marker (opened
-   without its matching `\f*`) has a much narrower effect than the missing-`\p` example
+8. **Footnotes.** Beyond the marker-pair check in step 2, footnote placement still
+   needs a review — a footnote that survives the marker check can still be attached to
+   the wrong verse or duplicated. That isn't always easy for you to spot, and deciding
+   which verse a footnote belongs to depends on reading the text, so this review is the
+   team's:
+   - Prompt the team to go through footnote placement book by book, looking at each
+     footnote in the text.
+   - **Look for `\fq` markers in the Markers Inventory** (step 2). A `\fq` marks text
+     quoted from the verse inside a footnote. If the project has any, the **Footnote
+     quotes** check in Run Basic Checks must be run: any editing of the verse can leave
+     the quote in its footnote out of date, and the check is how the team confirms it
+     still matches.
+
+   Note that an unclosed `\f` footnote marker (opened without its matching `\f*`) has a much narrower effect than the missing-`\p` example
    above: if it's unclosed at the end of a verse, it has no effect at all; if it's
    unclosed partway through a verse, the only consequence is that the footnote text
    displays as part of the verse itself — it has no other flow-on effect, and does not
@@ -98,9 +140,10 @@ Diagnosing structural-first doesn't mean the team fixes things in that exact ord
 by line — it means *you* look for the highest-leverage cause first, so you're not
 sending a team to manually correct fifty symptoms of one unclosed marker.
 
-There's a second way a Basic Checks result can look clean without being clean: unlike
-the wordlist's spelling status (Correct/Incorrect/Undecided only), Basic Checks results
-do carry a real accept/deny mechanism for flagged errors. A documented field case from
+A Basic Checks result can also look clean without being clean. In the
+wordlist, the shortcut is marking every word Correct (Lesson 2); in Basic Checks, it is
+**denying** flagged errors — a real Paratext action, meant for errors that genuinely
+aren't errors. A documented field case from
 the SME interview behind this course found a team that had **denied errors they didn't
 understand**, rather than resolving them — simply clearing the check's flags instead of
 dealing with what was underneath. When a denied error is shown, it appears in the list
@@ -109,6 +152,14 @@ whether it shows up at all depends on a **View menu** option, **Denied messages*
 that option off, denied errors disappear from the list completely, so a check that looks
 short and clean may simply have its denied items switched out of view. Turn on
 **View > Denied messages** to see the full picture before trusting a zero-error result.
+
+![The View menu open with "Denied messages" highlighted.](assets/ss-04-view-denied.png)
+
+![A denied error at MAT 2:5 shown with strikethrough text: "Text of marker/style does not begin with a capital: w".](assets/ss-04-denied-error-strikethrough.png)
+*Denied errors are struck through — but only if this view option is on.*
+
+![A Basic Checks results list for Matthew with the top item reading "Denied message(s) not shown."](assets/ss-04-denied-error-not-shown.png)
+*With the view option off, the list simply tells you denied messages exist without showing them.*
 
 > **WARNING — watch for a false-clean result here too:** A Basic Checks run showing zero
 > formatting errors can mean the project is genuinely clean — or it can mean the checks
@@ -141,8 +192,7 @@ expensive to fix once a project reaches a typesetter.
 Alongside it, under the same **Tools > Checking Inventories** menu, sits a distinct,
 complementary tool: **Unmatched Pairs of Punctuation.** It's its own standalone inventory
 window, listing single unmatched bracket/parenthesis-type characters — an unmatched "}",
-"[", or "(" — each with a count and a per-row **Status** column, using its own
-Status column: checkmark = approved, red X = incorrect, blue "?" = needs review. Where the
+"[", or "(" — each with a count and a per-row **Status** column: checkmark = approved, red X = incorrect, blue "?" = needs review. Where the
 Punctuation Inventory's "Show sequences" option (below) catches multi-character
 punctuation *sequences* — combinations like multiple quotation marks paired with spacing
 or another character such as ")" — Unmatched Pairs of Punctuation instead goes straight
@@ -169,7 +219,10 @@ Four things to do with these inventories:
   it reaches a typesetter — unrecognized or unconfigured punctuation characters left
   unresolved in the inventory's settings can surface late, as a pile of issues the
   typesetter has to chase down one by one instead of the team resolving them upfront.
-- **Select "Show sequences" in the Punctuation Inventory's Inventory menu**, so that
+  Whether a flagged character is valid is an orthography question. If you have the
+  orthography statement written by the project's linguist, you can check the character
+  against it; if not, the team decides.
+- **Select "Show sequences" in the Punctuation Inventory tab's Inventory menu**, so that
   punctuation *sequences* — multi-character combinations, such as multiple quotation
   marks paired with spacing or another punctuation character — are actually inventoried,
   not just the individual characters. The checkbox under Run Basic Checks is simply how
@@ -178,18 +231,28 @@ Four things to do with these inventories:
   with it selected, the punctuation checkbox is relabelled **"Punctuation (sequences)"**
   and runs the sequence-level check; without it, the same checkbox stays labelled
   **"Punctuation"** and only checks individual characters, so the review can look
-  complete while a whole class of problems goes unseen. A flagged result under
-  "Punctuation (sequences)" reads something like `Invalid or unknown punctuation
-  combination: ?'"_` or `Invalid or unknown punctuation combination: !]_` (the
-  underscore stands for a space in Paratext's display), each tied to a specific
-  reference such as ROM 3:5 — combinations Paratext doesn't recognize as valid, often
-  quotation marks paired with other punctuation. This lesson covers punctuation
-  sequences only; quotation marks specifically are more complicated and are intentionally
-  out of scope here, deferred to a separate, future addition.
+  complete while a whole class of problems goes unseen.
+
+  ![The Punctuation Inventory tab's Inventory menu, with "Show sequences" checked and highlighted.](assets/ss-04-punctuation-inventory-show-sequences.png)
+  *This checkbox is what makes "Punctuation (sequences)" mean anything.*
+
+  A flagged result under "Punctuation (sequences)" looks like this — each combination
+  Paratext doesn't recognize as valid, tied to a specific reference, often quotation
+  marks paired with other punctuation:
+
+  ![A list of flagged punctuation-sequence results, e.g. "ROM 3:5 Invalid or unknown punctuation combination: ?_(" and "ROM 9:20 Invalid or unknown punctuation combination: ?'"_".](assets/ss-04-punctuation-sequences-result.png)
+  *This is what a flagged sequence actually looks like.*
+
+  This lesson covers punctuation sequences only; quotation marks specifically are more
+  complicated and are intentionally out of scope here, deferred to a separate, future
+  addition.
 - **Review Unmatched Pairs of Punctuation directly**, using its Status column to work
   through any single unmatched bracket/parenthesis-type character it lists. Don't treat
   "Show sequences" as covering this — it catches multi-character sequences, not the
   single unmatched pairs this separate inventory is built to surface.
+
+  ![The Unmatched Pairs of Punctuation inventory, listing single-character pairs like "(", "&#93;", ")" with counts and a Status column (blue "?", green check, red X).](assets/ss-04-unmatched-pairs-punctuation.png)
+  *A direct list of unmatched brackets and parentheses.*
 
 That third point comes from a real case. One consultant believed their Punctuation
 Inventory review had been thorough — yet the typesetter later came back with a long list
@@ -216,7 +279,7 @@ by a single unselected menu option rather than by anyone skipping a step.
   earlier in the project.
 - Loose or unconfigured settings in the Punctuation Inventory are what create a late
   time-sink for the typesetter — catching them here is cheaper for everyone.
-- "Show sequences" must be selected in the Punctuation Inventory's Inventory menu for
+- "Show sequences" must be selected in the Punctuation Inventory tab's Inventory menu for
   Run Basic Checks' punctuation checkbox to relabel itself "Punctuation (sequences)" and
   actually check multi-character sequences — without it, that same checkbox stays a
   plain "Punctuation" check, and the review can look complete while still missing them.
@@ -241,11 +304,11 @@ to find the gaps here, not halfway through a support session.
    state which of the two cascades into other markers elsewhere in the chapter and
    which does not — this is the distinction that keeps you from over-reading a small
    error.
-3. **A resolved error can disappear from the list two different ways.** Write one line
+3. **A denied error is not a resolved one.** Write one line
    on how a denied error actually displays when it's visible (what marks it as denied,
    not resolved), and one line on the View menu setting that controls whether it shows
-   up at all. Then say in one line why "deny" is a real, correct action in Basic Checks
-   but has no equivalent in the wordlist's spelling status.
+   up at all. Then say in one line what the wordlist's equivalent shortcut is — the move
+   that makes a spelling list look clean without anyone reviewing it.
 4. **Open Tools > Checking Inventories > Punctuation Inventory** in a project you
    already support, then open its **Inventory** menu and confirm whether **"Show
    sequences"** is selected. Write down what you found. Then, in one sentence, say how

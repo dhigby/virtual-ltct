@@ -7,6 +7,8 @@ inside the shape of the whole translation process — so you know why checks tha
 "already done" still need re-running, and what your job is (and isn't) when you're in
 the room.
 
+**Watch the video:** _To be recorded at stage 8._
+
 ## Learning objectives
 
 - You will be able to:

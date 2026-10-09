@@ -2,7 +2,7 @@
 name: Language Documentation
 category: Technology Domain
 slug: language-documentation
-source label: Language Documentation
+source_label: Language Documentation
 in_framework: true
 target_statement: Can teach tools to document both living and endangered languages. Can identify quality audio and video recordings, teach best practices, and edit or clean up these files.
 outcome_levels:
@@ -11,15 +11,6 @@ outcome_levels:
   - "2 - With Assistance"
   - "3 - Independent"
   - "4 - Expert"
-resources:
-  - title: Language Documentation & Conservation
-    url: http://nflrc.hawaii.edu/ldc/
-  - title: SIL Language Documentation
-    url: https://www.sil.org/language-culture-documentation/language-documentation
-  - title: Wikipedia Language Documentation
-    url: https://en.wikipedia.org/wiki/Language_documentation
-  - title: SayMore
-    url: https://software.sil.org/saymore/
 source: Lang Tech Competencies.xlsx
 last_updated: 2026-09-02
 ---
@@ -30,11 +21,11 @@ last_updated: 2026-09-02
 
 ## Description
 
-Knowledge of the tools to document both living and endangered languages. 
+Knowledge of the tools to document both living and endangered languages.
 
 ## Why it matters
 
-Language Documentation is a wide field focused on collecting a corpus of linguistic material in many media. A Language Technologist choosing this competency will need to facilitate appropriate quality of recording, as well as guiding users through the tools used in the transcription process.
+Language Documentation is a wide field focused on collecting a corpus of linguistic material in many media. A Language Technologist choosing this competency will need to facilitate appropriate quality of recording, as well as guide users through the tools used in the transcription process.
 
 ## Target competency
 

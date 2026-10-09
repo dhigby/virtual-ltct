@@ -1,0 +1,97 @@
+# Rows #8 and #18: the custom profile fields every learner carries across courses and years.
+# Spec 002 (specs/002-org-structure-cohorts/contracts/declaration.md, research R5).
+
+rows: [8, 18]
+purpose: >-
+  The custom profile fields, in one category, "About your work". The organisation field fills
+  each organisation's cohort (#8), and with country, role and expertise it makes up a learner's
+  persistent profile (#18). This file declares only the fields and the values they allow. What
+  any learner has entered lives only in Moodle, never here. Country is Moodle's own field, so
+  it is not declared here; settings/groups.yaml keeps it visible. No field has a default, and
+  none is required, so a learner who leaves a field empty shows nothing in it.
+category:
+  name: About your work
+fields:
+  - shortname: ltct_org
+    datatype: menu
+    name: Organisation
+    visible: all
+    locked: 1
+    required: 0
+    options_from: organisations
+    why: >-
+      The partner organisation a learner belongs to, which puts them in its cohort (#8,
+      FR-008). The stored value is the organisation key, so renaming an organisation changes
+      no learner's data. It is locked, so only the site team can set it, never the learner or
+      an organisation manager (FR-009, US3-3).
+
+  - shortname: ltct_role
+    datatype: menu
+    name: Role in the work
+    visible: teachers
+    locked: 0
+    required: 0
+    options:
+      - LT Consultant
+      - Mentor
+      - Translator
+    why: >-
+      What the learner does in the work (#18, FR-008). Shown only to the learner and the site
+      team: organisation managers lack moodle/user:viewalldetails, so they do not see it
+      (US4-2, R5). The options are the maintainer's list from 2026-10-01; a new one is a
+      reviewed change here.
+
+  - shortname: ltct_exp_core_technical
+    datatype: checkbox
+    name: Core Technical
+    visible: all
+    locked: 0
+    required: 0
+    area: Core Technical
+    why: >-
+      Expertise in the framework's Core Technical competencies (#18, FR-008). Core has no
+      multi-select field, so each competencies.yaml category is one checkbox (R5).
+
+  - shortname: ltct_exp_technology_domain
+    datatype: checkbox
+    name: Technology Domain
+    visible: all
+    locked: 0
+    required: 0
+    area: Technology Domain
+    why: >-
+      Expertise in the framework's Technology Domain competencies (#18, FR-008). One checkbox
+      per competencies.yaml category (R5).
+
+  - shortname: ltct_exp_core
+    datatype: checkbox
+    name: Core
+    visible: all
+    locked: 0
+    required: 0
+    area: Core
+    why: >-
+      Expertise in the framework's Core competencies (#18, FR-008). One checkbox per
+      competencies.yaml category (R5).
+
+  - shortname: ltct_exp_professional
+    datatype: checkbox
+    name: Professional
+    visible: all
+    locked: 0
+    required: 0
+    area: Professional
+    why: >-
+      Expertise in the framework's Professional competencies (#18, FR-008). One checkbox per
+      competencies.yaml category (R5).
+
+  - shortname: ltct_exp_education
+    datatype: checkbox
+    name: Education
+    visible: all
+    locked: 0
+    required: 0
+    area: Education
+    why: >-
+      Expertise in the framework's Education competencies (#18, FR-008). One checkbox per
+      competencies.yaml category (R5). Meta holds only Uncategorized, so it has no checkbox.

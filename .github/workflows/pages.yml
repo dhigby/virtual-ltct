@@ -17,6 +17,8 @@ on:
     paths:
       - 'competencies/**'
       - 'competencies.yaml'
+      - 'resources.yaml'        # the library page and Further Information (spec 014)
+      - 'scripts/library.py'
       - 'outcome-levels.yaml'   # gen_site.py builds the level scale from this
       - 'COVERAGE.md'
       - 'modules/**'

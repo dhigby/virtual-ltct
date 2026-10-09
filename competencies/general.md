@@ -4,37 +4,12 @@ category: Education
 slug: general
 source_label: Domain-specific education
 in_framework: true
-target_statement: "Has pursue domain specific knowledge via formal education or equivalent in one of the following: translation, linguistics, literacy / education or scripture engagment."
+target_statement: "Has pursued domain specific knowledge via formal education or equivalent in one of the following: translation, linguistics, literacy / education or scripture engagement."
 outcome_levels:
   - "0 - No Competency"
   - "1 - Has Knowledge"
   - "2 - With Assistance"
   - "3 - Independent"
-resources:
-  - title: SIL Translation
-    url:  https://www.sil.org/training/translation
-  - title: SIL Training in Translation
-    url:  https://www.sil.org/translation/training-translation
-  - title: SIL Literacy and Education
-    url:  https://www.sil.org/training/literacy-and-education
-  - title: SIL Training in Literacy and Education
-    url:  https://www.sil.org/literacy-education/training-literacy-and-education-work
-  - title: SIL Training in Scripture Engagement
-    url:  https://www.sil.org/training/scripture-use-and-impact
-  - title: Scripture Engagement
-    url:  https://www.sil.org/translation/scripture-use-and-impact
-  - title: SIL Training
-    url:  https://www.sil.org/training
-  - title: Dallas International University
-    url:  https://www.diu.edu/
-  - title: Canada Institute of LInguistics
-    url:  https://www.canil.ca/
-  - title: Training Programs for Language Development
-    url:  https://www.sil.org/training
-  - title: SIL Training in Linguistics
-    url:  https://www.sil.org/training
-  - title: SIL Linguistics
-    url:  https://www.sil.org/linguistics
 source: Lang Tech Competencies.xlsx
 last_updated: 2026-09-02
 ---
@@ -47,15 +22,15 @@ last_updated: 2026-09-02
 
 ## Description
 
-Domain-specific knowledge in one of the following: translation, linguistics, literacy/education or scripture engagement
+Domain-specific knowledge in one of the following: translation, linguistics, literacy/education or scripture engagement.
 
 ## Why it matters
 
-Have a good understanding of one of the language domains used for Bible translation and language development work.
+A Language Technologist needs a good understanding of at least one of the language domains used in Bible translation and language development work.
 
 ## Target competency
 
-> Has pursue domain specific knowledge via formal education or equivalent in one of the following: translation, linguistics, literacy / education or scripture engagment.
+> Has pursued domain specific knowledge via formal education or equivalent in one of the following: translation, linguistics, literacy / education or scripture engagement.
 
 ## Progression by component
 

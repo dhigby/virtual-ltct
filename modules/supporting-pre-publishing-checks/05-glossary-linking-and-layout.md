@@ -15,9 +15,9 @@ last checks before a team's files go to the typesetter.
 - You will be able to:
   - Advise a team on a single- versus two-column layout decision based on reader and
     community expectation — not just word length.
-  - Use the Wordlist's Show hyphenation view to approve correct guesses and correct
-    wrong ones — individually and in batches — so long words break correctly in a
-    two-column layout.
+  - Use the Wordlist's Show hyphenation view to draft, enter and approve hyphenation
+    breaks — individually and in batches — with each break confirmed by the team, so
+    long words break correctly in a two-column layout.
 - You will be able to:
   - Lead a team through the final PTXprint draft-PDF read-through.
   - Resolve or triage what it surfaces, deferring true typesetting composition to the
@@ -63,7 +63,20 @@ results list you can re-run any time, unlike the transient link report. Glossary
 are marked directly in the text with `\w` and `\w*` around the linked span, in the form
 `\w <surface text>|<rendering>\w*` — for example `\w angel messenja guy\w*`, or, where
 the surface form in the text differs from the glossary entry's canonical rendering,
-`\w angel guy|Angel messenja guy\w*`. Look at each Find result: if `\w...\w*` markup
+`\w angel guy|Angel messenja guy\w*`.
+
+![A Paratext Find search result for "talk fo God," showing one occurrence as plain bold text (MAT 1:22) and another wrapped in \w talk fo God|guy who talk fo God\w* markup (MAT 2:5).](assets/ss-05-find-with-markup.png)
+*This is the markup a correctly-scoped link leaves behind.*
+
+You don't have to run Find to spot this markup — it's visible directly in the text
+editor too. The rendering half of a `\w...\w*` marker displays in **light grey**, right
+in the running text, which makes linked terms easy to scan for by eye as you read through
+a passage:
+
+![A passage of running text in the Paratext editor, with two \w...\w* markers visible: "angel guy|Angel messenja guy" and "talk fo God|guy who talk fo God," the rendering half shown in light grey.](assets/ss-05-glossary-links-shown-in-grey.png)
+*The grey text is the marker's rendering half — visible right in the text, not just in Find results.*
+
+Look at each Find result: if `\w...\w*` markup
 wraps **every single occurrence** of the term, that's over-linking; if it wraps only the
 **first occurrence per section**, the scope is correct. To fix over-linking: **unlink**
 the over-applied marks and **relink at "first occurrence in every section,"** not "all
@@ -92,6 +105,13 @@ phrase terms **before** their component single words, precisely so the single wo
 gets wrongly linked inside phrase territory. So when a hit falls inside an existing
 marker, read the rendering, not just the presence of markup: a broader phrase term there
 is expected and correct, not something to flag.
+
+> **TIP — checking every linked term at once, not one at a time:** Searching one
+> glossary term at a time doesn't scale if you want a full audit rather than checking a
+> single reported problem term. Paratext's Find supports regular expressions: prefix
+> your search with `regex:` (no space after the colon), then search for
+> `\w[^\]*\w\*` — confirmed working, returning every `\w...\w*` occurrence in one pass
+> (22 results in Matthew alone on a test search) rather than one term at a time.
 
 This is the same trap as the Project Plan checkbox from Lesson 1: the Project Plan's
 "Check and link glossary entries" task (Stage 6, Final Preparation for Publication) has
@@ -131,18 +151,48 @@ Digital and Print Publishing competency:
    - A **grey tick** means Paratext *guessed* the breaks — not yet reviewed.
    - A **green tick** means the breaks are **approved**.
 
-   Your job is to work through the guesses:
-   - **Correct guess** — click the grey tick; it turns green. Approved.
-   - **Wrong guess** — click the word and add or remove `=` marks where the breaks
-     should actually fall; the tick turns green automatically once you edit it.
-   - **Batch-approve a run of correct words** — select the first word, then
-     shift-click to extend a consecutive selection (or Ctrl-click to pick several
-     non-consecutive ones), then use the Wordlist's tab menu > **Edit > Approve word
-     hyphenation** to approve them all at once. As you approve more words, Paratext's
-     guesses get better, so late in the review not every remaining word needs
-     individual attention.
+   ![The Wordlist's Show hyphenation view, with a Hyphenation column showing grey ticks (unreviewed) and green ticks (approved) alongside each word.](assets/ss-05-wordlist-hyphenation.png)
+   *Grey = Paratext's guess; green = a human confirmed it.*
 
-   Your approvals save to **`hyphenatedWords.txt`** in the project folder when you close
+   Where a word may break is a fact about the language, and you don't speak it — so
+   neither Paratext's guess nor your own impression of a word settles whether a break is
+   right. **The decision about each break sits with the team.** Your part is the drafting
+   and all the tool work around that decision:
+
+   1. **Ask the team for their orthography statement.** If they can provide one, draft
+      breaks from the syllable structure it describes — adding or removing `=` marks on
+      Paratext's guesses where the statement's syllable rules point.
+      - If there is no orthography statement — common on a first translation into a
+        language — don't draft from guesswork. The team proposes the breaks, and you
+        enter them in the Wordlist.
+   2. **Have the team review and confirm each break.** Go through the drafted and
+      guessed breaks with a team member who speaks the language; they say whether each
+      one is right.
+      - Where they say a break is wrong, click the word and add or remove `=` marks
+        where they say the breaks fall; the tick turns green automatically once you
+        edit it.
+   3. **Approve a single confirmed word** — click its grey tick.
+      - The tick turns green. Approved.
+   4. **Batch-approve a run of confirmed words** — select the first word, then
+      shift-click to extend a consecutive selection (or Ctrl-click to pick several
+      non-consecutive ones), then use the Wordlist's tab menu > **Edit > Approve word
+      hyphenation**.
+      - Every selected word is approved at once.
+   5. **Before the files go to print, confirm hyphenation is approved** — check that no
+      grey ticks remain on words the team hasn't reviewed.
+
+   > **WARNING — editing a word turns it green before anyone has confirmed it:** Because
+   > the tick goes green as soon as you edit a word, the breaks you drafted from the
+   > orthography statement show as approved before the team has seen them. Keep a note
+   > of which words you drafted, so the team's review covers those as well as the
+   > remaining grey ticks.
+
+   > **TIP:** As more words are approved, Paratext's guesses get better, so late in the
+   > review the team may be able to confirm a run of words at a glance rather than one
+   > at a time — which is where batch approval saves the most time. It is still their
+   > confirmation that each break is right; batch approval just records it faster.
+
+   The approvals save to **`hyphenatedWords.txt`** in the project folder when you close
    the Wordlist. Lines *without* a leading asterisk are still just Paratext's unapproved
    guesses; a leading `*` marks a line the team has approved.
 
@@ -163,10 +213,13 @@ Digital and Print Publishing competency:
    > **TIP:** For advanced or unusual cases, `hyphenatedWords.txt` itself can be
    > hand-edited to customize which characters represent hard/soft hyphens and
    > hyphenated markers (`HardHyphen`, `SoftHyphen`, `SoftHyphenOut`,
-   > `HyphenatedMarkers`). That's beyond what most teams need — the approve/correct
+   > `HyphenatedMarkers`). That's beyond what most teams need — the draft/confirm/approve
    > workflow above covers the normal case.
 
-   This is genuine hands-on tooling work, not just advice-giving.
+   Enabling the view, drafting and entering breaks, approving them individually and in
+   batches, and confirming everything is approved before print is genuine hands-on
+   tooling work, not just advice-giving. What you don't do is decide for yourself where
+   a word in a language you don't speak may break.
 
 ### The final PTXprint draft-PDF read-through
 
@@ -179,6 +232,18 @@ the team's last look before the typesetter. Work through it methodically, watchi
   their reference.
 - **Heading placement** — headings sitting awkwardly at a page or column break.
 - **Underfilled pages** — pages with noticeably more white space than their neighbors.
+
+![A two-page PTXprint spread where a section heading has been pushed to the top of the second column, leaving a large block of white space at the bottom of the first column.](assets/ss-05-awkward-heading-break.png)
+*A heading held together with its paragraph pushed the whole block to the next column — leaving this underfilled gap behind it.*
+
+The read-through also turns up composition issues beyond this list — picture sizing and
+spacing, and page-margin spacing, for example:
+
+![A PTXprint spread where the left-hand page's illustration is oversized relative to the page, and the right-hand page's illustration sits with almost no gap between its caption/credit text and the picture itself.](assets/ss-05-picture-size.png)
+*An oversized picture, and one crowded too close to its own credit text — both are typesetting-craft issues to flag, not fix yourself.*
+
+![A page where the running header sits almost flush against the first line of body text, with no visible top margin.](assets/ss-05-top-margin.png)
+*Not enough top-margin space between the running header and the body text below it.*
 
 This course's team workbook material was verified against **PTXprint 3.0.38**;
 PTXprint updates often, so specific menu labels may have moved by the time you're
@@ -198,10 +263,12 @@ properly the typesetter's craft.
   drive the fix yourself, but check via Find (the link report is transient) and inspect
   the `\w...\w*` markup on each result rather than trusting a hit count.
 - Layout decisions follow reader expectation, not word length alone; once the layout
-  is set, working the Wordlist's Show hyphenation view — approving correct guesses
-  (grey tick → green), fixing wrong ones with `=` marks, and batch-approving with
-  shift-click/Ctrl-click — is hands-on technical work you do yourself, and it should
-  be done before print, since PTXprint's draft PDF will use unapproved guesses too.
+  is set, working the Wordlist's Show hyphenation view — drafting breaks from the
+  team's orthography statement (or entering the breaks the team proposes when there
+  isn't one), approving confirmed words (grey tick → green), and batch-approving with
+  shift-click/Ctrl-click — is hands-on technical work you do yourself. Whether each
+  break is right is the team's call, and it should all be confirmed and approved before
+  print, since PTXprint's draft PDF will use unapproved guesses too.
 - The draft-PDF read-through is your last chance to catch spreads, orphans, footnote
   shifts, heading placement, and underfilled pages — triage what you find rather than
   trying to resolve everything yourself.
@@ -224,12 +291,16 @@ answer, then check it against the Content section above.
    tell you about a layout choice, and one line on what actually sets the baseline for
    it. Then draft the single question — one sentence — you'd ask a team to establish
    that baseline, aimed at what the community already reads and uses.
-4. **Say where the hands-on half of your role begins, and walk the approve/correct
+4. **Say where the hands-on half of your role begins, and walk the draft/confirm/approve
    loop.** At what point in the layout sequence does opening the Wordlist's Show
    hyphenation view become the right next step, and what has to be settled before it?
-   Then, for a word Paratext has guessed wrong, describe the two clicks that take it
-   from grey tick to green — and separately, describe how you'd approve ten
-   already-correct guesses in one action rather than one at a time.
+   Then write what you'd do first if the team can give you an orthography statement,
+   and what you'd do instead if they can't — and who decides, in both cases, whether a
+   break is right. For a word the team says Paratext has broken wrongly, describe the
+   steps that take it from grey tick to green; then describe how you'd approve ten
+   words the team has confirmed in one action rather than one at a time. Finish with
+   one line on why a word you drafted yourself still needs the team's review even
+   though its tick is already green.
 5. **List the five things to watch for** in the draft-PDF read-through, from memory.
    Then write the general test you'd use to decide whether something the read-through
    surfaces is yours to resolve or is typesetting craft belonging to the typesetter —

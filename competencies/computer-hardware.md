@@ -10,19 +10,6 @@ outcome_levels:
   - "1 - Has Knowledge"
   - "2 - With Assistance"
   - "3 - Independent"
-resources:
-  - title: iFixit (Repair manuals for many devices)
-    url: https://www.ifixit.com/
-  - title: Identifying Failing Components
-    url: https://www.howtogeek.com/174068/how-to-identify-which-hardware-component-is-failing-in-your-computer/
-  - title: Windows 10 Hardware Troubleshooting
-    url: https://www.techrepublic.com/article/how-to-more-effectively-troubleshoot-hardware-issues-in-windows-10-with-device-managers-views/
-  - title: CompTIA A+ Certification Video for more advance users
-    url: https://www.youtube.com/watch?v=2eLe7uz-7CM
-  - title: Computer Basic Parts
-    url: https://edu.gcfglobal.org/en/computerbasics/basic-parts-of-a-computer/1/
-  - title: Net Literacy
-    url: https://drive.google.com/file/d/1sVyGCUqFEVLMSbajZw8hnRr4anSkcn7A/view
 source: Lang Tech Competencies.xlsx
 last_updated: 2026-07-01
 ---
@@ -33,7 +20,7 @@ last_updated: 2026-07-01
 
 ## Description
 
-Familiarity with basic components of a computer
+Familiarity with basic components of a computer.
 
 ## Why it matters
 
@@ -54,5 +41,5 @@ _Each row is a level a learner is **at**; its activities are what they do to rea
 | **0 - No Competency** | Identify the various hardware components of a computer and understand their function. | 1 - Has Knowledge |
 | **1 - Has Knowledge** | Spend time with an IT professional while they troubleshoot computer hardware issues. | 2 - With Assistance |
 | **2 - With Assistance** | Troubleshoot hardware issues, and recommend appropriate hardware for language program use. | 3 - Independent |
-| **3 - Independent** | Research the latest hardware components | 4 - Expert |
+| **3 - Independent** | Research the latest hardware components. | 4 - Expert |
 

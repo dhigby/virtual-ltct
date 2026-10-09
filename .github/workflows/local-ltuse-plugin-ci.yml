@@ -1,0 +1,217 @@
+name: local_ltuse Plugin CI
+
+# Runs local_ltuse's own checks and PHPUnit suite on a throwaway Moodle 5.2, so they never
+# have to run on the shared host (specs/002-org-structure-cohorts/research.md R4; spec 004
+# T003). Matches production: PHP 8.3, PostgreSQL 16, MOODLE_502_STABLE (spec 015).
+#
+# Spec 007 adds a block_ltuse job beside it. Path filters are workflow-level, so both jobs
+# run on a change to either plugin; intended, because the block depends on local_ltuse.
+#
+# To test a branch that predates this file, run it by hand from the Actions tab and name
+# the branch in `ref`.
+
+on:
+  push:
+    paths:
+      - 'moodle/local_ltuse/**'
+      - 'moodle/block_ltuse/**'
+      - '.github/workflows/local-ltuse-plugin-ci.yml'
+  pull_request:
+    paths:
+      - 'moodle/local_ltuse/**'
+      - 'moodle/block_ltuse/**'
+      - '.github/workflows/local-ltuse-plugin-ci.yml'
+  workflow_dispatch:
+    inputs:
+      ref:
+        description: 'Branch, tag or SHA whose moodle/local_ltuse and moodle/block_ltuse to test'
+        required: false
+        default: ''
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-24.04
+
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_USER: 'postgres'
+          POSTGRES_HOST_AUTH_METHOD: 'trust'
+        ports:
+          - 5432:5432
+        options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 3
+
+    strategy:
+      fail-fast: false
+      matrix:
+        php: ['8.3']
+        moodle-branch: ['MOODLE_502_STABLE']
+        database: [pgsql]
+
+    steps:
+      - name: Check out repository code
+        uses: actions/checkout@v4
+        with:
+          path: repo
+          ref: ${{ inputs.ref || github.ref }}
+          persist-credentials: false
+
+      - name: Setup PHP ${{ matrix.php }}
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php }}
+          ini-values: max_input_vars=5000, opcache.enable_cli=1
+          coverage: none
+
+      - name: Initialise moodle-plugin-ci
+        run: |
+          composer create-project -n --no-dev --prefer-dist moodlehq/moodle-plugin-ci ci ^4
+          echo $(cd ci/bin; pwd) >> $GITHUB_PATH
+          echo $(cd ci/vendor/bin; pwd) >> $GITHUB_PATH
+          sudo locale-gen en_AU.UTF-8
+          echo "NVM_DIR=$HOME/.nvm" >> $GITHUB_ENV
+
+      - name: Install moodle-plugin-ci
+        run: moodle-plugin-ci install --plugin ./repo/moodle/local_ltuse --db-host=127.0.0.1
+        env:
+          DB: ${{ matrix.database }}
+          MOODLE_BRANCH: ${{ matrix.moodle-branch }}
+          # A Moodle app template uses Angular attributes (ngNonBindable, core-link) that the
+          # HTML validator rejects; moodle-plugin-ci skips app templates only under
+          # templates/mobileapp/.
+          MUSTACHE_IGNORE_NAMES: 'mobile_*.mustache'
+
+      - name: PHP Lint
+        if: ${{ !cancelled() }}
+        run: moodle-plugin-ci phplint
+
+      - name: Validating
+        if: ${{ !cancelled() }}
+        run: moodle-plugin-ci validate
+
+      - name: Check upgrade savepoints
+        if: ${{ !cancelled() }}
+        run: moodle-plugin-ci savepoints
+
+      - name: Mustache Lint
+        if: ${{ !cancelled() }}
+        run: moodle-plugin-ci mustache
+
+      - name: PHPUnit tests
+        if: ${{ !cancelled() }}
+        run: moodle-plugin-ci phpunit --fail-on-warning
+
+      # Style checks report but do not fail the run yet: the plugin predates them, and a
+      # style backlog should not hide a real test failure.
+      - name: Moodle Code Checker
+        continue-on-error: true
+        if: ${{ !cancelled() }}
+        run: moodle-plugin-ci phpcs
+
+      - name: Moodle PHPDoc Checker
+        continue-on-error: true
+        if: ${{ !cancelled() }}
+        run: moodle-plugin-ci phpdoc
+
+      - name: Mark cancelled jobs as failed.
+        if: ${{ cancelled() }}
+        run: exit 1
+
+  block_ltuse:
+    runs-on: ubuntu-24.04
+
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_USER: 'postgres'
+          POSTGRES_HOST_AUTH_METHOD: 'trust'
+        ports:
+          - 5432:5432
+        options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 3
+
+    strategy:
+      fail-fast: false
+      matrix:
+        php: ['8.3']
+        moodle-branch: ['MOODLE_502_STABLE']
+        database: [pgsql]
+
+    steps:
+      - name: Check out repository code
+        uses: actions/checkout@v4
+        with:
+          path: repo
+          ref: ${{ inputs.ref || github.ref }}
+          persist-credentials: false
+
+      - name: Setup PHP ${{ matrix.php }}
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php }}
+          ini-values: max_input_vars=5000, opcache.enable_cli=1
+          coverage: none
+
+      - name: Initialise moodle-plugin-ci
+        run: |
+          composer create-project -n --no-dev --prefer-dist moodlehq/moodle-plugin-ci ci ^4
+          echo $(cd ci/bin; pwd) >> $GITHUB_PATH
+          echo $(cd ci/vendor/bin; pwd) >> $GITHUB_PATH
+          sudo locale-gen en_AU.UTF-8
+          echo "NVM_DIR=$HOME/.nvm" >> $GITHUB_ENV
+
+      # --extra-plugins takes a directory of plugin directories (each depth-0 directory is one
+      # plugin), so local_ltuse, which the block depends on, is copied into one first.
+      - name: Stage local_ltuse as an extra plugin
+        run: |
+          mkdir extra
+          cp -r repo/moodle/local_ltuse extra/local_ltuse
+
+      - name: Install moodle-plugin-ci
+        run: moodle-plugin-ci install --plugin ./repo/moodle/block_ltuse --extra-plugins ./extra --db-host=127.0.0.1
+        env:
+          DB: ${{ matrix.database }}
+          MOODLE_BRANCH: ${{ matrix.moodle-branch }}
+          # A Moodle app template uses Angular attributes (ngNonBindable, core-link) that the
+          # HTML validator rejects; moodle-plugin-ci skips app templates only under
+          # templates/mobileapp/.
+          MUSTACHE_IGNORE_NAMES: 'mobile_*.mustache'
+
+      - name: PHP Lint
+        if: ${{ !cancelled() }}
+        run: moodle-plugin-ci phplint
+
+      - name: Validating
+        if: ${{ !cancelled() }}
+        run: moodle-plugin-ci validate
+
+      - name: Check upgrade savepoints
+        if: ${{ !cancelled() }}
+        run: moodle-plugin-ci savepoints
+
+      - name: Mustache Lint
+        if: ${{ !cancelled() }}
+        run: moodle-plugin-ci mustache
+
+      - name: PHPUnit tests
+        if: ${{ !cancelled() }}
+        run: moodle-plugin-ci phpunit --fail-on-warning
+
+      # Style checks report but do not fail the run yet, as in the local_ltuse job.
+      - name: Moodle Code Checker
+        continue-on-error: true
+        if: ${{ !cancelled() }}
+        run: moodle-plugin-ci phpcs
+
+      - name: Moodle PHPDoc Checker
+        continue-on-error: true
+        if: ${{ !cancelled() }}
+        run: moodle-plugin-ci phpdoc
+
+      - name: Mark cancelled jobs as failed.
+        if: ${{ cancelled() }}
+        run: exit 1

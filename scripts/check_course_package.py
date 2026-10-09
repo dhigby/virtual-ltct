@@ -15,6 +15,7 @@ Two severities:
     * a malformed `**Design status**` line in 00-design.md
     * a screenshot that is remote, misplaced, missing, unlinkable or undescribed
       (see check_images)
+    * an asset whose name carries an unrecognised delivery suffix (see check_asset_names)
 
   Retro-fit / backfilled courses (a `00-design.md` whose design status is a retro-fit note)
   are faithful imports of already-delivered content and are grandfathered out of the 4Cs
@@ -34,6 +35,10 @@ import sys
 import pathlib
 import urllib.parse
 
+sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent))
+from disclosure import ANY_KEY_MARKER_RE, CANONICAL_KEY_RE  # noqa: E402
+from image_reduce import treatment_for  # noqa: E402  (no Pillow needed for this)
+
 REPO = pathlib.Path(__file__).resolve().parent.parent
 MODULES = REPO / "modules"
 
@@ -42,18 +47,11 @@ DESIGN_STATUS_RE = re.compile(r"^\|\s*\*\*Design status\*\*\s*\|(.+)\|", re.MULT
 ANSWER_KEY_RE = re.compile(r"^\s*1\.\s*\S+(\s*\\?\|\s*\d+\.\s*\S+)+", re.MULTILINE)
 THRESHOLD_RE = re.compile(r"\b\d{1,3}\s*%|\bto pass\b", re.IGNORECASE)
 
-# The answer key's MARKER, not its content. Standardised so that tooling never has to
-# guess where a key begins: scripts/gen_course_site.py strips these blocks to build the
-# learner view a pilot learner is handed, and a marker it cannot recognise means the quiz
-# is withheld from that view entirely. The marker may repeat -- a backfilled course can
-# carry more than one quiz in a file -- and may be qualified, e.g.
-# "## Answer key (Section 1)".
-CANONICAL_KEY_RE = re.compile(r"^## Answer key\b.*$")
-# Anything that merely LOOKS like a key marker, so a non-conforming one is reported
-# rather than passing silently because a conforming one exists elsewhere in the file.
-ANY_KEY_MARKER_RE = re.compile(
-    r"^[ ]{0,3}(?:#{1,6}[ \t]*answer[ \t]*key\b.*|\*{1,2}[ \t]*answer[ \t]*key\b.*)$",
-    re.IGNORECASE | re.MULTILINE)
+# The answer key's MARKER, not its content, comes from scripts/disclosure.py -- the one
+# definition shared by this check, the learner-view renderer, its gate, and the Moodle
+# publisher. This script is the authoring-time end of it: it is what makes an author fix
+# a non-conforming marker here, rather than discovering at pilot time that the quiz was
+# withheld from the learner entirely.
 
 MAX_MINUTES = 90
 
@@ -134,6 +132,27 @@ def check_images(folder, slug):
                               f"link it or delete it")
 
     return errors, warnings
+
+def check_asset_names(folder, slug):
+    """Return errors for asset names whose delivery suffix the publisher won't recognise.
+
+    An author asks for a screenshot to be sent unreduced by naming it `<stem>.full.png`,
+    or reduced further with `<stem>.small.png` (scripts/image_reduce.py). A typo there
+    must fail here: the publisher would quietly give `x.ful.png` the standard reduction,
+    and the dense dialog the author meant to protect would ship blurred.
+    """
+    errors = []
+    assets = folder / "assets"
+    if not assets.is_dir():
+        return errors
+    for p in sorted(assets.iterdir()):
+        if p.is_file() and treatment_for(p.name) is None:
+            stem = p.name.split(".", 1)[0]
+            errors.append(f"{slug}/assets/{p.name}: unrecognised delivery suffix -- use "
+                          f"{stem}.full{p.suffix} (send the original) or "
+                          f"{stem}.small{p.suffix} (smaller), or no suffix")
+    return errors
+
 
 # The Learning That Lasts four-phase lesson structure, as H2s in this order.
 PHASES = ("Connect", "Content", "Challenge", "Change")
@@ -287,6 +306,7 @@ def check_course(folder):
     img_errors, img_warnings = check_images(folder, slug)
     errors += img_errors
     warnings += img_warnings
+    errors += check_asset_names(folder, slug)
 
     # --- every lesson carries a visual ---
     vis_errors, vis_warnings = check_visuals(folder, slug)
@@ -328,7 +348,13 @@ def main():
         print(f"modules/{only} has no 00-design.md — not opted into the pipeline; nothing to check.")
         return
 
-    all_errors, all_warnings = [], []
+    # The design gate (spec 012, FR-001). Checked across every course, opted in or not:
+    # an assignment file is a new kind of package file with mentor-only content, and
+    # nothing yet knows how to keep that content from a learner.
+    all_errors = [f"{p.relative_to(MODULES).as_posix()}: assignments wait on the spec 012 "
+                  f"design approval -- remove this file until it is recorded"
+                  for p in sorted(MODULES.rglob("*-assignment.md"))]
+    all_warnings = []
     for f in folders:
         e, w = check_course(f)
         all_errors += e

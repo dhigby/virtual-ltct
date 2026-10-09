@@ -1,0 +1,65 @@
+{{!
+    @template local_ltuse/mobile_mentoring
+
+    The Mentoring page in the Moodle app (spec 003, research R4). Ionic markup, not
+    Bootstrap. Same context as local_ltuse/mentoring.
+
+    Example context (json):
+    {
+        "haslearners": true,
+        "learners": [{"id": 1, "fullname": "Learner One", "profileurl": "#", "gradesurl": "#",
+            "messageurl": "#", "pathwaysurl": "#", "hascourses": true,
+            "courses": [{"fullname": "Course A", "statustext": "In progress, 40%",
+                "inprogress": true, "hidden": false, "notactive": false, "enrolmenttext": ""}]}],
+        "hasmentors": true,
+        "mentors": [{"fullname": "Mentor One", "messageurl": "#"}],
+        "empty": false
+    }
+}}
+{{=<% %>=}}
+<%#empty%>
+<ion-item class="ion-text-wrap"><ion-label>{{ 'plugin.local_ltuse.nomentoring' | translate }}</ion-label></ion-item>
+<%/empty%>
+<%#haslearners%>
+<ion-list>
+    <ion-item-divider><ion-label><h2><%#str%>mentoring:learners, local_ltuse<%/str%></h2></ion-label></ion-item-divider>
+    <%#learners%>
+    <ion-item class="ion-text-wrap">
+        <ion-label>
+            <h2 ngNonBindable><% fullname %><%#protected%> <ion-badge color="warning"><% protectedlabel %></ion-badge><%/protected%></h2>
+            <%#protected%><p ngNonBindable><%#str%>protection:realname, local_ltuse, <% realname %><%/str%></p><%/protected%>
+            <p>
+                <a href="<% profileurl %>" core-link capture="true"><%#str%>mentoring:profile, local_ltuse<%/str%></a> ·
+                <a href="<% gradesurl %>" core-link capture="true"><%#str%>mentoring:grades, local_ltuse<%/str%></a> ·
+                <a href="<% messageurl %>" core-link capture="true"><%#str%>mentoring:message, local_ltuse<%/str%></a> ·
+                <a href="<% pathwaysurl %>" core-link capture="true"><%#str%>pathways, local_ltuse<%/str%></a>
+            </p>
+        </ion-label>
+    </ion-item>
+    <%#courses%>
+    <ion-item class="ion-text-wrap">
+        <ion-label>
+            <p><strong ngNonBindable><%{ fullname }%></strong><%#hidden%> (<%#str%>mentoring:hidden, local_ltuse<%/str%>)<%/hidden%></p>
+            <p ngNonBindable><% statustext %><%#notactive%> (<% enrolmenttext %>)<%/notactive%></p>
+        </ion-label>
+    </ion-item>
+    <%/courses%>
+    <%^hascourses%>
+    <ion-item class="ion-text-wrap"><ion-label><p><%#str%>mentoring:nocourses, local_ltuse<%/str%></p></ion-label></ion-item>
+    <%/hascourses%>
+    <%/learners%>
+</ion-list>
+<%/haslearners%>
+<%#hasmentors%>
+<ion-list>
+    <ion-item-divider><ion-label><h2><%#str%>mentoring:mentors, local_ltuse<%/str%></h2></ion-label></ion-item-divider>
+    <%#mentors%>
+    <ion-item class="ion-text-wrap">
+        <ion-label>
+            <h2 ngNonBindable><% fullname %></h2>
+            <p><a href="<% messageurl %>" core-link capture="true"><%#str%>mentoring:message, local_ltuse<%/str%></a></p>
+        </ion-label>
+    </ion-item>
+    <%/mentors%>
+</ion-list>
+<%/hasmentors%>

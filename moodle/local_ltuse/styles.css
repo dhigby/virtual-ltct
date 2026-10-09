@@ -1,0 +1,130 @@
+/* Presentation for published LTC course pages.
+ *
+ * Moodle serves a plugin's styles.css site-wide, and the Moodle app picks it up through
+ * the mobilecssurl setting -- so what is here also reaches the Android app, which is the
+ * reason the team chose Moodle in the first place. Keep it small and defensive: this
+ * loads on every page of the site, not only on course pages.
+ *
+ * Scoped to .local-ltuse-page, which scripts/moodle_payload.py wraps each page in; to spec
+ * 006's .local-ltuse-pathways and .local-ltuse-pathway; and to spec 007's div.ltuse-home (the
+ * learner home block) and div.ltuse-next (the next-lesson button). So nothing here can affect
+ * a page somebody else made.
+ *
+ * Every background is a translucent tint and no rule sets a text colour, so the theme's own
+ * text colour shows through in light and dark alike. Do not add a prefers-color-scheme
+ * block: the Moodle app ignores the phone's setting unless the learner picks "System", so
+ * a phone in dark mode with the app in light painted these boxes black under black text.
+ */
+
+/* Callouts. The curriculum writes these as blockquotes with a bold lead-in
+ * (> **NOTE**, > **TIP**, > **INFO**, > **CAUTION**) rather than as Markdown
+ * admonitions, so the blockquote rule is the one that actually does the work. */
+.local-ltuse-page blockquote {
+    border-left: 4px solid #4a7ebb;
+    background: rgba(74, 126, 187, 0.12);
+    margin: 1em 0;
+    padding: 0.75em 1em;
+    border-radius: 0 4px 4px 0;
+}
+
+.local-ltuse-page blockquote > p:first-child > strong:first-child {
+    display: block;
+    margin-bottom: 0.35em;
+    letter-spacing: 0.02em;
+}
+
+/* Markdown admonitions, if a lesson ever uses them, and the withheld-quiz placeholder
+ * the publisher emits when an answer key could not be cleanly separated. */
+.local-ltuse-page .admonition {
+    border-left: 4px solid #4a7ebb;
+    background: rgba(74, 126, 187, 0.12);
+    margin: 1em 0;
+    padding: 0.75em 1em;
+    border-radius: 0 4px 4px 0;
+}
+
+.local-ltuse-page .admonition-title {
+    font-weight: 600;
+    margin: 0 0 0.35em;
+}
+
+.local-ltuse-page .admonition.warning {
+    border-left-color: #c9761a;
+    background: rgba(201, 118, 26, 0.12);
+}
+
+/* Screenshots. Lessons teach software, so most pages carry one; without a max-width they
+ * overflow the content column on a phone. */
+.local-ltuse-page img {
+    max-width: 100%;
+    height: auto;
+}
+
+/* Tables are common in these courses (lesson indexes, comparison grids) and are the
+ * first thing to break at phone width. Let the page scroll a wide one rather than squash
+ * it -- done on the container so no extra markup is needed around each table. */
+.local-ltuse-page {
+    overflow-x: auto;
+}
+
+.local-ltuse-page table {
+    border-collapse: collapse;
+}
+
+.local-ltuse-page table th,
+.local-ltuse-page table td {
+    padding: 0.4em 0.6em;
+    border: 1px solid rgba(127, 127, 127, 0.35);
+    vertical-align: top;
+}
+
+.local-ltuse-page pre {
+    overflow-x: auto;
+    padding: 0.75em;
+    background: rgba(127, 127, 127, 0.12);
+    border-radius: 4px;
+}
+
+
+/* Spec 006: the next course on a pathway stands out from the rest of its list. */
+.local-ltuse-pathways .cx-pathway-next,
+.local-ltuse-pathway .cx-pathway-next {
+    border-left: 4px solid currentColor;
+    padding-left: 0.5em;
+}
+
+/* Spec 007: the learner home block on the Dashboard (block_ltuse), web and app (R11). SIL Blue
+ * (#005CB9) as a translucent tint and a rule, never a text colour; the button is Boost's
+ * btn-primary, which brandcolor makes SIL Blue. */
+div.ltuse-home {
+    background: rgba(0, 92, 185, 0.08);
+    border-left: 4px solid #005CB9;
+    padding: 1rem 1.25rem;
+    margin-bottom: 1rem;
+}
+
+/* A long lesson name wraps inside the button at the narrowest phone width. */
+div.ltuse-home .btn {
+    white-space: normal;
+    max-width: 100%;
+}
+
+/* The rule above "Where next", the onward routes. */
+div.ltuse-home .ltuse-onward {
+    border-top: 1px solid rgba(0, 92, 185, 0.20);
+    margin-top: 1rem;
+    padding-top: 0.75rem;
+}
+
+/* Spec 007: the next-lesson button at the foot of a lesson page (R6). Layout only: the button
+ * is Boost's own btn-primary or btn-secondary. */
+div.ltuse-next {
+    margin-top: 1.5rem;
+    text-align: end;
+}
+
+/* A long lesson name wraps inside the button at the narrowest phone width. */
+div.ltuse-next .btn {
+    white-space: normal;
+    max-width: 100%;
+}

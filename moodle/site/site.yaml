@@ -1,0 +1,94 @@
+# The Moodle release and the plugins the training system depends on.
+# Settings live in settings/, roles in roles.yaml. See README.md for how to change any of it.
+
+moodle:
+  # $CFG->version of the release this declaration was verified against.
+  # apply refuses a server older than this.
+  requires: 2026042003.03
+  release: "5.2.3+ (Build: 20260928)"
+
+plugins:
+  - component: local_ltuse
+    version: 2026101000
+    source:
+      path: moodle/local_ltuse
+    why: The publish endpoint and this applier. Pinned to the version.php stamp in this repo.
+  - component: block_ltuse
+    version: 2026100600
+    source:
+      path: moodle/block_ltuse
+    why: "#13 (spec 007 R5): the learner home block on the default Dashboard: continue, the empty state and onward routes. Core has none of these (R3)."
+
+  # Row #3: SCORM 1.2, H5P and embedded video.
+  - component: mod_scorm
+    enabled: 1
+    why: "#3 SCORM 1.2 packages."
+  - component: mod_h5pactivity
+    enabled: 1
+    why: "#3 H5P items as activities."
+  - component: filter_displayh5p
+    enabled: "on"
+    why: "#3 H5P embedded in pages."
+  - component: filter_mediaplugin
+    enabled: "on"
+    why: "#3 turns a Vimeo link into an embedded player."
+  - component: media_vimeo
+    enabled: 1
+    why: "#3 Vimeo is a trusted embed source."
+  - component: media_videojs
+    enabled: 1
+    why: "#3 plays linked video files."
+
+  # Row #25: push through the Moodle app, beside email. The Premium app plan allows
+  # unlimited devices at a flat rate, so push stays within constitution IX.
+  - component: message_airnotifier
+    enabled: 1
+    why: "#25 push notifications to the Moodle app; each learner can turn them off per notification."
+
+  # Row #8: partner organisations, their cohorts and cohort sync (spec 002).
+  - component: tool_dynamic_cohorts
+    version: 2026031300
+    source:
+      url: https://marketplace.moodle.com/api/plugins/tool_dynamic_cohorts/versions/2026031300/download
+      sha256: "c959d01def5d88b074a189ba8c423b054f7e4e97f2293d127a4ac901d76444b2"
+    why: "#8 fills organisation cohorts from the organisation field. Verified on 5.2 by hand checks (spec 002 research R4); its own version.php still says supported = [404, 501]."
+  # Row #23: the certificate of training completed, and the condition that unlocks it on
+  # course completion (spec 013, research R6 and R8; decision 1, accepted 2026-10-02).
+  - component: mod_customcert
+    version: 2026042014
+    source:
+      url: https://marketplace.moodle.com/api/plugins/mod_customcert/versions/2026042014/download
+      sha256: "434b084faa646aa2478bf263a96366a77441237a930206df01ae392710d7f8b3"
+    why: "#23 the certificate, v5.2.9, the only certificate plugin with a 5.2 branch (spec 013 R6). It prints the current name and the completion date on every download. Verified by quickstart V6; re-run V6 on every re-pin, because local_ltuse calls its template classes (R7)."
+  - component: availability_coursecompleted
+    version: 2026070100
+    source:
+      url: https://marketplace.moodle.com/api/plugins/availability_coursecompleted/versions/2026070100/download
+      sha256: "07e8c6c4237c594f3752b60134a0377eab794421a470a892c472945ead696a28"
+    why: "#23 unlocks the certificate on the course completion record, v5.5.3 (spec 013 R8). Core has no course-completion condition, and an AND of lesson conditions re-locks a learner when a lesson is added. Verified by quickstart V5 and V11."
+  # Row #21: mentor office hours (spec 011, research R9, R19; decision D6).
+  - component: mod_scheduler
+    version: 2026080400
+    source:
+      url: https://marketplace.moodle.com/api/plugins/mod_scheduler/versions/2026080400/download
+      sha256: "928ea42b8a4835dcc2c398d2c069cd198c8d41e3130883c2299f36e090a97826"
+    why: "#21 office-hour booking, v5.2-r1 (supported = [500, 502]), the maintained scheduler; core has no booking module (spec 011 R9). Browser-only: it has no app support (D6). local_ltuse relies on its group filter, its SSstu: calendar events and scheduler_slots.teacherid (R16, R20), so re-run quickstart V10 and V13 on every re-pin."
+  - component: enrol_cohort
+    enabled: 1
+    why: "#8 #15 cohort sync enrols an organisation into a course as Student, with no group; in an organisation-only course its managers cohort too, as orgmanager (spec 002 R3, R8)."
+  - component: enrol_manual
+    enabled: 1
+    why: "#7 stage 7 enrols pilot learners manually, and every delivery report is scoped by enrol:plugin not equal to manual. Disabled, that condition would produce no SQL and the reports would widen to pilots (spec 004 R10, MDL-84213)."
+  - component: enrol_self
+    enabled: 1
+    why: "#11 #15 a manager enrols their own learners through each course's organisation-enrolment instance, an enrol_self instance with self-enrolment off. Disabled, those enrolments go inactive (spec 002 R10)."
+
+  # Row #14: the login methods beside manual and nologin, which core always enables. They
+  # live in $CFG->auth, which no admin setting writes, so they are declared here and set
+  # through core's auth::enable_plugin(). Moved from spec 016's identity.yaml (auth: webservice).
+  - component: auth_webservice
+    enabled: 1
+    why: "#14 the publisher's account (local_ltuse/cli/setup_publishing.php) is auth=webservice; everyone else is a manual account made by the site team (Doug, 2026-10-05 (scope review))."
+  - component: auth_email
+    enabled: 0
+    why: "#14 no self-registration: accounts come from intake (spec 002, spec 008). Not core's default, which enables it (auth = email, lib/db/install.php). drift does not report another core login method being enabled, OAuth2 say, because it checks only the plugins declared here; enabling one is a decision of its own (Doug, 2026-10-05 (scope review))."

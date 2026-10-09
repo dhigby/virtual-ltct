@@ -19,7 +19,8 @@ scenario is built to surface:
 - **(c) Coaches, doesn't take over the keyboard.**
 - **(d) Drives the tools correctly** — chooses the sensible list/option (e.g. link
   first-per-section, not every occurrence) and can undo a bad move.
-- **(e) Judges legitimate variation vs. error**, especially in parallel passages.
+- **(e) Leaves legitimate variation vs. error to the team**, especially in parallel
+  passages: confirms the differences were reviewed, and gets the team to judge each one.
 - **(f) Advises the surfaced decisions** (layout, hyphenation, renderings) and defers to the
   team or another consultant where it's genuinely their call, not the LTC's.
 - **(g) Knows when to escalate** — an LT mentor for tooling problems, a Translation
@@ -65,9 +66,14 @@ for the relevant verses, not to dig through Project History (Project History is 
 mechanism for this check). A strong answer names the Status column specifically — a red
 "?" on a verse edited during the recent revision pass is direct evidence the "already
 checked" claim doesn't hold for that verse. This is marker **(a)**: don't trust a
-clean/settled-sounding result just because the team is confident about it. A weak answer
-accepts the team lead's explanation at face value and moves on to judging the passages
-itself.
+clean/settled-sounding result just because the team is confident about it. A strong
+answer also compares the shading of the Greek with the shading of the translation on
+those verses: where the Greek is unshaded, the originals differ, so the translation may
+differ there too, as the team lead says; where the Greek is shaded but the
+translation isn't, the translation differs where the originals agree, and that is worth
+pointing out to the team — as a question, not an error, since not every language can word
+things the same way and some variation is acceptable. A weak answer accepts the team lead's explanation at face value
+and moves on to judging the passages itself.
 
 **Watch for in what they'd say to the team:** the learner does not attempt to judge whether
 the differences are legitimate variation or error — they don't speak the language.
@@ -75,7 +81,9 @@ A strong answer asks the team to open the Parallel Passages tool and walk throug
 verse still showing a red "?" themselves, framed as routine process ("let's make sure
 everything edited in the recent revision gets reviewed again") rather than as doubting
 the team's judgment — marker **(e)**, correctly deferred to the people who can actually
-judge meaning.
+judge meaning. Pointing to a shading mismatch ("the Greek is shaded here and your
+translation isn't — can you look at that one?") is a strong way in: it names a pattern
+the learner can see, without claiming to judge the wording.
 
 **Watch for in escalation:** if the review surfaces a genuine internal disagreement about
 legitimate variation vs. error, that stays with the team (or moves to a Translation
@@ -97,16 +105,18 @@ numbers/weights/measures checking is in transition: a **new consolidated check**
 separate Numbers check, but not every team's Paratext version has migrated to it yet.
 This team is still on the older setup — only the separate Numbers check, with no working
 Measures check at all — and the learner should confirm that specifically for this
-team's version rather than assuming either way. A strong answer explicitly notes that
-because no working check can catch the weights/measures inconsistency reliably on this
-version, that changes what the informal comparison can tell you, not just how you
-interpret it. From there, the learner should distinguish two different problems that
-look similar — "an inconsistency turned up" (a normal, expected finding) vs. "the team
-has no documented standard to check against" (a process gap that has to be fixed before
-the finding means anything). A strong answer checks for the existence of a documented
-approach *first*, before treating the flagged inconsistency as something to resolve. A
-weak answer never asks which check(s) this team's version actually has, or assumes the
-new consolidated check must already be available everywhere.
+team's version rather than assuming either way. A strong answer confirms the available
+check, runs it against the team's documented approach, is honest that there is no
+reliable tool for weights and measures on this version, and asks the **team** to find and
+review their own measure renderings — rather than the learner comparing them. (Comparing
+measure renderings by hand is possible but not easy, and ambiguous terms get missed.)
+From there, the learner should distinguish two different problems that look similar —
+"an inconsistency turned up" (a normal, expected finding) vs. "the team has no
+documented standard to check against" (a process gap that has to be fixed before the
+finding means anything). A strong answer checks for the existence of a documented
+approach *first*, before treating the inconsistency the team found as something to
+resolve. A weak answer never asks which check(s) this team's version actually has, or
+assumes the new consolidated check must already be available everywhere.
 
 **Watch for in what they'd say to the team:** the learner explains, in plain terms, what
 this team's Paratext version does and doesn't have available yet — the older Numbers
@@ -118,15 +128,17 @@ this scenario has no field "gotcha" to diagnose — it's pure process/routing (p
 design doc, this check area has no confirmed field case yet, so don't expect or reward
 an invented technical cause).
 
-**Watch for in escalation:** once an approach exists, deciding which of the two flagged
-renderings is correct stays with the team; a Translation Consultant only enters if the team
+**Watch for in escalation:** once an approach exists, deciding which of the two
+inconsistent renderings is correct stays with the team; a Translation Consultant only enters if the team
 itself can't agree or the question turns out to be a genuine translation/content judgment
 beyond a documented style choice. A learner who says "escalate to a Translation Consultant"
 by default, without first establishing whether the team can resolve it internally, has
 skipped a step.
 
 **Common wrong turn:** proposing which rendering is "right" instead of routing the decision
-back to the team; assuming the new consolidated check is available without confirming it for
+back to the team; trying to compare or judge the measure renderings themselves and decide
+what counts as consistent, instead of asking the team to find and review them (mark
+down); assuming the new consolidated check is available without confirming it for
 this team's specific Paratext version, or assuming no team could possibly have it yet.
 
 ---
@@ -137,19 +149,24 @@ this team's specific Paratext version, or assuming no team could possibly have i
 
 First, Chapter/Verse Numbers. A strong answer confirms that check comes back clean
 *before* anything else, including the marker-pair census — because every other check on
-the list (references, footnotes, the heading flag itself) reports its results by
+the list (references, footnotes, the errors at the heading) reports its results by
 quoting a chapter/verse location, and those locations can't be trusted if the numbering
 has errors of its own.
 
 Second, once Chapter/Verse Numbers is confirmed clean, the learner moves to unclosed
-marker pairs and other structural breaks *before* interpreting the individual "heading
-doesn't match its text" flag. A missing `\p` marker after a section heading partway
-through Mark can cascade into exactly this kind of scattered-looking flag list
-downstream: everything between the heading and the next paragraph-style marker (such as
-`\p`, `\m`, `\q`, etc.) gets swallowed into and rendered as part of the heading,
-including verse numbers and verse text — which is what can produce the
-heading-doesn't-match-text flag and a garbled-looking reference. Marker **(b)**:
-diagnose cause, not each symptom separately.
+marker pairs and other structural breaks *before* chasing the individual errors
+one by one. A missing `\p` marker after a section heading partway through Mark can
+cascade into exactly this kind of scattered-looking flag list downstream: everything
+between the heading and the next paragraph-style marker (such as `\p`, `\m`, `\q`, etc.)
+gets swallowed into and rendered as part of the heading, including verse numbers and
+verse text — which is what produces verse text in the heading's bold style, verse
+numbers missing from the normal flow, the paired "Verse number in heading" and "Marker
+cannot occur here: \v" errors for every swallowed verse, and a
+garbled-looking reference. A strong answer confirms this by looking at the markup right
+after the heading for the missing `\p`, not by reading the heading or the verses —
+whether a heading's wording fits its passage is the team's call (Lesson 4, step 5), and
+nothing in this scenario asks the learner to judge it. Marker **(b)**: diagnose cause,
+not each symptom separately.
 
 Separately, on the Punctuation Inventory, the learner should flag "checked at the start
 of the project" as stale by definition — the project has had two more revision passes
@@ -163,10 +180,13 @@ Punctuation Inventory open on screen now, walked through live — not a descript
 was done "back at the start." Marker **(c)**: coaching them to open and review it
 themselves, not the learner doing it for them.
 
-**Watch for in escalation:** genuinely ambiguous Punctuation Inventory settings, or an
-unrecognized character the learner can't tell is a real problem vs. a font-display quirk,
-go to an LT mentor (a tooling/technical question), not a Translation Consultant. A learner
-who can't distinguish this from a content question has missed marker **(g)**.
+**Watch for in escalation:** genuinely ambiguous Punctuation Inventory settings, or a
+character that may be a font-display quirk, go to an LT mentor (a tooling/technical
+question), not a Translation Consultant. Whether a character is valid in the language is
+a different question: the learner checks it against the orthography statement written by
+the project's linguist, if they have it, and otherwise leaves it to the team. A learner
+who sends that question to an LT mentor, or decides it themselves without the orthography
+statement, has missed marker **(g)**.
 
 **Common wrong turn:** three separate ways a learner can go wrong here:
 - Working the Basic Checks flag list in the order it appears rather than checking for a
@@ -325,10 +345,23 @@ LWC, and those LWC Bibles are conventionally two-column, so word length alone sh
 drive a switch to single-column. This is marker **(f)**: advising the surfaced decision
 based on the right
 criterion. Because this course's Digital and Print Publishing claim rests on hands-on setup
-as well as advising, a strong answer also describes actually enabling Show hyphenation in
-the Wordlist's View menu and reviewing/correcting the auto-generated hyphenation breaks so
-long words break correctly in two-column layout — not just recommending that someone else
-do it.
+as well as advising, a strong answer also describes the learner doing the tool work
+themselves: enabling Show hyphenation in the Wordlist's View menu; drafting breaks from
+the syllable structure in the team's orthography statement if the team can provide one,
+or entering the breaks the team proposes if there is none (common on a first
+translation); approving confirmed words individually and in batches (Edit > Approve word
+hyphenation); and confirming hyphenation is approved before print. Where a word may break
+is a judgment about the language, which the learner doesn't speak — so a strong answer
+also routes **each break decision to the team** (a speaker) to review and confirm,
+including any breaks the learner drafted (editing a word turns its tick green, so drafted
+words look approved before anyone has confirmed them).
+
+- **Full credit:** the learner does the technical setup and drafting **and** sends each
+  break to the team for confirmation.
+- **Mark down** if the learner either decides breaks on their own judgment of the
+  language (approving or correcting Paratext's guesses because they "look right"), or
+  only recommends that someone else handle hyphenation without doing any of the tool
+  work themselves.
 
 **Escalation, across all three:** none of these three should need to leave the learner and
 the team — all three are within the learner's own coaching-plus-technical-setup role (per
@@ -339,4 +372,6 @@ outward has likely misjudged the scope of their own role at this level.
 **Common wrong turn:** treating the three items as unrelated instead of applying the same
 diagnose-before-fix, coach-don't-do discipline to each; explaining the Send/Receive cause
 vaguely ("it's just slow because the list is big") instead of naming the project-vs-view
-distinction; recommending single-column based on word length alone.
+distinction; recommending single-column based on word length alone; approving or
+correcting hyphenation breaks on the learner's own judgment instead of having the team
+confirm them.

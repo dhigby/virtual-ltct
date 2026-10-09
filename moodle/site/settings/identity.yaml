@@ -1,0 +1,53 @@
+# Row #26: what leaves the site about a person (spec 016, research R6, R8).
+#
+# Settings for every user, kept only where they cost nobody anything (Doug, 2026-10-05 (scope
+# review)). All but forceloginforprofileimage are core's defaults, declared so drift catches
+# one being changed. site_config.py validate requires enablegravatar, forceloginforprofileimage
+# and allowedemaildomains once protection.yaml is declared; the rest are declared for drift
+# only. The general account rules (registerauth, authpreventaccountcreation, protectusernames)
+# are spec 008's, in admin.yaml; the login methods are 008's site.yaml plugin entries
+# (auth_webservice on, auth_email off), not an auth setting.
+
+rows: [26]
+purpose: >-
+  A protected learner's email, real name and picture must not leave the site through an
+  outgoing email header, a Gravatar or a picture URL fetched without a login. Email stays in
+  staff views for everyone: a protected person's own address is checked, when they are
+  protected, not to reveal their name or organisation.
+settings:
+  - name: showuseridentity
+    value: email
+    why: >-
+      Core's default (admin/settings/users.php, MOODLE_502_STABLE): staff views show email.
+      Never add username: most usernames are the email a person had at intake (spec 008),
+      which may be the identifying address a protected person's email was changed away from
+      (R8). Email is no longer hidden from everyone (decision 1 rejected, Doug, 2026-10-05
+      (scope review)).
+  - name: grade_export_userprofilefields
+    value: firstname,lastname,idnumber,institution,department,email
+    why: >-
+      Core's default (admin/settings/grades.php, MOODLE_502_STABLE). With email as everyone's
+      login and idnumber empty, email is the only column an export can be matched on
+      (decision 1 rejected, Doug, 2026-10-05 (scope review)).
+  - name: grade_export_customprofilefields
+    value: ""
+    why: >-
+      Core's default: no custom profile field in a grade export, so no ltct_ field a protected
+      learner's level withholds leaves through one (R8).
+  - name: allowedemaildomains
+    value: ""
+    why: >-
+      Core's default. Empty, so no email is ever sent from a person's own address: From is the
+      no-reply address and FromName the display name, "(via site)" (email_to_user, R8).
+  - name: enablegravatar
+    value: 0
+    why: >-
+      Core's default. Gravatar would publish an unsalted MD5 of the real email as the default
+      picture of anyone with no picture, which is every protected learner (R6).
+  - name: forceloginforprofileimage
+    value: 1
+    why: >-
+      Not core's default, which is 0 (admin/settings/security.php): profile pictures need a
+      login, so a picture URL cannot be fetched from outside. It covers the hour before
+      reconcile deletes a picture uploaded from the app, and the email level keeps its
+      picture (R6).

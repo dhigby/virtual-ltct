@@ -1,0 +1,31 @@
+# Row #23: completion badges and the certificate (spec 013, research R12). Badges are core
+# Open Badges; the certificate is mod_customcert, pinned in site.yaml.
+
+rows: [23]
+purpose: >-
+  Course badges are on and exportable, the issuer is named once for badges and the
+  certificate, and a certificate's code can be verified without logging in.
+settings:
+  - name: enablebadges
+    value: 1
+    why: Without it there are no badges at all, and the app hides its badges screen (R11).
+  - name: badges_allowcoursebadges
+    value: 1
+    why: Every completion badge is a course badge; at 0 they disappear from lists and cannot be enabled (R12).
+  - name: badges_allowexternalbackpack
+    value: 1
+    why: A learner can send their badges to an external backpack, so their training history is portable (FR-013).
+  - name: badges_defaultissuername
+    value: LTC training programme
+    why: >-
+      The issuing programme, named on every badge and, through {programme}, on the
+      certificate. The exact organisational name is pending the maintainer (plan, decision 4).
+  - name: badges_defaultissuercontact
+    value: env:MOODLE_BADGE_CONTACT
+    why: Open Badges needs an issuer contact. It comes from the environment, so no address is committed to this public repo (constitution III).
+  - name: customcert/verifyallcertificates
+    value: 1
+    why: Lets anyone check a certificate by its code without logging in (FR-009, R9). Each activity also sets verifyany.
+  - name: enableavailability
+    value: 1
+    why: The certificate unlocks on course completion through an availability condition. With this off, Moodle drops the condition without a word and the certificate is open before completion; the publisher refuses instead (R8).

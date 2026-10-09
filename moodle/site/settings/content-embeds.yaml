@@ -1,0 +1,22 @@
+# Row #3: SCORM 1.2, H5P and embedded video. The plugins are enabled in site.yaml, and who
+# may embed arbitrary content is set by moodle/site:trustcontent in roles.yaml.
+
+rows: [3]
+purpose: >-
+  Content embeds. SCORM packages play under Moodle's relaxed handling of SCORM 1.2, and
+  trusted text is on, so an iframe survives only when its author holds
+  moodle/site:trustcontent (managers and the publisher, per roles.yaml). Everyone else's
+  arbitrary embeds are stripped before learners see them. Vimeo and H5P come through the
+  media and H5P filters enabled in site.yaml, not through trusted text.
+settings:
+  - name: scorm/scormstandard
+    value: 0   # core default; a checkbox, so 0 is "SCORM standards mode" off
+    why: >-
+      Off lets SCORM 1.2 packages store more than the 1.2 specification allows. With it on,
+      a package that writes more suspend data than 1.2 permits loses the learner's progress.
+      1.2 is the supported standard either way (FR-012).
+  - name: enabletrusttext
+    value: 1
+    why: >-
+      Without it no author is trusted, so the iframe embeds the publisher puts in pages are
+      stripped like anyone else's, and the trustcontent split in roles.yaml means nothing.

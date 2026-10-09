@@ -97,7 +97,7 @@ time — which makes it harder to catch in the act. You will need to reason abou
    abnormal.
 2. Describe the information you would gather to identify a pattern, and how you would test
    systematically — changing one thing at a time — rather than trying fixes at random.
-3. Explain what you would tell the translator about your process, including how you would
-   recognise that the problem exceeds what you can resolve alone and what the appropriate
-   next step would be (escalate, contact vendor support, restore from backup, or agree a
-   workaround).
+3. Explain what you would tell the translator about your process, including which of the
+   lesson's escalation signs would tell you the problem exceeds what you can resolve alone,
+   and what the appropriate next step would be (escalate, contact vendor support, restore
+   from backup, or agree a workaround).

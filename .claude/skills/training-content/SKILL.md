@@ -10,7 +10,6 @@ description: >-
   converting a stub to content, or revising a lesson for a given competency and
   target outcome level.
 ---
-
 # Training content: the Learning That Lasts 4Cs for LTC modules
 
 This curriculum trains **Language Technology Consultants** — people who support Bible
@@ -100,8 +99,7 @@ lesson's `**Estimated time:**` header and make sure the phases add up to it.
 - **Connect** *(~10 min)* — activate prior knowledge and surface the problem. A reflection
   prompt tied to the learner's own field context ("Think about the language you work with…").
   For reflection and activating experience *only* — do **not** put course overview, structure,
-  or administrative content here (that belongs in an Introduction before the first `##
-  Connect`).
+  or administrative content here (that belongs in an Introduction before the first `## Connect`).
 - **Content** *(~25–30 min)* — deliver only the knowledge needed to *attempt* the task, then
   stop. Videos, concept explanations, worked distinctions, real-world examples. Vary modality
   (video, demonstration, reading) — adults have diverse styles. **Every lesson carries at
@@ -185,12 +183,12 @@ Match the module's `target_outcome_level` frontmatter. It is a level on the Comp
 Certification (CBC) scale — defined once in [`outcome-levels.yaml`](../../../outcome-levels.yaml)
 — and it names **where the learner stands after finishing your course**, which calibrates depth:
 
-| Level | Meaning | Framework description |
-|---|---|---|
-| `1 - Has Knowledge` | Conceptual awareness — explain and recognize. Challenge and Change use explanation and self-assessment, not performance. | "Can understand concepts" |
-| `2 - With Assistance` | The learner *attempts the task in the field with mentor support*; Challenge requires applying a framework to a scenario and producing a plan a mentor reviews. Build in reaching for help. | "Can troubleshoot and begin to work on their own" |
-| `3 - Independent` | The learner performs unaided — including judgment calls and recovery from common failure — and advises others. Challenge is an unscaffolded end-to-end task with a self-check rubric; no mentor in the loop. | "Can work independently and advise others" |
-| `4 - Expert` | The learner teaches and trains others. Challenge is preparing and delivering instruction, or diagnosing and correcting someone else's work. | "Advanced skill and trains others" |
+| Level                   | Meaning                                                                                                                                                                                                        | Framework description                             |
+| ----------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------- |
+| `1 - Has Knowledge`   | Conceptual awareness — explain and recognize. Challenge and Change use explanation and self-assessment, not performance.                                                                                      | "Can understand concepts"                         |
+| `2 - With Assistance` | The learner*attempts the task in the field with mentor support*; Challenge requires applying a framework to a scenario and producing a plan a mentor reviews. Build in reaching for help.                    | "Can troubleshoot and begin to work on their own" |
+| `3 - Independent`     | The learner performs unaided — including judgment calls and recovery from common failure — and advises others. Challenge is an unscaffolded end-to-end task with a self-check rubric; no mentor in the loop. | "Can work independently and advise others"        |
+| `4 - Expert`          | The learner teaches and trains others. Challenge is preparing and delivering instruction, or diagnosing and correcting someone else's work.                                                                    | "Advanced skill and trains others"                |
 
 State the observable outcome a lesson prepares the learner for *before* teaching the content,
 matched to this level. If the content can't fit the declared level, say so and ask — do **not**

@@ -4,22 +4,13 @@ category: Technology Domain
 slug: phonetic-tools
 source_label: Phonetics Tools
 in_framework: true
-target_statement: Is able to use the tools for doing phonetic analysis and is able to consult others in their use
+target_statement: Is able to use the tools for doing phonetic analysis and is able to consult others in their use.
 outcome_levels:
   - "0 - No Competency"
   - "1 - Has Knowledge"
   - "2 - With Assistance"
   - "3 - Independent"
   - "4 - Expert"
-resources:
-  - title: Cambridge Journal of Phonology
-    url: https://www.cambridge.org/core/journals/phonology
-  - title: Phonology Assistant
-    url: https://software.sil.org/phonologyassistant/
-  - title: Phonology Assistant 3
-    url: http://lingtransoft.info/apps/phonology-assistant-3
-  - title: Dekereke Tutorials and Help Materials
-    url: http://casali.canil.ca/DekerekeTutorials/tutorials.html
 source: Lang Tech Competencies.xlsx
 last_updated: 2026-09-03
 ---
@@ -30,15 +21,15 @@ last_updated: 2026-09-03
 
 ## Description
 
-Knowledgable about current phonetic tools.
+Knowledgeable about current phonetic tools.
 
 ## Why it matters
 
-This competency covers the usage and training of users to use the current phonetic tools to determine the sound system of a language.
+This competency covers using the current phonetic tools to determine the sound system of a language, and training others to use them.
 
 ## Target competency
 
-> Is able to use the tools for doing phonetic analysis and is able to consult others in their use
+> Is able to use the tools for doing phonetic analysis and is able to consult others in their use.
 
 ## Progression by component
 
@@ -58,10 +49,10 @@ _Each row is a level a learner is **at**; its activities are what they do to rea
 
 | Current level | Suggested activities | Reaches |
 | --- | --- | --- |
-| **0 - No Competency** | Learn to use a phonetic analysis tool (i.e. Speech Analyzer) to open audio files. | 1 - Has Knowledge |
+| **0 - No Competency** | Learn to use a phonetic analysis tool (e.g., Speech Analyzer) to open audio files. | 1 - Has Knowledge |
 | **1 - Has Knowledge** | Work with a linguist to learn to configure views in a phonology tool so that they can identify and annotate segments and "interesting" features. | 2 - With Assistance |
 | **2 - With Assistance** | Work with a linguist to learn to visually interpret audio files in a phonetic analysis tool. | 3 - Independent |
-| **3 - Independent** | Prepare and teach phonetics tools module as part of a training event | 4 - Expert |
-| **4 - Expert** | Train someone to teach a phonetic tools module | — |
+| **3 - Independent** | Prepare and teach a phonetic tools module as part of a training event. | 4 - Expert |
+| **4 - Expert** | Train someone to teach a phonetic tools module. | — |
 
 _Level 4 activities aim past the top of the CBC scale (the source spreadsheet's "level 5"), which CBC does not define._

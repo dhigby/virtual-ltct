@@ -1,0 +1,33 @@
+# Row #25: notification defaults. Push (message_airnotifier) is enabled in site.yaml; core's
+# message-provider defaults send forum posts and contact requests to it. Those defaults stay at core defaults and are not
+# declared (research R9): they live outside the admin tree, and forum email already follows
+# each learner's maildigest preference.
+# Spec 005 (FR-011, research R8) adds the other three forum defaults a new account starts with.
+
+rows: [25]
+purpose: >-
+  Notification defaults. A new account gets forum email as one daily digest instead of one
+  email per post, in HTML, is subscribed to a discussion it posts in, and has read tracking
+  on. They are only defaults: every learner can change them, and every other notification
+  preference, from their own profile.
+settings:
+  - name: defaultpreference_maildigest
+    value: 1   # 0 no digest, 1 complete digest, 2 subjects only
+    why: >-
+      Core's default is one email per forum post, which floods a learner on a slow or
+      metered connection (FR-016).
+  - name: defaultpreference_autosubscribe
+    value: 1
+    why: >-
+      R8 (spec 005): posting in a discussion subscribes the poster, so a mentee gets the
+      mentor's reply to their own question.
+  - name: defaultpreference_trackforums
+    value: 1
+    why: >-
+      Q18 (spec 005): new accounts see which posts are unread. Accounts made before this was
+      declared are switched on once by local_ltuse's cli/trackforums_existing.php.
+  - name: defaultpreference_mailformat
+    value: 1   # 0 plain text, 1 HTML
+    why: >-
+      R8 (spec 005): forum email arrives as HTML, so a post's screenshots and links read as
+      they do in the forum.

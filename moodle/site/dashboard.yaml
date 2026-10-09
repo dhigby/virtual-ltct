@@ -1,0 +1,37 @@
+# Rows #13 and #21: the whole of every learner's default dashboard (spec 007, research R2, R4
+# and R5; spec 011, research R18).
+#
+# Read only by scripts/site_config.py (contracts: specs/011-events-calendar/contracts/
+# declaration.md, amended by specs/007-learner-experience/contracts/dashboard-declaration.md).
+# complete: apply removes any block on the default page that is not listed below. It never
+# touches a user's own dashboard, except the declared reset.
+
+rows: [13, 21]
+purpose: >-
+  What a learner sees on their dashboard: one way into their course, their course list,
+  and upcoming events. Nothing else.
+complete: true
+default_blocks:
+  - block: ltuse
+    region: content
+    weight: 0
+    why: >-
+      The learner home block (R5): the one way into the next lesson, the message that names
+      who to ask when no course is assigned yet, and the onward routes. Core has none of
+      these (R3).
+  - block: myoverview
+    region: content
+    weight: 1
+    why: >-
+      The course list, with each course's progress bar (R2, spec 004 R6). Its groupings are
+      declared in settings/learner-experience.yaml.
+  - block: calendar_upcoming
+    region: side-pre
+    why: >-
+      Upcoming events: site, course and group events in the learner's own time zone. Core
+      does not put it on a new site's dashboard, and Timeline never shows hand-made events
+      (R8).
+# R4, plan decision 2: roles.yaml prevents moodle/my:manageblocks for the user role, so a
+# dashboard a learner made their own can only be a leftover from before. Apply resets each
+# one to the default above, and refuses while editing is still allowed on the server.
+personal_dashboards: reset

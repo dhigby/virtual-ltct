@@ -8,7 +8,9 @@ descriptors. This check fails (exit 1) if they drift:
   * a descriptor names a competency that isn't in the framework,
   * a descriptor's frontmatter is malformed or missing `name` or `category`,
   * a descriptor self-reports `in_framework: false`,
-  * a descriptor's `resources:` entries aren't `{title, url}` links,
+  * a descriptor still carries `resources:` (they live in resources.yaml now),
+  * resources.yaml breaks its contract: a missing field, an unknown type, a non-http(s)
+    url, or a competency name not in competencies.yaml (spec 014),
   * or a descriptor's `outcome_levels:` drift from the CBC scale in outcome-levels.yaml.
 
 `slug:` is reported as a WARNING, not a failure. The published URL is built from the
@@ -30,9 +32,11 @@ except ImportError:
 
 sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent))
 import _levels
+import library
 
 REPO = pathlib.Path(__file__).resolve().parent.parent
 YAML = REPO / "competencies.yaml"
+RESOURCES = REPO / "resources.yaml"
 OUT = REPO / "competencies"
 
 # Framework names that legitimately have no descriptor (no source content exists).
@@ -73,23 +77,11 @@ def main():
         if not fm.get("slug"):
             warnings.append(f"{md.name}: no `slug` — the page will publish at "
                             f"'{md.stem}', taken from the filename")
-        # `resources:` is a list of {title, url} links that scripts/gen_site.py renders as
-        # each page's Further Information section. Hand-maintained, so guard the shape.
-        resources = fm.get("resources")
-        if resources is not None and not isinstance(resources, list):
-            errors.append(f"{md.name}: `resources` must be a list of title/url entries")
-        elif resources:
-            for i, r in enumerate(resources, start=1):
-                if not isinstance(r, dict):
-                    errors.append(f"{md.name}: resources[{i}] must be a mapping with "
-                                  "`title` and `url`")
-                    continue
-                if not str(r.get("title") or "").strip():
-                    errors.append(f"{md.name}: resources[{i}] is missing `title`")
-                url = str(r.get("url") or "").strip()
-                if not url.startswith(("http://", "https://")):
-                    errors.append(f"{md.name}: resources[{i}] `url` must be an http(s) URL "
-                                  f"(got {url!r})")
+        # Resources moved to resources.yaml (spec 014), so one used by several competencies
+        # is kept once. A list here would be silently ignored by the site, so refuse it.
+        if "resources" in fm:
+            errors.append(f"{md.name}: `resources:` belongs in resources.yaml now, "
+                          "with a description, type, competencies and language")
         # `outcome_levels:` is the CBC ladder. It must be a contiguous run starting at
         # level 0 — a rung names where a learner IS, and its activities carry them to the
         # next rung, so a ladder that skips or reorders levels is meaningless.
@@ -120,6 +112,11 @@ def main():
             errors.append(f"{md.name}: '{name}' is not in competencies.yaml")
         elif fm.get("in_framework") is False:
             errors.append(f"{md.name}: '{name}' self-reports in_framework: false")
+
+    try:
+        errors += library.validate(library.load(RESOURCES), framework)
+    except (OSError, yaml.YAMLError) as e:
+        errors.append(f"resources.yaml: cannot be read ({e})")
 
     missing = sorted(framework - set(seen) - EXEMPT)
     for name in missing:

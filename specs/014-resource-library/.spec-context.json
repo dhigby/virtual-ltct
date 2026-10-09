@@ -1,0 +1,520 @@
+{
+  "workflow": "companion",
+  "specName": "014-resource-library",
+  "branch": "014-resource-library",
+  "selectedAt": "2026-09-30T20:47:13.041Z",
+  "currentStep": "implement",
+  "status": "implementing",
+  "history": [
+    {
+      "step": "specify",
+      "substep": null,
+      "kind": "start",
+      "by": "extension",
+      "at": "2026-09-30T20:47:13.878Z"
+    },
+    {
+      "step": "plan",
+      "substep": null,
+      "kind": "start",
+      "by": "extension",
+      "at": "2026-10-06T22:23:01.721Z"
+    },
+    {
+      "step": "plan",
+      "substep": "research",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-06T22:27:02.896Z"
+    },
+    {
+      "step": "plan",
+      "substep": "design",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-06T22:29:00.826Z"
+    },
+    {
+      "step": "plan",
+      "substep": null,
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-06T22:29:02.513Z"
+    },
+    {
+      "step": "tasks",
+      "substep": null,
+      "kind": "start",
+      "by": "extension",
+      "at": "2026-10-06T22:29:51.159Z"
+    },
+    {
+      "step": "tasks",
+      "substep": "generate",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-06T22:30:42.514Z"
+    },
+    {
+      "step": "tasks",
+      "substep": null,
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-06T22:30:44.729Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "kind": "start",
+      "by": "extension",
+      "at": "2026-10-06T22:32:00.258Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T002",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-06T22:33:07.376Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T003",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-06T22:33:14.633Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T004",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-06T22:33:58.641Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T001",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-06T22:34:22.924Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T005",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-06T22:34:32.384Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T007",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-06T22:35:57.968Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T010",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-06T22:36:16.841Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T012",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-06T22:36:53.676Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T013",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-06T22:36:54.263Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T014",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-06T22:37:33.707Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T006",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-06T22:40:49.044Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T008",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-06T22:42:26.321Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T009",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-06T22:42:26.682Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T016",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-06T22:43:02.459Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T017",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-06T22:43:02.823Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T018",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-06T22:46:35.397Z"
+    }
+  ],
+  "telemetryInstanceId": "a9a1d1ef-ef2a-493d-b496-03006e524547",
+  "decisions": [
+    {
+      "decision": "Host the library on the public competency site",
+      "why": "Maintainer choice 2026-10-06; existing search, no new service, readable without log-in",
+      "rejected": "A Moodle library space"
+    },
+    {
+      "decision": "One resources.yaml at the repo root; descriptor resources: lists move into it",
+      "why": "A resource serves several competencies; one copy avoids drift",
+      "rejected": "Extending each descriptor resources: entry"
+    },
+    {
+      "decision": "Built-in MkDocs search over one library page with a heading per resource",
+      "why": "Indexes each heading; nothing new to run",
+      "rejected": "A custom JS filter or separate index"
+    },
+    {
+      "decision": "Stdlib link checker in a weekly workflow that keeps one issue open",
+      "why": "No new dependency; weekly meets SC-004",
+      "rejected": "lychee-action"
+    },
+    {
+      "decision": "Library link via custommenuitems (browser and app), verified in 5.2 source first",
+      "why": "Configuration only, one tap",
+      "rejected": "block_ltuse onward route, kept as the fallback"
+    },
+    {
+      "decision": "Shared scripts/library.py for validate and render",
+      "why": "gen_site.py runs only inside mkdocs, so its logic could not be tested; the check and the build need the same rules",
+      "rejected": "Duplicating the rules in the check and gen_site.py"
+    },
+    {
+      "decision": "Link checker counts 401/403/418/429 as alive",
+      "why": "Cloudflare-style bot screens would report the same live pages every week",
+      "rejected": "Reporting every 4xx as broken"
+    },
+    {
+      "decision": "Kept original urls even where they redirect",
+      "why": "Redirects still resolve; changing them is a content call for the maintainer",
+      "rejected": "Rewriting 14 urls to their redirect targets"
+    }
+  ],
+  "step_summaries": {
+    "plan": {
+      "summary": "Plan, research, data model and contracts for a resources.yaml-driven library on the competency site",
+      "key_finding": "The seed resource links have no descriptions, so writing them is the bulk of the content work"
+    },
+    "tasks": {
+      "summary": "18 tasks: setup check, foundational file/check/generator/migration, four story phases, polish"
+    },
+    "implement": {
+      "summary": "Library on the competency site: resources.yaml (176), library page, Further Information, check, weekly link check, Moodle menu items declared"
+    }
+  },
+  "approach": "Move resource links into one resources.yaml; gen_site.py builds a searchable library page and each competency's Further Information from it; the descriptor check validates names; a weekly stdlib link check opens one issue; Moodle gets a Library menu item.",
+  "coverage": {
+    "FR-001": {
+      "title": "Search by title, description and tags; results show title, description, type, competencies",
+      "tasks": [
+        "T003",
+        "T005",
+        "T008"
+      ]
+    },
+    "FR-002": {
+      "title": "Browse by competency and category; unknown name fails the build",
+      "tasks": [
+        "T002",
+        "T004",
+        "T005",
+        "T009"
+      ]
+    },
+    "FR-003": {
+      "title": "Each resource recorded in plain repo content with all fields",
+      "tasks": [
+        "T004",
+        "T006"
+      ]
+    },
+    "FR-004": {
+      "title": "Reachable from the Moodle dashboard, linkable from lessons, opens in the app",
+      "tasks": [
+        "T001",
+        "T010",
+        "T011"
+      ]
+    },
+    "FR-005": {
+      "title": "Readable without a Moodle log-in",
+      "tasks": [
+        "T005"
+      ]
+    },
+    "FR-006": {
+      "title": "Light pages; no video-only resource",
+      "tasks": [
+        "T005",
+        "T008"
+      ]
+    },
+    "FR-007": {
+      "title": "Scheduled link check reports broken links; no hotlinked committed images",
+      "tasks": [
+        "T012",
+        "T014"
+      ]
+    },
+    "FR-008": {
+      "title": "No git knowledge needed to add or fix a resource",
+      "tasks": [
+        "T013"
+      ]
+    },
+    "FR-009": {
+      "title": "Hosted on the public competency site",
+      "tasks": [
+        "T005"
+      ]
+    },
+    "FR-010": {
+      "title": "One-way publish from the repo",
+      "tasks": [
+        "T005",
+        "T007"
+      ]
+    },
+    "FR-011": {
+      "title": "Moved pages redirected",
+      "tasks": [
+        "T005"
+      ]
+    },
+    "FR-012": {
+      "title": "No answer keys, mentor guides, design docs or scripts",
+      "tasks": [
+        "T018"
+      ]
+    }
+  },
+  "currentTask": "T018",
+  "task_summaries": {
+    "T002": {
+      "status": "DONE",
+      "did": "Failing tests for resources.yaml validation",
+      "files": [
+        "tests/test_resources_yaml.py"
+      ]
+    },
+    "T003": {
+      "status": "DONE",
+      "did": "Failing tests for the library page and Further Information",
+      "files": [
+        "tests/test_gen_site_library.py"
+      ]
+    },
+    "T004": {
+      "status": "DONE",
+      "did": "Descriptor check validates resources.yaml via scripts/library.py and refuses descriptor resources:",
+      "files": [
+        "scripts/check_competency_descriptors.py",
+        "scripts/library.py"
+      ]
+    },
+    "T001": {
+      "status": "DONE",
+      "did": "Confirmed custommenuitems and tool_mobile/custommenuitems in 5.2 core source; no block_ltuse fallback needed",
+      "files": [
+        "specs/014-resource-library/research.md"
+      ]
+    },
+    "T005": {
+      "status": "DONE",
+      "did": "gen_site.py builds library.md and Further Information from resources.yaml via scripts/library.py",
+      "files": [
+        "scripts/gen_site.py",
+        "scripts/library.py",
+        "docs/stylesheets/extra.css"
+      ]
+    },
+    "T007": {
+      "status": "DONE",
+      "did": "resources.yaml and library.py added to descriptor-check and Pages triggers",
+      "files": [
+        ".github/workflows/competency-descriptors.yml",
+        ".github/workflows/pages.yml"
+      ]
+    },
+    "T010": {
+      "status": "DONE",
+      "did": "Declared custommenuitems and tool_mobile/custommenuitems Library items; validate passes, drift needs MOODLE_URL (run at T011)",
+      "files": [
+        "moodle/site/settings/learner-experience.yaml"
+      ]
+    },
+    "T012": {
+      "status": "DONE",
+      "did": "Failing tests for the link checker: ok, 404, HEAD refused then GET, timeout, exit codes",
+      "files": [
+        "tests/test_check_resource_links.py"
+      ]
+    },
+    "T013": {
+      "status": "DONE",
+      "did": "CONTRIBUTING: adding or fixing a library resource through Claude Code",
+      "files": [
+        "CONTRIBUTING.md"
+      ]
+    },
+    "T014": {
+      "status": "DONE",
+      "did": "Stdlib link checker and weekly workflow keeping one Broken resource links issue",
+      "files": [
+        "scripts/check_resource_links.py",
+        ".github/workflows/resource-links.yml"
+      ]
+    },
+    "T006": {
+      "status": "DONE",
+      "did": "176 resources moved from 42 descriptors to resources.yaml with drafted descriptions; 55 flagged for review",
+      "files": [
+        "resources.yaml",
+        "competencies/*.md"
+      ]
+    },
+    "T008": {
+      "status": "DONE",
+      "did": "Search check: 10/10 local via lunr.py; page 36 KB gz, index 47 KB gz",
+      "files": [
+        "specs/014-resource-library/quickstart.md",
+        "scripts/library.py"
+      ]
+    },
+    "T009": {
+      "status": "DONE",
+      "did": "Browse check: 4 competency pages list resources, empty one omits section, bad name fails",
+      "files": [
+        "specs/014-resource-library/quickstart.md"
+      ]
+    },
+    "T016": {
+      "status": "DONE",
+      "did": "CLAUDE.md: resources.yaml, library page, library.py and check_resource_links.py",
+      "files": [
+        "CLAUDE.md"
+      ]
+    },
+    "T017": {
+      "status": "DONE",
+      "did": "REQUIREMENTS row #24 marked built, pending live and user checks",
+      "files": [
+        "moodle/REQUIREMENTS.md"
+      ]
+    },
+    "T018": {
+      "status": "DONE",
+      "did": "Full suite 756 passed, descriptor check OK, coverage unchanged, strict build OK, no modules/ content in library"
+    }
+  },
+  "verified": [
+    {
+      "what": "spec 014 tests",
+      "command": "python -m pytest tests/test_resources_yaml.py tests/test_gen_site_library.py tests/test_check_resource_links.py -q",
+      "source": "derived",
+      "exitCode": 0,
+      "durationSeconds": 0.6,
+      "result": "...................                                                      [100%] · 19 passed in 0.14s"
+    },
+    {
+      "what": "descriptor and resources check",
+      "command": "python scripts/check_competency_descriptors.py",
+      "source": "derived",
+      "exitCode": 0,
+      "durationSeconds": 0.2,
+      "result": "framework: 43 competencies (1 exempt) Â· descriptors: 42 Â· covered: 42 · OK â€” descriptors and framework are in sync."
+    },
+    {
+      "what": "Full pytest suite",
+      "command": "python -m pytest tests -q",
+      "result": "756 passed, 2 skipped"
+    },
+    {
+      "what": "Strict site build",
+      "command": "python -m mkdocs build --strict",
+      "result": "built; library page 36 KB gz, search index 47 KB gz"
+    },
+    {
+      "what": "Search look-ups (local, lunr.py over built index)",
+      "result": "10/10 in first five"
+    },
+    {
+      "what": "Live link check",
+      "command": "python scripts/check_resource_links.py",
+      "result": "6 broken of 176",
+      "warnings": [
+        "bot-screen 403/418 answers treated as alive"
+      ]
+    }
+  ],
+  "concerns": [
+    {
+      "note": "Link checker simplified: a page truly gone behind a bot screen goes unreported",
+      "step": "implement"
+    },
+    {
+      "note": "55 drafted descriptions rest on titles or on moved/unreachable pages; 6 links broken now; needs maintainer review",
+      "step": "implement"
+    },
+    {
+      "note": "T011 and T015 are maintainer-run and open, so the spec stays at implementing",
+      "step": "implement"
+    },
+    {
+      "note": "Renaming a resource title changes its anchor; old anchors are not redirected",
+      "step": "implement"
+    }
+  ],
+  "last_action": "16/18 tasks done; T011 and T015 need the maintainer"
+}

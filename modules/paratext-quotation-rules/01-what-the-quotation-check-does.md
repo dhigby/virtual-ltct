@@ -8,8 +8,8 @@ help, you have to recognize when the check's results are meaningless because it 
 configured yet, and be able to explain that to the team. This lesson prepares you for that
 first conversation.
 
-> This lesson uses the fictional **Tamba New Testament** (`tamba`) project. See the
-> [course README](README.md#the-fictional-project) for the Tamba quotation conventions and
+> This lesson uses the **Tamba New Testament** (`tamba`) practice project. See the
+> [course README](README.md#the-practice-projects) for the Tamba quotation conventions and
 > [Prerequisites](README.md#prerequisites) for setup.
 
 **Watch the video:** _To be recorded at stage 8._

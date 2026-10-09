@@ -118,8 +118,9 @@ mentor for review. See you in Paratext."
 - **Live-demo caution:** always drive character entry with the dropdown (▼), never the
   keyboard, on camera — it models the habit the course insists on and avoids accidentally
   entering a straight quote.
-- **Pronunciation / naming:** the project languages (Tamba, Runda, Velna, Menda, Waku) are
-  fictional; say them plainly. Do not imply they are real languages.
+- **Pronunciation / naming:** Tamba, Runda, Velna, Menda and Waku are course names for
+  practice projects built from real languages' text; say them plainly. Don't name, describe or
+  make claims about the real languages behind them.
 - **Screen legibility:** the yellow information bar (Segment 1), the Example preview
   (Segment 2), and the reversed guillemets (Segment 5) are small UI details — zoom or
   crop the recording so they read clearly at video resolution.

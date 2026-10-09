@@ -2,8 +2,8 @@
 
 **Estimated time:** 90 minutes
 
-> This lesson uses the `tamba` and `runda` fictional projects. See the
-> [course README](README.md#the-fictional-project) for their quotation conventions.
+> This lesson uses the `tamba` and `runda` practice projects. See the
+> [course README](README.md#the-practice-projects) for their quotation conventions.
 
 **Purpose:** Every language marks speech differently — curly quotes, guillemets, a character
 that doubles as an apostrophe. On a real project your job is to translate those conventions
@@ -165,7 +165,7 @@ place. You'll see this firsthand in the third exercise below.
 
 ## Challenge
 
-You will configure two real (fictional) projects and then untangle the apostrophe conflict.
+You will configure two practice projects and then untangle the apostrophe conflict.
 Each exercise produces a configured tab a mentor can inspect against the language's convention
 table in the README.
 

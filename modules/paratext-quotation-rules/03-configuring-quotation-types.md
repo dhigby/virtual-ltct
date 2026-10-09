@@ -2,8 +2,8 @@
 
 **Estimated time:** 60 minutes
 
-> This lesson uses the `tamba` fictional project. See the
-> [course README](README.md#the-fictional-project) for its quotation conventions.
+> This lesson uses the `tamba` practice project. See the
+> [course README](README.md#the-practice-projects) for its quotation conventions.
 
 **Purpose:** The Quote marks tab from Lesson 2 tells Paratext *which* characters are quote
 marks; it does not say *when* marks should appear. On a real project a language may mark

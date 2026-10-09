@@ -4,12 +4,12 @@
 
 > Three independent scenarios, roughly 30 minutes each. Scenarios A and B are core practice;
 > **Scenario C (Waku em-dash) is an optional stretch** for learners who complete A and B
-> confidently. Do them in any order. Each uses its own fictional project — see the
+> confidently. Do them in any order. Each uses its own practice project — see the
 > [mentor guide](06-mentor-guide.md) for how the facilitator distributes them.
 
 **Learning objectives:** By the end of this scenario bank you will be able to apply the complete inventory + rules + check + triage workflow independently to an unfamiliar language scenario, including edge cases not covered in Lessons 1–4.
 
-These exercises use three new fictional projects. Each has a different quotation style. For each scenario follow the same four-step workflow — **inventory → rules → check → triage** — broken into eight concrete actions:
+These exercises use three new practice projects. Each has a different quotation style. For each scenario follow the same four-step workflow — **inventory → rules → check → triage** — broken into eight concrete actions:
 
 **Inventory**
 
@@ -57,7 +57,7 @@ No Third level. First level opening mark `«` also appears at the start of conti
 | First level | `«` | `«` | `»` |
 | Second level | `‘` | *(blank)* | `’` |
 
-Word-medial punctuation: add `’` (U+2019) in ☰ > Project settings > Language Settings > Other Characters tab > Word-medial punctuation — do this anyway, since it's the correct habit to build, but confirmed on a real Paratext 9.5 build, it will **not** stop the check from flagging Velna's word-medial apostrophes. That's expected: once `’` is already a configured quote mark, this setting has no effect on it. Treat any remaining apostrophe results as verified false positives, not something left to configure away. Since Velna's orthography is fictional and effectively still "in development" for this exercise, this is also the right moment to raise the real fix with learners: if this were a live translation team's project, this is exactly when you'd recommend adopting a different, unique apostrophe character — Lesson 2 names `ʼ` (U+02BC MODIFIER LETTER APOSTROPHE) as a concrete option — rather than living with the collision indefinitely. Velna itself keeps `’` for its apostrophes so the scenario still demonstrates the unresolvable case firsthand; the `ʼ` alternative is illustrated in Lesson 2's text, not built into this project.
+Word-medial punctuation: add `’` (U+2019) in ☰ > Project settings > Language Settings > Other Characters tab > Word-medial punctuation — do this anyway, since it's the correct habit to build, but confirmed on a real Paratext 9.5 build, it will **not** stop the check from flagging Velna's word-medial apostrophes. That's expected: once `’` is already a configured quote mark, this setting has no effect on it. Treat any remaining apostrophe results as verified false positives, not something left to configure away. Since Velna's conventions were set for this course, treat its orthography as still "in development" for this exercise; this is also the right moment to raise the real fix with learners: if this were a live translation team's project, this is exactly when you'd recommend adopting a different, unique apostrophe character — Lesson 2 names `ʼ` (U+02BC MODIFIER LETTER APOSTROPHE) as a concrete option — rather than living with the collision indefinitely. Velna itself keeps `’` for its apostrophes so the scenario still demonstrates the unresolvable case firsthand; the `ʼ` alternative is illustrated in Lesson 2's text, not built into this project.
 
 **Quotation types tab:** confirmed on a real Paratext 9.5 build: Velna needs exactly **one**
 change from recommended defaults — **Continued quotation = Use quote marks** (the First level

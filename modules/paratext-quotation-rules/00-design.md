@@ -89,10 +89,11 @@ following field knowledge (to be confirmed at SME fact-check, stage 5):_
   Continued-quotation claim is only testable once the types check is enabled.
 - The **Quotation types** check is a separate, administrator-enabled check that only checks
   first-level quotes in non-Deuterocanonical books.
-- Same-character open/close (em-dash languages like the fictional Waku) cannot always be
+- Same-character open/close (em-dash conventions like Waku's) cannot always be
   fully resolved by configuration; residual results must be documented in Project Notes for
   the consultant rather than edited away.
-- The fictional languages use ISO 639-3 private-use codes (`qaa`–`qtz`) to avoid colliding
-  with real languages in Paratext's language database.
+- The practice projects use real languages, adapted for the course (decided 2026-10-09,
+  replacing the earlier plan of ISO 639-3 private-use codes): each keeps its real language
+  setting in Paratext under a course name, with quotation conventions defined by the course.
 - Recommended-settings defaults shown in the course should be re-verified against the
   learner's actual Paratext 9.5 build before being relied on as exact.

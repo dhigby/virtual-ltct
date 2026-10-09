@@ -2,9 +2,11 @@
 
 **Estimated time:** 75 minutes
 
-> This lesson uses the `tamba` fictional project in **Phase B** (configured, with five
-> seeded errors). See the [mentor guide](06-mentor-guide.md) for how the facilitator stages
-> Phase B.
+> This lesson uses `TAMBAB`, the **Phase B** copy of the Tamba New Testament practice project
+> (configured, with five seeded errors). Your mentor gives you access to it before this lesson:
+> receive it with **Paratext > Send/Receive projects...**, and do all of Lesson 4 in `TAMBAB`,
+> not in `TAMBA`, which keeps your own Lesson 2–3 settings. See the
+> [mentor guide](06-mentor-guide.md) for how the facilitator stages Phase B.
 
 **Purpose:** A configured check still produces results — and on a real project the whole value
 of your work is being able to look at each one and decide, correctly and quickly, whether to
@@ -24,8 +26,9 @@ By the end of this lesson you will be able to:
 
 ## Connect
 
-By now the Tamba project is configured (Lessons 2 and 3). Run the check and you will still see
-results — but now they *mean* something. The skill this lesson builds is the judgment call you
+By now you have configured Tamba yourself (Lessons 2 and 3). For this lesson you switch to
+`TAMBAB`, the same Tamba text with that configuration already entered. Run the check and you
+will still see results — but now they *mean* something. The skill this lesson builds is the judgment call you
 will make dozens of times on a real project: **fix the text, or fix the settings?**
 
 **✏️ Reflection.** Think back to Lesson 1 — the unconfigured check that refused to examine the
@@ -70,7 +73,7 @@ reason to pick a different, unique character for the apostrophe — Lesson 2 rec
 functioning as a letter rather than as punctuation. That eliminates the collision outright
 rather than living with documented false positives — but it's a project-level decision for the
 team, not a Paratext setting, and it isn't available at all for a fixed text like Tamba's, where
-the orthography (real or fictional) is already settled.
+the orthography is already settled.
 
 ![The Quotations check results panel after full configuration, showing a manageable list of results. One result is highlighted with the verse open alongside it, demonstrating how to read a result entry (location, message, and the text in context).](assets/ss-04-results-with-highlight.png)
 
@@ -91,13 +94,13 @@ gap**; a one-off result usually points to a **real error** in that verse.
 
 ## Challenge
 
-The `tamba` project is in **Phase B**: fully configured, but seeded with five deliberate
+The `TAMBAB` project is Tamba in **Phase B**: fully configured, but seeded with five deliberate
 issues. Your job is to triage them correctly, then clear a book to zero. Your filled-in tables
 and reasoning are what a mentor reviews.
 
 ### Exercise 4.1 — Triage a dirty result set
 
-The `tamba` project has been seeded with five issues — but the check reports **seven** results,
+The `TAMBAB` project has been seeded with five issues — but the check reports **seven** results,
 because one issue (#3) is a single broken mark whose damage is reported back as three separate,
 differently-worded results at three different verses. This is common: a break in the middle of a
 nested quotation chain confuses the tracking on both sides of the break, so the checker reports
@@ -131,7 +134,7 @@ prediction for every row should you read the discovery prompts and open the vers
   level mark? Once you spot the one broken mark, ask yourself: does fixing only that one
   character, then re-running the check, clear all three results, or just one?
 - Acts 2:25–28: Peter cites Psalm 16 in Second level marks as one continuous span across
-  several paragraph breaks. Recall the Tamba conventions in The Fictional Project table: what
+  several paragraph breaks. Recall the Tamba conventions in The Practice Projects table: what
   does Tamba do with quotation marks at each new paragraph of continued speech? Does this text
   follow that convention?
 - Romans 1:1 has no dialogue. How could `’` (U+2019) inside a word cause the check to report a
@@ -151,7 +154,7 @@ prediction for every row should you read the discovery prompts and open the vers
 
 ### Exercise 4.2 — Reach zero *actionable* errors
 
-**Goal:** Work through the full result list for the `tamba` project until every result has
+**Goal:** Work through the full result list for the `TAMBAB` project until every result has
 either been cleared (by fixing the text or adjusting the configuration) or, for the one
 confirmed unresolvable case, verified and documented as an expected false positive. "Zero
 actionable errors" does not mean a literal zero-length results list once Romans is in scope —

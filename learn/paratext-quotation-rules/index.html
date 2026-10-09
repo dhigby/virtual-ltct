@@ -378,10 +378,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#the-fictional-project" class="md-nav__link">
+  <a href="#the-practice-projects" class="md-nav__link">
     <span class="md-ellipsis">
       
-        The Fictional Project
+        The Practice Projects
       
     </span>
   </a>
@@ -802,10 +802,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#the-fictional-project" class="md-nav__link">
+  <a href="#the-practice-projects" class="md-nav__link">
     <span class="md-ellipsis">
       
-        The Fictional Project
+        The Practice Projects
       
     </span>
   </a>
@@ -867,7 +867,7 @@
 <strong>Content type:</strong> content<br>
 <strong>4 lessons</strong> &middot; about 5.8 hours<br>
 <strong>Built from:</strong> <code>course/paratext-quotation-rules</code><br>
-<strong>Pull request:</strong> <a href="https://github.com/dhigby/virtual-ltct/pull/58">58</a><br></p>
+<strong>Pull request:</strong> <a href="https://github.com/dhigby/virtual-ltct/pull/112">112</a><br></p>
 <p>You are reading the <strong>learner view</strong> -- the course as a learner sees it. The design document, mentor guide and quiz solutions are not included.</p>
 </div>
 <h3 id="an-interactive-course-for-intermediate-users">An Interactive Course for Intermediate Users<a class="headerlink" href="#an-interactive-course-for-intermediate-users" title="Permanent link">&para;</a></h3>
@@ -933,13 +933,42 @@
 - Able to open a project and navigate the Paratext menu bar
 - Able to run a basic check (☰ &gt; Tools &gt; Run basic checks...)
 - Familiar with the idea that <code>\p</code>, <code>\q</code>, <code>\v</code> etc. are USFM markers (you do not need to know them in depth — the course explains the relevant ones as they appear)</p>
-<p><strong>Fictional projects</strong> (see the mentor guide for setup and distribution)
-- The <code>tamba</code> project must be installed before starting Lessons 1–4
-- The <code>runda</code> project must also be installed before starting Lesson 2 (Lessons 1, 3, and 4 only need <code>tamba</code>)
-- The <code>velna</code>, <code>menda</code>, and <code>waku</code> projects must be installed before the scenario bank</p>
+<p><strong>Practice projects</strong> (see the mentor guide for setup and distribution)</p>
+<p>Your mentor gives you access to each practice project when you need it, and adds you as an
+<strong>Administrator</strong> (Lesson 3 and the scenarios change settings only an administrator can change).
+Give your mentor the user name your Paratext is registered under (<strong>Help &gt; Registration
+information...</strong>). To get a project once you've been given access, use <strong>Paratext &gt; Send/Receive
+projects...</strong>, tick the project and click <strong>Send/Receive</strong>.</p>
+<table>
+<thead>
+<tr>
+<th>Before…</th>
+<th>Receive</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Lesson 1</td>
+<td><code>TAMBA</code>: Tamba New Testament, Phase A (used for Lessons 1–3)</td>
+</tr>
+<tr>
+<td>Lesson 2</td>
+<td><code>RUNDA</code>: Runda New Testament</td>
+</tr>
+<tr>
+<td>Lesson 4</td>
+<td><code>TAMBAB</code>: the Phase B copy of Tamba, configured and seeded with errors</td>
+</tr>
+<tr>
+<td>Scenario bank</td>
+<td><code>VELNA</code>, <code>MENDA</code> and <code>Waku</code></td>
+</tr>
+</tbody>
+</table>
 <hr />
-<h2 id="the-fictional-project">The Fictional Project<a class="headerlink" href="#the-fictional-project" title="Permanent link">&para;</a></h2>
-<p>Lessons 1–4 use a single fictional project called <strong>Tamba New Testament</strong> (<code>tamba</code>). The Tamba language is fictional and uses the following quotation conventions:</p>
+<h2 id="the-practice-projects">The Practice Projects<a class="headerlink" href="#the-practice-projects" title="Permanent link">&para;</a></h2>
+<p>Every practice project in this course is real Scripture text from a real language, adapted for the course. Each has a course name (Tamba, Runda, Velna, Menda, Waku), and Paratext's project lists show its real language name alongside it. Its quotation marks follow conventions set for this course, so read the tables below as the course's conventions, not as a description of how that language community writes. As in real consulting work, you won't need to read the text itself: the skill is configuring the tool and diagnosing what it reports.</p>
+<p>Lessons 1–4 use the <strong>Tamba New Testament</strong> project: <code>TAMBA</code> for Lessons 1–3, and its Phase B copy <code>TAMBAB</code> for Lesson 4. Tamba uses the following quotation conventions:</p>
 <table>
 <thead>
 <tr>
@@ -985,7 +1014,7 @@
 - When a speech quotes Scripture as poetry, the First level continuer <code>“</code> is repeated at the head of the first <code>\q1</code> line (e.g. Matthew 2:6 <code>\q1 “ ‘Oro iu, Betliem…</code>); the following <code>\q2</code>/<code>\q1</code> lines of the same poem carry no mark.
 - <strong>Continuer required at:</strong> <code>p p/q1 m/q1 s1/pi pi/pi b/q1</code> — every <code>\p</code> inside a speech, a <code>\q1</code> that follows <code>\p</code>, <code>\m</code> or <code>\b</code>, and an indented <code>\pi</code> that follows <code>\s1</code> or another <code>\pi</code>.
 - Phase A text contains no apostrophes, so the <code>’</code> collision described under Runda does not arise in Tamba.</p>
-<p>Lesson 2 also uses a second fictional project, <strong>Runda</strong> (<code>runda</code>), for the guillemet and apostrophe exercises:</p>
+<p>Lesson 2 also uses a second practice project, <strong>Runda</strong> (<code>runda</code>), for the guillemet and apostrophe exercises:</p>
 <table>
 <thead>
 <tr>
@@ -1030,7 +1059,7 @@
 - Poetry quoted inside speech (Matthew 2:6, 4:6, the Beatitudes 5:3–10) does <strong>not</strong> repeat the continuer on <code>\q1</code> lines — the poem opens straight into the Second level <code>‘</code>, or simply runs on.
 - <strong>Continuer required at:</strong> <code>p</code> — nothing else, because the text carries continuers only at <code>\p</code>. Listing <code>p/q1</code> produces "Expected continuers [«] are missing" at every quoted poem.
 - Runda's text uses <code>’</code> (U+2019) as an apostrophe throughout — word-medial (<em>don’t</em>) and word-final possessive (<em>righteousness’ sake</em>, Matthew 5:10) — so it collides with the Second level closing mark. That is deliberate: Exercise 2.3 is built on it.</p>
-<p>Keep these reference tables open as you work through Lessons 1–4. The scenario bank introduces three further fictional languages, each with its own conventions table.</p>
+<p>Keep these reference tables open as you work through Lessons 1–4. The scenario bank introduces three further practice projects, each with its own conventions table.</p>
 <hr />
 <h2 id="quick-reference-unicode-characters-used-in-this-course">Quick Reference — Unicode Characters Used in This Course<a class="headerlink" href="#quick-reference-unicode-characters-used-in-this-course" title="Permanent link">&para;</a></h2>
 <table>

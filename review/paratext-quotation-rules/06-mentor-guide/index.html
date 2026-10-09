@@ -683,10 +683,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#step-5-distribute-the-project" class="md-nav__link">
+  <a href="#step-5-make-the-projects-available-through-sendreceive" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Step 5 — Distribute the project
+        Step 5 — Make the projects available through Send/Receive
       
     </span>
   </a>
@@ -1022,10 +1022,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#step-5-distribute-the-project" class="md-nav__link">
+  <a href="#step-5-make-the-projects-available-through-sendreceive" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Step 5 — Distribute the project
+        Step 5 — Make the projects available through Send/Receive
       
     </span>
   </a>
@@ -1109,14 +1109,52 @@
 <h1 id="mentor-guide-facilitator-notes">Mentor Guide — Facilitator Notes<a class="headerlink" href="#mentor-guide-facilitator-notes" title="Permanent link">&para;</a></h1>
 <blockquote>
 <p>Facilitator-facing. Read this completely before the first session. It describes how to
-create and distribute the fictional training projects, how to stage the <code>tamba</code> project for
+create and distribute the practice projects, how to stage the <code>tamba</code> project for
 each phase of the course, and what text content is required. The learner-facing lessons are
 <a href="../01-what-the-quotation-check-does/"><code>01</code></a>–<a href="../05-scenario-bank/"><code>05</code></a>; the graded
 assessment is the <a href="../07-quiz/">quiz</a>.</p>
 </blockquote>
 <h2 id="overview">Overview<a class="headerlink" href="#overview" title="Permanent link">&para;</a></h2>
-<p>This course teaches configuration of Paratext 9.5's Quotation check using five fictional
-projects (<code>tamba</code>, <code>runda</code>, <code>velna</code>, <code>menda</code>, <code>waku</code>). Learners never touch a real project. The
+<p>This course teaches configuration of Paratext 9.5's Quotation check using five practice
+projects (<code>tamba</code>, <code>runda</code>, <code>velna</code>, <code>menda</code>, <code>waku</code>), plus <code>TAMBAB</code>, Tamba's Phase B copy.
+Learners never touch a live translation project.</p>
+<p>The practice projects use <strong>real languages, adapted for the course</strong>. Each project holds real
+Scripture text and keeps its real language setting in Paratext, but carries a course name, and
+its quotation marks follow conventions defined by this course. The conventions tables in the
+lessons are the course's conventions, not a claim about how that language community writes, so
+don't present them to learners as facts about the language. Paratext's project lists show the
+real language names:</p>
+<table>
+<thead>
+<tr>
+<th>Course project</th>
+<th>Language setting in Paratext</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>TAMBA</code>, <code>TAMBAB</code></td>
+<td>Notsi (<code>ncf</code>)</td>
+</tr>
+<tr>
+<td><code>RUNDA</code></td>
+<td>English (<code>en-US</code>)</td>
+</tr>
+<tr>
+<td><code>VELNA</code></td>
+<td>Sursurunga (<code>sgz</code>)</td>
+</tr>
+<tr>
+<td><code>MENDA</code></td>
+<td>English (<code>en-US</code>)</td>
+</tr>
+<tr>
+<td><code>Waku</code></td>
+<td>Nalik (<code>nal</code>)</td>
+</tr>
+</tbody>
+</table>
+<p>The
 <code>tamba</code> project is used in two staged versions (Phase A blank, Phase B seeded) across Lessons
 1–4. <code>runda</code> is a second project configured hands-on in Lesson 2, alongside <code>tamba</code>, to practice
 a different character set and the apostrophe conflict. The remaining three (<code>velna</code>, <code>menda</code>,
@@ -1148,7 +1186,7 @@ project, so Scenario A tests the same skill on a project the learner has not alr
 </tr>
 <tr>
 <td>Primary language</td>
-<td>Create a new language entry: name <code>Tamba</code>, ISO code <code>qtb</code> (ISO 639-3 private-use range <code>qaa</code>–<code>qtz</code>; <code>tmb</code> is assigned to Katimba, a real language — using a private-use code avoids conflicts in Paratext's language database)</td>
+<td>The real language whose text the project uses: Notsi (<code>ncf</code>) for Tamba. Don't create a private-use language code (see Overview).</td>
 </tr>
 <tr>
 <td>Versification</td>
@@ -1240,7 +1278,7 @@ project, so Scenario A tests the same skill on a project the learner has not alr
 </tr>
 </tbody>
 </table>
-<p><strong>Apostrophes:</strong> Phase A text should contain <strong>no contractions or possessives</strong> — Tamba’s fictional conventions do not include apostrophes in Phase A, consistent with Exercise 2.3 (which uses Runda as the apostrophe-conflict example, not Tamba). For Phase B, in the text near Romans 1:1 include a word with <code>’</code> (U+2019) as an apostrophe — the same character as Tamba’s Second level closing mark. This seeds the configuration-problem scenario in Exercise 4.1, item 5.</p>
+<p><strong>Apostrophes:</strong> Phase A text should contain <strong>no contractions or possessives</strong> — Tamba’s course conventions do not include apostrophes in Phase A, consistent with Exercise 2.3 (which uses Runda as the apostrophe-conflict example, not Tamba). For Phase B, in the text near Romans 1:1 include a word with <code>’</code> (U+2019) as an apostrophe — the same character as Tamba’s Second level closing mark. This seeds the configuration-problem scenario in Exercise 4.1, item 5.</p>
 <p><strong>Paragraph-spanning speech:</strong> Matthew 5:3–7:28 (the whole Sermon on the Mount) is the key example — not just the Beatitudes. Each verse is its own <code>\p</code> paragraph. The speech opens with <code>“</code> (U+201C) at verse 5:3. Because Tamba's First level uses a Quote Continuer, every following paragraph through 7:27 also opens with <code>“</code> (U+201C) — the same character, repeated to signal the speech continues from the previous paragraph. Only verse 7:28, the narrator's aside ("when Jesus had finished saying these things...") that ends the sermon, also carries the closing mark <code>”</code> (U+201D) at its end. This is what the learner configures in Exercise 2.1 (Quote marks tab — the continuer character) and Exercise 3.2 (Quotation types tab — Continued quotation = Use quote marks). Lesson 3's discovery exercise (Exercise 3.2, Step "Check your work") only asks the learner to confirm 5:4–5:11 aren't falsely flagged — it does not require the whole sermon to be built yet — but the full 5:3–7:28 span must exist correctly-marked in the Phase A/B baseline before Lesson 4, since Exercise 4.1 seed #1 depends on 7:28 being the true close.</p>
 <p><strong>SME verification — confirmed:</strong> a Paratext 9.5 run on a built <code>tamba</code> project confirmed the Quotation types "Continued quotation" setting does govern whether Paratext expects a configured continuer character at a paragraph break, independent of Second/Third level's close-and-reopen behavior. It also surfaced two behaviors the original design hadn't accounted for, both now reflected in the Lesson 4 Seeding table and Exercise 4.1 below: (1) an unclosed First level quotation is reported at its opening verse with wording that traces forward to wherever the next real closing mark happens to fall, rather than a fixed nearby verse; (2) a single corrupted Second level mark can cascade into multiple linked results on either side of the break rather than one isolated result. Re-verify both if the seeded text is rebuilt from scratch, since exact locations depend on the specific project build.</p>
 <p>Do <strong>not</strong> configure the Quote marks tab or Rules at this stage. The project should arrive at learners with a blank quotation configuration.</p>
@@ -1250,40 +1288,135 @@ project, so Scenario A tests the same skill on a project the learner has not alr
 - Quote marks tab: empty
 - Quotation Rules: default (unconfigured)
 - Text: correct marks, no deliberate errors</p>
-<p>Distribute Phase A before learners begin Lesson 1. Learners configure the inventory and rules themselves during Lessons 2–3.</p>
+<p>Make Phase A available before learners begin Lesson 1 (Step 5). Learners configure the inventory and rules themselves during Lessons 2–3.</p>
 <p><strong>Phase B — Lesson 4 (configured + seeded errors)</strong>
 - Quote marks tab: fully configured per the Tamba settings above (Exercise 2.1 values)
 - Quotation types tab: recommended defaults with three customizations, confirmed against a real Paratext 9.5 build — Quotation from another source = <strong>Quote marks are optional</strong>, Continued quotation = <strong>Use quote marks</strong>, Indirect = <strong>Never use quote marks</strong> (the Exercise 3.2 result). Self quote already defaults to Use quote marks, which matches Tamba's requirement, so it is left unchanged.
 - Text: same as Phase A, plus the five deliberate errors from the Lesson 4 Seeding table below</p>
-<p>Distribute Phase B (or push an update) before Exercise 4.1. For a group session, the simplest approach is to distribute Phase A, let learners work through Lessons 1–3 themselves, then have the facilitator push the five seed edits to the shared project before Lesson 4 begins.</p>
-<h3 id="step-5-distribute-the-project">Step 5 — Distribute the project<a class="headerlink" href="#step-5-distribute-the-project" title="Permanent link">&para;</a></h3>
-<p>Choose whichever distribution method suits your setup. (Prebuilt project backups accompany this course as <code>Projects/Tamba-A.zip</code>, <code>Projects/Tamba-B.zip</code>, <code>Projects/Runda.zip</code>, <code>Projects/Menda.zip</code>, <code>Projects/Velna.zip</code>, and <code>Projects/Waku.zip</code>.)</p>
+<p>Phase A and Phase B are two <strong>separate</strong> registered projects: <code>TAMBA</code> (Phase A) and <code>TAMBAB</code> (Phase B, full name also <em>Tamba New Testament</em>). Learners can't see <code>TAMBAB</code> until you add them to it, which you do just before Exercise 4.1 (Step 5). Keep <code>TAMBA</code> at Phase A at all times: if Phase B content ever reaches <code>TAMBA</code>, every learner who receives it for Lessons 1–3 gets the answers.</p>
+<h3 id="step-5-make-the-projects-available-through-sendreceive">Step 5 — Make the projects available through Send/Receive<a class="headerlink" href="#step-5-make-the-projects-available-through-sendreceive" title="Permanent link">&para;</a></h3>
+<p>Learners get every practice project through Paratext <strong>Send/Receive</strong>. You, the mentor, keep the set of backup files and use them to put each project into the state the next lesson needs. Learners never need the backup files themselves.</p>
+<p><strong>The backup set.</strong> These are prebuilt and verified. Keep them somewhere only mentors can reach: the Phase B backup contains the Lesson 2–3 answers and the configured state of every seed.</p>
 <table>
 <thead>
 <tr>
-<th>Method</th>
-<th>How</th>
+<th>Backup file</th>
+<th>Project</th>
+<th>State it restores</th>
+<th>Needed for</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>Paratext Send/Receive (shared server)</td>
-<td>Create the project on a shared Paratext server. Learners receive it via Send/Receive. Push the Phase B edits to the server before Lesson 4.</td>
+<td><code>Tamba New Testament 2026-10-07.zip</code></td>
+<td><code>TAMBA</code></td>
+<td><strong>Phase A</strong>: quotation settings blank, Quotation types check off, clean text</td>
+<td>Lessons 1–3</td>
 </tr>
 <tr>
-<td>USB / local file share</td>
-<td>Back up the project (<strong>Paratext menu &gt; Advanced &gt; Backup project to file...</strong>), distribute the <code>.bak</code> file, and learners restore it (<strong>Paratext menu &gt; Advanced &gt; Restore project from file...</strong>). Provide two <code>.bak</code> files: one for Phase A and one for Phase B.</td>
+<td><code>TAMBAB Phase B 2026-10-09.zip</code></td>
+<td><code>TAMBAB</code></td>
+<td><strong>Phase B</strong>: Lesson 2–3 settings entered, Quotation types check on, the five seeds in the text</td>
+<td>Lesson 4</td>
 </tr>
 <tr>
-<td>Paratext Registry (internet)</td>
-<td>Register <code>TAMBA</code> as a private project on the Paratext Registry. Learners receive it via Send/Receive using an invited user account.</td>
+<td><code>Runda New Testament 2026-10-07.zip</code></td>
+<td><code>RUNDA</code></td>
+<td>Blank</td>
+<td>Lesson 2</td>
+</tr>
+<tr>
+<td><code>Velna New Testament 2026-10-07.zip</code></td>
+<td><code>VELNA</code></td>
+<td>Blank (Word-medial punctuation empty)</td>
+<td>Scenario A</td>
+</tr>
+<tr>
+<td><code>Menda New Testament 2026-10-09.zip</code></td>
+<td><code>MENDA</code></td>
+<td>Blank</td>
+<td>Scenario B</td>
+</tr>
+<tr>
+<td><code>Waku New Testament 2026-10-07.zip</code></td>
+<td><code>Waku</code></td>
+<td>Blank</td>
+<td>Scenario C</td>
 </tr>
 </tbody>
 </table>
-<p>For self-paced learners working alone, USB or file share is simplest. For instructor-led groups, a shared Paratext server is recommended so the facilitator can push Phase B edits centrally.</p>
+<p>The Phase A and Phase B projects both have the full name <em>Tamba New Testament</em>, so Paratext's default backup names for them differ only by date. Keep the Phase B file named <code>TAMBAB Phase B …</code>, so it can't be mistaken for the Phase A backup. Restoring the wrong one over <code>TAMBA</code> gives every Lesson 1–3 learner the answers.</p>
+<p>Each backup already carries the project's Paratext Registry registration (visibility: Test), so restoring one does not create a new project on the Registry.</p>
+<p><strong>One-time setup, in your own Paratext</strong></p>
+<ol>
+<li>Restore each project: <strong>Paratext menu &gt; Advanced &gt; Restore project from file...</strong></li>
+<li>Add the learner to each project. In the project's window, open <strong>☰ &gt; Project settings &gt; User permissions...</strong>, then:</li>
+<li>Click <strong>Add User...</strong> and add the learner.</li>
+<li>Click <strong>Change Role...</strong> next to the learner's name and choose <strong>Administrator</strong>.</li>
+<li>Click <strong>Book Permissions...</strong> and give them <strong>all books</strong>. A new user starts with <em>Editable Books: None</em>, even as an Administrator, so don't skip this step.</li>
+<li>Click <strong>OK</strong>.</li>
+</ol>
+<p>The learner needs Administrator because Lesson 3 has them tick <em>Enable the Quotation types check</em>, and Lesson 2 and the scenarios have them change Language Settings. Those are administrator-only settings.
+3. Send the changes to the server: <strong>☰ &gt; Send/Receive this project</strong>. This is how the learner's access and the starting state reach the server.</p>
+<p><img alt="The User permissions dialog for a practice project, listing two users with the Administrator role. One shows Editable Books: None and the other All books in project. Across the bottom, numbered callouts mark the order of use: 1 Add User..., 2 Book Permissions..., 3 Other Permissions... and 4 OK." src="../ss-06-user-permissions.png" /></p>
+<p><strong>The learner receives a project</strong> from the main Paratext menu (top left of the Paratext window, not a project window's ☰ menu):</p>
+<ol>
+<li><strong>Paratext &gt; Send/Receive projects...</strong></li>
+<li>Under <strong>Send/Receive With</strong>, leave <strong>Internet server</strong> selected.</li>
+<li>The list shows every project the learner has been given access to. A project they don't have on their computer yet is counted under the <strong>New</strong> button above the list. Tick the course project(s) they need now, and click <strong>Send/Receive</strong>. Paratext downloads them.</li>
+</ol>
+<p>You add the learner by the user name their copy of Paratext is registered under (<strong>Help &gt; Registration information...</strong>). Get that name from them before you set them up.</p>
+<p><img alt="The Send/Receive Projects dialog with Internet server selected under Send/Receive With. The project list shows the five course projects, MENDA, RUNDA, TAMBA, VELNA and Waku, each ticked, with its full name, last Send/Receive time and language. Above the list, filter buttons read All, None, Edited 2 and New 8." src="../ss-06-send-receive-projects.png" /></p>
+<p><strong>When to make each project available</strong></p>
+<table>
+<thead>
+<tr>
+<th>Before…</th>
+<th>Project</th>
+<th>Mentor</th>
+<th>Learner</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Lesson 1</td>
+<td><code>TAMBA</code> (Phase A)</td>
+<td>Set up as above</td>
+<td>Receives <code>TAMBA</code></td>
+</tr>
+<tr>
+<td>Lesson 2</td>
+<td><code>RUNDA</code></td>
+<td>Set up as above</td>
+<td>Receives <code>RUNDA</code></td>
+</tr>
+<tr>
+<td>Lesson 4</td>
+<td><code>TAMBAB</code> (Phase B)</td>
+<td>Add the learner to <code>TAMBAB</code> (User permissions, as above), then Send/Receive <code>TAMBAB</code></td>
+<td>Receives <code>TAMBAB</code> and works in it, not in <code>TAMBA</code>, for Lesson 4</td>
+</tr>
+<tr>
+<td>Scenario bank</td>
+<td><code>VELNA</code>, <code>MENDA</code>, <code>Waku</code></td>
+<td>Set up as above</td>
+<td>Receives all three</td>
+</tr>
+</tbody>
+</table>
+<p><code>TAMBAB</code> arrives with the reference Lesson 2–3 configuration already entered, so Lesson 4 starts from a known-good setup whatever the learner entered in <code>TAMBA</code>. Review their Lesson 2–3 settings in <code>TAMBA</code> before they move on: that's where their own configuration work is.</p>
+<p><strong>One learner per project at a time.</strong> Quotation Rules and Language Settings apply to the whole project. Everyone sharing a project sees the same values, and Send/Receive carries any change to all of them. Two learners configuring the same <code>TAMBA</code> would overwrite each other's work, and two learners triaging the same <code>TAMBAB</code> would fix each other's seeds. Run one learner per copy of each project. To run several learners at the same time, each needs their own copy.</p>
+<blockquote>
+<p><strong>[Placeholder — Kevin/Jenni:</strong> how to make a separate copy of each project per learner (for example, restoring under a different short name and registering each copy). Decide and verify this before running a group.<strong>]</strong></p>
+</blockquote>
+<p><strong>Resetting for the next learner.</strong> When a learner finishes:
+1. Remove them from each project's user list, including <code>TAMBAB</code>.
+2. Restore the starting backups (Tamba Phase A, <code>TAMBAB</code>, Runda, Velna, Menda, Waku), so the projects are back to where a new learner begins.
+3. Send/Receive each one.</p>
+<p><strong>When Send/Receive isn't an option.</strong> If a learner has no reliable internet connection, give them the matching backup file to restore on their own computer instead (<strong>Paratext menu &gt; Advanced &gt; Restore project from file...</strong>). Don't hand out the <code>TAMBAB</code> backup until they reach Lesson 4.</p>
 <hr />
 <h2 id="project-setup-runda-lesson-2">Project Setup: <code>runda</code> (Lesson 2)<a class="headerlink" href="#project-setup-runda-lesson-2" title="Permanent link">&para;</a></h2>
-<p><code>runda</code> is a second fictional project, alongside <code>tamba</code>, used hands-on in Lesson 2
+<p><code>runda</code> is a second practice project, alongside <code>tamba</code>, used hands-on in Lesson 2
 (Exercises 2.2–2.3) to practice a different character set (guillemets) and to work through the
 word-medial apostrophe conflict — including discovering, on a real Paratext 9.5 check, that
 Word-medial punctuation does not actually clear the resulting flag. It must be installed before
@@ -1310,8 +1443,8 @@ learners start Lesson 2, not just before the scenario bank.</p>
 word-medial punctuation conflict has real examples to work through — the exercise now expects
 learners to confirm the check keeps flagging these even after configuring Word-medial
 punctuation, not to reach zero results. Leave the Quote marks tab and
-Quotation Rules blank — learners configure both during Lesson 2. A prebuilt backup accompanies
-this course as <code>Projects/Runda.zip</code>.</p>
+Quotation Rules blank — learners configure both during Lesson 2. The prebuilt backup is in the
+mentor's backup set; make it available through Send/Receive as described in Step 5 above.</p>
 <hr />
 <h2 id="project-setup-velna-menda-and-waku-scenario-bank">Project Setup: <code>velna</code>, <code>menda</code>, and <code>waku</code> (Scenario bank)<a class="headerlink" href="#project-setup-velna-menda-and-waku-scenario-bank" title="Permanent link">&para;</a></h2>
 <p>Each scenario-bank project needs enough text to produce meaningful check results, but no deliberate errors need to be seeded — learners configure these projects from scratch, independently, having never seen them before.</p>
@@ -1342,9 +1475,9 @@ this course as <code>Projects/Runda.zip</code>.</p>
 </tbody>
 </table>
 <p>Apply the correct quotation characters for each language throughout the text. Leave all Quote marks tab and Rules settings blank — learners configure them as part of the scenario.</p>
-<p>Prebuilt backups now exist for all three scenario-bank projects (<code>Projects/Velna.zip</code>, <code>Projects/Menda.zip</code>,
-<code>Projects/Waku.zip</code>) — the tables above are reference for anyone rebuilding a project from scratch, not
-a required setup step. If you do rebuild one: blank the Quote marks tab and Quotation Rules
+<p>Prebuilt backups of all three scenario-bank projects are in the mentor's backup set and are made
+available through Send/Receive (see Step 5 under the <code>tamba</code> setup). The tables above are reference
+for anyone rebuilding a project from scratch, not a required setup step. If you do rebuild one: blank the Quote marks tab and Quotation Rules
 settings used during verification before backing up — learners must start from empty fields.
 <code>velna</code> is new as of this revision (it replaces <code>runda</code>'s prior role in Scenario A, so the two
 must be distinct projects — do not reuse the <code>runda</code> backup for <code>velna</code>).</p>

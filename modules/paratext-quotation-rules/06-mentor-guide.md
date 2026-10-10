@@ -180,7 +180,7 @@ You add the learner by the user name their copy of Paratext is registered under 
 
 **When a learner finishes**, in each project, including `TAMBAB`:
 
-1. Remove the learner: **☰ > Project settings > User permissions...**, then **Remove** next to their name.
+1. Remove the learner: **☰ > Project settings > User permissions...**, then **Remove** next to their name. Reverting doesn't remove users, so do this yourself.
 2. Open **☰ > Project > Project history...**
 3. Click your `## Course starting state` entry, then click **Revert Books...**
 4. In **Select which books to restore**, click **All Books**, then **OK**.

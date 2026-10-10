@@ -22,7 +22,7 @@ content_type: content
 
 **Format:** Each lesson presents a goal, a starting state, a set of discovery prompts (questions to answer before you act), and then the expected configuration you can compare against.
 
-**Estimated time:** Lessons 1–4 run 3–4 hours total; the scenario bank adds 1–2 hours. Each individual lesson is capped at 90 minutes — see the duration header at the top of each file.
+**Estimated time:** Lessons 1–4 run 4¼ hours total (30 + 90 + 60 + 75 minutes); the scenario bank adds 1–2 hours. Each individual lesson is capped at 90 minutes — see the duration header at the top of each file.
 
 ---
 
@@ -33,7 +33,7 @@ This course follows the repo's [content package structure](../../process/PROCESS
 | File | What it is |
 | --- | --- |
 | [`01-what-the-quotation-check-does.md`](01-what-the-quotation-check-does.md) | Lesson 1 — why configuration matters (30 min) |
-| [`02-setting-up-quote-marks.md`](02-setting-up-quote-marks.md) | Lesson 2 — the Quote marks tab, continuer, apostrophe conflict (75 min) |
+| [`02-setting-up-quote-marks.md`](02-setting-up-quote-marks.md) | Lesson 2 — the Quote marks tab, continuer, apostrophe conflict (90 min) |
 | [`03-configuring-quotation-types.md`](03-configuring-quotation-types.md) | Lesson 3 — the Quotation types tab (60 min) |
 | [`04-interpreting-and-clearing-the-check.md`](04-interpreting-and-clearing-the-check.md) | Lesson 4 — triage to zero errors (75 min) |
 | [`05-scenario-bank.md`](05-scenario-bank.md) | Applied practice: Velna, Menda, Waku (90 min) |
@@ -64,6 +64,11 @@ Give your mentor the user name your Paratext is registered under (**Help > Regis
 information...**). To get a project once you've been given access, use **Paratext > Send/Receive
 projects...**, tick the project and click **Send/Receive**.
 
+> **WARNING:** Receive each project once. After that, never Send/Receive it: your changes would
+> go to every other learner using that project. Save your work instead. The check runs on your
+> own copy, so your work counts without sending it. If Paratext offers to Send/Receive (for
+> example, after your mentor changes your permissions), cancel it.
+
 | Before… | Receive |
 |---|---|
 | Lesson 1 | `TAMBA`: Tamba New Testament, Phase A (used for Lessons 1–3) |
@@ -93,7 +98,7 @@ Lessons 1–4 use the **Tamba New Testament** project: `TAMBA` for Lessons 1–3
 - **Continuer required at:** `p p/q1 m/q1 s1/pi pi/pi b/q1` — every `\p` inside a speech, a `\q1` that follows `\p`, `\m` or `\b`, and an indented `\pi` that follows `\s1` or another `\pi`.
 - Phase A text contains no apostrophes, so the `’` collision described under Runda does not arise in Tamba.
 
-Lesson 2 also uses a second practice project, **Runda** (`runda`), for the guillemet and apostrophe exercises:
+Lesson 2 also uses a second practice project, **Runda** (`RUNDA`), for the guillemet and apostrophe exercises:
 
 | Level | Name | Opening mark | Unicode | Closing mark | Unicode |
 |-------|------|-------------|---------|-------------|----------|

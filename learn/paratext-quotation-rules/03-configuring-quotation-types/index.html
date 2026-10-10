@@ -956,7 +956,7 @@
 <h1 id="lesson-3-configuring-quotation-types">Lesson 3 — Configuring Quotation Types<a class="headerlink" href="#lesson-3-configuring-quotation-types" title="Permanent link">&para;</a></h1>
 <p><strong>Estimated time:</strong> 60 minutes</p>
 <blockquote>
-<p>This lesson uses the <code>tamba</code> practice project. See the
+<p>This lesson uses the <code>TAMBA</code> practice project. See the
 <a href="../#the-practice-projects">course README</a> for its quotation conventions.</p>
 </blockquote>
 <p><strong>Purpose:</strong> The Quote marks tab from Lesson 2 tells Paratext <em>which</em> characters are quote
@@ -985,7 +985,9 @@ well):</p>
 <li>If a checker flagged <em>every</em> indirect-speech verse as "missing quotation mark," would that be
   the translation's fault or the check's setup?</li>
 </ul>
-<p>Those are exactly the distinctions the Quotation types tab exists to encode. Hold your answers.</p>
+<p>Those are exactly the distinctions the Quotation types tab exists to encode. Hold your answers —
+you'll make these same calls for Tamba in Exercise 3.2, and meet them again in the Change
+self-assessment.</p>
 <h2 id="content">Content<a class="headerlink" href="#content" title="Permanent link">&para;</a></h2>
 <p><em>This is the second half of configuring the check for the </em><em>Translation Tools</em><em> competency.
 Lesson 2 was about characters; this lesson is about expectations. Getting the type settings
@@ -1001,9 +1003,9 @@ always appear, never appear, or is either acceptable?</p>
 <p>At the top of the tab is the checkbox <strong>Enable the Quotation types check in Run basic
 checks</strong>. Only a project administrator can check this box — the status bar confirms: "Only a
 project administrator can enable this tab." Any user can configure the radio buttons and
-drop-downs below; it is only the enable checkbox that requires administrator access. If you are
-not an administrator, configure the settings in this lesson, then ask your project
-administrator to check the enable box.</p>
+drop-downs below; it is only the enable checkbox that requires administrator access. You are an
+administrator of every practice project in this course, so you tick it yourself in Exercise
+3.2.</p>
 <p><strong>WARNING</strong> The Quotation types check only checks first-level quotes in non-Deuterocanonical
 books.</p>
 <h3 id="the-seven-quotation-types">The seven quotation types<a class="headerlink" href="#the-seven-quotation-types" title="Permanent link">&para;</a></h3>
@@ -1032,15 +1034,15 @@ quotation type will still be reported.</p>
 <tbody>
 <tr>
 <td>Normal</td>
-<td>Direct speech between characters in the narrative</td>
+<td>Direct speech between people in the narrative</td>
 </tr>
 <tr>
 <td>Quotation from another source</td>
-<td>A narrator or character quotes scripture, another text, or a source outside the narrative</td>
+<td>A narrator or speaker quotes scripture, another text, or a source outside the narrative</td>
 </tr>
 <tr>
 <td>Self quote</td>
-<td>A character quotes their own earlier words</td>
+<td>A speaker quotes their own earlier words</td>
 </tr>
 <tr>
 <td>Continued quotation</td>
@@ -1106,7 +1108,7 @@ done. If your language diverges, select <strong>Custom settings</strong> and adj
 individually.</p>
 <p><strong>NOTE</strong> The values Paratext pre-fills under "Use recommended settings" are set by Paratext —
 verify what appears in your version before relying on the table above as the exact recommended
-defaults. (The table above reflects Paratext 9.5 defaults confirmed on a built <code>tamba</code> project;
+defaults. (The table above reflects Paratext 9.5 defaults confirmed on a built <code>TAMBA</code> project;
 earlier drafts of this lesson had Quotation from another source and Indirect backwards — both
 actually default to a "marks expected/optional" leaning rather than "never," which is why Tamba's
 Exercise 3.2 customization list below touches more rows than you might expect.)</p>
@@ -1128,14 +1130,13 @@ speech categories.</p>
   defaults produce incorrect results.</li>
 <li>Configuring types correctly reduces triage work in Lesson 4 by eliminating whole categories
   of expected exceptions before the check runs.</li>
-<li>Only a project administrator can enable the check — if you are not one, configure the
-  settings and ask an administrator to enable it.</li>
+<li>Only a project administrator can enable the check; any user can configure the settings.</li>
 </ul>
 <h2 id="challenge">Challenge<a class="headerlink" href="#challenge" title="Permanent link">&para;</a></h2>
-<p>You are configuring the Tamba project's quotation types after a working session with the
+<p>You are configuring the <code>TAMBA</code> project's quotation types after a working session with the
 translation team. Each exercise produces settings a mentor can check against Tamba's conventions.</p>
 <h3 id="exercise-31-read-tambas-current-quotation-types">Exercise 3.1 — Read Tamba's current quotation types<a class="headerlink" href="#exercise-31-read-tambas-current-quotation-types" title="Permanent link">&para;</a></h3>
-<p>Open the Tamba project and navigate to ☰ &gt; Project settings &gt; Quotation Rules &gt; Quotation types
+<p>Open the <code>TAMBA</code> project and navigate to ☰ &gt; Project settings &gt; Quotation Rules &gt; Quotation types
 tab.</p>
 <p><strong>✏️</strong> Before changing anything, record the current setting for each type:</p>
 <table>
@@ -1187,7 +1188,7 @@ things:</p>
    repeats the opening mark <code>“</code> at the head of each continued paragraph rather than closing and
    reopening. (Second and Third level have no continuer — those close and reopen fully instead,
    so they never produce a "Continued quotation" instance.)</li>
-<li>When a character quotes their own earlier words (a self-quote), Tamba treats it the same as
+<li>When a speaker quotes their own earlier words (a self-quote), Tamba treats it the same as
    any other direct speech: it <strong>must</strong> be marked with quotation marks.</li>
 <li>Tamba never marks reported/indirect speech (e.g. "He told them that the harvest was near") —
    no quote marks appear at all.</li>
@@ -1204,13 +1205,16 @@ match Tamba's conventions:
   mistakenly adds marks to reported speech. Since Tamba's convention is that indirect speech is
   <em>never</em> marked, set this to <em>Never use quote marks</em> so a stray mark there gets caught.</p>
 <p><strong>Step 2</strong> — Check the current recommended setting for <strong>Self quote</strong>. Unlike the other three,
-Self quote already defaults to <strong>Use quote marks</strong> — which is exactly what Tamba needs (item 3).
-No change required here; confirm it and move on.</p>
-<p>Click <strong>Custom settings</strong> at the top of the tab. This switches all drop-downs to editable mode.
-Change <strong>Quotation from another source</strong> from <em>Use quote marks</em> to <strong>Quote marks are optional</strong>,
-change <strong>Continued quotation</strong> from <em>Never use quote marks</em> to <strong>Use quote marks</strong>, and change
-<strong>Indirect</strong> from <em>Quote marks are optional</em> to <strong>Never use quote marks</strong>. Leave <strong>Self quote</strong>
-at <em>Use quote marks</em> — it was already correct.</p>
+Self quote already defaults to <strong>Use quote marks</strong> — which is exactly what Tamba needs (item 3),
+so it needs no change. Now make the changes, with the dialog still open:</p>
+<ul>
+<li>Click <strong>Custom settings</strong> at the top of the tab. This switches all drop-downs to editable mode.</li>
+<li>Change <strong>Quotation from another source</strong> from <em>Use quote marks</em> to <strong>Quote marks are
+  optional</strong>.</li>
+<li>Change <strong>Continued quotation</strong> from <em>Never use quote marks</em> to <strong>Use quote marks</strong>.</li>
+<li>Change <strong>Indirect</strong> from <em>Quote marks are optional</em> to <strong>Never use quote marks</strong>.</li>
+<li>Leave <strong>Self quote</strong> at <em>Use quote marks</em> — it was already correct.</li>
+</ul>
 <p>The correct final settings for Tamba:</p>
 <table>
 <thead>
@@ -1266,14 +1270,11 @@ at <em>Use quote marks</em> — it was already correct.</p>
 </tr>
 </tbody>
 </table>
-<p><strong>Before you re-run:</strong> the Quotation types check itself only runs if a project administrator
-has ticked <strong>Enable the Quotation types check in Run basic checks</strong> (see Content section
-above). Exercise 1.1 deliberately left this unticked. If it is still unticked, ask your
-administrator to enable it now — none of the settings below will affect the check results
-until they do.</p>
+<p><strong>Before you re-run:</strong> if you haven't yet, tick <strong>Enable the Quotation types check in Run basic
+checks</strong> at the top of the tab — until it is ticked, these settings don't affect the results.</p>
 <p><strong>Check your work:</strong>
 - Save and re-run the check. Phase A's self-quotes are already correctly marked, so leaving
-  Self quote at its default produces no <em>new</em> flags on <code>tamba</code>. (If a self-quote were missing
+  Self quote at its default produces no <em>new</em> flags on <code>TAMBA</code>. (If a self-quote were missing
   its marks, this setting is what would catch it — that's exactly the behavior Exercise 4.1
   exercises in Lesson 4.)
 - Confirm that Luke 4:18 (narrator Isaiah citation) is not flagged, now that Quotation from
@@ -1287,8 +1288,11 @@ until they do.</p>
   recognizes the continuer as expected rather than treating it as a stray mark.</p>
 <p><strong>✏️ Produce this (a mentor will review it).</strong> Write one sentence per type explaining <em>why</em>
 Tamba diverges from (or keeps) the recommended default — three diverge (Quotation from another
-source, Continued quotation, Indirect), one keeps the default (Self quote). A mentor will
-compare your final settings table to Tamba's conventions.</p>
+source, Continued quotation, Indirect), one keeps the default (Self quote). With them, submit a
+screenshot of the <strong>Quotation types</strong> tab for <code>TAMBA</code>, showing the Enable the Quotation types
+check box and all seven types. Your mentor can't see your settings any other way, because your
+project stays on your computer. A mentor will compare your final settings to Tamba's
+conventions.</p>
 <h2 id="change">Change<a class="headerlink" href="#change" title="Permanent link">&para;</a></h2>
 <p><strong>Self-assessment — can you explain it to a colleague?</strong></p>
 <ol>

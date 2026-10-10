@@ -973,7 +973,7 @@ mentor guide for how the facilitator distributes them.</p>
 </ol>
 <hr />
 <h2 id="scenario-a-guillemet-french-style">Scenario A — Guillemet (French style)<a class="headerlink" href="#scenario-a-guillemet-french-style" title="Permanent link">&para;</a></h2>
-<p><strong>Project:</strong> Velna New Testament (<code>velna</code>)</p>
+<p><strong>Project:</strong> Velna New Testament (<code>VELNA</code>)</p>
 <p><strong>Velna quotation conventions:</strong></p>
 <table>
 <thead>
@@ -1031,7 +1031,11 @@ mentor guide for how the facilitator distributes them.</p>
 </tr>
 </tbody>
 </table>
-<p>Word-medial punctuation: add <code>’</code> (U+2019) in ☰ &gt; Project settings &gt; Language Settings &gt; Other Characters tab &gt; Word-medial punctuation — do this anyway, since it's the correct habit to build, but confirmed on a real Paratext 9.5 build, it will <strong>not</strong> stop the check from flagging Velna's word-medial apostrophes. That's expected: once <code>’</code> is already a configured quote mark, this setting has no effect on it. Treat any remaining apostrophe results as verified false positives, not something left to configure away. Since Velna's conventions were set for this course, treat its orthography as still "in development" for this exercise; this is also the right moment to raise the real fix with learners: if this were a live translation team's project, this is exactly when you'd recommend adopting a different, unique apostrophe character — Lesson 2 names <code>ʼ</code> (U+02BC MODIFIER LETTER APOSTROPHE) as a concrete option — rather than living with the collision indefinitely. Velna itself keeps <code>’</code> for its apostrophes so the scenario still demonstrates the unresolvable case firsthand; the <code>ʼ</code> alternative is illustrated in Lesson 2's text, not built into this project.</p>
+<p>Continuation: <code>«</code> at First level only. The verified configuration also fills <strong>Continuer
+required at</strong> with <code>p b/q1 pi pi/pi</code> — the paragraph-marker contexts where the check must
+insist on the continuer. Copy it exactly; without it the check reads every continuer <code>«</code> as a
+new opening mark that is never closed, and a long speech floods with unclosed-quote results.</p>
+<p>Word-medial punctuation: add <code>’</code> (U+2019) in ☰ &gt; Project settings &gt; Language Settings &gt; Other Characters tab &gt; Word-medial punctuation — do this anyway, since it's the correct habit to build, but confirmed on a real Paratext 9.5 build, it will <strong>not</strong> stop the check from flagging Velna's word-medial apostrophes. That's expected: once <code>’</code> is already a configured quote mark, this setting has no effect on it. Treat any remaining apostrophe results as verified false positives, not something left to configure away. This is also the moment to remember the real fix: on a live translation team's project, you would raise with the team adopting a different, unique apostrophe character — Lesson 2 names <code>ʼ</code> (U+02BC MODIFIER LETTER APOSTROPHE) as a concrete option — rather than living with the collision indefinitely. Choosing it is an orthography decision for the translation team and the language community, not for you, and it can come up late, even close to typesetting. Velna itself keeps <code>’</code> for its apostrophes so the scenario still demonstrates the unresolvable case firsthand; the <code>ʼ</code> alternative is illustrated in Lesson 2's text, not built into this project.</p>
 <p><strong>Quotation types tab:</strong> confirmed on a real Paratext 9.5 build: Velna needs exactly <strong>one</strong>
 change from recommended defaults — <strong>Continued quotation = Use quote marks</strong> (the First level
 continuer means a mark is expected at every continued paragraph, same reasoning as Tamba in
@@ -1045,7 +1049,7 @@ Indirect, Hypothetical — stays at its recommended default.</p>
 - Enable the Quotation types check and run it on Matthew, Luke, and John. It should return clean once Continued quotation is set to Use quote marks — this check is separate from the apostrophe results above, which live in the Quotations check and remain regardless.</p>
 <hr />
 <h2 id="scenario-b-angle-bracket-guillemets-frenchgerman-style-with-nesting-reversal">Scenario B — Angle-bracket guillemets (French/German style with nesting reversal)<a class="headerlink" href="#scenario-b-angle-bracket-guillemets-frenchgerman-style-with-nesting-reversal" title="Permanent link">&para;</a></h2>
-<p><strong>Project:</strong> Menda New Testament (<code>menda</code>)</p>
+<p><strong>Project:</strong> Menda New Testament (<code>MENDA</code>)</p>
 <p><strong>Menda quotation conventions:</strong></p>
 <table>
 <thead>
@@ -1126,8 +1130,8 @@ it on <strong>Use recommended settings</strong>. Confirmed on a real Paratext 9.
 types check enabled, Menda's text passes clean at the recommended defaults (Normal/Quotation
 from another source/Self quote = Use quote marks; Continued quotation = Never use quote marks;
 Potential/Indirect = Quote marks are optional; Hypothetical = Never use quote marks). Step 5 of
-the scenario workflow still applies — open the tab, tick the enable checkbox (administrator
-required), and verify with a check run — but for Menda that verification is the whole task; there
+the scenario workflow still applies — open the tab, tick the enable checkbox, and verify with
+a check run — but for Menda that verification is the whole task; there
 is nothing to change.</p>
 <p><strong>Check your work:</strong>
 - Run the check on John (contains clear nested dialogue). Verify that <code>«...›...‹...»</code> structures pass without errors.
@@ -1137,7 +1141,7 @@ is nothing to change.</p>
 - Enable the Quotation types check and run it on John. It should return clean at recommended settings with no customization — if it doesn't, re-check your Quote marks tab entries first, since a character-level mistake there is more likely than a genuine need to customize types.</p>
 <hr />
 <h2 id="scenario-c-non-standard-marks-with-continuation">Scenario C — Non-standard marks with continuation<a class="headerlink" href="#scenario-c-non-standard-marks-with-continuation" title="Permanent link">&para;</a></h2>
-<p><strong>Project:</strong> Waku New Testament (<code>waku</code>)</p>
+<p><strong>Project:</strong> Waku New Testament (<code>Waku</code>)</p>
 <p><strong>Waku quotation conventions:</strong></p>
 <table>
 <thead>
@@ -1220,7 +1224,7 @@ enforce the continuer at those paragraph breaks.</p>
 - Check a verse where em dash is used for a parenthetical aside (not speech). Does the check flag it? What is the correct response — fix the text (replace the em dash with different punctuation for the parenthetical), reconfigure if possible, or document in a Project Note for the consultant?
 - This scenario leaves results that cannot be eliminated by configuration alone — because Paratext cannot distinguish an em dash used as speech from one used as a parenthetical dash. Confirmed on a real Paratext 9.5 build, a correct configuration run against all books ends at <strong>seven results</strong>: six "found as a word medial character" results on genuine parenthetical em dashes (Mark 13:14 twice, 13:19, 13:22; Luke 9:3; Acts 3:1), plus one "Closing quote mark is possibly missing before verse 18:1" at John 17:26.
 - The John 17:26 result is a different residual class from the parentheticals: the text there is <em>correct</em> — Jesus's prayer (17:1–26) opens with <code>—</code>, carries the <code>—</code> continuer at every paragraph, and closes with <code>—</code> at the end of verse 26 — but with the same character serving as opener, closer, and continuer across a long multi-paragraph speech, Paratext's context-based tracking loses the open/close state and reports the speech as possibly unclosed. No text change fixes it without breaking Waku's convention. Verify the marks are all present, then document.
-- For all seven: consider whether the parenthetical verses can be reworded to use different punctuation. Where rewording is not feasible (and always for John 17:26, where the text is already correct), add a Project Note (☰ &gt; Insert &gt; Project note...) explaining the result so the consultant can verify during review.</p>
+- For all seven: consider whether the parenthetical verses can be reworded to use different punctuation. Where rewording is not feasible (and always for John 17:26, where the text is already correct), add a Project Note (☰ &gt; Insert &gt; Project note...) explaining the result so the consultant can verify during review. Attach each note to the verse the result is reported at: Mark 13:14, 13:19, 13:22, Luke 9:3, Acts 3:1 and John 17:26.</p>
 <p><img alt="The Quotations check results panel for Waku across all books, showing the seven residual results: word-medial em dash results in Mark 13, Luke 9:3, and Acts 3:1, plus the possibly-missing closing mark at John 17:26. Mark 13:14 is open alongside, showing its parenthetical em dashes in context." src="../ss-05-waku-residual-results.png" /></p>
 <h2 id="scenario-bank-summary">Scenario bank summary<a class="headerlink" href="#scenario-bank-summary" title="Permanent link">&para;</a></h2>
 <ul>
@@ -1238,7 +1242,7 @@ enforce the continuer at those paragraph breaks.</p>
 <ol>
 <li>The characters were entered in the wrong fields — the left-pointing guillemet (<code>‹</code>, U+2039) is in the Opening field when it should be in the Closing field, and vice versa. Swap them: Opening should be <code>›</code> (right-pointing, U+203A), Closing should be <code>‹</code> (left-pointing, U+2039). Confirm by checking the Example section — the correct order shows <code>›</code> as the inner opening and <code>‹</code> as the inner closing.</li>
 <li>The check will fire on every Second level opening mark (treating the right-pointing guillemet as an unexpected closing mark) and on every Second level closing mark (treating the left-pointing guillemet as an unexpected opening mark). The entire Second level configuration will appear as errors.</li>
-<li>Two options: (1) For the parentheticals, rewrite the affected verses to use different punctuation for parenthetical remarks (e.g. brackets or a non-speech dash character), which removes the ambiguity and clears the results. (2) Where rewording is not feasible — and always for the multi-paragraph result, where the text is already correct and there is nothing to rewrite — add a Project Note (☰ &gt; Insert &gt; Project note...) to each verse explaining what the flagged em dash actually is, so the consultant can verify during review. The Basic Checks panel results will remain; documenting them prevents them from being mistaken for unreviewed errors.</li>
+<li>Two options: (1) For the parentheticals, rewrite the affected verses to use different punctuation for parenthetical remarks (e.g. brackets or a non-speech dash character), which removes the ambiguity and clears the results. (2) Where rewording is not feasible — and always for the multi-paragraph result, where the text is already correct and there is nothing to rewrite — add a Project Note (☰ &gt; Insert &gt; Project note...) explaining what the flagged em dash actually is, attached to the verse the result is reported at (Mark 13:14, 13:19, 13:22, Luke 9:3, Acts 3:1, John 17:26), so the consultant can verify during review. The Basic Checks panel results will remain; documenting them prevents them from being mistaken for unreviewed errors.</li>
 </ol>
 <hr />
 <h2 id="where-to-go-from-here">Where to Go from Here<a class="headerlink" href="#where-to-go-from-here" title="Permanent link">&para;</a></h2>

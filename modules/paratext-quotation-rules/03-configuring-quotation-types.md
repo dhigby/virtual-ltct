@@ -2,8 +2,8 @@
 
 **Estimated time:** 60 minutes
 
-> This lesson uses the `tamba` fictional project. See the
-> [course README](README.md#the-fictional-project) for its quotation conventions.
+> This lesson uses the `TAMBA` practice project. See the
+> [course README](README.md#the-practice-projects) for its quotation conventions.
 
 **Purpose:** The Quote marks tab from Lesson 2 tells Paratext *which* characters are quote
 marks; it does not say *when* marks should appear. On a real project a language may mark
@@ -35,7 +35,9 @@ well):
 - If a checker flagged *every* indirect-speech verse as "missing quotation mark," would that be
   the translation's fault or the check's setup?
 
-Those are exactly the distinctions the Quotation types tab exists to encode. Hold your answers.
+Those are exactly the distinctions the Quotation types tab exists to encode. Hold your answers —
+you'll make these same calls for Tamba in Exercise 3.2, and meet them again in the Change
+self-assessment.
 
 ## Content
 
@@ -58,9 +60,9 @@ Navigate to: ☰ > Project settings > Quotation Rules > **Quotation types** tab.
 At the top of the tab is the checkbox **Enable the Quotation types check in Run basic
 checks**. Only a project administrator can check this box — the status bar confirms: "Only a
 project administrator can enable this tab." Any user can configure the radio buttons and
-drop-downs below; it is only the enable checkbox that requires administrator access. If you are
-not an administrator, configure the settings in this lesson, then ask your project
-administrator to check the enable box.
+drop-downs below; it is only the enable checkbox that requires administrator access. You are an
+administrator of every practice project in this course, so you tick it yourself in Exercise
+3.2.
 
 **WARNING** The Quotation types check only checks first-level quotes in non-Deuterocanonical
 books.
@@ -86,9 +88,9 @@ quotation type will still be reported.
 
 | Type | Meaning |
 | --- | --- |
-| Normal | Direct speech between characters in the narrative |
-| Quotation from another source | A narrator or character quotes scripture, another text, or a source outside the narrative |
-| Self quote | A character quotes their own earlier words |
+| Normal | Direct speech between people in the narrative |
+| Quotation from another source | A narrator or speaker quotes scripture, another text, or a source outside the narrative |
+| Self quote | A speaker quotes their own earlier words |
 | Continued quotation | A speech that continues across a paragraph break using a continuation convention |
 | Potential | Paratext identifies this as a possible quotation but cannot determine the type |
 | Indirect | Reported speech: "He said that the road was long" (no direct marks in the source) |
@@ -115,7 +117,7 @@ individually.
 
 **NOTE** The values Paratext pre-fills under "Use recommended settings" are set by Paratext —
 verify what appears in your version before relying on the table above as the exact recommended
-defaults. (The table above reflects Paratext 9.5 defaults confirmed on a built `tamba` project;
+defaults. (The table above reflects Paratext 9.5 defaults confirmed on a built `TAMBA` project;
 earlier drafts of this lesson had Quotation from another source and Indirect backwards — both
 actually default to a "marks expected/optional" leaning rather than "never," which is why Tamba's
 Exercise 3.2 customization list below touches more rows than you might expect.)
@@ -141,17 +143,16 @@ speech categories.
   defaults produce incorrect results.
 - Configuring types correctly reduces triage work in Lesson 4 by eliminating whole categories
   of expected exceptions before the check runs.
-- Only a project administrator can enable the check — if you are not one, configure the
-  settings and ask an administrator to enable it.
+- Only a project administrator can enable the check; any user can configure the settings.
 
 ## Challenge
 
-You are configuring the Tamba project's quotation types after a working session with the
+You are configuring the `TAMBA` project's quotation types after a working session with the
 translation team. Each exercise produces settings a mentor can check against Tamba's conventions.
 
 ### Exercise 3.1 — Read Tamba's current quotation types
 
-Open the Tamba project and navigate to ☰ > Project settings > Quotation Rules > Quotation types
+Open the `TAMBA` project and navigate to ☰ > Project settings > Quotation Rules > Quotation types
 tab.
 
 **✏️** Before changing anything, record the current setting for each type:
@@ -179,7 +180,7 @@ things:
    repeats the opening mark `“` at the head of each continued paragraph rather than closing and
    reopening. (Second and Third level have no continuer — those close and reopen fully instead,
    so they never produce a "Continued quotation" instance.)
-3. When a character quotes their own earlier words (a self-quote), Tamba treats it the same as
+3. When a speaker quotes their own earlier words (a self-quote), Tamba treats it the same as
    any other direct speech: it **must** be marked with quotation marks.
 4. Tamba never marks reported/indirect speech (e.g. "He told them that the harvest was near") —
    no quote marks appear at all.
@@ -197,14 +198,15 @@ match Tamba's conventions:
   *never* marked, set this to *Never use quote marks* so a stray mark there gets caught.
 
 **Step 2** — Check the current recommended setting for **Self quote**. Unlike the other three,
-Self quote already defaults to **Use quote marks** — which is exactly what Tamba needs (item 3).
-No change required here; confirm it and move on.
+Self quote already defaults to **Use quote marks** — which is exactly what Tamba needs (item 3),
+so it needs no change. Now make the changes, with the dialog still open:
 
-Click **Custom settings** at the top of the tab. This switches all drop-downs to editable mode.
-Change **Quotation from another source** from *Use quote marks* to **Quote marks are optional**,
-change **Continued quotation** from *Never use quote marks* to **Use quote marks**, and change
-**Indirect** from *Quote marks are optional* to **Never use quote marks**. Leave **Self quote**
-at *Use quote marks* — it was already correct.
+- Click **Custom settings** at the top of the tab. This switches all drop-downs to editable mode.
+- Change **Quotation from another source** from *Use quote marks* to **Quote marks are
+  optional**.
+- Change **Continued quotation** from *Never use quote marks* to **Use quote marks**.
+- Change **Indirect** from *Quote marks are optional* to **Never use quote marks**.
+- Leave **Self quote** at *Use quote marks* — it was already correct.
 
 The correct final settings for Tamba:
 
@@ -218,15 +220,12 @@ The correct final settings for Tamba:
 | Indirect | **Never use quote marks** | Yes — default is Quote marks are optional | Reported speech is not marked |
 | Hypothetical | Never use quote marks | No | Hypothetical speech is not marked |
 
-**Before you re-run:** the Quotation types check itself only runs if a project administrator
-has ticked **Enable the Quotation types check in Run basic checks** (see Content section
-above). Exercise 1.1 deliberately left this unticked. If it is still unticked, ask your
-administrator to enable it now — none of the settings below will affect the check results
-until they do.
+**Before you re-run:** if you haven't yet, tick **Enable the Quotation types check in Run basic
+checks** at the top of the tab — until it is ticked, these settings don't affect the results.
 
 **Check your work:**
 - Save and re-run the check. Phase A's self-quotes are already correctly marked, so leaving
-  Self quote at its default produces no *new* flags on `tamba`. (If a self-quote were missing
+  Self quote at its default produces no *new* flags on `TAMBA`. (If a self-quote were missing
   its marks, this setting is what would catch it — that's exactly the behavior Exercise 4.1
   exercises in Lesson 4.)
 - Confirm that Luke 4:18 (narrator Isaiah citation) is not flagged, now that Quotation from
@@ -241,8 +240,11 @@ until they do.
 
 **✏️ Produce this (a mentor will review it).** Write one sentence per type explaining *why*
 Tamba diverges from (or keeps) the recommended default — three diverge (Quotation from another
-source, Continued quotation, Indirect), one keeps the default (Self quote). A mentor will
-compare your final settings table to Tamba's conventions.
+source, Continued quotation, Indirect), one keeps the default (Self quote). With them, submit a
+screenshot of the **Quotation types** tab for `TAMBA`, showing the Enable the Quotation types
+check box and all seven types. Your mentor can't see your settings any other way, because your
+project stays on your computer. A mentor will compare your final settings to Tamba's
+conventions.
 
 ## Change
 

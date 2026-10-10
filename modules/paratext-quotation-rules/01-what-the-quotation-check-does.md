@@ -8,8 +8,8 @@ help, you have to recognize when the check's results are meaningless because it 
 configured yet, and be able to explain that to the team. This lesson prepares you for that
 first conversation.
 
-> This lesson uses the fictional **Tamba New Testament** (`tamba`) project. See the
-> [course README](README.md#the-fictional-project) for the Tamba quotation conventions and
+> This lesson uses the **Tamba New Testament** (`TAMBA`) practice project. See the
+> [course README](README.md#the-practice-projects) for the Tamba quotation conventions and
 > [Prerequisites](README.md#prerequisites) for setup.
 
 **Watch the video:** _To be recorded at stage 8._
@@ -81,11 +81,11 @@ lead a short, honest explanation.
 
 **Do it in Paratext:**
 
-1. Open the `tamba` project.
+1. Open the `TAMBA` project.
 2. Click **☰ > Tools > Run basic checks...**
 3. In the dialog, tick **Quotations** only (leave "Quotation types" unticked — it is a
    separate check).
-4. Click **Choose Books** and select all NT books available in the `tamba` project, then click
+4. Click **Choose Books** and select all NT books available in the `TAMBA` project, then click
    **OK**. This runs the check across the whole project so you can see the full scope of the
    problem.
 

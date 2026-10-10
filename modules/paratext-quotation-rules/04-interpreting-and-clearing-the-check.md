@@ -2,9 +2,15 @@
 
 **Estimated time:** 75 minutes
 
-> This lesson uses the `tamba` fictional project in **Phase B** (configured, with five
-> seeded errors). See the [mentor guide](06-mentor-guide.md) for how the facilitator stages
-> Phase B.
+> This lesson uses `TAMBAB`, the **Phase B** copy of the Tamba New Testament practice project
+> (configured, with five seeded errors). Your mentor gives you access to it before this lesson:
+> receive it with **Paratext > Send/Receive projects...**, and do all of Lesson 4 in `TAMBAB`,
+> not in `TAMBA`, which keeps your own Lesson 2–3 settings. See the
+> [mentor guide](06-mentor-guide.md) for how the facilitator stages Phase B.
+>
+> **WARNING:** Receive `TAMBAB` once. After that, never Send/Receive it: your fixes would go to
+> every other learner. Save your work instead; the check runs on your own copy. If Paratext
+> offers to Send/Receive (for example, after a permission change), cancel it.
 
 **Purpose:** A configured check still produces results — and on a real project the whole value
 of your work is being able to look at each one and decide, correctly and quickly, whether to
@@ -24,8 +30,9 @@ By the end of this lesson you will be able to:
 
 ## Connect
 
-By now the Tamba project is configured (Lessons 2 and 3). Run the check and you will still see
-results — but now they *mean* something. The skill this lesson builds is the judgment call you
+By now you have configured `TAMBA` yourself (Lessons 2 and 3). For this lesson you switch to
+`TAMBAB`, the same Tamba text with that configuration already entered. Run the check and you
+will still see results — but now they *mean* something. The skill this lesson builds is the judgment call you
 will make dozens of times on a real project: **fix the text, or fix the settings?**
 
 **✏️ Reflection.** Think back to Lesson 1 — the unconfigured check that refused to examine the
@@ -63,14 +70,15 @@ is a genuine apostrophe, then leave it and move on — document it for whoever i
 project rather than losing time hunting for a setting that doesn't exist. You'll meet this
 exact case in Exercise 4.1, item 5.
 
-The one real fix, when it's available, is upstream of the check entirely: if the language's
-orthography is still being finalized, this is worth raising with the translation team as a
-reason to pick a different, unique character for the apostrophe — Lesson 2 recommends `ʼ`
-(U+02BC MODIFIER LETTER APOSTROPHE), the character Unicode itself designates for an apostrophe
-functioning as a letter rather than as punctuation. That eliminates the collision outright
-rather than living with documented false positives — but it's a project-level decision for the
-team, not a Paratext setting, and it isn't available at all for a fixed text like Tamba's, where
-the orthography (real or fictional) is already settled.
+The one real fix is upstream of the check entirely: a different, unique character for the
+apostrophe — Lesson 2 recommends `ʼ` (U+02BC MODIFIER LETTER APOSTROPHE), the character Unicode
+itself designates for an apostrophe functioning as a letter rather than as punctuation. That
+eliminates the collision outright rather than living with documented false positives. But
+choosing the apostrophe character is an orthography decision, and it belongs to the translation
+team and the language community, not to a Paratext setting. It can come up late — orthography
+changes are sometimes made right up to typesetting — so you can raise it whenever the collision
+appears, but you don't make it. In this course's practice text, leave the apostrophe as
+written.
 
 ![The Quotations check results panel after full configuration, showing a manageable list of results. One result is highlighted with the verse open alongside it, demonstrating how to read a result entry (location, message, and the text in context).](assets/ss-04-results-with-highlight.png)
 
@@ -91,16 +99,16 @@ gap**; a one-off result usually points to a **real error** in that verse.
 
 ## Challenge
 
-The `tamba` project is in **Phase B**: fully configured, but seeded with five deliberate
+The `TAMBAB` project is Tamba in **Phase B**: fully configured, but seeded with five deliberate
 issues. Your job is to triage them correctly, then clear a book to zero. Your filled-in tables
 and reasoning are what a mentor reviews.
 
 ### Exercise 4.1 — Triage a dirty result set
 
-The `tamba` project has been seeded with five issues — but the check reports **seven** results,
+The `TAMBAB` project has been seeded with five issues — but the check reports **seven** results,
 because one issue (#3) is a single broken mark whose damage is reported back as three separate,
-differently-worded results at three different verses. This is common: a break in the middle of a
-nested quotation chain confuses the tracking on both sides of the break, so the checker reports
+differently-worded results at three different verses. This is common: one broken mark in the middle of
+a long quotation confuses the tracking on both sides of it, so the checker reports
 the symptom in multiple places even though there is exactly one thing to fix. **Before reading
 further, fill in the Your prediction column for all five rows — write 1 (Real error), 2
 (Configuration problem), or 3 (Neither — cannot be resolved through configuration). For row 3,
@@ -116,9 +124,10 @@ prediction for every row should you read the discovery prompts and open the vers
 | 5 | Romans 1:1 | "Closing quote mark [’ U+2019] found as a word medial character. Sometimes caused when a closing quote is incorrectly used as an apostrophe" | ? | ? |
 
 **✏️ Discovery prompts for each item:**
-- Matthew 5:3 opens a speech that runs through verse 7:28 — the whole Sermon on the Mount, not
-  just the Beatitudes. What closing mark should appear at 7:28, and what does the check report
-  when it is absent?
+- Matthew 5:3 opens Jesus's speech, and the check traces it forward to verse 7:28 — the whole
+  Sermon on the Mount, not just the Beatitudes. Open the span and find every place the First
+  level speech should close: look at 5:12–13 as well as 7:27–28 (7:28 is the narrator again).
+  What closing mark should be there, is it, and what does the check report when it is absent?
 - Luke 4:18 contains an Isaiah citation. Does Tamba use dialogue marks for narrator scripture
   citations? If not, what should you do with a stray opening `“` before the citation? Notice the
   check doesn't call this mark "unexpected" — it just treats it as a legitimate new opening and
@@ -126,14 +135,15 @@ prediction for every row should you read the discovery prompts and open the vers
   What does that tell you about how much the checker actually "knows" about your language's
   conventions?
 - John 3:10, 3:16, and 3:21 are three separate results, but open the whole span in one sitting.
-  The inner quotation at 3:16 is Second level. What character should the Second level opening
-  mark be in Tamba? If you see a straight `"` (U+0022) instead, is that a valid Tamba Second
-  level mark? Once you spot the one broken mark, ask yourself: does fixing only that one
-  character, then re-running the check, clear all three results, or just one?
-- Acts 2:25–28: Peter cites Psalm 16 in Second level marks as one continuous span across
-  several paragraph breaks. Recall the Tamba conventions in The Fictional Project table: what
-  does Tamba do with quotation marks at each new paragraph of continued speech? Does this text
-  follow that convention?
+  Verse 3:16 begins a new `\p` paragraph inside Jesus's speech. What character should open a
+  continued paragraph of First level speech in Tamba? If you see a straight `"` (U+0022) there
+  instead, will the check recognize it as the continuer? Once you spot the one broken mark, ask
+  yourself: does fixing only that one character, then running the check again (close the
+  results panel and run it fresh, not "Rerun"), clear all three results, or just one?
+- Acts 2:25–28: Peter cites Psalm 16 in Second level marks, opening with `‘` in 2:25, as one
+  continuous span across several paragraph breaks. Tamba's Second level has no continuer, and
+  `TAMBA` (Phase A) passes the check with this span unbroken — so the paragraph breaks are not
+  the problem. Where should the citation close, and is the closing mark there?
 - Romans 1:1 has no dialogue. How could `’` (U+2019) inside a word cause the check to report a
   quotation problem? Try the fix Lesson 2 taught for this exact situation (Word-medial
   punctuation in Language Settings) and re-run the check with a genuinely fresh run, not just
@@ -143,32 +153,40 @@ prediction for every row should you read the discovery prompts and open the vers
 
 | # | Actual type | Action |
 |---|-------------|--------|
-| 1 | Real error | Add the missing `”` (U+201D) at the end of Matthew 7:28. The First level speech opened with `“` (U+201C) at verse 5:3 and runs continuously through the whole Sermon on the Mount; the closing mark at 7:28 was deleted. |
+| 1 | Real error | Add the missing `”` (U+201D) in two places: in Matthew 5:12, where Jesus's speech (opened with `“` U+201C at 5:3) closes before it reopens with `“` at the start of 5:13, and in 7:27, where the speech closes before the narrator resumes at 7:28 (7:28 has no quote marks). Both closing marks were deleted; the check reports the unclosed speech once, at its opening verse 5:3, tracing forward to 7:28. Add both, then re-run. |
 | 2 | Real error | Delete the stray `“` (U+201C) before the Isaiah citation in Luke 4:18. Tamba does not mark narrator scripture citations; the mark was added by mistake. |
-| 3 | Real error (one fix, three results) | The Second level opening mark in John 3:16 is a straight `"` (U+0022) rather than `‘` (U+2018). That single wrong character is what produces all three results: the checker reports the true Second level quote as "opened" at 3:10 (where it actually starts), then loses track at 3:16 because the mark there isn't recognized as the expected continuation, then reports an orphaned First-level-looking closing mark at 3:21 that no longer has anything to match against. Replace the one character at 3:16 with `‘` (U+2018), confirm the closing `’` (U+2019) is present at the end of the quotation, re-run the check, and all three results — 3:10, 3:16, and 3:21 — should clear together. Do not chase 3:10 or 3:21 individually; there is nothing wrong at those verses themselves. |
-| 4 | Real error | Tamba restarts quotation marks at every paragraph break, but the Psalm 16 citation runs from 2:25 to 2:28 as one unbroken Second level span. Edit the text: close with `’` (U+2019) at the end of each paragraph and reopen with `‘` (U+2018) at the start of the next, so every paragraph carries a complete pair. |
+| 3 | Real error (one fix, three results) | Verse 3:16 begins a new `\p` paragraph inside Jesus's speech, so it should open with Tamba's First level Quote Continuer `“` (U+201C) — but a straight `"` (U+0022) sits there instead. That single wrong character is what produces all three results: the check doesn't recognize it as the continuer, so it reports the speech as "opened" at 3:10 (where it actually starts), reports the missing continuer at 3:16, and then reports the speech's closing `”` at 3:21 as orphaned, with nothing left to match against. Replace the `"` at the start of 3:16 with `“` (U+201C), re-run the check, and all three results — 3:10, 3:16, and 3:21 — clear together. Do not chase 3:10 or 3:21 individually; there is nothing wrong at those verses themselves. |
+| 4 | Real error | Add the missing closing `’` (U+2019) in 2:28 that ends Peter's Psalm 16 citation. The citation opens with `‘` (U+2018) in 2:25 and runs as one Second level span across several paragraph breaks; that is valid under Tamba's configuration (Second level has no continuer, and Phase A passes the check with the span unbroken), so don't add close/reopen pairs at the breaks. Only the closing mark is missing. |
 | 5 | Neither — confirmed unresolvable | The `’` (U+2019) in Romans 1:1 is a genuine apostrophe inside a word, which Paratext reads as the Second level closing mark with no matching opener. Adding `’` to ☰ > Project settings > Language Settings > Other Characters > Word-medial punctuation looks like the fix (and is what Lesson 2 teaches), but confirmed against real Paratext 9.5 behavior, it does **not** suppress this result — the check keeps flagging it even after the setting is saved and a fully fresh check is run. There is no text change to make either (the apostrophe is correct as written). Verify the character really is a word-medial apostrophe, then leave the result and move on; note it for anyone else who picks up this project so they don't re-attempt the same fix. |
 
 ### Exercise 4.2 — Reach zero *actionable* errors
 
-**Goal:** Work through the full result list for the `tamba` project until every result has
+**Goal:** Work through the full result list for the `TAMBAB` project until every result has
 either been cleared (by fixing the text or adjusting the configuration) or, for the one
 confirmed unresolvable case, verified and documented as an expected false positive. "Zero
 actionable errors" does not mean a literal zero-length results list once Romans is in scope —
 it means nothing left in the list still needs your action.
+
+> **NOTE:** In this exercise, "re-run" means a full re-run: close the results panel, then run
+> the check again (**☰ > Tools > Run basic checks...**). Clicking **Rerun** on the panel that is
+> already open does not pick up your text changes. It keeps showing the old results, so a
+> correct fix looks as if it failed.
 
 **Steps:**
 1. Limit the scope to Matthew first. Work that book to zero results before expanding — Matthew
    has no unresolvable cases, so a true zero is the right target there.
 2. Work through the results top-to-bottom.
 3. For each result: open the verse, classify it, take the appropriate action.
-   - **Real error:** edit the verse text to fix the mark, then re-run.
-   - **Configuration problem:** adjust the Quote marks tab or Quotation types tab, then re-run.
+   - **Real error:** edit the verse text to fix the mark, then close the results panel and run
+     the check again.
+   - **Configuration problem:** adjust the Quote marks tab or Quotation types tab, then close
+     the results panel and run the check again.
      Do not edit the text to make marks disappear — fix the configuration instead.
    - **Neither (confirmed unresolvable):** a quote-mark/apostrophe collision, like Romans 1:1.
      Verify the flagged character is genuinely a word-medial apostrophe, then leave it — do not
      keep trying configuration changes to clear it, and do not edit the text.
-4. After fixing a batch of real errors, re-run the check to confirm the count drops.
+4. After fixing a batch of real errors, close the results panel and run the check again from
+   Run basic checks to confirm the count drops.
 5. Once Matthew is clean, expand the scope one book at a time through the NT. When you reach
    Romans, expect the count to stop at 1 (the 1:1 apostrophe) rather than reaching 0 — that
    remaining result is correct, not a sign something is still wrong.
@@ -179,7 +197,8 @@ it means nothing left in the list still needs your action.
    an "opened"/"quote opened" message, followed by an "expected continuer" or "not closed"
    message, followed by an orphaned "closing mark found without matching opening" further on —
    usually traces back to one broken mark in the middle of the chain, not three separate errors.
-   Fix the one mark, re-run, and confirm the whole cluster clears together before treating any of
+   Fix the one mark, close the results panel and run the check again, and confirm the whole
+   cluster clears together before treating any of
    the other verses in the cluster as needing their own fix.
 
 **Completion criteria:**
@@ -213,8 +232,7 @@ a speech that legitimately spans the break usually means the continuer character
 missing from the text. That makes this a **real error**, not a configuration problem: open the
 intervening paragraph(s), confirm each one opens with `“`, and add it wherever it's missing. If
 no paragraph break exists between 35 and 38, look instead for an unclosed Second or Third level
-quotation nested inside the speech, since Tamba's inner levels close and reopen fully rather
-than using a continuer. (2) They are configuration problems, not text errors — review
+quotation nested inside the speech. (2) They are configuration problems, not text errors — review
 each to find the missing rule or setting (e.g. a Quotation types setting that doesn't match how
 the language uses marks there), adjust, and re-run until they clear. (3) A real error — a stray
 quotation character, likely copied from a source text; open the verse, find the stray mark, and

@@ -22,7 +22,7 @@ content_type: content
 
 **Format:** Each lesson presents a goal, a starting state, a set of discovery prompts (questions to answer before you act), and then the expected configuration you can compare against.
 
-**Estimated time:** Lessons 1–4 run 3–4 hours total; the scenario bank adds 1–2 hours. Each individual lesson is capped at 90 minutes — see the duration header at the top of each file.
+**Estimated time:** Lessons 1–4 run 4¼ hours total (30 + 90 + 60 + 75 minutes); the scenario bank adds 1–2 hours. Each individual lesson is capped at 90 minutes — see the duration header at the top of each file.
 
 ---
 
@@ -33,7 +33,7 @@ This course follows the repo's [content package structure](../../process/PROCESS
 | File | What it is |
 | --- | --- |
 | [`01-what-the-quotation-check-does.md`](01-what-the-quotation-check-does.md) | Lesson 1 — why configuration matters (30 min) |
-| [`02-setting-up-quote-marks.md`](02-setting-up-quote-marks.md) | Lesson 2 — the Quote marks tab, continuer, apostrophe conflict (75 min) |
+| [`02-setting-up-quote-marks.md`](02-setting-up-quote-marks.md) | Lesson 2 — the Quote marks tab, continuer, apostrophe conflict (90 min) |
 | [`03-configuring-quotation-types.md`](03-configuring-quotation-types.md) | Lesson 3 — the Quotation types tab (60 min) |
 | [`04-interpreting-and-clearing-the-check.md`](04-interpreting-and-clearing-the-check.md) | Lesson 4 — triage to zero errors (75 min) |
 | [`05-scenario-bank.md`](05-scenario-bank.md) | Applied practice: Velna, Menda, Waku (90 min) |
@@ -56,16 +56,33 @@ Before starting this course confirm you have the following:
 - Able to run a basic check (☰ > Tools > Run basic checks...)
 - Familiar with the idea that `\p`, `\q`, `\v` etc. are USFM markers (you do not need to know them in depth — the course explains the relevant ones as they appear)
 
-**Fictional projects** (see the [mentor guide](06-mentor-guide.md) for setup and distribution)
-- The `tamba` project must be installed before starting Lessons 1–4
-- The `runda` project must also be installed before starting Lesson 2 (Lessons 1, 3, and 4 only need `tamba`)
-- The `velna`, `menda`, and `waku` projects must be installed before the scenario bank
+**Practice projects** (see the [mentor guide](06-mentor-guide.md) for setup and distribution)
+
+Your mentor gives you access to each practice project when you need it, and adds you as an
+**Administrator** (Lesson 3 and the scenarios change settings only an administrator can change).
+Give your mentor the user name your Paratext is registered under (**Help > Registration
+information...**). To get a project once you've been given access, use **Paratext > Send/Receive
+projects...**, tick the project and click **Send/Receive**.
+
+> **WARNING:** Receive each project once. After that, never Send/Receive it: your changes would
+> go to every other learner using that project. Save your work instead. The check runs on your
+> own copy, so your work counts without sending it. If Paratext offers to Send/Receive (for
+> example, after your mentor changes your permissions), cancel it.
+
+| Before… | Receive |
+|---|---|
+| Lesson 1 | `TAMBA`: Tamba New Testament, Phase A (used for Lessons 1–3) |
+| Lesson 2 | `RUNDA`: Runda New Testament |
+| Lesson 4 | `TAMBAB`: the Phase B copy of Tamba, configured and seeded with errors |
+| Scenario bank | `VELNA`, `MENDA` and `Waku` |
 
 ---
 
-## The Fictional Project
+## The Practice Projects
 
-Lessons 1–4 use a single fictional project called **Tamba New Testament** (`tamba`). The Tamba language is fictional and uses the following quotation conventions:
+Every practice project in this course is real Scripture text from a real language, adapted for the course. Each has a course name (Tamba, Runda, Velna, Menda, Waku), and Paratext's project lists show its real language name alongside it. Its quotation marks follow conventions set for this course, so read the tables below as the course's conventions, not as a description of how that language community writes. As in real consulting work, you won't need to read the text itself: the skill is configuring the tool and diagnosing what it reports.
+
+Lessons 1–4 use the **Tamba New Testament** project: `TAMBA` for Lessons 1–3, and its Phase B copy `TAMBAB` for Lesson 4. Tamba uses the following quotation conventions:
 
 | Level | Name | Opening mark | Unicode | Closing mark | Unicode |
 |-------|------|-------------|---------|-------------|----------|
@@ -81,7 +98,7 @@ Lessons 1–4 use a single fictional project called **Tamba New Testament** (`ta
 - **Continuer required at:** `p p/q1 m/q1 s1/pi pi/pi b/q1` — every `\p` inside a speech, a `\q1` that follows `\p`, `\m` or `\b`, and an indented `\pi` that follows `\s1` or another `\pi`.
 - Phase A text contains no apostrophes, so the `’` collision described under Runda does not arise in Tamba.
 
-Lesson 2 also uses a second fictional project, **Runda** (`runda`), for the guillemet and apostrophe exercises:
+Lesson 2 also uses a second practice project, **Runda** (`RUNDA`), for the guillemet and apostrophe exercises:
 
 | Level | Name | Opening mark | Unicode | Closing mark | Unicode |
 |-------|------|-------------|---------|-------------|----------|
@@ -96,7 +113,7 @@ Lesson 2 also uses a second fictional project, **Runda** (`runda`), for the guil
 - **Continuer required at:** `p` — nothing else, because the text carries continuers only at `\p`. Listing `p/q1` produces "Expected continuers [«] are missing" at every quoted poem.
 - Runda's text uses `’` (U+2019) as an apostrophe throughout — word-medial (*don’t*) and word-final possessive (*righteousness’ sake*, Matthew 5:10) — so it collides with the Second level closing mark. That is deliberate: Exercise 2.3 is built on it.
 
-Keep these reference tables open as you work through Lessons 1–4. The scenario bank introduces three further fictional languages, each with its own conventions table.
+Keep these reference tables open as you work through Lessons 1–4. The scenario bank introduces three further practice projects, each with its own conventions table.
 
 ---
 

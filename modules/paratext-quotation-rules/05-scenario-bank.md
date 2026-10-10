@@ -4,12 +4,12 @@
 
 > Three independent scenarios, roughly 30 minutes each. Scenarios A and B are core practice;
 > **Scenario C (Waku em-dash) is an optional stretch** for learners who complete A and B
-> confidently. Do them in any order. Each uses its own fictional project — see the
+> confidently. Do them in any order. Each uses its own practice project — see the
 > [mentor guide](06-mentor-guide.md) for how the facilitator distributes them.
 
 **Learning objectives:** By the end of this scenario bank you will be able to apply the complete inventory + rules + check + triage workflow independently to an unfamiliar language scenario, including edge cases not covered in Lessons 1–4.
 
-These exercises use three new fictional projects. Each has a different quotation style. For each scenario follow the same four-step workflow — **inventory → rules → check → triage** — broken into eight concrete actions:
+These exercises use three new practice projects. Each has a different quotation style. For each scenario follow the same four-step workflow — **inventory → rules → check → triage** — broken into eight concrete actions:
 
 **Inventory**
 
@@ -35,7 +35,7 @@ These exercises use three new fictional projects. Each has a different quotation
 
 ## Scenario A — Guillemet (French style)
 
-**Project:** Velna New Testament (`velna`)
+**Project:** Velna New Testament (`VELNA`)
 
 **Velna quotation conventions:**
 
@@ -57,7 +57,12 @@ No Third level. First level opening mark `«` also appears at the start of conti
 | First level | `«` | `«` | `»` |
 | Second level | `‘` | *(blank)* | `’` |
 
-Word-medial punctuation: add `’` (U+2019) in ☰ > Project settings > Language Settings > Other Characters tab > Word-medial punctuation — do this anyway, since it's the correct habit to build, but confirmed on a real Paratext 9.5 build, it will **not** stop the check from flagging Velna's word-medial apostrophes. That's expected: once `’` is already a configured quote mark, this setting has no effect on it. Treat any remaining apostrophe results as verified false positives, not something left to configure away. Since Velna's orthography is fictional and effectively still "in development" for this exercise, this is also the right moment to raise the real fix with learners: if this were a live translation team's project, this is exactly when you'd recommend adopting a different, unique apostrophe character — Lesson 2 names `ʼ` (U+02BC MODIFIER LETTER APOSTROPHE) as a concrete option — rather than living with the collision indefinitely. Velna itself keeps `’` for its apostrophes so the scenario still demonstrates the unresolvable case firsthand; the `ʼ` alternative is illustrated in Lesson 2's text, not built into this project.
+Continuation: `«` at First level only. The verified configuration also fills **Continuer
+required at** with `p b/q1 pi pi/pi` — the paragraph-marker contexts where the check must
+insist on the continuer. Copy it exactly; without it the check reads every continuer `«` as a
+new opening mark that is never closed, and a long speech floods with unclosed-quote results.
+
+Word-medial punctuation: add `’` (U+2019) in ☰ > Project settings > Language Settings > Other Characters tab > Word-medial punctuation — do this anyway, since it's the correct habit to build, but confirmed on a real Paratext 9.5 build, it will **not** stop the check from flagging Velna's word-medial apostrophes. That's expected: once `’` is already a configured quote mark, this setting has no effect on it. Treat any remaining apostrophe results as verified false positives, not something left to configure away. This is also the moment to remember the real fix: on a live translation team's project, you would raise with the team adopting a different, unique apostrophe character — Lesson 2 names `ʼ` (U+02BC MODIFIER LETTER APOSTROPHE) as a concrete option — rather than living with the collision indefinitely. Choosing it is an orthography decision for the translation team and the language community, not for you, and it can come up late, even close to typesetting. Velna itself keeps `’` for its apostrophes so the scenario still demonstrates the unresolvable case firsthand; the `ʼ` alternative is illustrated in Lesson 2's text, not built into this project.
 
 **Quotation types tab:** confirmed on a real Paratext 9.5 build: Velna needs exactly **one**
 change from recommended defaults — **Continued quotation = Use quote marks** (the First level
@@ -76,7 +81,7 @@ Indirect, Hypothetical — stays at its recommended default.
 
 ## Scenario B — Angle-bracket guillemets (French/German style with nesting reversal)
 
-**Project:** Menda New Testament (`menda`)
+**Project:** Menda New Testament (`MENDA`)
 
 **Menda quotation conventions:**
 
@@ -113,8 +118,8 @@ it on **Use recommended settings**. Confirmed on a real Paratext 9.5 build: with
 types check enabled, Menda's text passes clean at the recommended defaults (Normal/Quotation
 from another source/Self quote = Use quote marks; Continued quotation = Never use quote marks;
 Potential/Indirect = Quote marks are optional; Hypothetical = Never use quote marks). Step 5 of
-the scenario workflow still applies — open the tab, tick the enable checkbox (administrator
-required), and verify with a check run — but for Menda that verification is the whole task; there
+the scenario workflow still applies — open the tab, tick the enable checkbox, and verify with
+a check run — but for Menda that verification is the whole task; there
 is nothing to change.
 
 **Check your work:**
@@ -128,7 +133,7 @@ is nothing to change.
 
 ## Scenario C — Non-standard marks with continuation
 
-**Project:** Waku New Testament (`waku`)
+**Project:** Waku New Testament (`Waku`)
 
 **Waku quotation conventions:**
 
@@ -167,7 +172,7 @@ enforce the continuer at those paragraph breaks.
 - Check a verse where em dash is used for a parenthetical aside (not speech). Does the check flag it? What is the correct response — fix the text (replace the em dash with different punctuation for the parenthetical), reconfigure if possible, or document in a Project Note for the consultant?
 - This scenario leaves results that cannot be eliminated by configuration alone — because Paratext cannot distinguish an em dash used as speech from one used as a parenthetical dash. Confirmed on a real Paratext 9.5 build, a correct configuration run against all books ends at **seven results**: six "found as a word medial character" results on genuine parenthetical em dashes (Mark 13:14 twice, 13:19, 13:22; Luke 9:3; Acts 3:1), plus one "Closing quote mark is possibly missing before verse 18:1" at John 17:26.
 - The John 17:26 result is a different residual class from the parentheticals: the text there is *correct* — Jesus's prayer (17:1–26) opens with `—`, carries the `—` continuer at every paragraph, and closes with `—` at the end of verse 26 — but with the same character serving as opener, closer, and continuer across a long multi-paragraph speech, Paratext's context-based tracking loses the open/close state and reports the speech as possibly unclosed. No text change fixes it without breaking Waku's convention. Verify the marks are all present, then document.
-- For all seven: consider whether the parenthetical verses can be reworded to use different punctuation. Where rewording is not feasible (and always for John 17:26, where the text is already correct), add a Project Note (☰ > Insert > Project note...) explaining the result so the consultant can verify during review.
+- For all seven: consider whether the parenthetical verses can be reworded to use different punctuation. Where rewording is not feasible (and always for John 17:26, where the text is already correct), add a Project Note (☰ > Insert > Project note...) explaining the result so the consultant can verify during review. Attach each note to the verse the result is reported at: Mark 13:14, 13:19, 13:22, Luke 9:3, Acts 3:1 and John 17:26.
 
 ![The Quotations check results panel for Waku across all books, showing the seven residual results: word-medial em dash results in Mark 13, Luke 9:3, and Acts 3:1, plus the possibly-missing closing mark at John 17:26. Mark 13:14 is open alongside, showing its parenthetical em dashes in context.](assets/ss-05-waku-residual-results.png)
 
@@ -186,7 +191,7 @@ enforce the continuer at those paragraph breaks.
 
 1. The characters were entered in the wrong fields — the left-pointing guillemet (`‹`, U+2039) is in the Opening field when it should be in the Closing field, and vice versa. Swap them: Opening should be `›` (right-pointing, U+203A), Closing should be `‹` (left-pointing, U+2039). Confirm by checking the Example section — the correct order shows `›` as the inner opening and `‹` as the inner closing.
 2. The check will fire on every Second level opening mark (treating the right-pointing guillemet as an unexpected closing mark) and on every Second level closing mark (treating the left-pointing guillemet as an unexpected opening mark). The entire Second level configuration will appear as errors.
-3. Two options: (1) For the parentheticals, rewrite the affected verses to use different punctuation for parenthetical remarks (e.g. brackets or a non-speech dash character), which removes the ambiguity and clears the results. (2) Where rewording is not feasible — and always for the multi-paragraph result, where the text is already correct and there is nothing to rewrite — add a Project Note (☰ > Insert > Project note...) to each verse explaining what the flagged em dash actually is, so the consultant can verify during review. The Basic Checks panel results will remain; documenting them prevents them from being mistaken for unreviewed errors.
+3. Two options: (1) For the parentheticals, rewrite the affected verses to use different punctuation for parenthetical remarks (e.g. brackets or a non-speech dash character), which removes the ambiguity and clears the results. (2) Where rewording is not feasible — and always for the multi-paragraph result, where the text is already correct and there is nothing to rewrite — add a Project Note (☰ > Insert > Project note...) explaining what the flagged em dash actually is, attached to the verse the result is reported at (Mark 13:14, 13:19, 13:22, Luke 9:3, Acts 3:1, John 17:26), so the consultant can verify during review. The Basic Checks panel results will remain; documenting them prevents them from being mistaken for unreviewed errors.
 
 ---
 

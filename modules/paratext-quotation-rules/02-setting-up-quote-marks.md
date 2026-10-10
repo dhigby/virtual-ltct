@@ -2,8 +2,8 @@
 
 **Estimated time:** 90 minutes
 
-> This lesson uses the `tamba` and `runda` fictional projects. See the
-> [course README](README.md#the-fictional-project) for their quotation conventions.
+> This lesson uses the `TAMBA` and `RUNDA` practice projects. See the
+> [course README](README.md#the-practice-projects) for their quotation conventions.
 
 **Purpose:** Every language marks speech differently — curly quotes, guillemets, a character
 that doubles as an apostrophe. On a real project your job is to translate those conventions
@@ -106,7 +106,7 @@ run on. Two ways to find them:
    headings (`\s1`) never carry a continuer themselves, but a paragraph that *follows* a heading
    inside a running speech may, which is what a pair like `s1/pi` expresses.
 
-![The Markers inventory window for a project, with the upper pane listing markers, their counts and style names (p 1122, pi 434, q1 117, q2 118, nb 1, among others) and the lower pane listing the verses where the selected marker p occurs.](assets/ss-02-markers-inventory.png)
+![The Markers inventory window for the TAMBA project with All books selected. The upper pane lists markers with their counts and style names, among them p 1888, pi 11, q 14, q1 209 and q2 185. The marker p is selected, and the lower pane lists the first verses where it occurs: MAT 1:0, 1:16, 1:17 and 1:19.](assets/ss-02-markers-inventory.png)
 
 Most New Testament projects end up with a list of four to six entries. A project with heavy
 poetry, lists, or indented material has a longer list, but it is built the same way. Both
@@ -142,9 +142,10 @@ collision.
 as an apostrophe, there is no configuration that makes the check stop flagging it. The
 practical options are (a) recognize each such result during triage as a known, expected
 false positive — a real apostrophe, not a translation error — and move past it rather than
-hunting for a setting to clear it, or (b) if the orthography is still being finalized, choose a
+hunting for a setting to clear it, or (b) raise with the translation team whether to use a
 different, unique character for the apostrophe so the two roles don't collide in the first
-place. You'll see this firsthand in the third exercise below.
+place. That is an orthography decision for the team and the language community, not for you,
+and it can come up late in a project. You'll see this firsthand in the third exercise below.
 
 **Key takeaways**
 
@@ -165,16 +166,16 @@ place. You'll see this firsthand in the third exercise below.
 
 ## Challenge
 
-You will configure two real (fictional) projects and then untangle the apostrophe conflict.
+You will configure two practice projects and then untangle the apostrophe conflict.
 Each exercise produces a configured tab a mentor can inspect against the language's convention
 table in the README.
 
 ### Exercise 2.1 — Enter quote marks for Tamba
 
-Open the Tamba project's Quotation Rules dialog (☰ > Project settings > Quotation Rules) and
+Open the `TAMBA` project's Quotation Rules dialog (☰ > Project settings > Quotation Rules) and
 click the **Quote marks** tab.
 
-The Tamba project is in Phase A: the Quote marks tab is blank. Enter the following settings
+The `TAMBA` project is in Phase A: the Quote marks tab is blank. Enter the following settings
 using the dropdown arrow (▼) on each cell:
 
 | Level | Opening | Quote Continuer at new paragraph | Closing |
@@ -249,10 +250,10 @@ etc.) to see a description of that field in the status bar at the bottom of the 
 
 ### Exercise 2.2 — Enter quote marks for Runda
 
-Open the Runda project and navigate to ☰ > Project settings > Quotation Rules > Quote marks
+Open the `RUNDA` project and navigate to ☰ > Project settings > Quotation Rules > Quote marks
 tab.
 
-Runda is a new project with no quote marks configured. Enter the following settings:
+`RUNDA` is a new project with no quote marks configured. Enter the following settings:
 
 | Level | Opening | Quote Continuer at new paragraph | Closing |
 | --- | --- | --- | --- |
@@ -376,13 +377,14 @@ set both results aside together.
 Document this for whoever inherits the project, so a future checker doesn't waste time hunting
 for a fix that doesn't exist.
 
-**If the orthography is still being decided:** this is the one situation where the team has a
-real fix available — Paratext's own warning when you enter `’` into Word-medial punctuation
-("unique characters are recommended") is pointing at it. Recommend the language team adopt a
-different, unique character for the apostrophe (or, less commonly, for the closing mark) so the
-two roles never collide. That's a project-level decision for the translation team to make, not
-something you configure your way around — but it's worth raising if the orthography isn't
-locked in yet, since it's the only path that actually eliminates the false positives rather than
+**The real fix belongs to the team:** there is one way to make the collision go away —
+Paratext's own warning when you enter `’` into Word-medial punctuation ("unique characters are
+recommended") is pointing at it. A different, unique character for the apostrophe (or, less
+commonly, for the closing mark) means the two roles never collide. Choosing that character is
+an orthography decision, and it belongs to the translation team and the language community —
+you can raise it, but you don't make it, and it isn't something you configure your way around.
+Orthography changes are sometimes made right up to typesetting, so it is worth raising even
+late in a project: it's the only path that actually eliminates the false positives rather than
 just documenting them.
 
 A good concrete recommendation: **`ʼ` (U+02BC MODIFIER LETTER APOSTROPHE)**. It's the character
@@ -404,8 +406,10 @@ you just saw in Runda, not something a setting change would fix.
 project(s) and level(s) needed a Quote Continuer and why, what the **Continuer required at**
 list adds that the continuer cell alone does not, and what you observed when you tried the
 Word-medial punctuation fix for the apostrophe conflict — including that it did not suppress
-the check result. A mentor will check your configured Quote marks tabs, including the
-Continuer required at field, against the README convention tables.
+the check result. With them, submit a screenshot of the **Quote marks** tab for `TAMBA` and
+one for `RUNDA`, with the Continuer required at field visible. Your mentor can't see your
+settings any other way, because your projects stay on your computer. A mentor will check those
+tabs, including the Continuer required at field, against the README convention tables.
 
 ## Change
 

@@ -164,10 +164,35 @@ You add the learner by the user name their copy of Paratext is registered under 
 
 > **[Placeholder — Kevin/Jenni:** how to make a separate copy of each project per learner (for example, restoring under a different short name and registering each copy). Decide and verify this before running a group.**]**
 
-**Resetting for the next learner.** When a learner finishes:
-1. Remove them from each project's user list, including `TAMBAB`.
-2. Restore the starting backups (Tamba Phase A, `TAMBAB`, Runda, Velna, Menda, Waku), so the projects are back to where a new learner begins.
-3. Send/Receive each one.
+**Resetting for the next learner.** You can't restore a backup to a shared project. Paratext refuses to load it (*"Waku - Waku New Testament has the same ID as Waku - Waku New Testament and was not loaded."*), and Send/Receive would bring the learner's changes back from the server anyway. Use the project history instead: mark the starting state once, then go back to it after each learner.
+
+**Before the first learner starts**, once each project is set up:
+
+1. In the project window, open **☰ > Project > Mark point in history...**
+2. Type a comment you can find again, such as `## Course starting state`, and click **OK**.
+3. Send/Receive the project.
+
+> **TIP:** Paratext adds many history entries of its own. Starting your comment with a symbol such as `##` makes your marked point easy to spot in the list later.
+
+![The Project section of a project window's ☰ menu, with Mark point in history... highlighted between Send/Receive this project and Export draft PDF (PTXprint)....](assets/ss-06-mark-point-in-history.png)
+
+![The Mark Point in Project History dialog for TAMBA, with "## Course starting state" typed in the Comment box. The help text below reads that all changes will be saved and the current state recorded, so the project can later be compared or restored to exactly how it is now. Numbered callouts mark 1 the Comment box and 2 OK.](assets/ss-06-mark-point-comment.png)
+
+**When a learner finishes**, in each project, including `TAMBAB`:
+
+1. Remove the learner: **☰ > Project settings > User permissions...**, then **Remove** next to their name.
+2. Open **☰ > Project > Project history...**
+3. Click your `## Course starting state` entry, then click **Revert Books...**
+4. In **Select which books to restore**, click **All Books**, then **OK**.
+5. Send/Receive the project.
+
+> **WARNING:** Don't skip **All Books**. Choosing it is what also puts back the Quotation Rules and Language Settings, which is where most of the learner's work is. Without it, the next learner finds the last learner's answers already filled in.
+
+![The Project section of the ☰ menu with Project history... highlighted, among Project health report..., Manage books, Delete project..., Recent changes... and Mark point in history....](assets/ss-06-project-history-menu.png)
+
+![The Project History window for TAMBA, listing 7 versions. The top entry, dated 2026-10-10 by Jenni Beadle, reads "## Course starting state" and is selected. Below it are two entries by Kevin Nicholas dated 2026-10-08: "Committed outstanding changes before converting project" (MAT LUK JHN ACT ROM, Properties and Settings) and "Roles and Permissions". The Revert Books... button in the toolbar is outlined in red, with its tooltip: "Select and revert books to the specified revision".](assets/ss-06-project-history-revert-books-tool.png)
+
+![The Select which books to restore dialog. Buttons on the left read All Books, Old Testament, New Testament, Deuterocanon, Extra material and Deselect All; the list on the right shows Matthew, Luke, John, Acts and Romans.](assets/ss-06-project-history-revert-books-select-books.png)
 
 **When Send/Receive isn't an option.** If a learner has no reliable internet connection, give them the matching backup file to restore on their own computer instead (**Paratext menu > Advanced > Restore project from file...**). Don't hand out the `TAMBAB` backup until they reach Lesson 4.
 

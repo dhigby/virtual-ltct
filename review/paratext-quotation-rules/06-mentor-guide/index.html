@@ -1409,10 +1409,32 @@ project, so Scenario A tests the same skill on a project the learner has not alr
 <blockquote>
 <p><strong>[Placeholder — Kevin/Jenni:</strong> how to make a separate copy of each project per learner (for example, restoring under a different short name and registering each copy). Decide and verify this before running a group.<strong>]</strong></p>
 </blockquote>
-<p><strong>Resetting for the next learner.</strong> When a learner finishes:
-1. Remove them from each project's user list, including <code>TAMBAB</code>.
-2. Restore the starting backups (Tamba Phase A, <code>TAMBAB</code>, Runda, Velna, Menda, Waku), so the projects are back to where a new learner begins.
-3. Send/Receive each one.</p>
+<p><strong>Resetting for the next learner.</strong> You can't restore a backup to a shared project. Paratext refuses to load it (<em>"Waku - Waku New Testament has the same ID as Waku - Waku New Testament and was not loaded."</em>), and Send/Receive would bring the learner's changes back from the server anyway. Use the project history instead: mark the starting state once, then go back to it after each learner.</p>
+<p><strong>Before the first learner starts</strong>, once each project is set up:</p>
+<ol>
+<li>In the project window, open <strong>☰ &gt; Project &gt; Mark point in history...</strong></li>
+<li>Type a comment you can find again, such as <code>## Course starting state</code>, and click <strong>OK</strong>.</li>
+<li>Send/Receive the project.</li>
+</ol>
+<blockquote>
+<p><strong>TIP:</strong> Paratext adds many history entries of its own. Starting your comment with a symbol such as <code>##</code> makes your marked point easy to spot in the list later.</p>
+</blockquote>
+<p><img alt="The Project section of a project window's ☰ menu, with Mark point in history... highlighted between Send/Receive this project and Export draft PDF (PTXprint)...." src="../ss-06-mark-point-in-history.png" /></p>
+<p><img alt="The Mark Point in Project History dialog for TAMBA, with &quot;## Course starting state&quot; typed in the Comment box. The help text below reads that all changes will be saved and the current state recorded, so the project can later be compared or restored to exactly how it is now. Numbered callouts mark 1 the Comment box and 2 OK." src="../ss-06-mark-point-comment.png" /></p>
+<p><strong>When a learner finishes</strong>, in each project, including <code>TAMBAB</code>:</p>
+<ol>
+<li>Remove the learner: <strong>☰ &gt; Project settings &gt; User permissions...</strong>, then <strong>Remove</strong> next to their name.</li>
+<li>Open <strong>☰ &gt; Project &gt; Project history...</strong></li>
+<li>Click your <code>## Course starting state</code> entry, then click <strong>Revert Books...</strong></li>
+<li>In <strong>Select which books to restore</strong>, click <strong>All Books</strong>, then <strong>OK</strong>.</li>
+<li>Send/Receive the project.</li>
+</ol>
+<blockquote>
+<p><strong>WARNING:</strong> Don't skip <strong>All Books</strong>. Choosing it is what also puts back the Quotation Rules and Language Settings, which is where most of the learner's work is. Without it, the next learner finds the last learner's answers already filled in.</p>
+</blockquote>
+<p><img alt="The Project section of the ☰ menu with Project history... highlighted, among Project health report..., Manage books, Delete project..., Recent changes... and Mark point in history...." src="../ss-06-project-history-menu.png" /></p>
+<p><img alt="The Project History window for TAMBA, listing 7 versions. The top entry, dated 2026-10-10 by Jenni Beadle, reads &quot;## Course starting state&quot; and is selected. Below it are two entries by Kevin Nicholas dated 2026-10-08: &quot;Committed outstanding changes before converting project&quot; (MAT LUK JHN ACT ROM, Properties and Settings) and &quot;Roles and Permissions&quot;. The Revert Books... button in the toolbar is outlined in red, with its tooltip: &quot;Select and revert books to the specified revision&quot;." src="../ss-06-project-history-revert-books-tool.png" /></p>
+<p><img alt="The Select which books to restore dialog. Buttons on the left read All Books, Old Testament, New Testament, Deuterocanon, Extra material and Deselect All; the list on the right shows Matthew, Luke, John, Acts and Romans." src="../ss-06-project-history-revert-books-select-books.png" /></p>
 <p><strong>When Send/Receive isn't an option.</strong> If a learner has no reliable internet connection, give them the matching backup file to restore on their own computer instead (<strong>Paratext menu &gt; Advanced &gt; Restore project from file...</strong>). Don't hand out the <code>TAMBAB</code> backup until they reach Lesson 4.</p>
 <hr />
 <h2 id="project-setup-runda-lesson-2">Project Setup: <code>runda</code> (Lesson 2)<a class="headerlink" href="#project-setup-runda-lesson-2" title="Permanent link">&para;</a></h2>

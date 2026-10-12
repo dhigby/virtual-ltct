@@ -119,9 +119,9 @@ prediction for every row should you read the discovery prompts and open the vers
 |---|----------|--------------|----------------|------------|
 | 1 | Matthew 5:3 | "Closing quote mark is possibly missing before verse 7:28" | ? | ? |
 | 2 | Luke 4:18 | "Closing quote mark is possibly missing before verse 20" | ? | ? |
-| 3 | John 3:10, 3:16, 3:21 — **one seed, three linked results** | 3:10: "Quote opened; see following message for error" · 3:16: "Expected continuers [“] are missing OR quote not closed; see preceding message" · 3:21: "Closing quote mark [”] found without matching opening" | ? | ? |
+| 3 | John 3:10, 3:16, 3:21 — **one seed, three linked results** | 3:10: "Quote opened; see following message for error" · 3:16: "Expected continuers [“] are missing OR quote not closed; see preceding message" · 3:21: "Closing quote [” U+201D] found without matching opening. Caused by a missing opening quote, a missing continuer, or incorrectly defined continuer rules" | ? | ? |
 | 4 | Acts 2:25 | "Opening quote mark found without matching closing quote mark" | ? | ? |
-| 5 | Romans 1:1 | "Closing quote mark [’ U+2019] found as a word medial character. Sometimes caused when a closing quote is incorrectly used as an apostrophe" | ? | ? |
+| 5 | Romans 1:1 | "Closing quote [’ U+2019] found as a word medial character. Sometimes caused when a closing quote is incorrectly used as an apostrophe" | ? | ? |
 
 **✏️ Discovery prompts for each item:**
 - Matthew 5:3 opens Jesus's speech, and the check traces it forward to verse 7:28 — the whole

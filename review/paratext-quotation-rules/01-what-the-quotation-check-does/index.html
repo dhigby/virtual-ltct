@@ -447,6 +447,23 @@
     </span>
   </a>
   
+    <nav class="md-nav" aria-label="Content">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#a-new-project-already-has-settings-paratexts-not-the-teams" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        A new project already has settings — Paratext's, not the team's
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
       
         <li class="md-nav__item">
@@ -462,10 +479,10 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#exercise-11-observe-an-unconfigured-check" class="md-nav__link">
+  <a href="#exercise-11-run-the-check-at-paratexts-defaults" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Exercise 1.1 — Observe an unconfigured check
+        Exercise 1.1 — Run the check at Paratext's defaults
       
     </span>
   </a>
@@ -930,6 +947,23 @@
     </span>
   </a>
   
+    <nav class="md-nav" aria-label="Content">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#a-new-project-already-has-settings-paratexts-not-the-teams" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        A new project already has settings — Paratext's, not the team's
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
       
         <li class="md-nav__item">
@@ -945,10 +979,10 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#exercise-11-observe-an-unconfigured-check" class="md-nav__link">
+  <a href="#exercise-11-run-the-check-at-paratexts-defaults" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Exercise 1.1 — Observe an unconfigured check
+        Exercise 1.1 — Run the check at Paratext's defaults
       
     </span>
   </a>
@@ -999,10 +1033,11 @@
 <h1 id="lesson-1-what-the-quotation-check-does">Lesson 1 — What the Quotation Check Does<a class="headerlink" href="#lesson-1-what-the-quotation-check-does" title="Permanent link">&para;</a></h1>
 <p><strong>Estimated time:</strong> 30 minutes</p>
 <p><strong>Purpose:</strong> On a real project you will often be handed a Quotation check that is either
-screaming with errors or silent — and a translation team asking what it means. Before you can
-help, you have to recognize when the check's results are meaningless because it has not been
-configured yet, and be able to explain that to the team. This lesson prepares you for that
-first conversation.</p>
+screaming with errors, reporting a handful of plausible-looking ones, or silent — and a
+translation team asking what it means. Before you can help, you have to recognize when the
+check's results can't be trusted because its settings are still Paratext's defaults rather than
+the team's conventions, and be able to explain that to the team. This lesson prepares you for
+that first conversation.</p>
 <blockquote>
 <p>This lesson uses the <strong>Tamba New Testament</strong> (<code>TAMBA</code>) practice project. See the
 <a href="../#the-practice-projects">course README</a> for the Tamba quotation conventions and
@@ -1012,11 +1047,12 @@ first conversation.</p>
 <h2 id="learning-objectives">Learning objectives<a class="headerlink" href="#learning-objectives" title="Permanent link">&para;</a></h2>
 <p>By the end of this lesson you will be able to:</p>
 <ul>
-<li>Explain why the Quotation check cannot produce trustworthy results before it is configured.</li>
-<li>Name the two inputs Paratext needs — the Quote marks inventory and the quotation rules —
-  before the check is meaningful.</li>
-<li>Run the check on an unconfigured project and judge why its results are noise, not a starting
-  baseline.</li>
+<li>Explain why the Quotation check cannot produce trustworthy results until its settings
+  describe the team's own conventions.</li>
+<li>Name the two inputs Paratext needs — the Quote marks tab and the Quotation types tab — before
+  the check is meaningful.</li>
+<li>Run the check on a project still at Paratext's default settings and explain why its results
+  are not yet a list of things to fix in the text.</li>
 </ul>
 <h2 id="connect">Connect<a class="headerlink" href="#connect" title="Permanent link">&para;</a></h2>
 <p>Think about the language project you work with — or one you have seen a colleague support.</p>
@@ -1030,39 +1066,89 @@ basic checks) and it either flooded the screen with results or returned nothing 
   would you say?</li>
 </ul>
 <p>Hold those answers. This lesson is about telling the difference between a check that has
-<em>found nothing wrong</em> and a check that <em>doesn't yet know what to look for</em>.</p>
+<em>found something wrong in the text</em> and a check that <em>is looking for the wrong things</em>.</p>
 <h2 id="content">Content<a class="headerlink" href="#content" title="Permanent link">&para;</a></h2>
-<p><em>Configuring and troubleshooting a project's checks is core to the </em><em>Translation Tools</em><em>
+<p><em>Configuring and troubleshooting a project's checks is core to the <strong>Translation Tools</strong>
 competency — being able to "use translation tools and troubleshoot issues that arise." The
-Quotation check is a good first case because its results are worthless until you have given it
-two specific pieces of information, and recognizing that is half the skill.</em></p>
+Quotation check is a good first case because its results mean little until its settings
+describe the team's conventions, and recognizing that is half the skill.</em></p>
 <p>Paratext's <strong>Quotation check</strong> (☰ &gt; Tools &gt; Run basic checks... &gt; Quotations) scans your
-translation for unmatched, unopened, or incorrectly nested quotation marks. Before it can do
-this it needs two things:</p>
+translation for unmatched, unopened, or incorrectly nested quotation marks. It reads two sets
+of settings, both in <strong>☰ &gt; Project settings &gt; Quotation Rules</strong>:</p>
 <ol>
 <li><strong>Quote marks tab</strong> — which characters in your text are quotation marks, and at what level
    (Opening, Quote Continuer at new paragraph, Closing for each level).</li>
 <li><strong>Quotation types tab</strong> — for each semantic category of speech, whether marks are required,
    forbidden, or optional.</li>
 </ol>
-<p>If neither is configured, the check either fires on every verse or fires on nothing — both are
-useless. An unconfigured check is <strong>not a starting baseline; it is noise.</strong></p>
-<p><strong>NOTE</strong> Zero results on an unconfigured project does <em>not</em> mean the translation has no
-quotation errors. It means Paratext does not know which characters to look for, so it is not
-finding marks — not confirming their absence. The check is reporting silence, not correctness.</p>
+<h3 id="a-new-project-already-has-settings-paratexts-not-the-teams">A new project already has settings — Paratext's, not the team's<a class="headerlink" href="#a-new-project-already-has-settings-paratexts-not-the-teams" title="Permanent link">&para;</a></h3>
+<p>Those tabs are never empty. Every new project in Paratext 9.5 starts with these default quote
+marks:</p>
+<table>
+<thead>
+<tr>
+<th>Level</th>
+<th>Opening</th>
+<th>Quote Continuer at new paragraph</th>
+<th>Closing</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>First level</td>
+<td><code>“</code></td>
+<td><code>“</code></td>
+<td><code>”</code></td>
+</tr>
+<tr>
+<td>Second level</td>
+<td><code>‘</code></td>
+<td><code>‘</code></td>
+<td><code>’</code></td>
+</tr>
+<tr>
+<td>Third level</td>
+<td><code>“</code></td>
+<td><code>“</code></td>
+<td><code>”</code></td>
+</tr>
+</tbody>
+</table>
+<p>The <strong>Continuer required at</strong> field below the grid reads <code>p p/q1 b/q1</code>, and the Quotation types
+tab is on <strong>Use recommended settings</strong> with its check switched off.</p>
+<p>That is the trap. The tab <em>looks</em> configured, and the check runs and reports results. But
+nobody on the translation team chose those settings. Paratext chose them. Until someone
+compares every cell with the team's own conventions, the check is measuring the text against
+somebody else's rules. Depending on how far the defaults are from the team's conventions, you
+will see one of three things:</p>
+<ul>
+<li><strong>A handful of plausible results.</strong> Close to the team's conventions, but not quite. The few
+  results look like real mistakes in the text. You will see this in Exercise 1.1.</li>
+<li><strong>A flood.</strong> Far from the conventions. The Runda project you meet in Lesson 2 reports 1110
+  results at the defaults.</li>
+<li><strong>A false silence.</strong> The project's marks aren't in the defaults at all, so the check
+  recognizes no quote marks and reports "No errors found." The Menda project in the scenario
+  bank does exactly this, although its text is full of dialogue.</li>
+</ul>
+<p><strong>NOTE</strong> "No errors found" on a project still at the defaults does <em>not</em> mean the translation
+has no quotation errors. It can mean the check doesn't recognize any of the text's marks as
+quote marks. The check is reporting silence, not correctness.</p>
 <p><strong>Key takeaways</strong></p>
 <ul>
 <li>The Quotation check needs both the Quote marks tab (which characters are quote marks) and
   the Quotation types tab (when marks are expected) before it gives trustworthy results.</li>
-<li>Don't interpret or fix results until configuration is complete — you would be chasing noise.</li>
+<li>A new project starts with Paratext's defaults. They look like a configuration, but they are
+  not the team's conventions.</li>
+<li>Don't interpret results, or touch the text, until the settings match the team's conventions.
+  Never add or delete marks in the text to make a default-settings result go away.</li>
 </ul>
 <h2 id="challenge">Challenge<a class="headerlink" href="#challenge" title="Permanent link">&para;</a></h2>
-<h3 id="exercise-11-observe-an-unconfigured-check">Exercise 1.1 — Observe an unconfigured check<a class="headerlink" href="#exercise-11-observe-an-unconfigured-check" title="Permanent link">&para;</a></h3>
+<h3 id="exercise-11-run-the-check-at-paratexts-defaults">Exercise 1.1 — Run the check at Paratext's defaults<a class="headerlink" href="#exercise-11-run-the-check-at-paratexts-defaults" title="Permanent link">&para;</a></h3>
 <p><strong>The situation.</strong> You are supporting the <strong>Tamba New Testament</strong> team. The team lead has run
-the Quotations check for the first time, seen the results, and messaged you: <em>"The quotation
-check is giving me hundreds of errors — is our punctuation really this bad?"</em> Your job is to
-see for yourself what the check reports on an unconfigured project, and then write the team
-lead a short, honest explanation.</p>
+the Quotations check for the first time and messaged you: <em>"The quotation check found five
+places in John 17 where we forgot to close the speech. Should we add the closing marks?"</em> Your
+job is to see for yourself what the check reports, and then write the team lead a short,
+honest explanation.</p>
 <p><strong>Do it in Paratext:</strong></p>
 <ol>
 <li>Open the <code>TAMBA</code> project.</li>
@@ -1070,61 +1156,73 @@ lead a short, honest explanation.</p>
 <li>In the dialog, tick <strong>Quotations</strong> only (leave "Quotation types" unticked — it is a
    separate check).</li>
 <li>Click <strong>Choose Books</strong> and select all NT books available in the <code>TAMBA</code> project, then click
-   <strong>OK</strong>. This runs the check across the whole project so you can see the full scope of the
-   problem.</li>
+   <strong>OK</strong>. This runs the check across the whole project.</li>
 </ol>
 <p><strong>NOTE</strong> A yellow information bar at the bottom of the dialog reads <em>"The accuracy of the
 results of these checks is dependent upon the information you have provided in the inventories
-and quotation rules for your project."</em> This is expected — the point of this challenge is that
-the check cannot give accurate results until it is configured.</p>
+and quotation rules for your project."</em> That sentence is the point of this lesson.</p>
 <p><img alt="The Run basic checks dialog with Quotations ticked, Choose Books selected, and all NT books included." src="../ss-01-run-basic-checks.png" /></p>
 <ol>
 <li>Look at the results list.</li>
 </ol>
-<p><img alt="The Quotations check results panel with no results at all, showing only the notice &quot;Quotation punctuation is not used in project TAMBA&quot; and pointing to Project settings &gt; Quotation rules." src="../ss-01-unconfigured-results.png" /></p>
-<p><strong>TIP</strong> For all configuration work in Lessons 2–4, use <strong>Current Book</strong> in the Run basic
-checks dialog and keep Matthew open — it has heavy, representative dialogue and keeps results
-manageable. Switch to Choose Books and expand to the full NT only after Matthew is clean.</p>
+<p><img alt="The Quotations check results panel for TAMBA, all books, with the project still at Paratext 9.5's default Quotation Rules. It lists five results, all in John 17, at 17:1, 17:6, 17:13, 17:20 and 17:24, and each reads &quot;Opening quote mark found without matching closing quote mark: “&quot;." src="../ss-01-default-results.png" /></p>
+<ol>
+<li>Open <strong>☰ &gt; Project settings &gt; Quotation Rules</strong>, look at the <strong>Quote marks</strong> tab, and compare
+   it with Tamba's conventions in the <a href="../#the-practice-projects">README</a>. Then click
+   <strong>Cancel</strong>. You change nothing in this lesson.</li>
+</ol>
+<p><strong>TIP</strong> Each exercise in this course tells you which scope to run — the whole project with
+<strong>Choose Books</strong>, or one book with <strong>Current Book</strong>. Follow it, because the results each
+exercise describes are for that scope.</p>
 <p><strong>✏️ Discovery prompts</strong> (answer these before you write anything):</p>
 <ul>
-<li>What does the panel actually report? Is that the same thing as "no quotation errors were
-  found"?</li>
-<li>The notice points you to <strong>Project settings &gt; Quotation rules</strong>. What is Paratext missing
-  before it can examine the text at all?</li>
-<li>The team lead in the scenario above saw <em>hundreds</em> of errors on their project; this project
-  shows none. How can the same check produce both — and is either result trustworthy?</li>
+<li>Who chose the settings on the Quote marks tab? Do they match the README's table for Tamba,
+  including the <strong>Continuer required at</strong> field?</li>
+<li>The results say a speech was opened and never closed. Does that tell you something is wrong
+  with the text, or only that the text doesn't fit the settings the check is using?</li>
+<li>If the team added five closing marks to John 17, what would they be changing — the settings,
+  or the Scripture text?</li>
 </ul>
-<p><strong>What you should observe:</strong> confirmed on a real Paratext 9.5 build, the check declines to run
-on a truly unconfigured project — the panel shows no results, only the notice <em>"Quotation
-punctuation is not used in project TAMBA."</em> That is silence, not a clean bill of health. A
-project whose settings are <em>wrong</em> rather than missing (like the team lead's) fails the
-opposite way: a flood of false positives. Either way the results are not trustworthy until the
-Quote marks tab describes the language.</p>
+<p><strong>What you should observe:</strong> five results, all in John 17, each reading <em>"Opening quote mark
+found without matching closing quote mark: “"</em>. They look like five speeches someone forgot to
+close. They aren't. Tamba's Phase A text is correct; the course has checked it. The results
+come from the settings: <code>TAMBA</code> is still at Paratext's defaults, and the defaults don't
+describe how Tamba's text is laid out. In Lesson 2 you will find the exact setting responsible.</p>
+<p>Look at the other two outcomes from the Content section. On a project like Runda, the same
+defaults produce more than a thousand results; on one like Menda, none at all. Five results,
+a thousand, or none: none of them can be trusted until the settings describe the team's
+conventions.</p>
+<p>Adding closing marks to John 17 would change correct Scripture to satisfy a setting nobody
+chose. The fix belongs in the settings. Once they match the team's conventions, any result
+that still points at the text is a question to raise with the translation team — and in this
+case, there won't be any.</p>
 <p><strong>✏️ Produce this (a mentor will review it).</strong> Write the team lead a 2–3 sentence reply that
-(a) answers whether the errors mean their punctuation is bad, and (b) says what has to happen
-before the check can be trusted. Keep it plain enough for a non-technical translator to
-understand.</p>
+(a) answers whether they should add the closing marks, and (b) says what has to happen before
+the check can be trusted. Keep it plain enough for a non-technical translator to understand.</p>
 <h2 id="change">Change<a class="headerlink" href="#change" title="Permanent link">&para;</a></h2>
 <p><strong>Self-assessment — can you explain it to a colleague?</strong></p>
 <ol>
-<li>The Quotations check runs on an unconfigured project and returns zero results. Does this
-   mean the translation has no quotation errors?</li>
+<li>The Quotations check on a project still at Paratext's defaults returns "No errors found."
+   Does this mean the translation has no quotation errors?</li>
 <li>What are the two things Paratext needs before the Quotations check gives meaningful results?</li>
-<li>Why start with Matthew when working through check results during configuration, rather than
-   running the check on the whole NT at once?</li>
+<li>The team lead wants to add closing marks in John 17 to clear the five results. What do you
+   tell them?</li>
 </ol>
-<p><em>You should be able to say:</em> (1) No — zero results on an unconfigured project means Paratext
-does not know which characters to look for; it is reporting silence, not correctness. (2) The
-Quote marks tab (which characters are quote marks and at what level) and the Quotation types
-tab (whether each category of speech requires, forbids, or optionally allows marks). (3)
-Matthew has heavy, representative dialogue with clear nesting; one book keeps results
-manageable and lets you confirm each fix before expanding scope.</p>
-<p><strong>✏️ Take it to your context.</strong> Name one real project you support (or expect to). Does the team
-know whether its quotation checking is configured? Write down one sentence you would use to set
-their expectations before running the check for the first time.</p>
-<p><strong>Next step.</strong> In <a href="../02-setting-up-quote-marks/">Lesson 2</a> you will give Paratext the first of
-the two inputs it needs — you will open the Quote marks tab and enter Tamba's actual quotation
-characters, so the check finally has something meaningful to look for.</p>
+<p><em>You should be able to say:</em> (1) No — the defaults may not include the project's quote marks at
+all, so the check may not recognize any marks in the text. It is reporting silence, not
+correctness. (2) The Quote marks tab (which characters are quote marks and at what level) and
+the Quotation types tab (whether each category of speech requires, forbids, or optionally
+allows marks), both set to match the team's conventions. (3) Don't — the results come from
+Paratext's default settings, not from the team's conventions. First correct the settings and
+re-run the check. If anything still points at the text after that, it goes back to the
+translation team; it isn't yours to rewrite.</p>
+<p><strong>✏️ Take it to your context.</strong> Name one real project you support (or expect to). Has anyone
+ever compared its Quotation Rules with the team's conventions, or is it still at Paratext's
+defaults? Write down one sentence you would use to set the team's expectations before running
+the check for the first time.</p>
+<p><strong>Next step.</strong> In <a href="../02-setting-up-quote-marks/">Lesson 2</a> you correct the first of the two
+inputs: you open the Quote marks tab, compare each default cell with Tamba's conventions, and
+change the ones that differ — so the check finally looks for what the team actually writes.</p>
 <hr />
 <p>Next: <a href="../02-setting-up-quote-marks/">Lesson 2 — Setting Up Quote Marks</a></p>
 

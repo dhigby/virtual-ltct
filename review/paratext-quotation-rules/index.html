@@ -1018,7 +1018,7 @@
 <hr />
 <h2 id="about-this-course">About This Course<a class="headerlink" href="#about-this-course" title="Permanent link">&para;</a></h2>
 <p><strong>Audience:</strong> Translators and translation helpers who are comfortable navigating Paratext but have not yet configured quotation checking for a project.</p>
-<p><strong>Goal:</strong> By the end of this course you will be able to open an unconfigured project, identify the quotation characters a language uses, enter them correctly into the Quote marks tab, configure the checking rules, run the check, and interpret the results.</p>
+<p><strong>Goal:</strong> By the end of this course you will be able to open a project still at Paratext's default quotation settings, identify the quotation characters a language uses, correct the Quote marks tab to match them, configure the checking rules, run the check, and interpret the results.</p>
 <p><strong>Format:</strong> Each lesson presents a goal, a starting state, a set of discovery prompts (questions to answer before you act), and then the expected configuration you can compare against.</p>
 <p><strong>Estimated time:</strong> Lessons 1–4 run 4¼ hours total (30 + 90 + 60 + 75 minutes); the scenario bank adds 1–2 hours. Each individual lesson is capped at 90 minutes — see the duration header at the top of each file.</p>
 <hr />
@@ -1117,6 +1117,39 @@ example, after your mentor changes your permissions), cancel it.</p>
 <hr />
 <h2 id="the-practice-projects">The Practice Projects<a class="headerlink" href="#the-practice-projects" title="Permanent link">&para;</a></h2>
 <p>Every practice project in this course is real Scripture text from a real language, adapted for the course. Each has a course name (Tamba, Runda, Velna, Menda, Waku), and Paratext's project lists show its real language name alongside it. Its quotation marks follow conventions set for this course, so read the tables below as the course's conventions, not as a description of how that language community writes. As in real consulting work, you won't need to read the text itself: the skill is configuring the tool and diagnosing what it reports.</p>
+<p><strong>Starting state.</strong> <code>TAMBA</code>, <code>RUNDA</code>, <code>VELNA</code>, <code>MENDA</code> and <code>Waku</code> all reach you with Paratext 9.5's default Quotation Rules, which is what every brand-new project gets:</p>
+<table>
+<thead>
+<tr>
+<th>Level</th>
+<th>Opening</th>
+<th>Quote Continuer at new paragraph</th>
+<th>Closing</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>First level</td>
+<td><code>“</code></td>
+<td><code>“</code></td>
+<td><code>”</code></td>
+</tr>
+<tr>
+<td>Second level</td>
+<td><code>‘</code></td>
+<td><code>‘</code></td>
+<td><code>’</code></td>
+</tr>
+<tr>
+<td>Third level</td>
+<td><code>“</code></td>
+<td><code>“</code></td>
+<td><code>”</code></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Continuer required at:</strong> <code>p p/q1 b/q1</code>. <strong>Quotation types tab:</strong> Use recommended settings, with the Quotation types check off.</p>
+<p>These defaults are Paratext's, not any translation team's choice. Part of your job in every exercise is comparing each cell with the conventions below and correcting the ones that differ. <code>TAMBAB</code> (Lesson 4) is the exception: it arrives with Tamba's conventions already entered.</p>
 <p>Lessons 1–4 use the <strong>Tamba New Testament</strong> project: <code>TAMBA</code> for Lessons 1–3, and its Phase B copy <code>TAMBAB</code> for Lesson 4. Tamba uses the following quotation conventions:</p>
 <table>
 <thead>
@@ -1158,7 +1191,7 @@ example, after your mentor changes your permissions), cancel it.</p>
 </table>
 <p><strong>Additional facts about Tamba quotation style:</strong>
 - First level (primary speech) uses a Quote Continuer at new paragraph: continued speech repeats the opening mark <code>“</code> (U+201C) at the start of each new paragraph, with the closing mark <code>”</code> (U+201D) appearing only once, at the very end of the whole speech.
-- Second and Third level have no continuer — a Second or Third level quotation that spans a paragraph break closes fully and reopens fully at each new paragraph instead.
+- Second and Third level have no continuer (set to <em>none</em>; the defaults fill them, so they must be changed). Nothing is repeated at the head of a new paragraph at those levels, and a Second level quotation can run across paragraph breaks unbroken: Peter's Psalm 16 citation in Acts 2:25–28 opens with <code>‘</code> in 2:25 and closes with <code>’</code> in 2:28, with no marks at the breaks between.
 - Third level is used only in Matthew, John, and Revelation where a character quotes scripture inside dialogue.
 - When a speech quotes Scripture as poetry, the First level continuer <code>“</code> is repeated at the head of the first <code>\q1</code> line (e.g. Matthew 2:6 <code>\q1 “ ‘Oro iu, Betliem…</code>); the following <code>\q2</code>/<code>\q1</code> lines of the same poem carry no mark.
 - <strong>Continuer required at:</strong> <code>p p/q1 m/q1 s1/pi pi/pi b/q1</code> — every <code>\p</code> inside a speech, a <code>\q1</code> that follows <code>\p</code>, <code>\m</code> or <code>\b</code>, and an indented <code>\pi</code> that follows <code>\s1</code> or another <code>\pi</code>.
@@ -1298,15 +1331,15 @@ A check result caused by a gap or error in the Quote marks tab or Quotation type
 <p><strong>First level / Second level / Third level</strong>
 The nesting depth of a quotation. First level is primary speech; Second level is speech embedded within a First level quotation; Third level is speech embedded within a Second level quotation. Each level has its own Opening, Quote Continuer at new paragraph, and Closing characters on the Quote marks tab.</p>
 <p><strong>Label tooltip / status bar</strong>
-In the Quote marks tab, the status bar at the bottom of the dialog shows a description when you hover over any row or column label (such as “Opening” or “Quotes within Quotes (Second level)”). Use this to understand what a field does. To verify the actual character in a cell, use the dropdown arrow (▼) on that cell to see the character list, or check the Example preview at the bottom of the dialog.</p>
+In the Quote marks tab, the status bar at the bottom of the dialog shows a description when you hover over any row or column label (such as “Opening” or “Quotes within Quotes (Second level)”). Use this to understand what a field does. To verify the actual character in a cell, click in the cell and press <strong>Alt+X</strong> to show its Unicode code, then press <strong>Alt+X</strong> again to switch it back. Don't skip the second press: if you click OK while the cell shows the code (for example <code>203A</code>), Paratext saves that text as the quote mark. To check the characters in the text itself, use the <strong>Punctuation inventory</strong> or <strong>Characters inventory</strong>: select a character in the upper pane to see its Unicode value. The Example preview at the bottom of the dialog shows how the marks sit together.</p>
 <p><strong>Opening mark / Closing mark</strong>
 The characters that begin and end a quotation at a given level. These are entered per-level in the Quote marks tab.</p>
 <p><strong>Project note</strong>
 A note attached to a verse (☰ &gt; Insert &gt; Project note..., or via the notes list at ☰ &gt; Tools &gt; Notes List...). Use Project Notes to document residual check results that configuration cannot eliminate, so a consultant reviewer can see they were examined deliberately.</p>
 <p><strong>Quote Continuer at new paragraph</strong>
-A character placed at the start of a new paragraph to signal that a speaker’s speech from the previous paragraph continues. Entered in the middle column of the Quote marks tab grid. Many languages leave this blank and instead close and reopen quotes fully at each paragraph break.</p>
+A character placed at the start of a new paragraph to signal that a speaker’s speech from the previous paragraph continues. Entered in the middle column of the Quote marks tab grid. Paratext's defaults fill it at every level; set it to <em>none</em> at any level where the language doesn't repeat a mark at the head of a continued paragraph.</p>
 <p><strong>Quote marks tab</strong>
-The first tab of the Quotation Rules dialog (☰ &gt; Project settings &gt; Quotation Rules). Contains a three-row, three-column grid for entering the Opening, Quote Continuer at new paragraph, and Closing characters at each nesting level, plus additional checkboxes below the grid (hover labels for descriptions), an Example preview section showing the configured marks in context, and the <strong>Copy quote mark settings...</strong> button.</p>
+The first tab of the Quotation Rules dialog (☰ &gt; Project settings &gt; Quotation Rules). Contains a three-row, three-column grid for entering the Opening, Quote Continuer at new paragraph, and Closing characters at each nesting level, plus additional checkboxes below the grid (hover labels for descriptions), an Example preview section showing the configured marks in context, and the <strong>Copy quote mark settings...</strong> button (which copies the quote marks from another project but not the <strong>Continuer required at</strong> list). A new project opens with Paratext's defaults already in the grid (see <a href="#the-practice-projects">The Practice Projects</a>).</p>
 <p><strong>Quotation Rules</strong>
 The Paratext dialog (under the project menu <strong>☰ &gt; Project settings &gt; Quotation Rules</strong>) where both the Quote marks tab and the Quotation types tab are configured.</p>
 <p><strong>Quotation types check</strong>

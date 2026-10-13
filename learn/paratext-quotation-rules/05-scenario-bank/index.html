@@ -950,13 +950,13 @@ confidently. Do them in any order. Each uses its own practice project — see th
 mentor guide for how the facilitator distributes them.</p>
 </blockquote>
 <p><strong>Learning objectives:</strong> By the end of this scenario bank you will be able to apply the complete inventory + rules + check + triage workflow independently to an unfamiliar language scenario, including edge cases not covered in Lessons 1–4.</p>
-<p>These exercises use three new practice projects. Each has a different quotation style. For each scenario follow the same four-step workflow — <strong>inventory → rules → check → triage</strong> — broken into eight concrete actions:</p>
+<p>These exercises use three new practice projects. Each has a different quotation style, and each starts where a real new project starts: with Paratext's default Quotation Rules, not the language's conventions. For each scenario follow the same four-step workflow — <strong>inventory → rules → check → triage</strong> — broken into eight concrete actions:</p>
 <p><strong>Inventory</strong></p>
 <ol>
 <li>Read the language conventions table.</li>
-<li>Answer the discovery prompts before configuring anything.</li>
-<li>Open the Quote marks tab; the fields will be empty.</li>
-<li>Enter the quote mark characters on the Quote marks tab.</li>
+<li>Run the Quotations check on all books once, <em>before</em> changing anything, and note what it reports. Then answer the discovery prompts.</li>
+<li>Open the Quote marks tab and compare every cell with the conventions table. It holds Paratext's defaults (<code>“ “ ”</code> at First level, <code>‘ ‘ ’</code> at Second level, <code>“ “ ”</code> at Third level, Continuer required at <code>p p/q1 b/q1</code>).</li>
+<li>Correct the defaults: change every cell that differs, including continuers and unused levels that must be set to <em>none</em>, and the <strong>Continuer required at</strong> list.</li>
 </ol>
 <p><strong>Rules</strong></p>
 <ol>
@@ -1003,7 +1003,9 @@ mentor guide for how the facilitator distributes them.</p>
 </tbody>
 </table>
 <p>No Third level. First level opening mark <code>«</code> also appears at the start of continued paragraphs.</p>
+<p><strong>Starting state:</strong> Paratext's defaults. Run the Quotations check on all books before you change anything: it reports <strong>264 results</strong>. Most read "Second-level quote mark found without a preceding first-level quote: ‘"; there are also "Closing quote [ ’ U+2019 ] found as a word medial character" results (Matthew 1:1, for example).</p>
 <p><strong>Discovery prompts:</strong>
+- Most of the 264 results say a Second level <code>‘</code> has no First level quote around it. Velna's conventions use <code>‘</code> only inside <code>«…»</code> speech. What does that tell you about whether the check can see Velna's First level marks at the defaults? Is it the text or the settings that needs attention?
 - Velna uses <code>’</code> (U+2019) as both its Second level closing mark and as an apostrophe. Try adding <code>’</code> to Word-medial punctuation as Lesson 2 taught — does it actually clear the resulting check result here too?
 - How would you verify that the text contains <code>«</code> (U+00AB) rather than <code>&lt;&lt;</code> (two less-than signs)?</p>
 <p><strong>Expected configuration:</strong></p>
@@ -1026,16 +1028,27 @@ mentor guide for how the facilitator distributes them.</p>
 <tr>
 <td>Second level</td>
 <td><code>‘</code></td>
-<td><em>(blank)</em></td>
+<td><em>none</em></td>
 <td><code>’</code></td>
+</tr>
+<tr>
+<td>Third level</td>
+<td><em>none</em></td>
+<td><em>none</em></td>
+<td><em>none</em></td>
 </tr>
 </tbody>
 </table>
-<p>Continuation: <code>«</code> at First level only. The verified configuration also fills <strong>Continuer
-required at</strong> with <code>p b/q1 pi pi/pi</code> — the paragraph-marker contexts where the check must
-insist on the continuer. Copy it exactly; without it the check reads every continuer <code>«</code> as a
-new opening mark that is never closed, and a long speech floods with unclosed-quote results.</p>
-<p>Word-medial punctuation: add <code>’</code> (U+2019) in ☰ &gt; Project settings &gt; Language Settings &gt; Other Characters tab &gt; Word-medial punctuation — do this anyway, since it's the correct habit to build, but confirmed on a real Paratext 9.5 build, it will <strong>not</strong> stop the check from flagging Velna's word-medial apostrophes. That's expected: once <code>’</code> is already a configured quote mark, this setting has no effect on it. Treat any remaining apostrophe results as verified false positives, not something left to configure away. This is also the moment to remember the real fix: on a live translation team's project, you would raise with the team adopting a different, unique apostrophe character — Lesson 2 names <code>ʼ</code> (U+02BC MODIFIER LETTER APOSTROPHE) as a concrete option — rather than living with the collision indefinitely. Choosing it is an orthography decision for the translation team and the language community, not for you, and it can come up late, even close to typesetting. Velna itself keeps <code>’</code> for its apostrophes so the scenario still demonstrates the unresolvable case firsthand; the <code>ʼ</code> alternative is illustrated in Lesson 2's text, not built into this project.</p>
+<p><strong>What changes from the defaults:</strong> all three First level cells (<code>“ “ ”</code> → <code>« « »</code>); the Second
+level continuer, which must be cleared from <code>‘</code> to <em>none</em>; and all three Third level cells,
+which must be cleared from <code>“ “ ”</code> to <em>none</em>, because Velna has no Third level. The Second level
+Opening <code>‘</code> and Closing <code>’</code> already match.</p>
+<p>Continuation: <code>«</code> at First level only. The verified configuration also replaces the default
+<strong>Continuer required at</strong> list (<code>p p/q1 b/q1</code>) with <code>p b/q1 pi pi/pi</code> — the paragraph-marker
+contexts where the check must insist on the continuer. Copy it exactly; without the right list
+the check reads continuers <code>«</code> as new opening marks that are never closed, and a long speech
+floods with unclosed-quote results.</p>
+<p>Word-medial punctuation: add <code>’</code> (U+2019) in ☰ &gt; Project settings &gt; Language Settings &gt; Other Characters tab &gt; Word-medial punctuation — do this anyway, since it's the correct habit to build, but confirmed on a real Paratext 9.5 build, it will <strong>not</strong> stop the check from flagging Velna's word-medial apostrophes. That's expected: once <code>’</code> is already a configured quote mark, this setting has no effect on it. You will also see the same yellow warning triangle (⚠) Lesson 2 Exercise 2.3 showed you, in both dialogs: at the end of the Word-medial punctuation field and in the Second level Closing cell on the Quote marks tab, each with the hover message described there. That is expected too; click <strong>OK</strong> anyway. Treat any remaining apostrophe results as verified false positives, not something left to configure away. This is also the moment to remember the real fix: on a live translation team's project, you would raise with the team adopting a different, unique apostrophe character — Lesson 2 names <code>ʼ</code> (U+02BC MODIFIER LETTER APOSTROPHE) as a concrete option — rather than living with the collision indefinitely. Choosing it is an orthography decision for the translation team and the language community, not for you, and it can come up late, even close to typesetting. Velna itself keeps <code>’</code> for its apostrophes so the scenario still demonstrates the unresolvable case firsthand; the <code>ʼ</code> alternative is illustrated in Lesson 2's text, not built into this project.</p>
 <p><strong>Quotation types tab:</strong> confirmed on a real Paratext 9.5 build: Velna needs exactly <strong>one</strong>
 change from recommended defaults — <strong>Continued quotation = Use quote marks</strong> (the First level
 continuer means a mark is expected at every continued paragraph, same reasoning as Tamba in
@@ -1043,7 +1056,8 @@ Lesson 3). Unlike Tamba, Velna has no narrator-citation, self-quote, or indirect
 exceptions, so every other type — Normal, Quotation from another source, Self quote, Potential,
 Indirect, Hypothetical — stays at its recommended default.</p>
 <p><strong>Check your work:</strong>
-- After configuration, run the check on Luke. Verify that <code>«...»</code> speech boundaries are recognized correctly and narrative passages generate no results.
+- After configuration, run the check on all books again and compare with the 264 you started from. Read the messages, not just the count: which kinds of result has your configuration cleared, and which are left?
+- Run the check on Luke. Verify that <code>«...»</code> speech boundaries are recognized correctly and narrative passages generate no results.
 - Confirm that apostrophes inside words (contractions, possessives) are still flagged even after configuring Word-medial punctuation — that's the expected, confirmed outcome for this collision, not a sign of a missing setting. Verify each is a genuine apostrophe and move on.
 - Confirm the First level Quote Continuer (<code>«</code>) at the start of continued paragraphs is not flagged as an unexpected mark.
 - Enable the Quotation types check and run it on Matthew, Luke, and John. It should return clean once Continued quotation is set to Use quote marks — this check is separate from the apostrophe results above, which live in the Quotations check and remain regardless.</p>
@@ -1087,12 +1101,14 @@ Indirect, Hypothetical — stays at its recommended default.</p>
 </table>
 <p>Note: At Second level Menda uses <strong>single guillemets in reversed order</strong> — the <code>›</code> (U+203A, right-pointing) opens the embedded speech and <code>‹</code> (U+2039, left-pointing) closes it. This is unusual and easy to get wrong.</p>
 <p>At Third level Menda returns to <strong>double guillemets</strong> — <code>«</code> opens and <code>»</code> closes, the same characters as First level. Third level is rare; John 19:21 is the key example.</p>
+<p><strong>Starting state:</strong> Paratext's defaults. Run the Quotations check on all books before you change anything: it reports <strong>"No errors found."</strong></p>
 <p><img alt="The Quote marks tab for the Menda project, with Second level Opening set to › and Second level Closing set to ‹. The Example section at the bottom shows the marks in correct nested order." src="../ss-05-menda-quote-marks.png" /></p>
 <p><strong>Discovery prompts:</strong>
+- Menda's text is full of dialogue, and the check at the defaults says "No errors found." Why isn't that good news? Which of Menda's quote marks appear anywhere in Paratext's default grid?
 - Why might it be confusing that the opening mark for Second level is the right-pointing single guillemet? What would happen if you entered it in the Closing field by mistake?
-- How would you verify which direction the single guillemet in the text actually points? (Hint: use the dropdown list on each field — hover each character option to read its name in the list.)
+- How would you verify which direction the single guillemet in the text actually points? (Hint: open the <strong>Punctuation inventory</strong> or the <strong>Characters inventory</strong>. Select a single guillemet in the upper pane to see its Unicode value, 203A or 2039. The lower pane lists the verses where it occurs, and in short verses you can see both marks of the pair. Or place the cursor just after the character and press <strong>Alt+X</strong> (Edit &gt; Show/hide Unicode) to show its code, then press <strong>Alt+X</strong> again to switch it back.)
 - If a verse shows <code>«Il a dit ‹oui›»</code> and the check flags Second level as having incorrect marks, what is the most likely cause?
-- John 19:21 nests speech three levels deep. What characters does Menda use at the Third level, and what will the check report at 19:21 if the Third level cells are left blank?</p>
+- John 19:21 nests speech three levels deep. What characters does Menda use at the Third level, and what might the check report at 19:21 if the Third level cells are left at the defaults?</p>
 <p><strong>Expected configuration:</strong></p>
 <table>
 <thead>
@@ -1107,23 +1123,33 @@ Indirect, Hypothetical — stays at its recommended default.</p>
 <tr>
 <td>First level</td>
 <td><code>«</code></td>
-<td><em>(blank)</em></td>
+<td><em>none</em></td>
 <td><code>»</code></td>
 </tr>
 <tr>
 <td>Second level</td>
 <td><code>›</code></td>
-<td><em>(blank)</em></td>
+<td><em>none</em></td>
 <td><code>‹</code></td>
 </tr>
 <tr>
 <td>Third level</td>
 <td><code>«</code></td>
-<td><em>(blank)</em></td>
+<td><em>none</em></td>
 <td><code>»</code></td>
 </tr>
 </tbody>
 </table>
+<p><strong>What changes from the defaults:</strong> every cell. The six Opening and Closing cells change from
+the default curly quotes to guillemets, and all three continuer cells, which default to <code>“</code>,
+<code>‘</code> and <code>“</code>, must be cleared to <em>none</em>. The <strong>Continuer required at</strong> list changes too: clear it
+from <code>p p/q1 b/q1</code> to empty. None of Menda's marks are in the defaults, which is why
+the check at the defaults recognized no quote marks at all and reported "No errors found."</p>
+<p>Continuer required at: empty. Menda has no continuer at any level, so the list has nothing to
+require; set it to what the conventions say. Do it in this order: set all three continuers to
+<em>none</em> first, then clear the list. Paratext won't accept an empty list while any continuer is
+still set: a red <strong>!</strong> appears beside the field, its tooltip reads "Cannot be blank if any Quote
+Continuer is specified.", and <strong>OK</strong> is disabled.</p>
 <p>Continuation: none. Apostrophe handling: not needed — Menda's Quote marks tab does not use U+2019, so no Word-medial punctuation setting is required.</p>
 <p><strong>Quotation types tab:</strong> unlike Tamba (Lesson 3), Menda needs <strong>no customization at all</strong> — leave
 it on <strong>Use recommended settings</strong>. Confirmed on a real Paratext 9.5 build: with the Quotation
@@ -1137,7 +1163,7 @@ is nothing to change.</p>
 - Run the check on John (contains clear nested dialogue). Verify that <code>«...›...‹...»</code> structures pass without errors.
 - If the check fires on every Second level opening mark, the Opening and Closing fields for Second level are likely reversed. Confirm which character is right-pointing (<code>›</code>) and which is left-pointing (<code>‹</code>).
 - After entering Second level, check the Example section at the bottom. If › opens and ‹ closes in the example, you have the correct order. The visual difference between <code>›</code> and <code>‹</code> is easy to miss — use the Example to confirm before clicking OK.
-- John 19:21 contains Menda's rare Third level quotation. Verify it passes once Third level is configured — if 19:21 is flagged, the Third level cells are probably still empty.
+- John 19:21 contains Menda's rare Third level quotation. Verify it passes once Third level is configured — if 19:21 is flagged, check that the Third level cells really hold <code>«</code> and <code>»</code>, not the default <code>“</code> and <code>”</code>.
 - Enable the Quotation types check and run it on John. It should return clean at recommended settings with no customization — if it doesn't, re-check your Quote marks tab entries first, since a character-level mistake there is more likely than a genuine need to customize types.</p>
 <hr />
 <h2 id="scenario-c-non-standard-marks-with-continuation">Scenario C — Non-standard marks with continuation<a class="headerlink" href="#scenario-c-non-standard-marks-with-continuation" title="Permanent link">&para;</a></h2>
@@ -1178,7 +1204,9 @@ is nothing to change.</p>
 </tbody>
 </table>
 <p>Waku uses an <strong>em dash</strong> (U+2014) for both the opening and closing mark at First level. Multi-paragraph speech does <em>not</em> restart the em dash — it uses a <strong>continuation mark</strong> of <code>—</code> (another em dash) at the start of each continued paragraph. Waku's word-medial apostrophe is <code>ʼ</code> (U+02BC MODIFIER LETTER APOSTROPHE), so the Third level closer <code>’</code> (U+2019) creates no apostrophe collision.</p>
+<p><strong>Starting state:</strong> Paratext's defaults. Run the Quotations check on all books before you change anything: like Menda, it reports <strong>"No errors found."</strong></p>
 <p><strong>Discovery prompts:</strong>
+- Waku's Second and Third level marks are the same curly quotes that appear in Paratext's defaults, and the check at the defaults reports "No errors found." Does that mean the defaults are close enough? What does the default grid say about Waku's First level em dash?
 - When the same character is used for both opening and closing, how does Paratext know which is which? What rule does it rely on?
 - Waku uses the em dash as a continuation mark. Should the continuation mark be a different character from the opening mark, or can it be the same character? What happens if they are the same?
 - In a language where em dash is also used for parenthetical remarks (not speech), how would you expect the check to behave? Is there a way to address this?</p>
@@ -1202,33 +1230,44 @@ is nothing to change.</p>
 <tr>
 <td>Second level</td>
 <td><code>“</code></td>
-<td><em>(blank)</em></td>
+<td><em>none</em></td>
 <td><code>”</code></td>
 </tr>
 <tr>
 <td>Third level</td>
 <td><code>‘</code></td>
-<td><em>(blank)</em></td>
+<td><em>none</em></td>
 <td><code>’</code></td>
 </tr>
 </tbody>
 </table>
+<p><strong>What changes from the defaults:</strong> all three First level cells (<code>“ “ ”</code> → <code>— — —</code>); the Second
+level Opening and Closing (<code>‘ ’</code> → <code>“ ”</code>) and its continuer, which must be cleared from <code>‘</code> to
+<em>none</em>; and the Third level Opening and Closing (<code>“ ”</code> → <code>‘ ’</code>) and its continuer, which must be
+cleared from <code>“</code> to <em>none</em>.</p>
 <p>Continuation: <code>—</code> (em dash, same character) at First level only. The verified configuration
-also fills <strong>Continuer required at</strong> with <code>p p/q1 b/q1 m/q1</code> — the paragraph-marker contexts
-where the check must insist on the continuer. Copy it exactly; without it the check does not
-enforce the continuer at those paragraph breaks.</p>
+also replaces the default <strong>Continuer required at</strong> list (<code>p p/q1 b/q1</code>) with
+<code>p p/q1 b/q1 m/q1</code> — the paragraph-marker contexts where the check must insist on the
+continuer. Copy it exactly; without it the check does not enforce the continuer at those
+paragraph breaks.</p>
+<p><strong>Don't stop at the marks.</strong> If you change only the Opening and Closing marks and leave the
+Second and Third level continuers filled in (as the defaults have them) and the default list in place, the check gives an
+<strong>eighth</strong> result on top of the seven described below: Matthew 13:14, "Second-level quote mark
+found without a preceding first-level quote: “". With the full configuration above, that result
+goes and seven remain.</p>
 <p><img alt="The Quote marks tab for the Waku project, with the em dash in all three First level cells (Opening, Continuer, and Closing), “ and ” at Second level, and ‘ and ’ at Third level. The Example section at the bottom shows the same em dash serving as opener, continuer, and closer in the preview text." src="../ss-05-waku-quote-marks.png" /></p>
 <p><strong>Note on same-character open/close:</strong> When the same character serves as both opener and closer, Paratext relies on structural context (paragraph markers, verse boundaries, and surrounding text flow) to determine which role the em dash plays. Because this context-based interpretation may not resolve every case unambiguously, human review of flagged em-dash results is always required for Waku.</p>
 <p><strong>Check your work:</strong>
 - Run the check on Acts (extended speeches, heavy use of em-dash dialogue). Verify that multi-paragraph speeches with continuation marks do not generate "unclosed quote" errors.
-- Check a verse where em dash is used for a parenthetical aside (not speech). Does the check flag it? What is the correct response — fix the text (replace the em dash with different punctuation for the parenthetical), reconfigure if possible, or document in a Project Note for the consultant?
-- This scenario leaves results that cannot be eliminated by configuration alone — because Paratext cannot distinguish an em dash used as speech from one used as a parenthetical dash. Confirmed on a real Paratext 9.5 build, a correct configuration run against all books ends at <strong>seven results</strong>: six "found as a word medial character" results on genuine parenthetical em dashes (Mark 13:14 twice, 13:19, 13:22; Luke 9:3; Acts 3:1), plus one "Closing quote mark is possibly missing before verse 18:1" at John 17:26.
+- Check a verse where em dash is used for a parenthetical aside (not speech). Does the check flag it? What is the correct response — reconfigure if possible, or document it in a Project Note and raise the punctuation question with the translation team? (Changing the text is not your call; see below.)
+- This scenario leaves results that cannot be eliminated by configuration alone — because Paratext cannot distinguish an em dash used as speech from one used as a parenthetical dash. Confirmed on a real Paratext 9.5 build, a correct configuration run against all books ends at <strong>seven results</strong>: six "found as a word medial character" results on genuine parenthetical em dashes (Mark 13:14 twice, 13:19, 13:22; Luke 9:3; Acts 3:1), plus one "Closing quote mark is possibly missing before verse 18.1: —" at John 17:26.
 - The John 17:26 result is a different residual class from the parentheticals: the text there is <em>correct</em> — Jesus's prayer (17:1–26) opens with <code>—</code>, carries the <code>—</code> continuer at every paragraph, and closes with <code>—</code> at the end of verse 26 — but with the same character serving as opener, closer, and continuer across a long multi-paragraph speech, Paratext's context-based tracking loses the open/close state and reports the speech as possibly unclosed. No text change fixes it without breaking Waku's convention. Verify the marks are all present, then document.
-- For all seven: consider whether the parenthetical verses can be reworded to use different punctuation. Where rewording is not feasible (and always for John 17:26, where the text is already correct), add a Project Note (☰ &gt; Insert &gt; Project note...) explaining the result so the consultant can verify during review. Attach each note to the verse the result is reported at: Mark 13:14, 13:19, 13:22, Luke 9:3, Acts 3:1 and John 17:26.</p>
+- For all seven: add a Project Note (☰ &gt; Insert &gt; Project note...) explaining the result, so the consultant can verify it during review. Attach each note to the verse the result is reported at: Mark 13:14, 13:19, 13:22, Luke 9:3, Acts 3:1 and John 17:26. For the six parentheticals, also raise the punctuation question with the translation team: the same em dash marks both speech and parenthetical remarks, so the check can't tell them apart. Whether to change the text, for example by using different punctuation for parentheticals, is the team's decision, not yours. John 17:26 needs no question for the team: its marks are already correct.</p>
 <p><img alt="The Quotations check results panel for Waku across all books, showing the seven residual results: word-medial em dash results in Mark 13, Luke 9:3, and Acts 3:1, plus the possibly-missing closing mark at John 17:26. Mark 13:14 is open alongside, showing its parenthetical em dashes in context." src="../ss-05-waku-residual-results.png" /></p>
 <h2 id="scenario-bank-summary">Scenario bank summary<a class="headerlink" href="#scenario-bank-summary" title="Permanent link">&para;</a></h2>
 <ul>
 <li>The same four-step workflow (inventory → rules → check → triage) applies to every language, however unusual its quotation conventions.</li>
+<li>Every project starts from Paratext's defaults, and the defaults can mislead in either direction: 264 results for Velna, "No errors found" for Menda and Waku. Correct every cell to the conventions, including the ones that must become <em>none</em>, before you trust any result.</li>
 <li>Always verify entered characters using the Example section at the bottom of the Quote marks tab — on unfamiliar languages it is easy to confuse visually similar characters.</li>
 <li>Some languages (like Waku) will always require human review of residual results; zero configuration errors does not always mean zero results.</li>
 </ul>
@@ -1242,7 +1281,7 @@ enforce the continuer at those paragraph breaks.</p>
 <ol>
 <li>The characters were entered in the wrong fields — the left-pointing guillemet (<code>‹</code>, U+2039) is in the Opening field when it should be in the Closing field, and vice versa. Swap them: Opening should be <code>›</code> (right-pointing, U+203A), Closing should be <code>‹</code> (left-pointing, U+2039). Confirm by checking the Example section — the correct order shows <code>›</code> as the inner opening and <code>‹</code> as the inner closing.</li>
 <li>The check will fire on every Second level opening mark (treating the right-pointing guillemet as an unexpected closing mark) and on every Second level closing mark (treating the left-pointing guillemet as an unexpected opening mark). The entire Second level configuration will appear as errors.</li>
-<li>Two options: (1) For the parentheticals, rewrite the affected verses to use different punctuation for parenthetical remarks (e.g. brackets or a non-speech dash character), which removes the ambiguity and clears the results. (2) Where rewording is not feasible — and always for the multi-paragraph result, where the text is already correct and there is nothing to rewrite — add a Project Note (☰ &gt; Insert &gt; Project note...) explaining what the flagged em dash actually is, attached to the verse the result is reported at (Mark 13:14, 13:19, 13:22, Luke 9:3, Acts 3:1, John 17:26), so the consultant can verify during review. The Basic Checks panel results will remain; documenting them prevents them from being mistaken for unreviewed errors.</li>
+<li>Document all seven with a Project Note (☰ &gt; Insert &gt; Project note...) explaining the result, attached to the verse it is reported at (Mark 13:14, 13:19, 13:22, Luke 9:3, Acts 3:1, John 17:26), so the consultant can verify it during review. The Basic Checks panel results will remain; documenting them prevents them from being mistaken for unreviewed errors. For the six parentheticals, also raise the punctuation question with the translation team: their em dash marks both speech and parenthetical remarks, and the check can't tell the two apart. Whether to change the text, for example by using different punctuation for parentheticals, is the team's decision; you don't rewrite the verses. The John 17:26 result needs only the note, since its marks are already correct.</li>
 </ol>
 <hr />
 <h2 id="where-to-go-from-here">Where to Go from Here<a class="headerlink" href="#where-to-go-from-here" title="Permanent link">&para;</a></h2>
@@ -1259,12 +1298,12 @@ enforce the continuer at those paragraph breaks.</p>
 <p>Quotation Rules are set once per project and persist across sessions, but they need attention when:</p>
 <ul>
 <li><strong>New text is added.</strong> Re-run the check after each significant drafting session; new text may introduce new errors.</li>
-<li><strong>A new translator joins.</strong> Check whether they are typing the correct Unicode characters. Open the Quote marks tab and use the dropdown on each field to confirm the selected character, or check the Example section — if the marks look wrong in the example, a find-and-replace on the new chapters may be needed.</li>
+<li><strong>A new translator joins.</strong> Check whether they are typing the same quote-mark characters as the rest of the team. Open the <strong>Punctuation inventory</strong>, select a quote mark in the upper pane to see its Unicode value, and look in the lower pane for the verses where it occurs; a look-alike, such as a straight <code>"</code> (U+0022) where the conventions use <code>“</code> (U+201C), shows up as a separate entry. If you find one, raise it with the team; a find-and-replace on the new chapters may be what they decide to do.</li>
 <li><strong>A new book is started.</strong> Some books (like Psalms, Proverbs, or Revelation) have different poetry/prose ratios. Re-run the check after completing the first draft to confirm that poetry lines (<code>\q</code>, <code>\q2</code>) are not generating false quotation results.</li>
 </ul>
 <h3 id="copying-quotation-rules-to-another-project">Copying Quotation Rules to another project<a class="headerlink" href="#copying-quotation-rules-to-another-project" title="Permanent link">&para;</a></h3>
 <p>If your language has more than one translation project (for example, a study Bible alongside the main translation), you do not need to reconfigure the Quote marks tab from scratch. Paratext 9.5 can copy settings from a base project:</p>
-<p>Open <strong>☰ &gt; Project settings &gt; Quotation Rules</strong> on the destination project. At the bottom of the dialog, click <strong>Copy quote mark settings...</strong> and select the already-configured project as the source. Review every field after copying — differences in verse structure or text conventions between the two projects may require adjustments.</p>
+<p>Open <strong>☰ &gt; Project settings &gt; Quotation Rules</strong> on the destination project. At the bottom of the dialog, click <strong>Copy quote mark settings...</strong> and select the already-configured project as the source. It copies the quote marks but <strong>not</strong> the <strong>Continuer required at</strong> list, so type that by hand; otherwise the destination keeps the list it already had (on a new project, the default <code>p p/q1 b/q1</code>). Review every field after copying — differences in verse structure or text conventions between the two projects may require adjustments.</p>
 <h3 id="what-a-well-configured-project-looks-like">What a well-configured project looks like<a class="headerlink" href="#what-a-well-configured-project-looks-like" title="Permanent link">&para;</a></h3>
 <p>A project with correctly configured Quotation Rules will:</p>
 <ul>

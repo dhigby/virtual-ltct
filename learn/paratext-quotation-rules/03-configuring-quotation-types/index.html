@@ -989,7 +989,7 @@ well):</p>
 you'll make these same calls for Tamba in Exercise 3.2, and meet them again in the Change
 self-assessment.</p>
 <h2 id="content">Content<a class="headerlink" href="#content" title="Permanent link">&para;</a></h2>
-<p><em>This is the second half of configuring the check for the </em><em>Translation Tools</em><em> competency.
+<p><em>This is the second half of configuring the check for the <strong>Translation Tools</strong> competency.
 Lesson 2 was about characters; this lesson is about expectations. Getting the type settings
 right here eliminates whole categories of false positives before you ever begin triage in
 Lesson 4.</em></p>
@@ -1186,8 +1186,8 @@ things:</p>
    narrative text.</li>
 <li>Tamba's First level uses a Quote Continuer at new paragraph: a long First level speech
    repeats the opening mark <code>“</code> at the head of each continued paragraph rather than closing and
-   reopening. (Second and Third level have no continuer — those close and reopen fully instead,
-   so they never produce a "Continued quotation" instance.)</li>
+   reopening. (Second and Third level have no continuer. The Quotation types check only checks
+   First level quotes anyway — see the WARNING above.)</li>
 <li>When a speaker quotes their own earlier words (a self-quote), Tamba treats it the same as
    any other direct speech: it <strong>must</strong> be marked with quotation marks.</li>
 <li>Tamba never marks reported/indirect speech (e.g. "He told them that the harvest was near") —
@@ -1308,9 +1308,9 @@ conventions.</p>
 <p><em>You should be able to say:</em> (1) Indirect speech — set it to <strong>Never use quote marks</strong>: the
 check reports an error if marks appear unexpectedly and stays quiet when they are absent. (2)
 Yes, it conflicts — "Never use quote marks" expects no marks at the start of a continued
-paragraph, so a repeated opening mark would be flagged; change Continued quotation to <strong>Quote
-marks are optional</strong> or <strong>Use quote marks</strong> depending on how consistently the continuation mark
-is used. (3) A configuration issue — if the language doesn't mark narrator citations, change
+paragraph, so a repeated opening mark would be flagged; change Continued quotation to <strong>Use
+quote marks</strong>, as you did for Tamba in Exercise 3.2, so the continuer is expected at every
+continued paragraph. (3) A configuration issue — if the language doesn't mark narrator citations, change
 "Quotation from another source" to <strong>Quote marks are optional</strong> and re-run; fix the
 configuration rather than editing correct text.</p>
 <p><strong>✏️ Take it to your context.</strong> For one real language you support, fill in the seven-type

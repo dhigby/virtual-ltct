@@ -906,9 +906,9 @@ erasing correct Scripture.</p>
 <code>TAMBAB</code>, the same Tamba text with that configuration already entered. Run the check and you
 will still see results — but now they <em>mean</em> something. The skill this lesson builds is the judgment call you
 will make dozens of times on a real project: <strong>fix the text, or fix the settings?</strong></p>
-<p><strong>✏️ Reflection.</strong> Think back to Lesson 1 — the unconfigured check that refused to examine the
-text at all, and the team lead's project drowning in false positives — and to a project you
-support:</p>
+<p><strong>✏️ Reflection.</strong> Think back to Lesson 1 — the five John 17 results that came from Paratext's
+default settings rather than from anything wrong in the text, and the team lead who wanted to
+add closing marks to clear them — and to a project you support:</p>
 <ul>
 <li>When a check lights up, what is your first instinct — start editing verses, or step back and
   ask whether the settings are right?</li>
@@ -918,7 +918,7 @@ support:</p>
   many separate text mistakes?</li>
 </ul>
 <h2 id="content">Content<a class="headerlink" href="#content" title="Permanent link">&para;</a></h2>
-<p><em>This closes the </em><em>Translation Tools</em><em> "use and troubleshoot" loop: you configured the check,
+<p><em>This closes the <strong>Translation Tools</strong> "use and troubleshoot" loop: you configured the check,
 now you interpret it. The core discipline is never editing correct text just to make a result
 disappear — that corrupts the translation to quiet a tool.</em></p>
 <p>After configuration you will typically have two kinds of results:</p>
@@ -1138,30 +1138,34 @@ only for configuration problems.</p>
 <h2 id="change">Change<a class="headerlink" href="#change" title="Permanent link">&para;</a></h2>
 <p><strong>Self-assessment — can you explain it to a colleague?</strong></p>
 <ol>
-<li>A result in Luke 22:35 says "Missing closing quotation mark." You open the verse: Jesus is
-   speaking and the speech continues through verse 38, where it closes correctly with the final
-   <code>”</code>. What type of result is this, and what should you do?</li>
-<li>You have cleared all real errors in Matthew but 6 results remain. You have checked the text
-   carefully — the translation is correct. What should you do next?</li>
-<li>The check shows an unexpected Second level quotation mark in Romans 8:1, a verse with no
-   dialogue. What is the most likely cause and correct action?</li>
+<li>Two results appear in Luke 22: "Quote opened; see following message for error" at 22:35, and
+   "Expected continuers [“] are missing OR quote not closed; see preceding message" at 22:36.
+   Jesus is speaking from verse 35 through verse 38, where the speech closes with the final <code>”</code>.
+   What type of result is this, and what should you do?</li>
+<li>You have cleared all real errors in Matthew but 6 results remain. The translation team has
+   looked at those verses and confirmed the text is as they intend it. What should you do next?</li>
+<li>In Romans 8:1, a verse with no dialogue, the check reports "Second-level quote mark found
+   without a preceding first-level quote: ‘". What is the most likely cause and correct action?</li>
 </ol>
-<p><em>You should be able to say:</em> (1) Check whether a paragraph marker (<code>\p</code>) sits between verses 35
-and 38. If it does, Tamba's First level Quote Continuer (<code>“</code>, already configured in Lesson 2)
-should appear at the head of that new paragraph — a "Missing closing quotation mark" result on
-a speech that legitimately spans the break usually means the continuer character itself is
-missing from the text. That makes this a <strong>real error</strong>, not a configuration problem: open the
-intervening paragraph(s), confirm each one opens with <code>“</code>, and add it wherever it's missing. If
-no paragraph break exists between 35 and 38, look instead for an unclosed Second or Third level
-quotation nested inside the speech. (2) They are configuration problems, not text errors — review
-each to find the missing rule or setting (e.g. a Quotation types setting that doesn't match how
-the language uses marks there), adjust, and re-run until they clear. (3) A real error — a stray
-quotation character, likely copied from a source text; open the verse, find the stray mark, and
-delete it (a text correction, not a configuration change).</p>
+<p><em>You should be able to say:</em> (1) This is the same linked pattern as John 3:10 and 3:16 in
+Exercise 4.1: an "opened" message pointing to a following one. Open 22:35–38 in one sitting. If
+22:36 begins a new paragraph inside the speech, Tamba's First level Quote Continuer <code>“</code> should
+open it. If it is missing, or a look-alike such as a straight <code>"</code> sits there instead, that one
+mark is a <strong>real error</strong>: put in the <code>“</code> (U+201C), close the results panel, run the check
+again, and both results should clear together. (2) Once the team has confirmed the text, the
+remaining results are about the settings, not the text — review each to find the missing rule
+or setting (e.g. a Quotation types setting that doesn't match how the language uses marks
+there), adjust, and re-run until they clear. If any of them is the apostrophe collision from
+Lesson 2, that is the third case: verify it and document it. (3) Most likely a stray opening
+<code>‘</code> with no First level speech around it, perhaps copied from a source text. This is not the
+Romans 1:1 case: that message was about <code>’</code> inside a word, and this one is about an opening
+<code>‘</code>. Open the verse and find the mark. A stray mark is a real error — a text correction, not a
+configuration change — so confirm with the translation team that it doesn't belong, then remove
+it.</p>
 <p><strong>✏️ Take it to your context.</strong> Recall a real check result you (or a translator you support)
 have seen. Would you now classify it as a real error or a configuration problem — and what
 would you have done differently knowing the two-type distinction?</p>
-<p><strong>Next step.</strong> You have taken one language, Tamba, from an unconfigured check to zero
+<p><strong>Next step.</strong> You have taken one language, Tamba, from Paratext's default settings to zero
 actionable errors. The <a href="../05-scenario-bank/">scenario bank</a> puts the full workflow — inventory
 → rules → check → triage — to work on three unfamiliar languages (Velna, Menda, Waku), each
 with its own conventions and edge cases.</p>

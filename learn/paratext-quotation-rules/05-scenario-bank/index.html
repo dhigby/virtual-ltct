@@ -1290,7 +1290,7 @@ goes and seven remain.</p>
 <p>The recommended sequence for a book heading toward CC:</p>
 <ol>
 <li>Run all Basic Checks (Quotations, Characters, Markers, Footnotes, and others).</li>
-<li>Clear each check to zero results by fixing text errors and refining the configuration.</li>
+<li>Clear each check to zero actionable results by fixing text errors and refining the configuration, verifying that every remaining result is a known false positive.</li>
 <li>Where a residual result cannot be cleared by configuration (see Scenario C), document it with a Project Note so the consultant can verify it quickly.</li>
 </ol>
 <p>The Quotation check does not need to be perfect before work continues, but it must be clean before CC begins.</p>
@@ -1308,7 +1308,7 @@ goes and seven remain.</p>
 <p>A project with correctly configured Quotation Rules will:</p>
 <ul>
 <li>Return zero results in purely narrative passages with no speech.</li>
-<li>Return zero results on apostrophes and possessives.</li>
+<li>Have every result on an apostrophe or possessive verified as a genuine apostrophe and documented as a known false positive (where <code>’</code> is also a quote mark, no setting removes these).</li>
 <li>Flag only genuine mismatches — missing marks, extra marks, wrong-level marks — in speech sections.</li>
 <li>Have any residual results (where the same character serves two linguistic purposes and configuration cannot distinguish them) documented in Project Notes (☰ &gt; Insert &gt; Project note...) so a consultant reviewer can verify them without asking for clarification.</li>
 </ul>

@@ -1242,7 +1242,7 @@ word medial character. Sometimes caused when a closing quote is incorrectly used
 apostrophe". Others read "Second-level quote mark found without a preceding first-level quote:
 ‘" (Matthew 2:6, 4:4, 4:6, for example), and there is a "Closing quote [ ’ U+2019 ] found
 without matching opening…" at Matthew 5:10.</p>
-<p><img alt="The Quotations check results panel for RUNDA, all books, with the project still at Paratext 9.5's default Quotation Rules. The count reads 1110 results. The visible rows include &quot;Closing quote [ ’ U+2019 ] found as a word medial character&quot; results and &quot;Second-level quote mark found without a preceding first-level quote: ‘&quot; at Matthew 2:6 and 4:4." src="https://github.com/dhigby/virtual-ltct/blob/course/paratext-quotation-rules/modules/paratext-quotation-rules/assets/ss-02-runda-default-results.png" /></p>
+<p><img alt="The Quotations check results panel for RUNDA, all books, with the project still at Paratext 9.5's default Quotation Rules. The count reads 1110 results. The visible rows include &quot;Closing quote … found as a word medial character&quot; (naming ’ U+2019 in square brackets) results and &quot;Second-level quote mark found without a preceding first-level quote: ‘&quot; at Matthew 2:6 and 4:4." src="../ss-02-runda-default-results.png" /></p>
 <p>The cause is in the settings, not the text. Runda's First level marks are guillemets, and
 guillemets aren't in Paratext's defaults. Close the results panel.</p>
 <p><strong>Now correct the defaults.</strong> Navigate to ☰ &gt; Project settings &gt; Quotation Rules &gt; Quote marks
@@ -1379,8 +1379,7 @@ you already saw its footprint in the results at the end of Exercise 2.2.</p>
 <li>In the <strong>Word-medial punctuation</strong> field, enter <code>’</code> (U+2019). A yellow warning triangle (⚠)
    appears at the right end of the field; hover over it to read its message. There is no
    dialog to confirm. Click <strong>OK</strong> anyway; the warning doesn't block it.</li>
-<li>Open Quotation Rules (☰ &gt; Project settings &gt; Quotation Rules; before you click OK, the
-   <strong>Quotation Rules...</strong> link above the field opens it too) and go to the <strong>Quote marks</strong> tab. The Second level Closing cell holding <code>’</code> now carries a matching ⚠.
+<li>Open Quotation Rules (☰ &gt; Project settings &gt; Quotation Rules) and go to the <strong>Quote marks</strong> tab. The Second level Closing cell holding <code>’</code> now carries a matching ⚠.
    Hover over it: "This is also a word-medial character in the Language settings dialog:
    [ ’ U+2019 ]. Unique characters are recommended." A <strong>Language Settings...</strong> link appears
    above the Closing column. The two dialogs are warning about the same collision, each from
@@ -1432,7 +1431,7 @@ small raised mark close in shape to <code>’</code>, so the orthography doesn't
 it's a completely different code point, so Paratext never confuses it with a configured quote
 mark. For example, a word written <code>Kalaʼu</code> (U+02BC) would never generate a quotation result no
 matter what the Second level closing mark is configured to — compare that to <code>Kala’u</code> (U+2019),
-which collides the moment <code>’</code> is also a quote mark, exactly like Runda and Tamba above.</p>
+which collides the moment <code>’</code> is also a quote mark, exactly like Runda above.</p>
 <p><strong>Tamba scenario:</strong> Tamba's Second level closing mark is <code>’</code> (U+2019). Tamba's Phase A text has
 no contractions or apostrophes, so this conflict never comes up there — but if Tamba's real
 orthography later needed apostrophes written with <code>’</code>, this is the same unresolvable collision

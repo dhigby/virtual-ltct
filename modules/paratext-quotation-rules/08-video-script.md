@@ -5,8 +5,8 @@ This is an orientation/overview video: a screen-capture walkthrough that shows l
 the shape of the tool and the workflow before they sit down and do the hands-on lessons.
 It is **not** a full read-aloud of the lessons — the detailed, click-by-click exercise
 work happens in the numbered lesson files, where learners can pause and work at their own
-pace. The recording happens outside this repo; upload to Cypher for Business is a separate
-human step.
+pace. The recording happens outside this repo; hosting the video externally and linking it
+from the course in Moodle is a separate human step.
 
 **Estimated runtime:** 13-15 minutes (overview companion to a multi-hour hands-on course).
 **Companion lesson file(s):** `01-what-the-quotation-check-does.md` through

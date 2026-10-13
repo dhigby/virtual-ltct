@@ -117,10 +117,10 @@ individually.
 
 **NOTE** The values Paratext pre-fills under "Use recommended settings" are set by Paratext —
 verify what appears in your version before relying on the table above as the exact recommended
-defaults. (The table above reflects Paratext 9.5 defaults confirmed on a built `TAMBA` project;
-earlier drafts of this lesson had Quotation from another source and Indirect backwards — both
-actually default to a "marks expected/optional" leaning rather than "never," which is why Tamba's
-Exercise 3.2 customization list below touches more rows than you might expect.)
+defaults. (The table above reflects Paratext 9.5 defaults confirmed on a built `TAMBA` project.
+Don't assume Quotation from another source and Indirect default to "never": both lean toward
+marks expected or optional, which is why Tamba's Exercise 3.2 customization list below touches
+more rows than you might expect.)
 
 **TIP** Complete the settings on both the Quote marks tab and the Quotation types tab before
 clicking **OK** — the OK button saves all changes from both tabs at once.

@@ -246,7 +246,7 @@ The Quotation check is one of the **Basic Checks** in Paratext 9.5 (run via **�
 The recommended sequence for a book heading toward CC:
 
 1. Run all Basic Checks (Quotations, Characters, Markers, Footnotes, and others).
-2. Clear each check to zero results by fixing text errors and refining the configuration.
+2. Clear each check to zero actionable results by fixing text errors and refining the configuration, verifying that every remaining result is a known false positive.
 3. Where a residual result cannot be cleared by configuration (see Scenario C), document it with a Project Note so the consultant can verify it quickly.
 
 The Quotation check does not need to be perfect before work continues, but it must be clean before CC begins.
@@ -270,7 +270,7 @@ Open **☰ > Project settings > Quotation Rules** on the destination project. At
 A project with correctly configured Quotation Rules will:
 
 - Return zero results in purely narrative passages with no speech.
-- Return zero results on apostrophes and possessives.
+- Have every result on an apostrophe or possessive verified as a genuine apostrophe and documented as a known false positive (where `’` is also a quote mark, no setting removes these).
 - Flag only genuine mismatches — missing marks, extra marks, wrong-level marks — in speech sections.
 - Have any residual results (where the same character serves two linguistic purposes and configuration cannot distinguish them) documented in Project Notes (☰ > Insert > Project note...) so a consultant reviewer can verify them without asking for clarification.
 

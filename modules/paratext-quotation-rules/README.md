@@ -22,7 +22,7 @@ content_type: content
 
 **Format:** Each lesson presents a goal, a starting state, a set of discovery prompts (questions to answer before you act), and then the expected configuration you can compare against.
 
-**Estimated time:** Lessons 1–4 run 4¼ hours total (30 + 90 + 60 + 75 minutes); the scenario bank adds 1–2 hours. Each individual lesson is capped at 90 minutes — see the duration header at the top of each file.
+**Estimated time:** Lessons 1–4 run 4¼ hours total (30 + 90 + 60 + 75 minutes); the scenario bank adds 90 minutes. Each individual lesson is capped at 90 minutes — see the duration header at the top of each file.
 
 ---
 
@@ -39,7 +39,7 @@ This course follows the repo's [content package structure](../../process/PROCESS
 | [`05-scenario-bank.md`](05-scenario-bank.md) | Applied practice: Velna, Menda, Waku (90 min) |
 | [`06-mentor-guide.md`](06-mentor-guide.md) | Facilitator notes: project setup, phasing, error seeding |
 | [`07-quiz.md`](07-quiz.md) | Assessment quiz |
-| [`08-video-script.md`](08-video-script.md) | Recording script for Cypher upload |
+| [`08-video-script.md`](08-video-script.md) | Recording script for the overview video (delivered on Moodle) |
 
 ---
 

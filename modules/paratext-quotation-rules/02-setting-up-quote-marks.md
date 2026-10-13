@@ -397,28 +397,41 @@ has a **Word-medial punctuation** field. Its own help text says any character li
 treated as part of a word when it appears between two alphabetic characters, so the checker
 should not misread it as a closing mark.
 
-![The Language Settings dialog open on the Other Characters tab, showing the Word-medial punctuation field with a right single quotation mark entered.](assets/ss-02-language-settings-other-chars.png)
+![The Language Settings dialog for RUNDA on the Other Characters tab, with ’ (U+2019) entered in the Word-medial punctuation field, a yellow warning triangle at the right end of that field, a Quotation Rules... link above it, and the hover message "The following character(s) are also quote mark(s) in the Quotation rules dialog: ’ U+2019 (in square brackets). Unique characters are recommended." visible.](assets/ss-02-language-settings-other-chars.png)
 
 **Where this genuinely helps:** punctuation characters that are *not* also configured as a
-quote mark — a hyphen used word-medially, for instance. Paratext will warn you if you enter a
-character here that's also registered as a quote mark in Quotation Rules ("unique characters
-are recommended"); that warning is a real signal, not just caution — it means the setting won't
-do what you're about to try to use it for.
+quote mark — a hyphen used word-medially, for instance. If you enter a character here that's
+also a quote mark in Quotation Rules, Paratext doesn't open a pop-up. A yellow warning
+triangle (⚠) appears at the right end of the field instead, and its message shows only when
+you hover over it: "The following character(s) are also quote mark(s) in the Quotation rules
+dialog: [ ’ U+2019 ]. Unique characters are recommended." It's easy to miss, but it is a real
+signal, not just caution — it means the setting won't do what you're about to try to use it
+for.
 
 **Do it (Runda):** Runda uses `’` (U+2019) as its Second level closing mark — and its text also
 uses `’` as an apostrophe in *don’t*, *can’t*, *righteousness’ sake*. A genuine collision, and
 you already saw its footprint in the results at the end of Exercise 2.2.
 
 1. Navigate to ☰ > Project settings > Language Settings > Other Characters tab.
-2. In the **Word-medial punctuation** field, enter `’` (U+2019). Paratext will warn that this
-   character is already a quote mark. Confirm through the warning and click **OK** anyway.
-3. Re-run the quotation check (a full re-run, not just "Rerun" on an already-open results
+2. In the **Word-medial punctuation** field, enter `’` (U+2019). A yellow warning triangle (⚠)
+   appears at the right end of the field; hover over it to read its message. There is no
+   dialog to confirm. Click **OK** anyway; the warning doesn't block it.
+3. Open Quotation Rules (☰ > Project settings > Quotation Rules; before you click OK, the
+   **Quotation Rules...** link above the field opens it too) and go to the **Quote marks** tab. The Second level Closing cell holding `’` now carries a matching ⚠.
+   Hover over it: "This is also a word-medial character in the Language settings dialog:
+   [ ’ U+2019 ]. Unique characters are recommended." A **Language Settings...** link appears
+   above the Closing column. The two dialogs are warning about the same collision, each from
+   its own side. Close the dialog without changing anything.
+
+   ![The Quotation Rules dialog for RUNDA on the Quote marks tab with Exercise 2.2's settings (First level « « », Second level ‘ none ’, Third level none in all three cells, Continuer required at reading p), a yellow warning triangle in the Second level Closing cell, a Language Settings... link above the Closing column, and the hover message "This is also a word-medial character in the Language settings dialog: ’ U+2019 (in square brackets). Unique characters are recommended." visible.](assets/ss-02-apostrophe-warning.png)
+
+4. Re-run the quotation check (a full re-run, not just "Rerun" on an already-open results
    panel) on a chapter that has both apostrophes and single-quote speech.
-4. **Observe that the apostrophes are still flagged.** The check keeps reporting "Closing quote
+5. **Observe that the apostrophes are still flagged.** The check keeps reporting "Closing quote
    found as a word medial character" for every genuine apostrophe, exactly as before you added
    the setting. This is the expected, confirmed outcome — not a sign you configured something
    wrong.
-5. **Now look at Matthew 5:3 and 5:10.** The same collision has a second, nastier face. In
+6. **Now look at Matthew 5:3 and 5:10.** The same collision has a second, nastier face. In
    *don’t* the `’` sits between two letters, so the check at least recognizes it as
    word-medial and says so. In `righteousness’ sake` (5:10) the `’` is at the **end** of the word
    — a plural possessive — so the check simply sees a Second level closing mark with no opening
@@ -441,8 +454,8 @@ Document this for whoever inherits the project, so a future checker doesn't wast
 for a fix that doesn't exist.
 
 **The real fix belongs to the team:** there is one way to make the collision go away —
-Paratext's own warning when you enter `’` into Word-medial punctuation ("unique characters are
-recommended") is pointing at it. A different, unique character for the apostrophe (or, less
+the ⚠ Paratext shows in both dialogs when `’` is in Word-medial punctuation ("Unique characters
+are recommended") is pointing at it. A different, unique character for the apostrophe (or, less
 commonly, for the closing mark) means the two roles never collide. Choosing that character is
 an orthography decision, and it belongs to the translation team and the language community —
 you can raise it, but you don't make it, and it isn't something you configure your way around.

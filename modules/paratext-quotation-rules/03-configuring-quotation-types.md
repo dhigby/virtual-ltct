@@ -178,8 +178,8 @@ things:
    narrative text.
 2. Tamba's First level uses a Quote Continuer at new paragraph: a long First level speech
    repeats the opening mark `“` at the head of each continued paragraph rather than closing and
-   reopening. (Second and Third level have no continuer — those close and reopen fully instead,
-   so they never produce a "Continued quotation" instance.)
+   reopening. (Second and Third level have no continuer. The Quotation types check only checks
+   First level quotes anyway — see the WARNING above.)
 3. When a speaker quotes their own earlier words (a self-quote), Tamba treats it the same as
    any other direct speech: it **must** be marked with quotation marks.
 4. Tamba never marks reported/indirect speech (e.g. "He told them that the harvest was near") —
@@ -262,9 +262,9 @@ conventions.
 *You should be able to say:* (1) Indirect speech — set it to **Never use quote marks**: the
 check reports an error if marks appear unexpectedly and stays quiet when they are absent. (2)
 Yes, it conflicts — "Never use quote marks" expects no marks at the start of a continued
-paragraph, so a repeated opening mark would be flagged; change Continued quotation to **Quote
-marks are optional** or **Use quote marks** depending on how consistently the continuation mark
-is used. (3) A configuration issue — if the language doesn't mark narrator citations, change
+paragraph, so a repeated opening mark would be flagged; change Continued quotation to **Use
+quote marks**, as you did for Tamba in Exercise 3.2, so the continuer is expected at every
+continued paragraph. (3) A configuration issue — if the language doesn't mark narrator citations, change
 "Quotation from another source" to **Quote marks are optional** and re-run; fix the
 configuration rather than editing correct text.
 

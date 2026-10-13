@@ -46,13 +46,13 @@ One row per numbered lesson file. Each stays ≤ 90 minutes.
 | `04-interpreting-and-clearing-the-check.md` | Triage: real error vs. config problem; reaching zero | 5, 6 | 75 |
 | `05-scenario-bank.md` | Applied practice: three unfamiliar languages (Velna, Menda, Waku) | 7 | 90 |
 | `06-mentor-guide.md` | Facilitator notes: project setup, phasing, error seeding | — | — |
-| `07-quiz.md` | Assessment | 1–7 | 20 |
+| `07-quiz.md` | Assessment | 1–7 | 25 |
 | `08-video-script.md` | Recording script for Cypher upload | — | — |
-| **Total learner seat time** | | | **~365** (course runs longer than the 270-min guide; each lesson stays within the 90-min cap) |
+| **Total learner seat time** | | | **~370** (course runs longer than the 270-min guide; each lesson stays within the 90-min cap) |
 
 ## Assessment plan
 
-A 15-question quiz (80% = 12/15 to pass) covers objectives 1–7, grouped into five sections
+A 20-question quiz (80% = 16/20 to pass) covers objectives 1–7, grouped into five sections
 matching the five lessons — a mix of recall, scenario application, and true/false. The
 scenario bank (three independent language scenarios, ~30 minutes each) exercises objective 7
 as applied practice; Scenario C (Waku em-dash) is an optional stretch. Each lesson also

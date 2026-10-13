@@ -35,9 +35,9 @@ By now you have configured `TAMBA` yourself (Lessons 2 and 3). For this lesson y
 will still see results — but now they *mean* something. The skill this lesson builds is the judgment call you
 will make dozens of times on a real project: **fix the text, or fix the settings?**
 
-**✏️ Reflection.** Think back to Lesson 1 — the unconfigured check that refused to examine the
-text at all, and the team lead's project drowning in false positives — and to a project you
-support:
+**✏️ Reflection.** Think back to Lesson 1 — the five John 17 results that came from Paratext's
+default settings rather than from anything wrong in the text, and the team lead who wanted to
+add closing marks to clear them — and to a project you support:
 
 - When a check lights up, what is your first instinct — start editing verses, or step back and
   ask whether the settings are right?
@@ -217,32 +217,36 @@ only for configuration problems.
 
 **Self-assessment — can you explain it to a colleague?**
 
-1. A result in Luke 22:35 says "Missing closing quotation mark." You open the verse: Jesus is
-   speaking and the speech continues through verse 38, where it closes correctly with the final
-   `”`. What type of result is this, and what should you do?
-2. You have cleared all real errors in Matthew but 6 results remain. You have checked the text
-   carefully — the translation is correct. What should you do next?
-3. The check shows an unexpected Second level quotation mark in Romans 8:1, a verse with no
-   dialogue. What is the most likely cause and correct action?
+1. Two results appear in Luke 22: "Quote opened; see following message for error" at 22:35, and
+   "Expected continuers [“] are missing OR quote not closed; see preceding message" at 22:36.
+   Jesus is speaking from verse 35 through verse 38, where the speech closes with the final `”`.
+   What type of result is this, and what should you do?
+2. You have cleared all real errors in Matthew but 6 results remain. The translation team has
+   looked at those verses and confirmed the text is as they intend it. What should you do next?
+3. In Romans 8:1, a verse with no dialogue, the check reports "Second-level quote mark found
+   without a preceding first-level quote: ‘". What is the most likely cause and correct action?
 
-*You should be able to say:* (1) Check whether a paragraph marker (`\p`) sits between verses 35
-and 38. If it does, Tamba's First level Quote Continuer (`“`, already configured in Lesson 2)
-should appear at the head of that new paragraph — a "Missing closing quotation mark" result on
-a speech that legitimately spans the break usually means the continuer character itself is
-missing from the text. That makes this a **real error**, not a configuration problem: open the
-intervening paragraph(s), confirm each one opens with `“`, and add it wherever it's missing. If
-no paragraph break exists between 35 and 38, look instead for an unclosed Second or Third level
-quotation nested inside the speech. (2) They are configuration problems, not text errors — review
-each to find the missing rule or setting (e.g. a Quotation types setting that doesn't match how
-the language uses marks there), adjust, and re-run until they clear. (3) A real error — a stray
-quotation character, likely copied from a source text; open the verse, find the stray mark, and
-delete it (a text correction, not a configuration change).
+*You should be able to say:* (1) This is the same linked pattern as John 3:10 and 3:16 in
+Exercise 4.1: an "opened" message pointing to a following one. Open 22:35–38 in one sitting. If
+22:36 begins a new paragraph inside the speech, Tamba's First level Quote Continuer `“` should
+open it. If it is missing, or a look-alike such as a straight `"` sits there instead, that one
+mark is a **real error**: put in the `“` (U+201C), close the results panel, run the check
+again, and both results should clear together. (2) Once the team has confirmed the text, the
+remaining results are about the settings, not the text — review each to find the missing rule
+or setting (e.g. a Quotation types setting that doesn't match how the language uses marks
+there), adjust, and re-run until they clear. If any of them is the apostrophe collision from
+Lesson 2, that is the third case: verify it and document it. (3) Most likely a stray opening
+`‘` with no First level speech around it, perhaps copied from a source text. This is not the
+Romans 1:1 case: that message was about `’` inside a word, and this one is about an opening
+`‘`. Open the verse and find the mark. A stray mark is a real error — a text correction, not a
+configuration change — so confirm with the translation team that it doesn't belong, then remove
+it.
 
 **✏️ Take it to your context.** Recall a real check result you (or a translator you support)
 have seen. Would you now classify it as a real error or a configuration problem — and what
 would you have done differently knowing the two-type distinction?
 
-**Next step.** You have taken one language, Tamba, from an unconfigured check to zero
+**Next step.** You have taken one language, Tamba, from Paratext's default settings to zero
 actionable errors. The [scenario bank](05-scenario-bank.md) puts the full workflow — inventory
 → rules → check → triage — to work on three unfamiliar languages (Velna, Menda, Waku), each
 with its own conventions and edge cases.

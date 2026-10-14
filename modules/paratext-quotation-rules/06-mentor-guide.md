@@ -127,13 +127,13 @@ Phase A and Phase B are two **separate** registered projects: `TAMBA` (Phase A) 
 
 Learners use Paratext **Send/Receive** only to get the projects. Each learner receives each project once, then works in their own copy on their own computer and never sends. Because nobody sends, the server copy stays at its starting state: any number of learners can work at the same time without overwriting each other, and there is nothing to reset between learners.
 
-You, the mentor, keep the set of backup files and use them once, to set the projects up on the server. Learners only need a backup file if they have no internet connection (see **When Send/Receive isn't an option** below).
+All six projects (`TAMBA`, `TAMBAB`, `RUNDA`, `VELNA`, `MENDA`, `Waku`) are already on the Send/Receive server at their starting state, each with its `## Course starting state (defaults)` point marked in project history. Your job as mentor is to add each learner as a user (see **For each learner** below). You don't set the projects up yourself. The only use for a backup file is a learner who can't use Send/Receive (see **When Send/Receive isn't an option** below).
 
-**The backup set.** These are prebuilt and verified. Keep them somewhere only mentors can reach: the Phase B backup contains the Lesson 2–3 answers and the configured state of every seed. Keep them **outside the course repository** too — never in the course folder, because everything in a course folder is published on the review sites.
-
-> **[Placeholder — Kevin/Jenni:** where mentors get the backup set (location and who grants access).**]**
+**The backup set.** These are prebuilt and verified. Kevin keeps the master set, outside the course repository — never in the course folder, because everything in a course folder is published on the review sites. The Phase B backup contains the Lesson 2–3 answers and the configured state of every seed, so it must stay where only mentors can reach it. When a learner needs a backup, ask Kevin for the specific file.
 
 "Paratext defaults" below means the default Quotation Rules in the Overview table: `“ “ ”` / `‘ ‘ ’` / `“ “ ”`, Continuer required at `p p/q1 b/q1`, Quotation types on Use recommended settings with the check off.
+
+Use this table to know which file to ask for and give an offline learner, for the project and lesson they've reached:
 
 | Backup file | Project | State it restores | Needed for |
 |---|---|---|---|
@@ -144,17 +144,11 @@ You, the mentor, keep the set of backup files and use them once, to set the proj
 | `Menda New Testament 2026-10-12.zip` | `MENDA` | Paratext defaults | Scenario B |
 | `Waku New Testament 2026-10-12.zip` | `Waku` | Paratext defaults | Scenario C |
 
-The Phase A and Phase B projects both have the full name *Tamba New Testament*, so Paratext's default backup names for them differ only by date. Keep the Phase B file named `TAMBAB Phase B …`, so it can't be mistaken for the Phase A backup. Restoring the wrong one over `TAMBA` gives every Lesson 1–3 learner the answers.
+The Phase A and Phase B projects both have the full name *Tamba New Testament*, so Paratext's default backup names for them differ only by date. Keep the Phase B file named `TAMBAB Phase B …`, so it can't be mistaken for the Phase A backup. Giving the Phase B file to a learner in Lessons 1–3 gives them the answers.
 
 Each backup already carries the project's Paratext Registry registration (visibility: Test), so restoring one does not create a new project on the Registry.
 
-**One-time setup, in your own Paratext**
-
-1. Restore each project: **Paratext menu > Advanced > Restore project from file...**
-2. Send it to the server: **☰ > Send/Receive this project**. This is how the starting state reaches the server.
-3. Mark the starting state in its project history (see **Mark the starting state** below).
-
-If you set a project's starting state by hand instead of restoring the backup, note that **Copy quote mark settings...** (bottom left of Quotation Rules) copies the quote marks from another project but **not** the **Continuer required at** list. Type the list yourself: `p p/q1 b/q1` for the Paratext defaults.
+**Nothing to restore in your own Paratext.** The projects are already set up on the server and marked, so a mentor doesn't restore any backup. Don't restore a backup over a project you already have, and never Send/Receive a restored backup: it would push over the shared project that every learner receives.
 
 **For each learner, in your own Paratext**
 
@@ -196,6 +190,13 @@ You add the learner by the user name their copy of Paratext is registered under 
 
 For `TAMBA`, a clean check is not enough evidence. At the defaults the check gives five results, all in John 17 (Lesson 1); after Exercise 2.1 it gives "No errors found". But adding only `pi/pi` to the list also clears all five, and the default Second and Third level continuers produce no results in Tamba's text. So look at the screenshot itself: Second and Third level continuers at *none*, and the list reading `p p/q1 m/q1 s1/pi pi/pi b/q1`. A learner who stopped when the result list emptied has missed the lesson's point.
 
+**When a learner finishes the course.** The projects are shared by every learner, so the user list should hold only people currently taking the course. When a learner completes the course, or stops partway through, remove them from every course project you added them to (up to all six: `TAMBA`, `RUNDA`, `TAMBAB`, `VELNA`, `MENDA`, `Waku`). In your own Paratext:
+
+1. In each project the learner was added to, open **☰ > Project settings > User permissions...**, click **Remove** next to their name, then **OK**.
+2. Send the change to the server: **☰ > Send/Receive this project**. As with adding, this is how the change reaches the server.
+
+Removing the learner doesn't delete the copies on their own computer. They can delete those themselves with **☰ > Project > Delete project...**
+
 **Mark the starting state.** Quotation Rules and Language Settings apply to the whole project, and Send/Receive carries any change to everyone who receives afterwards. If a learner sends by mistake, the marked point is how you put the server copy's text back; the settings you reset by hand (see below). You can't restore a backup over the project instead: Paratext refuses to load it (*"Waku - Waku New Testament has the same ID as Waku - Waku New Testament and was not loaded."*), and Send/Receive would bring the learner's changes back from the server anyway. So mark the starting state once, as the point to go back to.
 
 **Before the first learner starts**, once each project is set up, do this on all six projects (`TAMBA`, `TAMBAB`, `RUNDA`, `VELNA`, `MENDA`, `Waku`):
@@ -231,7 +232,7 @@ For `TAMBA`, a clean check is not enough evidence. At the defaults the check giv
 
 Deleting their copy doesn't remove them from the project, so it appears in their Send/Receive list again straight away.
 
-Reverting doesn't remove users. That doesn't matter here, because the learner keeps working; if you also want to take them off the project, remove them yourself: **☰ > Project settings > User permissions...**, then **Remove** next to their name.
+Reverting doesn't remove users. That doesn't matter here, because the learner keeps working; if you also want to take them off the project, remove them yourself as in **When a learner finishes the course** above.
 
 ![The Project section of the ☰ menu with Project history... highlighted, among Project health report..., Manage books, Delete project..., Recent changes... and Mark point in history....](assets/ss-06-project-history-menu.png)
 
@@ -239,7 +240,9 @@ Reverting doesn't remove users. That doesn't matter here, because the learner ke
 
 ![The Select which books to restore dialog. Buttons on the left read All Books, Old Testament, New Testament, Deuterocanon, Extra material and Deselect All; the list on the right shows Matthew, Luke, John, Acts and Romans.](assets/ss-06-project-history-revert-books-select-books.png)
 
-**When Send/Receive isn't an option.** If a learner has no reliable internet connection, give them the matching backup file to restore on their own computer instead (**Paratext menu > Advanced > Restore project from file...**). Don't hand out the `TAMBAB` backup until they reach Lesson 4.
+**When Send/Receive isn't an option.** If a learner has no reliable internet connection, give them the matching backup file to restore on their own computer instead (**Paratext menu > Advanced > Restore project from file...**). Ask Kevin for the specific file (see the backup table in Step 5). Don't hand out the `TAMBAB` backup until they reach Lesson 4.
+
+> **[Placeholder — Kevin/Jenni:** test restoring a backup on a computer where the learner is not a member of the project: does it open, and does Paratext then offer to Send/Receive it? Decide and verify this.**]**
 
 ---
 
@@ -260,8 +263,9 @@ Include words using `’` (U+2019) as an apostrophe somewhere in the text, so Ex
 word-medial punctuation conflict has real examples to work through — the exercise now expects
 learners to confirm the check keeps flagging these even after configuring Word-medial
 punctuation, not to reach zero results. Leave Quotation Rules at Paratext's defaults — learners
-correct them during Lesson 2. The prebuilt backup is in the mentor's backup set; make it
-available through Send/Receive as described in Step 5 above.
+correct them during Lesson 2. `RUNDA` is already on the Send/Receive server at this starting
+state; add the learner as described in Step 5 above. A prebuilt backup is available from Kevin,
+for a learner who can't use Send/Receive.
 
 **Expected results (Quotations check):**
 
@@ -328,8 +332,9 @@ books are the same run. Verified in Paratext 9.5:
   blank if any Quote Continuer is specified." The learner cleared the list while a continuer was
   still set. Set all three continuers to *none* first, then clear the list.
 
-Prebuilt backups of all three scenario-bank projects are in the mentor's backup set and are made
-available through Send/Receive (see Step 5 under the `TAMBA` setup). The tables above are reference
+All three scenario-bank projects are already on the Send/Receive server at their starting state;
+add the learner as described in Step 5 under the `TAMBA` setup. Prebuilt backups are available from
+Kevin, for a learner who can't use Send/Receive. The tables above are reference
 for anyone rebuilding a project from scratch, not a required setup step. If you do rebuild one:
 put Quotation Rules back to Paratext's defaults (see Overview) before backing up — or create
 the project fresh in Paratext 9.5, which saves the defaults on creation. Learners must start

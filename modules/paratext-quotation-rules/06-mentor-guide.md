@@ -197,12 +197,14 @@ For `TAMBA`, a clean check is not enough evidence. At the defaults the check giv
 
 Removing the learner doesn't delete the copies on their own computer. They can delete those themselves with **☰ > Project > Delete project...**
 
-**Mark the starting state.** Quotation Rules and Language Settings apply to the whole project, and Send/Receive carries any change to everyone who receives afterwards. If a learner sends by mistake, the marked point is how you put the server copy's text back; the settings you reset by hand (see below). You can't restore a backup over the project instead: Paratext refuses to load it (*"Waku - Waku New Testament has the same ID as Waku - Waku New Testament and was not loaded."*), and Send/Receive would bring the learner's changes back from the server anyway. So mark the starting state once, as the point to go back to.
+**Mark the starting state.** Quotation Rules and Language Settings apply to the whole project, and Send/Receive carries any change to everyone who receives afterwards. If a learner sends by mistake, the marked point is how you put the server copy's text back; the settings you reset by hand (see below). You can't restore a backup over the project instead: Paratext refuses to load it (*"Waku - Waku New Testament has the same ID as Waku - Waku New Testament and was not loaded."*), and Send/Receive would bring the learner's changes back from the server anyway. So the starting state is marked once, as the point to go back to.
 
-**Before the first learner starts**, once each project is set up, do this on all six projects (`TAMBA`, `TAMBAB`, `RUNDA`, `VELNA`, `MENDA`, `Waku`):
+**All six projects already carry this mark** (`TAMBA`, `TAMBAB`, `RUNDA`, `VELNA`, `MENDA`, `Waku`), with the comment `## Course starting state (defaults)`, so a mentor has nothing to do here. It is the point the **If a learner sends by mistake** steps below revert to.
+
+**Only if a project is ever rebuilt** (for example, from scratch, as the scenario-bank setup section describes), mark it again after the rebuild, before any learner receives it:
 
 1. In the project window, open **☰ > Project > Mark point in history...**
-2. Type the comment `## Course starting state (defaults)` and click **OK**. Use the same comment on all six, `TAMBAB` included, so every project's reset point is found the same way.
+2. Type the comment `## Course starting state (defaults)` and click **OK**. Use the same comment on every project, `TAMBAB` included, so every project's reset point is found the same way. The newest mark is the one to revert to.
 3. Send/Receive the project.
 
 > **TIP:** Paratext adds many history entries of its own. Starting your comment with `##` makes your marked point easy to spot in the list later.

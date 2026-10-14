@@ -80,7 +80,7 @@ changes are sometimes made right up to typesetting — so you can raise it whene
 appears, but you don't make it. In this course's practice text, leave the apostrophe as
 written.
 
-![The Quotations check results panel after full configuration, showing a manageable list of results. One result is highlighted with the verse open alongside it, demonstrating how to read a result entry (location, message, and the text in context).](assets/ss-04-results-with-highlight.png)
+![The TAMBAB project in Paratext 9.5, with Matthew 5:3 open in the left pane and the Quotations check results panel on the right, headed 7 Items and TAMBAB; All Books; Checks run: Quotations. The seven results are: MAT 5:3, Closing quote mark is possibly missing before verse 7.28; LUK 4:18, Closing quote mark is possibly missing before verse 20; JHN 3:10, Quote opened; see following message for error; JHN 3:16, Expected continuers are missing OR quote not closed; see preceding message; JHN 3:21, Closing quote U+201D found without matching opening; ACT 2:25, Opening quote mark found without matching closing quote mark; ROM 1:1, Closing quote U+2019 found as a word medial character. The MAT 5:3 result is selected and outlined in red.](assets/ss-04-results-with-highlight.png)
 
 Read each result as three parts: the **location** (book, chapter, verse), the **message** (what
 the check thinks is wrong), and the **text in context** (open the verse and look). A useful
@@ -206,10 +206,10 @@ it means nothing left in the list still needs your action.
 - Romans shows exactly 1 result (the 1:1 apostrophe), verified as a genuine word-medial
   apostrophe and documented rather than chased with further configuration changes.
 
-![The Quotations check results panel showing zero results, confirming the check is clean.](assets/ss-04-zero-results.png)
+![The TAMBAB project in Paratext 9.5 after the four real errors are fixed, with Romans 1 open in the left pane. The Quotations check results panel on the right, headed 1 Item and TAMBAB; All Books; Checks run: Quotations, lists a single result: ROM 1:1, Closing quote U+2019 found as a word medial character. Sometimes caused when a closing quote is incorrectly used as an apostrophe.](assets/ss-04-final-results.png)
 
-**✏️ Produce this (a mentor will review it).** Submit your completed triage table (predictions
-+ actual types) and a one-line note for each result on the action you took and why. The point a
+**✏️ Produce this (a mentor will review it).** Submit your completed triage table
+(predictions + actual types) and a one-line note for each result on the action you took and why. The point a
 mentor is checking is your *reasoning* — that you fixed text only for real errors and settings
 only for configuration problems.
 

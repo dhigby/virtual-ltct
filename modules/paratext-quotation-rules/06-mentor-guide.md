@@ -223,7 +223,13 @@ For `TAMBA`, a clean check is not enough evidence. At the defaults the check giv
 
 > **WARNING:** Reverting has costs. It also wipes the learner's own work since the marked point, so they redo it. And anyone who received the project between the send and the revert keeps the leaked settings.
 
-> **[Placeholder — Kevin/Jenni:** what a learner who received the leaked settings should do (for example, whether they delete their copy and receive again after the revert). Decide and verify this.**]**
+**If a learner received the leaked settings**, reverting the server copy doesn't fix their copy. After the revert, tell them to:
+
+1. Delete their copy: **☰ > Project > Delete project...**
+2. Receive it again: **Paratext > Send/Receive projects...**
+3. Redo their own work in that project.
+
+Deleting their copy doesn't remove them from the project, so it appears in their Send/Receive list again straight away.
 
 Reverting doesn't remove users. That doesn't matter here, because the learner keeps working; if you also want to take them off the project, remove them yourself: **☰ > Project settings > User permissions...**, then **Remove** next to their name.
 

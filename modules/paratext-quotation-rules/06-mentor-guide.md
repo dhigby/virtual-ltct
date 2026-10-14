@@ -204,11 +204,11 @@ For `TAMBA`, a clean check is not enough evidence. At the defaults the check giv
 2. Type the comment `## Course starting state (defaults)` and click **OK**. Use the same comment on all six, `TAMBAB` included, so every project's reset point is found the same way.
 3. Send/Receive the project.
 
-> **TIP:** Paratext adds many history entries of its own. Starting your comment with `##` makes your marked point easy to spot in the list later. The screenshots below were taken before the comment gained "(defaults)"; type the full comment above.
+> **TIP:** Paratext adds many history entries of its own. Starting your comment with `##` makes your marked point easy to spot in the list later.
 
 ![The Project section of a project window's ☰ menu, with Mark point in history... highlighted between Send/Receive this project and Export draft PDF (PTXprint)....](assets/ss-06-mark-point-in-history.png)
 
-![The Mark Point in Project History dialog for TAMBA, with "## Course starting state" typed in the Comment box. The help text below reads that all changes will be saved and the current state recorded, so the project can later be compared or restored to exactly how it is now. Numbered callouts mark 1 the Comment box and 2 OK.](assets/ss-06-mark-point-comment.png)
+![The Mark Point in Project History dialog for TAMBA, with "## Course starting state (defaults)" typed in the Comment box. The help text below reads that all changes will be saved and the current state recorded, so the project can later be compared or restored to exactly how it is now. OK and Cancel are at the bottom.](assets/ss-06-mark-point-comment.png)
 
 **If a learner sends by mistake.** This is a recovery step, not routine: the server copy only leaves its starting state if someone sends. If a learner does Send/Receive a project after working in it, you or the learner put it back to its starting state. In that project:
 
@@ -229,7 +229,7 @@ Reverting doesn't remove users. That doesn't matter here, because the learner ke
 
 ![The Project section of the ☰ menu with Project history... highlighted, among Project health report..., Manage books, Delete project..., Recent changes... and Mark point in history....](assets/ss-06-project-history-menu.png)
 
-![The Project History window for TAMBA, listing 7 versions. The top entry, dated 2026-10-10 by Jenni Beadle, reads "## Course starting state" and is selected. Below it are two entries by Kevin Nicholas dated 2026-10-08: "Committed outstanding changes before converting project" (MAT LUK JHN ACT ROM, Properties and Settings) and "Roles and Permissions". The Revert Books... button in the toolbar is outlined in red, with its tooltip: "Select and revert books to the specified revision".](assets/ss-06-project-history-revert-books-tool.png)
+![The Project History window for TAMBA, titled Project History (13 Versions). The toolbar holds the All versions and All books filters, a Search project history box and, at its right end, the Revert Books... button. The selected entry, outlined, is dated 2026-10-12 by Kevin Nicholas and reads "## Course starting state (defaults)". Above it is a later 2026-10-13 entry by Kevin Nicholas; below it are older entries, including Jenni Beadle's 2026-10-10 "## Course starting state. 2026".](assets/ss-06-project-history-revert-books-tool.png)
 
 ![The Select which books to restore dialog. Buttons on the left read All Books, Old Testament, New Testament, Deuterocanon, Extra material and Deselect All; the list on the right shows Matthew, Luke, John, Acts and Romans.](assets/ss-06-project-history-revert-books-select-books.png)
 

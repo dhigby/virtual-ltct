@@ -362,4 +362,29 @@ Deviations and what remains:
 
 Mail: every new account made a password email to a non-receiving address through the shared relay. That was accepted by the maintainer (2026-10-15) because the relay's identity is unverified (no SPF or DKIM on the host), so the emailed-password login in V2 stays open until mail works.
 
+### T047, T056, T067: V7–V18 (2026-10-15, fixtures only)
+
+| Check | Result |
+|---|---|
+| V7 | Pass: an organisation's cohort into its own course, allowed; the other organisation's cohort, refused ("belongs to another organisation"); its managers cohort, allowed; a pilot course, refused; a missing course, refused before any change with no code. |
+| V9, disable half | Pass: unenrolling the cohort from a shared course showed the instance `disabled` with all 43 enrolments still counted; enrolling again restored it. Completion and grades were not exercised (the fixture courses have no activities). |
+| V9, course-mentor half | Pass: disabling the cohort removed both course mentors (enrolment and Teacher); re-enabling restored them. |
+| V10 | Pass: a move before the mirror was refused (`lost`, "run enrol mirror first"); after the mirror it applied, the shared course `kept` and the old organisation's own course `suspended_by_rule`. Also covers V8's move half. |
+| V8 | Partly run: the move and "a new member is enrolled with no further step" (V3). **Not run:** a completed activity and quiz attempt surviving the move. |
+| V14 | Partly run: suspend and reactivate worked for a learner and a mentor and the counts followed. **Not run:** ending a live session, login refused, and a holding-entry learner. |
+| V15 | Pass: masked on screen; a path in the repo refused with nothing written; a path outside written. |
+| V17 | Partly run, preview only: no role pathway is declared and no published course carries a competency, so no pathway had courses to enrol. Nothing was applied, so no pathway assignment exists. **Finding F1:** `enrol pathway` previewed `ltct:mentors` as `would_add` where V17 expects a refusal, because the cohort rules are checked per course on the pathway and an empty pathway has none. The "publish a course that joins it" half was not run. |
+| V18 | Pass: adds succeeded and the own-organisation note appeared; removing a non-member was `unchanged`; an organisation cohort was refused offline, naming the row. |
+| V11 | Pass: each mentor was enrolled through `ltct:coursementor`, held Teacher through `local_ltuse`, and sat in "Mentor group N" with their learners. Not checked: 004's delivery report. |
+| V12 | Partly passes. Ending all of a mentor's relationships, and suspending a mentor's learners, each removed the mentor's enrolment and Teacher in the same request, and reactivating restored them. **Finding F2:** in both cases the mentor and the learners stayed in the mentor group. **Not run:** a mentor also enrolled another way; 016's identity view. |
+| V13 | **Fails.** A one-course mentor was added for a learner, but the learner also stayed in the default mentor's group, so the one-course mentor did not replace the default. |
+
+**F2 and V13 share a probable cause (not yet proven).** `local_ltuse_allow_group_member_remove()` (`lib.php:465`) returns `false`, and its comment says `groups_remove_member()` is unconditional. The behaviour on Moodle 5.2.3 suggests it is not, so the sync's own removals are vetoed. Memberships carry `component=local_ltuse`, so the sync does recognise them.
+
+**Why it matters, and what holds.** 016's `is_course_mentor_of()` also needs the viewer to hold `local/ltuse:viewidentity` in the course, which Teacher supplies. So a mentor who has lost Teacher is not entitled by a lingering membership alone. But a one-course mentor now sharing a group with a learner who is still in a default mentor's group means each of those mentors, while they hold Teacher, is entitled to that learner. FR-018 requires the membership to end with its reason.
+
+**V19 (T076): pass.** After V1–V18, no new or changed data file (`.csv`, `.tsv`, `.txt`, `.xlsx`) appears in the repo or its four other worktrees, and none was committed on any branch since the start of the day. One old worktree (2026-10-02) shows 5 deletions of tracked files, not additions. Every `example.org` outside `tests/` is a doc comment or an example URL, none a learner address.
+
+The fixture accounts, courses and organisations stay on ltuse.net; none of the V7–V18 changes touched a real account or course.
+
 - The one-off setup scripts were run by the maintainer, because the assistant was refused permission to upload and run new PHP on the live host. Both are deleted from the server.

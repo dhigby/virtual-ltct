@@ -332,3 +332,22 @@ An interrupted run, a lost response and a plain re-run with the same code all fi
 ## Instance results
 
 To be filled by the quickstart run (V1–V19), with test accounts on `example.org` only. Manager-pilot findings name testers only as "tester 1/2/3" with the role "ALTC" or "organisation manager"; they name no Area or organisation entry, and give no protection level or count tied to an entry (constitution III), here or in a PR or issue.
+
+### T025: Prerequisites 1–6, V1, V16 first half (2026-10-15)
+
+Run by Claude on ltuse.net (`local_ltuse` 2026101500, Moodle 5.2.3+ Build 20260928) with a test admin account whose token was issued by `setup_admin_token.php`, read from the server into the environment for each command and never stored in a file here.
+
+| Check | Result |
+|---|---|
+| Prerequisite 1 (plugin version) | Pass: server and main both at 2026101500. |
+| Prerequisite 2–3 (private copy, fixture organisations, `coursementorsync` 1) | Pass: `validate` ok; `apply` ran; `drift` after it lists nothing missing for the fixtures. The 22 remaining differences all pre-date this run (unset `MOODLE_*` variables, earlier `test-a`/`test-b` leftovers, unmanaged settings, two courses without a discussion forum). |
+| Prerequisite 4 (fixture courses, starting enrolment) | Pass: both courses created hidden, in `ltct:published` and `ltct:org:fixture-a`; fixture-a's cohort enrolled in the shared course. |
+| Prerequisite 5 (test admin, token) | Pass: account holds `local/ltuse:administer` and is authorised on `ltuse_admin`; its auth type is `webservice`, so it cannot sign in to the web UI. |
+| Prerequisite 6 (`check`) | Pass: exit 0, no missing capability; all four protection levels available. |
+| V1 (path guard) | Pass: 4 of 4 refused, exit 1, each naming `~/ltct-private/` and creating nothing: a path in the repo, in a fresh `git init` folder, in a missing subfolder of it, and with `git` absent from `PATH`. For the repo path the tool did not say whether git already tracks the file, because the file did not exist; not exercised. |
+| V16, first half | Pass: with `ltctadmin` unassigned, `check` is refused by the service (`accessexception`, exit 2); with it reassigned, `check` exits 0. |
+
+Deviations and what remains:
+- `org-courses.yaml` accepts only a course that exists under `modules/`, so `fixture-a-only` is not declared there. Enrolment rules decide by the course's category, so this does not change what V7 tests.
+- Apply never deletes. The fixture categories, cohorts, cohort rules, reports and `ltct_org` menu options stay on the server after clean-up, as the `test-a`/`test-b` ones from an earlier run did. Only the two fixture courses and the test account can be removed.
+- The one-off setup scripts were run by the maintainer, because the assistant was refused permission to upload and run new PHP on the live host. Both are deleted from the server.

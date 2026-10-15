@@ -27,12 +27,14 @@ categories:
     why: >-
       The published curriculum, shared by every organisation and open across them (FR-003,
       R3). Adopted from the
-      existing category by name, so its id and the publisher's --category do not change (R6).
+      existing category by name, so its id does not change (R6). The publisher moves a
+      shared course here on its delivery publish (issue #108).
   - key: pilots
     name: LTC Pilots
     why: >-
       Stage-7 pilot courses, shared by every organisation. Adopted from the existing category
-      by name, as published is (R6).
+      by name, as published is (R6). The publisher puts a shared course here until its
+      delivery publish (issue #108).
   - key: organisations
     name: LTC Organisations
     why: >-

@@ -350,4 +350,16 @@ Run by Claude on ltuse.net (`local_ltuse` 2026101500, Moodle 5.2.3+ Build 202609
 Deviations and what remains:
 - `org-courses.yaml` accepts only a course that exists under `modules/`, so `fixture-a-only` is not declared there. Enrolment rules decide by the course's category, so this does not change what V7 tests.
 - Apply never deletes. The fixture categories, cohorts, cohort rules, reports and `ltct_org` menu options stay on the server after clean-up, as the `test-a`/`test-b` ones from an earlier run did. Only the two fixture courses and the test account can be removed.
+### T038: V2–V6 (2026-10-15, test accounts on a reserved example domain only)
+
+| Check | Result |
+|---|---|
+| V2 | Pass: 30-row intake previewed 27 new / 2 unchanged / 1 flagged (`flagged_other_org`); apply created 27, flagged 1, nothing sent at preview. Whole run (preview + apply) **21 s**, against SC-001's 15 minutes. Exit 1, because of the flagged row. **Not run:** logging in with the emailed password, and the 31st row whose email is another account's username (`login_clash`; covered by harness and PHPUnit only). |
+| V3 | Pass: right after the apply, the organisation cohort had 29 members and 29 were enrolled in the shared course, with no wait for cron. |
+| V4 | Pass: re-applying the same code reported 29 `already done` and left the flagged row alone; a fresh preview showed 29 unchanged / 1 flagged. Deviation: the spec expects exit 0, but the flagged row makes it exit 1. |
+| V5 | (a) new, done, and a re-preview shows it unchanged, so its protection settled; **the order of Moodle log events was not read**. (b) no protection column: new, nothing waited. (c) done; **its generated username and email login were not checked**. (d) `flagged_protection`, nothing enrolled. (e) `waits` with the `email_unchecked` sentence, no account. (f) `waits` with the `email_reveals` sentence, no account. (c)'s "waits while 016 cannot set the level" case is PHPUnit-only, by decision. |
+| V6 | Pass, by killing the process (not by unplugging a network): 12-row apply killed after 7 rows; the re-run with the same code did the other 5 and reported the 7 as `already done`; a fresh preview showed 12 unchanged, so no duplicates. Exit 0. |
+
+Mail: every new account made a password email to a non-receiving address through the shared relay. That was accepted by the maintainer (2026-10-15) because the relay's identity is unverified (no SPF or DKIM on the host), so the emailed-password login in V2 stays open until mail works.
+
 - The one-off setup scripts were run by the maintainer, because the assistant was refused permission to upload and run new PHP on the live host. Both are deleted from the server.

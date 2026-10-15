@@ -13,8 +13,8 @@ Two severities:
     * a quiz file present but missing a pass threshold, a pipe-separated answer key,
       or a canonical '## Answer key' marker above it
     * a malformed `**Design status**` line in 00-design.md
-    * a screenshot that is remote, misplaced, missing, unlinkable or undescribed
-      (see check_images)
+    * a screenshot that is remote, misplaced, missing, unlinkable or undescribed, or an
+      image link that cannot be parsed (see check_images)
     * an asset whose name carries an unrecognised delivery suffix (see check_asset_names)
 
   Retro-fit / backfilled courses (a `00-design.md` whose design status is a retro-fit note)
@@ -61,8 +61,52 @@ MAX_MINUTES = 90
 # human drops the file in. These rules make the handover checkable -- see
 # process/stages/03-draft.md.
 IMAGE_EXTS = (".png", ".jpg", ".jpeg", ".gif", ".webp", ".svg")
-IMAGE_LINK_RE = re.compile(r"!\[(?P<alt>[^\]]*)\]\((?P<src>[^)\s]+)\)")
 FENCE_RE = re.compile(r"^(```|~~~).*?^\1", re.MULTILINE | re.DOTALL)
+INLINE_CODE_RE = re.compile(r"`[^`\n]+`")
+IMAGE_START_RE = re.compile(r"(?<!\\)!\[")
+IMAGE_DEST_RE = re.compile(r"\((?P<src>[^)\s]+)\)")
+BLANK_LINE_RE = re.compile(r"\n[ \t]*\n")
+
+
+def strip_code(text):
+    """Blank out fenced blocks and inline code -- nothing in them renders as an image.
+
+    Blanked rather than removed, so every line stays where it was and a line number in a
+    report is the one the author sees in their editor.
+    """
+    blank = lambda m: re.sub(r"[^\n]", " ", m.group(0))  # noqa: E731
+    return INLINE_CODE_RE.sub(blank, FENCE_RE.sub(blank, text))
+
+
+def image_links(text):
+    """Return ([(alt, src, line)], [line of each `![` that is not a parseable link]).
+
+    Alt text may hold square brackets so long as they balance, nested or not: Paratext
+    messages quoted verbatim often do (`Closing quote [ ' U+2019 ] found ...`), and
+    Python-Markdown, which renders both the review site and the Moodle pages, accepts
+    them. A regex that stopped at the first `]` skipped such links silently (#114), so
+    this walks the brackets the way the renderer does, and hands back what it could not
+    parse instead of dropping it -- an unbalanced bracket breaks the published page too.
+    A link cannot cross a blank line, so the walk stops at one.
+    """
+    links, unparsed = [], []
+    for m in IMAGE_START_RE.finditer(text):
+        i, depth = m.end(), 1
+        while i < len(text) and depth:
+            if text[i] == "\\":
+                i += 2
+                continue
+            if BLANK_LINE_RE.match(text, i):
+                break
+            depth += {"[": 1, "]": -1}.get(text[i], 0)
+            i += 1
+        dest = IMAGE_DEST_RE.match(text, i) if depth == 0 else None
+        line = text.count("\n", 0, m.start()) + 1
+        if dest:
+            links.append((text[m.end():i - 1], dest.group("src"), line))
+        else:
+            unparsed.append(line)
+    return links, unparsed
 # Alt text that describes nothing. The point of alt text here is double: it is what a
 # screen reader reads out, AND it is the brief telling the human which state to capture.
 # "alt text" satisfies neither, and it is what an editor inserts by default.
@@ -92,10 +136,18 @@ def check_images(folder, slug):
             errors.append(f"{slug}/{p.name}: image files live in {slug}/assets/ -- "
                           f"move it there and update the links that point at it")
 
+    linked = set()
     for md in sorted(folder.glob("*.md")):
-        text = FENCE_RE.sub("", md.read_text(encoding="utf-8"))
-        for m in IMAGE_LINK_RE.finditer(text):
-            src, alt = m.group("src"), m.group("alt").strip()
+        links, unparsed = image_links(strip_code(md.read_text(encoding="utf-8")))
+        # Fail closed: an image the check cannot read is one none of the rules below
+        # reach -- not its file, its alt text, nor the unreferenced-asset sweep.
+        for line in unparsed:
+            errors.append(f"{slug}/{md.name}:{line}: image link could not be parsed. "
+                          f"Write it as ![alt text](assets/<file>), with no title, "
+                          f"and keep any square brackets in the alt text balanced.")
+        for alt, src, _ in links:
+            alt = alt.strip()
+            linked.add(urllib.parse.unquote(src))
             where = f"{slug}/{md.name}: image {src!r}"
 
             if src.lower().startswith(("http://", "https://")):
@@ -121,11 +173,6 @@ def check_images(folder, slug):
                               f"and the brief for whoever captures the shot.")
 
     if assets.is_dir():
-        linked = set()
-        for md in folder.glob("*.md"):
-            body = FENCE_RE.sub("", md.read_text(encoding="utf-8"))
-            linked |= {urllib.parse.unquote(m.group("src"))
-                       for m in IMAGE_LINK_RE.finditer(body)}
         for p in sorted(assets.iterdir()):
             if p.is_file() and f"assets/{p.name}" not in linked:
                 errors.append(f"{slug}/assets/{p.name} is not referenced by any lesson -- "
@@ -201,8 +248,8 @@ def lesson_visuals(folder):
                      key=lambda p: p.name)
     missing, overview = [], []
     for i, p in enumerate(lessons):
-        text = FENCE_RE.sub("", p.read_text(encoding="utf-8"))
-        has_image = IMAGE_LINK_RE.search(text) is not None
+        text = strip_code(p.read_text(encoding="utf-8"))
+        has_image = bool(image_links(text)[0])
         has_video = WATCH_RE.search(text) is not None
         if i == 0:
             if not has_video:

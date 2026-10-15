@@ -78,8 +78,13 @@ RESTRICTED_RESIDUAL_RE = re.compile(
 # (<varequal>T</varequal>), so publishing them to a learner hands over the answer key a
 # download at a time. Moodle's own backup format (.mbz) is the same hazard by another
 # name -- a course backup contains the full question bank, answers included.
+#
+# Any archive is withheld too, whatever its name: a Paratext practice-project backup
+# (`TAMBAB Phase B 2026-10-09.zip`) holds a configured project and its seeded errors, and
+# nothing here can look inside an archive to prove it harmless -- so it fails closed.
 # --------------------------------------------------------------------------------------
 LMS_EXPORT_RE = re.compile(r"^(qti[_-]|cypher-|moodle-)|\.(imscc|mbz)$", re.I)
+ARCHIVE_RE = re.compile(r"\.(zip|7z|rar|tar|gz|tgz)$", re.I)
 
 EXCLUDED_MD_SUFFIXES = ("-mentor-guide.md", "-video-script.md")
 EXCLUDED_STEM_SUFFIXES = ("-mentor-guide", "-video-script", "-quiz")
@@ -105,7 +110,7 @@ def excluded_asset(name, view):
     stem = name.split(".", 1)[0].lower()
     if stem == "00-design" or stem.endswith(EXCLUDED_STEM_SUFFIXES):
         return True
-    return bool(LMS_EXPORT_RE.search(name))
+    return bool(LMS_EXPORT_RE.search(name) or ARCHIVE_RE.search(name))
 
 
 # --------------------------------------------------------------------------------------

@@ -2,19 +2,21 @@
 
 **Estimated time:** 90 minutes
 
-> This lesson uses the `tamba` and `runda` fictional projects. See the
-> [course README](README.md#the-fictional-project) for their quotation conventions.
+> This lesson uses the `TAMBA` and `RUNDA` practice projects. See the
+> [course README](README.md#the-practice-projects) for their quotation conventions.
 
 **Purpose:** Every language marks speech differently — curly quotes, guillemets, a character
 that doubles as an apostrophe. On a real project your job is to translate those conventions
-into Paratext's Quote marks grid correctly, so the Quotation check finally has something
-meaningful to look for. This lesson gives the check the first of its two inputs.
+into Paratext's Quote marks grid correctly, replacing Paratext's defaults, so the Quotation
+check finally looks for what the team actually writes. This lesson gives the check the first of
+its two inputs.
 
 ## Learning objectives
 
 By the end of this lesson you will be able to:
 
-- Navigate to the Quote marks tab and enter the correct characters for each nesting level.
+- Navigate to the Quote marks tab, compare Paratext's default characters with a language's
+  conventions, and correct every cell that differs.
 - Configure the Quote Continuer at new paragraph for languages that use continuation marks,
   and fill the **Continuer required at** list that tells the check *where* to expect it.
 - Recognize the word-medial punctuation conflict when the same character serves as both a
@@ -23,8 +25,9 @@ By the end of this lesson you will be able to:
 
 ## Connect
 
-In [Lesson 1](01-what-the-quotation-check-does.md) you saw that an unconfigured check is just
-noise. Now you give it the first thing it needs: the actual characters your language uses.
+In [Lesson 1](01-what-the-quotation-check-does.md) you saw that a check running on Paratext's
+defaults can't be trusted. Now you give it the first thing it needs: the actual characters your
+language uses, in place of the ones Paratext chose.
 
 **✏️ Reflection.** Picture the language project you work with (or one you expect to support):
 
@@ -40,8 +43,8 @@ Hold those in mind. Two of the three exercises in this lesson are exactly these 
 ## Content
 
 *Configuring the Quote marks tab is the first half of the **Translation Tools** competency's
-"use and troubleshoot" skill for this check. Get the inventory of characters right here and
-most of the false positives from Lesson 1 disappear.*
+"use and troubleshoot" skill for this check. Get the characters right here and the
+default-settings results from Lesson 1 disappear.*
 
 The **Quote marks** tab tells Paratext which characters your language uses to open and close
 quotations at each nesting level, and which character (if any) continues a speech across a
@@ -51,7 +54,9 @@ project menu **☰ > Project settings > Quotation Rules**, then click the **Quot
 
 ![The project menu open showing Project settings highlighted, and Quotation Rules selected in the submenu.](assets/ss-02-project-menu-quotation-rules.png)
 
-The tab has a grid with three rows and three columns.
+The tab has a grid with three rows and three columns. (If the project's **Allow whitespace and
+invisible characters** option is on, you will see a fourth column, "After Opening/Continuer and
+before Closing". This course doesn't cover it.)
 
 **Rows — nesting levels:**
 - **Quotes (First level)** — primary speech
@@ -62,8 +67,21 @@ The tab has a grid with three rows and three columns.
 **Columns:**
 - **Opening** — the character that starts a quotation at that level
 - **Quote Continuer at new paragraph** — the character repeated at the beginning of a new
-  paragraph when a quotation continues (many languages leave this blank)
+  paragraph when a quotation continues (many languages set this to *none*)
 - **Closing** — the character that ends a quotation at that level
+
+**The grid is never empty.** As you saw in Lesson 1, a new project opens with Paratext's
+defaults: `“ “ ”` at First level, `‘ ‘ ’` at Second level, `“ “ ”` at Third level, and
+`p p/q1 b/q1` in the Continuer required at field. Your job is not to fill in a blank grid. It is
+to compare every cell with the team's conventions and change each one that differs, including
+cells that must be set to *none*. A cell you didn't look at is still Paratext's choice, not the
+team's.
+
+**NOTE** Each cell has a dropdown (▼) listing the characters you can choose. The dropdown shows
+only the character itself. The character names and Unicode codes given in this course's steps,
+such as "Left double quotation mark, U+201C", are for your reference, so you can tell
+look-alike characters apart; you won't see them in the list. Paratext also won't let you set the
+Second level until the First level is filled in.
 
 Below the grid the tab has a few additional settings — checkboxes such as **Closing quotes
 close** and **List all quote marks...**, and one text field, **Continuer required at**, which
@@ -106,7 +124,7 @@ run on. Two ways to find them:
    headings (`\s1`) never carry a continuer themselves, but a paragraph that *follows* a heading
    inside a running speech may, which is what a pair like `s1/pi` expresses.
 
-![The Markers inventory window for a project, with the upper pane listing markers, their counts and style names (p 1122, pi 434, q1 117, q2 118, nb 1, among others) and the lower pane listing the verses where the selected marker p occurs.](assets/ss-02-markers-inventory.png)
+![The Markers inventory window for the TAMBA project with All books selected. The upper pane lists markers with their counts and style names, among them p 1888, pi 11, q 14, q1 209 and q2 185. The marker p is selected, and the lower pane lists the first verses where it occurs: MAT 1:0, 1:16, 1:17 and 1:19.](assets/ss-02-markers-inventory.png)
 
 Most New Testament projects end up with a list of four to six entries. A project with heavy
 poetry, lists, or indented material has a longer list, but it is built the same way. Both
@@ -116,10 +134,11 @@ mechanics; the **Take it to your context** task at the end asks you to derive on
 At the bottom of the dialog:
 - **Example** — a live text preview showing how your configured marks look in a sample
   passage. Use this to visually confirm that you have selected the correct characters.
-- **Copy quote mark settings...** button — imports character settings from another project
-  (useful when a related project uses the same conventions).
+- **Copy quote mark settings...** button, at the bottom left — imports the quote marks from
+  another project (useful when a related project uses the same conventions). It does **not**
+  copy the **Continuer required at** list. Type that by hand after copying.
 
-![The Quote marks tab with the three-row, three-column grid visible, showing the additional settings below the grid.](assets/ss-02-quote-marks-tab-layout.png)
+![The Quote marks tab for a project still at Paratext 9.5's defaults. The three-row, three-column grid shows “ “ ” at First level, ‘ ‘ ’ at Second level and “ “ ” at Third level (Opening, Quote Continuer at new paragraph, Closing). Below the grid are the checkboxes and the Continuer required at field reading p p/q1 b/q1; the Example section and the Copy quote mark settings... button are at the bottom.](assets/ss-02-quote-marks-tab-defaults.png)
 
 **One more setting lives elsewhere, but it has a real limit.** Some languages use the same
 character for two purposes: as the **closing quotation mark** at the single-quote level *and*
@@ -142,18 +161,23 @@ collision.
 as an apostrophe, there is no configuration that makes the check stop flagging it. The
 practical options are (a) recognize each such result during triage as a known, expected
 false positive — a real apostrophe, not a translation error — and move past it rather than
-hunting for a setting to clear it, or (b) if the orthography is still being finalized, choose a
+hunting for a setting to clear it, or (b) raise with the translation team whether to use a
 different, unique character for the apostrophe so the two roles don't collide in the first
-place. You'll see this firsthand in the third exercise below.
+place. That is an orthography decision for the team and the language community, not for you,
+and it can come up late in a project. You'll see this firsthand in the third exercise below.
 
 **Key takeaways**
 
 - The Quote marks tab grid has three rows (First, Second, Third level) and three columns
   (Opening, Quote Continuer at new paragraph, Closing).
-- Always verify every character you enter using the **Example** section at the bottom of the
-  dialog — confirm the code point, not just the shape.
-- The Quote Continuer at new paragraph is optional; leave it blank if your language closes and
-  reopens the marks at each paragraph break.
+- A new project's grid holds Paratext's defaults, not the team's conventions. Compare every
+  cell, including the continuers and the Continuer required at list, and change each one that
+  differs.
+- Always check the characters you set using the **Example** section at the bottom of the
+  dialog. Look-alike characters are easy to confuse, so use the code points in the conventions
+  table to tell them apart.
+- The Quote Continuer at new paragraph is optional; set it to *none* at any level where the
+  language doesn't repeat a mark at the head of a continued paragraph.
 - If you fill the continuer cell, you **must** also fill **Continuer required at** with the
   paragraph markers (and marker transitions like `p/q1`) where the continuer is expected. The
   character alone does nothing; with the list empty, every continuer is reported as an unclosed
@@ -165,37 +189,42 @@ place. You'll see this firsthand in the third exercise below.
 
 ## Challenge
 
-You will configure two real (fictional) projects and then untangle the apostrophe conflict.
-Each exercise produces a configured tab a mentor can inspect against the language's convention
-table in the README.
+You will correct Paratext's defaults on two practice projects and then untangle the apostrophe
+conflict. Each exercise produces a corrected tab a mentor can inspect against the language's
+convention table in the README.
 
-### Exercise 2.1 — Enter quote marks for Tamba
+### Exercise 2.1 — Correct the defaults for Tamba
 
-Open the Tamba project's Quotation Rules dialog (☰ > Project settings > Quotation Rules) and
+Open the `TAMBA` project's Quotation Rules dialog (☰ > Project settings > Quotation Rules) and
 click the **Quote marks** tab.
 
-The Tamba project is in Phase A: the Quote marks tab is blank. Enter the following settings
-using the dropdown arrow (▼) on each cell:
+`TAMBA` is in Phase A: the Quote marks tab still holds Paratext's defaults, the settings behind
+the five John 17 results you saw in Lesson 1. Compare them with Tamba's conventions:
 
 | Level | Opening | Quote Continuer at new paragraph | Closing |
 | --- | --- | --- | --- |
-| First level | `“` (U+201C) | `“` (U+201C) | `”` (U+201D) |
-| Second level | `‘` (U+2018) | *(leave blank)* | `’` (U+2019) |
-| Third level | `“` (U+201C) | *(leave blank)* | `”` (U+201D) |
+| First level | `“` (U+201C) — default matches | `“` (U+201C) — default matches | `”` (U+201D) — default matches |
+| Second level | `‘` (U+2018) — default matches | *none* — default is `‘`; **change it** | `’` (U+2019) — default matches |
+| Third level | `“` (U+201C) — default matches | *none* — default is `“`; **change it** | `”` (U+201D) — default matches |
+
+**Continuer required at:** Tamba needs `p p/q1 m/q1 s1/pi pi/pi b/q1`. The default is
+`p p/q1 b/q1`; change it.
+
+So the First level already matches, and two continuer cells and the list do not.
 
 **Steps:**
-1. Click the dropdown (▼) on the **Opening** cell for First level. Select `“` (Left double
-   quotation mark, U+201C).
-2. Click the dropdown on the **Quote Continuer at new paragraph** cell for First level. Select
-   `“` (U+201C) — the same character as the Opening mark.
-3. Click the dropdown on the **Closing** cell for First level. Select `”` (Right double
-   quotation mark, U+201D).
-4. Repeat for Second level: Opening = `‘` (U+2018), Continuer = blank, Closing = `’` (U+2019).
-5. Repeat for Third level: Opening = `“` (U+201C), Continuer = blank, Closing = `”` (U+201D).
-6. Check the **Example** section at the bottom of the dialog. The sample text should show
+1. Confirm the First level row: Opening `“` (Left double quotation mark, U+201C), Continuer `“`
+   (U+201C), Closing `”` (Right double quotation mark, U+201D). These match Tamba; leave them.
+2. Click the dropdown (▼) on the **Quote Continuer at new paragraph** cell for Second level.
+   Select *none*.
+3. Click the dropdown on the **Quote Continuer at new paragraph** cell for Third level. Select
+   *none*.
+4. Confirm the rest of the Second level (Opening `‘` U+2018, Closing `’` U+2019) and Third level
+   (Opening `“` U+201C, Closing `”` U+201D). These match Tamba; leave them.
+5. Check the **Example** section at the bottom of the dialog. The sample text should show
    `“…‘…’…”` — curly double quotes at the outer level and curly single quotes for embedded
    speech.
-7. In the **Continuer required at** field below the grid, enter exactly:
+6. In the **Continuer required at** field below the grid, replace `p p/q1 b/q1` with exactly:
 
    ```
    p p/q1 m/q1 s1/pi pi/pi b/q1
@@ -203,15 +232,18 @@ using the dropdown arrow (▼) on each cell:
 
    Type it with single spaces between entries. Do not skip this step — see the table after
    the steps for what each entry is doing.
-8. Click **OK**.
+7. Click **OK**.
 
 ![The Quote marks tab for Tamba after entry: “ in the First level Opening and Continuer cells and ” in its Closing cell, ‘ and ’ at Second level with the Continuer cell at *none*, “ and ” at Third level, and the Continuer required at field below the grid reading p p/q1 m/q1 s1/pi pi/pi b/q1. The Example section shows “ repeated at the head of each continued \p paragraph.](assets/ss-02-tamba-quote-marks.png)
 
 Tamba uses English-style curly quotes at all three levels. First level speech that spans a
 paragraph break repeats the opening mark `“` (U+201C) as a Quote Continuer at the head of each
 new paragraph; the closing mark `”` (U+201D) appears only once, at the very end of the whole
-speech. Second and Third level have no continuer — a quotation at either of those levels that
-spans a paragraph break closes fully and reopens fully at each new paragraph instead.
+speech. Second and Third level have no continuer, so nothing is repeated at the head of a new
+paragraph at those levels. A Second level quotation can still run across paragraph breaks
+unbroken: Peter's Psalm 16 citation in Acts 2:25–28 opens with `‘` in 2:25, closes with `’` in
+2:28, and carries no mark at the paragraph breaks in between. Tamba's text passes the check that
+way.
 
 **Why that list?** Tamba's text uses ordinary `\p` paragraphs for most speech, quoted poetry
 introduced from prose or after a blank line, and indented `\pi` paragraphs after section
@@ -226,20 +258,29 @@ headings. Each entry covers one of those situations:
 | `s1/pi` | at an indented `\pi` paragraph that follows a `\s1` heading | A speech that continues past a section heading |
 | `pi/pi` | at a `\pi` paragraph that follows another `\pi` | Consecutive indented paragraphs within one speech |
 
-If you were configuring Tamba from scratch you would build this list by reading Matthew 5–7
-and Acts 2 and noting which markers appear inside the speeches. You will do exactly that for a
-real project in the **Take it to your context** task.
+If you were building this list yourself you would read Matthew 5–7, John 17 and Acts 2 and note
+which markers appear inside the speeches. You will do exactly that for a real project in the
+**Take it to your context** task.
 
 **Check it worked.** Run the Quotation check (☰ > Tools > Run basic checks, Quotations only)
-on all of Tamba's books. With the grid *and* the list filled, the result should be **"No errors
-found"** — Phase A's text is clean, and the Sermon on the Mount (Matthew 5:3–7:27) now reads as
-one correctly continued speech. Two other outcomes tell you what went wrong:
+on all of Tamba's books (**Choose Books**, all NT books). In Lesson 1 this gave five results in
+John 17. With your corrections it should be **"No errors found"** — Phase A's text is clean.
+Two other outcomes tell you what went wrong:
 
-- *"Quotation punctuation is not used in project TAMBA"* — the grid is still empty. The dialog
-  was closed with Cancel or the window's X instead of **OK**. Reopen it, re-enter, click OK.
-- A run of unclosed-quote results at every verse from Matthew 5:4 onward — the grid saved but
-  the **Continuer required at** field is empty or has a typo. That field is by far the most
-  common cause of this pattern.
+- *The same five John 17 results* — your changes didn't save. The dialog was closed with Cancel
+  or the window's X instead of **OK**. Reopen it, make the changes again, click OK.
+- A run of unclosed-quote results at every verse from Matthew 5:4 onward — the **Continuer
+  required at** field is empty or has a typo. That field is by far the most common cause of
+  this pattern.
+
+**A clean result is not the finish line.** Of all your changes, adding `pi/pi` to the list is
+the only one the check needed. That entry alone clears all five John 17 results. The default Second and Third level continuers produce no results in Tamba's text at all. So the
+check would have said "No errors found" even with those two cells still wrong and the list
+still missing `m/q1` and `s1/pi`. The check can only report what the current text happens to
+trip over. The team's conventions say Second and Third level have no continuer, and the list is
+the six entries above, so that is what you set. When the team drafts a new book, settings that
+match their conventions are what keep the check honest. Set what the conventions say; don't
+stop when the result list empties.
 
 (This is only the Quotations check. The separate Quotation types check, which Lesson 3
 configures, is not enabled yet and adds its own results once it is.)
@@ -247,21 +288,35 @@ configures, is not enabled yet and adds its own results once it is.)
 **TIP** Hover over any column or row label ("Opening", "Closing", "Quotes (First level)",
 etc.) to see a description of that field in the status bar at the bottom of the dialog.
 
-### Exercise 2.2 — Enter quote marks for Runda
+### Exercise 2.2 — Correct the defaults for Runda
 
-Open the Runda project and navigate to ☰ > Project settings > Quotation Rules > Quote marks
-tab.
+**First, see what the defaults do.** Open the `RUNDA` project. Like every practice project, it
+starts with Paratext's defaults. Run the Quotation check (☰ > Tools > Run basic checks,
+Quotations only) on all books with **Choose Books**. You get **1110 results**. Scroll through
+them and read the messages, not just the count. Most read "Closing quote [ ’ U+2019 ] found as a
+word medial character. Sometimes caused when a closing quote is incorrectly used as an
+apostrophe". Others read "Second-level quote mark found without a preceding first-level quote:
+‘" (Matthew 2:6, 4:4, 4:6, for example), and there is a "Closing quote [ ’ U+2019 ] found
+without matching opening…" at Matthew 5:10.
 
-Runda is a new project with no quote marks configured. Enter the following settings:
+![The Quotations check results panel for RUNDA, all books, with the project still at Paratext 9.5's default Quotation Rules. The count reads 1110 results. The visible rows include "Closing quote … found as a word medial character" (naming ’ U+2019 in square brackets) results and "Second-level quote mark found without a preceding first-level quote: ‘" at Matthew 2:6 and 4:4.](assets/ss-02-runda-default-results.png)
+
+The cause is in the settings, not the text. Runda's First level marks are guillemets, and
+guillemets aren't in Paratext's defaults. Close the results panel.
+
+**Now correct the defaults.** Navigate to ☰ > Project settings > Quotation Rules > Quote marks
+tab and compare each cell with Runda's conventions:
 
 | Level | Opening | Quote Continuer at new paragraph | Closing |
 | --- | --- | --- | --- |
-| First level | `«` (U+00AB) | `«` (U+00AB) | `»` (U+00BB) |
-| Second level | `‘` (U+2018) | *(leave blank)* | `’` (U+2019) |
-| Third level | *(leave blank)* | *(leave blank)* | *(leave blank)* |
+| First level | `«` (U+00AB) — default is `“` | `«` (U+00AB) — default is `“` | `»` (U+00BB) — default is `”` |
+| Second level | `‘` (U+2018) — default matches | *none* — default is `‘` | `’` (U+2019) — default matches |
+| Third level | *none* — default is `“` | *none* — default is `“` | *none* — default is `”` |
 
-Runda uses French-style guillemets at the first level with no continuation mark at the second
-level.
+**Continuer required at:** Runda needs just `p`. The default is `p p/q1 b/q1`.
+
+Runda uses French-style guillemets at the first level, no continuation mark at the second
+level, and no Third level at all. Five cells and the list differ from the defaults.
 
 **Steps:**
 1. Click the dropdown arrow (▼) on the **Opening** cell for First level. Select « from the
@@ -269,12 +324,12 @@ level.
 2. Click the dropdown arrow on the **Quote Continuer at new paragraph** cell for First level.
    Select «.
 3. Click the dropdown arrow on the **Closing** cell for First level. Select ».
-4. Click the dropdown arrow on the **Opening** cell for Second level. Select ‘ (U+2018).
-5. Click the dropdown arrow on the **Closing** cell for Second level. Select ’ (U+2019).
-6. Leave all Third level cells at **\*none\***.
-7. Check the **Example** section at the bottom of the dialog. You should see «...» for First
+4. Confirm the Second level Opening is ‘ (U+2018) and Closing is ’ (U+2019). Click the dropdown
+   arrow on the Second level **Quote Continuer at new paragraph** cell and select *none*.
+5. Set all three Third level cells to *none*.
+6. Check the **Example** section at the bottom of the dialog. You should see «...» for First
    level speech and ‘...’ for embedded speech.
-8. In the **Continuer required at** field, enter just:
+7. In the **Continuer required at** field, replace `p p/q1 b/q1` with just:
 
    ```
    p
@@ -283,27 +338,36 @@ level.
    Runda's text does use `\q1`/`\q2` poetry inside speech — Matthew 2:6 and 4:6 quote Scripture
    that way — but look at how it is written: the poetry line opens straight into the Second
    level `‘` with no `«` in front of it. Runda repeats its continuer only at `\p` paragraphs, so
-   `p` is the whole list. Adding `p/q1` here would make the check demand a `«` the text never
-   carries, and you would get "Expected continuers [«] are missing" at every quoted poem.
-9. Click **OK**.
+   `p` is the whole list. Leaving the default `p/q1` here would make the check demand a `«` the
+   text never carries, and you would get "Expected continuers [«] are missing" at every quoted
+   poem.
+8. Click **OK**.
 
-**Check it worked.** Run the Quotation check on Matthew. You should see **no** "Expected
-continuers" or "Quote opened; see following message" results at Matthew 2:5–6 or 4:6. What you
-*will* see is a long list of "Closing quote [’] found as a word medial character" results — one
-for almost every apostrophe in the book — plus a pair of results at **5:3 and 5:10** that look
-alarming: "Opening quote mark found without matching closing quote mark: «" at 5:3 and "Closing
-quote [’] found without matching opening" at 5:10. Leave all of these alone for now. Exercise 2.3
-is about exactly these results, including why 5:3 is reported when nothing at 5:3 is wrong.
+**Check it worked.** Run the Quotation check on all books again. The count drops from 1110 to
+**847**. Then run it on Matthew alone (**Current Book**, with Matthew open): **252 results**.
 
-![The Quote marks tab for Runda after entry, showing « and » in First level cells, the Second level Opening/Closing filled, and the Continuer required at field reading p.](assets/ss-02-runda-quote-marks.png)
+1110 to 847 looks like your changes barely helped. Read the messages, not the count. The
+"Second-level quote mark found without a preceding first-level quote" results are gone: the
+check now recognizes Runda's guillemets, so it sees the First level speech around each `‘`. In
+Matthew you should also see **no** "Expected continuers" or "Quote opened; see following
+message" results at Matthew 2:5–6 or 4:6. Almost everything left is one message, repeated:
+"Closing quote [’] found as a word medial character" — one for almost every apostrophe in the
+book. There is also a pair of results at **5:3 and 5:10** that look alarming: "Opening quote
+mark found without matching closing quote mark: «" at 5:3 and "Closing quote [’] found without
+matching opening" at 5:10. Leave all of these alone for now. Exercise 2.3 is about exactly these
+results, including why 5:3 is reported when nothing at 5:3 is wrong.
+
+![The Quotation Rules dialog for RUNDA on the Quote marks tab after Exercise 2.2. First level reads « « » (Opening, Continuer, Closing); Second level reads ‘, none, ’, with its continuer cleared from the default; Third level reads none in all three cells; Continuer required at reads p. The Example section shows the marks in nested order.](assets/ss-02-runda-quote-marks.png)
 
 **✏️ Compare.** Runda and Tamba both fill the Quote Continuer cell at First level — Runda with
 `«`, Tamba with `“` — because both languages repeat the opening mark at the start of each
-continued paragraph rather than closing and reopening. Now compare Second level: both leave it
-blank there, since embedded quotations in both languages close and reopen fully rather than
-continuing across a paragraph break. The convention table drives the configuration — never the
-other way around, so don't assume one language's pattern applies to another, or that every
-nesting level within the same language behaves the same way.
+continued paragraph rather than closing and reopening. Now compare Second level: both set its
+continuer to *none*, because neither language's conventions repeat a Second level mark at the
+head of a new paragraph. (In Tamba a Second level quotation can run across a paragraph break
+unbroken, as Acts 2:25–28 does.) In both projects that meant changing a default. The convention
+table drives the configuration — never the defaults, and never the other way around. Don't
+assume one language's pattern applies to another, or that every nesting level within the same
+language behaves the same way.
 
 Now compare the two **Continuer required at** lists. Both languages use a continuer, but Tamba's
 list has six entries and Runda's has one, because the list describes what the *text does*, not
@@ -313,8 +377,8 @@ wrong in either direction and the check tells you, with a different message each
 
 | List is… | What you see | Example |
 | --- | --- | --- |
-| Too short (a marker the text *does* continue at is missing) | "Quote opened…" followed by an unclosed-quote result at every paragraph of a long speech | Tamba with an empty field: the whole Sermon on the Mount |
-| Too long (a marker the text does *not* continue at is listed) | "Expected continuers [«] are missing" at each place the listed marker occurs inside speech | Runda with `p/q1` added: Matthew 2:6, 4:6 |
+| Too short (a marker the text *does* continue at is missing) | Unclosed-quote results inside a long speech, such as "Quote opened…" or "Opening quote mark found without matching closing quote mark: “" | Tamba at the defaults, which lack `pi/pi`: five results in John 17. Tamba with an empty field: the whole Sermon on the Mount |
+| Too long (a marker the text does *not* continue at is listed) | "Expected continuers [«] are missing" at each place the listed marker occurs inside speech | Runda with the default `p/q1` left in: Matthew 2:6, 4:6 |
 
 Either way the fix is in the field, not the text. The text is the authority; the list is
 your description of it.
@@ -333,28 +397,40 @@ has a **Word-medial punctuation** field. Its own help text says any character li
 treated as part of a word when it appears between two alphabetic characters, so the checker
 should not misread it as a closing mark.
 
-![The Language Settings dialog open on the Other Characters tab, showing the Word-medial punctuation field with a right single quotation mark entered.](assets/ss-02-language-settings-other-chars.png)
+![The Language Settings dialog for RUNDA on the Other Characters tab, with ’ (U+2019) entered in the Word-medial punctuation field, a yellow warning triangle at the right end of that field, a Quotation Rules... link above it, and the hover message "The following character(s) are also quote mark(s) in the Quotation rules dialog: ’ U+2019 (in square brackets). Unique characters are recommended." visible.](assets/ss-02-language-settings-other-chars.png)
 
 **Where this genuinely helps:** punctuation characters that are *not* also configured as a
-quote mark — a hyphen used word-medially, for instance. Paratext will warn you if you enter a
-character here that's also registered as a quote mark in Quotation Rules ("unique characters
-are recommended"); that warning is a real signal, not just caution — it means the setting won't
-do what you're about to try to use it for.
+quote mark — a hyphen used word-medially, for instance. If you enter a character here that's
+also a quote mark in Quotation Rules, Paratext doesn't open a pop-up. A yellow warning
+triangle (⚠) appears at the right end of the field instead, and its message shows only when
+you hover over it: "The following character(s) are also quote mark(s) in the Quotation rules
+dialog: [ ’ U+2019 ]. Unique characters are recommended." It's easy to miss, but it is a real
+signal, not just caution — it means the setting won't do what you're about to try to use it
+for.
 
 **Do it (Runda):** Runda uses `’` (U+2019) as its Second level closing mark — and its text also
 uses `’` as an apostrophe in *don’t*, *can’t*, *righteousness’ sake*. A genuine collision, and
 you already saw its footprint in the results at the end of Exercise 2.2.
 
 1. Navigate to ☰ > Project settings > Language Settings > Other Characters tab.
-2. In the **Word-medial punctuation** field, enter `’` (U+2019). Paratext will warn that this
-   character is already a quote mark. Confirm through the warning and click **OK** anyway.
-3. Re-run the quotation check (a full re-run, not just "Rerun" on an already-open results
+2. In the **Word-medial punctuation** field, enter `’` (U+2019). A yellow warning triangle (⚠)
+   appears at the right end of the field; hover over it to read its message. There is no
+   dialog to confirm. Click **OK** anyway; the warning doesn't block it.
+3. Open Quotation Rules (☰ > Project settings > Quotation Rules) and go to the **Quote marks** tab. The Second level Closing cell holding `’` now carries a matching ⚠.
+   Hover over it: "This is also a word-medial character in the Language settings dialog:
+   [ ’ U+2019 ]. Unique characters are recommended." A **Language Settings...** link appears
+   above the Closing column. The two dialogs are warning about the same collision, each from
+   its own side. Close the dialog without changing anything.
+
+   ![The Quotation Rules dialog for RUNDA on the Quote marks tab with Exercise 2.2's settings (First level « « », Second level ‘ none ’, Third level none in all three cells, Continuer required at reading p), a yellow warning triangle in the Second level Closing cell, a Language Settings... link above the Closing column, and the hover message "This is also a word-medial character in the Language settings dialog: ’ U+2019 (in square brackets). Unique characters are recommended." visible.](assets/ss-02-apostrophe-warning.png)
+
+4. Re-run the quotation check (a full re-run, not just "Rerun" on an already-open results
    panel) on a chapter that has both apostrophes and single-quote speech.
-4. **Observe that the apostrophes are still flagged.** The check keeps reporting "Closing quote
+5. **Observe that the apostrophes are still flagged.** The check keeps reporting "Closing quote
    found as a word medial character" for every genuine apostrophe, exactly as before you added
    the setting. This is the expected, confirmed outcome — not a sign you configured something
    wrong.
-5. **Now look at Matthew 5:3 and 5:10.** The same collision has a second, nastier face. In
+6. **Now look at Matthew 5:3 and 5:10.** The same collision has a second, nastier face. In
    *don’t* the `’` sits between two letters, so the check at least recognizes it as
    word-medial and says so. In `righteousness’ sake` (5:10) the `’` is at the **end** of the word
    — a plural possessive — so the check simply sees a Second level closing mark with no opening
@@ -376,13 +452,14 @@ set both results aside together.
 Document this for whoever inherits the project, so a future checker doesn't waste time hunting
 for a fix that doesn't exist.
 
-**If the orthography is still being decided:** this is the one situation where the team has a
-real fix available — Paratext's own warning when you enter `’` into Word-medial punctuation
-("unique characters are recommended") is pointing at it. Recommend the language team adopt a
-different, unique character for the apostrophe (or, less commonly, for the closing mark) so the
-two roles never collide. That's a project-level decision for the translation team to make, not
-something you configure your way around — but it's worth raising if the orthography isn't
-locked in yet, since it's the only path that actually eliminates the false positives rather than
+**The real fix belongs to the team:** there is one way to make the collision go away —
+the ⚠ Paratext shows in both dialogs when `’` is in Word-medial punctuation ("Unique characters
+are recommended") is pointing at it. A different, unique character for the apostrophe (or, less
+commonly, for the closing mark) means the two roles never collide. Choosing that character is
+an orthography decision, and it belongs to the translation team and the language community —
+you can raise it, but you don't make it, and it isn't something you configure your way around.
+Orthography changes are sometimes made right up to typesetting, so it is worth raising even
+late in a project: it's the only path that actually eliminates the false positives rather than
 just documenting them.
 
 A good concrete recommendation: **`ʼ` (U+02BC MODIFIER LETTER APOSTROPHE)**. It's the character
@@ -393,7 +470,7 @@ small raised mark close in shape to `’`, so the orthography doesn't change muc
 it's a completely different code point, so Paratext never confuses it with a configured quote
 mark. For example, a word written `Kalaʼu` (U+02BC) would never generate a quotation result no
 matter what the Second level closing mark is configured to — compare that to `Kala’u` (U+2019),
-which collides the moment `’` is also a quote mark, exactly like Runda and Tamba above.
+which collides the moment `’` is also a quote mark, exactly like Runda above.
 
 **Tamba scenario:** Tamba's Second level closing mark is `’` (U+2019). Tamba's Phase A text has
 no contractions or apostrophes, so this conflict never comes up there — but if Tamba's real
@@ -404,8 +481,10 @@ you just saw in Runda, not something a setting change would fix.
 project(s) and level(s) needed a Quote Continuer and why, what the **Continuer required at**
 list adds that the continuer cell alone does not, and what you observed when you tried the
 Word-medial punctuation fix for the apostrophe conflict — including that it did not suppress
-the check result. A mentor will check your configured Quote marks tabs, including the
-Continuer required at field, against the README convention tables.
+the check result. With them, submit a screenshot of the **Quote marks** tab for `TAMBA` and
+one for `RUNDA`, with the Continuer required at field visible. Your mentor can't see your
+settings any other way, because your projects stay on your computer. A mentor will check those
+tabs, including the Continuer required at field, against the README convention tables.
 
 ## Change
 
@@ -414,7 +493,7 @@ Continuer required at field, against the README convention tables.
 1. A language uses `««` (U+00AB U+00AB) and `»»` (U+00BB U+00BB) for First level speech and `«`
    / `»` for Second level speech. Where do you enter these characters in PT 9.5?
 2. What is the Quote Continuer at new paragraph column for? Give an example of when you would
-   leave it blank. And if you *do* fill it, what else must you fill, and what happens if you
+   set it to *none*. And if you *do* fill it, what else must you fill, and what happens if you
    don't?
 3. Your Second level closing mark is `’` (U+2019). The quotation check is flagging apostrophes
    inside words as unclosed quotations. Can you make this result disappear through
@@ -424,8 +503,9 @@ Continuer required at field, against the README convention tables.
 Project settings > Quotation Rules) — `««` in the First level Opening cell, `»»` in the First
 level Closing cell, `«` in the Second level Opening cell, and `»` in the Second level Closing
 cell. (2) It is the character repeated at the start of each new paragraph when one speech spans
-multiple paragraphs; leave it blank when the language closes and reopens the marks at each
-paragraph break (as most Western European languages do). If you fill it, you must also fill
+multiple paragraphs; set it to *none* when the language doesn't repeat a mark at the head of a
+continued paragraph (Tamba and Runda at Second level — remember the defaults fill it, so you
+have to change it). If you fill it, you must also fill
 **Continuer required at** with the paragraph markers and marker transitions (e.g. `p p/q1`)
 where the continuer is expected; otherwise the check reads every continuer as a new opening
 mark that is never closed and floods a long speech with unclosed-quote results. (3) No — adding `’` to ☰ > Project
@@ -437,7 +517,8 @@ that will clear it.
 
 **✏️ Take it to your context.** For one real language you support, write the three-row Quote
 marks table (First/Second/Third level, Opening / Continuer / Closing) as you believe it should
-be configured. If any level has a continuer, open the longest speech in the project's text,
+be configured, then open the project's Quote marks tab and mark every cell that still differs —
+on many projects that means cells still at Paratext's defaults. If any level has a continuer, open the longest speech in the project's text,
 list every paragraph marker that appears inside it, and draft the **Continuer required at**
 list from that — bare markers for paragraphs, pairs for the transitions. Note any character
 that doubles as an apostrophe — that's your word-medial punctuation candidate.

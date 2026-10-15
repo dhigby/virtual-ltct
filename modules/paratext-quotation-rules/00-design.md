@@ -26,7 +26,7 @@ and troubleshooting one specific check (Quotations), which is squarely `2 - With
 
 | # | Objective | Source | Assessed by |
 | --- | --- | --- | --- |
-| 1 | Learner can explain why the Quotation check produces no trustworthy results before it is configured, and name the two inputs it needs (inventory + rules). | Translation Tools §2.0 (use/troubleshoot) | Quiz §1; Lesson 1 exercise 1.1 |
+| 1 | Learner can explain why the Quotation check produces no trustworthy results before it is configured, and name the two inputs it needs (the Quote marks tab and the Quotation types tab of Quotation Rules). | Translation Tools §2.0 (use/troubleshoot) | Quiz §1; Lesson 1 exercise 1.1 |
 | 2 | Learner can enter the correct opening/closing quote-mark characters for each nesting level on the Quote marks tab and verify them via the Example preview. | Translation Tools §2.0 | Quiz §2; Lesson 2 exercises 2.1–2.2 |
 | 3 | Learner can configure the Quote Continuer at new paragraph **together with the Continuer required at marker list** (deriving that list from the paragraph markers the project actually uses), explain why the continuer character alone does nothing without the list, and recognize the word-medial apostrophe conflict as a confirmed limitation Language Settings cannot resolve when the character is also a quote mark. | Translation Tools §2.0 (troubleshoot) | Quiz §2; Lesson 2 exercises 2.1–2.2 (continuer + required-at list), 2.3 (apostrophe) |
 | 4 | Learner can configure each of the seven Quotation types for a given language's conventions and distinguish recommended vs. custom settings. | Translation Tools §2.0 | Quiz §3; Lesson 3 exercises 3.1–3.2 |
@@ -46,13 +46,13 @@ One row per numbered lesson file. Each stays ≤ 90 minutes.
 | `04-interpreting-and-clearing-the-check.md` | Triage: real error vs. config problem; reaching zero | 5, 6 | 75 |
 | `05-scenario-bank.md` | Applied practice: three unfamiliar languages (Velna, Menda, Waku) | 7 | 90 |
 | `06-mentor-guide.md` | Facilitator notes: project setup, phasing, error seeding | — | — |
-| `07-quiz.md` | Assessment | 1–7 | 20 |
-| `08-video-script.md` | Recording script for Cypher upload | — | — |
-| **Total learner seat time** | | | **~365** (course runs longer than the 270-min guide; each lesson stays within the 90-min cap) |
+| `07-quiz.md` | Assessment | 1–7 | 25 |
+| `08-video-script.md` | Recording script for the overview video (delivered via self-hosted Moodle) | — | — |
+| **Total learner seat time** | | | **~370** (course runs longer than the 270-min guide; each lesson stays within the 90-min cap) |
 
 ## Assessment plan
 
-A 15-question quiz (80% = 12/15 to pass) covers objectives 1–7, grouped into five sections
+A 20-question quiz (80% = 16/20 to pass) covers objectives 1–7, grouped into five sections
 matching the five lessons — a mix of recall, scenario application, and true/false. The
 scenario bank (three independent language scenarios, ~30 minutes each) exercises objective 7
 as applied practice; Scenario C (Waku em-dash) is an optional stretch. Each lesson also
@@ -89,10 +89,20 @@ following field knowledge (to be confirmed at SME fact-check, stage 5):_
   Continued-quotation claim is only testable once the types check is enabled.
 - The **Quotation types** check is a separate, administrator-enabled check that only checks
   first-level quotes in non-Deuterocanonical books.
-- Same-character open/close (em-dash languages like the fictional Waku) cannot always be
+- Same-character open/close (em-dash conventions like Waku's) cannot always be
   fully resolved by configuration; residual results must be documented in Project Notes for
   the consultant rather than edited away.
-- The fictional languages use ISO 639-3 private-use codes (`qaa`–`qtz`) to avoid colliding
-  with real languages in Paratext's language database.
+- The practice projects (TAMBA, RUNDA, VELNA, MENDA, Waku) start at Paratext 9.5's
+  **default** Quotation Rules, not blank — a new project saves these defaults when it is
+  created (verified; the basis of the 2026-10-12/13 rewrite). Quote marks (Opening /
+  Continuer / Closing): First level `“ “ ”`, Second level `‘ ‘ ’`, Third level `“ “ ”`;
+  Continuer required at `p p/q1 b/q1`; Quotation types at **Use recommended settings**.
+  TAMBAB (Phase B) instead starts with Tamba's configuration. Two related behaviors:
+  **Copy quote mark settings...** does not copy the Continuer required at list, and Paratext
+  refuses an empty Continuer required at list while any continuer is set ("Cannot be blank
+  if any Quote Continuer is specified.").
+- The practice projects use real languages, adapted for the course (decided 2026-10-09,
+  replacing the earlier plan of ISO 639-3 private-use codes): each keeps its real language
+  setting in Paratext under a course name, with quotation conventions defined by the course.
 - Recommended-settings defaults shown in the course should be re-verified against the
   learner's actual Paratext 9.5 build before being relied on as exact.

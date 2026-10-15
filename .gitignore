@@ -85,6 +85,13 @@ change.png
 # regenerable working files, not source.
 modules/*/Temp/
 
+# Paratext project backups. A practice project's backup holds its settings and text, and a
+# configured or seeded one holds a lesson's answers. Course folders publish every
+# non-markdown file to the review sites, so a backup left here was served to learners.
+# Mentors keep backups outside the repo. The two quiz exports already tracked in
+# coretech-why-keyboards-matter stay tracked; this stops new ones.
+modules/**/*.zip
+
 # Raw checking-assistant tool exports — not course content, may contain
 # unpublished translation-project data.
 **/checking-assistant-*.txt

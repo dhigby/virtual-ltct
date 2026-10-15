@@ -18,11 +18,11 @@ content_type: content
 
 **Audience:** Translators and translation helpers who are comfortable navigating Paratext but have not yet configured quotation checking for a project.
 
-**Goal:** By the end of this course you will be able to open an unconfigured project, identify the quotation characters a language uses, enter them correctly into the Quote marks tab, configure the checking rules, run the check, and interpret the results.
+**Goal:** By the end of this course you will be able to open a project still at Paratext's default quotation settings, identify the quotation characters a language uses, correct the Quote marks tab to match them, configure the checking rules, run the check, and interpret the results.
 
 **Format:** Each lesson presents a goal, a starting state, a set of discovery prompts (questions to answer before you act), and then the expected configuration you can compare against.
 
-**Estimated time:** Lessons 1–4 run 3–4 hours total; the scenario bank adds 1–2 hours. Each individual lesson is capped at 90 minutes — see the duration header at the top of each file.
+**Estimated time:** Lessons 1–4 run 4¼ hours total (30 + 90 + 60 + 75 minutes); the scenario bank adds 90 minutes. Each individual lesson is capped at 90 minutes — see the duration header at the top of each file.
 
 ---
 
@@ -33,13 +33,13 @@ This course follows the repo's [content package structure](../../process/PROCESS
 | File | What it is |
 | --- | --- |
 | [`01-what-the-quotation-check-does.md`](01-what-the-quotation-check-does.md) | Lesson 1 — why configuration matters (30 min) |
-| [`02-setting-up-quote-marks.md`](02-setting-up-quote-marks.md) | Lesson 2 — the Quote marks tab, continuer, apostrophe conflict (75 min) |
+| [`02-setting-up-quote-marks.md`](02-setting-up-quote-marks.md) | Lesson 2 — the Quote marks tab, continuer, apostrophe conflict (90 min) |
 | [`03-configuring-quotation-types.md`](03-configuring-quotation-types.md) | Lesson 3 — the Quotation types tab (60 min) |
 | [`04-interpreting-and-clearing-the-check.md`](04-interpreting-and-clearing-the-check.md) | Lesson 4 — triage to zero errors (75 min) |
 | [`05-scenario-bank.md`](05-scenario-bank.md) | Applied practice: Velna, Menda, Waku (90 min) |
 | [`06-mentor-guide.md`](06-mentor-guide.md) | Facilitator notes: project setup, phasing, error seeding |
 | [`07-quiz.md`](07-quiz.md) | Assessment quiz |
-| [`08-video-script.md`](08-video-script.md) | Recording script for Cypher upload |
+| [`08-video-script.md`](08-video-script.md) | Recording script for the overview video (delivered on Moodle) |
 
 ---
 
@@ -56,16 +56,45 @@ Before starting this course confirm you have the following:
 - Able to run a basic check (☰ > Tools > Run basic checks...)
 - Familiar with the idea that `\p`, `\q`, `\v` etc. are USFM markers (you do not need to know them in depth — the course explains the relevant ones as they appear)
 
-**Fictional projects** (see the [mentor guide](06-mentor-guide.md) for setup and distribution)
-- The `tamba` project must be installed before starting Lessons 1–4
-- The `runda` project must also be installed before starting Lesson 2 (Lessons 1, 3, and 4 only need `tamba`)
-- The `velna`, `menda`, and `waku` projects must be installed before the scenario bank
+**Practice projects** (see the [mentor guide](06-mentor-guide.md) for setup and distribution)
+
+Your mentor gives you access to each practice project when you need it, and adds you as an
+**Administrator** (Lesson 3 and the scenarios change settings only an administrator can change).
+Give your mentor the user name your Paratext is registered under (**Help > Registration
+information...**). To get a project once you've been given access, use **Paratext > Send/Receive
+projects...**, tick the project and click **Send/Receive**.
+
+> **WARNING:** Receive each project once. After that, never Send/Receive it: your changes would
+> go to every other learner using that project. Save your work instead. The check runs on your
+> own copy, so your work counts without sending it. If Paratext offers to Send/Receive (for
+> example, after your mentor changes your permissions), cancel it.
+
+| Before… | Receive |
+|---|---|
+| Lesson 1 | `TAMBA`: Tamba New Testament, Phase A (used for Lessons 1–3) |
+| Lesson 2 | `RUNDA`: Runda New Testament |
+| Lesson 4 | `TAMBAB`: the Phase B copy of Tamba, configured and seeded with errors |
+| Scenario bank | `VELNA`, `MENDA` and `Waku` |
 
 ---
 
-## The Fictional Project
+## The Practice Projects
 
-Lessons 1–4 use a single fictional project called **Tamba New Testament** (`tamba`). The Tamba language is fictional and uses the following quotation conventions:
+Every practice project in this course is real Scripture text from a real language, adapted for the course. Each has a course name (Tamba, Runda, Velna, Menda, Waku), and Paratext's project lists show its real language name alongside it. Its quotation marks follow conventions set for this course, so read the tables below as the course's conventions, not as a description of how that language community writes. As in real consulting work, you won't need to read the text itself: the skill is configuring the tool and diagnosing what it reports.
+
+**Starting state.** `TAMBA`, `RUNDA`, `VELNA`, `MENDA` and `Waku` all reach you with Paratext 9.5's default Quotation Rules, which is what every brand-new project gets:
+
+| Level | Opening | Quote Continuer at new paragraph | Closing |
+|-------|---------|----------------------------------|---------|
+| First level | `“` | `“` | `”` |
+| Second level | `‘` | `‘` | `’` |
+| Third level | `“` | `“` | `”` |
+
+**Continuer required at:** `p p/q1 b/q1`. **Quotation types tab:** Use recommended settings, with the Quotation types check off.
+
+These defaults are Paratext's, not any translation team's choice. Part of your job in every exercise is comparing each cell with the conventions below and correcting the ones that differ. `TAMBAB` (Lesson 4) is the exception: it arrives with Tamba's conventions already entered.
+
+Lessons 1–4 use the **Tamba New Testament** project: `TAMBA` for Lessons 1–3, and its Phase B copy `TAMBAB` for Lesson 4. Tamba uses the following quotation conventions:
 
 | Level | Name | Opening mark | Unicode | Closing mark | Unicode |
 |-------|------|-------------|---------|-------------|----------|
@@ -75,13 +104,13 @@ Lessons 1–4 use a single fictional project called **Tamba New Testament** (`ta
 
 **Additional facts about Tamba quotation style:**
 - First level (primary speech) uses a Quote Continuer at new paragraph: continued speech repeats the opening mark `“` (U+201C) at the start of each new paragraph, with the closing mark `”` (U+201D) appearing only once, at the very end of the whole speech.
-- Second and Third level have no continuer — a Second or Third level quotation that spans a paragraph break closes fully and reopens fully at each new paragraph instead.
+- Second and Third level have no continuer (set to *none*; the defaults fill them, so they must be changed). Nothing is repeated at the head of a new paragraph at those levels, and a Second level quotation can run across paragraph breaks unbroken: Peter's Psalm 16 citation in Acts 2:25–28 opens with `‘` in 2:25 and closes with `’` in 2:28, with no marks at the breaks between.
 - Third level is used only in Matthew, John, and Revelation where a character quotes scripture inside dialogue.
 - When a speech quotes Scripture as poetry, the First level continuer `“` is repeated at the head of the first `\q1` line (e.g. Matthew 2:6 `\q1 “ ‘Oro iu, Betliem…`); the following `\q2`/`\q1` lines of the same poem carry no mark.
 - **Continuer required at:** `p p/q1 m/q1 s1/pi pi/pi b/q1` — every `\p` inside a speech, a `\q1` that follows `\p`, `\m` or `\b`, and an indented `\pi` that follows `\s1` or another `\pi`.
 - Phase A text contains no apostrophes, so the `’` collision described under Runda does not arise in Tamba.
 
-Lesson 2 also uses a second fictional project, **Runda** (`runda`), for the guillemet and apostrophe exercises:
+Lesson 2 also uses a second practice project, **Runda** (`RUNDA`), for the guillemet and apostrophe exercises:
 
 | Level | Name | Opening mark | Unicode | Closing mark | Unicode |
 |-------|------|-------------|---------|-------------|----------|
@@ -96,7 +125,7 @@ Lesson 2 also uses a second fictional project, **Runda** (`runda`), for the guil
 - **Continuer required at:** `p` — nothing else, because the text carries continuers only at `\p`. Listing `p/q1` produces "Expected continuers [«] are missing" at every quoted poem.
 - Runda's text uses `’` (U+2019) as an apostrophe throughout — word-medial (*don’t*) and word-final possessive (*righteousness’ sake*, Matthew 5:10) — so it collides with the Second level closing mark. That is deliberate: Exercise 2.3 is built on it.
 
-Keep these reference tables open as you work through Lessons 1–4. The scenario bank introduces three further fictional languages, each with its own conventions table.
+Keep these reference tables open as you work through Lessons 1–4. The scenario bank introduces three further practice projects, each with its own conventions table.
 
 ---
 
@@ -130,7 +159,7 @@ A check result caused by a gap or error in the Quote marks tab or Quotation type
 The nesting depth of a quotation. First level is primary speech; Second level is speech embedded within a First level quotation; Third level is speech embedded within a Second level quotation. Each level has its own Opening, Quote Continuer at new paragraph, and Closing characters on the Quote marks tab.
 
 **Label tooltip / status bar**
-In the Quote marks tab, the status bar at the bottom of the dialog shows a description when you hover over any row or column label (such as “Opening” or “Quotes within Quotes (Second level)”). Use this to understand what a field does. To verify the actual character in a cell, use the dropdown arrow (▼) on that cell to see the character list, or check the Example preview at the bottom of the dialog.
+In the Quote marks tab, the status bar at the bottom of the dialog shows a description when you hover over any row or column label (such as “Opening” or “Quotes within Quotes (Second level)”). Use this to understand what a field does. To verify the actual character in a cell, click in the cell and press **Alt+X** to show its Unicode code, then press **Alt+X** again to switch it back. Don't skip the second press: if you click OK while the cell shows the code (for example `203A`), Paratext saves that text as the quote mark. To check the characters in the text itself, use the **Punctuation inventory** or **Characters inventory**: select a character in the upper pane to see its Unicode value. The Example preview at the bottom of the dialog shows how the marks sit together.
 
 **Opening mark / Closing mark**
 The characters that begin and end a quotation at a given level. These are entered per-level in the Quote marks tab.
@@ -139,10 +168,10 @@ The characters that begin and end a quotation at a given level. These are entere
 A note attached to a verse (☰ > Insert > Project note..., or via the notes list at ☰ > Tools > Notes List...). Use Project Notes to document residual check results that configuration cannot eliminate, so a consultant reviewer can see they were examined deliberately.
 
 **Quote Continuer at new paragraph**
-A character placed at the start of a new paragraph to signal that a speaker’s speech from the previous paragraph continues. Entered in the middle column of the Quote marks tab grid. Many languages leave this blank and instead close and reopen quotes fully at each paragraph break.
+A character placed at the start of a new paragraph to signal that a speaker’s speech from the previous paragraph continues. Entered in the middle column of the Quote marks tab grid. Paratext's defaults fill it at every level; set it to *none* at any level where the language doesn't repeat a mark at the head of a continued paragraph.
 
 **Quote marks tab**
-The first tab of the Quotation Rules dialog (☰ > Project settings > Quotation Rules). Contains a three-row, three-column grid for entering the Opening, Quote Continuer at new paragraph, and Closing characters at each nesting level, plus additional checkboxes below the grid (hover labels for descriptions), an Example preview section showing the configured marks in context, and the **Copy quote mark settings...** button.
+The first tab of the Quotation Rules dialog (☰ > Project settings > Quotation Rules). Contains a three-row, three-column grid for entering the Opening, Quote Continuer at new paragraph, and Closing characters at each nesting level, plus additional checkboxes below the grid (hover labels for descriptions), an Example preview section showing the configured marks in context, and the **Copy quote mark settings...** button (which copies the quote marks from another project but not the **Continuer required at** list). A new project opens with Paratext's defaults already in the grid (see [The Practice Projects](#the-practice-projects)).
 
 **Quotation Rules**
 The Paratext dialog (under the project menu **☰ > Project settings > Quotation Rules**) where both the Quote marks tab and the Quotation types tab are configured.

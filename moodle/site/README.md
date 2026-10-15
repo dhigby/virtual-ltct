@@ -401,9 +401,9 @@ An author is never enrolled, so they appear in no report. They cannot edit the c
 
 **To make someone a course author** (site team, or a manager):
 
-1. Go to **Site administration → Courses → Manage courses and categories**.
-2. Open **LTC Pilots**. In its menu, choose **Permissions**, then **Assign roles**.
-3. Choose **LTC course author**.
+1. Open the **LTC Pilots** category page itself (`/course/index.php?categoryid=<its id>`; it is 2 on ltuse.net), not the Manage courses and categories screen: there the category offers only **Permissions**, which changes what roles may do rather than who holds them.
+2. In the links under the title, choose **More → Assign roles**. On ltuse.net that is `/admin/roles/assign.php?contextid=17`.
+3. Choose **LTC course author**. The site-wide **Assign system roles** page never lists it, because it is held only on a category.
 4. Search for the author, select them and click **Add**.
 
 Assign it on LTC Pilots and nowhere else. The role works only there: the Pilot learners page refuses any course outside it. Who holds the role is a person-level fact, so it lives only in Moodle and is never written in this repo. To take the role away, remove them on the same page.

@@ -1,5 +1,5 @@
 """Every course payload carries one discussion block (spec 012, US4, FR-015), and a placement
-(spec 002 R11).
+(spec 002 R11, issue #108).
 
 contracts/payload.md: `discussion` = {idnumber, name, intro_html}. Shared courses are open
 across organisations (spec 002 R3, R14), so the block carries no sharing flag and
@@ -12,6 +12,7 @@ import shutil
 import sys
 import tempfile
 import unittest
+from unittest import mock
 
 REPO = pathlib.Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(REPO / "scripts"))
@@ -77,8 +78,16 @@ class DiscussionBlock(unittest.TestCase):
 
 # Spec 002 R11: the course's placement, from moodle/site/org-courses.yaml through
 # site_config.load_org_courses(), the loader validate uses, so the two cannot disagree.
+# Issue #108: a shared course is in Pilots until its delivery publish, then in Published.
 ORGS = "organisations:\n  - key: fixture-north\n    name: Fixture North\n"
-SHARED = {"org_only": False, "category_idnumber": None}
+SHARED = {"org_only": False, "category_idnumber": "ltct:pilots"}
+DELIVERED = {"org_only": False, "category_idnumber": "ltct:published"}
+ORG_ONLY = {"org_only": True, "category_idnumber": "ltct:org:fixture-north"}
+
+
+def at_stage_8():
+    """course_stage reporting a delivery, as test_payload_recognition.py simulates it."""
+    return mock.patch.object(mp, "stage_for", lambda folder, use_gh=False: {"stage": 8})
 
 
 class Placement(unittest.TestCase):
@@ -105,8 +114,19 @@ class Placement(unittest.TestCase):
 
     def test_declared_course_is_org_only(self):
         self.declare((DESIGNED, "fixture-north"))
-        self.assertEqual(build(DESIGNED, site_dir=self.site)["placement"],
-                         {"org_only": True, "category_idnumber": "ltct:org:fixture-north"})
+        self.assertEqual(build(DESIGNED, site_dir=self.site)["placement"], ORG_ONLY)
+
+    def test_delivered_shared_course_is_published(self):
+        with at_stage_8():
+            manifest = build(DESIGNED, site_dir=self.site)
+        self.assertTrue(manifest["recognition"]["delivery"])
+        self.assertEqual(manifest["placement"], DELIVERED)
+        self.assertEqual(cmp.check_placement(DESIGNED, manifest), [])
+
+    def test_delivered_org_only_course_stays_in_its_organisation(self):
+        self.declare((DESIGNED, "fixture-north"))
+        with at_stage_8():
+            self.assertEqual(build(DESIGNED, site_dir=self.site)["placement"], ORG_ONLY)
 
     def test_reviewer_view_has_placement(self):
         self.declare((DESIGNED, "fixture-north"))
@@ -133,14 +153,21 @@ class Placement(unittest.TestCase):
 class PlacementCheck(unittest.TestCase):
     """check_moodle_payload.py refuses a malformed placement before anything is sent."""
 
-    def problems(self, placement, drop=False):
-        manifest = {} if drop else {"placement": placement}
+    def problems(self, placement, drop=False, delivery=False):
+        manifest = {} if drop else {"placement": placement,
+                                    "recognition": {"delivery": delivery}}
         return cmp.check_placement("fixture-course", manifest)
 
     def test_well_formed_pass(self):
         self.assertEqual(self.problems(SHARED), [])
-        self.assertEqual(self.problems({"org_only": True,
-                                        "category_idnumber": "ltct:org:fixture-north"}), [])
+        self.assertEqual(self.problems(DELIVERED, delivery=True), [])
+        for delivery in (False, True):
+            self.assertEqual(self.problems(ORG_ONLY, delivery=delivery), [])
+
+    def test_shared_category_must_match_the_publish(self):
+        # A delivery left in Pilots could not be enrolled; a pilot in Published could be.
+        self.assertTrue(self.problems(DELIVERED, delivery=False))
+        self.assertTrue(self.problems(SHARED, delivery=True))
 
     def test_malformed_refused(self):
         for placement in (
@@ -148,7 +175,9 @@ class PlacementCheck(unittest.TestCase):
                 {"category_idnumber": None},
                 {"org_only": "false", "category_idnumber": None},
                 {"org_only": 0, "category_idnumber": None},
+                {"org_only": False, "category_idnumber": None},
                 {"org_only": False, "category_idnumber": "ltct:org:fixture-north"},
+                {"org_only": False, "category_idnumber": "ltct:mentoring"},
                 {"org_only": True, "category_idnumber": None},
                 {"org_only": True, "category_idnumber": "ltct:published"},
                 {"org_only": True, "category_idnumber": "ltct:org:"},

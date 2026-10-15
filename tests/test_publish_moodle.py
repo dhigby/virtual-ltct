@@ -14,7 +14,8 @@ COURSE = "ltct:demo"
 URL = "https://moodle.example.org"
 
 
-SHARED = {"org_only": False, "category_idnumber": None}
+PILOT = {"org_only": False, "category_idnumber": "ltct:pilots"}
+DELIVERED = {"org_only": False, "category_idnumber": "ltct:published"}
 ORG_ONLY = {"org_only": True, "category_idnumber": "ltct:org:fixture-north"}
 
 
@@ -215,7 +216,7 @@ class PublishBase(unittest.TestCase):
                 {"certificate": {"idnumber": "%s:certificate" % COURSE}} if delivery else {})},
             "assets": {n: {"sha1": hashlib.sha1(d).hexdigest(), "bytes": len(d)}
                        for n, d in self.images.items()},
-            "placement": placement or SHARED,
+            "placement": placement or (DELIVERED if delivery else PILOT),
         }
         (self.dir / "manifest.json").write_text(json.dumps(manifest), encoding="utf-8")
 
@@ -256,7 +257,7 @@ class PublishBase(unittest.TestCase):
     def publish(self, client):
         out = io.StringIO()
         with contextlib.redirect_stdout(out):
-            pm.publish(client, self.dir, 1)
+            pm.publish(client, self.dir)
         return out.getvalue()
 
 
@@ -483,7 +484,7 @@ def course_payload(client, function):
 class EnsureCourseGroupMode(unittest.TestCase):
     def test_update_sends_no_groups(self):
         client = StubClient({"id": 5})
-        courseid, created = pm.ensure_course(client, MANIFEST, 3)
+        courseid, created = pm.ensure_course(client, MANIFEST)
         self.assertEqual((courseid, created), (5, False))
         course = course_payload(client, "core_course_update_courses")
         self.assertEqual(course["id"], 5)
@@ -495,19 +496,19 @@ class EnsureCourseGroupMode(unittest.TestCase):
                                    (None, "core_course_create_courses")):
             with self.subTest(function=function):
                 client = StubClient(existing)
-                pm.ensure_course(client, MANIFEST, 3)
+                pm.ensure_course(client, MANIFEST)
                 course = course_payload(client, function)
                 self.assertEqual(course["courseformatoptions"],
                                  [{"name": "hiddensections", "value": "1"}])
 
     def test_create_sends_no_groups(self):
         client = StubClient(None)
-        courseid, created = pm.ensure_course(client, MANIFEST, 3)
+        courseid, created = pm.ensure_course(client, MANIFEST)
         self.assertEqual((courseid, created), (9, True))
         course = course_payload(client, "core_course_create_courses")
         self.assertEqual(course["groupmode"], 0)
         self.assertEqual(course["idnumber"], "ltct:fixture-course")
-        self.assertEqual(course["categoryid"], 3)
+        self.assertEqual(course["categoryid"], pm.CREATE_CATEGORY)
         self.assertNotIn("core_course_update_courses", [n for n, _ in client.calls])
 
     def test_activity_reports_off_on_create_and_update(self):
@@ -517,7 +518,7 @@ class EnsureCourseGroupMode(unittest.TestCase):
                                    (None, "core_course_create_courses")):
             with self.subTest(function=function):
                 client = StubClient(existing)
-                pm.ensure_course(client, MANIFEST, 3)
+                pm.ensure_course(client, MANIFEST)
                 self.assertEqual(course_payload(client, function)["showreports"], 0)
 
     def test_groupmode_is_not_forced(self):
@@ -525,7 +526,7 @@ class EnsureCourseGroupMode(unittest.TestCase):
         # use groups for teaching in one activity, and a forced mode would wall the forum.
         for existing in ({"id": 5}, None):
             client = StubClient(existing)
-            pm.ensure_course(client, MANIFEST, 3)
+            pm.ensure_course(client, MANIFEST)
             for name, params in client.calls:
                 for course in params.get("courses", []):
                     self.assertNotIn("groupmodeforce", course)
@@ -607,7 +608,7 @@ class Completion(Main):
     def test_ensure_course_switches_completion_on(self):
         for existing in ({"id": 5}, None):
             client = StubClient(existing)
-            pm.ensure_course(client, MANIFEST, 3)
+            pm.ensure_course(client, MANIFEST)
             fn = "core_course_update_courses" if existing else "core_course_create_courses"
             self.assertEqual(course_payload(client, fn)["enablecompletion"], 1)
 
@@ -760,7 +761,7 @@ class Competencies(Main):
         for existing in ({"id": 5}, None):
             client = StubClient(existing)
             problems = []
-            pm.ensure_course(client, manifest, 3, problems=problems)
+            pm.ensure_course(client, manifest, problems=problems)
             fn = "core_course_update_courses" if existing else "core_course_create_courses"
             fields = {f["shortname"]: f["value"]
                       for f in course_payload(client, fn)["customfields"]}
@@ -771,7 +772,7 @@ class Competencies(Main):
 
     def test_absent_level_is_sent_empty(self):
         client = StubClient({"id": 5})
-        pm.ensure_course(client, dict(MANIFEST, target_outcome_level=None), 3)
+        pm.ensure_course(client, dict(MANIFEST, target_outcome_level=None))
         fields = {f["shortname"]: f["value"]
                   for f in course_payload(client, "core_course_update_courses")["customfields"]}
         self.assertEqual(fields["ltct_target_level"], "")
@@ -781,13 +782,13 @@ class Competencies(Main):
         client = StubClient({"id": 5}, warnings=[{"item": "course", "itemid": 5,
                                                    "warningcode": "1", "message": "nope"}])
         with self.assertRaises(pm.MoodleError) as e:
-            pm.ensure_course(client, MANIFEST, 3)
+            pm.ensure_course(client, MANIFEST)
         self.assertIn("nope", str(e.exception))
 
     def test_a_silently_dropped_field_is_a_problem(self):
         client = StubClient({"id": 5}, drop={"ltct_target_level"})
         problems = []
-        pm.ensure_course(client, dict(MANIFEST, target_outcome_level="3 - Independent"), 3,
+        pm.ensure_course(client, dict(MANIFEST, target_outcome_level="3 - Independent"),
                          problems=problems)
         self.assertEqual(len(problems), 1)
         self.assertIn("ltct_target_level", problems[0])
@@ -1125,7 +1126,7 @@ if __name__ == "__main__":
 
 
 class Placement(Main):
-    """Spec 002 R11: an organisation-only course is placed in its category on every publish."""
+    """Spec 002 R11, issue #108: every course is placed in its category on every publish."""
 
     PLACE = "local_ltuse_place_course"
 
@@ -1165,10 +1166,46 @@ class Placement(Main):
         writes = client.writes()
         self.assertLess(writes.index(self.PLACE), writes.index("local_ltuse_create_page"))
 
-    def test_shared_course_is_never_placed(self):
+    def test_pilot_publish_places_in_pilots(self):
+        # Issue #108: a shared course's category comes from its payload, never a flag.
         client = FakeClient(self.server_as_published())
         self.publish(client)
-        self.assertEqual(client.calls_to(self.PLACE), [])
+        self.assertEqual(client.calls_to(self.PLACE), [
+            {"courseidnumber": COURSE, "categoryidnumber": "ltct:pilots"}])
+
+    def test_delivery_publish_moves_to_published(self):
+        # Issue #108: a piloted course leaves Pilots on its delivery publish, so the site
+        # team can enrol organisations in it without moving it by hand.
+        self.write_manifest(delivery=True)
+        client = FakeClient(self.server_as_published())
+        client.placed = {"moved": True}
+        out = self.publish(client)
+        self.assertEqual(client.calls_to(self.PLACE), [
+            {"courseidnumber": COURSE, "categoryidnumber": "ltct:published"}])
+        self.assertIn("placement moved to ltct:published", out)
+
+    def test_org_only_delivery_stays_in_its_organisation(self):
+        self.write_manifest(delivery=True, placement=ORG_ONLY)
+        client = FakeClient(self.server_as_published())
+        self.publish(client)
+        self.assertEqual(client.calls_to(self.PLACE), [
+            {"courseidnumber": COURSE, "categoryidnumber": "ltct:org:fixture-north"}])
+
+    def test_a_new_course_is_placed_before_content(self):
+        client = FakeClient([])
+        real = client.call
+
+        def first_publish(function, **params):
+            if function == "core_course_get_courses_by_field" and not any(
+                    f == "core_course_create_courses" for f, _ in client.calls):
+                client.calls.append((function, params))
+                return None
+            return real(function, **params)
+        client.call = first_publish
+        self.publish(client)
+        names = [f for f, _ in client.calls]
+        self.assertLess(names.index("core_course_create_courses"), names.index(self.PLACE))
+        self.assertLess(names.index(self.PLACE), names.index("local_ltuse_create_page"))
 
     def test_a_move_is_reported(self):
         self.write_manifest(placement=ORG_ONLY)

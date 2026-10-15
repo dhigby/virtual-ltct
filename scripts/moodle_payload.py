@@ -149,6 +149,11 @@ def completion_for(kind, threshold_pct):
 
 DELIVERY_STAGE = 8
 
+# The shared categories a course is placed in (moodle/site/organisations.yaml): Pilots until
+# its delivery publish, Published from then on. Organisation-only courses go to ltct:org:<key>.
+PILOTS_CATEGORY = "ltct:pilots"
+PUBLISHED_CATEGORY = "ltct:published"
+
 
 def recognition_for(folder, url_slug):
     """The payload's recognition block (spec 013, data-model "Payload additions").
@@ -389,6 +394,7 @@ class Payload:
             weight["by_treatment"][r["treatment"]] =                 weight["by_treatment"].get(r["treatment"], 0) + 1
         self._page_budget(sections, pages, records)
         self._check_identities(sections, quizzes)
+        recognition = recognition_for(self.folder, self.url_slug)
 
         manifest = {
             "slug": self.url_slug,
@@ -410,12 +416,12 @@ class Payload:
             # Spec 013: whether this publish is a delivery, which is what turns the badge on
             # and makes the certificate. course_stage.py decides; the payload never works out
             # a stage itself (R4). It says nothing about badges or customcert (Principle II).
-            "recognition": recognition_for(self.folder, self.url_slug),
+            "recognition": recognition,
             "content_type": meta.get("content_type"),
             "sections": sections,
             "quizzes": quizzes,
             "discussion": self._discussion(),
-            "placement": self._placement(),
+            "placement": self._placement(recognition["delivery"]),
             "withheld": self.withheld,
             "notes": self.notes,
             "assets": records,
@@ -492,13 +498,19 @@ class Payload:
             "intro_html": render(DISCUSSION_INTRO_MD),
         }
 
-    def _placement(self):
-        """Whether only one organisation's people may join this course (spec 002 R11).
+    def _placement(self, delivery):
+        """The category this course belongs in, by idnumber (spec 002 R11, issue #108).
 
-        Read from moodle/site/org-courses.yaml through site_config.load_org_courses(), the
-        loader drift uses, so the two cannot disagree. An invalid declaration stops the
-        build rather than guessing: a typo that silently shares an organisation-only course
-        is a decision nobody made.
+        An organisation-only course goes to its organisation's category, at every stage.
+        A shared course goes to LTC Pilots until it is delivered, then to LTC Published, so
+        the delivery publish moves a piloted course out of Pilots, where no organisation can
+        be enrolled. `delivery` is recognition_for()'s, so placement and the badge cannot
+        disagree about which publish this is.
+
+        Whether a course is organisation-only is read from moodle/site/org-courses.yaml
+        through site_config.load_org_courses(), the loader drift uses, so the two cannot
+        disagree. An invalid declaration stops the build rather than guessing: a typo that
+        silently shares an organisation-only course is a decision nobody made.
         """
         courses, problems = site_config.load_org_courses(self.site_dir)
         if problems:
@@ -509,7 +521,8 @@ class Payload:
             if course["slug"] == self.url_slug:
                 return {"org_only": True,
                         "category_idnumber": "ltct:org:" + course["organisation"]}
-        return {"org_only": False, "category_idnumber": None}
+        return {"org_only": False,
+                "category_idnumber": PUBLISHED_CATEGORY if delivery else PILOTS_CATEGORY}
 
     def _page(self, path, asset_by_rel, module_ids, excluded_names, used_assets):
         raw = path.read_text(encoding="utf-8", errors="replace")
@@ -703,8 +716,8 @@ def main():
     report_images(manifest)
     print("  discussion %s" % manifest["discussion"]["idnumber"])
     placement = manifest["placement"]
-    print("  placement %s" % (placement["category_idnumber"] if placement["org_only"]
-                              else "shared"))
+    print("  placement %s%s" % (placement["category_idnumber"],
+                                "" if placement["org_only"] else " (shared)"))
     for note in manifest["notes"]:
         print("  note      %s" % note)
     if manifest["withheld"]:

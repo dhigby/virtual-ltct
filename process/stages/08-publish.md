@@ -69,9 +69,13 @@ itself is automated: the markdown here is the source, and Moodle is a render of 
    visible. With the Moodle link in the README, the course is at
    stage 8, and `/publish-to-moodle <course-slug>` now switches the course's **completion
    badge** on and adds its **certificate** activity. A pilot publish never does either: a
-   pilot issues no badge and has no certificate. The publish says which it did:
+   pilot issues no badge and has no certificate. The delivery publish also moves the course
+   out of **LTC Pilots** into **LTC Published**, where organisations can be enrolled (an
+   organisation-only course stays in its organisation's category). The publish says what it
+   did:
 
    ```text
+     placement moved to ltct:published
      recognition  badge unchanged, activated; certificate created
    ```
 

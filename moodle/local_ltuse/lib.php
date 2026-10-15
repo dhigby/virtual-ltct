@@ -465,3 +465,27 @@ function local_ltuse_protection_profile_nodes(\core_user\output\myprofile\tree $
 function local_ltuse_allow_group_member_remove($itemid, $groupid, $userid) {
     return false;
 }
+
+/**
+ * "Pilot learners" in a stage-7 pilot's More menu (2026-10-15), for a course author who holds
+ * local/ltuse:pilotenrol there. Core still calls this lib.php callback on MOODLE_502_STABLE
+ * (lib/classes/navigation/settings_navigation.php, load_course_settings()). It only offers the
+ * link: pilot.php and pilot\actions check the course and the capability again.
+ *
+ * @param navigation_node $navigation the course's settings node
+ * @param stdClass $course
+ * @param context_course $context
+ */
+function local_ltuse_extend_navigation_course($navigation, $course, $context) {
+    global $DB;
+    if (!has_capability(\local_ltuse\pilot\actions::CAPABILITY, $context)) {
+        return;
+    }
+    $categoryidnumber = (string)$DB->get_field('course_categories', 'idnumber', ['id' => $course->category]);
+    if (\local_ltuse\pilot\rules::course((string)$course->idnumber, $categoryidnumber) !== null) {
+        return;
+    }
+    $navigation->add(get_string('pilot', 'local_ltuse'),
+        new moodle_url('/local/ltuse/pilot.php', ['courseid' => $course->id]),
+        navigation_node::TYPE_SETTING, null, 'local_ltuse_pilot', new pix_icon('i/enrolusers', ''));
+}

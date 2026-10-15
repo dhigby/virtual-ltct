@@ -445,3 +445,33 @@ $string['privacy:path:digestoverrides'] = 'Forum email settings made by the cour
 $string['backtocourse'] = 'Back to the course';
 $string['nextlesson'] = 'Next: {$a}';
 // End of the spec 007 learner experience block.
+
+// Pilot learners (2026-10-15): the course author's page for a stage-7 pilot. Learner-facing
+// strings never name a CBC level or say "certified".
+$string['ltuse:pilotenrol'] = 'Enrol trial students in a pilot course, and show or hide it';
+$string['pilot'] = 'Pilot learners';
+$string['pilot:intro'] = 'Enrol the people trying this pilot course as students. Their results stay in the pilots report and never count as delivery. To see the course as they will, use Switch role to... > Student in the user menu.';
+$string['pilot:learners'] = 'Trial students';
+$string['pilot:nolearners'] = 'Nobody is enrolled for the pilot yet.';
+$string['pilot:email'] = 'Email address of the person to enrol';
+$string['pilot:email_help'] = 'Type their address exactly. The person must already have an account on this site: if they do not, ask the site team to create one.';
+$string['pilot:enrol'] = 'Enrol as a trial student';
+$string['pilot:remove'] = 'Remove';
+$string['pilot:confirm:remove'] = 'Remove {$a->person} from "{$a->course}"? Their grades in it are removed. Their activity and completion records are kept.';
+$string['pilot:done:enrol'] = '{$a} is enrolled as a trial student.';
+$string['pilot:done:remove'] = 'Removed.';
+$string['pilot:noaccount'] = 'No single account has that address. Check it, or ask the site team to create one.';
+$string['pilot:notpilot'] = 'This page is only for courses in LTC Pilots.';
+$string['pilot:notallowed'] = 'You cannot enrol that person here. The site team can help.';
+$string['pilot:otherenrolment'] = 'That person is already enrolled in this course another way, so they are not a trial student. The site team can help.';
+$string['pilot:alreadyenrolled'] = 'That person is already a trial student here.';
+$string['pilot:manualdisabled'] = 'Manual enrolment is turned off in this course, so a trial student could not open it. The site team can turn it on.';
+$string['pilot:notenrolled'] = 'That person is not a trial student in this course.';
+$string['pilot:visibility'] = 'Course visibility';
+$string['pilot:visible'] = 'The course is visible: enrolled trial students can open it.';
+$string['pilot:hidden'] = 'The course is hidden: trial students cannot open it yet. You can still preview it.';
+$string['pilot:show'] = 'Show the course';
+$string['pilot:hide'] = 'Hide the course';
+$string['pilot:done:show'] = 'The course is visible.';
+$string['pilot:done:hide'] = 'The course is hidden.';
+// End of the pilot learners block.

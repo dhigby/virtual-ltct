@@ -355,6 +355,11 @@ step cost.
 applied with `python scripts/site_config.py apply`. A setting clicked into the admin UI is not done;
 `drift` reports it. Settings `config.php` sets (`wwwroot`, `debug`) are provisioning's, not this folder's.
 
+**Course authors run their own stage-7 pilots** through the `ltcauthor` role, held on the LTC
+Pilots category: they preview a hidden pilot (Switch role to → Student), show or hide it, and
+enrol trial students by exact email on local_ltuse's **Pilot learners** page, which enrols only
+through the manual method. Never give authors core's enrol screen; it searches every user.
+
 **Shared courses have no organisation groups**: managers are scoped by their managers cohort through
 `local_ltuse\organisation\access`, never by groups, so never send `groupmode: 1` (spec 002 R3, R10).
 

@@ -9,7 +9,12 @@
 defined('MOODLE_INTERNAL') || die();
 
 $plugin->component = 'local_ltuse';
-$plugin->version   = 2026101000;   // Community space (spec 005), first bump. It ships:
+$plugin->version   = 2026101500;   // Pilot learners (2026-10-15): the
+                                   // local/ltuse:pilotenrol capability, pilot.php and
+                                   // pilot\rules and pilot\actions, the course navigation link, and
+                                   // siteconfig's allowswitch pairs. No schema, so no
+                                   // savepoint. Before it, 2026101000:
+                                   // community space (spec 005), first bump. It ships:
                                    // the local_ltuse_digest_override table (savepoint
                                    // 2026101000), admin\digest_overrides, trackforums and
                                    // cli/trackforums_existing.php; the db/events.php
@@ -78,7 +83,7 @@ $plugin->requires  = 2026042000;   // Moodle 5.2 -- the release this was
 $plugin->supported = [502, 502];
 
 $plugin->maturity  = MATURITY_ALPHA;
-$plugin->release   = '0.14.0';   // Spec 007. 0.13.0 (spec 016) is main's release before it.
+$plugin->release   = '0.15.0';   // Pilot learners. 0.14.0 (spec 007) is the release before it.
 
 // No third-party dependencies, deliberately. Sections were originally going to be
 // local_wsmanagesections' job, but it could not be installed here, so local_ltuse grew an

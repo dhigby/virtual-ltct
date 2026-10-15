@@ -1,0 +1,51 @@
+{{!
+    @template local_ltuse/pilot
+
+    The pilot learners page (2026-10-15): a course author's trial students for one stage-7
+    pilot, the form that enrols one more by exact email, and the course's visibility.
+    Phone-width first: lists, no wide tables. No email address is shown. Remove opens a
+    confirmation; nothing here writes on a GET.
+
+    Context variables required for this template:
+    * haslearners
+    * learners: [{id, name, removeurl}]
+    * visible: the course is visible to students
+    * visibilitytoggle: rendered show/hide button, or empty when the viewer may not change it
+    * form: rendered enrol form
+
+    Example context (json):
+    {
+        "haslearners": true,
+        "learners": [{"id": 2, "name": "Learner One", "removeurl": "#"}],
+        "visible": false,
+        "visibilitytoggle": "",
+        "form": ""
+    }
+}}
+<div class="local-ltuse-pilot">
+    <p>{{#str}}pilot:intro, local_ltuse{{/str}}</p>
+
+    <h3>{{#str}}pilot:visibility, local_ltuse{{/str}}</h3>
+    <p>
+    {{#visible}}{{#str}}pilot:visible, local_ltuse{{/str}}{{/visible}}
+    {{^visible}}{{#str}}pilot:hidden, local_ltuse{{/str}}{{/visible}}
+    </p>
+    {{{visibilitytoggle}}}
+
+    <h3 class="mt-4">{{#str}}pilot:learners, local_ltuse{{/str}}</h3>
+    {{^haslearners}}
+    <p class="text-muted">{{#str}}pilot:nolearners, local_ltuse{{/str}}</p>
+    {{/haslearners}}
+    {{#haslearners}}
+    <ul class="list-unstyled">
+        {{#learners}}
+        <li class="d-flex justify-content-between align-items-center border-bottom py-2">
+            <span>{{name}}</span>
+            <a class="btn btn-link" href="{{removeurl}}">{{#str}}pilot:remove, local_ltuse{{/str}}</a>
+        </li>
+        {{/learners}}
+    </ul>
+    {{/haslearners}}
+
+    {{{form}}}
+</div>

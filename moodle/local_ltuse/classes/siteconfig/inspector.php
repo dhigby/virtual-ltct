@@ -30,7 +30,8 @@ use core_plugin_manager;
  *   moodle     {requires, release}
  *   plugins    [{component, enabled?, version?}]
  *   roles      [{shortname, name?, description?, archetype?, contextlevels?, capabilities?,
- *                allowassign?}]   allowassign: spec 003, the roles this one may assign
+ *                allowassign?, allowswitch?}]   allowassign: spec 003, the roles this one may
+ *                assign; allowswitch: pilot learners (2026-10-15), the roles it may switch to
  *   settings   [{name, value?, secret?}]   value is absent for a secret in drift mode
  *   failed_env [{name, env}, ...]         settings whose env: variable was not set (each also carries env_missing)
  *
@@ -108,8 +109,9 @@ use core_plugin_manager;
  * admin_get_root(), admin_setting::get_setting()/is_readonly(), core_plugin_manager,
  * plugininfo::get_enabled_plugin(), get_default_capabilities(), get_capability_info(),
  * get_role_contextlevels(). The raw reads are role_capabilities by roleid and contextid,
- * and role_allow_assign by its unique (roleid, allowassign) key (spec 003; core offers no
- * reader for one pair), both listed in the plugin README (constitution XI).
+ * role_allow_assign by its unique (roleid, allowassign) key (spec 003; core offers no
+ * reader for one pair), and role_allow_switch by its unique (roleid, allowswitch) key (pilot
+ * learners, 2026-10-15; likewise), all listed in the plugin README (constitution XI).
  *
  * Course discussions (spec 012, R5): groups_get_activity_groupmode()'s rule (lib/grouplib.php:
  * a course's groupmodeforce overrides the activity). Courses and their forum are looked up by
@@ -590,6 +592,7 @@ class inspector {
         }
         foreach ($this->declaration['roles'] ?? [] as $role) {
             $items = array_merge($items, $this->check_allowassign($role));
+            $items = array_merge($items, $this->check_allowswitch($role));
         }
         foreach ($this->declaration['settings'] ?? [] as $setting) {
             $items[] = $this->check_setting($setting);
@@ -941,6 +944,35 @@ class inspector {
                 continue;
             }
             $exists = $DB->record_exists('role_allow_assign', ['roleid' => $fromid, 'allowassign' => $toid]);
+            $items[] = self::result('role', $item, $exists ? self::RESULT_OK : self::RESULT_CHANGED,
+                'allowed', $exists ? 'allowed' : null);
+        }
+        return $items;
+    }
+
+    /**
+     * Compare a role's declared allow-switch pairs with role_allow_switch (pilot learners,
+     * 2026-10-15): the roles a holder may use in Switch role to. Additive, exactly like
+     * check_allowassign(): pairs nobody declared, such as the archetypes' defaults, are never
+     * reported, and apply only ever adds one.
+     *
+     * @param array $role the role declaration
+     * @return array[] item results, keyed 'role:<from>:allowswitch:<to>'
+     */
+    public function check_allowswitch(array $role): array {
+        global $DB;
+        $from = (string)($role['shortname'] ?? '');
+        $items = [];
+        foreach ($role['allowswitch'] ?? [] as $to) {
+            $item = "role:{$from}:allowswitch:{$to}";
+            $fromid = $DB->get_field('role', 'id', ['shortname' => $from]);
+            $toid = $DB->get_field('role', 'id', ['shortname' => (string)$to]);
+            if (!$fromid || !$toid) {
+                $items[] = self::result('role', $item, self::RESULT_MISSING, 'allowed', null,
+                    'a role in this pair is not on the server yet; apply adds the pair after creating it');
+                continue;
+            }
+            $exists = $DB->record_exists('role_allow_switch', ['roleid' => $fromid, 'allowswitch' => $toid]);
             $items[] = self::result('role', $item, $exists ? self::RESULT_OK : self::RESULT_CHANGED,
                 'allowed', $exists ? 'allowed' : null);
         }

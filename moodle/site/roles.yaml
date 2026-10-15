@@ -80,7 +80,7 @@ roles:
 
   - shortname: manager
     archetype: manager
-    allowassign: [mentor]   # spec 003 (R6): the site team assigns mentors in a learner's profile
+    allowassign: [mentor, ltcauthor]   # spec 003 (R6): mentors in a learner's profile; pilot learners (2026-10-15): course authors on LTC Pilots
     capabilities:
       moodle/site:trustcontent: allow
       local/ltuse:viewidentity: allow          # spec 016 R7 path 1: the site team sees real identities
@@ -88,7 +88,9 @@ roles:
     why: >-
       #3 (FR-012): managers keep trusted content, so their edits keep iframe embeds. #11
       (spec 003): a manager may assign the mentor role, which is what offers "Mentor" on a
-      learner's "Assign roles relative to this user" page. Admins need no pair. #26 (spec
+      learner's "Assign roles relative to this user" page. Admins need no pair. Pilot
+      learners (2026-10-15): a manager may also assign LTC course author, on the LTC Pilots
+      category's Assign roles page. #26 (spec
       016): the two protection capabilities are the manager archetype's defaults, listed so
       drift manages them; site_config.py allows the manage capability on no other role but
       ltctadmin, the site team's administration role (spec 008 research R12; the grant is R5).
@@ -302,3 +304,45 @@ roles:
       an account that has no organisation yet (008 research R5). It makes the holder the site
       team in 016's terms, which this role is. It does not hold local/ltuse:viewidentity:
       intake never needs to see a real identity.
+
+  # Pilot learners (2026-10-15): course authors at stage 7.
+  - shortname: ltcauthor
+    name: LTC course author
+    description: >-
+      A course author at stage 7. Sees every pilot course in LTC Pilots, hidden or not, as a
+      teacher would, and uses Switch role to > Student to see it as a learner will. Shows or
+      hides a pilot, and enrols its trial students by exact email address on the course's
+      Pilot learners page. Edits nothing: the next publish would overwrite it. Assigned once
+      per author, on the LTC Pilots category. Declared in moodle/site/roles.yaml and applied by
+      scripts/site_config.py -- edit that file rather than this role.
+    archetype: ""              # every capability is managed, so one granted by hand shows as drift
+    contextlevels: [coursecat] # one assignment per author, on LTC Pilots
+    allowswitch: [student]     # Switch role to > Student: the learner's view of the pilot
+    capabilities:
+      moodle/course:view: allow                  # enter a pilot without being enrolled, so the author is never in a report
+      moodle/course:viewhiddencourses: allow     # pilots are published hidden (publish_moodle.py)
+      moodle/course:viewhiddensections: allow
+      moodle/course:viewhiddenactivities: allow  # the mentor notes page and the question bank are hidden modules
+      moodle/role:switchroles: allow             # with allowswitch above
+      moodle/course:visibility: allow            # show the pilot when the trial student is ready
+      local/ltuse:pilotenrol: allow              # the Pilot learners page: enrol and remove trial students
+      mod/page:view: allow                       # the lessons
+      mod/quiz:view: allow
+      mod/quiz:preview: allow                    # try the quiz without a graded attempt
+      mod/forum:viewdiscussion: allow            # the course discussion
+    why: >-
+      Pilot learners (Doug, 2026-10-15). INTENT.md asks that staff can author, revise and test
+      courses in a range of roles; until this role, a pilot was hidden and enrolled nobody, so
+      only the site team could see it, and only the site team could enrol its trial student.
+      Assigned on the category, never in a course: the author is never enrolled, so the pilots
+      report (role student, manual enrolment) and every delivery report stay clean. A switched
+      role is let into a hidden course (require_login(), public/lib/moodlelib.php,
+      MOODLE_502_STABLE: "When switching roles ignore the hidden flag"), so the learner view
+      works before the course is shown. get_switchable_roles() accepts an allowswitch held in a
+      parent context, so the category assignment is enough (public/lib/accesslib.php). Trial
+      students come in through local/ltuse:pilotenrol, not enrol/manual:enrol: core's enrol
+      screen searches every user on the site, which INTENT.md rules out for anyone but the site
+      team; the pilot page matches one exact email address and lists nothing. No participant,
+      grade or identity capability, so an author sees their trial students' names on the pilot
+      page and nothing else about anyone. site_config.py validate keeps the role to this
+      allowlist (AUTHOR_ALLOW).

@@ -158,6 +158,11 @@ Note what is deliberately **not** on this list. The published competency site is
   - **Two 2026-10-02 answers reversed.** An organisation can no longer withhold its people's real identities from its own managers, and there are no organisation minimum levels.
   - **What a secret identity means.** A secret identity is permitted through a pseudonym and an email address that does not indicate the person's real name. The person's organisation stays visible, and their ALTC, their mentors and the site team still see who they are.
   - **We trust people who are in the system.** It is applied twice. A course mentor holds Moodle's non-editing teacher role, which reaches every learner in a shared course, not only the ones they assess; that is accepted, and a protected learner's real identity still reaches a course mentor only through a shared mentor group (spec 016). And a course leader who gives themselves the course-mentor role and a mentor group can reach a protected learner's identity that way; that is accepted too, with no narrowing of what course leaders may assign (spec 016 T046).
+- **2026-10-15 — Course authors run their own pilots.** Until now a stage-7 pilot was published hidden and enrolled nobody, so only the site team could see it or enrol its trial student, and authors could not test their courses in Moodle at all (outcome: "author, revise and test courses in a range of roles"). Doug decided:
+  - **An LTC course author role on the LTC Pilots category.** An author sees every pilot, hidden or not, as a teacher would, and switches to Student to see it as a learner will. They are never enrolled, so they appear in no report, and they edit nothing, because the next publish would overwrite it.
+  - **Authors show and hide their pilot.**
+  - **Authors enrol trial students by exact email address**, on a local_ltuse page that acts only in Pilots courses and only through the manual method, so the trial stays out of the delivery reports. This is a narrow exception to the 2026-10-03 rule that ALTCs alone add learners. It does not use core's enrol screen, which searches every user on the site, and it never lists or suggests an account.
+  - **Account creation stays with the site team.** A trial student with no account is created first, with no course.
 
 ## Open questions
 

@@ -670,6 +670,7 @@ This plugin fills those three gaps and nothing else.
 | `role_assignments` joined to `context` | `ra.userid`, `ra.roleid`, `ctx.contextlevel = CONTEXT_USER` | `role_assignments.userid` is | Core has no "contexts where this user holds this role" function. `block_mentees` reads the same join. The result only finds candidates; the capability decides. |
 | `course_completions` | `userid`, `timecompleted IS NOT NULL` | `userid` is | Lists a course the learner completed after their enrolment was deleted, which `enrol_get_all_users_courses()` no longer returns (FR-004). |
 | `role_allow_assign` | `(roleid, allowassign)` | unique key | The applier and drift check one declared allow-assign pair. `get_assignable_roles()` answers for a user in a context, not for a pair. |
+| `role_allow_switch` | `(roleid, allowswitch)` | unique key | Pilot learners (2026-10-15): the same for one declared allow-switch pair, written with `core_role_set_switch_allowed()` (`lib/accesslib.php:3215`). `get_switchable_roles()` answers for a user in a context, not for a pair. |
 
 ### Manage mentors: organisation managers (spec 003 Phase B)
 
@@ -767,6 +768,46 @@ own.
 | `enrol` | `courseid`, `enrol = self`, `customchar1` | `courseid` is | Finding the organisation-enrolment instance by its marker; `enrol_get_instances()` has no filter. |
 | `user_enrolments` joined to `enrol` | `ue.userid`; `ue.enrolid`, `status` | both are | Which courses a person is enrolled in through that instance, and active enrolments to suspend. |
 | `role_assignments` joined to `context` and `role` | `ra.userid`; `contextlevel = CONTEXT_COURSE`, `r.shortname <> 'student'` | `ra.userid` is | Whether a person is staff, so not a manager's to manage: any role but student in any course. `get_user_roles()` takes one context, and `has_coursecontact_role()` sees only `$CFG->coursecontact` (teachers by default). |
+
+## Pilot learners (2026-10-15)
+
+A course author tries their own stage-7 pilot on Moodle and runs its trial with one learner,
+without the site team. The declared `ltcauthor` role, held on the LTC Pilots category, brings
+them in (`moodle/site/roles.yaml`, [moodle/site/README.md](../site/README.md#course-authors-and-pilots));
+this plugin gives that role one page.
+
+| Piece | Where | Does |
+|---|---|---|
+| The capability | `db/access.php` | `local/ltuse:pilotenrol`, category context, `RISK_PERSONAL` (the page confirms whether an address has an account), no archetype. |
+| The rules | `classes/pilot/rules.php` (pure) | `course()`: an `ltct:<slug>` course in `ltct:pilots`, never `ltct:officehours`. `enrol()`: an active, confirmed account, never a site admin or the author themself, not already enrolled by any method but manual. `single()`: exactly one account per address. |
+| The actions | `classes/pilot/actions.php` | Every method starts with `require_pilot()`: the rules' course check, then `require_capability()`. `enrol()` matches the address exactly, ignoring case, and enrols through the course's one manual instance as Student. `remove()` ends only that enrolment. `set_visible()` requires `moodle/course:visibility` too. `learners()` lists the manual enrolments by name. |
+| The page | `pilot.php`, `templates/pilot.mustache`, `classes/form/pilot_enrol_form.php` | The trial students by name, the email form, Remove (a confirmation; only the confirmed POST writes) and Show/Hide (a single button, POST with sesskey). No email address or participant list is shown, and nothing is searched. |
+| Navigation | `lib.php` `local_ltuse_extend_navigation_course()` | "Pilot learners" in a pilot's More menu, for holders of the capability. |
+
+**Why manual, and why not core's enrol screen.** The manual method is what makes a pilot
+learner: the pilots report counts it and every delivery report leaves it out (spec 004 R10).
+Core's manual-enrol screen searches every user on the site, which INTENT.md keeps from
+everyone but the site team, so the role holds no `enrol/manual:enrol` and this page enrols on
+the author's behalf. Nothing is stored: core's `user_enrolment_created`, `user_enrolment_deleted`
+and `course_updated` record the author as the actor, and the privacy provider has nothing new
+to declare.
+
+**Core APIs this adds**, each confirmed on `MOODLE_502_STABLE`:
+
+- `enrol_get_plugin('manual')->add_default_instance()` (`enrol/manual/lib.php:137`; one manual instance per course, `:158`), `enrol_plugin::enrol_user()` (`lib/enrollib.php:2112`), `unenrol_user()` (`:2294`), `enrol_is_enabled()`;
+- `course_change_visibility()` (`course/lib.php:2657`), which checks no capability, so `actions` does;
+- `$DB->sql_equal()` with case-insensitive matching (`lib/dml/moodle_database.php:2267`), `\core_user\fields::for_name()` and `get_name_fields()` (`user/classes/fields.php`);
+- the `extend_navigation_course` lib.php callback, still called by `settings_navigation::load_course_settings()` (`lib/classes/navigation/settings_navigation.php:599`);
+- the switched-role preview: `require_login()` lets a switched role into a hidden course (`lib/moodlelib.php`, "When switching roles ignore the hidden flag"), and `get_switchable_roles()` accepts an allow-switch pair held in a parent context (`lib/accesslib.php:3337`), so the category assignment is enough.
+
+**Raw reads.** None is a write.
+
+| Table | Read by | Indexed? | Why there is no API |
+|---|---|---|---|
+| `user` | `email` (case-insensitive), `mnethostid` | `email` is | Core has no "the account with this exact address" function that does not search. |
+| `course_categories` | `id` → `idnumber` | primary key | Whether a course is in `ltct:pilots`, as `organisation\actions` reads it. |
+| `enrol` | `courseid`, `enrol = manual` | `courseid` is | The course's one manual instance; `enrol_get_instances()` has no filter. |
+| `user_enrolments` joined to `enrol` | `ue.userid`, `e.courseid`; `ue.enrolid` | both are | Which methods a person is enrolled through in the course, and the trial students' list. |
 
 ## Events and office hours (spec 011)
 

@@ -56,4 +56,16 @@ $capabilities = [
         'contextlevel' => CONTEXT_USER,
         'archetypes'   => ['manager' => CAP_ALLOW],
     ],
+
+    // Pilot learners (2026-10-15): a course author enrols a trial student in their own stage-7
+    // pilot, on pilot.php, by exact email address, and shows or hides the course. Category
+    // context, because the declared ltcauthor role (moodle/site/roles.yaml) is assigned once on
+    // LTC Pilots; pilot\rules refuses every course outside it. RISK_PERSONAL: the page confirms
+    // whether an address has an account. No archetype.
+    'local/ltuse:pilotenrol' => [
+        'riskbitmask'  => RISK_PERSONAL,
+        'captype'      => 'write',
+        'contextlevel' => CONTEXT_COURSECAT,
+        'archetypes'   => [],
+    ],
 ];

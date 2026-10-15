@@ -353,6 +353,19 @@ NO_ALLOWASSIGN = frozenset({ORGMANAGER, MENTOR})
 # local/ltuse:manageprotection (research R5).
 ADMIN_ROLE = "ltctadmin"
 
+# Pilot learners (2026-10-15): the course author's role, held on LTC Pilots. Everything it may
+# hold, as an allowlist: view a pilot as a teacher would and switch to Student, show or hide
+# it, and enrol trial students through local_ltuse's pilot page (never core's enrol screen,
+# which searches every user; INTENT.md). No edit, participant, grade or identity capability.
+# Widening it is a reviewed change to this block.
+AUTHOR_ROLE = "ltcauthor"
+AUTHOR_ALLOW = frozenset({
+    "moodle/course:view", "moodle/course:viewhiddencourses", "moodle/course:viewhiddensections",
+    "moodle/course:viewhiddenactivities", "moodle/role:switchroles",
+    "moodle/course:visibility", "local/ltuse:pilotenrol",
+    # What a pilot publish creates: pages, the quiz, the course discussion.
+    "mod/page:view", "mod/quiz:view", "mod/quiz:preview", "mod/forum:viewdiscussion"})
+
 
 # ---------------------------------------------------------------------------------------
 # A strict YAML loader. YAML 1.1 turns an unquoted `off` into False, which a reviewer
@@ -683,7 +696,7 @@ def validate(site_dir=SITE_DIR, modules_dir=None):
             rwhere = "%s roles[%d]" % (where, i)
             if not _check_keys(rwhere, role, {"shortname", "why"},
                                {"name", "description", "archetype", "contextlevels",
-                                "capabilities", "allowassign"}, problems):
+                                "capabilities", "allowassign", "allowswitch"}, problems):
                 continue
             short = role.get("shortname")
             if not (isinstance(short, str) and re.match(r"^[a-z0-9_]+$", short)):
@@ -740,13 +753,23 @@ def validate(site_dir=SITE_DIR, modules_dir=None):
                 problems.add(rwhere, "%s assigns no roles; it follows people and changes "
                              "nothing" % short)
             out["allowassign"] = list(assign)
+            # Pilot learners (2026-10-15): roles a holder may use in Switch role to. Additive,
+            # exactly like allowassign.
+            switch = role.get("allowswitch", [])
+            if not isinstance(switch, list) or not all(isinstance(a, str) for a in switch):
+                problems.add(rwhere, "allowswitch is a list of role shortnames")
+                switch = []
+            elif len(set(switch)) != len(switch):
+                problems.add(rwhere, "allowswitch names a role twice")
+            out["allowswitch"] = list(switch)
             decl["roles"].append(out)
         for out in decl["roles"]:
-            for target in out["allowassign"]:
-                if target not in role_names:
-                    problems.add("%s %s" % (where, out["shortname"]),
-                                 "allowassign names role %r, which is neither core nor in "
-                                 "roles.yaml" % target)
+            for key in ("allowassign", "allowswitch"):
+                for target in out[key]:
+                    if target not in role_names:
+                        problems.add("%s %s" % (where, out["shortname"]),
+                                     "%s names role %r, which is neither core nor in "
+                                     "roles.yaml" % (key, target))
 
     # settings/*.yaml
     settings_dir = site_dir / "settings"
@@ -862,6 +885,8 @@ def validate(site_dir=SITE_DIR, modules_dir=None):
             _check_mentor(role, problems)
         elif role["shortname"] == ADMIN_ROLE:
             _check_admin_role(role, problems)
+        elif role["shortname"] == AUTHOR_ROLE:
+            _check_author_role(role, problems)
     # FR-001 (spec 003): once local_ltuse defines the mentor capability, the role that holds
     # it must be declared, or the Mentoring page has nobody to show.
     ltuse = next((p for p in decl["plugins"] if p.get("component") == "local_ltuse"), None)
@@ -1310,6 +1335,31 @@ def _check_admin_role(role, problems):
     if role.get("archetype") != "":
         problems.add(where, 'archetype must be "", so it is never granted by default and a '
                      "capability added by hand shows as drift")
+
+
+def _check_author_role(role, problems):
+    """The course author's role on LTC Pilots (pilot learners, 2026-10-15)."""
+    where = "roles.yaml %s" % AUTHOR_ROLE
+    if role.get("contextlevels") != ["coursecat"]:
+        problems.add(where, "contextlevels must be exactly [coursecat]; it is assigned once per "
+                     "author, on LTC Pilots")
+    if role.get("archetype") != "":
+        problems.add(where, 'archetype must be "", so every capability is managed and one '
+                     "granted by hand shows as drift")
+    if role.get("allowassign"):
+        problems.add(where, "an author assigns no roles; trial students are enrolled through "
+                     "local/ltuse:pilotenrol")
+    if any(target != "student" for target in role.get("allowswitch", [])):
+        problems.add(where, "an author switches only to student, to see the course as a "
+                     "learner will")
+    for cap, perm in role.get("capabilities", {}).items():
+        if perm != "allow":
+            problems.add(where, "%s: an author's role only allows, so it never takes a "
+                         "permission away from another role" % cap)
+        if cap not in AUTHOR_ALLOW:
+            problems.add(where, "%s is not on the author allowlist: an author previews a pilot, "
+                         "enrols its trial students and shows or hides it, and edits nothing "
+                         "(the next publish would overwrite an edit)" % cap)
 
 
 def _expand(decl, orgs, fields):

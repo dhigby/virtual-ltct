@@ -695,6 +695,95 @@ class Mentor(Base):
         self.assertAccepted()
 
 
+# Pilot learners (2026-10-15): the course author's role on LTC Pilots, and allowswitch.
+AUTHOR_ENTRY = """\
+  - shortname: ltcauthor
+    name: LTC course author
+    archetype: ""
+    contextlevels: [coursecat]
+    allowswitch: [student]
+    capabilities:
+      moodle/course:view: allow
+      moodle/course:viewhiddencourses: allow
+      moodle/role:switchroles: allow
+      moodle/course:visibility: allow
+      local/ltuse:pilotenrol: allow
+      mod/quiz:preview: allow
+    why: fixture
+"""
+
+
+class Author(Base):
+    """The ltcauthor role's allowlist and shape, and the allowswitch key."""
+    LAST_CAP = "      mod/quiz:preview: allow\n"
+
+    def setUp(self):
+        super().setUp()
+        self.write("roles.yaml", MENTOR_ROLES + AUTHOR_ENTRY)
+
+    def test_allowed(self):
+        self.assertAccepted()
+
+    def test_capability_outside_allowlist(self):
+        # Editing, core's enrol screen, role assignment, people's data.
+        for cap in ("moodle/course:update", "moodle/course:manageactivities", "enrol/manual:enrol",
+                    "moodle/role:assign", "moodle/course:viewparticipants", "moodle/grade:viewall",
+                    "moodle/site:viewuseridentity", "local/ltuse:publish"):
+            with self.subTest(capability=cap):
+                self.reset()
+                self.edit("roles.yaml", self.LAST_CAP, self.LAST_CAP + "      %s: allow\n" % cap)
+                self.assertInvalid("not on the author allowlist")
+
+    def test_only_allow(self):
+        self.edit("roles.yaml", "mod/quiz:preview: allow", "mod/quiz:preview: prohibit")
+        self.assertInvalid("only allows")
+
+    def test_contextlevels_coursecat_only(self):
+        for levels in ("[course]", "[system, coursecat]", "[]"):
+            with self.subTest(contextlevels=levels):
+                self.reset()
+                self.edit("roles.yaml", "contextlevels: [coursecat]", "contextlevels: %s" % levels)
+                self.assertRejected()
+
+    def test_archetype_must_be_empty(self):
+        self.edit("roles.yaml", '    archetype: ""\n    contextlevels: [coursecat]',
+                  "    archetype: teacher\n    contextlevels: [coursecat]")
+        self.assertInvalid('archetype must be ""')
+
+    def test_assigns_no_roles(self):
+        self.edit("roles.yaml", "    allowswitch: [student]\n",
+                  "    allowswitch: [student]\n    allowassign: [student]\n")
+        self.assertInvalid("an author assigns no roles")
+
+    def test_switches_only_to_student(self):
+        self.edit("roles.yaml", "allowswitch: [student]", "allowswitch: [student, teacher]")
+        self.assertInvalid("switches only to student")
+
+    def test_allowswitch_unknown_role(self):
+        self.edit("roles.yaml", "allowswitch: [student]", "allowswitch: [nosuchrole]")
+        self.assertInvalid("allowswitch names role 'nosuchrole'")
+
+    def test_allowswitch_duplicate(self):
+        self.edit("roles.yaml", "allowswitch: [student]", "allowswitch: [student, student]")
+        self.assertInvalid("allowswitch names a role twice")
+
+    def test_allowswitch_not_a_list(self):
+        self.edit("roles.yaml", "allowswitch: [student]", "allowswitch: student")
+        self.assertInvalid("allowswitch is a list")
+
+    def test_allowswitch_rendered(self):
+        rc, out, err = self.run_main("render")
+        self.assertEqual(rc, 0, err)
+        roles = {r["shortname"]: r for r in json.loads(out)["roles"]}
+        self.assertEqual(roles["ltcauthor"]["allowswitch"], ["student"])
+        self.assertEqual(roles["mentor"]["allowswitch"], [])
+
+    def test_tracked_role_matches_the_allowlist(self):
+        declared = yaml.safe_load((REPO / "moodle" / "site" / "roles.yaml").read_text())
+        author = next(r for r in declared["roles"] if r["shortname"] == sc.AUTHOR_ROLE)
+        self.assertLessEqual(set(author["capabilities"]), sc.AUTHOR_ALLOW)
+
+
 class Expansion(Base):
     """One organisation entry becomes one category, two cohorts and one rule (FR-002)."""
 

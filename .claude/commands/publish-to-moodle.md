@@ -30,6 +30,11 @@ Publishing belongs at **stage 7** (pilot) or **stage 8** (publish). If the cours
 earlier than that, say so and stop: the stages are gates, and a course that has not been
 fact-checked or reviewed should not be in front of a learner.
 
+Stages 4-7 leave no trace in the repo, so the script reports a course in any of them as
+**`4-7`**, with stage number 4. Don't treat that 4 as "too early". When the stage label is
+`4-7`, ask the user whether the course's tracker issue is at **Pilot** (its stage 6 box
+ticked and its PR merged). Go on only on a yes. If not, or if the PR is still open, stop.
+
 ## 3. Check the connection
 
 ```bash
@@ -87,8 +92,8 @@ the end of the publish: hidden and moved into a hidden "Retired" section, never 
 and listed under `retire`. Report those lines to the user: one they didn't expect usually
 means a file was renamed by accident.
 
-The course is created **hidden**. A human makes it visible when they are ready for
-learners.
+The course is created **hidden**. At stage 7, the author makes it visible on the course's
+Pilot learners page once their trial student is enrolled. At stage 8, a site admin does.
 
 ## 6. Output
 
@@ -104,8 +109,18 @@ learners.
 ⚠ <only if: something was withheld, a video is still unrecorded, or the course is hidden>
 ```
 
-For a **pilot learner at stage 7**, give them the Moodle course URL — not the
-`/review/<slug>/` URL, which contains the answer key and the mentor guide's scoring notes.
+At **stage 7**, the next steps are the author's, in this order
+([`process/stages/07-pilot.md`](../../process/stages/07-pilot.md) steps 3-6):
+
+1. Open the course and look at it, using **Switch role to… → Student** for the learner's
+   view. This needs the **LTC course author** role on LTC Pilots; if they can't see the
+   course, a site admin gives them that role
+   ([`moodle/site/README.md`](../../moodle/site/README.md#course-authors-and-pilots)).
+2. If the trial student has no account, ask the site team to create one.
+3. Enrol them on the course's **More → Pilot learners** page, by their exact email address.
+4. Show the course with the button on the same page, then send the learner the Moodle
+   course URL — never the `/review/<slug>/` URL, which contains the answer key and the
+   mentor guide's scoring notes.
 
 At **stage 8**, remind the user to record the published course URL in the module's
 `README.md` frontmatter under `external_links: moodle:`. That key is what

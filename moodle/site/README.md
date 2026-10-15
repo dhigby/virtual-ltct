@@ -387,6 +387,37 @@ A manager never acts on staff, mentors or other managers, and never on another o
 
 A manager's enrolments count as delivery in the reports, as cohort sync does. They go through a separate enrolment method in each course, a self enrolment named **Organisation enrolment**, made the first time a manager enrols someone there. Leave it enabled, and leave its new enrolments switched off: learners cannot use it to enrol themselves, and disabling it makes its enrolments inactive.
 
+## Course authors and pilots
+
+A course author tries their course on Moodle at stage 7, before it is published, and runs its trial with one learner ([process/stages/07-pilot.md](../../process/stages/07-pilot.md)). The `ltcauthor` role, **LTC course author**, lets them:
+
+- open every course in **LTC Pilots**, hidden or not, and see it as a teacher would, with the mentor notes;
+- use **Switch role to… → Student** to see it as a learner will. This works while the course is still hidden;
+- preview the quiz;
+- enrol and remove trial students on the course's **Pilot learners** page (More menu), by exact email address;
+- show and hide the course.
+
+An author is never enrolled, so they appear in no report. They cannot edit the course, because the next publish would overwrite an edit. They cannot see its participants, grades or anyone's email. The Pilot learners page shows the names of the trial students it enrolled, and nothing else about anyone.
+
+**To make someone a course author** (site team, or a manager):
+
+1. Go to **Site administration → Courses → Manage courses and categories**.
+2. Open **LTC Pilots**. In its menu, choose **Permissions**, then **Assign roles**.
+3. Choose **LTC course author**.
+4. Search for the author, select them and click **Add**.
+
+Assign it on LTC Pilots and nowhere else. The role works only there: the Pilot learners page refuses any course outside it. Who holds the role is a person-level fact, so it lives only in Moodle and is never written in this repo. To take the role away, remove them on the same page.
+
+**Trial students.** The page enrols a trial student through the course's **manual** method, as Student. The manual method is what makes them a pilot learner, so the pilots report shows them and every delivery report leaves them out. It matches one account by its exact email address, ignoring case. It never lists or suggests accounts: core's enrol screen searches every user on the site, which is why authors are not given it. It refuses:
+
+- an address that matches no account, or more than one, or a suspended account. All three get the same answer;
+- the author themself, and site admins;
+- anyone already enrolled in the course another way.
+
+Someone with no account is created by the site team first, with no course (see [Bring learners on](#bring-learners-on)). Stage 8 suspends the trial students' manual enrolments as before.
+
+`roles.yaml` lets `manager` assign `ltcauthor` (`allowassign`), and lets `ltcauthor` switch to `student` (`allowswitch`). `validate` keeps the role to its allowlist in `scripts/site_config.py` (`AUTHOR_ALLOW`).
+
 ## Mentors: assigning and ending a relationship
 
 A mentor follows the learners assigned to them across every course those learners take, for as long as the relationship lasts (spec 003). The relationship is the `mentor` role, held by the mentor **in the learner's own profile**, never in a course. Who mentors whom is learner data, so it lives only in Moodle and is never written in this repo.

@@ -118,6 +118,7 @@ class applier {
         // After every role exists, so a pair naming a role created in this run can be added.
         foreach ($this->declaration['roles'] ?? [] as $role) {
             $this->apply_allowassign($role);
+            $this->apply_allowswitch($role);
         }
         foreach ($this->declaration['settings'] ?? [] as $setting) {
             $this->apply_setting($setting);
@@ -365,6 +366,32 @@ class applier {
                 $DB->get_field('role', 'id', ['shortname' => $to], MUST_EXIST));
             $after = null;
             foreach ($this->inspector->check_allowassign($role) as $recheck) {
+                if ($recheck['item'] === $item['item']) {
+                    $after = $recheck;
+                }
+            }
+            $this->report_write($after ?? $item, $item);
+        }
+    }
+
+    /**
+     * Add each declared allow-switch pair that is missing (pilot learners, 2026-10-15). Never
+     * removes one.
+     *
+     * @param array $role the role declaration
+     */
+    protected function apply_allowswitch(array $role): void {
+        global $DB;
+        foreach ($this->inspector->check_allowswitch($role) as $item) {
+            if ($item['result'] !== inspector::RESULT_CHANGED) {
+                $this->report->add_result($item);
+                continue;
+            }
+            [, $from, , $to] = explode(':', $item['item'], 4);
+            core_role_set_switch_allowed($DB->get_field('role', 'id', ['shortname' => $from], MUST_EXIST),
+                $DB->get_field('role', 'id', ['shortname' => $to], MUST_EXIST));
+            $after = null;
+            foreach ($this->inspector->check_allowswitch($role) as $recheck) {
                 if ($recheck['item'] === $item['item']) {
                     $after = $recheck;
                 }

@@ -160,14 +160,6 @@
   - Computational and Corpus Linguistics
   - Software Development
   language: English
-- title: Learn C# online
-  url: https://codeasy.net/
-  description: Online course for learning C# programming.
-  type: site
-  competencies:
-  - Computational and Corpus Linguistics
-  - Software Development
-  language: English
 - title: C# Tutorial
   url: https://www.tutorialspoint.com/csharp/index.htm
   description: C# tutorial running from basic syntax and data types to object-oriented and asynchronous
@@ -1057,14 +1049,6 @@
   competencies:
   - OS Basics
   language: English
-- title: Nepals basic computer course
-  url: https://docs.google.com/document/d/12ZmXEZWhTuhFCLqoLD2hYoVl4MvHpcNIISmuXLFZWmQ/edit
-  description: A basic computer course document from Nepal, possibly usable as a model for teaching computer
-    fundamentals.
-  type: document
-  competencies:
-  - OS Basics
-  language: English
 - title: Ubuntu commands for Beginners (Wasta is an Ubuntu based OS)
   url: https://ubuntu.com/tutorials/command-line-for-beginners#1-overview
   description: Beginner tutorial on the Linux command line, covering navigation, file handling, pipes
@@ -1203,8 +1187,9 @@
   - Problem Solving
   language: English
 - title: Building Students' Problem-Solving Skills Through Complex Challenges
-  url: http://www.ascd.org/Publications/Books/Overview/What-If-Building-Students-Problem-Solving-Skills-Through-Complex-Challenges.aspx
-  description: ASCD book overview on building problem-solving skills through complex challenges.
+  url: https://www.ascd.org/books/what-if-building-students-problem-solving-skills-through-complex-challenges
+  description: ASCD's page for Ronald Beghetto's book on building problem-solving skills through complex
+    challenges.
   type: site
   competencies:
   - Problem Solving
@@ -1281,9 +1266,9 @@
   - Responsive Feedback
   language: English
 - title: Paratext Support
-  url: https://paratext.org/support/
-  description: Paratext support page for getting help with Paratext.
-  type: site
+  url: https://paratext.org/get-help/
+  description: Paratext's guide to the ways of getting help with Paratext.
+  type: guide
   competencies:
   - Translation Tools
   language: English

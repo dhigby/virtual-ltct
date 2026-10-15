@@ -999,7 +999,12 @@ and Q12 already tested; and lesson 03's Challenge 2 says "a difference the team 
 than "flagged difference". A follow-up alignment check (2026-10-07) also led to lesson 03 and the
 video script saying the tool shows matches but does not judge them (replacing "nothing for it to
 compute"), lesson 03 stating that unshaded Greek means the translation may differ, and Challenge
-1 separating spotting the shading (the consultant) from judging against the standard (the team). Seat time, competencies,
+1 separating spotting the shading (the consultant) from judging against the standard (the team).
+Jenni's follow-up rulings (2026-10-07): yellow-shaded Greek counts as shaded (not an exact match,
+but still a match); the shading may look paler in the translation and resources than in the
+Greek; word order can differ, so the shading need not line up word for word; and lesson 03's
+objective "Recognize the difference between legitimate variation and over-harmonising" becomes
+"Recognize signs of over-harmonising to raise with the team". Seat time, competencies,
 outcome level and all objectives are unchanged. `module-author` may revise
 `03-parallel-passages-and-measures.md`, `06-scenario-bank.md` and `07-mentor-guide.md` on this
 basis.

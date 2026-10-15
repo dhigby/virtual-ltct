@@ -14,7 +14,7 @@ You will be able to:
     using the Parallel Passages tool's Status column.
   - Flag any verse pairings still showing a red "?" back to the team for their own
     decision.
-  - Recognize the difference between legitimate variation and over-harmonising.
+  - Recognize signs of over-harmonising to raise with the team.
 
 You will be able to:
   - Confirm which numbers/measures check(s) are actually available for the team's
@@ -56,10 +56,12 @@ something the tool hands you pre-flagged.
 
 **The shading.** The tool shades matching text in every text it shows: the project's
 translation as well as the Greek and any resources. Wherever the same three or more
-words appear in both parallel passages, they're shaded green, and text that differs is
-left unshaded. In the Greek, yellow marks words a biblical scholar has marked by hand
-as equivalent — usually a word with a different gloss. That means you can compare the
-shading of the Greek with the shading of the translation without reading either one.
+words appear in both parallel passages, they're shaded green (the shade may look paler
+in the translation and resources than in the Greek), and text that differs is left
+unshaded. In the Greek, yellow marks words a biblical scholar has marked by hand as
+equivalent — usually a word with a different gloss. Yellow means not an exact match,
+but still a match, so count it as shaded. That means you can compare the shading of the
+Greek with the shading of the translation without reading either one.
 Where the Greek is unshaded, the originals differ there, so the translation may differ
 too. Two patterns are worth pointing out:
 
@@ -68,8 +70,12 @@ too. Two patterns are worth pointing out:
 - **The translation is shaded but the Greek isn't:** the translation may be more
   harmonized than the originals.
 
-Either is a pattern to point out to the team, not an error. Not every language can
-word things the same way, so even where the originals agree, some variation in the
+Don't expect the shading to line up word for word: the translation's word order can
+differ from the Greek. What matters is that the parallel passages are similar where
+the originals are, not that the words come in the same order.
+
+Either pattern is something to point out to the team, not an error. Not every language
+can word things the same way, so even where the originals agree, some variation in the
 translation is acceptable. Whether the difference is right is the team's decision.
 
 ![The Parallel Passages tool comparing MAT 3:4 with MRK 1:6. In the GRK row, Greek words that match across the two passages are shaded green and words marked as equivalent are shaded yellow, each with an English gloss underneath. Below it, the project (PTP) row and the RSV resource row shade the words that match across the two passages; the unshaded words differ.](assets/ss-03-pp-source-shading.png)

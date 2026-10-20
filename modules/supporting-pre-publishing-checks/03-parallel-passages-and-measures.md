@@ -10,6 +10,7 @@ the team's own, made against their own agreed approach.
 ## Learning objectives
 
 You will be able to:
+
   - Confirm every parallel passage has actually been reviewed since the last revision,
     using the Parallel Passages tool's Status column.
   - Flag any verse pairings still showing a red "?" back to the team for their own
@@ -17,6 +18,7 @@ You will be able to:
   - Recognize signs of over-harmonising to raise with the team.
 
 You will be able to:
+
   - Confirm which numbers/measures check(s) are actually available for the team's
     Paratext version — the new consolidated check, or the older separate Numbers check
     with no working Measures check.
@@ -79,6 +81,7 @@ can word things the same way, so even where the originals agree, some variation 
 translation is acceptable. Whether the difference is right is the team's decision.
 
 ![The Parallel Passages tool comparing MAT 3:4 with MRK 1:6. In the GRK row, Greek words that match across the two passages are shaded green and words marked as equivalent are shaded yellow, each with an English gloss underneath. Below it, the project (PTP) row and the RSV resource row shade the words that match across the two passages; the unshaded words differ.](assets/ss-03-pp-source-shading.png)
+
 *Compare the shading, not the words: Greek, translation and resource are shaded the same way.*
 
 What the tool *does* track is **review status**, per verse, in a **Status column**:
@@ -93,6 +96,7 @@ above the table:
 ![The Parallel Passages filter dropdown, with "Changed text" selected below "All references" and "Unapproved references."](assets/ss-03-pp-changed-text-menu.png)
 
 ![The Parallel Passages tool with the Status column showing a green checkmark on one row and a red "?" on another, plus the "Show differences" button.](assets/ss-03-pp-changed-text.png)
+
 *Checkmark = reviewed and approved; red "?" = edited since approval, needs another look.*
 
 Clicking the "Show differences" icon on a flagged row opens a side-by-side comparison of

@@ -56,6 +56,7 @@ verse** — "Verse number in heading" and "Marker cannot occur here: \v".
 ![A section heading followed by a \p marker before verse 19, and another before verse 21, so verses 19-22 render as normal body text below the heading.](assets/ss-04-p-marker-in-place.png)
 
 ![The same passage with the \p marker missing: verses 19 and 20 have been swallowed into the \s1 heading style, rendered in bold as if they were part of the heading title.](assets/ss-04-p-marker-missing.png)
+
 *One missing paragraph marker, and the verse numbers disappear into the heading.*
 
 If you start by fixing the errors at the bottom of a long list, you may be fixing
@@ -68,6 +69,7 @@ symptoms of a single cause higher up. Work in this order instead:
    if the chapter/verse numbering itself has errors (such as a duplicate verse).
 
 ![The Run Basic Checks dialog with Chapter/verse numbers checked, and the book-selection and OK controls numbered 1 through 4.](assets/ss-04-basic-checks-chapter-verse.png)
+
 *Confirm this one first — everything else on this list depends on it.*
 
 2. **Marker-pair census.** Paratext markers come in two kinds: **paragraph markers**
@@ -79,6 +81,7 @@ symptoms of a single cause higher up. Work in this order instead:
    downstream-looking errors.
 
 ![The Markers Inventory dialog listing markers, their counts, and style names (Chapter Number, Footnote, End Marker, and others).](assets/ss-04-markers-inventory.png)
+
 *This is where you check that every paired marker actually closes.*
 
 3. **Ghost markers.** Look for markers left behind with no content attached — often the
@@ -156,9 +159,11 @@ short and clean may simply have its denied items switched out of view. Turn on
 ![The View menu open with "Denied messages" highlighted.](assets/ss-04-view-denied.png)
 
 ![A denied error at MAT 2:5 shown with strikethrough text: "Text of marker/style does not begin with a capital: w".](assets/ss-04-denied-error-strikethrough.png)
+
 *Denied errors are struck through — but only if this view option is on.*
 
 ![A Basic Checks results list for Matthew with the top item reading "Denied message(s) not shown."](assets/ss-04-denied-error-not-shown.png)
+
 *With the view option off, the list simply tells you denied messages exist without showing them.*
 
 > **WARNING — watch for a false-clean result here too:** A Basic Checks run showing zero

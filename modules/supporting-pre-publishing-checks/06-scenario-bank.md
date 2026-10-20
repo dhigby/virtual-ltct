@@ -46,6 +46,7 @@ judge the passages' meaning yourself — but you can see the tool's shading on t
 and on the team's translation.
 
 **Your task:**
+
 1. **Diagnose:** What would you confirm before accepting the team lead's explanation?
    How would you use the Parallel Passages tool's Status column to check whether the
    relevant verses have actually been reviewed since the last revision pass, and how
@@ -85,6 +86,7 @@ for this team's specific version before you lean on it, and the rest is process 
 routing, not recognizing a specific known error.
 
 **Your task:**
+
 1. **Diagnose:** How would you confirm, for this team's Paratext version, whether they
    have the new consolidated check or only the older, separate Numbers check with no
    working Measures check — and, given that no working check can catch weights/measures
@@ -119,6 +121,7 @@ three weeks.
 of these as already handled.
 
 **Your task:**
+
 1. **Diagnose:** Before working the Basic Checks list top to bottom, what would you check
    first, and why? (Note that Chapter/Verse Numbers hasn't been confirmed clean yet — why
    does that have to happen before anything else, including the marker-pair census?) If
@@ -149,6 +152,7 @@ was linked at the correct scope.
 — you're only reviewing the linking operation.
 
 **Your task:**
+
 1. **Diagnose:** Since there's no report to open, how would you use Find to check the
    scope of "angel"'s linking? What exactly would you look for in each Find result's
    markup to tell over-linking (every occurrence) apart from correctly-scoped linking
@@ -176,6 +180,7 @@ and a heading that lands awkwardly at a column break on a spread.
 on, and are inclined to treat all three as "typesetting's problem now."
 
 **Your task:**
+
 1. **Diagnose:** For each of the three issues, what's your first read on what's causing
    it, and what would you check to confirm?
 2. **Say to the team:** Sort the three into "mine to resolve," "the team's call," and
@@ -199,6 +204,7 @@ forward, and doesn't distinguish between them — from their side, "you're the L
 sort it out."
 
 **Your task:**
+
 1. **Diagnose:** Using the three-bucket framework from Lesson 1 (yours / the team's /
    escalate), sort each of the three items and explain your reasoning for each — what
    makes (1) yours, (2) the team's, and (3) an escalation rather than yours?
@@ -231,6 +237,7 @@ separate things going on:
 unrelated, minor asks.
 
 **Your task:**
+
 1. **Diagnose:** For the Biblical Terms list, what would you check to determine whether
    the "done" claim is genuine — and separately, what would you check to confirm which of
    a term's several candidate renderings is actually current versus a stale leftover? For

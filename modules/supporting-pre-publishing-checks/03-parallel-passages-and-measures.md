@@ -186,6 +186,7 @@ one. What *is* established is the shape of your role above — confirm what's av
 run it against the documented approach, and route gaps back to the team.
 
 **Key takeaways**
+
 - In both check areas, your job is process and routing — confirm every relevant item has
   actually been reviewed, and hand judgment calls about wording back to the team.
 - The Parallel Passages tool shows passages side by side (with original-language text)

@@ -170,6 +170,7 @@ short and clean may simply have its denied items switched out of view. Turn on
 > already did that" trap from earlier lessons, now applied to formatting.
 
 **Key takeaways**
+
 - Work structural-first: Chapter/Verse Numbers first, since every other check quotes
   chapter/verse locations to report results, then marker pairs and ghost markers before
   headings, titles, and references — upstream breakage can masquerade as unrelated
@@ -271,6 +272,7 @@ by a single unselected menu option rather than by anyone skipping a step.
 > here before the project reaches a typesetter.
 
 **Key takeaways**
+
 - The Punctuation Inventory and Unmatched Pairs of Punctuation both live in Paratext
   itself (Tools > Checking Inventories) — neither is a PTXprint or typesetter-side tool,
   and reviewing both is part of your own formatting check, not something to defer to the

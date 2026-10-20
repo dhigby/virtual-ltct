@@ -189,6 +189,7 @@ who sends that question to an LT mentor, or decides it themselves without the or
 statement, has missed marker **(g)**.
 
 **Common wrong turn:** three separate ways a learner can go wrong here:
+
 - Working the Basic Checks flag list in the order it appears rather than checking for a
   structural root cause first.
 - Jumping straight to the marker-pair census without first confirming Chapter/Verse

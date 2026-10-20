@@ -95,7 +95,7 @@
             
   <strong>Draft under review.</strong>
   Not published material, and not part of the LT Consultant competency framework.
-  Built from <code>main</code>.
+  Built from <code>course/paratext-quotation-rules</code>.
 
           </div>
           
@@ -1054,7 +1054,7 @@
 
 
   
-    <a href="https://github.com/dhigby/virtual-ltct/edit/main/modules/paratext-quotation-rules/08-video-script.md" title="Edit this page" class="md-content__button md-icon" rel="edit">
+    <a href="https://github.com/dhigby/virtual-ltct/edit/course/paratext-quotation-rules/modules/paratext-quotation-rules/08-video-script.md" title="Edit this page" class="md-content__button md-icon" rel="edit">
       
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M10 20H6V4h7v5h5v3.1l2-2V8l-6-6H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h4zm10.2-7c.1 0 .3.1.4.2l1.3 1.3c.2.2.2.6 0 .8l-1 1-2.1-2.1 1-1c.1-.1.2-.2.4-.2m0 3.9L14.1 23H12v-2.1l6.1-6.1z"/></svg>
     </a>
@@ -1160,12 +1160,12 @@ Then you'll set them up yourself."</p>
 <td>"Same project, same text, nothing typed into Scripture, and the five John 17 results are gone. One more thing, though: a clean check on its own doesn't prove the settings are right. The check can only report what the current text happens to trip over. Some of the changes you just made never produced a result at all, so the check would have gone quiet with them still wrong. Set what the team's conventions say, and don't stop just because the list is empty."</td>
 </tr>
 <tr>
-<td>Brief cut to the Runda Quote marks tab after correction, showing guillemets and a filled First level Continuer cell. (<code>assets/ss-02-runda-quote-marks.png</code>.)</td>
-<td>"Different language, same grid. Runda uses French guillemets, and like Tamba it repeats its opening mark at each new paragraph, so its continuer cell holds « instead of “. None of those characters were in the defaults, which is why Runda came back with more than a thousand results. The tab doesn't change from language to language. Only the characters do."</td>
+<td>Brief cut back to the <code>RUNDA</code> results panel at the defaults (<code>assets/ss-02-runda-default-results.png</code>), holding on the 1110 count and the repeated rows reading <em>"Closing quote [ ’ U+2019 ] found as a word medial character. Sometimes caused when a closing quote is incorrectly used as an apostrophe"</em>. Optional lower-third: <strong>767 of 1110 — one message.</strong> Then cut to the Runda Quote marks tab after correction, showing guillemets and a filled First level Continuer cell. (<code>assets/ss-02-runda-quote-marks.png</code>.)</td>
+<td>"Different language, same grid. Remember Runda's flood at the defaults: 1110 results. Read the messages, not the count. 767 of them are this one message, a closing quote found as a word-medial character. In this text the same character, U+2019, is used for more than quotation marks, so most of the flood is that one message, repeated. On the tab itself, Runda uses French guillemets, and like Tamba it repeats its opening mark at each new paragraph, so its continuer cell holds « instead of “. None of those were in the defaults either. The tab doesn't change from language to language. Only the characters do."</td>
 </tr>
 <tr>
 <td>Cut to Language Settings: <strong>☰ &gt; Project settings &gt; Language Settings &gt; Other Characters</strong> tab, with <code>’</code> in the <strong>Word-medial punctuation</strong> field, warning icon visible. (<code>assets/ss-02-language-settings-other-chars.png</code>.)</td>
-<td>"Here's a gotcha that traps almost everyone, and it doesn't play out the way you'd expect. If your closing single quote is U+2019, and the same character is also used as an apostrophe inside words, the check reads every apostrophe as a stray closing mark. This field, Word-medial punctuation under Language Settings, Other Characters, looks built for exactly this case. Add the character here, save, run a fresh check, and the apostrophes are still flagged. That's confirmed on Paratext 9.5: once a character is set as a quote mark, this setting doesn't override it. No setting fixes this one. The skill is recognizing it, confirming each one really is an apostrophe, and documenting it instead of hunting for a fix. A different apostrophe character would remove the collision, but that's an orthography decision for the translation team, not for you."</td>
+<td>"That repeated message is a gotcha that traps almost everyone, and it doesn't play out the way you'd expect. If your closing single quote is U+2019, and the same character is also used as an apostrophe inside words, the check reads every apostrophe as a stray closing mark. This field, Word-medial punctuation under Language Settings, Other Characters, looks built for exactly this case. Add the character here, save, run a fresh check, and the apostrophes are still flagged. That's confirmed on Paratext 9.5: once a character is set as a quote mark, this setting doesn't override it. No setting fixes this one. The skill is recognizing it, confirming each one really is an apostrophe, and documenting it instead of hunting for a fix. A different apostrophe character would remove the collision, but that's an orthography decision for the translation team, not for you."</td>
 </tr>
 </tbody>
 </table>
@@ -1287,7 +1287,15 @@ Paratext."</p>
 <li><strong>Terms to show on screen (not just say):</strong> define <em>real error</em> vs. <em>configuration
   problem</em> with the Segment 4 slide, and put the Unicode code points (U+201C, U+2019,
   U+00AB, U+203A, U+2039, U+2014) on screen wherever you name a character — the visual
-  glyphs are easy to confuse and the code point is the ground truth.</li>
+  glyphs are easy to confuse and the code point is the ground truth. You can't tell which
+  character sits in a Quotation Rules cell by its shape: if you need to confirm one on
+  camera, click into the cell and press <strong>Alt+X</strong> to show its code point, then <strong>Alt+X</strong>
+  again to switch it back.</li>
+<li><strong>Quoting Paratext messages on screen.</strong> Where a lower-third or cue shows a message
+  verbatim, copy Paratext's exact format, including the spaces inside the brackets — e.g.
+  <em>"Closing quote [ ’ U+2019 ] found as a word medial character…"</em>. In the voiceover,
+  paraphrase it ("a closing quote found as a word-medial character") rather than reading the
+  brackets and code point aloud.</li>
 <li><strong>Live-demo caution:</strong> always drive character entry with the dropdown (▼), never the
   keyboard, on camera — it models the habit the course insists on and avoids accidentally
   entering a straight quote. The one thing that is typed is the <strong>Continuer required at</strong>

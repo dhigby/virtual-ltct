@@ -95,7 +95,7 @@
             
   <strong>Draft under review.</strong>
   Not published material, and not part of the LT Consultant competency framework.
-  Built from <code>main</code>.
+  Built from <code>course/paratext-quotation-rules</code>.
 
           </div>
           
@@ -1010,7 +1010,7 @@
 
 
   
-    <a href="https://github.com/dhigby/virtual-ltct/edit/main/modules/paratext-quotation-rules/04-interpreting-and-clearing-the-check.md" title="Edit this page" class="md-content__button md-icon" rel="edit">
+    <a href="https://github.com/dhigby/virtual-ltct/edit/course/paratext-quotation-rules/modules/paratext-quotation-rules/04-interpreting-and-clearing-the-check.md" title="Edit this page" class="md-content__button md-icon" rel="edit">
       
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M10 20H6V4h7v5h5v3.1l2-2V8l-6-6H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h4zm10.2-7c.1 0 .3.1.4.2l1.3 1.3c.2.2.2.6 0 .8l-1 1-2.1-2.1 1-1c.1-.1.2-.2.4-.2m0 3.9L14.1 23H12v-2.1l6.1-6.1z"/></svg>
     </a>
@@ -1090,7 +1090,7 @@ team and the language community, not to a Paratext setting. It can come up late 
 changes are sometimes made right up to typesetting — so you can raise it whenever the collision
 appears, but you don't make it. In this course's practice text, leave the apostrophe as
 written.</p>
-<p><img alt="The TAMBAB project in Paratext 9.5, with Matthew 5:3 open in the left pane and the Quotations check results panel on the right, headed 7 Items and TAMBAB; All Books; Checks run: Quotations. The seven results are: MAT 5:3, Closing quote mark is possibly missing before verse 7.28; LUK 4:18, Closing quote mark is possibly missing before verse 20; JHN 3:10, Quote opened; see following message for error; JHN 3:16, Expected continuers are missing OR quote not closed; see preceding message; JHN 3:21, Closing quote U+201D found without matching opening; ACT 2:25, Opening quote mark found without matching closing quote mark; ROM 1:1, Closing quote U+2019 found as a word medial character. The MAT 5:3 result is selected and outlined in red." src="../ss-04-results-with-highlight.png" /></p>
+<p><img alt="The TAMBAB project in Paratext 9.5, with Matthew 5:3 open in the left pane and the Quotations check results panel on the right, headed 7 Items and TAMBAB; All Books; Checks run: Quotations. The seven results are: MAT 5:3, Closing quote mark is possibly missing before verse 7.28; LUK 4:18, Closing quote mark is possibly missing before verse 20; JHN 3:10, Quote opened; see following message for error; JHN 3:16, Expected continuers are missing OR quote not closed; see preceding message; JHN 3:21, Closing quote [ ” U+201D ] found without matching opening, followed by the rest of that message; ACT 2:25, Opening quote mark found without matching closing quote mark: ‘; ROM 1:1, Closing quote [ ’ U+2019 ] found as a word medial character, followed by the rest of that message. The MAT 5:3 result is selected and outlined in red." src="../ss-04-results-with-highlight.png" /></p>
 <p>Read each result as three parts: the <strong>location</strong> (book, chapter, verse), the <strong>message</strong> (what
 the check thinks is wrong), and the <strong>text in context</strong> (open the verse and look). A useful
 heuristic: the same message repeated across many verses usually points to a <strong>configuration
@@ -1147,21 +1147,21 @@ prediction for every row should you read the discovery prompts and open the vers
 <tr>
 <td>3</td>
 <td>John 3:10, 3:16, 3:21 — <strong>one seed, three linked results</strong></td>
-<td>3:10: "Quote opened; see following message for error" · 3:16: "Expected continuers [“] are missing OR quote not closed; see preceding message" · 3:21: "Closing quote [” U+201D] found without matching opening. Caused by a missing opening quote, a missing continuer, or incorrectly defined continuer rules"</td>
+<td>3:10: "Quote opened; see following message for error" · 3:16: "Expected continuers [“] are missing OR quote not closed; see preceding message" · 3:21: "Closing quote [ ” U+201D ] found without matching opening. Caused by a missing opening quote, a missing continuer, or incorrectly defined continuer rules"</td>
 <td>?</td>
 <td>?</td>
 </tr>
 <tr>
 <td>4</td>
 <td>Acts 2:25</td>
-<td>"Opening quote mark found without matching closing quote mark"</td>
+<td>"Opening quote mark found without matching closing quote mark: ‘" — listed below it: 2:29 "First-level quote continuer", and 2:34 "First-level quote continuer" and "Second-level quote opened, but second-level quote already open"</td>
 <td>?</td>
 <td>?</td>
 </tr>
 <tr>
 <td>5</td>
 <td>Romans 1:1</td>
-<td>"Closing quote [’ U+2019] found as a word medial character. Sometimes caused when a closing quote is incorrectly used as an apostrophe"</td>
+<td>"Closing quote [ ’ U+2019 ] found as a word medial character. Sometimes caused when a closing quote is incorrectly used as an apostrophe"</td>
 <td>?</td>
 <td>?</td>
 </tr>
@@ -1184,10 +1184,12 @@ prediction for every row should you read the discovery prompts and open the vers
   instead, will the check recognize it as the continuer? Once you spot the one broken mark, ask
   yourself: does fixing only that one character, then running the check again (close the
   results panel and run it fresh, not "Rerun"), clear all three results, or just one?
-- Acts 2:25–28: Peter cites Psalm 16 in Second level marks, opening with <code>‘</code> in 2:25, as one
-  continuous span across several paragraph breaks. Tamba's Second level has no continuer, and
-  <code>TAMBA</code> (Phase A) passes the check with this span unbroken — so the paragraph breaks are not
-  the problem. Where should the citation close, and is the closing mark there?
+- Acts 2:25–28: Peter cites Psalm 16. In 2:25 an opening phrase is followed by a <code>\q1</code> line
+  that opens both First and Second level (<code>“ ‘</code>), and the Second level runs as one continuous
+  span across several paragraph breaks. Tamba's Second level has no continuer, and <code>TAMBA</code>
+  (Phase A) passes the check with this span unbroken — so the paragraph breaks are not the
+  problem. The lines Paratext lists under this result point at later verses (2:29, 2:34); open
+  them, but start from 2:25. Where should the Second level close, and is the closing mark there?
 - Romans 1:1 has no dialogue. How could <code>’</code> (U+2019) inside a word cause the check to report a
   quotation problem? Try the fix Lesson 2 taught for this exact situation (Word-medial
   punctuation in Language Settings) and re-run the check with a genuinely fresh run, not just
@@ -1220,7 +1222,7 @@ prediction for every row should you read the discovery prompts and open the vers
 <tr>
 <td>4</td>
 <td>Real error</td>
-<td>Add the missing closing <code>’</code> (U+2019) in 2:28 that ends Peter's Psalm 16 citation. The citation opens with <code>‘</code> (U+2018) in 2:25 and runs as one Second level span across several paragraph breaks; that is valid under Tamba's configuration (Second level has no continuer, and Phase A passes the check with the span unbroken), so don't add close/reopen pairs at the breaks. Only the closing mark is missing.</td>
+<td>Add the missing closing <code>’</code> (U+2019) in 2:28 that ends the Second level of Peter's Psalm 16 citation. In 2:25, after an opening phrase, a <code>\q1</code> line opens both First and Second level (<code>“ ‘</code>, U+201C U+2018); 2:28 closes only the Second level. The Second level runs as one span across several paragraph breaks; that is valid under Tamba's configuration (Second level has no continuer, and Phase A passes the check with the span unbroken), so don't add close/reopen pairs at the breaks. Only the closing mark is missing.</td>
 </tr>
 <tr>
 <td>5</td>
@@ -1273,7 +1275,7 @@ correct fix looks as if it failed.</p>
 - The Quotations check shows 0 results for every book except Romans.
 - Romans shows exactly 1 result (the 1:1 apostrophe), verified as a genuine word-medial
   apostrophe and documented rather than chased with further configuration changes.</p>
-<p><img alt="The TAMBAB project in Paratext 9.5 after the four real errors are fixed, with Romans 1 open in the left pane. The Quotations check results panel on the right, headed 1 Item and TAMBAB; All Books; Checks run: Quotations, lists a single result: ROM 1:1, Closing quote U+2019 found as a word medial character. Sometimes caused when a closing quote is incorrectly used as an apostrophe." src="../ss-04-final-results.png" /></p>
+<p><img alt="The TAMBAB project in Paratext 9.5 after the four real errors are fixed, with Romans 1 open in the left pane. The Quotations check results panel on the right, headed 1 Item and TAMBAB; All Books; Checks run: Quotations, lists a single result: ROM 1:1, Closing quote [ ’ U+2019 ] found as a word medial character. Sometimes caused when a closing quote is incorrectly used as an apostrophe." src="../ss-04-final-results.png" /></p>
 <p><strong>✏️ Produce this (a mentor will review it).</strong> Submit your completed triage table
 (predictions + actual types) and a one-line note for each result on the action you took and why. The point a
 mentor is checking is your <em>reasoning</em> — that you fixed text only for real errors and settings

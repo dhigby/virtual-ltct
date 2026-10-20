@@ -93,7 +93,7 @@
             
   <strong>Draft under review.</strong>
   Not published material, and not part of the LT Consultant competency framework.
-  Built from <code>main</code>.
+  Built from <code>course/paratext-quotation-rules</code>.
 
           </div>
           
@@ -851,7 +851,7 @@
 
 
   
-    <a href="https://github.com/dhigby/virtual-ltct/edit/main/modules/paratext-quotation-rules/README.md" title="Edit this page" class="md-content__button md-icon" rel="edit">
+    <a href="https://github.com/dhigby/virtual-ltct/edit/course/paratext-quotation-rules/modules/paratext-quotation-rules/README.md" title="Edit this page" class="md-content__button md-icon" rel="edit">
       
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M10 20H6V4h7v5h5v3.1l2-2V8l-6-6H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h4zm10.2-7c.1 0 .3.1.4.2l1.3 1.3c.2.2.2.6 0 .8l-1 1-2.1-2.1 1-1c.1-.1.2-.2.4-.2m0 3.9L14.1 23H12v-2.1l6.1-6.1z"/></svg>
     </a>
@@ -866,8 +866,8 @@
 <strong>Competencies:</strong> Translation Tools<br>
 <strong>Content type:</strong> content<br>
 <strong>4 lessons</strong> &middot; about 5.8 hours<br>
-<strong>Built from:</strong> <code>main</code><br>
-<strong>Pull request:</strong> <a href="https://github.com/dhigby/virtual-ltct/pull/112">112</a><br></p>
+<strong>Built from:</strong> <code>course/paratext-quotation-rules</code><br>
+<strong>Pull request:</strong> <a href="https://github.com/dhigby/virtual-ltct/pull/124">124</a><br></p>
 <p>You are reading the <strong>learner view</strong> -- the course as a learner sees it. The design document, mentor guide and quiz solutions are not included.</p>
 </div>
 <h3 id="an-interactive-course-for-intermediate-users">An Interactive Course for Intermediate Users<a class="headerlink" href="#an-interactive-course-for-intermediate-users" title="Permanent link">&para;</a></h3>
@@ -880,7 +880,7 @@
 <p><strong>Estimated time:</strong> Lessons 1–4 run 4¼ hours total (30 + 90 + 60 + 75 minutes); the scenario bank adds 90 minutes. Each individual lesson is capped at 90 minutes — see the duration header at the top of each file.</p>
 <hr />
 <h2 id="course-package">Course package<a class="headerlink" href="#course-package" title="Permanent link">&para;</a></h2>
-<p>This course follows the repo's <a href="https://github.com/dhigby/virtual-ltct/blob/main/process/PROCESS.md">content package structure</a>. Work through the numbered files in order:</p>
+<p>This course follows the repo's <a href="https://github.com/dhigby/virtual-ltct/blob/course/paratext-quotation-rules/process/PROCESS.md">content package structure</a>. Work through the numbered files in order:</p>
 <table>
 <thead>
 <tr>
@@ -1048,7 +1048,7 @@ example, after your mentor changes your permissions), cancel it.</p>
 </table>
 <p><strong>Additional facts about Tamba quotation style:</strong>
 - First level (primary speech) uses a Quote Continuer at new paragraph: continued speech repeats the opening mark <code>“</code> (U+201C) at the start of each new paragraph, with the closing mark <code>”</code> (U+201D) appearing only once, at the very end of the whole speech.
-- Second and Third level have no continuer (set to <em>none</em>; the defaults fill them, so they must be changed). Nothing is repeated at the head of a new paragraph at those levels, and a Second level quotation can run across paragraph breaks unbroken: Peter's Psalm 16 citation in Acts 2:25–28 opens with <code>‘</code> in 2:25 and closes with <code>’</code> in 2:28, with no marks at the breaks between.
+- Second and Third level have no continuer (set to <em>none</em>; the defaults fill them, so they must be changed). Nothing is repeated at the head of a new paragraph at those levels, and a Second level quotation can run across paragraph breaks unbroken: in Peter's Psalm 16 citation in Acts 2:25–28, an opening phrase is followed by a <code>\q1</code> line that opens both First and Second level (<code>“ ‘</code>), and the Second level closes with <code>’</code> in 2:28, with no Second level mark repeated at the breaks between.
 - Third level is used only in Matthew, John, and Revelation where a character quotes scripture inside dialogue.
 - When a speech quotes Scripture as poetry, the First level continuer <code>“</code> is repeated at the head of the first <code>\q1</code> line (e.g. Matthew 2:6 <code>\q1 “ ‘Oro iu, Betliem…</code>); the following <code>\q2</code>/<code>\q1</code> lines of the same poem carry no mark.
 - <strong>Continuer required at:</strong> <code>p p/q1 m/q1 s1/pi pi/pi b/q1</code> — every <code>\p</code> inside a speech, a <code>\q1</code> that follows <code>\p</code>, <code>\m</code> or <code>\b</code>, and an indented <code>\pi</code> that follows <code>\s1</code> or another <code>\pi</code>.
@@ -1188,7 +1188,7 @@ A check result caused by a gap or error in the Quote marks tab or Quotation type
 <p><strong>First level / Second level / Third level</strong>
 The nesting depth of a quotation. First level is primary speech; Second level is speech embedded within a First level quotation; Third level is speech embedded within a Second level quotation. Each level has its own Opening, Quote Continuer at new paragraph, and Closing characters on the Quote marks tab.</p>
 <p><strong>Label tooltip / status bar</strong>
-In the Quote marks tab, the status bar at the bottom of the dialog shows a description when you hover over any row or column label (such as “Opening” or “Quotes within Quotes (Second level)”). Use this to understand what a field does. To verify the actual character in a cell, click in the cell and press <strong>Alt+X</strong> to show its Unicode code, then press <strong>Alt+X</strong> again to switch it back. Don't skip the second press: if you click OK while the cell shows the code (for example <code>203A</code>), Paratext saves that text as the quote mark. To check the characters in the text itself, use the <strong>Punctuation inventory</strong> or <strong>Characters inventory</strong>: select a character in the upper pane to see its Unicode value. The Example preview at the bottom of the dialog shows how the marks sit together.</p>
+In the Quote marks tab, the status bar at the bottom of the dialog shows a description when you hover over any row or column label (such as “Opening” or “Quotes within Quotes (Second level)”). Use this to understand what a field does. To verify the actual character in a cell, click in the cell and press <strong>Alt+X</strong> to show its Unicode code, then press <strong>Alt+X</strong> again to switch it back. This is the reliable way: look-alike characters can't be told apart by their shape. Don't skip the second press: if you click OK while the cell shows the code (for example <code>203A</code>), Paratext saves that text as the quote mark. To check the characters in the text itself, use the <strong>Punctuation inventory</strong> or <strong>Characters inventory</strong>: the upper pane lists each character with its Unicode value in a column of its own, always visible. The Example preview at the bottom of the dialog shows how the marks sit together, but only as shapes, so it can't confirm which character a cell holds.</p>
 <p><strong>Opening mark / Closing mark</strong>
 The characters that begin and end a quotation at a given level. These are entered per-level in the Quote marks tab.</p>
 <p><strong>Project note</strong>

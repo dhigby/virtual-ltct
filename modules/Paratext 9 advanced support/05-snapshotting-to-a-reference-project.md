@@ -48,7 +48,7 @@ and then restore the main project to its current state. Step by step:
    matters — you're about to put the main project into a temporary, reverted state, and you
    don't want an automatic Send/Receive pushing that reverted state out to the rest of the
    team.)
-3. In project history, select the desired history point, use the "Revert books" command, and
+3. In project history, select the desired history point, use the "Revert Books" command, and
    select the books to revert.
 4. Create the new project and import the reverted books into it, exactly as in the easy case
    above.

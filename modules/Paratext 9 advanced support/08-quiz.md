@@ -1,13 +1,13 @@
 # Quiz
 
-## Assessment quiz (10 questions)
+## Assessment quiz (11 questions)
 
 This quiz covers all five lessons of the Advanced Paratext Support module — installing
 open-source texts as editable projects, why project history isn't always chronological,
-why user-role edit restrictions aren't foolproof, recovering lost notes and settings, and
-snapshotting an earlier project state into a reference project. You need **80% (8/10)** to
-pass. Questions are a mix of recall, scenario-based application, and true/false. Everything
-asked here is drawn directly from the lesson content — work them first. (The five-scenario
+why user-role edit restrictions aren't foolproof (and what to check before undoing a
+corrupted change), recovering lost notes and settings, and snapshotting an earlier project
+state into a reference project. You need **9/11 (about 80%)** to pass. Questions are a mix
+of recall, scenario-based application, and true/false. Everything asked here is drawn directly from the lesson content — work them first. (The five-scenario
 bank, graded separately by a mentor, is where hands-on execution of each recovery procedure
 is verified; this quiz checks the conceptual and diagnostic knowledge behind it.)
 
@@ -57,7 +57,7 @@ needs to be redone.
 
 ---
 
-### Section 3: User Roles Aren't a Guarantee (Questions 5-6)
+### Section 3: User Roles Aren't a Guarantee (Questions 5-7)
 
 **Question 5:** A user's computer crashes unexpectedly while Paratext is open, and
 afterward some project data looks odd. What should a consultant tell this user to do
@@ -74,11 +74,25 @@ observer's next Send/Receive, exactly as it would for an editor.
 - A) True
 - B) False
 
+**Question 7:** After a computer crash, a team member did a Send/Receive straight away, and
+the corrupted book files have now reached the rest of the team. The project administrator
+finds the history point where the corruption came in. Before choosing "Undo Changes" on that
+point, what should the administrator do, and why?
+- A) Nothing extra — "Undo Changes" on the point that introduced the corruption always
+  restores the latest uncorrupted version of every affected book
+- B) Ask the affected user to delete the project and Send/Receive first, because "Undo
+  changes" won't work while their corrupted copy still exists
+- C) Check the affected user's role — if they had no edit access to the book, Paratext will
+  have refused the change and there is nothing to undo
+- D) Click the changed book's link to open Compare Versions; if the right-hand pane isn't the
+  latest version, that user's pre-corruption copy was out of date, so find the history point
+  holding the latest version of the book and use "Revert Books"
+
 ---
 
-### Section 4: Recovering Lost Notes, Term Renderings, and Settings (Questions 7-8)
+### Section 4: Recovering Lost Notes, Term Renderings, and Settings (Questions 8-9)
 
-**Question 7:** Why can't a lost notes file typically be recovered just by looking at
+**Question 8:** Why can't a lost notes file typically be recovered just by looking at
 Paratext's own project history view?
 - A) Paratext's history view only shows changes made in the last 24 hours
 - B) Mercurial tracks detailed changes to notes files and other settings, but Paratext's
@@ -87,7 +101,7 @@ Paratext's own project history view?
 - C) Notes files aren't stored in the Mercurial repository at all
 - D) Project history only tracks changes made by project administrators
 
-**Question 8:** A user reports that their most recent notes are visible, but older notes
+**Question 9:** A user reports that their most recent notes are visible, but older notes
 seem to have vanished entirely. What does this pattern most likely indicate, and what does
 recovering it require?
 - A) The notes file was deleted at some point and new notes have been created since —
@@ -100,9 +114,9 @@ recovering it require?
 
 ---
 
-### Section 5: Snapshotting an Earlier Stage into a Reference Project (Questions 9-10)
+### Section 5: Snapshotting an Earlier Stage into a Reference Project (Questions 10-11)
 
-**Question 9:** A project administrator wants to preserve the team's translation exactly
+**Question 10:** A project administrator wants to preserve the team's translation exactly
 as it stood three months ago, in a separate reference project — not the project's current
 state. Which procedure is required?
 - A) Simply create a new project and import the current book files
@@ -112,7 +126,7 @@ state. Which procedure is required?
 - C) Rename the current project and mark it read-only
 - D) Use Compare Versions to view the earlier text; no separate project is needed
 
-**Question 10:** While carrying out the earlier-point snapshot procedure, an administrator
+**Question 11:** While carrying out the earlier-point snapshot procedure, an administrator
 skips turning off automatic Send/Receive before reverting the books. Based on why that step
 exists, what is the likely risk?
 - A) No risk — automatic Send/Receive only affects resource projects, not standard
@@ -126,4 +140,4 @@ exists, what is the likely risk?
 
 ## Answer key
 
-1. B | 2. B | 3. B | 4. B | 5. B | 6. B | 7. B | 8. A | 9. B | 10. B
+1. B | 2. B | 3. B | 4. B | 5. B | 6. B | 7. D | 8. B | 9. A | 10. B | 11. B

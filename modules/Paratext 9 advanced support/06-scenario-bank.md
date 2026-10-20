@@ -1,10 +1,10 @@
 # Scenario Bank
 
-**Estimated time:** 80 minutes
+**Estimated time:** 84 minutes
 
 **Purpose:** Applied practice covering all five recovery/support topics from this course.
 **Format:** Sequenced from most straightforward to most involved. Scenario 1 is a simple
-setup task; Scenario 5 (last) is the most complex, since it requires an external tool
+setup task; Scenario 4 is the most technically involved, since it requires an external tool
 (TortoiseHG) and manual file editing rather than anything done inside Paratext alone.
 
 ## How to use these scenarios
@@ -77,7 +77,7 @@ anyone starts re-typing it from memory.
 
 ## Scenario 3: The Suspicious Edit
 
-**Time budget:** 16 minutes | **Topic:** User roles and edit access (Lesson 3)
+**Time budget:** 20 minutes | **Topic:** User roles and edit access (Lesson 3)
 
 **Situation:** A team leader contacts you confused: project history shows a change to a
 book credited to a team member who, according to the project's user roles, does not have
@@ -94,6 +94,19 @@ a Send/Receive since restarting it.
    them having actually used Paratext to make an unauthorized edit.
 2. Recommend the correct next step for the team member whose laptop crashed — and
    specifically what they should *not* do first, and why.
+
+**Follow-on twist:** A week later, a different team member's computer crashes while Paratext
+is open. This time they do a Send/Receive straight away, before calling you, and the corrupted
+files go out to the rest of the team. The project administrator has found the history point
+where the corruption came in and is about to click "Undo Changes" on it.
+
+3. Plan the administrator's recovery of the team's copy, step by step.
+4. Say what you would have the administrator check **before** clicking "Undo Changes", what
+   result of that check would mean "Undo Changes" is the wrong tool, and what to do instead.
+   Explain how you would decide which version is the latest without relying on reading the
+   translation text yourself.
+
+---
 
 ## Scenario 4: The Vanishing Notes
 
@@ -118,6 +131,7 @@ installed yet and have never used it.
 3. Describe what you would check afterward to confirm the recovery succeeded, and what a
    corrupt-file result would tell you about where the edit went wrong.
 
+---
 
 ## Scenario 5: The Archived Draft
 

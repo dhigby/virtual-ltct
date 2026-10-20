@@ -291,6 +291,7 @@ roles:
       moodle/role:assign: allow              # mentor (user context) and Course mentor (course context)
       moodle/course:managegroups: allow      # mentor groups (R10)
       local/ltuse:manageprotection: allow    # intake protects a new account: spec 016's can_manage_protection (R5)
+      moodle/site:configview: allow          # shows the Site administration menu, so the holder can add and edit accounts in the browser
     why: >-
       #14 (spec 008, research R12): the site team's administration account, one per person so
       Moodle's logs show who made each change (plan decision 7). Exactly the capabilities the
@@ -303,7 +304,12 @@ roles:
       protection its row asks for, and 016's can_manage_protection needs this capability for
       an account that has no organisation yet (008 research R5). It makes the holder the site
       team in 016's terms, which this role is. It does not hold local/ltuse:viewidentity:
-      intake never needs to see a real identity.
+      intake never needs to see a real identity. moodle/site:configview (2026-10-20, Doug):
+      Moodle shows the Site administration menu only to a holder of it
+      (lib/classes/navigation/settings_navigation.php, MOODLE_502_STABLE), so without it a
+      site-team member holding moodle/user:create could not find Add a new user. It is read
+      only, carries no risk flag, and is the manager archetype's own default; the menu then
+      lists only the pages whose capabilities the role holds.
 
   # Pilot learners (2026-10-15): course authors at stage 7.
   - shortname: ltcauthor

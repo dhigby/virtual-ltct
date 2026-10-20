@@ -332,3 +332,59 @@ An interrupted run, a lost response and a plain re-run with the same code all fi
 ## Instance results
 
 To be filled by the quickstart run (V1–V19), with test accounts on `example.org` only. Manager-pilot findings name testers only as "tester 1/2/3" with the role "ALTC" or "organisation manager"; they name no Area or organisation entry, and give no protection level or count tied to an entry (constitution III), here or in a PR or issue.
+
+### T025: Prerequisites 1–6, V1, V16 first half (2026-10-15)
+
+Run by Claude on ltuse.net (`local_ltuse` 2026101500, Moodle 5.2.3+ Build 20260928) with a test admin account whose token was issued by `setup_admin_token.php`, read from the server into the environment for each command and never stored in a file here.
+
+| Check | Result |
+|---|---|
+| Prerequisite 1 (plugin version) | Pass: server and main both at 2026101500. |
+| Prerequisite 2–3 (private copy, fixture organisations, `coursementorsync` 1) | Pass: `validate` ok; `apply` ran; `drift` after it lists nothing missing for the fixtures. The 22 remaining differences all pre-date this run (unset `MOODLE_*` variables, earlier `test-a`/`test-b` leftovers, unmanaged settings, two courses without a discussion forum). |
+| Prerequisite 4 (fixture courses, starting enrolment) | Pass: both courses created hidden, in `ltct:published` and `ltct:org:fixture-a`; fixture-a's cohort enrolled in the shared course. |
+| Prerequisite 5 (test admin, token) | Pass: account holds `local/ltuse:administer` and is authorised on `ltuse_admin`; its auth type is `webservice`, so it cannot sign in to the web UI. |
+| Prerequisite 6 (`check`) | Pass: exit 0, no missing capability; all four protection levels available. |
+| V1 (path guard) | Pass: 4 of 4 refused, exit 1, each naming `~/ltct-private/` and creating nothing: a path in the repo, in a fresh `git init` folder, in a missing subfolder of it, and with `git` absent from `PATH`. For the repo path the tool did not say whether git already tracks the file, because the file did not exist; not exercised. |
+| V16, first half | Pass: with `ltctadmin` unassigned, `check` is refused by the service (`accessexception`, exit 2); with it reassigned, `check` exits 0. |
+
+Deviations and what remains:
+- `org-courses.yaml` accepts only a course that exists under `modules/`, so `fixture-a-only` is not declared there. Enrolment rules decide by the course's category, so this does not change what V7 tests.
+- Apply never deletes. The fixture categories, cohorts, cohort rules, reports and `ltct_org` menu options stay on the server after clean-up, as the `test-a`/`test-b` ones from an earlier run did. Only the two fixture courses and the test account can be removed.
+### T038: V2–V6 (2026-10-15, test accounts on a reserved example domain only)
+
+| Check | Result |
+|---|---|
+| V2 | Pass: 30-row intake previewed 27 new / 2 unchanged / 1 flagged (`flagged_other_org`); apply created 27, flagged 1, nothing sent at preview. Whole run (preview + apply) **21 s**, against SC-001's 15 minutes. Exit 1, because of the flagged row. **Not run:** logging in with the emailed password, and the 31st row whose email is another account's username (`login_clash`; covered by harness and PHPUnit only). |
+| V3 | Pass: right after the apply, the organisation cohort had 29 members and 29 were enrolled in the shared course, with no wait for cron. |
+| V4 | Pass: re-applying the same code reported 29 `already done` and left the flagged row alone; a fresh preview showed 29 unchanged / 1 flagged. Deviation: the spec expects exit 0, but the flagged row makes it exit 1. |
+| V5 | (a) new, done, and a re-preview shows it unchanged, so its protection settled; **the order of Moodle log events was not read**. (b) no protection column: new, nothing waited. (c) done; **its generated username and email login were not checked**. (d) `flagged_protection`, nothing enrolled. (e) `waits` with the `email_unchecked` sentence, no account. (f) `waits` with the `email_reveals` sentence, no account. (c)'s "waits while 016 cannot set the level" case is PHPUnit-only, by decision. |
+| V6 | Pass, by killing the process (not by unplugging a network): 12-row apply killed after 7 rows; the re-run with the same code did the other 5 and reported the 7 as `already done`; a fresh preview showed 12 unchanged, so no duplicates. Exit 0. |
+
+Mail: every new account made a password email to a non-receiving address through the shared relay. That was accepted by the maintainer (2026-10-15) because the relay's identity is unverified (no SPF or DKIM on the host), so the emailed-password login in V2 stays open until mail works.
+
+### T047, T056, T067: V7–V18 (2026-10-15, fixtures only)
+
+| Check | Result |
+|---|---|
+| V7 | Pass: an organisation's cohort into its own course, allowed; the other organisation's cohort, refused ("belongs to another organisation"); its managers cohort, allowed; a pilot course, refused; a missing course, refused before any change with no code. |
+| V9, disable half | Pass: unenrolling the cohort from a shared course showed the instance `disabled` with all 43 enrolments still counted; enrolling again restored it. Completion and grades were not exercised (the fixture courses have no activities). |
+| V9, course-mentor half | Pass: disabling the cohort removed both course mentors (enrolment and Teacher); re-enabling restored them. |
+| V10 | Pass: a move before the mirror was refused (`lost`, "run enrol mirror first"); after the mirror it applied, the shared course `kept` and the old organisation's own course `suspended_by_rule`. Also covers V8's move half. |
+| V8 | Partly run: the move and "a new member is enrolled with no further step" (V3). **Not run:** a completed activity and quiz attempt surviving the move. |
+| V14 | Partly run: suspend and reactivate worked for a learner and a mentor and the counts followed. **Not run:** ending a live session, login refused, and a holding-entry learner. |
+| V15 | Pass: masked on screen; a path in the repo refused with nothing written; a path outside written. |
+| V17 | Partly run, preview only: no role pathway is declared and no published course carries a competency, so no pathway had courses to enrol. Nothing was applied, so no pathway assignment exists. **Finding F1:** `enrol pathway` previewed `ltct:mentors` as `would_add` where V17 expects a refusal, because the cohort rules are checked per course on the pathway and an empty pathway has none. The "publish a course that joins it" half was not run. |
+| V18 | Pass: adds succeeded and the own-organisation note appeared; removing a non-member was `unchanged`; an organisation cohort was refused offline, naming the row. |
+| V11 | Pass: each mentor was enrolled through `ltct:coursementor`, held Teacher through `local_ltuse`, and sat in "Mentor group N" with their learners. Not checked: 004's delivery report. |
+| V12 | Partly passes. Ending all of a mentor's relationships, and suspending a mentor's learners, each removed the mentor's enrolment and Teacher in the same request, and reactivating restored them. **Finding F2:** in both cases the mentor and the learners stayed in the mentor group. **Not run:** a mentor also enrolled another way; 016's identity view. |
+| V13 | **Fails.** A one-course mentor was added for a learner, but the learner also stayed in the default mentor's group, so the one-course mentor did not replace the default. |
+
+**F2 and V13 share a probable cause (not yet proven).** `local_ltuse_allow_group_member_remove()` (`lib.php:465`) returns `false`, and its comment says `groups_remove_member()` is unconditional. The behaviour on Moodle 5.2.3 suggests it is not, so the sync's own removals are vetoed. Memberships carry `component=local_ltuse`, so the sync does recognise them.
+
+**Why it matters, and what holds.** 016's `is_course_mentor_of()` also needs the viewer to hold `local/ltuse:viewidentity` in the course, which Teacher supplies. So a mentor who has lost Teacher is not entitled by a lingering membership alone. But a one-course mentor now sharing a group with a learner who is still in a default mentor's group means each of those mentors, while they hold Teacher, is entitled to that learner. FR-018 requires the membership to end with its reason.
+
+**V19 (T076): pass.** After V1–V18, no new or changed data file (`.csv`, `.tsv`, `.txt`, `.xlsx`) appears in the repo or its four other worktrees, and none was committed on any branch since the start of the day. One old worktree (2026-10-02) shows 5 deletions of tracked files, not additions. Every `example.org` outside `tests/` is a doc comment or an example URL, none a learner address.
+
+The fixture accounts, courses and organisations stay on ltuse.net; none of the V7–V18 changes touched a real account or course.
+
+- The one-off setup scripts were run by the maintainer, because the assistant was refused permission to upload and run new PHP on the live host. Both are deleted from the server.

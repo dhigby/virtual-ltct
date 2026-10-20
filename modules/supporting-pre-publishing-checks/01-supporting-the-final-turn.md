@@ -99,6 +99,7 @@ everything is the team's translation call either. Three buckets:
   **Translation Consultant**.
 
 **Key takeaways**
+
 - Errors can be introduced or missed at any stage of the 6-stage spiral, not only in a
   final accumulating pass — that's why Stage 6 can't assume earlier stages caught
   everything.

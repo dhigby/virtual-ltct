@@ -19,6 +19,7 @@ diagnostic reasoning — it can't assess live coaching. The mentor-reviewed scen
 
 **Question 1:** A team says every check in Paratext shows clean and they're ready for
 the typesetter. What is the FIRST thing you should do?
+
 - A) Sign off and send the files on, since a clean status in every check means the work is done
 - B) Escalate to an LT mentor straight away so a more experienced consultant can verify the checks
 - C) Ask how the checks came to be clean, to confirm they were genuinely reviewed and not just cleared
@@ -27,6 +28,7 @@ the typesetter. What is the FIRST thing you should do?
 **Question 2:** A team disagrees about whether a parallel passage should be
 harmonized — a genuine content question about Scripture. Who owns that decision, and
 who would you escalate to if expert review is needed?
+
 - A) The team decides; escalate to a Translation Consultant if expert review is needed
 - B) You decide it yourself, since you're the consultant in the room and can compare the two passages
 - C) The typesetter decides, since harmonising affects how the passages will lay out on the page
@@ -34,6 +36,7 @@ who would you escalate to if expert review is needed?
 
 **Question 3:** True or False: A check status showing "no outstanding errors" always
 means the team has genuinely reviewed and resolved everything.
+
 - A) True
 - B) False
 
@@ -43,6 +46,7 @@ means the team has genuinely reviewed and resolved everything.
 were marked correct with none flagged as suspect — including several proper names
 spelled two different ways, all marked correct. What does this pattern most likely
 indicate?
+
 - A) The wordlist genuinely has no problems, since zero errors is the target at Stage 6
 - B) The spelling check malfunctioned and failed to flag the suspect entries
 - C) The team was working from an outdated copy of the wordlist that predates the team's most recent edits
@@ -52,6 +56,7 @@ indicate?
 several rows still highlighted with placeholder text ("Double click to enter
 rendering(s) from project text") and a Found count of "0" or blank. What does this
 indicate?
+
 - A) A software glitch in the Biblical Terms tool that needs a support ticket raised
 - B) Those terms are still at their default starting state, with no rendering entered yet
 - C) The team accidentally deleted those renderings, which now need restoring from a project backup
@@ -60,6 +65,7 @@ indicate?
 **Question 6:** While reviewing a Biblical Terms list, you notice one term has several
 candidate renderings listed, but the Found count shows only one of them as actually
 present in the current text. What should the team do?
+
 - A) Review the term's rendering list, confirm which is current, and remove the stale ones
 - B) Leave all the renderings in place, since extra renderings help Paratext find more occurrences
 - C) Delete the term from the Biblical Terms list entirely, then add it back with a single rendering
@@ -68,6 +74,7 @@ present in the current text. What should the team do?
 **Question 7:** A team reports Send/Receive has become noticeably slower, and mentions
 they added the entire "All Biblical Terms" reference list to the Project's Biblical
 Terms list. What is the most likely cause, and what should you advise?
+
 - A) The slowdown is unrelated to the terms list; check their internet connection speed first
 - B) Paratext's installation is likely corrupted; advise reinstalling it to restore normal performance
 - C) Viewing any large list slows Send/Receive; advise closing the list before syncing
@@ -75,6 +82,7 @@ Terms list. What is the most likely cause, and what should you advise?
 
 **Question 8:** Per the SME field case, why was the connection between adding a large
 Biblical Terms list and the Send/Receive slowdown "hard to convince the team of"?
+
 - A) The relationship isn't real, and the slowdown turned out to have a different cause
 - B) It only happens on certain operating systems, so the team couldn't reproduce it
 - C) The team didn't believe that adding terms to a list could affect Send/Receive performance
@@ -83,6 +91,7 @@ Biblical Terms list and the Send/Receive slowdown "hard to convince the team of"
 ### Section 3: Parallel Passages and Measures (Questions 9-12)
 
 **Question 9:** What is "over-harmonising" in the context of parallel-passage checks?
+
 - A) Leaving parallel passages unreviewed so that differences between them go unchecked
 - B) Making parallel passages match more closely than the original texts do
 - C) Approving parallel passages in bulk without opening the Show differences comparison first
@@ -93,6 +102,7 @@ The team lead says, "those are just supposed to be different — we're not touch
 them." You open the Parallel Passages tool and see the relevant verses still showing a
 red "?" in the Status column, meaning they were edited during a major revision three
 weeks ago and haven't been reviewed since. What should you do?
+
 - A) Escalate the differences to a Translation Consultant without discussing them with the team
 - B) Accept the team lead's explanation and mark the check done, since some variation is legitimate
 - C) Compare the two accounts yourself and decide whether the wording should match
@@ -102,6 +112,7 @@ weeks ago and haven't been reviewed since. What should you do?
 weights, and measures checking into one check, replacing the older, separate Numbers
 check — but not every team's Paratext version has migrated to it yet. Before accepting
 any numbers/measures check results, what should you confirm?
+
 - A) That the results match your own sense of how the numbers and measures should be rendered
 - B) That the old and new checks both appear together as one combined list in the Open Biblical Terms List dialog
 - C) Which check(s) the team's version actually has, and that it ran against their documented approach
@@ -111,6 +122,7 @@ any numbers/measures check results, what should you confirm?
 working Measures check. At your request, the team reviews their own measure renderings
 and finds two occurrences of the same measurement rendered differently. Nobody is sure
 a documented approach to measures exists. What should you do?
+
 - A) Settle whether a documented approach exists, then refer the inconsistency to the team
 - B) Compare the measure renderings yourself to confirm the team's finding before acting on it
 - C) Decide which of the two renderings is correct and ask the team to match the other to it
@@ -120,6 +132,7 @@ a documented approach to measures exists. What should you do?
 
 **Question 13:** Why should formatting checks be worked "structural-first" — Chapter/Verse
 Numbers and marker pairs before headings, titles, and references?
+
 - A) Paratext's design requires it: the later checks won't run until the earlier ones have passed
 - B) One upstream break, like an unclosed marker pair, can cause many downstream-looking errors
 - C) The typesetter requires this order, and expects the checks to be reported to them in this sequence
@@ -128,6 +141,7 @@ Numbers and marker pairs before headings, titles, and references?
 **Question 14:** A team says their Punctuation Inventory "was already checked back
 when we started the project," but the project has since gone through two more
 revision passes and is headed to a typesetter in three weeks. What should you do?
+
 - A) Skip it, since the Punctuation Inventory belongs to PTXprint rather than Paratext's own checks
 - B) Accept it as done, since punctuation rarely changes once a project's early drafting is finished
 - C) Leave it for the typesetter, who will catch any punctuation problems during composition
@@ -137,6 +151,7 @@ revision passes and is headed to a typesetter in three weeks. What should you do
 
 **Question 15:** What is the correct glossary-linking scope, and what is the common
 field mistake?
+
 - A) Link every occurrence of a term; the mistake is linking too few occurrences
 - B) Link only the first occurrence in each book; the mistake is linking it again in later chapters
 - C) Link the first occurrence per section; the mistake is over-linking every occurrence
@@ -144,6 +159,7 @@ field mistake?
 
 **Question 16:** You notice a high-frequency term is linked at nearly every occurrence
 across several chapters. What should you do?
+
 - A) Unlink the over-applied marks and relink at "first occurrence in every section"
 - B) Delete the glossary entry for that term so the excess links no longer point anywhere
 - C) Leave it as it is, since more links help readers who start reading mid-chapter
@@ -152,6 +168,7 @@ across several chapters. What should you do?
 **Question 17:** An expat project admin wants single-column layout because the
 language has long words and the team has never used hyphenation. What should you
 check before agreeing?
+
 - A) Whether single-column is technically easier to set up in PTXprint for this project
 - B) Which layout the LWC (Language of Wider Communication) Bibles the community already reads use
 - C) Nothing further, since long words and a team with no hyphenation experience settle the decision on their own
@@ -160,6 +177,7 @@ check before agreeing?
 **Question 18:** The community currently reads two-column Bibles in the LWC (Language
 of Wider Communication), and the target language has long words. What concrete
 technical step should you take?
+
 - A) Reduce the font size in PTXprint until the long words fit the column width
 - B) Recommend the community switch to single-column, since long words won't fit well in two columns
 - C) Enable Show hyphenation in the Wordlist and get the team to review and correct the auto-generated hyphenation breaks
@@ -169,6 +187,7 @@ technical step should you take?
 
 **Question 19:** During the final PTXprint draft-PDF read-through, what should you be
 watching for?
+
 - A) Spelling errors in the source text, so you can list the words the team needs to correct
 - B) Whether each Biblical Terms rendering in the PDF is the accurate one for that term
 - C) Whether the wordlist and Basic Checks have been re-run since the PDF was last generated
@@ -177,6 +196,7 @@ watching for?
 **Question 20:** During a draft-PDF read-through you spot an orphan word, a footnote
 shifted two pages from its reference, and a heading landing awkwardly at a column
 break. What is your role regarding these findings?
+
 - A) Resolve what's yours to fix, and triage the rest as the team's call or the typesetter's
 - B) Note them but leave them alone, since anything in the draft PDF is entirely the typesetter's job
 - C) Fix all three yourself in PTXprint straight away, since you're the one who found them

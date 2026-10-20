@@ -259,6 +259,7 @@ belongs to the typesetter, not you. Don't try to solve typesetting problems that
 properly the typesetter's craft.
 
 **Key takeaways**
+
 - Over-linking is a scope problem (every occurrence vs. first-per-section) — you can
   drive the fix yourself, but check via Find (the link report is transient) and inspect
   the `\w...\w*` markup on each result rather than trusting a hit count.

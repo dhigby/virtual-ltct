@@ -156,6 +156,7 @@ you've seen behave one way in one project will exist or behave the same way in a
 *Numbers is its own entry here, separate from the other lists.*
 
 **Key takeaways**
+
 - There's no technical way to detect a blanket-approved wordlist, and the Project Plan
   only counts "Incorrect" entries — it doesn't flag Undecided or bulk approval. Ask the
   team directly, and if there's doubt, reset the whole wordlist to Undecided (this loses

@@ -10,24 +10,27 @@ zero-error result rather than a fast one.
 
 ## Learning objectives
 
-- You will be able to:
-  - Diagnose formatting-check failures — chapter/verse numbering errors, unclosed
-    marker pairs, ghost markers (a marker left with no content attached, usually debris
-    from an incompletely deleted footnote or cross-reference), wrong markers, and errors
-    in book titles, section headings, and references — by working structural-first.
-  - Coach a team to a zero-error result without touching their keyboard.
-- You will be able to:
-  - Review and use Paratext's Punctuation Inventory (Tools > Checking Inventories >
-    Punctuation Inventory) ahead of typesetting.
-  - Select "Show sequences" in its Inventory menu so that Run Basic Checks' punctuation
-    checkbox relabels itself "Punctuation (sequences)" and catches multi-character
-    punctuation sequences, rather than staying a plain "Punctuation" check.
-  - Use the complementary Unmatched Pairs of Punctuation inventory (Tools > Checking
-    Inventories) to directly catch single unmatched bracket/parenthesis-type pairs.
-  - Confirm both inventories were genuinely reviewed rather than assumed already
-    handled.
-  - Recognize the common settings issues that turn these into a time-sink for a
-    typesetter.
+You will be able to:
+
+- Diagnose formatting-check failures — chapter/verse numbering errors, unclosed
+  marker pairs, ghost markers (a marker left with no content attached, usually debris
+  from an incompletely deleted footnote or cross-reference), wrong markers, and errors
+  in book titles, section headings, and references — by working structural-first.
+- Coach a team to a zero-error result without touching their keyboard.
+
+You will be able to:
+
+- Review and use Paratext's Punctuation Inventory (Tools > Checking Inventories >
+  Punctuation Inventory) ahead of typesetting.
+- Select "Show sequences" in its Inventory menu so that Run Basic Checks' punctuation
+  checkbox relabels itself "Punctuation (sequences)" and catches multi-character
+  punctuation sequences, rather than staying a plain "Punctuation" check.
+- Use the complementary Unmatched Pairs of Punctuation inventory (Tools > Checking
+  Inventories) to directly catch single unmatched bracket/parenthesis-type pairs.
+- Confirm both inventories were genuinely reviewed rather than assumed already
+  handled.
+- Recognize the common settings issues that turn these into a time-sink for a
+  typesetter.
 
 ## Connect
 

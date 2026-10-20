@@ -8,20 +8,25 @@ last checks before a team's files go to the typesetter.
 
 ## Learning objectives
 
-- You will be able to:
-  - Diagnose over-linked glossary marking (every occurrence instead of
-    first-per-section).
-  - Coach a team to unlink and relink at the correct scope.
-- You will be able to:
-  - Advise a team on a single- versus two-column layout decision based on reader and
-    community expectation — not just word length.
-  - Use the Wordlist's Show hyphenation view to draft, enter and approve hyphenation
-    breaks — individually and in batches — with each break confirmed by the team, so
-    long words break correctly in a two-column layout.
-- You will be able to:
-  - Lead a team through the final PTXprint draft-PDF read-through.
-  - Resolve or triage what it surfaces, deferring true typesetting composition to the
-    typesetter.
+You will be able to:
+
+- Diagnose over-linked glossary marking (every occurrence instead of
+  first-per-section).
+- Coach a team to unlink and relink at the correct scope.
+
+You will be able to:
+
+- Advise a team on a single- versus two-column layout decision based on reader and
+  community expectation — not just word length.
+- Use the Wordlist's Show hyphenation view to draft, enter and approve hyphenation
+  breaks — individually and in batches — with each break confirmed by the team, so
+  long words break correctly in a two-column layout.
+
+You will be able to:
+
+- Lead a team through the final PTXprint draft-PDF read-through.
+- Resolve or triage what it surfaces, deferring true typesetting composition to the
+  typesetter.
 
 ## Connect
 

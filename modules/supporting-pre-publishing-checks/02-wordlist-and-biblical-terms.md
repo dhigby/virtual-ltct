@@ -9,19 +9,24 @@ fix without touching their keyboard.
 
 ## Learning objectives
 
-- You will be able to:
-  - Recognize that Paratext has no technical way to detect a blanket-approved wordlist,
-    and ask the team directly instead of relying on the tool.
-  - Coach a team to reset the whole wordlist to Undecided when there's doubt, and
-    re-review it together honestly.
-- You will be able to:
-  - Recognize incomplete Biblical Terms coverage — blank renderings presented as done.
-  - Recognize stale or duplicate renderings left uncleaned.
-  - Coach the team to genuinely complete and clean up the list.
-- You will be able to:
-  - Diagnose a Project Biblical Terms list that has been over-added-to and is causing
-    Send/Receive or performance slowdowns.
-  - Advise the team on right-sizing it.
+You will be able to:
+
+- Recognize that Paratext has no technical way to detect a blanket-approved wordlist,
+  and ask the team directly instead of relying on the tool.
+- Coach a team to reset the whole wordlist to Undecided when there's doubt, and
+  re-review it together honestly.
+
+You will be able to:
+
+- Recognize incomplete Biblical Terms coverage — blank renderings presented as done.
+- Recognize stale or duplicate renderings left uncleaned.
+- Coach the team to genuinely complete and clean up the list.
+
+You will be able to:
+
+- Diagnose a Project Biblical Terms list that has been over-added-to and is causing
+  Send/Receive or performance slowdowns.
+- Advise the team on right-sizing it.
 
 ## Connect
 

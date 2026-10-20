@@ -11,21 +11,21 @@ the team's own, made against their own agreed approach.
 
 You will be able to:
 
-  - Confirm every parallel passage has actually been reviewed since the last revision,
-    using the Parallel Passages tool's Status column.
-  - Flag any verse pairings still showing a red "?" back to the team for their own
-    decision.
-  - Recognize signs of over-harmonising to raise with the team.
+- Confirm every parallel passage has actually been reviewed since the last revision,
+  using the Parallel Passages tool's Status column.
+- Flag any verse pairings still showing a red "?" back to the team for their own
+  decision.
+- Recognize signs of over-harmonising to raise with the team.
 
 You will be able to:
 
-  - Confirm which numbers/measures check(s) are actually available for the team's
-    Paratext version — the new consolidated check, or the older separate Numbers check
-    with no working Measures check.
-  - Run whichever check is available, checking it against the team's already-agreed
-    approach.
-  - Route any gaps or contradictions back to the team rather than deciding the correct
-    rendering yourself.
+- Confirm which numbers/measures check(s) are actually available for the team's
+  Paratext version — the new consolidated check, or the older separate Numbers check
+  with no working Measures check.
+- Run whichever check is available, checking it against the team's already-agreed
+  approach.
+- Route any gaps or contradictions back to the team rather than deciding the correct
+  rendering yourself.
 
 ## Connect
 

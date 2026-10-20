@@ -95,7 +95,7 @@
             
   <strong>Draft under review.</strong>
   Not published material, and not part of the LT Consultant competency framework.
-  Built from <code>main</code>.
+  Built from <code>course/paratext-9-advanced-support</code>.
 
           </div>
           
@@ -1060,7 +1060,7 @@
 
 
   
-    <a href="https://github.com/dhigby/virtual-ltct/edit/main/modules/Paratext 9 advanced support/07-mentor-guide.md" title="Edit this page" class="md-content__button md-icon" rel="edit">
+    <a href="https://github.com/dhigby/virtual-ltct/edit/course/paratext-9-advanced-support/modules/Paratext 9 advanced support/07-mentor-guide.md" title="Edit this page" class="md-content__button md-icon" rel="edit">
       
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M10 20H6V4h7v5h5v3.1l2-2V8l-6-6H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h4zm10.2-7c.1 0 .3.1.4.2l1.3 1.3c.2.2.2.6 0 .8l-1 1-2.1-2.1 1-1c.1-.1.2-.2.4-.2m0 3.9L14.1 23H12v-2.1l6.1-6.1z"/></svg>
     </a>
@@ -1141,9 +1141,37 @@ a chronology mismatch, not the whole explanation.)</p>
 <li>Recognizes this behavior applies across Paratext 9, 8, and 7 — it is not a version-9-only
   quirk, so the learner shouldn't imply it would be fixed by upgrading or downgrading.</li>
 </ul>
-<p><strong>Common wrong turn:</strong> recommending an immediate Send/Receive "to get back in sync," which
-is the exact action the source material warns against — it risks propagating the
-crash-corrupted files to the rest of the team.</p>
+<p><strong>Follow-on twist (tasks 3–4) — what a strong answer looks like:</strong></p>
+<ul>
+<li>Recognises that once the corrupted files have been sent, deleting and resyncing is no longer
+  enough: the administrator recovers the uncorrupted book files from project history.</li>
+<li>Before "Undo Changes", has the administrator click the link for the changed book in the
+  history point that introduced the corruption, to open the Compare Versions dialog.</li>
+<li>Recognises that the right-hand pane may not be the latest version: "Undo Changes" restores
+  whatever that user had before the corruption, and if they didn't have the latest book files,
+  that is an out-of-date copy.</li>
+<li>If the right-hand pane isn't the latest, looks through the other history points for the one
+  holding the latest version of that book and uses "Revert Books" to restore it.</li>
+<li>Knows that finding the best version may be easier in TortoiseHG, examining the Mercurial
+  repository directly (Lesson 4).</li>
+<li>Judges "latest" from the project history and Compare Versions — not by reading the text for
+  correctness — and says they would confirm with the translation team if it's ambiguous which
+  version is the latest. Bonus if they recall from Lesson 2 that history isn't always in
+  strict chronological order.</li>
+<li>Notes this recovery applies to Paratext 9 and 8 (not 7, unlike the rest of the scenario).</li>
+<li>Demonstrates the "what good looks like" criterion: can explain the pitfall of using "Undo
+  changes" to recover after corrupt files have reached the Send/Receive server.</li>
+</ul>
+<p><strong>Common wrong turns:</strong></p>
+<ul>
+<li>Recommending an immediate Send/Receive "to get back in sync," which is the exact action the
+  source material warns against — it risks propagating the crash-corrupted files to the rest of
+  the team.</li>
+<li>In the follow-on twist, clicking "Undo Changes" on the corrupting history point straight away
+  and assuming the team is back to the latest text. The corruption is gone, but if the user
+  didn't have the latest version before the crash, the team is now on that user's out-of-date
+  copy, and newer work is missing without anything looking wrong.</li>
+</ul>
 <h3 id="scenario-4-the-vanishing-notes">Scenario 4: The Vanishing Notes<a class="headerlink" href="#scenario-4-the-vanishing-notes" title="Permanent link">&para;</a></h3>
 <p><strong>What a strong answer looks like:</strong></p>
 <ul>

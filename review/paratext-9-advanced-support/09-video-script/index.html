@@ -95,7 +95,7 @@
             
   <strong>Draft under review.</strong>
   Not published material, and not part of the LT Consultant competency framework.
-  Built from <code>main</code>.
+  Built from <code>course/paratext-9-advanced-support</code>.
 
           </div>
           
@@ -1082,7 +1082,7 @@
 
 
   
-    <a href="https://github.com/dhigby/virtual-ltct/edit/main/modules/Paratext 9 advanced support/09-video-script.md" title="Edit this page" class="md-content__button md-icon" rel="edit">
+    <a href="https://github.com/dhigby/virtual-ltct/edit/course/paratext-9-advanced-support/modules/Paratext 9 advanced support/09-video-script.md" title="Edit this page" class="md-content__button md-icon" rel="edit">
       
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M10 20H6V4h7v5h5v3.1l2-2V8l-6-6H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h4zm10.2-7c.1 0 .3.1.4.2l1.3 1.3c.2.2.2.6 0 .8l-1 1-2.1-2.1 1-1c.1-.1.2-.2.4-.2m0 3.9L14.1 23H12v-2.1l6.1-6.1z"/></svg>
     </a>
@@ -1098,7 +1098,7 @@ the five support/recovery topics, in spoken form, and sends the learner to the n
 lessons and the scenario bank for hands-on practice and the fine detail (e.g., the precise
 XML edits in Lesson 4). The recording happens outside this repo; upload to Cypher for
 Business is a separate human step.</p>
-<p><strong>Estimated runtime:</strong> 18-20 minutes.
+<p><strong>Estimated runtime:</strong> about 19-21 minutes.
 <strong>Companion lesson file(s):</strong> <code>01-installing-open-source-texts.md</code> through
 <code>05-snapshotting-to-a-reference-project.md</code> — one segment per lesson — plus a short
 orientation to <code>06-scenario-bank.md</code> at the close.</p>
@@ -1194,8 +1194,9 @@ explanation.</p>
 </table>
 <h3 id="segment-3-user-roles-are-not-a-guarantee-companion-to-lesson-3">Segment 3 — User roles are not a guarantee (companion to Lesson 3)<a class="headerlink" href="#segment-3-user-roles-are-not-a-guarantee-companion-to-lesson-3" title="Permanent link">&para;</a></h3>
 <blockquote>
-<p>~3.5 minutes. This is a "here's the danger, here's the exact safe response" segment —
-narrate the do-not-do step just as clearly as the do-this step.</p>
+<p>~4.5 minutes. This is a "here's the danger, here's the exact safe response" segment —
+narrate the do-not-do step just as clearly as the do-this step, and the same goes for the
+Undo Changes trap in the recovery case.</p>
 </blockquote>
 <table>
 <thead>
@@ -1226,8 +1227,24 @@ narrate the do-not-do step just as clearly as the do-this step.</p>
 <td>"The safe response is two steps: delete the project from that user's Paratext, then Send/Receive to bring down a clean copy from the server. That gets them back to good without ever pushing the bad files out."</td>
 </tr>
 <tr>
-<td>Title card:<strong>Applies to Paratext 9, 8, and 7.</strong></td>
-<td>"And this isn't version-specific — it's how the edit-role check has always worked, across 9, 8, and 7."</td>
+<td>Title card:<strong>Already sent? The administrator can recover from project history.</strong></td>
+<td>"But sometimes you get the call too late — the user has already done that Send/Receive, and the corrupted files are now with the whole team. That's still recoverable. The administrator can get the good book files back by going into the project history and finding the history point where the corrupted files came in."</td>
+</tr>
+<tr>
+<td><strong>WARNING</strong> title card: <strong>"Undo Changes" may bring back an out-of-date version.</strong></td>
+<td>"Here's the trap. The obvious move is to pick that history point and choose 'Undo Changes.' But Undo Changes puts back whatever that user had <em>before</em> the corruption — and if that user didn't have the latest version of those books, you've just replaced corrupted files with out-of-date ones. The corruption is gone, but so is the team's more recent work on that book."</td>
+</tr>
+<tr>
+<td><code>assets/ss-03-history-undo-changes-compare.png</code> — Compare Versions opened from the changed book's link on the history point that introduced the corruption; the right-hand pane shows a version older than the latest.</td>
+<td>"So before you choose Undo Changes, click the link for the changed book on that history point. That opens Compare Versions. Look at the right-hand pane: if it isn't the latest version of the book, don't use Undo Changes. Look through the project history for the point that holds the latest version of that book, and use 'Revert Books' to restore that version instead. If finding the best version gets hard, TortoiseHG — which we'll meet in the next segment — can make it easier."</td>
+</tr>
+<tr>
+<td>Title card:<strong>Recovering from project history: Paratext 9 and 8.</strong></td>
+<td>"This recovery step — and the Undo Changes trap — applies to Paratext 9 and 8."</td>
+</tr>
+<tr>
+<td>Title card:<strong>Edit-role check and delete-and-resync: Paratext 9, 8, and 7.</strong></td>
+<td>"And the rest of this segment isn't version-specific — it's how the edit-role check has always worked, across 9, 8, and 7."</td>
 </tr>
 </tbody>
 </table>
@@ -1312,7 +1329,7 @@ down for the ordering warning.</p>
 <td>"If the team is already at the point they want to preserve, this is the easy case: create a new project, and import the current books straight into it. Nothing else to it."</td>
 </tr>
 <tr>
-<td>Title card, numbered, matching the six-step lesson procedure: 1) Send/Receive first 2) turn OFF automatic Send/Receive on the main project 3) Revert books to the chosen history point 4) create the new project and import the reverted books 5) Delete project →<strong>Delete from this computer only</strong> 6) Send/Receive to restore the current main project, then re-enable automatic Send/Receive.</td>
+<td>Title card, numbered, matching the six-step lesson procedure: 1) Send/Receive first 2) turn OFF automatic Send/Receive on the main project 3) Revert Books to the chosen history point 4) create the new project and import the reverted books 5) Delete project →<strong>Delete from this computer only</strong> 6) Send/Receive to restore the current main project, then re-enable automatic Send/Receive.</td>
 <td>"If you need an<em>earlier</em> point — not where the project is now — an administrator does this instead: Send/Receive any pending work, turn off automatic Send/Receive, revert the books to the history point you want, import them into the new project, delete the reverted copy of the main project — <strong>from this computer only</strong> — and then Send/Receive to bring the main project back to its current state."</td>
 </tr>
 <tr>
@@ -1345,7 +1362,15 @@ and submit your answers to your mentor for feedback before you take the quiz."</
   paraphrase from memory.</strong> Segment 3's "do not Send/Receive, delete and resync instead"
   and Segment 5's revert-then-delete ordering are the two places in this course where
   getting the sequence wrong on camera would teach the <em>opposite</em> of the safe procedure.
-  Read from the lesson text for those two step lists rather than ad-libbing the order.</li>
+  Read from the lesson text for those two step lists rather than ad-libbing the order.
+  The same applies to Segment 3's recovery case: the check-before-you-act step — click the
+  changed book's link, check the right-hand pane of Compare Versions, and use "Revert Books"
+  on the latest good version rather than "Undo Changes" if that pane isn't the latest — must
+  be read from Lesson 3's text, not ad-libbed. Paraphrasing it as "just undo the bad history
+  point" teaches exactly the mistake the segment warns against. If Lesson 3 doesn't yet carry
+  this procedure when you record, take it to the course lead rather than improvising it, and
+  check that <code>assets/ss-03-history-undo-changes-compare.png</code> has been captured before you
+  rely on it as an on-screen cue.</li>
 <li><strong>On production status of this content:</strong> <code>00-design.md</code>'s SME knowledge notes record
   that the procedural gaps originally flagged for Scenario 3 (user roles) and Scenario 5
   (reference-project snapshotting) — missing version scope and "what good looks like"

@@ -95,7 +95,7 @@
             
   <strong>Draft under review.</strong>
   Not published material, and not part of the LT Consultant competency framework.
-  Built from <code>main</code>.
+  Built from <code>course/paratext-9-advanced-support</code>.
 
           </div>
           
@@ -507,6 +507,17 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
+  <a href="#if-the-corrupted-files-have-already-been-sent" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        If the corrupted files have already been sent
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#key-takeaways" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -819,6 +830,17 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
+  <a href="#if-the-corrupted-files-have-already-been-sent" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        If the corrupted files have already been sent
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#key-takeaways" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -873,7 +895,7 @@
 
 
   
-    <a href="https://github.com/dhigby/virtual-ltct/edit/main/modules/Paratext 9 advanced support/03-user-roles-and-edit-access.md" title="Edit this page" class="md-content__button md-icon" rel="edit">
+    <a href="https://github.com/dhigby/virtual-ltct/edit/course/paratext-9-advanced-support/modules/Paratext 9 advanced support/03-user-roles-and-edit-access.md" title="Edit this page" class="md-content__button md-icon" rel="edit">
       
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M10 20H6V4h7v5h5v3.1l2-2V8l-6-6H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h4zm10.2-7c.1 0 .3.1.4.2l1.3 1.3c.2.2.2.6 0 .8l-1 1-2.1-2.1 1-1c.1-.1.2-.2.4-.2m0 3.9L14.1 23H12v-2.1l6.1-6.1z"/></svg>
     </a>
@@ -882,17 +904,23 @@
 
 
 <h1 id="user-roles-arent-a-guarantee-responding-to-possible-file-corruption">User Roles Aren't a Guarantee: Responding to Possible File Corruption<a class="headerlink" href="#user-roles-arent-a-guarantee-responding-to-possible-file-corruption" title="Permanent link">&para;</a></h1>
-<p><strong>Estimated time:</strong> 30 minutes</p>
+<p><strong>Estimated time:</strong> 35 minutes</p>
 <p><strong>Purpose:</strong> Prepares you to explain why Paratext's per-book edit-role restrictions are not an
-absolute guarantee against unauthorized-looking changes, and to apply the correct, safe response
+absolute guarantee against unauthorized-looking changes, to apply the correct, safe response
 when a user's local project files may be corrupted — instead of the instinctive but risky move
-of an immediate Send/Receive.</p>
+of an immediate Send/Receive — and, when corrupted files have <em>already</em> been sent, to guide the
+administrator's recovery from project history without landing the team on an out-of-date
+version.</p>
 <h2 id="learning-objectives">Learning objectives<a class="headerlink" href="#learning-objectives" title="Permanent link">&para;</a></h2>
 <ul>
 <li>You will be able to explain why Paratext's per-book user-role edit restrictions are not an
   absolute guarantee — that a book file can be altered outside Paratext and that change will
   propagate to the whole team via Send/Receive — and apply the correct response (delete the
   project and resync, not an immediate Send/Receive) when a user's local files may be corrupted.</li>
+<li>You will be able to explain the pitfall of using "Undo Changes" to recover after corrupted
+  files have reached the Send/Receive server, and describe the check (Compare Versions from the
+  changed book's link) and the alternative ("Revert Books" from the history point holding the
+  latest version) an administrator should use instead.</li>
 </ul>
 <h2 id="connect">Connect<a class="headerlink" href="#connect" title="Permanent link">&para;</a></h2>
 <p><strong>✏️ Reflection:</strong> Think about how you've explained Paratext's user roles and per-book edit
@@ -938,6 +966,44 @@ out to the team.</p>
 <p><strong>INFO:</strong> This applies to Paratext 9, and to Paratext 8 and 7 as well — the underlying behavior
 (edit-role checks live inside Paratext, not in the shared repository) hasn't changed across
 these versions.</p>
+<h3 id="if-the-corrupted-files-have-already-been-sent">If the corrupted files have already been sent<a class="headerlink" href="#if-the-corrupted-files-have-already-been-sent" title="Permanent link">&para;</a></h3>
+<p>Sometimes the warning comes too late: the user has a crash or file corruption, does a
+Send/Receive anyway, and the corrupted files go out to the rest of the team. The situation is
+still recoverable — the project history kept the earlier, uncorrupted versions — but this is
+now a job for the project <strong>administrator</strong>, working in project history.</p>
+<p>The obvious move is to find the history point where the corrupted files were introduced and
+choose <strong>"Undo Changes"</strong> on it. But that can fail to bring back the latest version of the
+files. Here is why.</p>
+<p><strong>Why "Undo Changes" can land on stale text:</strong> "Undo Changes" replaces the corrupted files with
+whatever that user had <em>before</em> the corruption. If that user did not have the latest version of
+the book files at that moment — say, colleagues had sent newer work that this user had not yet
+received — then "Undo Changes" restores the user's out-of-date copy, not the team's latest
+text. The corruption is gone, but so is the newer work, and nothing about the result looks
+alarming.</p>
+<p><strong>The check to make before clicking "Undo Changes":</strong></p>
+<ol>
+<li>In project history, find the history point where the corrupted files were introduced.</li>
+<li><strong>Before</strong> choosing "Undo Changes", click the link for the changed book in that history point.
+   This opens the <strong>Compare Versions</strong> dialog.</li>
+<li>Look at the <strong>right-hand pane</strong>. If it is not the latest version of that book, "Undo Changes"
+   would restore an out-of-date copy — don't use it.</li>
+<li>Instead, look through the other history points in project history for the one holding the
+   latest version of that book, and use <strong>"Revert Books"</strong> to restore that version.</li>
+</ol>
+<p><img alt="Paratext Project History for the UCTV test project, with test1white's 2026-09-16 history point selected, and Compare Versions on MAT 1:0 opened from that point's MAT link. The left pane, test1white's 15:58 version, is empty — the corrupted file. The right pane, the 15:54 baseline that “Undo Changes” would restore, shows the whole book struck through as removed. Other Steven White history points for MAT appear above and below it in the list." src="../ss-03-history-undo-changes-compare.png" /></p>
+<p><strong>NOTE:</strong> "Is this the latest version?" is a question you answer from the project history — which
+history points exist for that book, who sent them and in what order — and from what Compare
+Versions shows has changed, <strong>not</strong> by reading the text and judging which wording is right. You
+can't judge the translation linguistically, and you shouldn't try. If the history leaves it
+ambiguous which version the team was really working from, confirm with the translation team
+before restoring anything. Remember too, from Lesson 2, that project history is not always in
+strict chronological order.</p>
+<p><strong>TIP:</strong> Finding and restoring the best version can be easier when you examine the Mercurial
+repository directly in <strong>TortoiseHG</strong>, which Lesson 4 introduces.</p>
+<p><strong>INFO:</strong> This recovery procedure applies to <strong>Paratext 9 and Paratext 8</strong> — not Paratext 7,
+unlike the rest of this lesson.</p>
+<p>Lesson 5 also uses "Revert Books", but there the reverted state must never be sent to the team.
+Here it is the opposite: the version you restore is the one the team is meant to end up with.</p>
 <p><strong>What "good" looks like:</strong> you can explain, to a non-technical team member, how and why project
 history can show a mysterious edit credited to someone who does not have editing access to that
 book — without that explanation ever needing to invoke anyone actually bypassing Paratext's
@@ -955,6 +1021,13 @@ permissions.</p>
   Send/Receive to get a clean copy — never an immediate Send/Receive on the possibly-corrupted
   files.</li>
 <li>This behavior applies across Paratext 9, 8, and 7.</li>
+<li>If corrupted files have already been sent, the administrator recovers from project history —
+  but "Undo Changes" restores whatever the user had before the corruption, which may be out of
+  date. Before using it, click the changed book's link to open Compare Versions; if the
+  right-hand pane isn't the latest version, use "Revert Books" from the history point that holds
+  the latest version. (Paratext 9 and 8.)</li>
+<li>Decide which version is latest from the history, never by reading the text; when it's
+  ambiguous, ask the translation team.</li>
 </ul>
 <h2 id="challenge">Challenge<a class="headerlink" href="#challenge" title="Permanent link">&para;</a></h2>
 <p><strong>✏️ Try this:</strong> A user on a team you support tells you their computer crashed unexpectedly
@@ -968,10 +1041,21 @@ I just do a Send/Receive to get everything back in sync?"</p>
 <li>What you would check afterward, once their project has been deleted and re-synced, to confirm
    things are back to normal.</li>
 </ol>
+<p><strong>✏️ Then consider the harder version:</strong> suppose the user had <em>already</em> done a Send/Receive
+before calling you, so the corrupted files have reached the rest of the team. Write out:</p>
+<ol>
+<li>What the project administrator should do to recover the team's copy.</li>
+<li>What the administrator should check <strong>before</strong> clicking "Undo Changes" on the history point
+   that introduced the corruption — and why skipping that check could leave the team on
+   out-of-date text without anyone noticing.</li>
+</ol>
 <h2 id="change">Change<a class="headerlink" href="#change" title="Permanent link">&para;</a></h2>
 <p><strong>✏️ Self-check:</strong> Could you explain to a team leader, in plain language, why "only certain
 people can edit this book" doesn't fully protect them from a corrupted file spreading to
 everyone? And could you state the correct recovery response without hesitating?</p>
+<p><strong>✏️ Self-check:</strong> Could you explain to an administrator why "Undo Changes" on the corrupting
+history point might restore an out-of-date version — and what to look at in Compare Versions
+before trusting it?</p>
 <p><strong>✏️ Reflection:</strong> Think of a real team whose computers are older, share a poor power supply, or
 are otherwise prone to crashes or improper shutdowns. How would you introduce this "don't
 Send/Receive right away" guidance to them <em>before</em> they need it, rather than after?</p>

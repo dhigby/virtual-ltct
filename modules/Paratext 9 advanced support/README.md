@@ -55,6 +55,7 @@ Work through the numbered files in order:
 | [`07-mentor-guide.md`](07-mentor-guide.md) | Facilitator notes: rubric for each scenario, common wrong turns, known SME-source gaps | — (facilitator use) |
 | `08-quiz.md` | Assessment quiz covering all five topics | 20 min (not counted toward seat time) |
 | [`09-video-script.md`](09-video-script.md) | Recording script for Cypher upload | — (facilitator/recording use) |
+| [`10-video-script.md`](10-video-script.md) | Course-introduction (overview) video script — the video that sits on Lesson 1 | — (facilitator/recording use) |
 
 **Total learner seat time:** 264 minutes (lessons 180 min + scenario bank 84 min). The
 mentor guide and quiz are excluded from this total by convention — see this course's

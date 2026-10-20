@@ -55,10 +55,10 @@ has been changed yet. What do you do?
 **Question 6:** On the Quote marks tab you have changed every cell that differed from the
 team's conventions. Before clicking OK, what is the recommended way to confirm you picked
 the right characters?
-- A) Check the sample text in the Example section at the bottom of the dialog
-- B) Hover each column label and read the character named in the status bar
+- A) Press Alt+X in each cell to see its code, and again to switch back
+- B) Check the sample text in the Example section at the bottom of the dialog
 - C) Compare the shapes in the grid with the marks in the convention table
-- D) Click OK, then run the check on the whole NT and compare the counts
+- D) Open each cell's dropdown (▼) and confirm the mark that is selected in it
 
 **Question 7:** On `RUNDA` you correct the First level cells to `«` `«` `»` but leave the
 **Continuer required at** list at the default `p p/q1 b/q1`. The check on Matthew reports
@@ -124,7 +124,7 @@ classify and handle this result?
 
 **Question 13:** In `TAMBAB`, three results appear together. John 3:10: "Quote opened; see
 following message for error". John 3:16: "Expected continuers [“] are missing OR quote not
-closed; see preceding message". John 3:21: "Closing quote [” U+201D] found without matching
+closed; see preceding message". John 3:21: "Closing quote [ ” U+201D ] found without matching
 opening. Caused by a missing opening quote, a missing continuer, or incorrectly defined
 continuer rules". Verse 3:16 starts a new `\p` paragraph inside Jesus's speech and begins with
 a straight `"` (U+0022). What do you do?
@@ -158,7 +158,7 @@ actionable errors. How do you scope the check?
 - D) Check the Continuer required at list, since the text is now correct
 
 **Question 17:** Expanding `TAMBAB` book by book, every book now shows 0 results except Romans,
-which shows one, at 1:1: "Closing quote [’ U+2019] found as a word medial character. Sometimes
+which shows one, at 1:1: "Closing quote [ ’ U+2019 ] found as a word medial character. Sometimes
 caused when a closing quote is incorrectly used as an apostrophe". The verse has no dialogue,
 and the flagged `’` sits between two letters of a word. When is Romans finished?
 - A) Once adding `’` to Word-medial punctuation has cleared the result
@@ -205,7 +205,7 @@ describe the language, the Quotations check run on every book will return zero r
 3. A (True) — Lesson 1 Content: at the defaults the check can show a handful of plausible results (Tamba's five in John 17), a flood (Runda's 1110) or a false silence (Menda's "No errors found" on a text full of dialogue, because none of its marks are in the defaults). The defaults are Paratext's, not the team's, so none of these results can be trusted yet.
 4. D — Lesson 2 Exercise 2.2 and the scenario workflow: the grid is never empty, so correcting it means changing every cell that differs from the conventions, including unused levels that must be set to *none*. A cell you leave at the default is still Paratext's choice, not the team's: in Runda's current text the Third level defaults happen to add no results (A's reason is true), but as with Q5 a clean check does not prove the settings are right. Runda's First and Second level marks are not its Third level, because Runda has none.
 5. D — Lesson 2 Exercise 2.1: `pi/pi` alone clears the John 17 results, and the default Second and Third level continuers produce no results in Tamba's text, so "No errors found" does not prove the settings are right. The check only reports what the current text happens to trip over. Tamba's conventions have no Second or Third level continuer and a six-entry **Continuer required at** list (`p p/q1 m/q1 s1/pi pi/pi b/q1`, against the default's three plus your `pi/pi`), so set both. Stopping after either half because the run is clean leaves a default the team never chose; and Tamba's First level does repeat `“` as its continuer, so that cell stays as it is rather than going to *none*.
-6. A — Lesson 2: confirm the characters in the Example section at the bottom of the dialog before clicking OK. Hovering a label shows a description of the field, not the character in the cell; similar-looking marks can be different code points, so comparing shapes is not enough; and a check run is not a substitute for verifying what you entered.
+6. A — Lesson 2: look-alike marks can be different code points, so you can't identify a character by its shape. Press Alt+X in the cell to show its code (for example U+201C), compare it with the code in the convention table, then press Alt+X again to switch it back to the character. Press it only once and click OK, and Paratext saves the code as text in the cell instead of the mark. The Example section at the bottom of the dialog and the cell's dropdown both show only shapes, so neither can tell look-alikes apart, and comparing shapes by eye has the same problem.
 7. A — Lesson 2 Exercise 2.2 and its table: "Expected continuers [«] are missing" at each place a listed marker occurs inside speech means the list is too long; the default `p/q1` names a marker Runda's text does not continue at. Runda's text carries `«` only at `\p`, so its list is `p` alone. The fix is in the field, not the text: the text is the authority and the list is your description of it. A too-short list shows a different symptom (unclosed-quote results inside a long speech), and clearing the continuer cell would break Runda's real continuers.
 8. C — Lesson 2 Exercise 2.3: Word-medial punctuation does not suppress the result once the character is also a configured quote mark, so every genuine apostrophe is still flagged on a fresh run. Paratext warns that unique characters are recommended, but it saves the setting. Treat each result as an expected false positive; the lasting fix is a different, unique apostrophe character, which is an orthography decision for the translation team to make, not you.
 9. B — Lesson 3 Exercise 3.2: with a First level continuer, a mark is expected at the head of each continued paragraph, so "Never use quote marks" would flag every expected continuer as an error. Switch to Custom settings and set Continued quotation to Use quote marks. The setting concerns Tamba's First level continuer, the Quote marks tab does not override it, and clearing the continuer cell would break the Quotations check configured in Lesson 2.

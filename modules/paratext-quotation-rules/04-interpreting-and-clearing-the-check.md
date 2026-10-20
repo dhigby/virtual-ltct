@@ -80,7 +80,7 @@ changes are sometimes made right up to typesetting — so you can raise it whene
 appears, but you don't make it. In this course's practice text, leave the apostrophe as
 written.
 
-![The TAMBAB project in Paratext 9.5, with Matthew 5:3 open in the left pane and the Quotations check results panel on the right, headed 7 Items and TAMBAB; All Books; Checks run: Quotations. The seven results are: MAT 5:3, Closing quote mark is possibly missing before verse 7.28; LUK 4:18, Closing quote mark is possibly missing before verse 20; JHN 3:10, Quote opened; see following message for error; JHN 3:16, Expected continuers are missing OR quote not closed; see preceding message; JHN 3:21, Closing quote U+201D found without matching opening; ACT 2:25, Opening quote mark found without matching closing quote mark; ROM 1:1, Closing quote U+2019 found as a word medial character. The MAT 5:3 result is selected and outlined in red.](assets/ss-04-results-with-highlight.png)
+![The TAMBAB project in Paratext 9.5, with Matthew 5:3 open in the left pane and the Quotations check results panel on the right, headed 7 Items and TAMBAB; All Books; Checks run: Quotations. The seven results are: MAT 5:3, Closing quote mark is possibly missing before verse 7.28; LUK 4:18, Closing quote mark is possibly missing before verse 20; JHN 3:10, Quote opened; see following message for error; JHN 3:16, Expected continuers are missing OR quote not closed; see preceding message; JHN 3:21, Closing quote [ ” U+201D ] found without matching opening, followed by the rest of that message; ACT 2:25, Opening quote mark found without matching closing quote mark: ‘; ROM 1:1, Closing quote [ ’ U+2019 ] found as a word medial character, followed by the rest of that message. The MAT 5:3 result is selected and outlined in red.](assets/ss-04-results-with-highlight.png)
 
 Read each result as three parts: the **location** (book, chapter, verse), the **message** (what
 the check thinks is wrong), and the **text in context** (open the verse and look). A useful
@@ -119,9 +119,9 @@ prediction for every row should you read the discovery prompts and open the vers
 |---|----------|--------------|----------------|------------|
 | 1 | Matthew 5:3 | "Closing quote mark is possibly missing before verse 7:28" | ? | ? |
 | 2 | Luke 4:18 | "Closing quote mark is possibly missing before verse 20" | ? | ? |
-| 3 | John 3:10, 3:16, 3:21 — **one seed, three linked results** | 3:10: "Quote opened; see following message for error" · 3:16: "Expected continuers [“] are missing OR quote not closed; see preceding message" · 3:21: "Closing quote [” U+201D] found without matching opening. Caused by a missing opening quote, a missing continuer, or incorrectly defined continuer rules" | ? | ? |
-| 4 | Acts 2:25 | "Opening quote mark found without matching closing quote mark" | ? | ? |
-| 5 | Romans 1:1 | "Closing quote [’ U+2019] found as a word medial character. Sometimes caused when a closing quote is incorrectly used as an apostrophe" | ? | ? |
+| 3 | John 3:10, 3:16, 3:21 — **one seed, three linked results** | 3:10: "Quote opened; see following message for error" · 3:16: "Expected continuers [“] are missing OR quote not closed; see preceding message" · 3:21: "Closing quote [ ” U+201D ] found without matching opening. Caused by a missing opening quote, a missing continuer, or incorrectly defined continuer rules" | ? | ? |
+| 4 | Acts 2:25 | "Opening quote mark found without matching closing quote mark: ‘" — listed below it: 2:29 "First-level quote continuer", and 2:34 "First-level quote continuer" and "Second-level quote opened, but second-level quote already open" | ? | ? |
+| 5 | Romans 1:1 | "Closing quote [ ’ U+2019 ] found as a word medial character. Sometimes caused when a closing quote is incorrectly used as an apostrophe" | ? | ? |
 
 **✏️ Discovery prompts for each item:**
 - Matthew 5:3 opens Jesus's speech, and the check traces it forward to verse 7:28 — the whole
@@ -140,10 +140,12 @@ prediction for every row should you read the discovery prompts and open the vers
   instead, will the check recognize it as the continuer? Once you spot the one broken mark, ask
   yourself: does fixing only that one character, then running the check again (close the
   results panel and run it fresh, not "Rerun"), clear all three results, or just one?
-- Acts 2:25–28: Peter cites Psalm 16 in Second level marks, opening with `‘` in 2:25, as one
-  continuous span across several paragraph breaks. Tamba's Second level has no continuer, and
-  `TAMBA` (Phase A) passes the check with this span unbroken — so the paragraph breaks are not
-  the problem. Where should the citation close, and is the closing mark there?
+- Acts 2:25–28: Peter cites Psalm 16. In 2:25 an opening phrase is followed by a `\q1` line
+  that opens both First and Second level (`“ ‘`), and the Second level runs as one continuous
+  span across several paragraph breaks. Tamba's Second level has no continuer, and `TAMBA`
+  (Phase A) passes the check with this span unbroken — so the paragraph breaks are not the
+  problem. The lines Paratext lists under this result point at later verses (2:29, 2:34); open
+  them, but start from 2:25. Where should the Second level close, and is the closing mark there?
 - Romans 1:1 has no dialogue. How could `’` (U+2019) inside a word cause the check to report a
   quotation problem? Try the fix Lesson 2 taught for this exact situation (Word-medial
   punctuation in Language Settings) and re-run the check with a genuinely fresh run, not just
@@ -156,7 +158,7 @@ prediction for every row should you read the discovery prompts and open the vers
 | 1 | Real error | Add the missing `”` (U+201D) in two places: in Matthew 5:12, where Jesus's speech (opened with `“` U+201C at 5:3) closes before it reopens with `“` at the start of 5:13, and in 7:27, where the speech closes before the narrator resumes at 7:28 (7:28 has no quote marks). Both closing marks were deleted; the check reports the unclosed speech once, at its opening verse 5:3, tracing forward to 7:28. Add both, then re-run. |
 | 2 | Real error | Delete the stray `“` (U+201C) before the Isaiah citation in Luke 4:18. Tamba does not mark narrator scripture citations; the mark was added by mistake. |
 | 3 | Real error (one fix, three results) | Verse 3:16 begins a new `\p` paragraph inside Jesus's speech, so it should open with Tamba's First level Quote Continuer `“` (U+201C) — but a straight `"` (U+0022) sits there instead. That single wrong character is what produces all three results: the check doesn't recognize it as the continuer, so it reports the speech as "opened" at 3:10 (where it actually starts), reports the missing continuer at 3:16, and then reports the speech's closing `”` at 3:21 as orphaned, with nothing left to match against. Replace the `"` at the start of 3:16 with `“` (U+201C), re-run the check, and all three results — 3:10, 3:16, and 3:21 — clear together. Do not chase 3:10 or 3:21 individually; there is nothing wrong at those verses themselves. |
-| 4 | Real error | Add the missing closing `’` (U+2019) in 2:28 that ends Peter's Psalm 16 citation. The citation opens with `‘` (U+2018) in 2:25 and runs as one Second level span across several paragraph breaks; that is valid under Tamba's configuration (Second level has no continuer, and Phase A passes the check with the span unbroken), so don't add close/reopen pairs at the breaks. Only the closing mark is missing. |
+| 4 | Real error | Add the missing closing `’` (U+2019) in 2:28 that ends the Second level of Peter's Psalm 16 citation. In 2:25, after an opening phrase, a `\q1` line opens both First and Second level (`“ ‘`, U+201C U+2018); 2:28 closes only the Second level. The Second level runs as one span across several paragraph breaks; that is valid under Tamba's configuration (Second level has no continuer, and Phase A passes the check with the span unbroken), so don't add close/reopen pairs at the breaks. Only the closing mark is missing. |
 | 5 | Neither — confirmed unresolvable | The `’` (U+2019) in Romans 1:1 is a genuine apostrophe inside a word, which Paratext reads as the Second level closing mark with no matching opener. Adding `’` to ☰ > Project settings > Language Settings > Other Characters > Word-medial punctuation looks like the fix (and is what Lesson 2 teaches), but confirmed against real Paratext 9.5 behavior, it does **not** suppress this result — the check keeps flagging it even after the setting is saved and a fully fresh check is run. There is no text change to make either (the apostrophe is correct as written). Verify the character really is a word-medial apostrophe, then leave the result and move on; note it for anyone else who picks up this project so they don't re-attempt the same fix. |
 
 ### Exercise 4.2 — Reach zero *actionable* errors
@@ -206,7 +208,7 @@ it means nothing left in the list still needs your action.
 - Romans shows exactly 1 result (the 1:1 apostrophe), verified as a genuine word-medial
   apostrophe and documented rather than chased with further configuration changes.
 
-![The TAMBAB project in Paratext 9.5 after the four real errors are fixed, with Romans 1 open in the left pane. The Quotations check results panel on the right, headed 1 Item and TAMBAB; All Books; Checks run: Quotations, lists a single result: ROM 1:1, Closing quote U+2019 found as a word medial character. Sometimes caused when a closing quote is incorrectly used as an apostrophe.](assets/ss-04-final-results.png)
+![The TAMBAB project in Paratext 9.5 after the four real errors are fixed, with Romans 1 open in the left pane. The Quotations check results panel on the right, headed 1 Item and TAMBAB; All Books; Checks run: Quotations, lists a single result: ROM 1:1, Closing quote [ ’ U+2019 ] found as a word medial character. Sometimes caused when a closing quote is incorrectly used as an apostrophe.](assets/ss-04-final-results.png)
 
 **✏️ Produce this (a mentor will review it).** Submit your completed triage table
 (predictions + actual types) and a one-line note for each result on the action you took and why. The point a

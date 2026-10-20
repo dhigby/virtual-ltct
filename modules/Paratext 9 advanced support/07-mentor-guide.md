@@ -83,9 +83,36 @@ a chronology mismatch, not the whole explanation.)
 - Recognizes this behavior applies across Paratext 9, 8, and 7 — it is not a version-9-only
   quirk, so the learner shouldn't imply it would be fixed by upgrading or downgrading.
 
-**Common wrong turn:** recommending an immediate Send/Receive "to get back in sync," which
-is the exact action the source material warns against — it risks propagating the
-crash-corrupted files to the rest of the team.
+**Follow-on twist (tasks 3–4) — what a strong answer looks like:**
+
+- Recognises that once the corrupted files have been sent, deleting and resyncing is no longer
+  enough: the administrator recovers the uncorrupted book files from project history.
+- Before "Undo Changes", has the administrator click the link for the changed book in the
+  history point that introduced the corruption, to open the Compare Versions dialog.
+- Recognises that the right-hand pane may not be the latest version: "Undo Changes" restores
+  whatever that user had before the corruption, and if they didn't have the latest book files,
+  that is an out-of-date copy.
+- If the right-hand pane isn't the latest, looks through the other history points for the one
+  holding the latest version of that book and uses "Revert Books" to restore it.
+- Knows that finding the best version may be easier in TortoiseHG, examining the Mercurial
+  repository directly (Lesson 4).
+- Judges "latest" from the project history and Compare Versions — not by reading the text for
+  correctness — and says they would confirm with the translation team if it's ambiguous which
+  version is the latest. Bonus if they recall from Lesson 2 that history isn't always in
+  strict chronological order.
+- Notes this recovery applies to Paratext 9 and 8 (not 7, unlike the rest of the scenario).
+- Demonstrates the "what good looks like" criterion: can explain the pitfall of using "Undo
+  changes" to recover after corrupt files have reached the Send/Receive server.
+
+**Common wrong turns:**
+
+- Recommending an immediate Send/Receive "to get back in sync," which is the exact action the
+  source material warns against — it risks propagating the crash-corrupted files to the rest of
+  the team.
+- In the follow-on twist, clicking "Undo Changes" on the corrupting history point straight away
+  and assuming the team is back to the latest text. The corruption is gone, but if the user
+  didn't have the latest version before the crash, the team is now on that user's out-of-date
+  copy, and newer work is missing without anything looking wrong.
 
 ### Scenario 4: The Vanishing Notes
 

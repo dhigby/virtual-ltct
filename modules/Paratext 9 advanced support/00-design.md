@@ -48,7 +48,7 @@ rather than pre-emptively.
 | --- | --- | --- | --- |
 | 1 | Learner can install an openly-licensed/open-source Scripture text as an editable project in Paratext, distinct from the team's own translation draft project. | Translation Tools, 3.0 — Scripture Markup and Import, Practitioner ("Convert and import data from other formats (plain text, Word document, etc) into translation software.") | Scenario Bank #1 |
 | 2 | Learner can diagnose why Paratext's chronological project-history view does not always reflect the true order of edits, and determine the actual sequence of changes using the tools available. | Translation Tools, 5.0 — Scripture Collaboration, Practitioner ("Advise users in best-practices for collaboration and data safety … such as the use of Send/Receive.") — approximate match; the descriptor names Send/Receive and data safety generally but does not specifically call out history-view accuracy. Closest existing row. | Scenario Bank #2; Quiz |
-| 3 | Learner can explain why Paratext's per-book user-role edit restrictions are not an absolute guarantee — that a book file can be altered outside Paratext (crashes, file-system corruption, an external history restore) and that change will propagate to the whole team via Send/Receive — and can apply the correct response (delete-project-and-resync, not an immediate Send/Receive) when a user's local files may be corrupted. | Translation Tools, 5.0 — Scripture Collaboration, Practitioner ("Advise users in best-practices for collaboration and data safety … such as the use of Send/Receive.") — approximate match; the descriptor's general data-safety language covers this failure mode without naming it specifically. | Scenario Bank #3; Quiz |
+| 3 | Learner can explain why Paratext's per-book user-role edit restrictions are not an absolute guarantee — that a book file can be altered outside Paratext (crashes, file-system corruption, an external history restore) and that change will propagate to the whole team via Send/Receive — and can apply the correct response (delete-project-and-resync, not an immediate Send/Receive) when a user's local files may be corrupted — and, if the corrupted files have already been sent, can explain why "Undo Changes" on the offending history point may restore stale text, checking Compare Versions first and using "Revert Books" from the history point holding the latest version instead. | Translation Tools, 5.0 — Scripture Collaboration, Practitioner ("Advise users in best-practices for collaboration and data safety … such as the use of Send/Receive.") — approximate match; the descriptor's general data-safety language covers this failure mode without naming it specifically. | Scenario Bank #3; Quiz |
 | 4 | Learner can recover a previous version of project notes, term renderings, or other non-text project settings that are not restored by a plain text rollback. | Translation Tools, 5.0 — Scripture Collaboration, Practitioner ("Advise users in best-practices for collaboration and data safety … such as the use of Send/Receive.") — **flagged: no clean match.** The descriptor's data-safety language does not enumerate recovery of notes/renderings/non-text settings specifically; this is the closest existing row, included because the SME named it as a real, recurring support case. | Scenario Bank #4; Quiz |
 | 5 | Learner can configure a reference project that preserves ("snapshots") the translation text as it existed at an earlier stage of the project. | Translation Tools, 5.0 — Scripture Collaboration, Practitioner ("Advise users in best-practices for collaboration and data safety … such as the use of Send/Receive. Assist users to configure plans and tasks in a way that helps them.") | Scenario Bank #5; Quiz |
 
@@ -58,16 +58,16 @@ rather than pre-emptively.
 | --- | --- | --- | --- |
 | `01-installing-open-source-texts.md` | Installing an open-source/openly-licensed text as an editable project (not a Paratext resource) | 1 | 35 |
 | `02-project-history-accuracy.md` | Understanding and troubleshooting Paratext's chronological project-history view | 2 | 40 |
-| `03-user-roles-and-edit-access.md` | Why Paratext's per-book edit-role restrictions aren't foolproof, and the safe recovery response when a user's local files may be corrupted | 3 | 30 |
+| `03-user-roles-and-edit-access.md` | Why Paratext's per-book edit-role restrictions aren't foolproof, and the safe recovery response when a user's local files may be corrupted — including the "Undo Changes" pitfall once corrupted files have already been sent (Scenario 3.5) | 3 | 35 |
 | `04-recovering-notes-and-settings.md` | Recovering previous versions of project notes, term renderings, and other non-text settings | 4 | 40 |
 | `05-snapshotting-to-a-reference-project.md` | Saving an earlier text state into a reference project | 5 | 30 |
-| `06-scenario-bank.md` | Applied practice: five "here's a broken/at-risk project — fix it" recovery scenarios, one per topic, sequenced simplest (editable-project install) → most complex (notes/settings recovery via TortoiseHG) | 1, 2, 3, 4, 5 | 80 |
+| `06-scenario-bank.md` | Applied practice: five "here's a broken/at-risk project — fix it" recovery scenarios, one per topic, sequenced simplest (editable-project install) → most complex (notes/settings recovery via TortoiseHG); Scenario 3 carries a Scenario 3.5 follow-on | 1, 2, 3, 4, 5 | 84 |
 | `07-mentor-guide.md` | Facilitator notes: rubric for grading each scenario, what a complete recovery looks like, common wrong turns | — | — |
 | `08-quiz.md` | Assessment | 1, 2, 3, 4, 5 | 20 (not counted — see below) |
-| **Total learner seat time** | | | **255** |
+| **Total learner seat time** | | | **264** |
 
-Lesson content totals 175 minutes (35+40+30+40+30); the scenario bank adds 80 minutes for a
-total of 255 learner-facing minutes — under the 270-minute guideline, with the scenario
+Lesson content totals 180 minutes (35+40+35+40+30); the scenario bank adds 84 minutes for a
+total of 264 learner-facing minutes — under the 270-minute guideline, with the scenario
 bank deliberately weighted at roughly a third of total time, since these five topics are
 exactly the "diagnose and fix a real project problem" cases this course exists to build.
 Mentor guide and quiz minutes are structural/facilitator or assessment-only and are excluded
@@ -75,8 +75,9 @@ from the seat-time total per convention.
 
 ## Assessment plan
 
-A 10-question multiple-choice quiz (80% = 8/10 to pass) covers conceptual and diagnostic
-knowledge for all five objectives (two questions per topic) — recognizing correct vs.
+An 11-question multiple-choice quiz (9/11 to pass, about 80%) covers conceptual and diagnostic
+knowledge for all five objectives (two questions per topic, plus a third for topic 3 covering
+the Scenario 3.5 "Undo Changes" pitfall) — recognizing correct vs.
 incorrect approaches, predicting what a given history/backup state implies, and identifying
 the right Paratext feature for a described symptom. The five-scenario bank is where
 hands-on performance is verified for all five objectives — each scenario presents a project
@@ -138,7 +139,17 @@ Some computer mishaps that can result in changing Paratext files: Hard drive cor
 This is why if a user experiences a computer crash, or file system errors so that project files disappear, they should not do a send/receive right away. That send/receive may send their corrupted files to other users. What they should do in this case is to delete the project from their Paratext with "Delete project", then do a send/receive to receive a new copy from the server.
 **Paratext version differences** Version 9, and also 8 and 7.
 **What "good" looks like** A user can explain cases where the project history shows aa mysterious edit by someone without editing permission.
-##**Scenario 4**
+**Scenario 3.5**
+**War stories**
+An episode of file corruption does take place and the user sends the corrupted files to the rest of the team. The administrator finds that history point and selects "Undo Changes" but it fails to recover the latest version of the files. 
+**Exact Understanding**
+If a user has experienced file corruption, and has gone ahead and done a send/receive, the administrator can recover the uncorrupted book files by looking at the project history. A warning here, finding the point where the corrupted files were introduced and choosing "Undo Changes" may not be adequate. If that user did not have the latest version of book files before the corruption happened, "Undo Changes" replaces the corrupted files  with the out of date files the user had. 
+Before choosing "Undo Changes" click the link for the changed book to see the compare versions dialog. If the right hand pane is not the latest version, look for other history points in the project history for the latest version of that book and use "Revert Books" to restore that version. 
+
+This process of finding restoring the best version might be easier when examining the Mercurial repository directly in TortoiseHG, as described in the next scenario. 
+**Paratext version differences** True for Paratext 9 and Paratext 8. 
+**What good looks like** A user can explain the possible pitfall in using "Undo Changes" to attempt to recover from file corruption after the corrupt files have been sent to the send/receive server.
+**Scenario 4**
 **War stories** A user asks for help because a bunch of project notes have gone missing, perhaps every single note a user has submitted, or perhaps lots of older notes have vanished, only the very latest ones are visible. Computer mishaps such as Paratext crashing without shutting down properly,  or the computer crashes while Paratext was running, can cause a user's note file, or the list of term renderings, or the project wordlist to be deleted, and then these changes can get propagated to all the project users by send/receive. 
 **Exact procedures for scenario**
 Mercurial keeps a detailed record of changes to the notes files and other project settings just like it does for the project text. But the Paratext project history does not show these details. You need to have a way to connect to Mercurial more directly than through Paratext to look for these. You can do this either by downloading the TortoiseHG tool, or by running Mercurial commands directly in a command prompt. 
@@ -175,7 +186,7 @@ Open the corrupt notes file (Paratext will rename it **Notes_User Name.corrupt**
 Step by step:
 1) Do send/receive if you have made any recent changes that have not yet been sent.
 2) make sure all automatic send/receive options are turned off for the main project 
-3) In project history, select the desired history point, use the "Revert books" command and select the books to revert.
+3) In project history, select the desired history point, use the "Revert Books" command and select the books to revert.
 4) create the new project and import the books as above.
 5) delete the reverted main project. Choose "delete project" (from either the main menu or the project menu), select action "Delete from this computer only"
 6) Do send/receive, select the main project from your list of "New" projects, to restore the current version. Now you can turn any automatic send/receive options back on if you were using them. 
@@ -193,10 +204,10 @@ Step by step:
   access to a project with no available administrator — that had no SME content behind it
   at all and did not appear in the SME's own scenario list; it has been dropped in favor of
   the SME's actual scenario 3, "user roles are not foolproof.")
-- **Modules:** 5 numbered lesson files (35+40+30+40+30 = 175 minutes), each well under the
-  90-minute cap, plus an 80-minute scenario bank, a mentor guide, and a quiz (mentor guide
+- **Modules:** 5 numbered lesson files (35+40+35+40+30 = 180 minutes), each well under the
+  90-minute cap, plus an 84-minute scenario bank, a mentor guide, and a quiz (mentor guide
   and quiz excluded from seat-time total per convention).
-- **Total learner seat time:** 255 minutes (within the ≤270-minute ceiling), with the
+- **Total learner seat time:** 264 minutes (within the ≤270-minute ceiling), with the
   scenario bank intentionally weighted heavy given the recovery/troubleshooting nature of
   this content.
 - **Module count recommendation:** One module, not split — see Scope note above.

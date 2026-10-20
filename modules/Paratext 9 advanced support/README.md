@@ -19,7 +19,8 @@ configuration into real support and recovery situations.
 **Goal:** By the end of this course you will be able to install an editable copy of an
 open-license Scripture text as its own project, explain why Paratext's project history view
 can look chronologically wrong without anything actually being lost, respond correctly when
-a user's project files may have been altered outside Paratext, recover project notes and
+a user's project files may have been altered outside Paratext (including after the damage
+has already been sent to the team), recover project notes and
 settings that a plain rollback won't restore, and configure a reference project that
 preserves an earlier stage of a team's translation text.
 
@@ -47,15 +48,15 @@ Work through the numbered files in order:
 | --- | --- | --- |
 | [`01-installing-open-source-texts.md`](01-installing-open-source-texts.md) | Lesson 1 — installing an open-source/openly-licensed text as an editable project | 35 min |
 | [`02-project-history-accuracy.md`](02-project-history-accuracy.md) | Lesson 2 — why Paratext's chronological project-history view isn't always accurate | 40 min |
-| [`03-user-roles-and-edit-access.md`](03-user-roles-and-edit-access.md) | Lesson 3 — why per-book edit-role restrictions aren't foolproof, and the safe recovery response | 30 min |
+| [`03-user-roles-and-edit-access.md`](03-user-roles-and-edit-access.md) | Lesson 3 — why per-book edit-role restrictions aren't foolproof, the safe recovery response, and the "Undo Changes" pitfall once bad files are sent | 35 min |
 | [`04-recovering-notes-and-settings.md`](04-recovering-notes-and-settings.md) | Lesson 4 — recovering lost notes, term renderings, and other non-text project settings with TortoiseHG | 40 min |
 | [`05-snapshotting-to-a-reference-project.md`](05-snapshotting-to-a-reference-project.md) | Lesson 5 — saving an earlier stage of the text into a reference project | 30 min |
-| [`06-scenario-bank.md`](06-scenario-bank.md) | Applied practice: five recovery scenarios, one per topic, simplest → most complex | 80 min |
+| [`06-scenario-bank.md`](06-scenario-bank.md) | Applied practice: five recovery scenarios, one per topic, simplest → most complex | 84 min |
 | [`07-mentor-guide.md`](07-mentor-guide.md) | Facilitator notes: rubric for each scenario, common wrong turns, known SME-source gaps | — (facilitator use) |
 | `08-quiz.md` | Assessment quiz covering all five topics | 20 min (not counted toward seat time) |
 | [`09-video-script.md`](09-video-script.md) | Recording script for Cypher upload | — (facilitator/recording use) |
 
-**Total learner seat time:** 255 minutes (lessons 175 min + scenario bank 80 min). The
+**Total learner seat time:** 264 minutes (lessons 180 min + scenario bank 84 min). The
 mentor guide and quiz are excluded from this total by convention — see this course's
 `00-design.md` for the full breakdown.
 

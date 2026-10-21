@@ -76,8 +76,9 @@ def fingerprint(text, voice, model):
 def main():
     ap = argparse.ArgumentParser(description=__doc__.split("\n\n")[0])
     ap.add_argument("--slug", required=True)
-    ap.add_argument("--voice", help="ElevenLabs voice id (see --list-voices)")
-    ap.add_argument("--model", default=DEFAULT_MODEL)
+    ap.add_argument("--voice", help="ElevenLabs voice id (see --list-voices); "
+                                    "default: the one in the video's recipe")
+    ap.add_argument("--model", help="default: the recipe's, else %s" % DEFAULT_MODEL)
     ap.add_argument("--only", help="comma-separated scene ids, e.g. s03,s05")
     ap.add_argument("--force", action="store_true", help="re-voice even if unchanged")
     ap.add_argument("--list-voices", action="store_true")
@@ -88,8 +89,6 @@ def main():
     if args.list_voices:
         list_voices(key)
         return 0
-    if not args.voice:
-        sys.exit("Give --voice <voice id>; --list-voices shows them.")
 
     slug = course_stage.resolve(args.slug)
     if not slug:
@@ -106,6 +105,11 @@ def main():
     if hashlib.sha256(script.read_bytes()).hexdigest() != doc["script_sha256"]:
         sys.exit("%s changed since scenes.json was made -- re-run video_scenes.py first."
                  % doc["script"])
+    recipe = video_scenes.load_recipe(slug, doc["script"])
+    args.voice = args.voice or recipe.get("voice")
+    args.model = args.model or recipe.get("model") or DEFAULT_MODEL
+    if not args.voice:
+        sys.exit("Give --voice <voice id>; --list-voices shows them.")
 
     scenes = doc["scenes"]
     only = set(args.only.split(",")) if args.only else None

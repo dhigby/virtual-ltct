@@ -44,6 +44,22 @@ def default_out(slug):
     return pathlib.Path(root) / course_stage.branch_slug(slug)
 
 
+def recipe_path(slug, script_name):
+    """The video's recipe, committed beside its script: `10-video-script.recipe.json`.
+
+    How the video was made -- voice, model, scene lengths, the Motion film and Vimeo links
+    -- so anyone can rebuild or fix it from git; the media itself stays out (INTENT.md).
+    Its name begins with the script's stem, so the learner view and Moodle withhold it
+    exactly as they withhold the script (disclosure.excluded_asset).
+    """
+    return course_stage.MODULES / slug / (pathlib.Path(script_name).stem + ".recipe.json")
+
+
+def load_recipe(slug, script_name):
+    path = recipe_path(slug, script_name)
+    return json.loads(path.read_text(encoding="utf-8")) if path.is_file() else {}
+
+
 def pick_script(folder, name):
     """The named script, or the course's only overview script."""
     if name:

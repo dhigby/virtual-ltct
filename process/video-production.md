@@ -32,6 +32,11 @@ any folder inside a git repository.
 
 Save Motion's export into that folder too, never into the course folder.
 
+The one thing that **is** committed is the video's **recipe**, `NN-video-script.recipe.json`,
+which sits beside the script in the course folder. It holds the voice, each scene's timing,
+and the links to the Motion film and the Vimeo upload. With the script and the recipe, anyone
+can rebuild or fix the video from git on any machine. Like the script, learners never see it.
+
 ## The steps
 
 1. **Split the script into scenes.**
@@ -46,6 +51,8 @@ Save Motion's export into that folder too, never into the course folder.
 3. **Narrate.**
    `python scripts/video_narrate.py --slug <course> --voice <voice id>`
    This makes one audio file per scene and records each one's length.
+   - Once a recipe exists, leave out `--voice`. The recipe's voice is used, so a fix
+     sounds like the original.
    - Running it again only re-voices scenes whose wording changed, so fixing one line
      costs one line of credits.
 4. **Build the film in Motion.** Ask Claude to make a Motion film from `scenes.json`, with
@@ -60,11 +67,15 @@ Save Motion's export into that folder too, never into the course folder.
    folder.
 7. **Add the narration and captions.**
    `python scripts/video_assemble.py --slug <course> --film "<exported>.mp4"`
-   This writes `<course>.mp4` with the voice laid on, and `<course>.srt` captions.
+   This writes `<course>.mp4` with the voice laid on, and `<course>.srt` captions. It also
+   writes the recipe into the course folder.
    - Watch it through. If voice and picture drift apart, comment on the film, ask Claude
      to retime that scene, re-export and run this step again.
-8. **Upload** the MP4 and its `.srt` to Vimeo or Drive, then carry on with stage 8's
-   step 2.
+8. **Upload** the MP4 and its `.srt` to Vimeo, and put the link in the lesson's
+   `**Watch the video:**` line (stage 8's step 3).
+9. **Record the link in the recipe and commit it.** Run step 7 again with
+   `--link vimeo=<the Vimeo URL>`, then commit `NN-video-script.recipe.json` with the
+   course.
 
 ## Rules that still hold
 

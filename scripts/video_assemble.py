@@ -6,7 +6,9 @@ Reads, from the course's working folder (outside every git tree):
   narration.json    each scene's audio file and length (video_narrate.py)
   film-timing.json  each scene's length in the Motion film: {"lead": 0.3, "scenes": [{"id", "dur"}]}
   <film>.mp4        the film, exported from its Motion page (silent)
-and writes <slug>.mp4 (film + narration) and <slug>.srt (captions) beside them.
+and writes <slug>.mp4 (film + narration) and <slug>.srt (captions) beside them, plus the
+video's recipe into the course folder (video_scenes.recipe_path), the one output that is
+committed. On a machine with no film-timing.json, the recipe's timing is used.
 
 Scene i's audio starts `lead` seconds after scene i starts in the film, so sync holds as
 long as film-timing.json matches the film's scene lengths. Captions split each scene's
@@ -15,7 +17,7 @@ Captions matter beyond accessibility: INTENT.md says video is never the only rou
 the content, and a learner on poor bandwidth may read rather than stream.
 
 Usage:
-  python scripts/video_assemble.py --slug <slug> --film "<exported>.mp4"
+  python scripts/video_assemble.py --slug <slug> --film "<exported>.mp4" [--link vimeo=<url>]
 """
 import argparse
 import json
@@ -66,6 +68,8 @@ def main():
     ap.add_argument("--slug", required=True)
     ap.add_argument("--film", required=True, help="the MP4 exported from the Motion page")
     ap.add_argument("--out", help="working folder (default: ltct-video/<slug>/ beside the repo)")
+    ap.add_argument("--link", action="append", metavar="NAME=URL",
+                    help="record a link in the recipe, e.g. vimeo=https://vimeo.com/123")
     args = ap.parse_args()
 
     slug = course_stage.resolve(args.slug)
@@ -79,9 +83,17 @@ def main():
     if not film.is_file():
         sys.exit("No film at %s." % film)
 
-    scenes = json.loads((work / "scenes.json").read_text(encoding="utf-8"))["scenes"]
+    doc = json.loads((work / "scenes.json").read_text(encoding="utf-8"))
+    scenes = doc["scenes"]
     narration = json.loads((work / "narration.json").read_text(encoding="utf-8"))
-    timing = json.loads((work / "film-timing.json").read_text(encoding="utf-8"))
+    recipe = video_scenes.load_recipe(slug, doc["script"])
+    timing_file = work / "film-timing.json"
+    if timing_file.is_file():
+        timing = json.loads(timing_file.read_text(encoding="utf-8"))
+    elif recipe.get("scenes"):
+        timing = recipe          # a fresh machine: the committed recipe has the film's timing
+    else:
+        sys.exit("No film-timing.json in %s and no recipe in the course folder." % work)
     lead = timing.get("lead", 0.3)
     durs = {s["id"]: s["dur"] for s in timing["scenes"]}
     if [s["id"] for s in scenes] != [s["id"] for s in timing["scenes"]]:
@@ -120,6 +132,35 @@ def main():
     out_srt.write_text("".join("%d\n%s --> %s\n%s\n\n" % (k, srt_time(a), srt_time(b), p)
                                for k, (a, b, p) in enumerate(captions, 1)), encoding="utf-8")
     print("Film length %d:%02d. Wrote:\n  %s\n  %s" % (start // 60, start % 60, out_mp4, out_srt))
+
+    # The recipe: everything but the media, committed with the course so the video can be
+    # rebuilt or fixed from git. Links (Motion films, Vimeo) carry over from the timing
+    # file, the old recipe and --link, newest winning.
+    links = dict(recipe.get("links", {}))
+    links.update({k: v for k, v in timing.items() if k.startswith("film") and isinstance(v, str)})
+    links.update(timing.get("links", {}))
+    for pair in args.link or []:
+        name, _, url = pair.partition("=")
+        links[name.strip()] = url.strip()
+    voiced = [n for n in narration.values() if n.get("voice") not in (None, "human")]
+    new = {
+        "about": "How this course video was made: process/video-production.md. "
+                 "The audio and video are not in git; the finished video is at links.vimeo.",
+        "script": doc["script"],
+        "script_sha256": doc["script_sha256"],
+        "voice": voiced[0]["voice"] if voiced else recipe.get("voice"),
+        "model": voiced[0].get("model") if voiced else recipe.get("model"),
+        "lead": lead,
+        "scenes": [{"id": s["id"], "dur": durs[s["id"]],
+                    "narration_seconds": narration[s["id"]]["seconds"],
+                    "voice": "human" if narration[s["id"]].get("voice") == "human" else "tts"}
+                   for s in scenes],
+        "length_seconds": round(start, 2),
+        "links": links,
+    }
+    path = video_scenes.recipe_path(slug, doc["script"])
+    path.write_text(json.dumps(new, indent=2) + "\n", encoding="utf-8")
+    print("  %s  (commit this with the course)" % path.relative_to(course_stage.REPO))
     return 0
 
 

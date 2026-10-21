@@ -1,0 +1,71 @@
+{
+  "about": "How this course video was made: process/video-production.md. The audio and video are not in git; the finished video is at links.vimeo.",
+  "script": "10-video-script.md",
+  "script_sha256": "12c70af95ee0036cbc3af69f41a5cbdcca931d715c0b3fc863c8605cf67f818e",
+  "voice": "XrExE9yKIg1WjnnlVkGX",
+  "model": "eleven_multilingual_v2",
+  "lead": 0.3,
+  "scenes": [
+    {
+      "id": "s01",
+      "dur": 27.9,
+      "narration_seconds": 27.3,
+      "voice": "tts"
+    },
+    {
+      "id": "s02",
+      "dur": 26.7,
+      "narration_seconds": 26.1,
+      "voice": "tts"
+    },
+    {
+      "id": "s03",
+      "dur": 16.2,
+      "narration_seconds": 15.6,
+      "voice": "tts"
+    },
+    {
+      "id": "s04",
+      "dur": 14.1,
+      "narration_seconds": 13.45,
+      "voice": "tts"
+    },
+    {
+      "id": "s05",
+      "dur": 20.4,
+      "narration_seconds": 19.77,
+      "voice": "tts"
+    },
+    {
+      "id": "s06",
+      "dur": 10.5,
+      "narration_seconds": 9.85,
+      "voice": "tts"
+    },
+    {
+      "id": "s07",
+      "dur": 12.5,
+      "narration_seconds": 11.83,
+      "voice": "tts"
+    },
+    {
+      "id": "s08",
+      "dur": 26.1,
+      "narration_seconds": 25.52,
+      "voice": "tts"
+    },
+    {
+      "id": "s09",
+      "dur": 14.6,
+      "narration_seconds": 11.52,
+      "voice": "tts"
+    }
+  ],
+  "length_seconds": 169.0,
+  "links": {
+    "film": "https://claude.ai/artifact/ACNaBfGyjX4N9Y6KTasuKZ",
+    "film_case_files": "https://claude.ai/artifact/LRM4rnPdHp4f1TM4D1uptA",
+    "vimeo": "https://vimeo.com/1238012314",
+    "motion_film": "https://claude.ai/artifact/LRM4rnPdHp4f1TM4D1uptA"
+  }
+}

@@ -6,8 +6,9 @@ is on screen with what is said. Each pairing is one scene: the cold open, each r
 on-screen/voiceover tables, and the close. This writes them to `scenes.json`, which the
 narration step reads (one audio file per scene) and the Motion film is timed from.
 
-The working folder is OUTSIDE every git tree (default %USERPROFILE%\\ltct-video\\<slug>\\):
-narration and video are large binaries, which never go in git (INTENT.md), and GitDoc
+The working folder is OUTSIDE every git tree -- by default an `ltct-video` folder beside the
+repo (C:\\projects\\ltct-video\\<slug>\\ for a clone at C:\\projects\\virtual-ltct), or under
+LTCT_VIDEO_DIR when that is set: narration and video are large binaries, which never go in git (INTENT.md), and GitDoc
 would push anything left in the repo. The path guard is admin_files.guard_path.
 
 Text-to-speech must never voice local-language data (CLAUDE.md, "Who an LTC is"). A
@@ -21,6 +22,7 @@ import argparse
 import datetime
 import hashlib
 import json
+import os
 import pathlib
 import re
 import sys
@@ -37,7 +39,9 @@ SEPARATOR_ROW = re.compile(r"^\|[\s:|-]+\|$")
 
 
 def default_out(slug):
-    return pathlib.Path.home() / "ltct-video" / course_stage.branch_slug(slug)
+    """<LTCT_VIDEO_DIR or the repo's parent folder>/ltct-video/<slug> -- beside the repo, not in it."""
+    root = os.environ.get("LTCT_VIDEO_DIR") or course_stage.REPO.parent / "ltct-video"
+    return pathlib.Path(root) / course_stage.branch_slug(slug)
 
 
 def pick_script(folder, name):
@@ -138,7 +142,7 @@ def main():
     ap = argparse.ArgumentParser(description=__doc__.split("\n\n")[0])
     ap.add_argument("--slug", required=True)
     ap.add_argument("--script", help="script filename in the course folder")
-    ap.add_argument("--out", help="working folder (default ~/ltct-video/<slug>/)")
+    ap.add_argument("--out", help="working folder (default: ltct-video/<slug>/ beside the repo)")
     args = ap.parse_args()
 
     slug = course_stage.resolve(args.slug)

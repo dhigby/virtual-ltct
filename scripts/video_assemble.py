@@ -65,7 +65,7 @@ def main():
     ap = argparse.ArgumentParser(description=__doc__.split("\n\n")[0])
     ap.add_argument("--slug", required=True)
     ap.add_argument("--film", required=True, help="the MP4 exported from the Motion page")
-    ap.add_argument("--out", help="working folder (default ~/ltct-video/<slug>/)")
+    ap.add_argument("--out", help="working folder (default: ltct-video/<slug>/ beside the repo)")
     args = ap.parse_args()
 
     slug = course_stage.resolve(args.slug)

@@ -81,7 +81,7 @@ def main():
     ap.add_argument("--only", help="comma-separated scene ids, e.g. s03,s05")
     ap.add_argument("--force", action="store_true", help="re-voice even if unchanged")
     ap.add_argument("--list-voices", action="store_true")
-    ap.add_argument("--out", help="working folder (default ~/ltct-video/<slug>/)")
+    ap.add_argument("--out", help="working folder (default: ltct-video/<slug>/ beside the repo)")
     args = ap.parse_args()
 
     key = api_key()

@@ -397,6 +397,11 @@ constructing it — the host changes when the server moves.
 - `image_reduce.py` — makes the lighter copy of each committed image that goes into a
   payload (fit to a width, palette PNG; `.full`/`.small` suffixes override). Never writes
   to the repo. Not run directly.
+- `video_scenes.py` · `video_narrate.py` · `video_assemble.py` — turn a video script into
+  a narrated, captioned MP4 (process/video-production.md): split it into scenes, voice
+  each with ElevenLabs (`ELEVENLABS_API_KEY`), then lay the narration onto the film
+  exported from Claude Motion and write an `.srt`. Media stays in `ltct-video/` beside the
+  repo (`LTCT_VIDEO_DIR` overrides); the path guard refuses any git tree.
 - `cbc_wording.py` — the CBC wording rules, defined once: report labels name a level only
   as an aim, and badge and certificate text never says "certified" or a CBC level held.
   Imported by `site_config.py validate` and `check_moodle_payload.py`. Not run directly.

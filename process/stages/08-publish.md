@@ -21,6 +21,8 @@ itself is automated: the markdown here is the source, and Moodle is a render of 
 
 1. **Record** the overview video using `NN-video-script.md` as the script, plus any
    per-lesson videos from their `NN-lesson-<L>-video-script.md` scripts.
+   [Making a course video](../video-production.md) shows how to build one with Claude
+   Motion and AI narration, with captions, instead of recording a presenter.
 2. **Upload** each video to Vimeo or Drive. Don't commit the video file itself; large
    binaries stay out of git.
 3. **Fill in the lesson links.** Each video's lesson is waiting on it with

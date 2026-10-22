@@ -79,8 +79,11 @@ team's.
 
 **NOTE** Each cell has a dropdown (▼) listing the characters you can choose. The dropdown shows
 only the character itself. The character names and Unicode codes given in this course's steps,
-such as "Left double quotation mark, U+201C", are for your reference, so you can tell
-look-alike characters apart; you won't see them in the list. Paratext also won't let you set the
+such as "Left double quotation mark, U+201C", are for your reference; you won't see them in the
+list. Look-alike characters can't be told apart by their shape, so to confirm which character a
+cell actually holds, click in the cell and press **Alt+X** to show its Unicode code, then press
+**Alt+X** again to switch it back. Don't skip the second press: if you click OK while the cell
+shows the code, Paratext saves that text as the quote mark. Paratext also won't let you set the
 Second level until the First level is filled in.
 
 Below the grid the tab has a few additional settings — checkboxes such as **Closing quotes
@@ -133,7 +136,9 @@ mechanics; the **Take it to your context** task at the end asks you to derive on
 
 At the bottom of the dialog:
 - **Example** — a live text preview showing how your configured marks look in a sample
-  passage. Use this to visually confirm that you have selected the correct characters.
+  passage. Use it to check that the marks sit together in the order you expect. It shows only
+  the shapes, so it can't tell you which of two look-alike characters a cell holds; use
+  **Alt+X** in the cell for that.
 - **Copy quote mark settings...** button, at the bottom left — imports the quote marks from
   another project (useful when a related project uses the same conventions). It does **not**
   copy the **Continuer required at** list. Type that by hand after copying.
@@ -149,8 +154,8 @@ treat a listed character as part of a word rather than punctuation when it sits 
 letters.
 
 **Verified on Paratext 9.5, this does *not* work for a character that is also a configured
-quote mark.** Adding `’` to Word-medial punctuation has no effect on the "Closing quote found as
-a word medial character" result when `’` is also set as a Second (or Third) level closing mark
+quote mark.** Adding `’` to Word-medial punctuation has no effect on the "Closing quote [ ’ U+2019 ]
+found as a word medial character" result when `’` is also set as a Second (or Third) level closing mark
 — the check keeps flagging every genuine apostrophe, with or without the setting. Once a
 character is claimed as a quote mark in the Quotation Rules dialog, that classification appears
 to take priority over the Word-medial punctuation exception list. The setting genuinely works
@@ -173,9 +178,10 @@ and it can come up late in a project. You'll see this firsthand in the third exe
 - A new project's grid holds Paratext's defaults, not the team's conventions. Compare every
   cell, including the continuers and the Continuer required at list, and change each one that
   differs.
-- Always check the characters you set using the **Example** section at the bottom of the
-  dialog. Look-alike characters are easy to confuse, so use the code points in the conventions
-  table to tell them apart.
+- Always check the marks you set in the **Example** section at the bottom of the dialog, but
+  remember it shows only shapes. Look-alike characters are easy to confuse, so confirm the
+  character in a cell with **Alt+X** (and **Alt+X** again to switch it back) and compare the
+  code with the conventions table.
 - The Quote Continuer at new paragraph is optional; set it to *none* at any level where the
   language doesn't repeat a mark at the head of a continued paragraph.
 - If you fill the continuer cell, you **must** also fill **Continuer required at** with the
@@ -205,7 +211,7 @@ the five John 17 results you saw in Lesson 1. Compare them with Tamba's conventi
 | --- | --- | --- | --- |
 | First level | `“` (U+201C) — default matches | `“` (U+201C) — default matches | `”` (U+201D) — default matches |
 | Second level | `‘` (U+2018) — default matches | *none* — default is `‘`; **change it** | `’` (U+2019) — default matches |
-| Third level | `“` (U+201C) — default matches | *none* — default is `“`; **change it** | `”` (U+201D) — default matches |
+| Third level | `“` (U+201C) — default matches | *none* — default is `“`; **change it** (step 2 does this for you) | `”` (U+201D) — default matches |
 
 **Continuer required at:** Tamba needs `p p/q1 m/q1 s1/pi pi/pi b/q1`. The default is
 `p p/q1 b/q1`; change it.
@@ -216,9 +222,10 @@ So the First level already matches, and two continuer cells and the list do not.
 1. Confirm the First level row: Opening `“` (Left double quotation mark, U+201C), Continuer `“`
    (U+201C), Closing `”` (Right double quotation mark, U+201D). These match Tamba; leave them.
 2. Click the dropdown (▼) on the **Quote Continuer at new paragraph** cell for Second level.
-   Select *none*.
-3. Click the dropdown on the **Quote Continuer at new paragraph** cell for Third level. Select
-   *none*.
+   Select *none*. Paratext sets the Third level continuer to *none* at the same time, so don't
+   be surprised when that cell changes by itself.
+3. Look at the **Quote Continuer at new paragraph** cell for Third level. It should now read
+   *none*; there is nothing to set there separately.
 4. Confirm the rest of the Second level (Opening `‘` U+2018, Closing `’` U+2019) and Third level
    (Opening `“` U+201C, Closing `”` U+201D). These match Tamba; leave them.
 5. Check the **Example** section at the bottom of the dialog. The sample text should show
@@ -234,16 +241,17 @@ So the First level already matches, and two continuer cells and the list do not.
    the steps for what each entry is doing.
 7. Click **OK**.
 
-![The Quote marks tab for Tamba after entry: “ in the First level Opening and Continuer cells and ” in its Closing cell, ‘ and ’ at Second level with the Continuer cell at *none*, “ and ” at Third level, and the Continuer required at field below the grid reading p p/q1 m/q1 s1/pi pi/pi b/q1. The Example section shows “ repeated at the head of each continued \p paragraph.](assets/ss-02-tamba-quote-marks.png)
+![The Quote marks tab for Tamba after entry: “ in the First level Opening and Continuer cells and ” in its Closing cell, ‘ and ’ at Second level with the Continuer cell at *none*, “ and ” at Third level with the Continuer cell also at *none*, and the Continuer required at field below the grid reading p p/q1 m/q1 s1/pi pi/pi b/q1. The Example section shows “ repeated at the head of each continued \p paragraph.](assets/ss-02-tamba-quote-marks.png)
 
 Tamba uses English-style curly quotes at all three levels. First level speech that spans a
 paragraph break repeats the opening mark `“` (U+201C) as a Quote Continuer at the head of each
 new paragraph; the closing mark `”` (U+201D) appears only once, at the very end of the whole
 speech. Second and Third level have no continuer, so nothing is repeated at the head of a new
 paragraph at those levels. A Second level quotation can still run across paragraph breaks
-unbroken: Peter's Psalm 16 citation in Acts 2:25–28 opens with `‘` in 2:25, closes with `’` in
-2:28, and carries no mark at the paragraph breaks in between. Tamba's text passes the check that
-way.
+unbroken: in Peter's Psalm 16 citation in Acts 2:25–28, an opening phrase is followed by a `\q1`
+line that opens both First and Second level (`“ ‘`), and the Second level closes with `’` in
+2:28, with no Second level mark repeated at the paragraph breaks in between. Tamba's text passes
+the check that way.
 
 **Why that list?** Tamba's text uses ordinary `\p` paragraphs for most speech, quoted poetry
 introduced from prose or after a blank line, and indented `\pi` paragraphs after section
@@ -293,16 +301,20 @@ etc.) to see a description of that field in the status bar at the bottom of the 
 **First, see what the defaults do.** Open the `RUNDA` project. Like every practice project, it
 starts with Paratext's defaults. Run the Quotation check (☰ > Tools > Run basic checks,
 Quotations only) on all books with **Choose Books**. You get **1110 results**. Scroll through
-them and read the messages, not just the count. Most read "Closing quote [ ’ U+2019 ] found as a
-word medial character. Sometimes caused when a closing quote is incorrectly used as an
-apostrophe". Others read "Second-level quote mark found without a preceding first-level quote:
+them and read the messages, not just the count. Most of them, 767 of the 1110, read "Closing
+quote [ ’ U+2019 ] found as a word medial character. Sometimes caused when a closing quote is
+incorrectly used as an apostrophe". Others read "Second-level quote mark found without a preceding first-level quote:
 ‘" (Matthew 2:6, 4:4, 4:6, for example), and there is a "Closing quote [ ’ U+2019 ] found
 without matching opening…" at Matthew 5:10.
 
 ![The Quotations check results panel for RUNDA, all books, with the project still at Paratext 9.5's default Quotation Rules. The count reads 1110 results. The visible rows include "Closing quote … found as a word medial character" (naming ’ U+2019 in square brackets) results and "Second-level quote mark found without a preceding first-level quote: ‘" at Matthew 2:6 and 4:4.](assets/ss-02-runda-default-results.png)
 
-The cause is in the settings, not the text. Runda's First level marks are guillemets, and
-guillemets aren't in Paratext's defaults. Close the results panel.
+Two different things are behind these results. The flood of word-medial messages comes from
+the text using the same character, `’`, for more than one job: it is the Second level closing
+mark, and Runda's text also uses it as an apostrophe, in contractions and possibly for a glottal
+stop. Each of those is reported as a closing quote in the middle of a word, which is why most of
+the 1110 results are that one message. The rest come from the settings: Runda's First level
+marks are guillemets, and guillemets aren't in Paratext's defaults. Close the results panel.
 
 **Now correct the defaults.** Navigate to ☰ > Project settings > Quotation Rules > Quote marks
 tab and compare each cell with Runda's conventions:
@@ -325,8 +337,10 @@ level, and no Third level at all. Five cells and the list differ from the defaul
    Select «.
 3. Click the dropdown arrow on the **Closing** cell for First level. Select ».
 4. Confirm the Second level Opening is ‘ (U+2018) and Closing is ’ (U+2019). Click the dropdown
-   arrow on the Second level **Quote Continuer at new paragraph** cell and select *none*.
-5. Set all three Third level cells to *none*.
+   arrow on the Second level **Quote Continuer at new paragraph** cell and select *none*. As in
+   Exercise 2.1, Paratext sets the Third level continuer to *none* at the same time.
+5. Set the Third level Opening and Closing cells to *none*, and check that its continuer cell
+   already reads *none*.
 6. Check the **Example** section at the bottom of the dialog. You should see «...» for First
    level speech and ‘...’ for embedded speech.
 7. In the **Continuer required at** field, replace `p p/q1 b/q1` with just:
@@ -351,10 +365,10 @@ level, and no Third level at all. Five cells and the list differ from the defaul
 check now recognizes Runda's guillemets, so it sees the First level speech around each `‘`. In
 Matthew you should also see **no** "Expected continuers" or "Quote opened; see following
 message" results at Matthew 2:5–6 or 4:6. Almost everything left is one message, repeated:
-"Closing quote [’] found as a word medial character" — one for almost every apostrophe in the
+"Closing quote [ ’ U+2019 ] found as a word medial character" — one for almost every apostrophe in the
 book. There is also a pair of results at **5:3 and 5:10** that look alarming: "Opening quote
-mark found without matching closing quote mark: «" at 5:3 and "Closing quote [’] found without
-matching opening" at 5:10. Leave all of these alone for now. Exercise 2.3 is about exactly these
+mark found without matching closing quote mark: «" at 5:3 and "Closing quote [ ’ U+2019 ] found
+without matching opening" at 5:10. Leave all of these alone for now. Exercise 2.3 is about exactly these
 results, including why 5:3 is reported when nothing at 5:3 is wrong.
 
 ![The Quotation Rules dialog for RUNDA on the Quote marks tab after Exercise 2.2. First level reads « « » (Opening, Continuer, Closing); Second level reads ‘, none, ’, with its continuer cleared from the default; Third level reads none in all three cells; Continuer required at reads p. The Example section shows the marks in nested order.](assets/ss-02-runda-quote-marks.png)
@@ -427,14 +441,14 @@ you already saw its footprint in the results at the end of Exercise 2.2.
 4. Re-run the quotation check (a full re-run, not just "Rerun" on an already-open results
    panel) on a chapter that has both apostrophes and single-quote speech.
 5. **Observe that the apostrophes are still flagged.** The check keeps reporting "Closing quote
-   found as a word medial character" for every genuine apostrophe, exactly as before you added
+   [ ’ U+2019 ] found as a word medial character" for every genuine apostrophe, exactly as before you added
    the setting. This is the expected, confirmed outcome — not a sign you configured something
    wrong.
 6. **Now look at Matthew 5:3 and 5:10.** The same collision has a second, nastier face. In
    *don’t* the `’` sits between two letters, so the check at least recognizes it as
    word-medial and says so. In `righteousness’ sake` (5:10) the `’` is at the **end** of the word
    — a plural possessive — so the check simply sees a Second level closing mark with no opening
-   and reports "Closing quote [’] found without matching opening". Worse, that stray close
+   and reports "Closing quote [ ’ U+2019 ] found without matching opening". Worse, that stray close
    knocks the check off the First level speech it was tracking, so it also reports "Opening
    quote mark found without matching closing quote mark: «" back at **5:3**, where the Sermon
    on the Mount begins. Nothing is wrong at 5:3: the speech closes correctly with `»` at 7:27.

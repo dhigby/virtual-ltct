@@ -1,163 +1,100 @@
 # Lesson 2: Wordlist and Biblical Terms
 
-**Estimated time:** 40 minutes
+**Estimated time:** 30 minutes
 
-**Purpose:** Support a team through two related but distinct check areas — the
-high-volume wordlist/spell-checking pass and the Biblical Terms tool — recognizing the
-specific ways each one produces false confidence, and coaching the team to a genuine
-fix without touching their keyboard.
+**Purpose:** Support a team through two check areas: the wordlist (spelling) and the Biblical Terms tool. Each one can look finished when it is not. You learn to spot this and coach the team to a real fix, without touching their keyboard.
 
 ## Learning objectives
 
 You will be able to:
 
-- Recognize that Paratext has no technical way to detect a blanket-approved wordlist,
-  and ask the team directly instead of relying on the tool.
-- Coach a team to reset the whole wordlist to Undecided when there's doubt, and
-  re-review it together honestly.
+- Recognize that Paratext cannot show whether a wordlist was blanket-approved, and ask the team directly.
+- Coach the team to reset the whole wordlist to Undecided when there is doubt, and review it again together.
 
 You will be able to:
 
-- Recognize incomplete Biblical Terms coverage — blank renderings presented as done.
-- Recognize stale or duplicate renderings left uncleaned.
-- Coach the team to genuinely complete and clean up the list.
-
-You will be able to:
-
-- Diagnose a Project Biblical Terms list that has been over-added-to and is causing
-  Send/Receive or performance slowdowns.
-- Advise the team on right-sizing it.
+- Recognize an unfinished Biblical Terms list: blank renderings presented as done, or old and duplicate renderings that were never cleaned up.
+- Coach the team to complete and clean up the Biblical Terms list.
+- Diagnose a Project Biblical Terms list that is too big and slows Send/Receive or performance, and advise the team on right-sizing it.
 
 ## Connect
 
-**✏️ Reflection:** A wordlist check in Paratext can cover tens of thousands of words in
-a single project. If you were the translator facing that list after weeks of drafting,
-what would tempt you to just mark everything "correct" and move on? Hold onto that
-honestly — it's not laziness, it's fatigue, and it's exactly the condition this lesson
-prepares you to spot and address with the team.
+**✏️ Reflection:** A project's wordlist can hold tens of thousands of words. Imagine you are the translator, after weeks of drafting. What would tempt you to mark every word "correct" and move on? This is not laziness. It is tiredness. This lesson helps you spot it and handle it with the team.
 
 ## Content
 
-**Wordlist / spelling: a false-clean result, confirmed in the field.** This is the
-check area where "false-clean" isn't theoretical — it's a documented pattern from the
-SME interview behind this course. Every word in the wordlist carries one of three
-spelling statuses: **Correct**, **Incorrect** or **Undecided**.
+### Wordlist: a clean list may not be a checked list
 
-- A wordlist of **thousands of words was blanket-approved** — every entry marked
-  correct without genuine review.
-- Entries can just as easily sit **marked "Undecided" and never followed up on**, which
-  leaves the same false impression of a resolved list.
+Every word in the wordlist has one of three spelling statuses: **Correct**, **Incorrect** or **Undecided**.
 
-In both cases, the check tool *looked* clean. Nothing in the display told you the team
-had actually engaged with it. There is **no technical way in Paratext to detect that a
-wordlist was blanket-approved** — the tool doesn't distinguish an entry reviewed one at
-a time from one swept up in a bulk approval, and the **Project Plan only shows a count
-of "Incorrect" spelling-status entries**; it doesn't flag or count Undecided entries,
-and it can't surface bulk approval at all. So your job starts with a conversation, not a
-tool: **ask the team directly** whether entries were reviewed individually or approved
-in bulk, and whether any suspicion of that exists. If there's any doubt, the safe
-practice is to **reset the entire wordlist to Undecided** — not just the entries that
-look suspect — and work through the list together with the team from a clean slate.
-Resetting the whole list loses nothing: the words and their spelling data are
-unaffected, only the approval status resets. Once reset, walk the team through *why*
-each flagged item was raised, especially incorrectly split or joined words, which are
-common in a mass-approved list. You explain and coach; the translator does the actual
-review and correction.
+This problem is real. In one field case, a wordlist of **thousands of words was blanket-approved**. Every word was marked Correct, but nobody really reviewed them. Words can also stay **Undecided** and never be followed up. That gives the same false picture of a finished list.
 
-> **WARNING — watch for a false-clean result here too:** A clean-looking status bar (or
-> a Project Plan showing zero "Incorrect" entries) tells you nothing about whether the
-> list was genuinely reviewed or blanket-approved — there's no technical check for that,
-> and the Project Plan doesn't track Undecided entries either. If you have any doubt,
-> ask the team directly whether blanket approval happened, and if there's any
-> uncertainty, reset the whole wordlist to Undecided and re-review it together rather
-> than trying to isolate "the relevant entries."
+> **WARNING:** Paratext has **no technical way to detect a blanket-approved wordlist**. The tool does not show whether a word was reviewed on its own or approved with many others at once. The **Project Plan** only shows a count of words marked **Incorrect**. It does not count Undecided words, and it cannot show bulk approval. So zero Incorrect words in the Project Plan proves nothing.
 
-**Biblical Terms: blank renderings are the default starting state.** Every term in
-Paratext's Biblical Terms tool starts out with a gloss (in English, or the source
-language for a localized instance) and a **blank rendering** — shown highlighted (e.g.
-orange in the UI) with placeholder text like "Double click to enter rendering(s) from
-project text." This isn't a bug or a trap the tool is setting for the team; it's simply
-the tool's normal starting state, and the task is straightforward: work through the
-list and add the appropriate rendering for each term from the project's own text.
+### What to do about the wordlist
+
+1. **Ask the team directly.** Did they review the words one by one, or approve them in bulk?
+2. **If there is any doubt, reset the entire wordlist to Undecided.** Reset the whole list, not only the words that look suspect. This loses nothing. The words and their spelling data stay the same. Only the approval status resets.
+3. **Review the list again with the team.** Explain why each flagged word was raised. Pay special attention to words that are split or joined incorrectly. These are common in a mass-approved list.
+4. **Let the translator do the work.** You explain and coach. The translator reviews and corrects each word.
+
+### Biblical Terms: blank renderings
+
+Every term in the Biblical Terms tool starts with a gloss and a **blank rendering**. The gloss is in English, or in the source language of a localized version. The blank rendering is highlighted (for example, in orange). It shows the text "Double click to enter rendering(s) from project text."
+
+This is **not a bug**. It is the tool's normal starting state. The team's task is simple: work through the list and add a rendering for each term from their own project text.
 
 ![A Biblical Terms row still at its default state: orange highlight, "Double click to enter rendering(s) from project text."](assets/ss-02-blank-bt-row.png)
 
 *A term still at its default, unfilled state — not an error, just unfinished.*
 
-Where this becomes a false-clean risk is the same pattern as the wordlist above: a team
-can present a partially-completed Biblical Terms list as "done" without having actually
-gone through and filled in every term. The check that catches this isn't eyeballing the
-list — it's the **Found** column/count on each row (e.g. "2/2" found vs. a row that's
-still blank or unfilled). To diagnose it: open the list and check the Found count row by
-row rather than trusting a general "we did the Biblical Terms" claim. To coach the fix:
-have the team work through the remaining blank rows themselves, entering renderings from
-their own project text.
+The risk is that a team presents a partly-done list as "done". This is a false-clean result. Do not just look over the list. Check the **Found** column on each row, for example "2/2" found, against a row that is still blank.
 
-**Biblical Terms: stale or duplicate renderings piling up.** A separate, related
-problem: a term can accumulate a long list of multiple candidate renderings, most of
-which are no longer actually found in the current text — for example, an old (and
-possibly wrong) rendering left in place after a correct one was added later, without
-ever deleting the original. This clutters the list and can make it hard to tell which
-rendering is the team's current, intended one.
+- **Diagnose:** Open the list and check the Found count row by row. Do not trust a general "we did the Biblical Terms".
+- **Coach:** The team fills in the remaining blank rows themselves, from their own project text.
 
-To diagnose it: look for terms carrying several renderings and check which ones the
-Found count shows as still present in the text versus which are stale leftovers. To
-coach the fix: have the team review the full rendering list for a term, confirm which
-rendering(s) are current and correct, and remove the stale ones themselves — you're
-coaching this, not doing it at their keyboard.
+### Biblical Terms: old and duplicate renderings
+
+A term can collect several renderings over time. Many of them may no longer be found in the current text. For example, the team adds a correct rendering later, but never deletes the old one. The old one may be wrong. This clutters the list. It becomes hard to tell which rendering the team means to use now.
 
 ![A Biblical Terms row for "adikos" showing three candidate renderings ("da bad guys," "no on us," "no do da ting") but a Found count of only 2/11.](assets/ss-02-term-only-2-renderings-used.png)
 
 *Renderings pile up over time — the Found column tells you which one is actually live.*
 
-> **NOTE:** A related, less common pattern: a rendering that's just the verse's first
-> word, repeated across a term's occurrences, rather than an actual translation. Per a
-> support.bible programmer's reply to the SME interview behind this course, the likely
-> cause is running Paratext's **Guess Renderings** feature before the project had enough
-> translated data for it to work correctly — with too little data to draw on, it can
-> default to guessing the verse's first word as the rendering. This is a background,
-> automated side effect of running that feature, not something a translator did
-> deliberately or would necessarily notice happened. It's a secondary pattern to the two
-> confirmed ones above (blank rows, stale duplicates) — don't lead your check with it,
-> but if you see a rendering that looks like a repeated first word, this is the likely
-> explanation, and it's worth checking for.
+- **Diagnose:** Look for terms with several renderings. Use the Found count to see which ones are still in the text and which are old leftovers.
+- **Coach:** The team reviews all the renderings for the term. They confirm which ones are current and correct. By this stage every context has been translated. So a rendering that is not found anywhere in the text is an old leftover. They remove those themselves.
 
-> **TIP:** To spot this quickly, open a term's occurrences and step through them with
-> the **down arrow** rather than reading each one closely. A rendering that's just the
-> verse's first word stands out visually against real translations once you're moving
-> through the list at that pace — you don't need to read every entry carefully to catch
-> it.
+> **NOTE:** A less common pattern is a rendering that is only the first word of the verse, repeated across a term's occurrences. A support.bible programmer says the likely cause is Paratext's **Guess Renderings** feature. The team probably ran it before the project had enough translated text. With too little data, it can guess the verse's first word as the rendering. This happens automatically, so the translator may not notice it. Do not start your check with this pattern. But if you see it, this is the likely cause.
 
-**Biblical Terms: Project list bloat and performance.** A separate problem with the
-same tool: a consultant **added the entire "All Biblical Terms" list into the
-Project's Biblical Terms list** — not merely selecting it for viewing, but adding every
-term into the project itself. To see why that's a much bigger addition than it sounds,
-it helps to know what's actually in each list, per Paratext's own help documentation:
-"All Biblical Terms" lists every Greek, Hebrew, and Aramaic term occurring 500 times or
-less in the original text — potentially tens of thousands of entries depending on the
-project's scope (the SME has observed a whole-Bible project where this list ran to
-around 20,000 entries). "Major Biblical Terms," by contrast, is a curated subset of
-just over 8,500 terms, organized into semantic domains. Adding the *entire* "All
-Biblical Terms" list into a project, rather than working from the curated "Major"
-list, means loading tens of thousands of entries instead of a few thousand — and that
-scale difference is exactly what turns into a Send/Receive and performance problem. The
-slowdown that followed came specifically from that addition to the *project* list, not
-from viewing a large list. The SME interview noted this cause was **hard to convince the
-team of** — the connection between "we added a big list of terms" and "Send/Receive is
-now slow" is not obvious to a non-technical team, especially when the sheer scale (tens
-of thousands of entries) isn't visible or intuitive from inside the tool.
+> **TIP:** To find this pattern quickly, open a term's occurrences. Step through them with the **down arrow**. You do not need to read each one closely. A rendering that is just the verse's first word stands out when you move through the list quickly.
 
-Diagnosing this means checking whether the Project Biblical Terms list has been
-expanded well beyond the terms the project actually uses, and advising the team to
-**right-size it** — keep the project list to the terms relevant to their translation,
-rather than the full reference list. Note also that the Open Biblical Terms List dialog holds
-several separate lists side by side (Major Biblical Terms, All Biblical Terms, NT Key
-Biblical Terms, Inclusive/Exclusive Pronouns, Younger/Older Siblings, and others),
-and — as covered in Lesson 3 — **Numbers** is another separate entry there. There is no
-Measures list: a new combined list covering numbers, weights, and measures together is
-replacing the older Numbers list, though not every team's Paratext version will have it
-at the same time. Don't assume every project's terms lists look identical, or that a list
-you've seen behave one way in one project will exist or behave the same way in another.
+### Biblical Terms: project list size
+
+In one field case, a consultant **added the entire "All Biblical Terms" list into the Project Biblical Terms list**. This is different from selecting a list to view it. Adding puts every term into the project itself.
+
+Paratext's help describes the two lists like this:
+
+- **All Biblical Terms** lists every Greek, Hebrew and Aramaic term that occurs 500 times or less in the original text. This can be tens of thousands of entries, depending on the project's scope. The SME has seen a whole-Bible project where this list had about 20,000 entries.
+- **Major Biblical Terms** is a curated subset of just over 8,500 terms, organized into semantic domains.
+
+So adding the whole "All" list loads tens of thousands of entries, not a few thousand. This makes the project bigger and slows Send/Receive and performance. The slowdown comes from **adding** the terms to the project list. It does not come from viewing a large list.
+
+It was **hard to convince the team** of this cause. A non-technical team does not easily connect "we added a big list of terms" with "Send/Receive is now slow". The size of the list is not easy to see from inside the tool.
+
+- **Diagnose:** Check whether the Project Biblical Terms list has grown far beyond the terms the project actually uses.
+- **Advise:** Help the team **right-size** it. The project list should hold the terms relevant to their translation, not the full reference list.
+
+### Biblical Terms: several separate lists
+
+The Open Biblical Terms List dialog holds several separate lists. They include:
+
+- Major Biblical Terms
+- All Biblical Terms
+- NT Key Biblical Terms
+- Inclusive/Exclusive Pronouns
+- Younger/Older Siblings, and others.
+
+**Numbers** is another separate entry there (see Lesson 4). There is no Measures list. A new combined list for numbers, weights and measures is replacing the older Numbers list. Not every team's Paratext version will have it at the same time. So do not assume that every project's lists look the same, or behave the same way.
 
 ![The Open Biblical Terms List dialog, showing Major Biblical Terms, All Biblical Terms, Numbers, and other lists as separate entries.](assets/ss-02-bt-choose-list.png)
 
@@ -165,52 +102,29 @@ you've seen behave one way in one project will exist or behave the same way in a
 
 **Key takeaways**
 
-- There's no technical way to detect a blanket-approved wordlist, and the Project Plan
-  only counts "Incorrect" entries — it doesn't flag Undecided or bulk approval. Ask the
-  team directly, and if there's doubt, reset the whole wordlist to Undecided (this loses
-  nothing) and re-review it together.
-- Blank renderings are Biblical Terms' normal starting state, not a bug — check the
-  Found column/count to confirm a list is genuinely complete, not just look clean.
-- Stale or duplicate renderings can pile up on a term over time; coach the team to
-  review and remove the ones no longer found in the text.
-- Project Biblical Terms bloat causes real Send/Receive slowdowns, and the cause is
-  often hard for a team to accept without a clear explanation.
+- Paratext cannot detect a blanket-approved wordlist. The Project Plan counts only Incorrect words. Ask the team directly. If there is doubt, reset the whole wordlist to Undecided (this loses nothing) and review it again together.
+- Blank renderings are the normal starting state in Biblical Terms, not a bug. Check the Found column row by row to confirm the list is really complete.
+- Old and duplicate renderings pile up. Coach the team to remove the ones no longer found in the text.
+- Adding a huge list to the Project Biblical Terms slows Send/Receive. Help the team right-size it.
+- You diagnose and coach. The team makes the fixes. You never touch their keyboard.
 
 ## Challenge
 
-**✏️ Try this:** Four short exercises on the two tools in this lesson. Write each
-answer first, then verify it against the Content section above.
+**✏️ Try this:** Four short exercises on this lesson. Try each one without looking back. Then check your answers against the Content section above.
 
-1. **Name the only three statuses** a word's spelling can carry in Paratext's
-   wordlist.
-2. **Two rows, two different problems.** Row A shows a highlighted rendering carrying
-   the placeholder text "Double click to enter rendering(s) from project text." Row B
-   shows five renderings on one term, most of them no longer found in the current
-   text. For each row write one line: what the row is telling you, and what you look
-   at to confirm it. Then say which of the two is the tool's normal starting state
-   rather than something that has gone wrong.
-3. **Open the Biblical Terms list** in a project you already support and pick any one
-   row. Read its **Found** column/count and its rendering(s), and write down which of
-   three states that row is in: blank default, one current rendering, or several
-   renderings needing review. One row only — this is a find-the-column exercise, not a
-   list review.
-4. **Selecting versus adding.** In one sentence each, say what happens when a team
-   *selects* "All Biblical Terms" in order to view it, and what happens when they
-   *add* its contents into the Project Biblical Terms list — then name which of the
-   two can slow Send/Receive, and why. Include the rough scale this lesson gives for
-   "All Biblical Terms" against "Major Biblical Terms." That size difference is the
-   part a team finds hardest to believe, so you want the numbers at your fingertips
-   before you're in front of one.
+1. **Why zero is not enough.** Name the three spelling statuses a word can have. Then write one or two sentences: why does a Project Plan with zero Incorrect words not prove that the team reviewed the wordlist?
+2. **Sort two rows.** For each row, write what it tells you and what you check to confirm it.
+   - Row A has a highlighted rendering with the text "Double click to enter rendering(s) from project text."
+   - Row B has five renderings on one term. Most of them are no longer found in the text.
+
+   Then say which row is the tool's normal starting state, and which shows something that needs cleaning up.
+3. **Find the column.** Open the Biblical Terms list in a project you support. Pick one row. Look at its **Found** count and its rendering(s). Write which state the row is in: blank default, one current rendering, or several renderings to review. One row is enough.
+4. **Explain it to the team.** A team says, "We only opened the All Biblical Terms list. Why is Send/Receive slow?" Write two or three sentences you could say to them. Explain the difference between selecting a list to view it and adding it to the project. Use the list sizes from this lesson.
 
 ## Change
 
-**✏️ Reflection:** Which of these two check areas — the wordlist or Biblical Terms —
-is more likely to come up with a team you currently support, and why?
+**✏️ Reflection:** Which check area is more likely to come up with a team you support now: the wordlist or Biblical Terms? Why?
 
-**Next step:** Next time you review a wordlist or Biblical Terms status with a team,
-ask specifically how the approvals happened, not just what the current status shows.
+**Next step:** The next time you look at a wordlist or Biblical Terms status with a team, ask how the approvals happened. Do not look only at what the status shows now.
 
-**Coming up:** Lesson 3 moves to parallel passages and numbers/weights/measures — two
-check areas where your job is to confirm the check ran against the team's own agreed
-approach, and route what it surfaces back to them, rather than judging the language
-yourself.
+**Coming up:** Lesson 3 covers parallel passages. Your job there is to confirm the check ran against the team's own agreed approach. Then you route what it finds back to the team. You do not judge the language yourself.

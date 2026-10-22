@@ -14,7 +14,7 @@ content_type: content
 **In production** — this course is being built through the repo's
 [8-stage production pipeline](../../process/PROCESS.md), tracked on
 [issue #40](https://github.com/dhigby/virtual-ltct/issues/40). The design document
-(`00-design.md`) was approved, and all content — lessons 01–05, the scenario bank, the mentor
+(`00-design.md`) was approved, and all content — lessons 01–08, the scenario bank, the mentor
 guide, and the quiz — is fully drafted, has passed alignment review (Stage 4) and SME
 fact-check (Stage 5). Its current stage is tracked on the board.
 Run `/next-step supporting-pre-publishing-checks` to see where it stands.

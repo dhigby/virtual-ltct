@@ -1,7 +1,7 @@
 # Mentor guide
 
 **Purpose:** Guide for mentors assessing learner responses to the
-[scenario bank](06-scenario-bank.md). This is the component that earns this course's
+[scenario bank](09-scenario-bank.md). This is the component that earns this course's
 `3 - Independent` claim (see `00-design.md`, "Outcome-level open question") — score
 reasoning and coaching quality, not a single correct fix. Several scenarios have more than
 one defensible path.
@@ -100,27 +100,29 @@ History instead of the Parallel Passages tool itself.
 ## Scenario 2: The Undocumented Measure (Objective 5)
 
 **Watch for in the diagnosis:** the learner should first recognize that Paratext's
-numbers/weights/measures checking is in transition: a **new consolidated check**
-(covering numbers, weights, and measures together) is expected to replace the older,
-separate Numbers check, but not every team's Paratext version has migrated to it yet.
-This team is still on the older setup — only the separate Numbers check, with no working
-Measures check at all — and the learner should confirm that specifically for this
-team's version rather than assuming either way. A strong answer confirms the available
-check, runs it against the team's documented approach, is honest that there is no
-reliable tool for weights and measures on this version, and asks the **team** to find and
-review their own measure renderings — rather than the learner comparing them. (Comparing
-measure renderings by hand is possible but not easy, and ambiguous terms get missed.)
+numbers/weights/measures are reviewed in Biblical Terms lists, not run as a check, and
+these lists are in transition: a **new combined list** (covering numbers, weights, and
+measures together) is expected to replace the older, separate Numbers list, but not
+every team's Paratext version has it yet. This team is still on the older setup — only
+the separate Numbers list, with no Measures list at all — and the learner should confirm
+that specifically for this team's version rather than assuming either way. A strong
+answer confirms which list is available, and coaches the **team** to add the measurement
+terms they need to their project Biblical Terms list (from Major Biblical Terms, filtered
+to the Realia category, or by searching All Biblical Terms) and to review those
+renderings against their documented approach — rather than the learner comparing them.
+(Comparing measure renderings by hand is possible but not easy, and ambiguous terms get
+missed.)
 From there, the learner should distinguish two different problems that look similar —
 "an inconsistency turned up" (a normal, expected finding) vs. "the team has no
 documented standard to check against" (a process gap that has to be fixed before the
 finding means anything). A strong answer checks for the existence of a documented
 approach *first*, before treating the inconsistency the team found as something to
-resolve. A weak answer never asks which check(s) this team's version actually has, or
-assumes the new consolidated check must already be available everywhere.
+resolve. A weak answer never asks which list this team's version actually has, or
+assumes the new combined list must already be available everywhere.
 
 **Watch for in what they'd say to the team:** the learner explains, in plain terms, what
 this team's Paratext version does and doesn't have available yet — the older Numbers
-check only, no reliable Measures coverage — and helps the team locate or establish their
+list only, no Measures list — and helps the team locate or establish their
 own documented approach — asking questions, prompting them to search prior notes or ask
 whoever made "the decision early on" — without proposing a rendering themselves. This is
 marker **(f)**: the numbers/measures rendering is the team's call, not the LTC's, and
@@ -137,8 +139,8 @@ skipped a step.
 
 **Common wrong turn:** proposing which rendering is "right" instead of routing the decision
 back to the team; trying to compare or judge the measure renderings themselves and decide
-what counts as consistent, instead of asking the team to find and review them (mark
-down); assuming the new consolidated check is available without confirming it for
+what counts as consistent, instead of coaching the team to add and review them (mark
+down); assuming the new combined list is available without confirming it for
 this team's specific Paratext version, or assuming no team could possibly have it yet.
 
 ---
@@ -164,7 +166,7 @@ numbers missing from the normal flow, the paired "Verse number in heading" and "
 cannot occur here: \v" errors for every swallowed verse, and a
 garbled-looking reference. A strong answer confirms this by looking at the markup right
 after the heading for the missing `\p`, not by reading the heading or the verses —
-whether a heading's wording fits its passage is the team's call (Lesson 4, step 5), and
+whether a heading's wording fits its passage is the team's call (Lesson 5, step 5), and
 nothing in this scenario asks the learner to judge it. Marker **(b)**: diagnose cause,
 not each symptom separately.
 

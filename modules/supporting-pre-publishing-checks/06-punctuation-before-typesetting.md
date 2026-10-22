@@ -64,7 +64,7 @@ Each flagged result shows a combination Paratext does not recognize, with its re
 
 "Show sequences" does not cover single unmatched brackets. That is the job of Unmatched Pairs of Punctuation:
 
-![The Unmatched Pairs of Punctuation inventory, listing single-character pairs like "(", "\]", ")" with counts and a Status column (blue "?", green check, red X).](assets/ss-04-unmatched-pairs-punctuation.png)
+![The Unmatched Pairs of Punctuation inventory, listing single characters such as an opening parenthesis, a closing square bracket and a closing parenthesis, with counts and a Status column (blue "?", green check, red X).](assets/ss-04-unmatched-pairs-punctuation.png)
 
 *A direct list of unmatched brackets and parentheses. It shows only the characters that are actually unmatched in the project.*
 

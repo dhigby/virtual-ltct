@@ -95,7 +95,7 @@
             
   <strong>Draft under review.</strong>
   Not published material, and not part of the LT Consultant competency framework.
-  Built from <code>main</code>.
+  Built from <code>course/paratext-quotation-rules</code>.
 
           </div>
           
@@ -1098,7 +1098,7 @@
 
 
   
-    <a href="https://github.com/dhigby/virtual-ltct/edit/main/modules/paratext-quotation-rules/06-mentor-guide.md" title="Edit this page" class="md-content__button md-icon" rel="edit">
+    <a href="https://github.com/dhigby/virtual-ltct/edit/course/paratext-quotation-rules/modules/paratext-quotation-rules/06-mentor-guide.md" title="Edit this page" class="md-content__button md-icon" rel="edit">
       
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M10 20H6V4h7v5h5v3.1l2-2V8l-6-6H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h4zm10.2-7c.1 0 .3.1.4.2l1.3 1.3c.2.2.2.6 0 .8l-1 1-2.1-2.1 1-1c.1-.1.2-.2.4-.2m0 3.9L14.1 23H12v-2.1l6.1-6.1z"/></svg>
     </a>
@@ -1274,7 +1274,7 @@ learner has not already configured.</p>
 <tr>
 <td>John</td>
 <td>17</td>
-<td>Exercise 1.1 — at the defaults the check reports five results here (17:1, 17:6, 17:13, 17:20, 17:24), which clear once <code>pi/pi</code> is in the Continuer required at list (Exercise 2.1)</td>
+<td>Exercise 1.1 — at the defaults the check reports five results here (17:1, 17:6, 17:13, 17:20, 17:24), which clear once <code>pi</code> is in the Continuer required at list (Exercise 2.1)</td>
 </tr>
 <tr>
 <td>Acts</td>
@@ -1288,7 +1288,7 @@ learner has not already configured.</p>
 </tr>
 </tbody>
 </table>
-<p>For all other books, inserting one or two placeholder verses is sufficient. At Paratext's defaults, Exercise 1.1 (all books) gives exactly five results, all in John 17, each "Opening quote mark found without matching closing quote mark: “"; the lesson teaches that these come from the defaults, not from errors in the text. The default Second and Third level continuers produce no results in Tamba's text. Five or more books with at least a few verses each is sufficient.</p>
+<p>For all other books, inserting one or two placeholder verses is sufficient. At Paratext's defaults, Exercise 1.1 (all books) gives exactly five results, all in John 17, each "Opening quote mark found without matching closing quote mark: “"; the lesson teaches that these come from the defaults, not from errors in the text. Adding <code>pi</code> to the default list clears all five (adding only <code>pi/pi</code> leaves 17:1 and 17:6). The default Second and Third level continuers produce no results in Tamba's text. Five or more books with at least a few verses each is sufficient.</p>
 <h3 id="step-3-apply-correct-tamba-quotation-marks-throughout">Step 3 — Apply correct Tamba quotation marks throughout<a class="headerlink" href="#step-3-apply-correct-tamba-quotation-marks-throughout" title="Permanent link">&para;</a></h3>
 <p>All dialogue in the required passages must use the correct Tamba quotation characters:</p>
 <table>
@@ -1333,7 +1333,7 @@ learner has not already configured.</p>
 - Text: correct marks, no deliberate errors</p>
 <p>Make Phase A available before learners begin Lesson 1 (Step 5). Learners correct the defaults themselves during Lessons 2–3.</p>
 <p><strong>Phase B — Lesson 4 (configured + seeded errors)</strong>
-- Quote marks tab: fully configured per the Tamba settings above (Exercise 2.1 values)
+- Quote marks tab: fully configured per the Tamba settings above (Exercise 2.1 values), Continuer required at <code>p p/q1 m/q1 pi b/q1</code>
 - Quotation types tab: recommended defaults with three customizations, confirmed against a real Paratext 9.5 build — Quotation from another source = <strong>Quote marks are optional</strong>, Continued quotation = <strong>Use quote marks</strong>, Indirect = <strong>Never use quote marks</strong> (the Exercise 3.2 result). Self quote already defaults to Use quote marks, which matches Tamba's requirement, so it is left unchanged.
 - Text: same as Phase A, plus the five deliberate errors from the Lesson 4 Seeding table below</p>
 <p>Phase A and Phase B are two <strong>separate</strong> registered projects: <code>TAMBA</code> (Phase A) and <code>TAMBAB</code> (Phase B, full name also <em>Tamba New Testament</em>). Learners can't see <code>TAMBAB</code> until you add them to it, which you do just before Exercise 4.1 (Step 5). Keep <code>TAMBA</code> at Phase A at all times: if Phase B content ever reaches <code>TAMBA</code>, every learner who receives it for Lessons 1–3 gets the answers.</p>
@@ -1455,7 +1455,7 @@ learner has not already configured.</p>
 </table>
 <p><code>TAMBAB</code> arrives with the reference Lesson 2–3 configuration already entered, so Lesson 4 starts from a known-good setup whatever the learner entered in <code>TAMBA</code>.</p>
 <p><strong>Reviewing Lesson 2–3 work.</strong> Review the learner's Lesson 2–3 settings before they move on to Lesson 4: that's where their own configuration work is. Learners don't send, so you can't see their settings through Send/Receive. Instead, with each lesson's <strong>✏️ Produce this</strong> task they submit screenshots: the <strong>Quote marks</strong> tab for <code>TAMBA</code> and <code>RUNDA</code> (Lesson 2), and the <strong>Quotation types</strong> tab for <code>TAMBA</code> (Lesson 3). Check those against the README convention tables and the Exercise 3.2 settings table.</p>
-<p>For <code>TAMBA</code>, a clean check is not enough evidence. At the defaults the check gives five results, all in John 17 (Lesson 1); after Exercise 2.1 it gives "No errors found". But adding only <code>pi/pi</code> to the list also clears all five, and the default Second and Third level continuers produce no results in Tamba's text. So look at the screenshot itself: Second and Third level continuers at <em>none</em>, and the list reading <code>p p/q1 m/q1 s1/pi pi/pi b/q1</code>. A learner who stopped when the result list emptied has missed the lesson's point.</p>
+<p>For <code>TAMBA</code>, a clean check is not enough evidence. At the defaults the check gives five results, all in John 17 (Lesson 1); after Exercise 2.1 it gives "No errors found". But adding only <code>pi</code> to the default list also clears all five, and the default Second and Third level continuers produce no results in Tamba's text. So look at the screenshot itself: Second and Third level continuers at <em>none</em>, and the list reading <code>p p/q1 m/q1 pi b/q1</code>. A learner who stopped when the result list emptied has missed the lesson's point.</p>
 <p><strong>When a learner finishes the course.</strong> The projects are shared by every learner, so the user list should hold only people currently taking the course. When a learner completes the course, or stops partway through, remove them from every course project you added them to (up to all six: <code>TAMBA</code>, <code>RUNDA</code>, <code>TAMBAB</code>, <code>VELNA</code>, <code>MENDA</code>, <code>Waku</code>). In your own Paratext:</p>
 <ol>
 <li>In each project the learner was added to, open <strong>☰ &gt; Project settings &gt; User permissions...</strong>, click <strong>Remove</strong> next to their name, then <strong>OK</strong>.</li>
@@ -1482,8 +1482,8 @@ learner has not already configured.</p>
 <ol>
 <li><strong>Put back the text.</strong> Open <strong>☰ &gt; Project &gt; Project history...</strong>, click your <code>## Course starting state (defaults)</code> entry (if there's more than one, use the newest), then click <strong>Revert Books...</strong>. In <strong>Select which books to restore</strong>, click <strong>All Books</strong>, then <strong>OK</strong>. This undoes the learner's text edits (Lesson 4 fixes, scenario edits).</li>
 <li><strong>Set the Quotation Rules back by hand.</strong> Open <strong>☰ &gt; Project settings &gt; Quotation Rules</strong> and set it to that project's starting state:</li>
-<li><strong><code>TAMBA</code>, <code>RUNDA</code>, <code>VELNA</code>, <code>MENDA</code>, <code>Waku</code>:</strong> the Paratext defaults (see the table in the Overview). Quote marks <code>“ “ ”</code> / <code>‘ ‘ ’</code> / <code>“ “ ”</code>, Continuer required at <code>p p/q1 b/q1</code>. Quotation types tab: <strong>Use recommended settings</strong>, with the check box off. You can use <strong>Copy quote mark settings...</strong> from another project still at the defaults, but it doesn't copy the Continuer required at list, so type that by hand.</li>
-<li><strong><code>TAMBAB</code>:</strong> Tamba's configured settings (the README's Tamba table and the Phase B description in Step 4). Quote marks <code>“ “ ”</code> / <code>‘</code> <em>none</em> <code>’</code> / <code>“</code> <em>none</em> <code>”</code>, Continuer required at <code>p p/q1 m/q1 s1/pi pi/pi b/q1</code>. Quotation types tab: <strong>Custom settings</strong>, check box on, with the Exercise 3.2 settings.</li>
+<li><strong><code>TAMBA</code>, <code>RUNDA</code>, <code>VELNA</code>, <code>MENDA</code>, <code>Waku</code>:</strong> the Paratext defaults (see the table in the Overview). Quote marks <code>“ “ ”</code> / <code>‘ ‘ ’</code> / <code>“ “ ”</code>, Continuer required at <code>p p/q1 b/q1</code>. Quotation types tab: <strong>Use recommended settings</strong>, with the check box off. You can use <strong>Copy quote mark settings...</strong> from another project still at the defaults; it brings the Continuer required at list across too. Confirm the list reads correctly afterwards, and check the cells rather than the Example box, which may still show the old marks.</li>
+<li><strong><code>TAMBAB</code>:</strong> Tamba's configured settings (the README's Tamba table and the Phase B description in Step 4). Quote marks <code>“ “ ”</code> / <code>‘</code> <em>none</em> <code>’</code> / <code>“</code> <em>none</em> <code>”</code>, Continuer required at <code>p p/q1 m/q1 pi b/q1</code>. Quotation types tab: <strong>Custom settings</strong>, check box on, with the Exercise 3.2 settings. <strong>Copy quote mark settings...</strong> from a project at this state brings the list across with the marks; confirm the list reads correctly afterwards.</li>
 <li><strong>Check Language Settings where the course has learners change them.</strong> Open <strong>☰ &gt; Project settings &gt; Language Settings &gt; Other Characters</strong> and make sure <strong>Word-medial punctuation</strong> is back to its starting state (empty) on the projects where learners add <code>’</code>: <code>RUNDA</code> (Exercise 2.3), <code>VELNA</code> (Scenario A) and <code>TAMBAB</code> (Exercise 4.1, item 5).</li>
 <li>Click <strong>OK</strong>, then Send/Receive the project.</li>
 </ol>
@@ -1609,7 +1609,7 @@ the 847 are one apostrophe clash. The learner should be reading the messages, no
 <td><code>VELNA</code></td>
 <td>264 — mostly "Second-level quote mark found without a preceding first-level quote: ‘", plus word-medial <code>’</code> (e.g. Matthew 1:1)</td>
 <td>3: word-medial <code>’</code> at Matthew 1:1, Luke 1:1 and John 1:1</td>
-<td>The <code>’</code> results remain after correction (expected; see Scenario A). 264 → 3. Velna's text uses <code>’</code> as a glottal stop (Matthew 1:1, Luke 1:1, John 1:1; not Mark 1:1) and in contractions (e.g. Matthew 1:6, 1:20), in narrative as well as speech, so narrative passages are not result-free.</td>
+<td>The <code>’</code> results remain after correction (expected; see Scenario A). 264 → 3. Velna's text uses <code>’</code> as a glottal stop (Matthew 1:1, Luke 1:1, John 1:1; not Mark 1:1) and in contractions (e.g. Matthew 1:6, 1:20), in narrative as well as speech, so narrative passages are not result-free. Re-run with the Scenario A configuration and list <code>p b/q1 pi</code> (2026-10-22): still exactly the 3 results at the 1:1 verses; the contractions at Matthew 1:6 and 1:20 are not flagged.</td>
 </tr>
 <tr>
 <td><code>MENDA</code></td>
@@ -1625,9 +1625,6 @@ the 847 are one apostrophe clash. The learner should be reading the messages, no
 </tr>
 </tbody>
 </table>
-<blockquote>
-<p><strong>[Placeholder — Kevin/Jenni:</strong> the SME's 2026-10 re-check says Velna's text also uses <code>’</code> in contractions (e.g. Matthew 1:6, 1:20), but the <code>VELNA</code> row above says a configured run ends at <strong>3</strong> results, all glottal-stop <code>’</code> at the 1:1 verses. Either the contraction <code>’</code> at 1:6 and 1:20 isn't flagged (and if so, why — word-final rather than word-medial?), or the count of 3 is out of date. Re-run <code>VELNA</code> with the Scenario A configuration, confirm the count and locations, and update this row and Scenario A's "Check your work" to match.<strong>]</strong></p>
-</blockquote>
 <p><strong>Reviewing Scenario B (<code>MENDA</code>).</strong> Menda holds only John, so a run on John and a run on all
 books are the same run. Verified in Paratext 9.5:</p>
 <ul>

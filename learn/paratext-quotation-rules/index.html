@@ -93,7 +93,7 @@
             
   <strong>Draft under review.</strong>
   Not published material, and not part of the LT Consultant competency framework.
-  Built from <code>main</code>.
+  Built from <code>course/paratext-quotation-rules</code>.
 
           </div>
           
@@ -851,7 +851,7 @@
 
 
   
-    <a href="https://github.com/dhigby/virtual-ltct/edit/main/modules/paratext-quotation-rules/README.md" title="Edit this page" class="md-content__button md-icon" rel="edit">
+    <a href="https://github.com/dhigby/virtual-ltct/edit/course/paratext-quotation-rules/modules/paratext-quotation-rules/README.md" title="Edit this page" class="md-content__button md-icon" rel="edit">
       
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M10 20H6V4h7v5h5v3.1l2-2V8l-6-6H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h4zm10.2-7c.1 0 .3.1.4.2l1.3 1.3c.2.2.2.6 0 .8l-1 1-2.1-2.1 1-1c.1-.1.2-.2.4-.2m0 3.9L14.1 23H12v-2.1l6.1-6.1z"/></svg>
     </a>
@@ -866,7 +866,7 @@
 <strong>Competencies:</strong> Translation Tools<br>
 <strong>Content type:</strong> content<br>
 <strong>4 lessons</strong> &middot; about 5.8 hours<br>
-<strong>Built from:</strong> <code>main</code><br>
+<strong>Built from:</strong> <code>course/paratext-quotation-rules</code><br>
 <strong>Pull request:</strong> <a href="https://github.com/dhigby/virtual-ltct/pull/124">124</a><br></p>
 <p>You are reading the <strong>learner view</strong> -- the course as a learner sees it. The design document, mentor guide and quiz solutions are not included.</p>
 </div>
@@ -880,7 +880,7 @@
 <p><strong>Estimated time:</strong> Lessons 1–4 run 4¼ hours total (30 + 90 + 60 + 75 minutes); the scenario bank adds 90 minutes. Each individual lesson is capped at 90 minutes — see the duration header at the top of each file.</p>
 <hr />
 <h2 id="course-package">Course package<a class="headerlink" href="#course-package" title="Permanent link">&para;</a></h2>
-<p>This course follows the repo's <a href="https://github.com/dhigby/virtual-ltct/blob/main/process/PROCESS.md">content package structure</a>. Work through the numbered files in order:</p>
+<p>This course follows the repo's <a href="https://github.com/dhigby/virtual-ltct/blob/course/paratext-quotation-rules/process/PROCESS.md">content package structure</a>. Work through the numbered files in order:</p>
 <table>
 <thead>
 <tr>
@@ -1051,7 +1051,7 @@ example, after your mentor changes your permissions), cancel it.</p>
 - Second and Third level have no continuer (set to <em>none</em>; the defaults fill them, so they must be changed). Nothing is repeated at the head of a new paragraph at those levels, and a Second level quotation can run across paragraph breaks unbroken: in Peter's Psalm 16 citation in Acts 2:25–28, an opening phrase is followed by a <code>\q1</code> line that opens both First and Second level (<code>“ ‘</code>), and the Second level closes with <code>’</code> in 2:28, with no Second level mark repeated at the breaks between.
 - Third level is used only in Matthew, John, and Revelation where a character quotes scripture inside dialogue.
 - When a speech quotes Scripture as poetry, the First level continuer <code>“</code> is repeated at the head of the first <code>\q1</code> line (e.g. Matthew 2:6 <code>\q1 “ ‘Oro iu, Betliem…</code>); the following <code>\q2</code>/<code>\q1</code> lines of the same poem carry no mark.
-- <strong>Continuer required at:</strong> <code>p p/q1 m/q1 s1/pi pi/pi b/q1</code> — every <code>\p</code> inside a speech, a <code>\q1</code> that follows <code>\p</code>, <code>\m</code> or <code>\b</code>, and an indented <code>\pi</code> that follows <code>\s1</code> or another <code>\pi</code>.
+- <strong>Continuer required at:</strong> <code>p p/q1 m/q1 pi b/q1</code> — every <code>\p</code> inside a speech, a <code>\q1</code> that follows <code>\p</code>, <code>\m</code> or <code>\b</code>, and every indented <code>\pi</code> inside a speech, whatever comes before it (a <code>\s1</code> heading, another <code>\pi</code> or anything else).
 - Phase A text contains no apostrophes, so the <code>’</code> collision described under Runda does not arise in Tamba.</p>
 <p>Lesson 2 also uses a second practice project, <strong>Runda</strong> (<code>RUNDA</code>), for the guillemet and apostrophe exercises:</p>
 <table>
@@ -1196,7 +1196,7 @@ A note attached to a verse (☰ &gt; Insert &gt; Project note..., or via the not
 <p><strong>Quote Continuer at new paragraph</strong>
 A character placed at the start of a new paragraph to signal that a speaker’s speech from the previous paragraph continues. Entered in the middle column of the Quote marks tab grid. Paratext's defaults fill it at every level; set it to <em>none</em> at any level where the language doesn't repeat a mark at the head of a continued paragraph.</p>
 <p><strong>Quote marks tab</strong>
-The first tab of the Quotation Rules dialog (☰ &gt; Project settings &gt; Quotation Rules). Contains a three-row, three-column grid for entering the Opening, Quote Continuer at new paragraph, and Closing characters at each nesting level, plus additional checkboxes below the grid (hover labels for descriptions), an Example preview section showing the configured marks in context, and the <strong>Copy quote mark settings...</strong> button (which copies the quote marks from another project but not the <strong>Continuer required at</strong> list). A new project opens with Paratext's defaults already in the grid (see <a href="#the-practice-projects">The Practice Projects</a>).</p>
+The first tab of the Quotation Rules dialog (☰ &gt; Project settings &gt; Quotation Rules). Contains a three-row, three-column grid for entering the Opening, Quote Continuer at new paragraph, and Closing characters at each nesting level, plus additional checkboxes below the grid (hover labels for descriptions), an Example preview section showing the configured marks in context, and the <strong>Copy quote mark settings...</strong> button (which copies the whole Quote marks tab from another project, <strong>Continuer required at</strong> list included; afterwards check the cells and the list, since the Example may still show the old project's marks). A new project opens with Paratext's defaults already in the grid (see <a href="#the-practice-projects">The Practice Projects</a>).</p>
 <p><strong>Quotation Rules</strong>
 The Paratext dialog (under the project menu <strong>☰ &gt; Project settings &gt; Quotation Rules</strong>) where both the Quote marks tab and the Quotation types tab are configured.</p>
 <p><strong>Quotation types check</strong>

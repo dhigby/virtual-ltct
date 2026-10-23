@@ -95,7 +95,7 @@
             
   <strong>Draft under review.</strong>
   Not published material, and not part of the LT Consultant competency framework.
-  Built from <code>main</code>.
+  Built from <code>course/paratext-quotation-rules</code>.
 
           </div>
           
@@ -923,7 +923,7 @@
 
 
   
-    <a href="https://github.com/dhigby/virtual-ltct/edit/main/modules/paratext-quotation-rules/02-setting-up-quote-marks.md" title="Edit this page" class="md-content__button md-icon" rel="edit">
+    <a href="https://github.com/dhigby/virtual-ltct/edit/course/paratext-quotation-rules/modules/paratext-quotation-rules/02-setting-up-quote-marks.md" title="Edit this page" class="md-content__button md-icon" rel="edit">
       
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M10 20H6V4h7v5h5v3.1l2-2V8l-6-6H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h4zm10.2-7c.1 0 .3.1.4.2l1.3 1.3c.2.2.2.6 0 .8l-1 1-2.1-2.1 1-1c.1-.1.2-.2.4-.2m0 3.9L14.1 23H12v-2.1l6.1-6.1z"/></svg>
     </a>
@@ -1022,9 +1022,13 @@ paragraph-marker contexts. Each entry takes one of two shapes:</p>
   paragraph that falls inside an open quotation.</li>
 <li><strong>A previous-marker / marker pair</strong>, such as <code>p/q1</code> — a continuer is required at a <code>\q1</code>
   line only when it directly follows a <code>\p</code> paragraph. This is how you cover a speech that moves
-  from prose into quoted poetry (<code>p/q1</code>, <code>b/q1</code>, <code>m/q1</code>), or through indented paragraphs
-  (<code>s1/pi</code>, <code>pi/pi</code>), without demanding a continuer on every poetry line.</li>
+  from prose into quoted poetry (<code>p/q1</code>, <code>b/q1</code>, <code>m/q1</code>) without demanding a continuer on
+  every poetry line.</li>
 </ul>
+<p>A bare marker is the broader of the two: <code>pi</code> requires a continuer at <em>every</em> <code>\pi</code> paragraph
+inside a speech, whatever comes before it, while the pair <code>pi/pi</code> covers only a <code>\pi</code> that
+follows another <code>\pi</code>. Use a pair only when the text carries the continuer after some markers
+and not others.</p>
 <p><strong>Where does the list come from?</strong> From the text, not from a catalogue. You do not need to know
 every USFM paragraph marker — only the ones <em>this project</em> uses at points where a speech can
 run on. Two ways to find them:</p>
@@ -1039,7 +1043,8 @@ run on. Two ways to find them:</p>
    upper pane and the lower pane lists every verse where it occurs, so you can double-click into
    a few and see whether they fall inside speech. Keep the paragraph markers that do. Section
    headings (<code>\s1</code>) never carry a continuer themselves, but a paragraph that <em>follows</em> a heading
-   inside a running speech may, which is what a pair like <code>s1/pi</code> expresses.</li>
+   inside a running speech may, so its marker belongs on the list (a bare <code>pi</code> covers a <code>\pi</code>
+   after a heading as well as one after another <code>\pi</code>).</li>
 </ol>
 <p><img alt="The Markers inventory window for the TAMBA project with All books selected. The upper pane lists markers with their counts and style names, among them p 1888, pi 11, q 14, q1 209 and q2 185. The marker p is selected, and the lower pane lists the first verses where it occurs: MAT 1:0, 1:16, 1:17 and 1:19." src="../ss-02-markers-inventory.png" /></p>
 <p>Most New Testament projects end up with a list of four to six entries. A project with heavy
@@ -1052,8 +1057,10 @@ mechanics; the <strong>Take it to your context</strong> task at the end asks you
   the shapes, so it can't tell you which of two look-alike characters a cell holds; use
   <strong>Alt+X</strong> in the cell for that.
 - <strong>Copy quote mark settings...</strong> button, at the bottom left — imports the quote marks from
-  another project (useful when a related project uses the same conventions). It does <strong>not</strong>
-  copy the <strong>Continuer required at</strong> list. Type that by hand after copying.</p>
+  another project (useful when a related project uses the same conventions). It copies the
+  whole Quote marks tab, <strong>Continuer required at</strong> list included. After copying, check the
+  grid cells and the list themselves, not the Example: the Example may still show the old
+  project's marks.</p>
 <p><img alt="The Quote marks tab for a project still at Paratext 9.5's defaults. The three-row, three-column grid shows “ “ ” at First level, ‘ ‘ ’ at Second level and “ “ ” at Third level (Opening, Quote Continuer at new paragraph, Closing). Below the grid are the checkboxes and the Continuer required at field reading p p/q1 b/q1; the Example section and the Copy quote mark settings... button are at the bottom." src="../ss-02-quote-marks-tab-defaults.png" /></p>
 <p><strong>One more setting lives elsewhere, but it has a real limit.</strong> Some languages use the same
 character for two purposes: as the <strong>closing quotation mark</strong> at the single-quote level <em>and</em>
@@ -1139,7 +1146,7 @@ the five John 17 results you saw in Lesson 1. Compare them with Tamba's conventi
 </tr>
 </tbody>
 </table>
-<p><strong>Continuer required at:</strong> Tamba needs <code>p p/q1 m/q1 s1/pi pi/pi b/q1</code>. The default is
+<p><strong>Continuer required at:</strong> Tamba needs <code>p p/q1 m/q1 pi b/q1</code>. The default is
 <code>p p/q1 b/q1</code>; change it.</p>
 <p>So the First level already matches, and two continuer cells and the list do not.</p>
 <p><strong>Steps:</strong>
@@ -1156,12 +1163,12 @@ the five John 17 results you saw in Lesson 1. Compare them with Tamba's conventi
    <code>“…‘…’…”</code> — curly double quotes at the outer level and curly single quotes for embedded
    speech.
 6. In the <strong>Continuer required at</strong> field below the grid, replace <code>p p/q1 b/q1</code> with exactly:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>p p/q1 m/q1 s1/pi pi/pi b/q1
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>p p/q1 m/q1 pi b/q1
 </code></pre></div>
 <p>Type it with single spaces between entries. Do not skip this step — see the table after
    the steps for what each entry is doing.
 7. Click <strong>OK</strong>.</p>
-<p><img alt="The Quote marks tab for Tamba after entry: “ in the First level Opening and Continuer cells and ” in its Closing cell, ‘ and ’ at Second level with the Continuer cell at *none*, “ and ” at Third level with the Continuer cell also at *none*, and the Continuer required at field below the grid reading p p/q1 m/q1 s1/pi pi/pi b/q1. The Example section shows “ repeated at the head of each continued \p paragraph." src="../ss-02-tamba-quote-marks.png" /></p>
+<p><img alt="The Quote marks tab for Tamba after entry: “ in the First level Opening and Continuer cells and ” in its Closing cell, ‘ and ’ at Second level with the Continuer cell at *none*, “ and ” at Third level with the Continuer cell also at *none*, and the Continuer required at field below the grid reading p p/q1 m/q1 pi b/q1. The Example section shows “ repeated at the head of each continued \p paragraph." src="../ss-02-tamba-quote-marks.png" /></p>
 <p>Tamba uses English-style curly quotes at all three levels. First level speech that spans a
 paragraph break repeats the opening mark <code>“</code> (U+201C) as a Quote Continuer at the head of each
 new paragraph; the closing mark <code>”</code> (U+201D) appears only once, at the very end of the whole
@@ -1172,8 +1179,8 @@ line that opens both First and Second level (<code>“ ‘</code>), and the Seco
 2:28, with no Second level mark repeated at the paragraph breaks in between. Tamba's text passes
 the check that way.</p>
 <p><strong>Why that list?</strong> Tamba's text uses ordinary <code>\p</code> paragraphs for most speech, quoted poetry
-introduced from prose or after a blank line, and indented <code>\pi</code> paragraphs after section
-headings. Each entry covers one of those situations:</p>
+introduced from prose or after a blank line, and indented <code>\pi</code> paragraphs. Each entry covers
+one of those situations:</p>
 <table>
 <thead>
 <tr>
@@ -1204,14 +1211,9 @@ headings. Each entry covers one of those situations:</p>
 <td>A second stanza of quoted poetry</td>
 </tr>
 <tr>
-<td><code>s1/pi</code></td>
-<td>at an indented <code>\pi</code> paragraph that follows a <code>\s1</code> heading</td>
-<td>A speech that continues past a section heading</td>
-</tr>
-<tr>
-<td><code>pi/pi</code></td>
-<td>at a <code>\pi</code> paragraph that follows another <code>\pi</code></td>
-<td>Consecutive indented paragraphs within one speech</td>
+<td><code>pi</code></td>
+<td>at the start of every indented <code>\pi</code> paragraph inside an open speech, whether it follows a <code>\s1</code> heading, another <code>\pi</code> or anything else</td>
+<td>John 17, where the five results you saw in Lesson 1 fall</td>
 </tr>
 </tbody>
 </table>
@@ -1229,12 +1231,14 @@ Two other outcomes tell you what went wrong:</p>
   required at</strong> field is empty or has a typo. That field is by far the most common cause of
   this pattern.</li>
 </ul>
-<p><strong>A clean result is not the finish line.</strong> Of all your changes, adding <code>pi/pi</code> to the list is
-the only one the check needed. That entry alone clears all five John 17 results. The default Second and Third level continuers produce no results in Tamba's text at all. So the
-check would have said "No errors found" even with those two cells still wrong and the list
-still missing <code>m/q1</code> and <code>s1/pi</code>. The check can only report what the current text happens to
-trip over. The team's conventions say Second and Third level have no continuer, and the list is
-the six entries above, so that is what you set. When the team drafts a new book, settings that
+<p><strong>A clean result is not the finish line.</strong> Of all your changes, adding <code>pi</code> to the default list
+(giving <code>p p/q1 b/q1 pi</code>) is the only one the check needed. That entry alone clears all five John 17 results. (The pair
+<code>pi/pi</code> would not: it still leaves 17:1 and 17:6, where a <code>\pi</code> follows something other than
+another <code>\pi</code>.) The default Second and Third level continuers produce no results in Tamba's
+text at all. So the check would have said "No errors found" even with those two cells still
+wrong and the list still missing <code>m/q1</code>. The check can only report what the current text
+happens to trip over. The team's conventions say Second and Third level have no continuer, and
+the list is the five entries above, so that is what you set. When the team drafts a new book, settings that
 match their conventions are what keep the check honest. Set what the conventions say; don't
 stop when the result list empties.</p>
 <p>(This is only the Quotations check. The separate Quotation types check, which Lesson 3
@@ -1338,7 +1342,7 @@ table drives the configuration — never the defaults, and never the other way a
 assume one language's pattern applies to another, or that every nesting level within the same
 language behaves the same way.</p>
 <p>Now compare the two <strong>Continuer required at</strong> lists. Both languages use a continuer, but Tamba's
-list has six entries and Runda's has one, because the list describes what the <em>text does</em>, not
+list has five entries and Runda's has one, because the list describes what the <em>text does</em>, not
 what the language's punctuation convention says. Both projects quote poetry inside speech;
 Tamba's text repeats the continuer at the head of the poetry, Runda's does not. Get the list
 wrong in either direction and the check tells you, with a different message each way:</p>
@@ -1354,7 +1358,7 @@ wrong in either direction and the check tells you, with a different message each
 <tr>
 <td>Too short (a marker the text <em>does</em> continue at is missing)</td>
 <td>Unclosed-quote results inside a long speech, such as "Quote opened…" or "Opening quote mark found without matching closing quote mark: “"</td>
-<td>Tamba at the defaults, which lack <code>pi/pi</code>: five results in John 17. Tamba with an empty field: the whole Sermon on the Mount</td>
+<td>Tamba at the defaults, which lack <code>pi</code>: five results in John 17. Tamba with an empty field: the whole Sermon on the Mount</td>
 </tr>
 <tr>
 <td>Too long (a marker the text does <em>not</em> continue at is listed)</td>

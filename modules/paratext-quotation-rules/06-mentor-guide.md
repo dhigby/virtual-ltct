@@ -138,7 +138,7 @@ Use this table to know which file to ask for and give an offline learner, for th
 | Backup file | Project | State it restores | Needed for |
 |---|---|---|---|
 | `Tamba New Testament 2026-10-12.zip` | `TAMBA` | **Phase A**: Paratext defaults, clean text | Lessons 1–3 |
-| `TAMBAB Phase B 2026-10-09.zip` | `TAMBAB` | **Phase B**: Lesson 2–3 settings entered, Quotation types check on, the five seeds in the text | Lesson 4 |
+| `TAMBAB Phase B 2026-10-22.zip` | `TAMBAB` | **Phase B**: Lesson 2–3 settings entered, Quotation types check on, the five seeds in the text | Lesson 4 |
 | `Runda New Testament 2026-10-13.zip` | `RUNDA` | Paratext defaults | Lesson 2 |
 | `Velna New Testament 2026-10-12.zip` | `VELNA` | Paratext defaults (Word-medial punctuation empty) | Scenario A |
 | `Menda New Testament 2026-10-12.zip` | `MENDA` | Paratext defaults | Scenario B |

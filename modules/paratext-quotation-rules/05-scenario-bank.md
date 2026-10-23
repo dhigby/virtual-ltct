@@ -67,7 +67,7 @@ which must be cleared from `“ “ ”` to *none*, because Velna has no Third l
 Opening `‘` and Closing `’` already match.
 
 Continuation: `«` at First level only. The verified configuration also replaces the default
-**Continuer required at** list (`p p/q1 b/q1`) with `p b/q1 pi pi/pi` — the paragraph-marker
+**Continuer required at** list (`p p/q1 b/q1`) with `p b/q1 pi` — the paragraph-marker
 contexts where the check must insist on the continuer. Copy it exactly; without the right list
 the check reads continuers `«` as new opening marks that are never closed, and a long speech
 floods with unclosed-quote results.
@@ -263,7 +263,7 @@ Quotation Rules are set once per project and persist across sessions, but they n
 
 If your language has more than one translation project (for example, a study Bible alongside the main translation), you do not need to reconfigure the Quote marks tab from scratch. Paratext 9.5 can copy settings from a base project:
 
-Open **☰ > Project settings > Quotation Rules** on the destination project. At the bottom of the dialog, click **Copy quote mark settings...** and select the already-configured project as the source. It copies the quote marks but **not** the **Continuer required at** list, so type that by hand; otherwise the destination keeps the list it already had (on a new project, the default `p p/q1 b/q1`). Review every field after copying — differences in verse structure or text conventions between the two projects may require adjustments.
+Open **☰ > Project settings > Quotation Rules** on the destination project. At the bottom of the dialog, click **Copy quote mark settings...** and select the already-configured project as the source. It copies the whole Quote marks tab, **Continuer required at** list included. Check the grid cells and the list themselves after copying, not the **Example** box: it may still show the old project's marks. Review every field after copying — differences in verse structure or text conventions between the two projects may require adjustments.
 
 ### What a well-configured project looks like
 

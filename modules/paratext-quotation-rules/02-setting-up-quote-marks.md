@@ -108,8 +108,13 @@ paragraph-marker contexts. Each entry takes one of two shapes:
   paragraph that falls inside an open quotation.
 - **A previous-marker / marker pair**, such as `p/q1` — a continuer is required at a `\q1`
   line only when it directly follows a `\p` paragraph. This is how you cover a speech that moves
-  from prose into quoted poetry (`p/q1`, `b/q1`, `m/q1`), or through indented paragraphs
-  (`s1/pi`, `pi/pi`), without demanding a continuer on every poetry line.
+  from prose into quoted poetry (`p/q1`, `b/q1`, `m/q1`) without demanding a continuer on
+  every poetry line.
+
+A bare marker is the broader of the two: `pi` requires a continuer at *every* `\pi` paragraph
+inside a speech, whatever comes before it, while the pair `pi/pi` covers only a `\pi` that
+follows another `\pi`. Use a pair only when the text carries the continuer after some markers
+and not others.
 
 **Where does the list come from?** From the text, not from a catalogue. You do not need to know
 every USFM paragraph marker — only the ones *this project* uses at points where a speech can
@@ -125,7 +130,8 @@ run on. Two ways to find them:
    upper pane and the lower pane lists every verse where it occurs, so you can double-click into
    a few and see whether they fall inside speech. Keep the paragraph markers that do. Section
    headings (`\s1`) never carry a continuer themselves, but a paragraph that *follows* a heading
-   inside a running speech may, which is what a pair like `s1/pi` expresses.
+   inside a running speech may, so its marker belongs on the list (a bare `pi` covers a `\pi`
+   after a heading as well as one after another `\pi`).
 
 ![The Markers inventory window for the TAMBA project with All books selected. The upper pane lists markers with their counts and style names, among them p 1888, pi 11, q 14, q1 209 and q2 185. The marker p is selected, and the lower pane lists the first verses where it occurs: MAT 1:0, 1:16, 1:17 and 1:19.](assets/ss-02-markers-inventory.png)
 
@@ -140,8 +146,10 @@ At the bottom of the dialog:
   the shapes, so it can't tell you which of two look-alike characters a cell holds; use
   **Alt+X** in the cell for that.
 - **Copy quote mark settings...** button, at the bottom left — imports the quote marks from
-  another project (useful when a related project uses the same conventions). It does **not**
-  copy the **Continuer required at** list. Type that by hand after copying.
+  another project (useful when a related project uses the same conventions). It copies the
+  whole Quote marks tab, **Continuer required at** list included. After copying, check the
+  grid cells and the list themselves, not the Example: the Example may still show the old
+  project's marks.
 
 ![The Quote marks tab for a project still at Paratext 9.5's defaults. The three-row, three-column grid shows “ “ ” at First level, ‘ ‘ ’ at Second level and “ “ ” at Third level (Opening, Quote Continuer at new paragraph, Closing). Below the grid are the checkboxes and the Continuer required at field reading p p/q1 b/q1; the Example section and the Copy quote mark settings... button are at the bottom.](assets/ss-02-quote-marks-tab-defaults.png)
 
@@ -213,7 +221,7 @@ the five John 17 results you saw in Lesson 1. Compare them with Tamba's conventi
 | Second level | `‘` (U+2018) — default matches | *none* — default is `‘`; **change it** | `’` (U+2019) — default matches |
 | Third level | `“` (U+201C) — default matches | *none* — default is `“`; **change it** (step 2 does this for you) | `”` (U+201D) — default matches |
 
-**Continuer required at:** Tamba needs `p p/q1 m/q1 s1/pi pi/pi b/q1`. The default is
+**Continuer required at:** Tamba needs `p p/q1 m/q1 pi b/q1`. The default is
 `p p/q1 b/q1`; change it.
 
 So the First level already matches, and two continuer cells and the list do not.
@@ -234,14 +242,14 @@ So the First level already matches, and two continuer cells and the list do not.
 6. In the **Continuer required at** field below the grid, replace `p p/q1 b/q1` with exactly:
 
    ```
-   p p/q1 m/q1 s1/pi pi/pi b/q1
+   p p/q1 m/q1 pi b/q1
    ```
 
    Type it with single spaces between entries. Do not skip this step — see the table after
    the steps for what each entry is doing.
 7. Click **OK**.
 
-![The Quote marks tab for Tamba after entry: “ in the First level Opening and Continuer cells and ” in its Closing cell, ‘ and ’ at Second level with the Continuer cell at *none*, “ and ” at Third level with the Continuer cell also at *none*, and the Continuer required at field below the grid reading p p/q1 m/q1 s1/pi pi/pi b/q1. The Example section shows “ repeated at the head of each continued \p paragraph.](assets/ss-02-tamba-quote-marks.png)
+![The Quote marks tab for Tamba after entry: “ in the First level Opening and Continuer cells and ” in its Closing cell, ‘ and ’ at Second level with the Continuer cell at *none*, “ and ” at Third level with the Continuer cell also at *none*, and the Continuer required at field below the grid reading p p/q1 m/q1 pi b/q1. The Example section shows “ repeated at the head of each continued \p paragraph.](assets/ss-02-tamba-quote-marks.png)
 
 Tamba uses English-style curly quotes at all three levels. First level speech that spans a
 paragraph break repeats the opening mark `“` (U+201C) as a Quote Continuer at the head of each
@@ -254,8 +262,8 @@ line that opens both First and Second level (`“ ‘`), and the Second level cl
 the check that way.
 
 **Why that list?** Tamba's text uses ordinary `\p` paragraphs for most speech, quoted poetry
-introduced from prose or after a blank line, and indented `\pi` paragraphs after section
-headings. Each entry covers one of those situations:
+introduced from prose or after a blank line, and indented `\pi` paragraphs. Each entry covers
+one of those situations:
 
 | Entry | Continuer required… | Where Tamba does this |
 | --- | --- | --- |
@@ -263,8 +271,7 @@ headings. Each entry covers one of those situations:
 | `p/q1` | at a `\q1` poetry line that follows a `\p` paragraph | A speech that quotes Scripture as poetry mid-paragraph |
 | `m/q1` | at a `\q1` line that follows a `\m` (no-indent) paragraph | Same, after a continuation paragraph |
 | `b/q1` | at a `\q1` line that follows a `\b` blank line | A second stanza of quoted poetry |
-| `s1/pi` | at an indented `\pi` paragraph that follows a `\s1` heading | A speech that continues past a section heading |
-| `pi/pi` | at a `\pi` paragraph that follows another `\pi` | Consecutive indented paragraphs within one speech |
+| `pi` | at the start of every indented `\pi` paragraph inside an open speech, whether it follows a `\s1` heading, another `\pi` or anything else | John 17, where the five results you saw in Lesson 1 fall |
 
 If you were building this list yourself you would read Matthew 5–7, John 17 and Acts 2 and note
 which markers appear inside the speeches. You will do exactly that for a real project in the
@@ -281,12 +288,14 @@ Two other outcomes tell you what went wrong:
   required at** field is empty or has a typo. That field is by far the most common cause of
   this pattern.
 
-**A clean result is not the finish line.** Of all your changes, adding `pi/pi` to the list is
-the only one the check needed. That entry alone clears all five John 17 results. The default Second and Third level continuers produce no results in Tamba's text at all. So the
-check would have said "No errors found" even with those two cells still wrong and the list
-still missing `m/q1` and `s1/pi`. The check can only report what the current text happens to
-trip over. The team's conventions say Second and Third level have no continuer, and the list is
-the six entries above, so that is what you set. When the team drafts a new book, settings that
+**A clean result is not the finish line.** Of all your changes, adding `pi` to the default list
+(giving `p p/q1 b/q1 pi`) is the only one the check needed. That entry alone clears all five John 17 results. (The pair
+`pi/pi` would not: it still leaves 17:1 and 17:6, where a `\pi` follows something other than
+another `\pi`.) The default Second and Third level continuers produce no results in Tamba's
+text at all. So the check would have said "No errors found" even with those two cells still
+wrong and the list still missing `m/q1`. The check can only report what the current text
+happens to trip over. The team's conventions say Second and Third level have no continuer, and
+the list is the five entries above, so that is what you set. When the team drafts a new book, settings that
 match their conventions are what keep the check honest. Set what the conventions say; don't
 stop when the result list empties.
 
@@ -384,14 +393,14 @@ assume one language's pattern applies to another, or that every nesting level wi
 language behaves the same way.
 
 Now compare the two **Continuer required at** lists. Both languages use a continuer, but Tamba's
-list has six entries and Runda's has one, because the list describes what the *text does*, not
+list has five entries and Runda's has one, because the list describes what the *text does*, not
 what the language's punctuation convention says. Both projects quote poetry inside speech;
 Tamba's text repeats the continuer at the head of the poetry, Runda's does not. Get the list
 wrong in either direction and the check tells you, with a different message each way:
 
 | List is… | What you see | Example |
 | --- | --- | --- |
-| Too short (a marker the text *does* continue at is missing) | Unclosed-quote results inside a long speech, such as "Quote opened…" or "Opening quote mark found without matching closing quote mark: “" | Tamba at the defaults, which lack `pi/pi`: five results in John 17. Tamba with an empty field: the whole Sermon on the Mount |
+| Too short (a marker the text *does* continue at is missing) | Unclosed-quote results inside a long speech, such as "Quote opened…" or "Opening quote mark found without matching closing quote mark: “" | Tamba at the defaults, which lack `pi`: five results in John 17. Tamba with an empty field: the whole Sermon on the Mount |
 | Too long (a marker the text does *not* continue at is listed) | "Expected continuers [«] are missing" at each place the listed marker occurs inside speech | Runda with the default `p/q1` left in: Matthew 2:6, 4:6 |
 
 Either way the fix is in the field, not the text. The text is the authority; the list is

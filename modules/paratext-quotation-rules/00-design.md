@@ -77,7 +77,7 @@ following field knowledge (to be confirmed at SME fact-check, stage 5):_
   field on the same tab. With the field empty, every continuer is read as a fresh opening mark
   that is never closed, and a long speech such as the Sermon on the Mount produces an unclosed
   quote result at every paragraph — confirmed against Paratext 9.5 (K. Nicholas, 2026-09-03).
-  The shipped Tamba Phase B project carries `p p/q1 m/q1 s1/pi pi/pi b/q1`; Lesson 2 has the
+  The shipped Tamba Phase B project carries `p p/q1 m/q1 pi b/q1`; Lesson 2 has the
   learner enter that value on Phase A so Lesson 3's expected results are reproducible. The
   list is derived from where the project's text actually places continuers, not from a fixed
   catalogue: Runda quotes poetry inside speech without repeating `«` on the `\q1` line, so its
@@ -98,7 +98,9 @@ following field knowledge (to be confirmed at SME fact-check, stage 5):_
   Continuer / Closing): First level `“ “ ”`, Second level `‘ ‘ ’`, Third level `“ “ ”`;
   Continuer required at `p p/q1 b/q1`; Quotation types at **Use recommended settings**.
   TAMBAB (Phase B) instead starts with Tamba's configuration. Two related behaviors:
-  **Copy quote mark settings...** does not copy the Continuer required at list, and Paratext
+  **Copy quote mark settings...** copies the whole Quote marks tab, Continuer required at list
+  included, though the Example box may still show the old project's marks afterwards
+  (confirmed against Paratext 9.5, K. Nicholas, 2026-10-22); and Paratext
   refuses an empty Continuer required at list while any continuer is set ("Cannot be blank
   if any Quote Continuer is specified.").
 - The practice projects use real languages, adapted for the course (decided 2026-10-09,

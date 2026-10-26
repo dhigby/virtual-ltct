@@ -324,8 +324,11 @@ books are the same run. Verified in Paratext 9.5:
 - **Second level reversed** (`‹` in Opening, `›` in Closing): **175 results** throughout John,
   in pairs per verse: "Closing quote [ › U+203A ] found without matching opening. Caused by a
   missing opening quote, a missing continuer, or incorrectly defined continuer rules: ›" and
-  "Opening quote mark found without matching closing quote mark: ‹".
-- **`«` typed instead of `»`** in the First and Third level Closing cells: **224 results** in
+  "Opening quote mark found without matching closing quote mark: ‹". Note: 51 of the 175
+  results are "Unexpected quotation mark value" from the **Quotation types** check; a mentor
+  running only the Quotations check (types check off) will see 124 results instead. All counts
+  in this section assume both Quotations and Quotation types checks are enabled.
+- **`«` typed instead of `»`** in the First and Third level Closing cells: **168 results** in
   John, nearly all naming `«` ("Closing quote mark is possibly missing in this verse: «",
   "Opening quote mark found without matching closing quote mark: «"). The Example box on the
   Quote marks tab gives it away: it shows `«` where the closing mark should be (for example

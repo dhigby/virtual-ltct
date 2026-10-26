@@ -6,7 +6,7 @@
 or openly-licensed Scripture text they can actually edit, by installing it as its own standard
 translation project rather than as a locked Paratext resource.
 
-**Watch the video:** _To be recorded at stage 8._
+**Watch the video:** [Advanced Paratext Support: course introduction](https://vimeo.com/1238012314)
 
 ## Learning objectives
 

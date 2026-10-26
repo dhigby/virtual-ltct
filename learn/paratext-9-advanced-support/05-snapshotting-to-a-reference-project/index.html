@@ -23,7 +23,7 @@
       
       
       <link rel="icon" href="../assets/favicon.svg">
-      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.8.0">
     
     
       
@@ -31,10 +31,10 @@
       
     
     
-      <link rel="stylesheet" href="../assets/stylesheets/main.ec1eaa64.min.css">
+      <link rel="stylesheet" href="../assets/stylesheets/main.57a0d79d.min.css">
       
         
-        <link rel="stylesheet" href="../assets/stylesheets/palette.ab4e12ef.min.css">
+        <link rel="stylesheet" href="../assets/stylesheets/palette.fb2fffe2.min.css">
       
       
 
@@ -921,17 +921,23 @@ and then restore the main project to its current state. Step by step:</p>
 <li>Make sure all automatic Send/Receive options are turned <strong>off</strong> for the main project. (This
    matters — you're about to put the main project into a temporary, reverted state, and you
    don't want an automatic Send/Receive pushing that reverted state out to the rest of the
-   team.)</li>
+   team.) In the Send/Receive Projects dialog, click <strong>Schedule…</strong> and set the main project's
+   <strong>Send/Receive setting</strong> to <strong>Never</strong>.</li>
+</ol>
+<p><img alt="The Schedule Send/Receive dialog, opened with the Schedule… button at the bottom of the Send/Receive Projects dialog. Its table lists projects with two columns of drop-downs: “Check for updates” and “Send/Receive setting”. Every project shown has its Send/Receive setting set to Never, so none will send or receive automatically. Check for updates is Never for all but the first project, which is set to On startup." src="../ss-05-schedule-send-receive-never.png" /></p>
+<ol>
 <li>In project history, select the desired history point, use the "Revert Books" command, and
    select the books to revert.</li>
 <li>Create the new project and import the reverted books into it, exactly as in the easy case
    above.</li>
 <li>Delete the reverted copy of the main project: choose "Delete project" (from either the main
-   menu or the project menu), and select the action <strong>"Delete from this computer only."</strong></li>
-<li>Do a Send/Receive, and select the main project from your list of "New" projects to restore
-   the current version. Once that's done, you can turn any automatic Send/Receive options back
-   on, if you were using them.</li>
+   menu or the project menu), and select the action <strong>"Delete project from this computer only."</strong></li>
 </ol>
+<p><img alt="The Delete Project dialog, with four numbered callouts. 1: the Project drop-down, showing the project to delete. 2: the Action drop-down, set to “Delete project from this computer only”. 3: the note below it, saying a shared project will still be shared with all project members via internet Send/Receive, and project registration is unaffected. 4: the OK button. The Location table shows the effect: Project on this computer changes from a tick (Before) to a cross (After), while Project on Send/Receive Server and Registration on Registry website keep their ticks. “Also remove me from this project” is unchecked." src="../ss-05-delete-project-this-computer-only.png" />
+6. Do a Send/Receive, and select the main project from your list of "New" projects to restore
+   the current version. Once that's done, you can turn any automatic Send/Receive options back
+   on, if you were using them.</p>
+<p><img alt="Diagram of the six steps as a vertical flow. Steps 1 (Send/Receive any unsent changes) and 2 (turn off automatic Send/Receive) sit above a red dashed danger zone. Inside the zone are steps 3 (Revert Books to the chosen history point — from here the main project on this computer holds old text), 4 (create the new project and import the reverted books) and 5 (delete the reverted main project with “Delete project from this computer only”). The zone's heading says no Send/Receive, automatic or manual, may happen inside it, because it would send the old text to the team; its footer says the reverted copy has been deleted and the old text never left this computer. Step 6 (Send/Receive to restore the main project, then re-enable automatic Send/Receive) sits below the zone." src="../ss-05-snapshot-sequence.svg" /></p>
 <p><strong>WARNING:</strong> The middle of this procedure leaves the main project locally reverted to an old
 state. Steps 2 and 5 exist specifically to make sure that reverted state never gets sent to the
 rest of the team and is cleanly discarded afterward — don't skip or reorder them.</p>
@@ -940,7 +946,7 @@ Send/Receive — automatic or manual — happens anywhere between reverting the 
 deleting the reverted copy (step 5), it can push the older, reverted state out to the rest of the
 team as if it were <em>new</em> work, overwriting everyone else's more recent edits with the
 administrator's temporarily-reverted copy. Turning off automatic Send/Receive before the revert,
-and deleting the reverted copy with "Delete from this computer only" (not sending it anywhere)
+and deleting the reverted copy with "Delete project from this computer only" (not sending it anywhere)
 before resyncing, are what keep that reverted state from ever leaving the administrator's machine.</p>
 <p><strong>INFO:</strong> This procedure applies to Paratext 9.</p>
 <p><strong>What "good" looks like:</strong> you can create a second project that contains the team's content from
@@ -953,7 +959,7 @@ an earlier stage of the main project's history.</p>
   project, import books) if the team is already at the point they want.</li>
 <li>To snapshot an <em>earlier</em> point, an administrator must temporarily revert the main project's
   books, import them into the new project, then discard the reverted copy locally and resync —
-  turning automatic Send/Receive off beforehand and choosing "Delete from this computer only"
+  turning automatic Send/Receive off beforehand and choosing "Delete project from this computer only"
   are the two steps that keep this safe.</li>
 </ul>
 <h2 id="challenge">Challenge<a class="headerlink" href="#challenge" title="Permanent link">&para;</a></h2>
@@ -1071,10 +1077,10 @@ sequenced from the most straightforward to the most involved, for you to diagnos
     
       
       
-      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["navigation.sections", "navigation.top", "navigation.footer", "toc.follow", "search.suggest", "search.highlight", "content.action.edit", "content.code.copy"], "search": "../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["navigation.sections", "navigation.top", "navigation.footer", "toc.follow", "search.suggest", "search.highlight", "content.action.edit", "content.code.copy"], "search": "../assets/javascripts/workers/search.a7633da7.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
     
     
-      <script src="../assets/javascripts/bundle.d7400e89.min.js"></script>
+      <script src="../assets/javascripts/bundle.c21346df.min.js"></script>
       
     
   </body>

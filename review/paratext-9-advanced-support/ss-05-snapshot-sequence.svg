@@ -1,0 +1,70 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 680 730" width="680" height="730" role="img" aria-labelledby="title desc" font-family="Segoe UI, Helvetica, Arial, sans-serif">
+  <title id="title">Snapshotting an earlier point in history: the six steps</title>
+  <desc id="desc">Six steps in order. Steps 3 to 5 sit inside a red danger zone: from Revert Books until the reverted copy is deleted, the main project on this computer holds old text and must not be sent.</desc>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+      <path d="M0,0 L10,5 L0,10 z" fill="#52606d"/>
+    </marker>
+  </defs>
+
+  <rect width="680" height="730" fill="#ffffff"/>
+
+  <text x="340" y="34" text-anchor="middle" font-size="18" font-weight="700" fill="#1f2933">Snapshotting an earlier point in history</text>
+
+  <!-- Danger zone: steps 3-5 -->
+  <rect x="36" y="240" width="608" height="356" rx="10" fill="#fdecea" stroke="#c62828" stroke-width="2.5" stroke-dasharray="9 6"/>
+  <text x="130" y="264" font-size="14" font-weight="700" fill="#b71c1c">⚠ DANGER ZONE — main project is reverted on this computer</text>
+  <text x="130" y="283" font-size="12.5" fill="#b71c1c">No Send/Receive, automatic or manual: it would send the old text to the team</text>
+  <text x="130" y="586" font-size="13" font-style="italic" fill="#b71c1c">Reverted copy deleted — the old text never left this computer</text>
+
+  <!-- Arrows -->
+  <g stroke="#52606d" stroke-width="2" marker-end="url(#arrow)">
+    <line x1="98" y1="130" x2="98" y2="156"/>
+    <line x1="98" y1="230" x2="98" y2="291"/>
+    <line x1="98" y1="365" x2="98" y2="391"/>
+    <line x1="98" y1="465" x2="98" y2="491"/>
+    <line x1="98" y1="565" x2="98" y2="621"/>
+  </g>
+
+  <!-- Step 1 -->
+  <rect x="60" y="60" width="560" height="70" rx="8" fill="#f4f6f8" stroke="#8a96a3" stroke-width="1.5"/>
+  <circle cx="98" cy="95" r="17" fill="#2b5c8a"/>
+  <text x="98" y="101" text-anchor="middle" font-size="16" font-weight="700" fill="#ffffff">1</text>
+  <text x="130" y="90" font-size="15" font-weight="700" fill="#1f2933">Send/Receive any unsent changes</text>
+  <text x="130" y="112" font-size="13" fill="#3e4c59">The main project is current and shared</text>
+
+  <!-- Step 2 -->
+  <rect x="60" y="160" width="560" height="70" rx="8" fill="#f4f6f8" stroke="#8a96a3" stroke-width="1.5"/>
+  <circle cx="98" cy="195" r="17" fill="#2b5c8a"/>
+  <text x="98" y="201" text-anchor="middle" font-size="16" font-weight="700" fill="#ffffff">2</text>
+  <text x="130" y="190" font-size="15" font-weight="700" fill="#1f2933">Turn OFF automatic Send/Receive</text>
+  <text x="130" y="212" font-size="13" fill="#3e4c59">Schedule… → main project's Send/Receive setting: Never</text>
+
+  <!-- Step 3 -->
+  <rect x="60" y="295" width="560" height="70" rx="8" fill="#ffffff" stroke="#c62828" stroke-width="1.5"/>
+  <circle cx="98" cy="330" r="17" fill="#c62828"/>
+  <text x="98" y="336" text-anchor="middle" font-size="16" font-weight="700" fill="#ffffff">3</text>
+  <text x="130" y="325" font-size="15" font-weight="700" fill="#1f2933">Revert Books to the chosen history point</text>
+  <text x="130" y="347" font-size="13" fill="#3e4c59">From here, the main project on this computer holds old text</text>
+
+  <!-- Step 4 -->
+  <rect x="60" y="395" width="560" height="70" rx="8" fill="#ffffff" stroke="#c62828" stroke-width="1.5"/>
+  <circle cx="98" cy="430" r="17" fill="#c62828"/>
+  <text x="98" y="436" text-anchor="middle" font-size="16" font-weight="700" fill="#ffffff">4</text>
+  <text x="130" y="425" font-size="15" font-weight="700" fill="#1f2933">Create the new project; import the reverted books</text>
+  <text x="130" y="447" font-size="13" fill="#3e4c59">Manage Books → Import Books</text>
+
+  <!-- Step 5 -->
+  <rect x="60" y="495" width="560" height="70" rx="8" fill="#ffffff" stroke="#c62828" stroke-width="1.5"/>
+  <circle cx="98" cy="530" r="17" fill="#c62828"/>
+  <text x="98" y="536" text-anchor="middle" font-size="16" font-weight="700" fill="#ffffff">5</text>
+  <text x="130" y="525" font-size="15" font-weight="700" fill="#1f2933">Delete the reverted main project</text>
+  <text x="130" y="547" font-size="13" fill="#3e4c59">Action: Delete project from this computer only</text>
+
+  <!-- Step 6 -->
+  <rect x="60" y="625" width="560" height="70" rx="8" fill="#f4f6f8" stroke="#8a96a3" stroke-width="1.5"/>
+  <circle cx="98" cy="660" r="17" fill="#2b5c8a"/>
+  <text x="98" y="666" text-anchor="middle" font-size="16" font-weight="700" fill="#ffffff">6</text>
+  <text x="130" y="655" font-size="15" font-weight="700" fill="#1f2933">Send/Receive to restore the main project</text>
+  <text x="130" y="677" font-size="13" fill="#3e4c59">Pick it from the “New” projects; then re-enable automatic S/R</text>
+</svg>

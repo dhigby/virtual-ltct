@@ -7,7 +7,7 @@
 | **Title**                  | Advanced Paratext Support                                                                                                                                                                                      |
 | **Competencies addressed** | Translation Tools                                                                                                                                                                                              |
 | **Target outcome level**   | 2 - With Assistance                                                                                                                                                                                            |
-| **SME(s) consulted**       | TBD — scenario list below was supplied directly by the requesting consultant during initial scoping; a full SME interview for procedural specifics has not yet been conducted (see SME knowledge notes below) |
+| **SME(s) consulted**       | Steve White                                                                                                                                                                                                    |
 | **Design status**          | Approved by Steve White on 2026-07-16                                                                                                                                                                          |
 
 ### Outcome-level rationale

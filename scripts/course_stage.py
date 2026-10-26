@@ -65,10 +65,11 @@ def pending_screenshots(folder):
 
 
 def missing_visuals(folder):
-    """Return (lessons with no visual, lesson 1 if it has no overview video).
+    """Return (lessons with no visual, README.md if the course has no overview video).
 
-    Every lesson carries a screenshot, diagram, image or video; lesson 1 is the course
-    overview, so its visual is the overview video. Both shortfalls hold a course at 3e.
+    Every lesson carries a screenshot, diagram, image or video, and the course carries its
+    overview video in README.md (or, if drafted before 2026-10-26, in lesson 1). Both
+    shortfalls hold a course at 3e.
     """
     if _pkg is None:
         return [], []
@@ -307,7 +308,7 @@ def stage_for(folder, use_gh=True):
         return result(3, "3d", "Draft -- overview video script",
                       "process/stages/03-draft.md",
                       "Use the video-script-writer agent to write the overview video "
-                      "script (the companion to lesson 1) for modules/" + slug + "/.")
+                      "script (shown on the course's front page) for modules/" + slug + "/.")
     done.append("3d. Overview video script")
 
     # --- Stage 3e: the visuals -- every lesson has one, and the briefed shots exist ---
@@ -320,8 +321,8 @@ def stage_for(folder, use_gh=True):
     if bare or overview or pending:
         todo = []
         if overview:
-            todo.append("lesson 1 (" + overview[0] + ") is the course overview and needs "
-                        "its overview video linked with '**Watch the video:** ...'")
+            todo.append("link the overview video in " + overview[0] + " with a "
+                        "'**Watch the video:** ...' line above its first '##' heading")
         if bare:
             todo.append("no visual yet in " + ", ".join(bare)
                         + " -- add a screenshot, diagram, image or video to each")

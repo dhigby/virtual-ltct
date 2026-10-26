@@ -146,7 +146,11 @@ separate faithful-import workstream — see [`process/backfill.md`](process/back
    These courses teach software, and a lesson of unbroken prose asks the learner to
    picture a screen they have never seen. The author chooses which while drafting (stage
    **3a**); CI warns while a course is in draft and the alignment check (stage **4**)
-   blocks. **Lesson 1 is the course overview, so its visual is the overview video.**
+   blocks. **The overview video belongs to the course, not to lesson 1:** it goes in the
+   course's `README.md`, above its first `##` heading, which the publisher sends to
+   Moodle as the course description, so it is seen before the course is started.
+   Lesson 1 needs its own visual like any other. A course drafted before 2026-10-26
+   may keep the video in lesson 1; that still counts, and the publisher copies it.
 
    - **Screenshots and diagrams** live in `modules/<slug>/assets/`, named
      `ss-<lesson number>-<what-it-shows>.png` (lowercase, hyphens, no spaces), and are
@@ -397,6 +401,11 @@ constructing it — the host changes when the server moves.
 - `image_reduce.py` — makes the lighter copy of each committed image that goes into a
   payload (fit to a width, palette PNG; `.full`/`.small` suffixes override). Never writes
   to the repo. Not run directly.
+- `video_scenes.py` · `video_narrate.py` · `video_assemble.py` — turn a video script into
+  a narrated, captioned MP4 (process/video-production.md): split it into scenes, voice
+  each with ElevenLabs (`ELEVENLABS_API_KEY`), then lay the narration onto the film
+  exported from Claude Motion and write an `.srt`. Media stays in `ltct-video/` beside the
+  repo (`LTCT_VIDEO_DIR` overrides); the path guard refuses any git tree.
 - `cbc_wording.py` — the CBC wording rules, defined once: report labels name a level only
   as an aim, and badge and certificate text never says "certified" or a CBC level held.
   Imported by `site_config.py validate` and `check_moodle_payload.py`. Not run directly.

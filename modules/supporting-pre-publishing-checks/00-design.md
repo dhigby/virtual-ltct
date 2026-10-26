@@ -197,6 +197,20 @@ assessed, but consolidated into lighter sections rather than each getting standa
 except objective 1, which per the flagged tension above is kept as a short recurring callout inside
 each core check-area lesson instead of either a heavy standalone module or being dropped.
 
+> **Amendment, Jenni Beadle, 2026-10-23 — lessons split and renumbered:** after proof-reading,
+> lessons 03–05 were each split in two, and every file was renumbered so each has its own
+> two-digit number (Moodle identifies a lesson by its file number, so `03a`/`03b` would clash).
+> The table below and the notes elsewhere in this document keep the old file names as a record.
+> Old → new: `01` → `01-supporting-the-final-turn.md` (25 min); `02` →
+> `02-wordlist-and-biblical-terms.md` (30 min); `03-parallel-passages-and-measures.md` →
+> `03-parallel-passages.md` (25 min) and `04-numbers-and-measures.md` (20 min);
+> `04-formatting-and-references.md` → `05-structural-checks.md` (45 min) and
+> `06-punctuation-before-typesetting.md` (35 min); `05-glossary-linking-and-layout.md` →
+> `07-glossary-linking.md` (30 min) and `08-layout-and-read-through.md` (35 min);
+> `06-scenario-bank.md` → `09-scenario-bank.md`; `07-mentor-guide.md` → `10-mentor-guide.md`;
+> `08-quiz.md` → `11-quiz.md`; `09-video-script.md` → `12-video-script.md` (still written
+> against the old five lessons; to be redrafted once a video production process is settled).
+
 > **Clarification, Doug Higby and Jenni Beadle, 2026-09-08:** each of the five lessons below
 > (01–05) ends in a Challenge section that is a **self-check/recall exercise** — write an answer
 > from memory, then verify it against that lesson's own Content section — not an applied,

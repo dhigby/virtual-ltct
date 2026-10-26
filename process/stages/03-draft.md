@@ -13,9 +13,11 @@ tracker. Do them in order — later artifacts depend on earlier ones being stabl
 > **Every lesson has a visual.** These courses teach software, and a lesson of unbroken
 > prose asks the learner to picture a screen they have never seen. So every numbered lesson
 > carries at least one — a **screenshot**, a **diagram**, an **image**, or a **video** —
-> and you choose which as you draft it (3a). **Lesson 1 is the course overview, so its
-> visual is the overview video:** it carries a `**Watch the video:**` line, and the script
-> for it is 3d. Pick by what the learner needs: a screenshot for anything they must find
+> and you choose which as you draft it (3a). **The overview video belongs to the course,
+> not to lesson 1:** the course's `README.md` carries its `**Watch the video:**` line above
+> the first `##` heading, the part Moodle shows as the course description, and the script
+> for it is 3d. Lesson 1 needs its own visual like any other. (A course drafted before
+> 2026-10-26 may keep the line in lesson 1; that still counts.) Pick by what the learner needs: a screenshot for anything they must find
 > on screen, a diagram for how parts relate or a decision flow, a video for orientation and
 > the shape of a workflow. One that merely decorates is worse than none — it costs reading
 > time and teaches nothing.
@@ -89,9 +91,9 @@ pipe-separated answer key. ✅ Tick **"3c. Quiz written"**.
 > (`NN-video-script.md`) for `modules/<slug>/` from its finished lessons.
 
 The script for the recording step — cold open, on-screen/voiceover pairing, runtime
-estimate. `NN-video-script.md` is the **overview video**, the companion to lesson 1: it
-orients a learner to the shape of the tool and the workflow before they do the hands-on
-lessons. It is not a read-aloud of the course.
+estimate. `NN-video-script.md` is the **overview video**, shown on the course's front
+page: it orients a learner to the shape of the tool and the workflow before they do the
+hands-on lessons. It is not a read-aloud of the course.
 
 If a later lesson also warrants its own video, that script is **optional** and is named
 `NN-lesson-<L>-video-script.md` (e.g. `09-lesson-03-video-script.md`). Keep
@@ -141,8 +143,9 @@ diagram or video line in. ✅ Tick **"3e. Visuals in place"**.
   `## Connect`, `## Content`, `## Challenge`, `## Change`.
 - Every image link resolves to a committed file under `assets/`, with alt text that
   describes the state shown.
-- **Every lesson carries a visual** — screenshot, diagram, image or video — and lesson 1
-  carries the overview video. Stage 4 blocks on this.
+- **Every lesson carries a visual** — screenshot, diagram, image or video — and the
+  course's `README.md` carries the overview video (or, if drafted before 2026-10-26,
+  lesson 1 does). Stage 4 blocks on this.
 
 ## Then
 

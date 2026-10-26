@@ -25,7 +25,8 @@ It returns a pass/fail checklist covering:
 - **Lesson structure** — every lesson has the four *Learning That Lasts* phase sections,
   in order: `## Connect`, `## Content`, `## Challenge`, `## Change`.
 - **Lesson visuals** — every lesson carries a screenshot, diagram, image or video, and
-  lesson 1 carries the overview video. This is the gate: CI only *warns* about a bare
+  the course's `README.md` carries the overview video (or, if drafted before
+  2026-10-26, lesson 1 does). This is the gate: CI only *warns* about a bare
   lesson while a course is being drafted, so stage 4 is where it blocks. A lesson with no
   visual goes back to [3e](03-draft.md), not through.
 - **Quiz format** — sections, pass threshold, mixed question types, answer key.

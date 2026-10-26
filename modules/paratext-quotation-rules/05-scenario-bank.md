@@ -83,8 +83,8 @@ Indirect, Hypothetical — stays at its recommended default.
 
 **Check your work:**
 - After configuration, run the check on all books again and compare with the 264 you started from. Read the messages, not just the count: which kinds of result has your configuration cleared, and which are left?
-- Run the check on Luke. Verify that `«...»` speech boundaries are recognized correctly and narrative passages generate no results.
-- Confirm that apostrophes inside words (contractions, possessives) are still flagged even after configuring Word-medial punctuation — that's the expected, confirmed outcome for this collision, not a sign of a missing setting. Verify each is a genuine apostrophe and move on.
+- Run the check on Luke. Verify that `«...»` speech boundaries are recognized correctly. Don't expect narrative passages to be free of results: Velna's text uses `’` for more than its Second level closing mark. It is also a glottal stop (at Matthew 1:1, Luke 1:1 and John 1:1, for example, though not at Mark 1:1) and appears in contractions (Matthew 1:6 and 1:20, for example), in narrative as well as in speech.
+- Confirm that the `’` used as a glottal stop or in a contraction is still flagged even after configuring Word-medial punctuation — that's the expected, confirmed outcome for this collision, not a sign of a missing setting. Verify each is a genuine apostrophe and move on.
 - Confirm the First level Quote Continuer (`«`) at the start of continued paragraphs is not flagged as an unexpected mark.
 - Enable the Quotation types check and run it on Matthew, Luke, and John. It should return clean once Continued quotation is set to Use quote marks — this check is separate from the apostrophe results above, which live in the Quotations check and remain regardless.
 
@@ -113,7 +113,7 @@ At Third level Menda returns to **double guillemets** — `«` opens and `»` cl
 **Discovery prompts:**
 - Menda's text is full of dialogue, and the check at the defaults says "No errors found." Why isn't that good news? Which of Menda's quote marks appear anywhere in Paratext's default grid?
 - Why might it be confusing that the opening mark for Second level is the right-pointing single guillemet? What would happen if you entered it in the Closing field by mistake?
-- How would you verify which direction the single guillemet in the text actually points? (Hint: open the **Punctuation inventory** or the **Characters inventory**. Select a single guillemet in the upper pane to see its Unicode value, 203A or 2039. The lower pane lists the verses where it occurs, and in short verses you can see both marks of the pair. Or place the cursor just after the character and press **Alt+X** (Edit > Show/hide Unicode) to show its code, then press **Alt+X** again to switch it back.)
+- How would you verify which direction the single guillemet in the text actually points? (Hint: open the **Punctuation inventory** or the **Characters inventory**. The upper pane always shows each character's Unicode value in its own column, so you can read 203A or 2039 there without selecting anything. Select a single guillemet and the lower pane lists the verses where it occurs, and in short verses you can see both marks of the pair. Or place the cursor just after the character and press **Alt+X** (Edit > Show/hide Unicode) to show its code, then press **Alt+X** again to switch it back.)
 - If a verse shows `«Il a dit ‹oui›»` and the check flags Second level as having incorrect marks, what is the most likely cause?
 - John 19:21 nests speech three levels deep. What characters does Menda use at the Third level, and what might the check report at 19:21 if the Third level cells are left at the defaults?
 
@@ -151,7 +151,7 @@ is nothing to change.
 **Check your work:**
 - Run the check on John (contains clear nested dialogue). Verify that `«...›...‹...»` structures pass without errors.
 - If the check fires on every Second level opening mark, the Opening and Closing fields for Second level are likely reversed. Confirm which character is right-pointing (`›`) and which is left-pointing (`‹`).
-- After entering Second level, check the Example section at the bottom. If › opens and ‹ closes in the example, you have the correct order. The visual difference between `›` and `‹` is easy to miss — use the Example to confirm before clicking OK.
+- After entering Second level, check the Example section at the bottom. If › opens and ‹ closes in the example, you have the correct order. The visual difference between `›` and `‹` is easy to miss — use the Example to confirm the order, and press **Alt+X** in each cell to confirm the character (203A in Opening, 2039 in Closing; press **Alt+X** again to switch it back) before clicking OK.
 - John 19:21 contains Menda's rare Third level quotation. Verify it passes once Third level is configured — if 19:21 is flagged, check that the Third level cells really hold `«` and `»`, not the default `“` and `”`.
 - Enable the Quotation types check and run it on John. It should return clean at recommended settings with no customization — if it doesn't, re-check your Quote marks tab entries first, since a character-level mistake there is more likely than a genuine need to customize types.
 
@@ -220,7 +220,7 @@ goes and seven remain.
 ## Scenario bank summary
 - The same four-step workflow (inventory → rules → check → triage) applies to every language, however unusual its quotation conventions.
 - Every project starts from Paratext's defaults, and the defaults can mislead in either direction: 264 results for Velna, "No errors found" for Menda and Waku. Correct every cell to the conventions, including the ones that must become *none*, before you trust any result.
-- Always verify entered characters using the Example section at the bottom of the Quote marks tab — on unfamiliar languages it is easy to confuse visually similar characters.
+- Always verify entered characters with **Alt+X** in each cell (then **Alt+X** again to switch it back) — on unfamiliar languages it is easy to confuse visually similar characters, and neither the cell nor the Example section at the bottom of the Quote marks tab can tell them apart, because both show only shapes. Use the Example section to check that the marks sit together in the right order.
 - Some languages (like Waku) will always require human review of residual results; zero configuration errors does not always mean zero results.
 
 ## Scenario check-your-understanding
@@ -256,7 +256,7 @@ The Quotation check does not need to be perfect before work continues, but it mu
 Quotation Rules are set once per project and persist across sessions, but they need attention when:
 
 - **New text is added.** Re-run the check after each significant drafting session; new text may introduce new errors.
-- **A new translator joins.** Check whether they are typing the same quote-mark characters as the rest of the team. Open the **Punctuation inventory**, select a quote mark in the upper pane to see its Unicode value, and look in the lower pane for the verses where it occurs; a look-alike, such as a straight `"` (U+0022) where the conventions use `“` (U+201C), shows up as a separate entry. If you find one, raise it with the team; a find-and-replace on the new chapters may be what they decide to do.
+- **A new translator joins.** Check whether they are typing the same quote-mark characters as the rest of the team. Open the **Punctuation inventory**, read each quote mark's Unicode value in the upper pane's Unicode column, and select a mark to see the verses where it occurs in the lower pane; a look-alike, such as a straight `"` (U+0022) where the conventions use `“` (U+201C), shows up as a separate entry. If you find one, raise it with the team; a find-and-replace on the new chapters may be what they decide to do.
 - **A new book is started.** Some books (like Psalms, Proverbs, or Revelation) have different poetry/prose ratios. Re-run the check after completing the first draft to confirm that poetry lines (`\q`, `\q2`) are not generating false quotation results.
 
 ### Copying Quotation Rules to another project
@@ -269,7 +269,7 @@ Open **☰ > Project settings > Quotation Rules** on the destination project. At
 
 A project with correctly configured Quotation Rules will:
 
-- Return zero results in purely narrative passages with no speech.
+- Return no results in narrative passages with no speech, except where the text uses a quote-mark character for another purpose as well (as Velna's text uses `’` for a glottal stop and in contractions); those are the results covered by the next point.
 - Have every result on an apostrophe or possessive verified as a genuine apostrophe and documented as a known false positive (where `’` is also a quote mark, no setting removes these).
 - Flag only genuine mismatches — missing marks, extra marks, wrong-level marks — in speech sections.
 - Have any residual results (where the same character serves two linguistic purposes and configuration cannot distinguish them) documented in Project Notes (☰ > Insert > Project note...) so a consultant reviewer can verify them without asking for clarification.

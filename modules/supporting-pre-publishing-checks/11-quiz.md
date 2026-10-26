@@ -2,18 +2,18 @@
 
 ## Assessment Quiz (20 questions)
 
-This quiz covers Lessons 1–5 of Supporting Scripture Pre-publishing Checks. You need
+This quiz covers Lessons 1–8 of Supporting Scripture Pre-publishing Checks. You need
 **80% (16/20)** to pass.
 
 Questions are weighted toward the course's core objectives (confirming the parallel-
-passage check and the numbers/weights/measures check(s) available for a team's Paratext
+passage check and the numbers/weights/measures list available for a team's Paratext
 version, formatting diagnosis,
 glossary/layout, and the final read-through and escalation judgment), with the secondary
 objectives (false-clean
 recognition, incomplete/stale Biblical Terms coverage, Project Biblical Terms bloat, and the
 layout/hyphenation decision) still represented. This quiz can assess recognition and
 diagnostic reasoning — it can't assess live coaching. The mentor-reviewed scenario bank
-(`06-scenario-bank.md`) is what earns this course's `3 - Independent` claim.
+(`09-scenario-bank.md`) is what earns this course's `3 - Independent` claim.
 
 ### Section 1: Workflow, Role, and the False-Clean Trap (Questions 1-3)
 
@@ -52,10 +52,10 @@ indicate?
 - C) The team was working from an outdated copy of the wordlist that predates the team's most recent edits
 - D) The wordlist was blanket-approved in bulk rather than genuinely reviewed entry by entry
 
-**Question 5:** A team tells you their Biblical Terms list is done. You open it and see
-several rows still highlighted with placeholder text ("Double click to enter
-rendering(s) from project text") and a Found count of "0" or blank. What does this
-indicate?
+**Question 5:** A team tells you their Biblical Terms list is done. You open it. Most
+terms have renderings, so work has clearly been done. But some rows are still
+highlighted with placeholder text ("Double click to enter rendering(s) from project
+text") and a Found count of "0" or blank. What does this indicate about those rows?
 
 - A) A software glitch in the Biblical Terms tool that needs a support ticket raised
 - B) Those terms are still at their default starting state, with no rendering entered yet
@@ -64,9 +64,9 @@ indicate?
 
 **Question 6:** While reviewing a Biblical Terms list, you notice one term has several
 candidate renderings listed, but the Found count shows only one of them as actually
-present in the current text. What should the team do?
+present in the current text. What should you coach the team to do?
 
-- A) Review the term's rendering list, confirm which is current, and remove the stale ones
+- A) Review the renderings together, confirm which are current, and remove the ones no longer found in the text
 - B) Leave all the renderings in place, since extra renderings help Paratext find more occurrences
 - C) Delete the term from the Biblical Terms list entirely, then add it back with a single rendering
 - D) Run Guess Renderings again so Paratext can pick the correct rendering automatically
@@ -108,25 +108,24 @@ weeks ago and haven't been reviewed since. What should you do?
 - C) Compare the two accounts yourself and decide whether the wording should match
 - D) Ask the team to review the verses still showing a red "?" in the Parallel Passages tool
 
-**Question 11:** A new, consolidated Paratext check is expected to combine numbers,
-weights, and measures checking into one check, replacing the older, separate Numbers
-check — but not every team's Paratext version has migrated to it yet. Before accepting
-any numbers/measures check results, what should you confirm?
+**Question 11:** A new Biblical Terms list is expected to combine numbers, weights,
+and measures into one list, replacing the older, separate Numbers list — but not every
+team's Paratext version has it yet. Before accepting a team's review of their numbers
+and measures, what should you confirm?
 
 - A) That the results match your own sense of how the numbers and measures should be rendered
-- B) That the old and new checks both appear together as one combined list in the Open Biblical Terms List dialog
-- C) Which check(s) the team's version actually has, and that it ran against their documented approach
+- B) That the new combined list has replaced the Numbers entry in the Open Biblical Terms List dialog
+- C) Which list the team's version actually has, and that the renderings were reviewed against their documented approach
 - D) That the typesetter has reviewed the results, since numbers often affect the layout of tables
 
-**Question 12:** A team's Paratext version has only the older Numbers check and no
-working Measures check. At your request, the team reviews their own measure renderings
-and finds two occurrences of the same measurement rendered differently. Nobody is sure
-a documented approach to measures exists. What should you do?
+**Question 12:** A team's Paratext version has only the Numbers list, which does not
+cover weights and measures. How should you coach the team to check their measure
+renderings?
 
-- A) Settle whether a documented approach exists, then refer the inconsistency to the team
-- B) Compare the measure renderings yourself to confirm the team's finding before acting on it
-- C) Decide which of the two renderings is correct and ask the team to match the other to it
-- D) Ask the typesetter to make the two occurrences consistent when the files are composed
+- A) Add the measurement terms they need to their project Biblical Terms list, then review those renderings
+- B) Compare the measure renderings yourself across the text, then report the differences to the team
+- C) Leave measures unchecked until the team's Paratext version has the new combined list
+- D) Ask the typesetter to make the measure renderings consistent when the files are composed
 
 ### Section 4: Formatting and References (Questions 13-14)
 
@@ -180,8 +179,8 @@ technical step should you take?
 
 - A) Reduce the font size in PTXprint until the long words fit the column width
 - B) Recommend the community switch to single-column, since long words won't fit well in two columns
-- C) Enable Show hyphenation in the Wordlist and get the team to review and correct the auto-generated hyphenation breaks
-- D) Turn on word break characters under Project settings > Language settings > Other Characters so long words can break across columns
+- C) Add the hyphen to word-medial punctuation in Language settings, then have the team review the Wordlist's hyphenation breaks
+- D) Ask the typesetter to decide where long words break, by eye, while composing the columns
 
 ### Section 6: The Final Read-Through and Escalation (Questions 19-20)
 

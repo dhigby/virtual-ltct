@@ -321,13 +321,12 @@ books are the same run. Verified in Paratext 9.5:
 
   The diagnostic to listen for: results only at 19:21 mean Third level wasn't changed; results
   throughout John point to First or Second level.
-- **Second level reversed** (`‹` in Opening, `›` in Closing): **175 results** throughout John,
+- **Second level reversed** (`‹` in Opening, `›` in Closing): **160 results** throughout John,
   in pairs per verse: "Closing quote [ › U+203A ] found without matching opening. Caused by a
   missing opening quote, a missing continuer, or incorrectly defined continuer rules: ›" and
-  "Opening quote mark found without matching closing quote mark: ‹". Note: 51 of the 175
-  results are "Unexpected quotation mark value" from the **Quotation types** check; a mentor
-  running only the Quotations check (types check off) will see 124 results instead. All counts
-  in this section assume both Quotations and Quotation types checks are enabled.
+  "Opening quote mark found without matching closing quote mark: ‹". Note: with only the
+  Quotations check enabled (Quotation types off) the count is **125**. All counts in this
+  section assume both Quotations and Quotation types checks are enabled.
 - **`«` typed instead of `»`** in the First and Third level Closing cells: **168 results** in
   John, nearly all naming `«` ("Closing quote mark is possibly missing in this verse: «",
   "Opening quote mark found without matching closing quote mark: «"). The Example box on the

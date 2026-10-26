@@ -321,7 +321,7 @@ books are the same run. Verified in Paratext 9.5:
 
   The diagnostic to listen for: results only at 19:21 mean Third level wasn't changed; results
   throughout John point to First or Second level.
-- **Second level reversed** (`‹` in Opening, `›` in Closing): **125 results** throughout John,
+- **Second level reversed** (`‹` in Opening, `›` in Closing): **175 results** throughout John,
   in pairs per verse: "Closing quote [ › U+203A ] found without matching opening. Caused by a
   missing opening quote, a missing continuer, or incorrectly defined continuer rules: ›" and
   "Opening quote mark found without matching closing quote mark: ‹".

@@ -6,8 +6,6 @@
 or openly-licensed Scripture text they can actually edit, by installing it as its own standard
 translation project rather than as a locked Paratext resource.
 
-**Watch the video:** [Advanced Paratext Support: course introduction](https://vimeo.com/1238012314)
-
 ## Learning objectives
 
 - You will be able to install an openly-licensed/open-source Scripture text as an editable
@@ -35,6 +33,8 @@ consultants see with this task: users assume that because a text is public domai
 will let them edit it directly. It won't. Paratext resources (the read-only reference texts
 listed alongside a project) are locked regardless of the license on the underlying text. To get
 an editable copy, you have to bring the text in as its own **project**, not as a resource.
+
+![A Paratext window titled “BSB: MAT 1:17 (Resource)”, showing the Berean Standard Bible resource open at Matthew 1:17 with the cursor placed in the verse text. An orange warning banner across the top reads: “The project you are viewing is not editable. It may be a resource text or 'Editing Enabled' may not be ticked under the 'Advanced' tab in the Project > Project settings > Project properties dialog.” A Dismiss button with a 9-second countdown sits at the bottom right of the banner.](assets/ss-01-resource-not-editable.png)
 
 **The procedure**
 

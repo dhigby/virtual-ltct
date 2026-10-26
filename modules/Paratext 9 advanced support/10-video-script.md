@@ -2,7 +2,7 @@
 
 Companion recording script for the course **Advanced Paratext Support**. This is the
 **course-introduction (overview) video**: a short, trailer-style orientation that sits on
-Lesson 1. Its job is to make a working consultant want to take the course and to show them
+the course front page (`README.md`), ahead of Lesson 1. Its job is to make a working consultant want to take the course and to show them
 the arc before they start the hands-on lessons. It is not a walkthrough of the procedures;
 the lessons and the scenario bank teach those. (The longer concept-and-procedure
 walkthrough lives separately in `09-video-script.md`.) The recording happens outside this
@@ -10,8 +10,8 @@ repo; hosting the video and linking it from the course is a separate human step.
 
 **Estimated runtime:** about 3 minutes (roughly 470 spoken words, including the cold open and
 close; trim a sentence or two from the lesson beats if it runs over).
-**Companion lesson file(s):** `01-installing-open-source-texts.md` (the video sits on Lesson 1
-as the course overview). It previews `01` through `05`, one beat per lesson, and closes on
+**Companion lesson file(s):** none; the video sits on the course front page (`README.md`) as
+the course overview. It previews `01` through `05`, one beat per lesson, and closes on
 `06-scenario-bank.md`.
 
 ## Overview / cold open
@@ -82,6 +82,5 @@ and what not to touch."
 - **Confirm before recording:** menu names are not used in this script, so there is no menu-drift
   risk here, but the course map slide should be checked against the published course in case the
   lesson titles or timings have changed.
-- **Gaps flagged (not filled here):** (1) Lesson 1 has no `**Watch the video:**` line yet; it
-  needs `**Watch the video:** _To be recorded at stage 8._` from `module-author`. (2) `README.md`'s
-  course package table lists `09-video-script.md` but not this file.
+- **Where the video is linked:** the `**Watch the video:**` line at the top of `README.md`,
+  which becomes the course summary in Moodle. It is not linked from Lesson 1.

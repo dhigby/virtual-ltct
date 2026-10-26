@@ -141,7 +141,7 @@ Use this table to know which file to ask for and give an offline learner, for th
 | `TAMBAB Phase B 2026-10-22.zip` | `TAMBAB` | **Phase B**: Lesson 2–3 settings entered, Quotation types check on, the five seeds in the text | Lesson 4 |
 | `Runda New Testament 2026-10-13.zip` | `RUNDA` | Paratext defaults | Lesson 2 |
 | `Velna New Testament 2026-10-12.zip` | `VELNA` | Paratext defaults (Word-medial punctuation empty) | Scenario A |
-| `Menda New Testament 2026-10-12.zip` | `MENDA` | Paratext defaults | Scenario B |
+| `Menda_correct_New_Testament_2026-10-26.zip` | `MENDA` | Paratext defaults, corrected John text (guillemet marks) | Scenario B |
 | `Waku New Testament 2026-10-12.zip` | `Waku` | Paratext defaults | Scenario C |
 
 The Phase A and Phase B projects both have the full name *Tamba New Testament*, so Paratext's default backup names for them differ only by date. Keep the Phase B file named `TAMBAB Phase B …`, so it can't be mistaken for the Phase A backup. Giving the Phase B file to a learner in Lessons 1–3 gives them the answers.

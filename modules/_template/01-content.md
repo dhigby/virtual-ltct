@@ -39,8 +39,9 @@ else can reproduce it.](assets/ss-01-what-it-shows.png)
 
 **Watch the video:** _To be recorded at stage 8._
 
-[Lesson 1 is the course overview, so its visual is the overview video — keep the
-`**Watch the video:**` line here and script it at stage 3d.]
+[The course overview video does not go here: it goes in the course's `README.md`,
+above the first `##` heading, and is scripted at stage 3d. Keep a video line here only
+for a video that belongs to this lesson.]
 
 ## Challenge
 

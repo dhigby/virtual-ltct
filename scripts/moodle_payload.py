@@ -375,6 +375,7 @@ class Payload:
                                                             errors="replace"))
             summary_md = body.split("\n## ", 1)[0]
             summary_md = H1_RE.sub("", summary_md, count=1).strip()
+        summary_md = self._with_overview_video(summary_md, lessons)
 
         # A course with no lesson files is a backfill placeholder, not content: its whole
         # body is a single run-on README paragraph imported from Notion, with hotlinked
@@ -523,6 +524,30 @@ class Payload:
                         "category_idnumber": "ltct:org:" + course["organisation"]}
         return {"org_only": False,
                 "category_idnumber": PUBLISHED_CATEGORY if delivery else PILOTS_CATEGORY}
+
+    def _with_overview_video(self, summary_md, lessons):
+        """The course description, carrying the overview video once it is recorded.
+
+        The overview video belongs on the course description, so it is seen before the
+        first lesson is opened (Doug, 2026-10-26). A README carries it above its first
+        `##`; a course drafted before then carries it at the top of lesson 1 instead, and
+        is copied from there -- the lesson keeps it -- so no course in flight has to change.
+        A video still to be recorded is left off: a placeholder in a course listing helps
+        nobody.
+        """
+        lines = summary_md.splitlines()
+        kept = [ln for ln in lines
+                if not (VIDEO_RE.search(ln) and PENDING_VIDEO_RE.search(ln))]
+        if len(kept) != len(lines):
+            self.notes.append("README.md: overview video not recorded yet")
+        summary_md = "\n".join(kept).strip()
+        if VIDEO_RE.search(summary_md) or not lessons:
+            return summary_md
+        intro = lessons[0].read_text(encoding="utf-8", errors="replace").split("\n## ", 1)[0]
+        m = VIDEO_RE.search(intro)
+        if m and not PENDING_VIDEO_RE.search(m.group(1)):
+            summary_md = (summary_md + "\n\n" + m.group(0)).strip()
+        return summary_md
 
     def _page(self, path, asset_by_rel, module_ids, excluded_names, used_assets):
         raw = path.read_text(encoding="utf-8", errors="replace")

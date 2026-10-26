@@ -146,7 +146,11 @@ separate faithful-import workstream — see [`process/backfill.md`](process/back
    These courses teach software, and a lesson of unbroken prose asks the learner to
    picture a screen they have never seen. The author chooses which while drafting (stage
    **3a**); CI warns while a course is in draft and the alignment check (stage **4**)
-   blocks. **Lesson 1 is the course overview, so its visual is the overview video.**
+   blocks. **The overview video belongs to the course, not to lesson 1:** it goes in the
+   course's `README.md`, above its first `##` heading, which the publisher sends to
+   Moodle as the course description, so it is seen before the course is started.
+   Lesson 1 needs its own visual like any other. A course drafted before 2026-10-26
+   may keep the video in lesson 1; that still counts, and the publisher copies it.
 
    - **Screenshots and diagrams** live in `modules/<slug>/assets/`, named
      `ss-<lesson number>-<what-it-shows>.png` (lowercase, hyphens, no spaces), and are

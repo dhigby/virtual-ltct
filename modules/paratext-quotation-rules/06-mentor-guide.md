@@ -327,11 +327,14 @@ books are the same run. Verified in Paratext 9.5:
   "Opening quote mark found without matching closing quote mark: ‹". Note: with only the
   Quotations check enabled (Quotation types off) the count is **125**. All counts in this
   section assume both Quotations and Quotation types checks are enabled.
-- **`«` typed instead of `»`** in the First and Third level Closing cells: **168 results** in
-  John, nearly all naming `«` ("Closing quote mark is possibly missing in this verse: «",
-  "Opening quote mark found without matching closing quote mark: «"). The Example box on the
-  Quote marks tab gives it away: it shows `«` where the closing mark should be (for example
-  "upstairs.«"). Send the learner to the Example box.
+- **First level reversed** (`»` in Opening, `«` in Closing): **366 results** throughout John.
+  The Example box gives it away immediately: the preview opens with `»` and ends with `«` (for
+  example `»A man carrying … upstairs.«`). Send the learner to the Example box first — the
+  reversed order is visible before they even run the check. Confirmed in Paratext 9.5 with both
+  Quotations and Quotation types checks enabled. Note: entering `«` in the Closing field and
+  leaving Opening as `«` (same character both sides) does **not** produce errors — Paratext
+  treats it as a same-character open/close and the marks balance; the Example box is the only
+  indicator in that case.
 - **OK is disabled, with a red ! beside Continuer required at.** The tooltip reads "Cannot be
   blank if any Quote Continuer is specified." The learner cleared the list while a continuer was
   still set. Set all three continuers to *none* first, then clear the list.

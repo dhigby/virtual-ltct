@@ -147,14 +147,14 @@ the learner is trying to preserve, rather than setting up the merge correctly.
 - Gives the full sequence in order: Send/Receive any pending changes → turn off automatic
   Send/Receive for the main project → revert the desired books to the chosen history point
   → create the new project and import the reverted books → delete the reverted main
-  project ("Delete from this computer only") → Send/Receive to restore the current main
+  project ("Delete project from this computer only") → Send/Receive to restore the current main
   project from the server → re-enable automatic Send/Receive if it was on.
 - Correctly identifies the specific failure point: a Send/Receive — automatic or manual —
   happening anywhere between reverting the books and deleting the reverted copy could push
   the older, reverted state out to the rest of the team as if it were *new* work,
   overwriting other team members' more recent edits. This is exactly why the procedure
   turns off automatic Send/Receive before the revert and deletes the reverted copy with
-  "Delete from this computer only" before resyncing, and why those two steps have to happen
+  "Delete project from this computer only" before resyncing, and why those two steps have to happen
   in that order.
 - Demonstrates the scenario's "what good looks like" criterion: the learner can actually
   create a second project containing content from an earlier stage of the main project's

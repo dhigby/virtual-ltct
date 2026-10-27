@@ -19,19 +19,19 @@ is verified; this quiz checks the conceptual and diagnostic knowledge behind it.
 public domain, and adds it to Paratext — but then finds she cannot type into it. What
 explains this?
 - A) The BSB is not actually public domain despite claims
-- B) Paratext resources are always read-only, no matter what license the underlying text
+- B) She needs administrator rights before she can edit any resource
+- C) Paratext resources are always read-only, no matter what license the underlying text
   carries
-- C) She needs administrator rights before she can edit any resource
 - D) The USFM file was corrupted during download
 
 **Question 2:** You're setting up a training workshop where ten participants each need an
 editable copy of the same open-license text to practice on. Which sequence of steps is
 correct?
-- A) Add the text as a Paratext resource, then ask Paratext support to unlock editing for
-  the workshop
-- B) Download the text in USFM format from a site such as ebible.org/find or
+- A) Download the text in USFM format from a site such as ebible.org/find or
   open.bible/bibles, create a new project, specify the language, set the project type to a
   standard translation project, then import the books
+- B) Add the text as a Paratext resource, then ask Paratext support to unlock editing for
+  the workshop
 - C) Copy the resource's book files directly onto each participant's computer and rename
   the file extension
 - D) Use the Quotation Rules dialog to change the resource's edit permissions
@@ -42,10 +42,10 @@ correct?
 
 **Question 3:** What does Paratext's project history view actually order changes by?
 - A) The timestamp shown on each user's own computer clock
-- B) Mercurial version number — assigned in the order Send/Receive resolves conflicting
-  versions, which is not necessarily the true chronological order
+- B) The order in which points were marked with "Mark point in history"
 - C) Alphabetical order of the book that was changed
-- D) The order in which points were marked with "Mark point in history"
+- D) Mercurial version number — assigned in the order Send/Receive resolves conflicting
+  versions, which is not necessarily the true chronological order
 
 **Question 4:** Two users, both starting from the same version, each edit a different book
 (Matthew and Mark) and Send/Receive around the same time. Afterward, running Compare
@@ -63,9 +63,9 @@ needs to be redone.
 afterward some project data looks odd. What should a consultant tell this user to do
 first?
 - A) Do a Send/Receive immediately, so anything lost can be restored from the server
-- B) Delete the project from that user's Paratext installation, then do a Send/Receive to
+- B) Ask every other team member to also delete and resync their own projects
+- C) Delete the project from that user's Paratext installation, then do a Send/Receive to
   pull down a clean copy from the server
-- C) Ask every other team member to also delete and resync their own projects
 - D) Reassign the affected books to a different user role to prevent further changes
 
 **Question 6:** True or False: If a project observer's local text is altered (for example,
@@ -94,10 +94,10 @@ point, what should the administrator do, and why?
 
 **Question 8:** Why can't a lost notes file typically be recovered just by looking at
 Paratext's own project history view?
-- A) Paratext's history view only shows changes made in the last 24 hours
-- B) Mercurial tracks detailed changes to notes files and other settings, but Paratext's
+- A) Mercurial tracks detailed changes to notes files and other settings, but Paratext's
   own history display doesn't surface that detail — recovering them requires TortoiseHG
   or direct Mercurial commands
+- B) Paratext's history view only shows changes made in the last 24 hours
 - C) Notes files aren't stored in the Mercurial repository at all
 - D) Project history only tracks changes made by project administrators
 
@@ -120,10 +120,10 @@ recovering it require?
 as it stood three months ago, in a separate reference project — not the project's current
 state. Which procedure is required?
 - A) Simply create a new project and import the current book files
-- B) Temporarily revert the main project's books to the desired history point, import the
+- B) Rename the current project and mark it read-only
+- C) Temporarily revert the main project's books to the desired history point, import the
   reverted books into the new project, then delete the reverted copy locally and resync
   the main project
-- C) Rename the current project and mark it read-only
 - D) Use Compare Versions to view the earlier text; no separate project is needed
 
 **Question 11:** While carrying out the earlier-point snapshot procedure, an administrator
@@ -140,4 +140,4 @@ exists, what is the likely risk?
 
 ## Answer key
 
-1. B | 2. B | 3. B | 4. B | 5. B | 6. B | 7. D | 8. B | 9. A | 10. B | 11. B
+1. C | 2. A | 3. D | 4. B | 5. C | 6. B | 7. D | 8. A | 9. A | 10. C | 11. B

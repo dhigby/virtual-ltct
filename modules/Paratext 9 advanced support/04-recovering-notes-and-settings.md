@@ -6,6 +6,8 @@
 non-text project settings using TortoiseHG — going beyond what Paratext's own project history
 view can show you — when a plain text rollback won't bring these back.
 
+**Watch the video:** [Paratext 9 Advanced Support, part 2 (Lessons 4–5)](https://vimeo.com/1222710442)
+
 ## Learning objectives
 
 - You will be able to recover a previous version of project notes, term renderings, or other

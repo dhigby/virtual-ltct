@@ -56,7 +56,7 @@ Work through the numbered files in order:
 | [`06-scenario-bank.md`](06-scenario-bank.md) | Applied practice: five recovery scenarios, one per topic, simplest → most complex | 84 min |
 | [`07-mentor-guide.md`](07-mentor-guide.md) | Facilitator notes: rubric for each scenario, common wrong turns, known SME-source gaps | — (facilitator use) |
 | `08-quiz.md` | Assessment quiz covering all five topics | 20 min (not counted toward seat time) |
-| [`09-video-script.md`](09-video-script.md) | Recording script for Cypher upload | — (facilitator/recording use) |
+| [`09-video-script.md`](09-video-script.md) | Walkthrough video script, recorded as two videos: [part 1](https://vimeo.com/1222691505) (on Lessons 1–3) and [part 2](https://vimeo.com/1222710442) (on Lessons 4–5) | — (facilitator/recording use) |
 | [`10-video-script.md`](10-video-script.md) | Course-introduction (overview) video script — the video that sits at the top of this page | — (facilitator/recording use) |
 
 **Total learner seat time:** 264 minutes (lessons 180 min + scenario bank 84 min). The

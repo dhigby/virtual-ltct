@@ -6,6 +6,8 @@
 or openly-licensed Scripture text they can actually edit, by installing it as its own standard
 translation project rather than as a locked Paratext resource.
 
+**Watch the video:** [Paratext 9 Advanced Support, part 1 (Lessons 1–3)](https://vimeo.com/1222691505)
+
 ## Learning objectives
 
 - You will be able to install an openly-licensed/open-source Scripture text as an editable

@@ -5,8 +5,10 @@ concept-and-procedure walkthrough for a working consultant, not a full read-alou
 lesson files — it hits the diagnostic framework and the exact ordered steps for each of
 the five support/recovery topics, in spoken form, and sends the learner to the numbered
 lessons and the scenario bank for hands-on practice and the fine detail (e.g., the precise
-XML edits in Lesson 4). The recording happens outside this repo; upload to Cypher for
-Business is a separate human step.
+XML edits in Lesson 4). It has been recorded as two videos, each linked with a
+`**Watch the video:**` line from the lessons it covers: [part 1](https://vimeo.com/1222691505)
+(segments 1–3, on Lessons 1–3) and [part 2](https://vimeo.com/1222710442) (segments 4–5, on
+Lessons 4–5).
 
 **Estimated runtime:** about 19-21 minutes.
 **Companion lesson file(s):** `01-installing-open-source-texts.md` through

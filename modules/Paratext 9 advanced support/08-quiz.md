@@ -8,8 +8,8 @@ why user-role edit restrictions aren't foolproof (and what to check before undoi
 corrupted change), recovering lost notes and settings, and snapshotting an earlier project
 state into a reference project. You need **9/11 (about 80%)** to pass. Questions are a mix
 of recall, scenario-based application, and true/false. Everything asked here is drawn directly from the lesson content — work them first. (The five-scenario
-bank, graded separately by a mentor, is where hands-on execution of each recovery procedure
-is verified; this quiz checks the conceptual and diagnostic knowledge behind it.)
+bank, graded separately by a mentor, is where your written plan for each recovery procedure
+is checked; this quiz checks the conceptual and diagnostic knowledge behind it.)
 
 ---
 

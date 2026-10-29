@@ -156,9 +156,9 @@ the learner is trying to preserve, rather than setting up the merge correctly.
   turns off automatic Send/Receive before the revert and deletes the reverted copy with
   "Delete project from this computer only" before resyncing, and why those two steps have to happen
   in that order.
-- Demonstrates the scenario's "what good looks like" criterion: the learner can actually
-  create a second project containing content from an earlier stage of the main project's
-  history, not just describe the steps in the abstract.
+- Demonstrates the scenario's "what good looks like" criterion: the learner's plan would
+  produce a second project containing content from an earlier stage of the main project's
+  history, with every step in the right order and nothing a Send/Receive could push to the team.
 - Recognizes this procedure applies to Paratext 9.
 
 **Common wrong turn:** deleting the reverted main project and expecting Send/Receive to

@@ -9,6 +9,8 @@ of an immediate Send/Receive — and, when corrupted files have *already* been s
 administrator's recovery from project history without landing the team on an out-of-date
 version.
 
+**Watch the video:** [Paratext 9 Advanced Support, part 1 (Lessons 1–3)](https://vimeo.com/1222691505)
+
 ## Learning objectives
 
 - You will be able to explain why Paratext's per-book user-role edit restrictions are not an

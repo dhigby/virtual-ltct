@@ -7,6 +7,8 @@ project history can appear to show an edit being "undone" when nothing was actua
 to determine the real sequence of changes using the tools available rather than the history
 view's apparent order.
 
+**Watch the video:** [Paratext 9 Advanced Support, part 1 (Lessons 1–3)](https://vimeo.com/1222691505)
+
 ## Learning objectives
 
 - You will be able to diagnose why Paratext's chronological project-history view does not

@@ -6,6 +6,8 @@
 translation text as it existed at an earlier stage of the project — either from where the team
 stands right now, or from a point further back in project history.
 
+**Watch the video:** [Paratext 9 Advanced Support, part 2 (Lessons 4–5)](https://vimeo.com/1222710442)
+
 ## Learning objectives
 
 - You will be able to configure a reference project that preserves ("snapshots") the translation
@@ -47,16 +49,24 @@ and then restore the main project to its current state. Step by step:
 2. Make sure all automatic Send/Receive options are turned **off** for the main project. (This
    matters — you're about to put the main project into a temporary, reverted state, and you
    don't want an automatic Send/Receive pushing that reverted state out to the rest of the
-   team.)
+   team.) In the Send/Receive Projects dialog, click **Schedule…** and set the main project's
+   **Send/Receive setting** to **Never**.
+
+   ![The Schedule Send/Receive dialog, opened with the Schedule… button at the bottom of the Send/Receive Projects dialog. Its table lists projects with two columns of drop-downs: “Check for updates” and “Send/Receive setting”. Every project shown has its Send/Receive setting set to Never, so none will send or receive automatically. Check for updates is Never for all but the first project, which is set to On startup.](assets/ss-05-schedule-send-receive-never.png)
+
 3. In project history, select the desired history point, use the "Revert Books" command, and
    select the books to revert.
 4. Create the new project and import the reverted books into it, exactly as in the easy case
    above.
 5. Delete the reverted copy of the main project: choose "Delete project" (from either the main
-   menu or the project menu), and select the action **"Delete from this computer only."**
+   menu or the project menu), and select the action **"Delete project from this computer only."**
+
+   ![The Delete Project dialog, with four numbered callouts. 1: the Project drop-down, showing the project to delete. 2: the Action drop-down, set to “Delete project from this computer only”. 3: the note below it, saying a shared project will still be shared with all project members via internet Send/Receive, and project registration is unaffected. 4: the OK button. The Location table shows the effect: Project on this computer changes from a tick (Before) to a cross (After), while Project on Send/Receive Server and Registration on Registry website keep their ticks. “Also remove me from this project” is unchecked.](assets/ss-05-delete-project-this-computer-only.png)
 6. Do a Send/Receive, and select the main project from your list of "New" projects to restore
    the current version. Once that's done, you can turn any automatic Send/Receive options back
    on, if you were using them.
+
+![Diagram of the six steps as a vertical flow. Steps 1 (Send/Receive any unsent changes) and 2 (turn off automatic Send/Receive) sit above a red dashed danger zone. Inside the zone are steps 3 (Revert Books to the chosen history point — from here the main project on this computer holds old text), 4 (create the new project and import the reverted books) and 5 (delete the reverted main project with “Delete project from this computer only”). The zone's heading says no Send/Receive, automatic or manual, may happen inside it, because it would send the old text to the team; its footer says the reverted copy has been deleted and the old text never left this computer. Step 6 (Send/Receive to restore the main project, then re-enable automatic Send/Receive) sits below the zone.](assets/ss-05-snapshot-sequence.svg)
 
 **WARNING:** The middle of this procedure leaves the main project locally reverted to an old
 state. Steps 2 and 5 exist specifically to make sure that reverted state never gets sent to the
@@ -67,7 +77,7 @@ Send/Receive — automatic or manual — happens anywhere between reverting the 
 deleting the reverted copy (step 5), it can push the older, reverted state out to the rest of the
 team as if it were *new* work, overwriting everyone else's more recent edits with the
 administrator's temporarily-reverted copy. Turning off automatic Send/Receive before the revert,
-and deleting the reverted copy with "Delete from this computer only" (not sending it anywhere)
+and deleting the reverted copy with "Delete project from this computer only" (not sending it anywhere)
 before resyncing, are what keep that reverted state from ever leaving the administrator's machine.
 
 **INFO:** This procedure applies to Paratext 9.
@@ -83,7 +93,7 @@ an earlier stage of the main project's history.
   project, import books) if the team is already at the point they want.
 - To snapshot an *earlier* point, an administrator must temporarily revert the main project's
   books, import them into the new project, then discard the reverted copy locally and resync —
-  turning automatic Send/Receive off beforehand and choosing "Delete from this computer only"
+  turning automatic Send/Receive off beforehand and choosing "Delete project from this computer only"
   are the two steps that keep this safe.
 
 ## Challenge

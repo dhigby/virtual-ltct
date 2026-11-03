@@ -51,8 +51,9 @@ Settings.)
 **Finding where a file was deleted**
 
 1. Close Paratext.
-2. Open the HG Workbench: in File Viewer, right-click the project folder, choose "Show more
-   options," then pick HG Workbench under the TortoiseHG section.
+2. Open the HG Workbench: in File Explorer, go to your Paratext projects folder (usually
+   `My Paratext 9 Projects`), right-click the project's folder, choose "Show more options"
+   (Windows 11 only), then pick HG Workbench under the TortoiseHG section.
 3. If you know the file was recently deleted, inspect the recent history points to find it. For
    example, in this history, one user's note file was deleted:
 

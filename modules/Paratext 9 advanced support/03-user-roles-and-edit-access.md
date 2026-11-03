@@ -123,8 +123,7 @@ Here it is the opposite: the version you restore is the one the team is meant to
 
 **What "good" looks like:** you can explain, to a non-technical team member, how and why project
 history can show a mysterious edit credited to someone who does not have editing access to that
-book — without that explanation ever needing to invoke anyone actually bypassing Paratext's
-permissions.
+book — without implying that Paratext's permissions failed.
 
 ### Key Takeaways
 

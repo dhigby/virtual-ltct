@@ -76,8 +76,8 @@ a chronology mismatch, not the whole explanation.)
 - Notes that project observers are the one exception — an observer's local text changes
   are never sent out by Paratext.
 - Can explain — to a non-technical team leader — how and why project history can show a
-  mysterious edit credited to someone without editing permission, without that explanation
-  ever needing to invoke someone actually bypassing Paratext's permission settings. This is
+  mysterious edit credited to someone without editing permission, without implying that
+  Paratext's permissions failed. This is
   the scenario's core "what good looks like" criterion: the learner should be able to give
   this explanation clearly and confidently, not just recite the list of possible causes.
 - Recognizes this behavior applies across Paratext 9, 8, and 7 — it is not a version-9-only

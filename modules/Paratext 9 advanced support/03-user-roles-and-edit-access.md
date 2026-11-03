@@ -64,11 +64,13 @@ files disappear or behave strangely, they should **not** do a Send/Receive right
 may send their corrupted files out to every other user on the project. Instead, the correct
 response is:
 
-1. Delete the project from that user's Paratext installation ("Delete project").
+1. Delete the project from that user's Paratext installation ("Delete project -remove from this computer only").
 2. Do a Send/Receive to pull down a clean copy of the project from the server.
 
 This gets the affected user back to a good copy without ever pushing their corrupted local files
 out to the team.
+
+If the user has made edits to uncorrupted books and not yet shared them, before deleting their copy of the project; they can make a backup to file of their current copy of the project before deleting it. Then they can make a temporary project from their backup file (select "Restore project from file", and in the restore dialog select the new project option.  [Restore from file to a new project](assets/ss-03-restore-from-file-new-project.png)
 
 **INFO:** This applies to Paratext 9, and to Paratext 8 and 7 as well — the underlying behavior
 (edit-role checks live inside Paratext, not in the shared repository) hasn't changed across

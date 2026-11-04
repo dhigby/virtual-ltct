@@ -91,20 +91,20 @@ unexpectedly a few days ago while Paratext happened to be open.
 
 1. Explain to the team leader why this change could appear under that user's name without
    them having actually used Paratext to make an unauthorized edit.
-2. Recommend the correct next step for the team member whose laptop crashed — and
-   specifically what they should *not* do first, and why.
+2. Plan the administrator's recovery of the team's copy, step by step.
+3. Say what you would have the administrator check **before** clicking "Undo Changes", what
+   result of that check would mean "Undo Changes" is the wrong tool, and what to do instead.
+   Explain how you would decide which version is the latest without relying on reading the
+   translation text yourself.
 
 **Follow-on twist:** A week later, a different team member's computer crashes while Paratext
 is open. This time they do a Send/Receive straight away, before calling you, and the corrupted
 files go out to the rest of the team. The project administrator has found the history point
 where the corruption came in and is about to click "Undo Changes" on it.
 
-3. Plan the administrator's recovery of the team's copy, step by step.
-4. Say what you would have the administrator check **before** clicking "Undo Changes", what
-   result of that check would mean "Undo Changes" is the wrong tool, and what to do instead.
-   Explain how you would decide which version is the latest without relying on reading the
-   translation text yourself.
 
+1. Recommend the correct next step for the team member whose laptop crashed — and
+   specifically what they should *not* do first, and why.
 ---
 
 ## Scenario 4: The Vanishing Notes

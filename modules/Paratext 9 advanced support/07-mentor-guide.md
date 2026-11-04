@@ -64,17 +64,12 @@ a chronology mismatch, not the whole explanation.)
 
 ### Scenario 3: The Suspicious Edit
 
-**What a strong answer looks like:**
+**Task 1 (explaining the change) — what a strong answer looks like:**
 
 - Correctly explains that Paratext's edit-access restrictions only apply while a user is
   working through Paratext itself — they cannot prevent a file from being altered by a
   crash, file-system corruption, or (for `.ptx` project files) a Windows System Restore
   that reverts the file because Microsoft treats `.ptx` as a system file extension.
-- Correctly recommends that the team member who experienced the crash should **not**
-  Send/Receive immediately, and instead should delete the project from their own
-  installation and then Send/Receive to pull a clean copy from the server.
-- Notes that project observers are the one exception — an observer's local text changes
-  are never sent out by Paratext.
 - Can explain — to a non-technical team leader — how and why project history can show a
   mysterious edit credited to someone without editing permission, without implying that
   Paratext's permissions failed. This is
@@ -83,36 +78,46 @@ a chronology mismatch, not the whole explanation.)
 - Recognizes this behavior applies across Paratext 9, 8, and 7 — it is not a version-9-only
   quirk, so the learner shouldn't imply it would be fixed by upgrading or downgrading.
 
-**Follow-on twist (tasks 3–4) — what a strong answer looks like:**
+**Tasks 2–3 (recovering the team's copy) — what a strong answer looks like:**
 
-- Recognises that once the corrupted files have been sent, deleting and resyncing is no longer
-  enough: the administrator recovers the uncorrupted book files from project history.
+- Recognises that the change is already in project history, so the corrupted files have been
+  sent: deleting and resyncing is no longer enough, and the administrator recovers the
+  uncorrupted book files from project history.
 - Before "Undo Changes", has the administrator click the link for the changed book in the
   history point that introduced the corruption, to open the Compare Versions dialog.
 - Recognises that the right-hand pane may not be the latest version: "Undo Changes" restores
   whatever that user had before the corruption, and if they didn't have the latest book files,
   that is an out-of-date copy.
-- If the right-hand pane isn't the latest, looks through the other history points for the one
-  holding the latest version of that book and uses "Revert Books" to restore it.
+- If the right-hand pane isn't the latest, has the administrator look through the other
+  history points for the one holding the latest version of that book and use "Revert Books"
+  to restore it.
 - Knows that finding the best version may be easier in TortoiseHG, examining the Mercurial
   repository directly (Lesson 4).
-- Judges "latest" from the project history and Compare Versions — not by reading the text for
-  correctness — and says they would confirm with the translation team if it's ambiguous which
-  version is the latest. Bonus if they recall from Lesson 2 that history isn't always in
-  strict chronological order.
-- Notes this recovery applies to Paratext 9 and 8 (not 7, unlike the rest of the scenario).
+- Leaves the choice of version to the administrator, who can read the text — the learner
+  points them to the project history and Compare Versions rather than judging the text
+  themselves. Bonus if they recall from Lesson 2 that history isn't always in strict
+  chronological order.
+- Notes this recovery applies to Paratext 9 and 8 (not 7, unlike task 1).
 - Demonstrates the "what good looks like" criterion: can explain the pitfall of using "Undo
-  changes" to recover after corrupt files have reached the Send/Receive server.
+  Changes" to recover after corrupt files have reached the Send/Receive server.
+
+**Follow-on twist (task 4) — what a strong answer looks like:**
+
+- Correctly recommends that the second team member should **not** Send/Receive immediately,
+  and instead should delete the project from their own installation and then Send/Receive to
+  pull a clean copy from the server.
+- Notes that project observers are the one exception — an observer's local text changes
+  are never sent out by Paratext.
 
 **Common wrong turns:**
 
-- Recommending an immediate Send/Receive "to get back in sync," which is the exact action the
-  source material warns against — it risks propagating the crash-corrupted files to the rest of
-  the team.
-- In the follow-on twist, clicking "Undo Changes" on the corrupting history point straight away
-  and assuming the team is back to the latest text. The corruption is gone, but if the user
-  didn't have the latest version before the crash, the team is now on that user's out-of-date
-  copy, and newer work is missing without anything looking wrong.
+- Clicking "Undo Changes" on the corrupting history point straight away and assuming the team
+  is back to the latest text. The corruption is gone, but if the user didn't have the latest
+  version before the crash, the team is now on that user's out-of-date copy, and newer work is
+  missing without anything looking wrong.
+- In the follow-on twist, recommending an immediate Send/Receive "to get back in sync," which
+  is the exact action the source material warns against — it risks propagating the
+  crash-corrupted files to the rest of the team.
 
 ### Scenario 4: The Vanishing Notes
 

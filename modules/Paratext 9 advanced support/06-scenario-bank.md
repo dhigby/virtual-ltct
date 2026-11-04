@@ -85,8 +85,7 @@ editing access to that book. The team leader wants to know if someone has bypass
 permission settings.
 
 **Context:** That same team member mentions, almost in passing, that their laptop crashed
-unexpectedly a few days ago while Paratext happened to be open, and that they haven't done
-a Send/Receive since restarting it.
+unexpectedly a few days ago while Paratext happened to be open.
 
 **Your task:**
 

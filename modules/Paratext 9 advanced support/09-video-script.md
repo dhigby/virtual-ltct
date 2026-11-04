@@ -142,16 +142,6 @@ and submit your answers to your mentor for feedback before you take the quiz."
   this procedure when you record, take it to the course lead rather than improvising it, and
   check that `assets/ss-03-history-undo-changes-compare.png` has been captured before you
   rely on it as an on-screen cue.
-- **On production status of this content:** `00-design.md`'s SME knowledge notes record
-  that the procedural gaps originally flagged for Scenario 3 (user roles) and Scenario 5
-  (reference-project snapshotting) — missing version scope and "what good looks like"
-  criteria — were filled by the SME before the lesson content was drafted, and both
-  lessons now carry full version scope and success criteria. No hedging language is
-  needed in the delivery for those two topics on that basis. Do note, separately, that
-  the design doc's SME-consulted field still reads "TBD" at the top of the document even
-  though the detailed interview notes further down are complete — that looks like a
-  stale summary line in `00-design.md` rather than an open procedural gap; flag it to the
-  course lead if it should be corrected, but it isn't a reason to soften this script.
 - **Terms to define on screen, not just say:** "resource" vs. "project" (Segment 1),
   "version number" vs. "chronological order" (Segment 2), "observer" role (Segment 3),
   and the `@NN` filename suffix (Segment 4) — these are the exact words learners will
@@ -182,6 +172,3 @@ and submit your answers to your mentor for feedback before you take the quiz."
   recording that isn't answered in the lesson content (e.g., a Paratext version not
   covered, or a step for a scenario this course doesn't include), take it to the course
   lead rather than answering it on camera.
-
-I tried to create the video by having Claude make a powerpoint, then converted that power point to Video with Google vids. I am not impressed with the results. Video link:
-https://docs.google.com/videos/d/1etBXbfO0Pp7PZw_zgyNIpX5IHoUBD2aNM_o_MSRk6ak/play?usp=sharing

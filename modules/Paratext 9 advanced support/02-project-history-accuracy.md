@@ -69,7 +69,7 @@ to have been undone*:
 **This is an illusion.** Nothing was undone. History points in the repository are not always in
 strict chronological order, so comparing across them can make an earlier edit look like it was
 reversed by a later one, when really the two edits just landed in a different numeric sequence
-than you'd expect from their real-world timing.
+than you'd expect from their real-world timing. The edit supposedly deleted should still be visible in the current text. 
 
 **A real case:** on one project, a user's computer clock was set to the wrong date — several
 months in the future. Mercurial was not fooled by the bad date. It kept track of the fact that

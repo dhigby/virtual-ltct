@@ -70,7 +70,12 @@ response is:
 This gets the affected user back to a good copy without ever pushing their corrupted local files
 out to the team.
 
-If the user has made edits to uncorrupted books and not yet shared them, before deleting their copy of the project; they can make a backup to file of their current copy of the project before deleting it. Then they can make a temporary project from their backup file (select "Restore project from file", and in the restore dialog select the new project option.  [Restore from file to a new project](assets/ss-03-restore-from-file-new-project.png)
+If the user has made edits to uncorrupted books and not yet shared them, they can make a backup
+to file of their current copy of the project before deleting it. Then they can make a temporary
+project from that backup file: select "Restore project from file", and in the Restore dialog
+click **New Project…** to restore into a new project rather than over an existing one.
+
+![The Paratext Restore dialog, with a backup .zip file in the From field and the Restore into drop-down left empty. Callout 1 marks the New Project… button beside it, which restores the backup as a new project instead of over an existing one. Callout 2 marks the Files In Backup / Files On Hard Disk table listing what the backup holds (properties and settings, Biblical Terms renderings, book names, note tags, project progress, language settings and the book). Callout 3 marks the OK button.](assets/ss-03-restore-from-file-new-project.png)
 
 **INFO:** This applies to Paratext 9, and to Paratext 8 and 7 as well — the underlying behavior
 (edit-role checks live inside Paratext, not in the shared repository) hasn't changed across

@@ -106,8 +106,8 @@ Write out, as a plan a mentor could review:
 
 1. Which of the two procedures above applies, and why.
 2. The full step-by-step sequence you would walk this administrator through, in order.
-3. What could go wrong if step 2 (turning off automatic Send/Receive) or step 5 ("Delete from
-   this computer only," not from the server) were skipped or done incorrectly.
+3. What could go wrong if step 2 (turning off automatic Send/Receive) or step 5 ("Delete project
+   from this computer only," not from the server) were skipped or done incorrectly.
 
 ## Change
 

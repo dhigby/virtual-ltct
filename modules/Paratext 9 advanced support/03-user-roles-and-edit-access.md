@@ -64,7 +64,7 @@ files disappear or behave strangely, they should **not** do a Send/Receive right
 may send their corrupted files out to every other user on the project. Instead, the correct
 response is:
 
-1. Delete the project from that user's Paratext installation ("Delete project -remove from this computer only").
+1. Delete the project from that user's Paratext installation ("Delete project from this computer only").
 2. Do a Send/Receive to pull down a clean copy of the project from the server.
 
 This gets the affected user back to a good copy without ever pushing their corrupted local files

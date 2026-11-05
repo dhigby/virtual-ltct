@@ -1115,6 +1115,8 @@ restore the file under its original name, delete those extra characters before s
 that's done, restart Paratext — you should now see the missing notes — and do a Send/Receive to
 circulate them to the rest of the project's users.</p>
 <p><img alt="The “Save file to” dialog open on the NBV project folder, with the File name field reading Notes_test1white@24.xml — an arrow points at the @24 revision suffix that must be removed before Paratext will read the file." src="../ss-04-hg-save-filename.png" /></p>
+<p>The same process can also restore a deleted wordlist (<code>spellingstatus.xml</code>) and deleted term
+renderings (<code>termrenderings.xml</code>).</p>
 <p><strong>When only the older notes are missing (a merge, not a straight restore)</strong></p>
 <p>Sometimes a user has some recent notes visible, but the older ones are gone. This usually means
 the notes file was deleted a while ago, and the user has simply been creating new notes since
@@ -1139,6 +1141,9 @@ not just restoring an old version outright:</p>
    and save.</li>
 <li>Start Paratext. It should now show all the notes — old and new.</li>
 </ol>
+<p>Like with the notes, there could possibly be an old and a new <code>spellingstatus.xml</code> to attempt to
+merge, or an old and new <code>termrenderings.xml</code>, but merging those would be more complicated and
+is not covered here.</p>
 <p><strong>WARNING:</strong> If Paratext reports that the notes file is corrupt after this, something went wrong
 in the edit. Paratext will rename the bad file to <code>Notes_User Name.corrupt</code>. Open it and check,
 in order:</p>

@@ -1130,11 +1130,16 @@ files disappear or behave strangely, they should <strong>not</strong> do a Send/
 may send their corrupted files out to every other user on the project. Instead, the correct
 response is:</p>
 <ol>
-<li>Delete the project from that user's Paratext installation ("Delete project").</li>
+<li>Delete the project from that user's Paratext installation ("Delete project -remove from this computer only").</li>
 <li>Do a Send/Receive to pull down a clean copy of the project from the server.</li>
 </ol>
 <p>This gets the affected user back to a good copy without ever pushing their corrupted local files
 out to the team.</p>
+<p>If the user has made edits to uncorrupted books and not yet shared them, they can make a backup
+to file of their current copy of the project before deleting it. Then they can make a temporary
+project from that backup file: select "Restore project from file", and in the Restore dialog
+click <strong>New Project…</strong> to restore into a new project rather than over an existing one.</p>
+<p><img alt="The Paratext Restore dialog, with a backup .zip file in the From field and the Restore into drop-down left empty. Callout 1 marks the New Project… button beside it, which restores the backup as a new project instead of over an existing one. Callout 2 marks the Files In Backup / Files On Hard Disk table listing what the backup holds (properties and settings, Biblical Terms renderings, book names, note tags, project progress, language settings and the book). Callout 3 marks the OK button." src="../ss-03-restore-from-file-new-project.png" /></p>
 <p><strong>INFO:</strong> This applies to Paratext 9, and to Paratext 8 and 7 as well — the underlying behavior
 (edit-role checks live inside Paratext, not in the shared repository) hasn't changed across
 these versions.</p>

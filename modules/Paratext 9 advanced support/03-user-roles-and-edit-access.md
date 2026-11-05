@@ -106,7 +106,7 @@ alarming.
 3. Look at the **right-hand pane**. If it is not the latest version of that book, "Undo Changes"
    would restore an out-of-date copy — don't use it.
 4. Instead, look through the other history points in project history for the one holding the
-   latest version of that book, and use **"Revert Books"** to restore that version. The admin can now do a send/receive and this should replace the corrupted version of the book for all users. The user who experienced the crash does not need to delete their copy of the project and receive a new copy.
+   latest version of that book, and use **"Revert Books"** to restore that version. The admin can now do a Send/Receive and this should replace the corrupted version of the book for all users. The user who experienced the crash does not need to delete their copy of the project and receive a new copy.
 
 ![Paratext Project History for the UCTV test project, with test1white's 2026-09-16 history point selected, and Compare Versions on MAT 1:0 opened from that point's MAT link. The left pane, test1white's 15:58 version, is empty — the corrupted file. The right pane, the 15:54 baseline that “Undo Changes” would restore, shows the whole book struck through as removed. Other Steven White history points for MAT appear above and below it in the list.](assets/ss-03-history-undo-changes-compare.png)
 

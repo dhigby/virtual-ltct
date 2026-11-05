@@ -59,8 +59,9 @@ the text imported into it.
   language a non-technical translator would find genuinely convincing, not just soothing.
 - Checks the current text of the book, where the edit is still visible, rather than
   reassuring from general principle alone.
-- Recognizes this applies regardless of Paratext version (Paratext 7 onward), so this
-  isn't a version-specific bug the team should expect fixed later.
+
+**Bonus:** recognizes this applies regardless of Paratext version (Paratext 7 onward), so
+this isn't a version-specific bug the team should expect fixed later.
 
 **Common wrong turn:** trying to explain this in terms of computer clocks or timestamps
 alone, without grasping that Mercurial's version numbering — not the date shown — is what
@@ -80,8 +81,6 @@ a chronology mismatch, not the whole explanation.)
   Paratext's permissions failed. This is
   the scenario's core "what good looks like" criterion: the learner should be able to give
   this explanation clearly and confidently, not just recite the list of possible causes.
-- Recognizes this behavior applies across Paratext 9, 8, and 7 — it is not a version-9-only
-  quirk, so the learner shouldn't imply it would be fixed by upgrading or downgrading.
 
 **Tasks 2–3 (recovering the team's copy) — what a strong answer looks like:**
 
@@ -105,9 +104,12 @@ a chronology mismatch, not the whole explanation.)
   points them to the project history and Compare Versions rather than judging the text
   themselves. Bonus if they recall from Lesson 2 that history isn't always in strict
   chronological order.
-- Notes this recovery applies to Paratext 9 and 8 (not 7, unlike task 1).
 - Demonstrates the "what good looks like" criterion: can explain the pitfall of using "Undo
   Changes" to recover after corrupt files have reached the Send/Receive server.
+
+**Bonus:** recognizes that task 1's behavior applies across Paratext 9, 8 and 7 — not a
+version-9-only quirk that upgrading or downgrading would fix — while the recovery in tasks 2–3
+applies to Paratext 9 and 8, not 7.
 
 **Follow-on twist (task 4) — what a strong answer looks like:**
 
@@ -146,7 +148,8 @@ a chronology mismatch, not the whole explanation.)
   into the project folder; start Paratext; Send/Receive.
 - Knows to check the three specific XML lines (first line, second line, last line) if
   Paratext reports the merged file as corrupt afterward.
-- Notes this procedure applies to both Paratext 9 and Paratext 8.
+
+**Bonus:** notes this procedure applies to both Paratext 9 and Paratext 8.
 
 **Common wrong turn:** stripping the `@NN` suffix when saving the old file (as in the
 straight-restore case), which overwrites the current notes file and loses the very notes
@@ -174,7 +177,8 @@ the learner is trying to preserve, rather than setting up the merge correctly.
 - Demonstrates the scenario's "what good looks like" criterion: the learner's plan would
   produce a second project containing content from an earlier stage of the main project's
   history, with every step in the right order and nothing a Send/Receive could push to the team.
-- Recognizes this procedure applies to Paratext 9.
+
+**Bonus:** recognizes this procedure applies to Paratext 9.
 
 **Common wrong turn:** deleting the reverted main project and expecting Send/Receive to
 "just work" without first confirming automatic Send/Receive was off during the reverted

@@ -36,9 +36,8 @@ snapshotting into a reference project gives you.
 **1. Snapshotting the current state** (the easy case): if the team is currently at the point they
 want to preserve, you don't need to touch project history at all.
 
-- Create a new project (main menu → New Project).
-- Open the project menu, choose Manage Books → Import Books, and select the book files from the
-  main project.
+- Create a new project (main menu → New Project). You could make the project type Auxiliary if you wanted to share it with other users without registering it. You probably want to uncheck the "Editing enabled" box on the Advanced tab so no one accidentally makes changes to it. 
+- Open the project menu, choose Manage Books → Import Books, and select the book files from the  main project and import them.
 
 **2. Snapshotting an earlier point in history** (for a project administrator): if you need to
 capture the text as it stood at some point *in the past* — not where the project is now — the

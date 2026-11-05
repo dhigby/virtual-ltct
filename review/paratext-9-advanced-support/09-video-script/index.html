@@ -1246,7 +1246,7 @@ Undo Changes trap in the recovery case.</p>
 </tr>
 <tr>
 <td>Title card:<strong>That change still goes out on the next Send/Receive — except for observers.</strong></td>
-<td>"Whatever caused the change, Paratext still sends it to the rest of the team on the next Send/Receive, as if it were a normal edit. The one exception: an observer's local text changes are never sent, because they have no editing role to attribute a change to in the first place."</td>
+<td>"Whatever caused the change, Paratext still sends it to the rest of the team on the next Send/Receive, as if it were a normal edit. The one exception: an observer's local text changes are never sent to others."</td>
 </tr>
 <tr>
 <td><strong>DANGER</strong> title card, red or high-contrast: <strong>Do NOT Send/Receive right away.</strong></td>
@@ -1320,8 +1320,8 @@ Keep the two cases (full restore vs. merge) visually distinct on screen.</p>
 <td>"This is the one decision point that matters most. If every note is gone, strip that<code>@NN</code> suffix so the file goes back to its original name. If only the <em>older</em> notes are gone and recent ones are still showing, you must keep the <code>@NN</code> — stripping it here would overwrite the current file and destroy the recent notes you're trying to protect."</td>
 </tr>
 <tr>
-<td>Title card, numbered: 1) delete first two lines of the new file (<code>&lt;?xml …?&gt;</code> and <code>&lt;CommentList&gt;</code>) 2) delete the last line of the old file (<code>&lt;/CommentList&gt;</code>) 3) paste the old content above the new file's remaining content 4) save.</td>
-<td>"For the merge case specifically: open the new file in a plain text editor and remove its first two lines. Open the old file and remove its last line. Paste the old file's remaining content above what's left of the new file, and save. That stitches the two note histories into one valid file."</td>
+<td>Title card, numbered: 1) copy the current notes file to a new folder outside the project 2) save the old file there, keeping the <code>@NN</code> 3) delete the first two lines of the recovered file (<code>&lt;?xml …?&gt;</code> and <code>&lt;CommentList&gt;</code>) 4) delete the last line of the current file (<code>&lt;/CommentList&gt;</code>) 5) paste the recovered content after the current file's content and save 6) copy the merged current file back into the project folder.</td>
+<td>"For the merge case specifically: work in a separate folder outside the project. Copy the current notes file there, and save the old file there too, keeping its <code>@NN</code>. Open the recovered file in a plain text editor and remove its first two lines. Open the current file and remove its last line. Paste the recovered content after the end of the current file, and save. That stitches the two note histories into one valid file. Then copy the merged current file, not the <code>@NN</code> file, back into the project folder."</td>
 </tr>
 <tr>
 <td><code>assets/ss-04-hg-save-filename.png</code> — Paratext restarted, showing the recovered notes.</td>

@@ -943,7 +943,7 @@ Settings.)</p>
 restore the file under its original name, delete those extra characters before saving. Once
 that's done, restart Paratext — you should now see the missing notes — and do a Send/Receive to
 circulate them to the rest of the project's users.</p>
-<p><img alt="The “Save file to” dialog open on the NBV project folder, with the File name field reading Notes_test1white@24.xml — an arrow points at the @24 revision suffix that must be removed before Paratext will read the file." src="../ss-04-hg-save-filename.png" /></p>
+<p><img alt="The “Save file to” dialog open on the NBV project folder. The folder lists .hg, BookNames.xml, CommentTags.xml, ProjectProgress.xml and ProjectUpdates.xml — there is no Notes_test1white.xml, because it was deleted. The File name field reads Notes_test1white@24.xml, and an arrow points at the @24 revision suffix that must be removed before Paratext will read the file." src="../ss-04-hg-save-filename.png" /></p>
 <p>The same process can also restore a deleted wordlist (<code>spellingstatus.xml</code>) and deleted term
 renderings (<code>termrenderings.xml</code>).</p>
 <p><strong>When only the older notes are missing (a merge, not a straight restore)</strong></p>
@@ -952,23 +952,32 @@ the notes file was deleted a while ago, and the user has simply been creating ne
 then in a fresh file. Recovering this case means merging the old notes back into the new file,
 not just restoring an old version outright:</p>
 <ol>
-<li>Close Paratext if it's open. Find the deleted file and save it from the previous revision as
-   above — but this time, <strong>keep</strong> the <code>@NN</code> suffix on the filename. (If you strip it here, you
-   would overwrite the current file and lose the new notes it contains.)</li>
-<li>Open the <em>new</em> file in Notepad (or another plain text editor) and delete its first two lines:</li>
+<li>Close Paratext if it's open.</li>
+<li>Create a new folder on your hard drive (outside of the Paratext projects folder) and copy the
+   current notes file out of the Paratext project folder to that new folder.</li>
+<li>Find the deleted file and save it from the previous revision to that same new folder — but
+   this time, <strong>keep</strong> the <code>@NN</code> suffix on the filename. (If you strip it here, you would
+   overwrite the copy of the current file and lose the new notes it contains.)</li>
+<li>Open the <em>recovered</em> file in Notepad (or another plain text editor) and delete its first two
+   lines:</li>
 </ol>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>&lt;?xml version="1.0" encoding="utf-8"?&gt;
 <a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>&lt;CommentList&gt;
 </code></pre></div>
 <ol>
-<li>Open the <em>old</em> file and delete its last line:</li>
+<li>Open the <em>current</em> file and delete its last line, leaving the cursor on a new empty line:</li>
 </ol>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>&lt;/CommentList&gt;
 </code></pre></div>
 <ol>
-<li>Select all of the old file's remaining content, paste it above the contents of the new file,
-   and save.</li>
+<li>Select all of the recovered file's remaining content, and paste it after the end of the
+   current file. Make sure the first line of the pasted content is not on the same line as the
+   last line of the current file. Save your changes. (The order of the notes in the file should
+   not matter.)</li>
+<li>Copy the merged current notes file (<code>Notes_&lt;user&gt;.xml</code>, not the <code>@NN</code> file) back to your
+   Paratext project folder, replacing the file which was there.</li>
 <li>Start Paratext. It should now show all the notes — old and new.</li>
+<li>Do a Send/Receive to send the restored notes to the rest of the team.</li>
 </ol>
 <p>Like with the notes, there could possibly be an old and a new <code>spellingstatus.xml</code> to attempt to
 merge, or an old and new <code>termrenderings.xml</code>, but merging those would be more complicated and

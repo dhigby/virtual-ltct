@@ -1205,14 +1205,13 @@ plans and tasks in a way that helps them.") and 3.0 Scripture Markup and Import 
 import data from other formats … into translation software."). That activity is
 "perform/configure with some independent judgment," not "train others."</p>
 <blockquote>
-<p><strong>⚠️ Re-level pending approval.</strong> This rationale was written against the old two-value
-scale, where the closest thing to those rows was <code>With Assistance</code>. Under the CBC scale the
-rows labelled <code>2 - With Assistance</code> are the rows whose activities <em>carry a learner to</em>
-<code>3 - Independent</code> — so on the merits this course should be
-<code>target_outcome_level: "3 - Independent"</code>. The frontmatter still reads <code>2 - With Assistance</code>
-(a faithful translation of its previous value) pending sign-off from the design approver
-(Steve White, per the Design status above). This is exactly the mis-level the old coarse
-scale forced; see <a href="https://github.com/dhigby/virtual-ltct/blob/course/paratext-9-advanced-support/outcome-levels.yaml"><code>outcome-levels.yaml</code></a>.</p>
+<p><strong>Level confirmed: <code>2 - With Assistance</code></strong> (Steve White, design approver, 2026-11-05). This
+rationale was written against the old two-value scale, and under the CBC scale the rows it
+draws on are the ones that carry a learner <em>to</em> <code>3 - Independent</code> (see
+<a href="https://github.com/dhigby/virtual-ltct/blob/course/paratext-9-advanced-support/outcome-levels.yaml"><code>outcome-levels.yaml</code></a>). The course as built stops short of
+that: learners <em>plan</em> each recovery and a mentor reviews the plan, and none of the
+assessments asks them to carry one out alone. That is where <code>2 - With Assistance</code> lands
+someone; independent performance comes later, in the field.</p>
 </blockquote>
 <h3 id="scope-note">Scope note<a class="headerlink" href="#scope-note" title="Permanent link">&para;</a></h3>
 <p>All five SME-specified scenarios fit coherently within one module: each is a discrete
@@ -1237,31 +1236,31 @@ rather than pre-emptively.</p>
 <tr>
 <td>1</td>
 <td>Learner can install an openly-licensed/open-source Scripture text as an editable project in Paratext, distinct from the team's own translation draft project.</td>
-<td>Translation Tools, 3.0 — Scripture Markup and Import, Practitioner ("Convert and import data from other formats (plain text, Word document, etc) into translation software.")</td>
+<td>Translation Tools, 3.0 — Scripture Markup and Import, row <code>2 - With Assistance</code> ("Convert and import data from other formats (plain text, Word document, etc) into translation software.")</td>
 <td>Scenario Bank #1</td>
 </tr>
 <tr>
 <td>2</td>
 <td>Learner can diagnose why Paratext's chronological project-history view does not always reflect the true order of edits, and determine the actual sequence of changes using the tools available.</td>
-<td>Translation Tools, 5.0 — Scripture Collaboration, Practitioner ("Advise users in best-practices for collaboration and data safety … such as the use of Send/Receive.") — approximate match; the descriptor names Send/Receive and data safety generally but does not specifically call out history-view accuracy. Closest existing row.</td>
+<td>Translation Tools, 5.0 — Scripture Collaboration, row <code>2 - With Assistance</code> ("Advise users in best-practices for collaboration and data safety … such as the use of Send/Receive.") — approximate match; the descriptor names Send/Receive and data safety generally but does not specifically call out history-view accuracy. Closest existing row.</td>
 <td>Scenario Bank #2; Quiz</td>
 </tr>
 <tr>
 <td>3</td>
 <td>Learner can explain why Paratext's per-book user-role edit restrictions are not an absolute guarantee — that a book file can be altered outside Paratext (crashes, file-system corruption, an external history restore) and that change will propagate to the whole team via Send/Receive — and can apply the correct response (delete-project-and-resync, not an immediate Send/Receive) when a user's local files may be corrupted — and, if the corrupted files have already been sent, can explain why "Undo Changes" on the offending history point may restore stale text, checking Compare Versions first and using "Revert Books" from the history point holding the latest version instead.</td>
-<td>Translation Tools, 5.0 — Scripture Collaboration, Practitioner ("Advise users in best-practices for collaboration and data safety … such as the use of Send/Receive.") — approximate match; the descriptor's general data-safety language covers this failure mode without naming it specifically.</td>
+<td>Translation Tools, 5.0 — Scripture Collaboration, row <code>2 - With Assistance</code> ("Advise users in best-practices for collaboration and data safety … such as the use of Send/Receive.") — approximate match; the descriptor's general data-safety language covers this failure mode without naming it specifically.</td>
 <td>Scenario Bank #3; Quiz</td>
 </tr>
 <tr>
 <td>4</td>
 <td>Learner can recover a previous version of project notes, wordlist or term renderings that are not restored by a plain text rollback.</td>
-<td>Translation Tools, 5.0 — Scripture Collaboration, Practitioner ("Advise users in best-practices for collaboration and data safety … such as the use of Send/Receive.") — <strong>flagged: no clean match.</strong> The descriptor's data-safety language does not enumerate recovery of notes/renderings/non-text settings specifically; this is the closest existing row, included because the SME named it as a real, recurring support case.</td>
+<td>Translation Tools, 5.0 — Scripture Collaboration, row <code>2 - With Assistance</code> ("Advise users in best-practices for collaboration and data safety … such as the use of Send/Receive.") — <strong>flagged: no clean match.</strong> The descriptor's data-safety language does not enumerate recovery of notes/renderings/non-text settings specifically; this is the closest existing row, included because the SME named it as a real, recurring support case.</td>
 <td>Scenario Bank #4; Quiz</td>
 </tr>
 <tr>
 <td>5</td>
 <td>Learner can configure a reference project that preserves ("snapshots") the translation text as it existed at an earlier stage of the project.</td>
-<td>Translation Tools, 5.0 — Scripture Collaboration, Practitioner ("Advise users in best-practices for collaboration and data safety … such as the use of Send/Receive. Assist users to configure plans and tasks in a way that helps them.")</td>
+<td>Translation Tools, 5.0 — Scripture Collaboration, row <code>2 - With Assistance</code> ("Advise users in best-practices for collaboration and data safety … such as the use of Send/Receive. Assist users to configure plans and tasks in a way that helps them.")</td>
 <td>Scenario Bank #5; Quiz</td>
 </tr>
 </tbody>
@@ -1422,11 +1421,13 @@ To recover the deleted file, go to the history point just before the file was de
 The save dialog will suggest adding @ followed by the version number to the file you save, in this example you want to delete those characters to save as the original file name. Now you can restart Paratext, see the missing notes, and do a send/receive to circulate the notes to other project users.</p>
 <p><img alt="The “Save file to” dialog open on the NBV project folder, with the File name field reading Notes_test1white@24.xml — an arrow points at the @24 revision suffix that must be removed before Paratext will read the file." src="../ss-04-hg-save-filename.png" />
 In the case where the user has some recent notes visible, but older notes were lost, this probably means the file was deleted a while ago, and then the user created some new notes. How can you merge an old notes file with a new one? As above, close Paratext if it is open.</p>
-<p>1) find the deleted file and save from the previous revision as above. In this case though, keep the @NN at the end of the filename, otherwise you would replace the new notes file, losing the new notes.
-2) edit the new file in Notepad (or another text editor) and delete the first two lines, that read
-3) open the old file and delete the last line, that reads
-4) select all the old file, then paste it above the contents of the new file, and save your changes.
-   Now start Paratext.</p>
+<p>1) create a new folder outside the Paratext projects folder, and copy the current notes file into it.
+2) find the deleted file and save it from the previous revision into that same folder, as above. In this case though, keep the @NN at the end of the filename, otherwise you would replace the copy of the current notes file, losing the new notes.
+3) edit the recovered (@NN) file in Notepad (or another text editor) and delete the first two lines, that read
+4) open the current file and delete the last line, that reads
+5) select all the recovered file's remaining content, paste it after the end of the current file (on a new line), and save your changes. The order of the notes in the file should not matter.
+6) copy the merged current file (not the @NN file) back to the Paratext project folder, replacing the file there.
+   Now start Paratext, and do a send/receive to send the restored notes to the rest of the team.</p>
 <p>Paratext should now show all the notes. If Paratext says the notes file is corrupt, you did something wrong in the edit.
 Open the corrupt notes file (Paratext will rename it <strong>Notes_User Name.corrupt</strong>) and check for:</p>
 <ol>

@@ -952,8 +952,7 @@ their assigned role.</p>
 <p><strong>If a book file changes outside Paratext, Paratext will still send the changed version to the
 repository the next time that user does a Send/Receive</strong> — the corruption or reversion looks,
 to the rest of the team, exactly like a normal edit. <strong>The one exception is project observers:</strong>
-if an observer's local text changes, Paratext does not send those changes out, because observers
-have no editing role to attribute the change to in the first place.</p>
+if an observer's local text changes, Paratext does not send those changes out to others.</p>
 <p><strong>DANGER:</strong> If a user experiences a computer crash, or file system errors that make project
 files disappear or behave strangely, they should <strong>not</strong> do a Send/Receive right away. Doing so
 may send their corrupted files out to every other user on the project. Instead, the correct
@@ -994,7 +993,7 @@ alarming.</p>
 <li>Look at the <strong>right-hand pane</strong>. If it is not the latest version of that book, "Undo Changes"
    would restore an out-of-date copy — don't use it.</li>
 <li>Instead, look through the other history points in project history for the one holding the
-   latest version of that book, and use <strong>"Revert Books"</strong> to restore that version.</li>
+   latest version of that book, and use <strong>"Revert Books"</strong> to restore that version. The admin can now do a Send/Receive and this should replace the corrupted version of the book for all users. The user who experienced the crash does not need to delete their copy of the project and receive a new copy.</li>
 </ol>
 <p><img alt="Paratext Project History for the UCTV test project, with test1white's 2026-09-16 history point selected, and Compare Versions on MAT 1:0 opened from that point's MAT link. The left pane, test1white's 15:58 version, is empty — the corrupted file. The right pane, the 15:54 baseline that “Undo Changes” would restore, shows the whole book struck through as removed. Other Steven White history points for MAT appear above and below it in the list." src="../ss-03-history-undo-changes-compare.png" /></p>
 <p><strong>NOTE:</strong> "Is this the latest version?" is a question you answer from the project history — which

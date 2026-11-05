@@ -1129,6 +1129,9 @@ Challenge activity again before moving on.</p>
 <li>Gives the correct sequence: create a new project (main menu → New Project) → set
   language in project properties → set project type to standard translation → import
   books (Project menu → Manage books → Import books).</li>
+<li>For the eight-participant workshop, creates <strong>one</strong> project and shares it with all eight
+  computers by Send/Receive from a flash drive or a local network drive — set up the day
+  before, so it doesn't depend on the internet.</li>
 </ul>
 <p><strong>Common wrong turn:</strong> treating the BSB resource itself as something that can be "unlocked"
 or converted to editable — missing that a <em>new, separate</em> project has to be created and
@@ -1144,9 +1147,9 @@ the text imported into it.</p>
   language a non-technical translator would find genuinely convincing, not just soothing.</li>
 <li>Checks the current text of the book, where the edit is still visible, rather than
   reassuring from general principle alone.</li>
-<li>Recognizes this applies regardless of Paratext version (Paratext 7 onward), so this
-  isn't a version-specific bug the team should expect fixed later.</li>
 </ul>
+<p><strong>Bonus:</strong> recognizes this applies regardless of Paratext version (Paratext 7 onward), so
+this isn't a version-specific bug the team should expect fixed later.</p>
 <p><strong>Common wrong turn:</strong> trying to explain this in terms of computer clocks or timestamps
 alone, without grasping that Mercurial's version numbering — not the date shown — is what
 actually determines the merge order. (The wrong-clock war story in Lesson 2 is one cause of
@@ -1163,8 +1166,6 @@ a chronology mismatch, not the whole explanation.)</p>
   Paratext's permissions failed. This is
   the scenario's core "what good looks like" criterion: the learner should be able to give
   this explanation clearly and confidently, not just recite the list of possible causes.</li>
-<li>Recognizes this behavior applies across Paratext 9, 8, and 7 — it is not a version-9-only
-  quirk, so the learner shouldn't imply it would be fixed by upgrading or downgrading.</li>
 </ul>
 <p><strong>Tasks 2–3 (recovering the team's copy) — what a strong answer looks like:</strong></p>
 <ul>
@@ -1179,16 +1180,21 @@ a chronology mismatch, not the whole explanation.)</p>
 <li>If the right-hand pane isn't the latest, has the administrator look through the other
   history points for the one holding the latest version of that book and use "Revert Books"
   to restore it.</li>
+<li>Finishes the recovery with a Send/Receive by the administrator, which replaces the
+  corrupted version of the book for all users. Knows that the user whose computer crashed
+  does not then need to delete their copy of the project and receive a new copy.</li>
 <li>Knows that finding the best version may be easier in TortoiseHG, examining the Mercurial
   repository directly (Lesson 4).</li>
 <li>Leaves the choice of version to the administrator, who can read the text — the learner
   points them to the project history and Compare Versions rather than judging the text
   themselves. Bonus if they recall from Lesson 2 that history isn't always in strict
   chronological order.</li>
-<li>Notes this recovery applies to Paratext 9 and 8 (not 7, unlike task 1).</li>
 <li>Demonstrates the "what good looks like" criterion: can explain the pitfall of using "Undo
   Changes" to recover after corrupt files have reached the Send/Receive server.</li>
 </ul>
+<p><strong>Bonus:</strong> recognizes that task 1's behavior applies across Paratext 9, 8 and 7 — not a
+version-9-only quirk that upgrading or downgrading would fix — while the recovery in tasks 2–3
+applies to Paratext 9 and 8, not 7.</p>
 <p><strong>Follow-on twist (task 4) — what a strong answer looks like:</strong></p>
 <ul>
 <li>Correctly recommends that the second team member should <strong>not</strong> Send/Receive immediately,
@@ -1217,14 +1223,16 @@ a chronology mismatch, not the whole explanation.)</p>
   user's actual Windows bitness), closing Paratext, opening the HG Workbench, and finding
   the deletion point (using the <code>removes("*.*")</code> revision-set query if it isn't obvious
   from recent history).</li>
-<li>Gets the merge mechanics right: save the old file <strong>keeping</strong> its <code>@NN</code> suffix; strip the
-  first two lines (<code>&lt;?xml version...?&gt;</code> and <code>&lt;CommentList&gt;</code>) from the <em>new</em> file; strip the
-  last line (<code>&lt;/CommentList&gt;</code>) from the <em>old</em> file; paste the old content above the new
-  file's remaining content; save.</li>
+<li>Gets the merge mechanics right: work in a separate folder outside the project, with a copy
+  of the current notes file; save the old file there <strong>keeping</strong> its <code>@NN</code> suffix; strip the
+  first two lines (<code>&lt;?xml version...?&gt;</code> and <code>&lt;CommentList&gt;</code>) from the <em>recovered</em> file; strip
+  the last line (<code>&lt;/CommentList&gt;</code>) from the <em>current</em> file; paste the recovered content after
+  the current file's content; save; copy the merged current file (not the <code>@NN</code> file) back
+  into the project folder; start Paratext; Send/Receive.</li>
 <li>Knows to check the three specific XML lines (first line, second line, last line) if
   Paratext reports the merged file as corrupt afterward.</li>
-<li>Notes this procedure applies to both Paratext 9 and Paratext 8.</li>
 </ul>
+<p><strong>Bonus:</strong> notes this procedure applies to both Paratext 9 and Paratext 8.</p>
 <p><strong>Common wrong turn:</strong> stripping the <code>@NN</code> suffix when saving the old file (as in the
 straight-restore case), which overwrites the current notes file and loses the very notes
 the learner is trying to preserve, rather than setting up the merge correctly.</p>
@@ -1249,8 +1257,8 @@ the learner is trying to preserve, rather than setting up the merge correctly.</
 <li>Demonstrates the scenario's "what good looks like" criterion: the learner's plan would
   produce a second project containing content from an earlier stage of the main project's
   history, with every step in the right order and nothing a Send/Receive could push to the team.</li>
-<li>Recognizes this procedure applies to Paratext 9.</li>
 </ul>
+<p><strong>Bonus:</strong> recognizes this procedure applies to Paratext 9.</p>
 <p><strong>Common wrong turn:</strong> deleting the reverted main project and expecting Send/Receive to
 "just work" without first confirming automatic Send/Receive was off during the reverted
 period, or choosing the wrong delete option and affecting the whole team's copy — either

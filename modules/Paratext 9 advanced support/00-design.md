@@ -163,11 +163,13 @@ The save dialog will suggest adding @ followed by the version number to the file
 ![The “Save file to” dialog open on the NBV project folder, with the File name field reading Notes_test1white@24.xml — an arrow points at the @24 revision suffix that must be removed before Paratext will read the file.](assets/ss-04-hg-save-filename.png)
 In the case where the user has some recent notes visible, but older notes were lost, this probably means the file was deleted a while ago, and then the user created some new notes. How can you merge an old notes file with a new one? As above, close Paratext if it is open.
 
-1) find the deleted file and save from the previous revision as above. In this case though, keep the @NN at the end of the filename, otherwise you would replace the new notes file, losing the new notes.
-2) edit the new file in Notepad (or another text editor) and delete the first two lines, that read
-3) open the old file and delete the last line, that reads
-4) select all the old file, then paste it above the contents of the new file, and save your changes.
-   Now start Paratext.
+1) create a new folder outside the Paratext projects folder, and copy the current notes file into it.
+2) find the deleted file and save it from the previous revision into that same folder, as above. In this case though, keep the @NN at the end of the filename, otherwise you would replace the copy of the current notes file, losing the new notes.
+3) edit the recovered (@NN) file in Notepad (or another text editor) and delete the first two lines, that read
+4) open the current file and delete the last line, that reads
+5) select all the recovered file's remaining content, paste it after the end of the current file (on a new line), and save your changes. The order of the notes in the file should not matter.
+6) copy the merged current file (not the @NN file) back to the Paratext project folder, replacing the file there.
+   Now start Paratext, and do a send/receive to send the restored notes to the rest of the team.
 
 Paratext should now show all the notes. If Paratext says the notes file is corrupt, you did something wrong in the edit.
 Open the corrupt notes file (Paratext will rename it **Notes_User Name.corrupt**) and check for:

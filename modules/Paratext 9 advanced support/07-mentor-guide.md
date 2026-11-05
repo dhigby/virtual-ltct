@@ -135,10 +135,12 @@ a chronology mismatch, not the whole explanation.)
   user's actual Windows bitness), closing Paratext, opening the HG Workbench, and finding
   the deletion point (using the `removes("*.*")` revision-set query if it isn't obvious
   from recent history).
-- Gets the merge mechanics right: save the old file **keeping** its `@NN` suffix; strip the
-  first two lines (`<?xml version...?>` and `<CommentList>`) from the *new* file; strip the
-  last line (`</CommentList>`) from the *old* file; paste the old content above the new
-  file's remaining content; save.
+- Gets the merge mechanics right: work in a separate folder outside the project, with a copy
+  of the current notes file; save the old file there **keeping** its `@NN` suffix; strip the
+  first two lines (`<?xml version...?>` and `<CommentList>`) from the *recovered* file; strip
+  the last line (`</CommentList>`) from the *current* file; paste the recovered content after
+  the current file's content; save; copy the merged current file (not the `@NN` file) back
+  into the project folder; start Paratext; Send/Receive.
 - Knows to check the three specific XML lines (first line, second line, last line) if
   Paratext reports the merged file as corrupt afterward.
 - Notes this procedure applies to both Paratext 9 and Paratext 8.

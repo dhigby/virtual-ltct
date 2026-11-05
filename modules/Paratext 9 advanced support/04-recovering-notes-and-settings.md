@@ -91,25 +91,34 @@ the notes file was deleted a while ago, and the user has simply been creating ne
 then in a fresh file. Recovering this case means merging the old notes back into the new file,
 not just restoring an old version outright:
 
-1. Close Paratext if it's open. Find the deleted file and save it from the previous revision as
-   above — but this time, **keep** the `@NN` suffix on the filename. (If you strip it here, you
-   would overwrite the current file and lose the new notes it contains.)
-2. Open the *new* file in Notepad (or another plain text editor) and delete its first two lines:
+1. Close Paratext if it's open.
+2. Create a new folder on your hard drive (outside of the Paratext projects folder) and copy the
+   current notes file out of the Paratext project folder to that new folder.
+3. Find the deleted file and save it from the previous revision to that same new folder — but
+   this time, **keep** the `@NN` suffix on the filename. (If you strip it here, you would
+   overwrite the copy of the current file and lose the new notes it contains.)
+4. Open the *recovered* file in Notepad (or another plain text editor) and delete its first two
+   lines:
 
    ```
    <?xml version="1.0" encoding="utf-8"?>
    <CommentList>
    ```
 
-3. Open the *old* file and delete its last line:
+5. Open the *current* file and delete its last line, leaving the cursor on a new empty line:
 
    ```
    </CommentList>
    ```
 
-4. Select all of the old file's remaining content, paste it above the contents of the new file,
-   and save.
-5. Start Paratext. It should now show all the notes — old and new.
+6. Select all of the recovered file's remaining content, and paste it after the end of the
+   current file. Make sure the first line of the pasted content is not on the same line as the
+   last line of the current file. Save your changes. (The order of the notes in the file should
+   not matter.)
+7. Copy the merged current notes file (`Notes_<user>.xml`, not the `@NN` file) back to your
+   Paratext project folder, replacing the file which was there.
+8. Start Paratext. It should now show all the notes — old and new.
+9. Do a Send/Receive to send the restored notes to the rest of the team.
 
 Like with the notes, there could possibly be an old and a new `spellingstatus.xml` to attempt to
 merge, or an old and new `termrenderings.xml`, but merging those would be more complicated and

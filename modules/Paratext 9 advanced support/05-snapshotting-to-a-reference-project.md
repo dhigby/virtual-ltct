@@ -49,7 +49,7 @@ and then restore the main project to its current state. Step by step:
    matters — you're about to put the main project into a temporary, reverted state, and you
    don't want an automatic Send/Receive pushing that reverted state out to the rest of the
    team.) In the Send/Receive Projects dialog, click **Schedule…** and set the main project's
-   **Send/Receive setting** to **Never**.
+   **Send/Receive setting** to **Never**. You can leave **Check for updates** as it is.
 
    ![The Schedule Send/Receive dialog, opened with the Schedule… button at the bottom of the Send/Receive Projects dialog. Its table lists projects with two columns of drop-downs: “Check for updates” and “Send/Receive setting”. Every project shown has its Send/Receive setting set to Never, so none will send or receive automatically. Check for updates is Never for all but the first project, which is set to On startup.](assets/ss-05-schedule-send-receive-never.png)
 

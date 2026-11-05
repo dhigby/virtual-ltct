@@ -67,8 +67,6 @@ Settings.)
    If the revision set query box isn't visible, click in the list of revisions and press
    `Ctrl-S`.
 
-   
-
 **Recovering the deleted file**
 
 Go to the history point just *before* the file was deleted, right-click on the file, and choose
@@ -82,7 +80,9 @@ that's done, restart Paratext — you should now see the missing notes — and d
 circulate them to the rest of the project's users.
 
 ![The “Save file to” dialog open on the NBV project folder, with the File name field reading Notes_test1white@24.xml — an arrow points at the @24 revision suffix that must be removed before Paratext will read the file.](assets/ss-04-hg-save-filename.png)
-The same process can also restore a deleted wordlist (spellingstatus.xml) and deleted term renderings (termrenderings.xml)
+
+The same process can also restore a deleted wordlist (`spellingstatus.xml`) and deleted term
+renderings (`termrenderings.xml`).
 
 **When only the older notes are missing (a merge, not a straight restore)**
 
@@ -110,7 +110,10 @@ not just restoring an old version outright:
 4. Select all of the old file's remaining content, paste it above the contents of the new file,
    and save.
 5. Start Paratext. It should now show all the notes — old and new.
-Like with the notes, there could possibly be an old and a new spellingstatus.xml to attempt to merge, or an old and new termrenderings.xml, but merging those would be more complicated and is not covered here. 
+
+Like with the notes, there could possibly be an old and a new `spellingstatus.xml` to attempt to
+merge, or an old and new `termrenderings.xml`, but merging those would be more complicated and
+is not covered here.
 
 **WARNING:** If Paratext reports that the notes file is corrupt after this, something went wrong
 in the edit. Paratext will rename the bad file to `Notes_User Name.corrupt`. Open it and check,

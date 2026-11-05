@@ -54,6 +54,10 @@ Once imported this way, the text lives inside an ordinary, editable Paratext pro
 from the team's own translation draft — that anyone with access can type into, mark up, or
 practice on without touching the team's real work.
 
+**Remember from the basic Paratext course:** a project doesn't need the internet to be shared.
+To give several computers the *same* project — a workshop room, say — create it once, then share
+it with the other computers by Send/Receive from a USB flash drive or a local network drive.
+
 **INFO:** This applies to any Paratext 9 version, and the same principles apply to earlier
 Paratext versions too — the distinction between a locked resource and an editable project has
 not changed across versions.
@@ -81,7 +85,7 @@ Write out, as if explaining it directly to this translator:
 3. The exact sequence of steps you would walk them through in Paratext to turn that download
    into a text they can freely edit.
 
-Also consider the workshop version of this same task: if you were setting up a room of ten
+Also consider the workshop version of this same task: if you were setting up a room of eight
 participants who all need to edit the *same* open text during a training session, does anything
 about the steps above change? (Think about what "the same text" means when each participant
 creates their own project.)

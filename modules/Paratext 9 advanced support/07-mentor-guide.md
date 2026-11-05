@@ -54,6 +54,8 @@ the text imported into it.
   version get renumbered on merge.
 - Reassures the team without simply asserting "it's fine" — explains *why* it's fine, in
   language a non-technical translator would find genuinely convincing, not just soothing.
+- Checks the current text of the book, where the edit is still visible, rather than
+  reassuring from general principle alone.
 - Recognizes this applies regardless of Paratext version (Paratext 7 onward), so this
   isn't a version-specific bug the team should expect fixed later.
 

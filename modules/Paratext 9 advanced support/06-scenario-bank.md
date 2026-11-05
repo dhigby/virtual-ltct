@@ -57,7 +57,7 @@ they couldn't type into it, since they'd read it was public domain.
 **Situation:** Two translators on a team you support have been working in different books
 at the same time — one in Matthew, one in Mark — and both did a Send/Receive shortly
 afterward. A few days later, one of them runs Compare Versions to check her edit to
-Matthew against the point where her colleague's Mark edit was merged in, and is alarmed:
+Matthew against the history point her colleague made after editing Mark, and is alarmed:
 it looks like her Matthew edit was undone.
 
 **Context:** She has already messaged the rest of the team saying "I think we lost an

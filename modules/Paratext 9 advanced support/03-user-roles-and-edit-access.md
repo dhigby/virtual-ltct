@@ -128,9 +128,9 @@ unlike the rest of this lesson.
 Lesson 5 also uses "Revert Books", but there the reverted state must never be sent to the team.
 Here it is the opposite: the version you restore is the one the team is meant to end up with.
 
-**What "good" looks like:** you can explain, to a non-technical team member, how and why project
+**What "good" looks like:** You can explain, to a non-technical team member, how and why project
 history can show a mysterious edit credited to someone who does not have editing access to that
-book — without implying that Paratext's permissions failed.
+book.
 
 ### Key Takeaways
 

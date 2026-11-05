@@ -79,7 +79,7 @@ restore the file under its original name, delete those extra characters before s
 that's done, restart Paratext — you should now see the missing notes — and do a Send/Receive to
 circulate them to the rest of the project's users.
 
-![The “Save file to” dialog open on the NBV project folder, with the File name field reading Notes_test1white@24.xml — an arrow points at the @24 revision suffix that must be removed before Paratext will read the file.](assets/ss-04-hg-save-filename.png)
+![The “Save file to” dialog open on the NBV project folder. The folder lists .hg, BookNames.xml, CommentTags.xml, ProjectProgress.xml and ProjectUpdates.xml — there is no Notes_test1white.xml, because it was deleted. The File name field reads Notes_test1white@24.xml, and an arrow points at the @24 revision suffix that must be removed before Paratext will read the file.](assets/ss-04-hg-save-filename.png)
 
 The same process can also restore a deleted wordlist (`spellingstatus.xml`) and deleted term
 renderings (`termrenderings.xml`).

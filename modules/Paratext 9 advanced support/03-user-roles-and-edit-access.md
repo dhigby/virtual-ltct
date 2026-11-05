@@ -56,8 +56,7 @@ their assigned role.
 **If a book file changes outside Paratext, Paratext will still send the changed version to the
 repository the next time that user does a Send/Receive** — the corruption or reversion looks,
 to the rest of the team, exactly like a normal edit. **The one exception is project observers:**
-if an observer's local text changes, Paratext does not send those changes out, because observers
-have no editing role to attribute the change to in the first place.
+if an observer's local text changes, Paratext does not send those changes out to others.
 
 **DANGER:** If a user experiences a computer crash, or file system errors that make project
 files disappear or behave strangely, they should **not** do a Send/Receive right away. Doing so

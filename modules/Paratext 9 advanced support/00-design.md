@@ -22,14 +22,13 @@ plans and tasks in a way that helps them.") and 3.0 Scripture Markup and Import 
 import data from other formats … into translation software."). That activity is
 "perform/configure with some independent judgment," not "train others."
 
-> **⚠️ Re-level pending approval.** This rationale was written against the old two-value
-> scale, where the closest thing to those rows was `With Assistance`. Under the CBC scale the
-> rows labelled `2 - With Assistance` are the rows whose activities *carry a learner to*
-> `3 - Independent` — so on the merits this course should be
-> `target_outcome_level: "3 - Independent"`. The frontmatter still reads `2 - With Assistance`
-> (a faithful translation of its previous value) pending sign-off from the design approver
-> (Steve White, per the Design status above). This is exactly the mis-level the old coarse
-> scale forced; see [`outcome-levels.yaml`](../../outcome-levels.yaml).
+> **Level confirmed: `2 - With Assistance`** (Steve White, design approver, 2026-11-05). This
+> rationale was written against the old two-value scale, and under the CBC scale the rows it
+> draws on are the ones that carry a learner *to* `3 - Independent` (see
+> [`outcome-levels.yaml`](../../outcome-levels.yaml)). The course as built stops short of
+> that: learners *plan* each recovery and a mentor reviews the plan, and none of the
+> assessments asks them to carry one out alone. That is where `2 - With Assistance` lands
+> someone; independent performance comes later, in the field.
 
 ### Scope note
 

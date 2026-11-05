@@ -93,6 +93,9 @@ a chronology mismatch, not the whole explanation.)
 - If the right-hand pane isn't the latest, has the administrator look through the other
   history points for the one holding the latest version of that book and use "Revert Books"
   to restore it.
+- Finishes the recovery with a Send/Receive by the administrator, which replaces the
+  corrupted version of the book for all users. Knows that the user whose computer crashed
+  does not then need to delete their copy of the project and receive a new copy.
 - Knows that finding the best version may be easier in TortoiseHG, examining the Mercurial
   repository directly (Lesson 4).
 - Leaves the choice of version to the administrator, who can read the text — the learner

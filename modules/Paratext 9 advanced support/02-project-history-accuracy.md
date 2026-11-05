@@ -64,7 +64,7 @@ If someone then runs Compare Versions on Matthew, comparing the history point fr
 was edited against the history point from when Matthew was edited, the edit to Matthew *appears
 to have been undone*:
 
-![Paratext Compare versions on MAT 1:1, comparing the 15:31 Mark history point (left) against the 15:30 Matthew history point (right). The Matthew edit appears to have been undone, because the history points are not in strict chronological order.](assets/ss-02-compare-versions-apparent-undo.png)
+![Paratext Compare versions on MAT 1:1, comparing the 15:31 Mark history point (left) against the 15:30 Matthew history point (right). The Matthew edit appears to have been undone, because the two points are on parallel lines of work.](assets/ss-02-compare-versions-apparent-undo.png)
 
 **This is an illusion.** Nothing was undone. Each edit was made on a parallel line of work. History points in the repository are not always in
 strict chronological order, so comparing across them can make an earlier edit look like it was

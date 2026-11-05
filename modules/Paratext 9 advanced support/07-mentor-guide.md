@@ -39,6 +39,9 @@ Challenge activity again before moving on.
 - Gives the correct sequence: create a new project (main menu → New Project) → set
   language in project properties → set project type to standard translation → import
   books (Project menu → Manage books → Import books).
+- For the eight-participant workshop, creates **one** project and shares it with all eight
+  computers by Send/Receive from a flash drive or a local network drive — set up the day
+  before, so it doesn't depend on the internet.
 
 **Common wrong turn:** treating the BSB resource itself as something that can be "unlocked"
 or converted to editable — missing that a *new, separate* project has to be created and

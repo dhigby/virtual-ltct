@@ -35,11 +35,11 @@ avoid."
 | On-screen | Voiceover / talking points |
 | --- | --- |
 | Presenter to camera. Lower-third: **Advanced Paratext Support**. | "This course is about walking into those calls calmly, diagnosing correctly, and not making it worse. In some of these situations, the instinctive first move, a quick Send/Receive to get back in sync, is exactly what turns a recoverable problem into a real one. By the end, you'll be able to explain what you're seeing, say what's safe to do first, and carry out the recovery, with your mentor alongside you." |
-| Title card: **1. An editable copy of an open text.** (No screenshot; Lesson 1 has no asset. A static card is fine.) | "It starts with something that sounds simple. A team, or a workshop, wants a text they can freely edit and practice on. But public domain doesn't make a Paratext resource editable. You'll learn how to bring the text in as its own project." |
+| Title card: **1. An editable copy of an open text.** (Screenshot: `assets/ss-01-resource-not-editable.png`.) | "It starts with something that sounds simple. A team, or a workshop, wants a text they can freely edit and practice on. But public domain doesn't make a Paratext resource editable. You'll learn how to bring the text in as its own project." |
 | `assets/ss-02-project-history-two-points.png`, then a quick cut to `assets/ss-02-compare-versions-apparent-undo.png`. Title card: **2. History that looks undone.** | "Then the alarm. History that looks as if an edit was undone. It wasn't. You'll learn why Paratext's history can look out of order, and how to work out the real sequence before anyone starts retyping work." |
 | `assets/ss-03-history-undo-changes-compare.png`. Title card: **3. A change under the wrong name.** | "Next, a change under a name that shouldn't have had access. Edit roles only hold inside Paratext, so a crash can slip past them. You'll learn the safe response, and, if corrupted files have already been sent, why the obvious Undo Changes can bring back out-of-date text, and what to check first." |
 | `assets/ss-04-hg-deleted-note-file.png`, then `assets/ss-04-hg-save-at-revision.png`. Title card: **4. Notes that vanished.** | "Then the vanishing notes. Paratext's own history won't show you these, so you'll go one level down with TortoiseHG, find the deleted file, and bring it back." |
-| Title card: **5. Preserving an earlier stage.** (No screenshot; Lesson 5 has no asset.) | "And finally, the other direction. Saving an earlier stage of the team's text as its own reference project, in an order of steps that keeps a temporary revert from ever reaching the team." |
+| Title card: **5. Preserving an earlier stage.** (Diagram: `assets/ss-05-snapshot-sequence.svg`.) | "And finally, the other direction. Saving an earlier stage of the team's text as its own reference project, in an order of steps that keeps a temporary revert from ever reaching the team." |
 | Closing course-map slide: **Lessons 1-5 → Scenario bank → Mentor review → Quiz.** Small text under it: **about 4.5 hours, at your own pace.** | "Here's how it works. Five lessons, about 35 to 40 minutes each, each opening with a situation from the field. Then a scenario bank of five realistic cases: you write up your plan and send it to your mentor. Then an eleven-question quiz. Have the two earlier Paratext courses behind you, and if your connectivity is limited, download TortoiseHG ahead of Lesson 4." |
 
 ## Call to action / close
@@ -67,9 +67,7 @@ and what not to touch."
   contain example wording and user names. Show them only as brief visuals of what the *tool*
   is displaying; don't read the text aloud, and don't say which wording is right. Say
   nothing about any real language.
-- **Screenshot use.** Cue the screenshots by filename only. No new assets are needed. Lessons
-  1 and 5 have no screenshot, so use plain title cards there. If a recorded clip is wanted for
-  either later, flag it to the lesson author.
+- **Screenshot use.** Cue the screenshots by filename only. No new assets are needed.
 - **Don't quote numbers you haven't checked.** Times (35, 40, 35, 40, 30 minutes; about 4.5
   hours total with the scenario bank) and the 11-question quiz come from `README.md` and
   `00-design.md`. If those change, update the closing slide and voiceover to match.

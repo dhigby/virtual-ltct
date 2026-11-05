@@ -51,7 +51,7 @@ Work through the numbered files in order:
 | [`01-installing-open-source-texts.md`](01-installing-open-source-texts.md) | Lesson 1 — installing an open-source/openly-licensed text as an editable project | 35 min |
 | [`02-project-history-accuracy.md`](02-project-history-accuracy.md) | Lesson 2 — why Paratext's chronological project-history view isn't always accurate | 40 min |
 | [`03-user-roles-and-edit-access.md`](03-user-roles-and-edit-access.md) | Lesson 3 — why per-book edit-role restrictions aren't foolproof, the safe recovery response, and the "Undo Changes" pitfall once bad files are sent | 35 min |
-| [`04-recovering-notes-and-settings.md`](04-recovering-notes-and-settings.md) | Lesson 4 — recovering lost notes, term renderings, and other non-text project settings with TortoiseHG | 40 min |
+| [`04-recovering-notes-and-settings.md`](04-recovering-notes-and-settings.md) | Lesson 4 — recovering lost notes, wordlist and term renderings with TortoiseHG | 40 min |
 | [`05-snapshotting-to-a-reference-project.md`](05-snapshotting-to-a-reference-project.md) | Lesson 5 — saving an earlier stage of the text into a reference project | 30 min |
 | [`06-scenario-bank.md`](06-scenario-bank.md) | Applied practice: five recovery scenarios, one per topic, simplest → most complex | 84 min |
 | [`07-mentor-guide.md`](07-mentor-guide.md) | Facilitator notes: rubric for each scenario, common wrong turns | — (facilitator use) |

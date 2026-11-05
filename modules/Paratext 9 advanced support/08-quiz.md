@@ -5,7 +5,7 @@
 This quiz covers all five lessons of the Advanced Paratext Support module — installing
 open-source texts as editable projects, why project history isn't always chronological,
 why user-role edit restrictions aren't foolproof (and what to check before undoing a
-corrupted change), recovering lost notes and settings, and snapshotting an earlier project
+corrupted change), recovering lost notes, wordlist and term renderings, and snapshotting an earlier project
 state into a reference project. You need **9/11 (about 80%)** to pass. Questions are a mix
 of recall, scenario-based application, and true/false. Everything asked here is drawn directly from the lesson content — work them first. (The five-scenario
 bank, graded separately by a mentor, is where your written plan for each recovery procedure
@@ -90,7 +90,7 @@ point, what should the administrator do, and why?
 
 ---
 
-### Section 4: Recovering Lost Notes, Term Renderings, and Settings (Questions 8-9)
+### Section 4: Recovering Lost Notes, Wordlist and Term Renderings (Questions 8-9)
 
 **Question 8:** Why can't a lost notes file typically be recovered just by looking at
 Paratext's own project history view?

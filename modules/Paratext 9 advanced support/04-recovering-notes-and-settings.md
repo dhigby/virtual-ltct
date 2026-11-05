@@ -1,17 +1,17 @@
-# Recovering Lost Notes, Term Renderings, and Project Settings
+# Recovering Lost Notes, Wordlist and Term Renderings
 
 **Estimated time:** 40 minutes
 
-**Purpose:** Prepares you to recover a user's lost project notes, term renderings, or other
-non-text project settings using TortoiseHG — going beyond what Paratext's own project history
+**Purpose:** Prepares you to recover a user's lost project notes, wordlist or term renderings
+using TortoiseHG — going beyond what Paratext's own project history
 view can show you — when a plain text rollback won't bring these back.
 
 **Watch the video:** [Paratext 9 Advanced Support, part 2 (Lessons 4–5)](https://vimeo.com/1222710442)
 
 ## Learning objectives
 
-- You will be able to recover a previous version of project notes, term renderings, or other
-  non-text project settings that are not restored by a plain text rollback.
+- You will be able to recover a previous version of project notes, wordlist or term renderings
+  that are not restored by a plain text rollback.
 
 ## Connect
 
@@ -22,7 +22,7 @@ exactly that recovery, step by step.
 
 ## Content
 
-**How notes and settings get lost**
+**How notes, wordlist and term renderings get lost**
 
 A user may ask for help because a batch of project notes has gone missing — sometimes every
 single note a user submitted, sometimes just the older ones (with only the very latest notes

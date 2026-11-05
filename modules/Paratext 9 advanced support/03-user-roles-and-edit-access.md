@@ -190,4 +190,4 @@ are otherwise prone to crashes or improper shutdowns. How would you introduce th
 Send/Receive right away" guidance to them *before* they need it, rather than after?
 
 **Next:** Lesson 4 covers a related but different recovery case — when it isn't the Scripture
-text that's been lost, but a user's notes, term renderings, or other project settings.
+text that's been lost, but a user's notes, wordlist or term renderings.

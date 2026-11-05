@@ -106,7 +106,7 @@ is open. They notice a corrupted file and wonder what to do about it.
 
 ## Scenario 4: The Vanishing Notes
 
-**Time budget:** 20 minutes | **Topic:** Recovering notes and settings (Lesson 4)
+**Time budget:** 20 minutes | **Topic:** Recovering notes, wordlist and term renderings (Lesson 4)
 
 **Situation:** A translator contacts you: most of their project notes seem to have
 disappeared. Looking more closely, a handful of very recent notes are still there — it's

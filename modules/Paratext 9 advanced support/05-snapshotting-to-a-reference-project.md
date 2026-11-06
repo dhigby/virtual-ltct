@@ -36,7 +36,10 @@ snapshotting into a reference project gives you.
 **1. Snapshotting the current state** (the easy case): if the team is currently at the point they
 want to preserve, you don't need to touch project history at all.
 
-- Create a new project (main menu → New Project). You could make the project type Auxiliary if you wanted to share it with other users without registering it. You probably want to uncheck the "Editing enabled" box on the Advanced tab so no one accidentally makes changes to it. 
+- Create a new project (main menu → New Project). You could make the project type Auxiliary if you wanted to share it with other users without registering it. You probably want to uncheck the "Editing enabled" box on the Advanced tab so no one accidentally makes changes to it.
+
+  ![The Paratext Project properties dialog for the BBOS project, open on the Advanced tab. Numbered callouts mark each setting: 1 Typical file name, 2 USFM version, 3 Encoding, 4 Normalization, 5 Allow whitespace and invisible characters, 6 Editing enabled (ticked), 7 Allow other Paratext users to access this project as a translation resource, 8 Share language info with SIL Locale Data Repository, and 9 the OK button. For a snapshot project, untick Editing enabled, callout 6.](assets/ss-05-editing-enabled.png)
+
 - Open the project menu, choose Manage Books → Import Books, and select the book files from the main project and import them.
 
 **2. Snapshotting an earlier point in history** (for a project administrator): if you need to

@@ -1,15 +1,17 @@
-# Recovering Lost Notes, Term Renderings, and Project Settings
+# Recovering Lost Notes, Wordlist and Term Renderings
 
 **Estimated time:** 40 minutes
 
-**Purpose:** Prepares you to recover a user's lost project notes, term renderings, or other
-non-text project settings using TortoiseHG — going beyond what Paratext's own project history
+**Purpose:** Prepares you to recover a user's lost project notes, wordlist or term renderings
+using TortoiseHG — going beyond what Paratext's own project history
 view can show you — when a plain text rollback won't bring these back.
+
+**Watch the video:** [Paratext 9 Advanced Support, part 2 (Lessons 4–5)](https://vimeo.com/1222710442)
 
 ## Learning objectives
 
-- You will be able to recover a previous version of project notes, term renderings, or other
-  non-text project settings that are not restored by a plain text rollback.
+- You will be able to recover a previous version of project notes, wordlist or term renderings
+  that are not restored by a plain text rollback.
 
 ## Connect
 
@@ -20,7 +22,7 @@ exactly that recovery, step by step.
 
 ## Content
 
-**How notes and settings get lost**
+**How notes, wordlist and term renderings get lost**
 
 A user may ask for help because a batch of project notes has gone missing — sometimes every
 single note a user submitted, sometimes just the older ones (with only the very latest notes
@@ -49,8 +51,9 @@ Settings.)
 **Finding where a file was deleted**
 
 1. Close Paratext.
-2. Open the HG Workbench: in File Viewer, right-click the project folder, choose "Show more
-   options," then pick HG Workbench under the TortoiseHG section.
+2. Open the HG Workbench: in File Explorer, go to your Paratext projects folder (usually
+   `My Paratext 9 Projects`), right-click the project's folder, choose "Show more options"
+   (Windows 11 only), then pick HG Workbench under the TortoiseHG section.
 3. If you know the file was recently deleted, inspect the recent history points to find it. For
    example, in this history, one user's note file was deleted:
 
@@ -76,7 +79,10 @@ restore the file under its original name, delete those extra characters before s
 that's done, restart Paratext — you should now see the missing notes — and do a Send/Receive to
 circulate them to the rest of the project's users.
 
-![The “Save file to” dialog open on the NBV project folder, with the File name field reading Notes_test1white@24.xml — an arrow points at the @24 revision suffix that must be removed before Paratext will read the file.](assets/ss-04-hg-save-filename.png)
+![The “Save file to” dialog open on the NBV project folder. The folder lists .hg, BookNames.xml, CommentTags.xml, ProjectProgress.xml and ProjectUpdates.xml — there is no Notes_test1white.xml, because it was deleted. The File name field reads Notes_test1white@24.xml, and an arrow points at the @24 revision suffix that must be removed before Paratext will read the file.](assets/ss-04-hg-save-filename.png)
+
+The same process can also restore a deleted wordlist (`spellingstatus.xml`) and deleted term
+renderings (`termrenderings.xml`).
 
 **When only the older notes are missing (a merge, not a straight restore)**
 
@@ -85,25 +91,38 @@ the notes file was deleted a while ago, and the user has simply been creating ne
 then in a fresh file. Recovering this case means merging the old notes back into the new file,
 not just restoring an old version outright:
 
-1. Close Paratext if it's open. Find the deleted file and save it from the previous revision as
-   above — but this time, **keep** the `@NN` suffix on the filename. (If you strip it here, you
-   would overwrite the current file and lose the new notes it contains.)
-2. Open the *new* file in Notepad (or another plain text editor) and delete its first two lines:
+1. Close Paratext if it's open.
+2. Create a new folder on your hard drive (outside of the Paratext projects folder) and copy the
+   current notes file out of the Paratext project folder to that new folder.
+3. Find the deleted file and save it from the previous revision to that same new folder — but
+   this time, **keep** the `@NN` suffix on the filename. (If you strip it here, you would
+   overwrite the copy of the current file and lose the new notes it contains.)
+4. Open the *recovered* file in Notepad (or another plain text editor) and delete its first two
+   lines:
 
    ```
    <?xml version="1.0" encoding="utf-8"?>
    <CommentList>
    ```
 
-3. Open the *old* file and delete its last line:
+5. Open the *current* file and delete its last line, leaving the cursor on a new empty line:
 
    ```
    </CommentList>
    ```
 
-4. Select all of the old file's remaining content, paste it above the contents of the new file,
-   and save.
-5. Start Paratext. It should now show all the notes — old and new.
+6. Select all of the recovered file's remaining content, and paste it after the end of the
+   current file. Make sure the first line of the pasted content is not on the same line as the
+   last line of the current file. Save your changes. (The order of the notes in the file should
+   not matter.)
+7. Copy the merged current notes file (`Notes_<user>.xml`, not the `@NN` file) back to your
+   Paratext project folder, replacing the file which was there.
+8. Start Paratext. It should now show all the notes — old and new.
+9. Do a Send/Receive to send the restored notes to the rest of the team.
+
+Like with the notes, there could possibly be an old and a new `spellingstatus.xml` to attempt to
+merge, or an old and new `termrenderings.xml`, but merging those would be more complicated and
+is not covered here.
 
 **WARNING:** If Paratext reports that the notes file is corrupt after this, something went wrong
 in the edit. Paratext will rename the bad file to `Notes_User Name.corrupt`. Open it and check,

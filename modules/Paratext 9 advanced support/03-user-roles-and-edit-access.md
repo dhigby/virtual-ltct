@@ -9,6 +9,8 @@ of an immediate Send/Receive — and, when corrupted files have *already* been s
 administrator's recovery from project history without landing the team on an out-of-date
 version.
 
+**Watch the video:** [Paratext 9 Advanced Support, part 1 (Lessons 1–3)](https://vimeo.com/1222691505)
+
 ## Learning objectives
 
 - You will be able to explain why Paratext's per-book user-role edit restrictions are not an
@@ -54,19 +56,25 @@ their assigned role.
 **If a book file changes outside Paratext, Paratext will still send the changed version to the
 repository the next time that user does a Send/Receive** — the corruption or reversion looks,
 to the rest of the team, exactly like a normal edit. **The one exception is project observers:**
-if an observer's local text changes, Paratext does not send those changes out, because observers
-have no editing role to attribute the change to in the first place.
+if an observer's local text changes, Paratext does not send those changes out to others.
 
 **DANGER:** If a user experiences a computer crash, or file system errors that make project
 files disappear or behave strangely, they should **not** do a Send/Receive right away. Doing so
 may send their corrupted files out to every other user on the project. Instead, the correct
 response is:
 
-1. Delete the project from that user's Paratext installation ("Delete project").
+1. Delete the project from that user's Paratext installation ("Delete project from this computer only").
 2. Do a Send/Receive to pull down a clean copy of the project from the server.
 
 This gets the affected user back to a good copy without ever pushing their corrupted local files
 out to the team.
+
+If the user has made edits to uncorrupted books and not yet shared them, they can make a backup
+to file of their current copy of the project before deleting it. Then they can make a temporary
+project from that backup file: select "Restore project from file", and in the Restore dialog
+click **New Project…** to restore into a new project rather than over an existing one.
+
+![The Paratext Restore dialog, with a backup .zip file in the From field and the Restore into drop-down left empty. Callout 1 marks the New Project… button beside it, which restores the backup as a new project instead of over an existing one. Callout 2 marks the Files In Backup / Files On Hard Disk table listing what the backup holds (properties and settings, Biblical Terms renderings, book names, note tags, project progress, language settings and the book). Callout 3 marks the OK button.](assets/ss-03-restore-from-file-new-project.png)
 
 **INFO:** This applies to Paratext 9, and to Paratext 8 and 7 as well — the underlying behavior
 (edit-role checks live inside Paratext, not in the shared repository) hasn't changed across
@@ -98,7 +106,7 @@ alarming.
 3. Look at the **right-hand pane**. If it is not the latest version of that book, "Undo Changes"
    would restore an out-of-date copy — don't use it.
 4. Instead, look through the other history points in project history for the one holding the
-   latest version of that book, and use **"Revert Books"** to restore that version.
+   latest version of that book, and use **"Revert Books"** to restore that version. The admin can now do a Send/Receive and this should replace the corrupted version of the book for all users. The user who experienced the crash does not need to delete their copy of the project and receive a new copy.
 
 ![Paratext Project History for the UCTV test project, with test1white's 2026-09-16 history point selected, and Compare Versions on MAT 1:0 opened from that point's MAT link. The left pane, test1white's 15:58 version, is empty — the corrupted file. The right pane, the 15:54 baseline that “Undo Changes” would restore, shows the whole book struck through as removed. Other Steven White history points for MAT appear above and below it in the list.](assets/ss-03-history-undo-changes-compare.png)
 
@@ -119,10 +127,9 @@ unlike the rest of this lesson.
 Lesson 5 also uses "Revert Books", but there the reverted state must never be sent to the team.
 Here it is the opposite: the version you restore is the one the team is meant to end up with.
 
-**What "good" looks like:** you can explain, to a non-technical team member, how and why project
+**What "good" looks like:** You can explain, to a non-technical team member, how and why project
 history can show a mysterious edit credited to someone who does not have editing access to that
-book — without that explanation ever needing to invoke anyone actually bypassing Paratext's
-permissions.
+book.
 
 ### Key Takeaways
 
@@ -182,4 +189,4 @@ are otherwise prone to crashes or improper shutdowns. How would you introduce th
 Send/Receive right away" guidance to them *before* they need it, rather than after?
 
 **Next:** Lesson 4 covers a related but different recovery case — when it isn't the Scripture
-text that's been lost, but a user's notes, term renderings, or other project settings.
+text that's been lost, but a user's notes, wordlist or term renderings.

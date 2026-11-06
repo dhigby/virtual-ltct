@@ -57,7 +57,7 @@ they couldn't type into it, since they'd read it was public domain.
 **Situation:** Two translators on a team you support have been working in different books
 at the same time — one in Matthew, one in Mark — and both did a Send/Receive shortly
 afterward. A few days later, one of them runs Compare Versions to check her edit to
-Matthew against the point where her colleague's Mark edit was merged in, and is alarmed:
+Matthew against the history point her colleague made after editing Mark, and is alarmed:
 it looks like her Matthew edit was undone.
 
 **Context:** She has already messaged the rest of the team saying "I think we lost an
@@ -85,32 +85,28 @@ editing access to that book. The team leader wants to know if someone has bypass
 permission settings.
 
 **Context:** That same team member mentions, almost in passing, that their laptop crashed
-unexpectedly a few days ago while Paratext happened to be open, and that they haven't done
-a Send/Receive since restarting it.
+unexpectedly a few days ago while Paratext happened to be open.
 
 **Your task:**
 
 1. Explain to the team leader why this change could appear under that user's name without
    them having actually used Paratext to make an unauthorized edit.
-2. Recommend the correct next step for the team member whose laptop crashed — and
-   specifically what they should *not* do first, and why.
+2. Plan the administrator's recovery of the team's copy, step by step.
+3. If the administrator wants to click "Undo Changes", say what you would have them check
+   **before** clicking it, what result of that check would mean "Undo Changes" is the wrong
+   tool, and what to do instead.
 
 **Follow-on twist:** A week later, a different team member's computer crashes while Paratext
-is open. This time they do a Send/Receive straight away, before calling you, and the corrupted
-files go out to the rest of the team. The project administrator has found the history point
-where the corruption came in and is about to click "Undo Changes" on it.
+is open. They notice a corrupted file and wonder what to do about it.
 
-3. Plan the administrator's recovery of the team's copy, step by step.
-4. Say what you would have the administrator check **before** clicking "Undo Changes", what
-   result of that check would mean "Undo Changes" is the wrong tool, and what to do instead.
-   Explain how you would decide which version is the latest without relying on reading the
-   translation text yourself.
+4. Recommend the correct next step for this second team member — and specifically what they
+   should *not* do first, and why.
 
 ---
 
 ## Scenario 4: The Vanishing Notes
 
-**Time budget:** 20 minutes | **Topic:** Recovering notes and settings (Lesson 4)
+**Time budget:** 20 minutes | **Topic:** Recovering notes, wordlist and term renderings (Lesson 4)
 
 **Situation:** A translator contacts you: most of their project notes seem to have
 disappeared. Looking more closely, a handful of very recent notes are still there — it's

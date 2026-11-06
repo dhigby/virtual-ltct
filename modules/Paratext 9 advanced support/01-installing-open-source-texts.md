@@ -6,6 +6,8 @@
 or openly-licensed Scripture text they can actually edit, by installing it as its own standard
 translation project rather than as a locked Paratext resource.
 
+**Watch the video:** [Paratext 9 Advanced Support, part 1 (Lessons 1–3)](https://vimeo.com/1222691505)
+
 ## Learning objectives
 
 - You will be able to install an openly-licensed/open-source Scripture text as an editable
@@ -34,6 +36,8 @@ will let them edit it directly. It won't. Paratext resources (the read-only refe
 listed alongside a project) are locked regardless of the license on the underlying text. To get
 an editable copy, you have to bring the text in as its own **project**, not as a resource.
 
+![A Paratext window titled “BSB: MAT 1:17 (Resource)”, showing the Berean Standard Bible resource open at Matthew 1:17 with the cursor placed in the verse text. An orange warning banner across the top reads: “The project you are viewing is not editable. It may be a resource text or 'Editing Enabled' may not be ticked under the 'Advanced' tab in the Project > Project settings > Project properties dialog.” A Dismiss button with a 9-second countdown sits at the bottom right of the banner.](assets/ss-01-resource-not-editable.png)
+
 **The procedure**
 
 1. **Find the text in USFM format, outside Paratext.** Paratext does not fetch these for you —
@@ -49,6 +53,10 @@ an editable copy, you have to bring the text in as its own **project**, not as a
 Once imported this way, the text lives inside an ordinary, editable Paratext project — separate
 from the team's own translation draft — that anyone with access can type into, mark up, or
 practice on without touching the team's real work.
+
+**Remember from the basic Paratext course:** a project doesn't need the internet to be shared.
+To give several computers the *same* project — a workshop room, say — create it once, then share
+it with the other computers by Send/Receive from a USB flash drive or a local network drive.
 
 **INFO:** This applies to any Paratext 9 version, and the same principles apply to earlier
 Paratext versions too — the distinction between a locked resource and an editable project has
@@ -77,7 +85,7 @@ Write out, as if explaining it directly to this translator:
 3. The exact sequence of steps you would walk them through in Paratext to turn that download
    into a text they can freely edit.
 
-Also consider the workshop version of this same task: if you were setting up a room of ten
+Also consider the workshop version of this same task: if you were setting up a room of eight
 participants who all need to edit the *same* open text during a training session, does anything
 about the steps above change? (Think about what "the same text" means when each participant
 creates their own project.)

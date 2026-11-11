@@ -238,11 +238,9 @@ clear the list. Paratext won't accept an empty list while any continuer is still
   the dash. Both are wrong: `—` is a genuine Waku opening mark, and the dash belongs in the text.
 - Ask the translation team. You can't tell where a paragraph starts in a language you don't
   read, so ask them whether a new paragraph starts between the two speeches, and where. In this
-  practice project, the team's answer is that a new paragraph starts at the sentence in verse 12
-  that leads into the second em dash.
-- Insert a `\p` paragraph marker at that point in verse 12.
-
-> **[AUTHOR: confirm the steps to insert a \p paragraph break mid-verse in Paratext 9.5]**
+  practice project, the team's answer is that a new paragraph starts at verse 12.
+- Insert a `\p` paragraph marker there: in Mark 2, click immediately before the `\v 12` verse
+  marker and type `\p`.
 
 - Close the results panel and run the check again from **☰ > Tools > Run basic checks...**. Don't click **Rerun** on the open panel, because it doesn't pick up your text change. The check on all books now reports **"No errors found."**
 
@@ -267,7 +265,7 @@ clear the list. Paratext won't accept an empty list while any continuer is still
 
 1. The characters were entered in the wrong fields — the left-pointing guillemet (`‹`, U+2039) is in the Opening field when it should be in the Closing field, and vice versa. Swap them: Opening should be `›` (right-pointing, U+203A), Closing should be `‹` (left-pointing, U+2039). Confirm by checking the Example section — the correct order shows `›` as the inner opening and `‹` as the inner closing.
 2. The check will fire on every Second level opening mark (treating the right-pointing guillemet as an unexpected closing mark) and on every Second level closing mark (treating the left-pointing guillemet as an unexpected opening mark). The entire Second level configuration will appear as errors.
-3. It is a **real error** in the text, a single result in one verse. The error is a missing paragraph break, not a wrong mark. An em-dash quote may end at the end of its paragraph with no closing mark. The speech at 2:11 has none, and before its paragraph ends, verse 12 has a second em dash that opens another speech, so Paratext finds the first speech still open. Both em dashes are correct. Don't remove `—` from the First level Opening cell, and don't delete either dash. Either would make the result disappear, and both are wrong. You can't tell where a paragraph starts in a language you don't read, so ask the translation team whether a new paragraph starts there, and where. Insert a `\p` paragraph marker where they say: in the practice project, at the sentence in verse 12 that leads into the second em dash. Then close the results panel and run the check again (not **Rerun** on the open panel). You're finished when the check on all books reports "No errors found." That message means more than the one at the defaults because the configured check has shown it recognizes Waku's marks: it found the missing break. The check at the defaults reported "No errors found." with that same problem in the text, so its clean result told you nothing.
+3. It is a **real error** in the text, a single result in one verse. The error is a missing paragraph break, not a wrong mark. An em-dash quote may end at the end of its paragraph with no closing mark. The speech at 2:11 has none, and before its paragraph ends, verse 12 has a second em dash that opens another speech, so Paratext finds the first speech still open. Both em dashes are correct. Don't remove `—` from the First level Opening cell, and don't delete either dash. Either would make the result disappear, and both are wrong. You can't tell where a paragraph starts in a language you don't read, so ask the translation team whether a new paragraph starts there, and where. Insert a `\p` paragraph marker where they say: in the practice project, by typing `\p` immediately before the `\v 12` verse marker. Then close the results panel and run the check again (not **Rerun** on the open panel). You're finished when the check on all books reports "No errors found." That message means more than the one at the defaults because the configured check has shown it recognizes Waku's marks: it found the missing break. The check at the defaults reported "No errors found." with that same problem in the text, so its clean result told you nothing.
 
 ---
 

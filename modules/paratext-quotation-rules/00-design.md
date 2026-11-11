@@ -55,7 +55,7 @@ One row per numbered lesson file. Each stays ≤ 90 minutes.
 A 20-question quiz (80% = 16/20 to pass) covers objectives 1–7, grouped into five sections
 matching the five lessons — a mix of recall, scenario application, and true/false. The
 scenario bank (three independent language scenarios, ~30 minutes each) exercises objective 7
-as applied practice; Scenario C (Waku em-dash) is an optional stretch. Each lesson also
+as applied practice; Scenario C (Waku) is an optional stretch. Each lesson also
 carries a short set of formative "check your understanding" questions inline; the graded
 assessment is the consolidated quiz.
 
@@ -89,9 +89,6 @@ following field knowledge (to be confirmed at SME fact-check, stage 5):_
   Continued-quotation claim is only testable once the types check is enabled.
 - The **Quotation types** check is a separate, administrator-enabled check that only checks
   first-level quotes in non-Deuterocanonical books.
-- Same-character open/close (em-dash conventions like Waku's) cannot always be
-  fully resolved by configuration; residual results must be documented in Project Notes for
-  the consultant rather than edited away.
 - The practice projects (TAMBA, RUNDA, VELNA, MENDA, Waku) start at Paratext 9.5's
   **default** Quotation Rules, not blank — a new project saves these defaults when it is
   created (verified; the basis of the 2026-10-12/13 rewrite). Quote marks (Opening /

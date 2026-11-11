@@ -142,7 +142,7 @@ Use this table to know which file to ask for and give an offline learner, for th
 | `Runda New Testament 2026-10-13.zip` | `RUNDA` | Paratext defaults | Lesson 2 |
 | `Velna New Testament 2026-10-12.zip` | `VELNA` | Paratext defaults (Word-medial punctuation empty) | Scenario A |
 | `Menda_correct_New_Testament_2026-10-26.zip` | `MENDA` | Paratext defaults, corrected John text (guillemet marks) | Scenario B |
-| `Waku New Testament 2026-10-12.zip` | `Waku` | Paratext defaults | Scenario C |
+| `Waku New Testament 2026-11-11.zip` | `Waku` | Paratext defaults | Scenario C |
 
 The Phase A and Phase B projects both have the full name *Tamba New Testament*, so Paratext's default backup names for them differ only by date. Keep the Phase B file named `TAMBAB Phase B …`, so it can't be mistaken for the Phase A backup. Giving the Phase B file to a learner in Lessons 1–3 gives them the answers.
 
@@ -283,13 +283,13 @@ the 847 are one apostrophe clash. The learner should be reading the messages, no
 
 ## Project Setup: `VELNA`, `MENDA`, and `Waku` (Scenario bank)
 
-Each scenario-bank project needs enough text to produce meaningful check results, but no deliberate errors need to be seeded — learners correct these projects from Paratext's defaults, independently, having never seen them before.
+Each scenario-bank project needs enough text to produce meaningful check results, but no deliberate errors need to be seeded, apart from the missing paragraph break `Waku` must keep at Mark 2:11–12 (see the table) — learners correct these projects from Paratext's defaults, independently, having never seen them before.
 
 | Project | Quotation style | Minimum books suggested |
 |---------|----------------|-------------------------|
 | `VELNA` | Guillemet outer (`«` / `»`), curly single inner (`‘` / `’`) — Guillemet style (Scenario A). Include words with `’` (U+2019) as apostrophes so learners encounter the apostrophe conflict. | Matthew, Luke, John (dialogue-heavy) |
 | `MENDA` | Double guillemets outer, reversed single guillemets inner: `«...›...‹...»`; Third level returns to `«...»` — include at least one third-level quote (John 19:21) (Scenario B) | John (dialogue-heavy, contains the 19:21 third-level example) |
-| `Waku` | Em dash as both opener and closer: `—...—`, with em dash continuation mark; Second level `“...”`; Third level `‘...’` (Scenario C) | Matthew, Mark, Luke, John, Acts (stretch exercise; Acts is required — the scenario's check steps use its extended multi-paragraph speeches; Mark 13 carries most of the parenthetical em dashes and John 17 the same-character ambiguity that the scenario's seven residual results depend on) |
+| `Waku` | First level opens with `“` (U+201C) or, as an alternate, `—` (U+2014), and closes with `”` (U+201D), though an em-dash quote may have no closing mark and end at the end of its paragraph; Second level `“...”`; Third level `‘...’`; no continuers at any level (Scenario C) | Matthew, Mark, Luke, John, Acts (stretch exercise). Mark 2:11–12 carries the missing paragraph break the scenario depends on: the em-dash speech at 2:11 has no closing mark, and the sentence in verse 12 that leads into a second em-dash speech stays joined to the 2:11 paragraph. It is the one real error learners find, and they fix it by inserting a `\p`. Keep that break missing when you rebuild the project. |
 
 Apply the correct quotation characters for each language throughout the text. Leave Quotation Rules at Paratext's defaults — learners correct them as part of the scenario.
 
@@ -299,7 +299,7 @@ Apply the correct quotation characters for each language throughout the text. Le
 |---|---|---|---|
 | `VELNA` | 264 — mostly "Second-level quote mark found without a preceding first-level quote: ‘", plus word-medial `’` (e.g. Matthew 1:1) | 3: word-medial `’` at Matthew 1:1, Luke 1:1 and John 1:1 | The `’` results remain after correction (expected; see Scenario A). 264 → 3. Velna's text uses `’` as a glottal stop (Matthew 1:1, Luke 1:1, John 1:1; not Mark 1:1) and in contractions (e.g. Matthew 1:6, 1:20), in narrative as well as speech, so narrative passages are not result-free. Re-run with the Scenario A configuration and list `p b/q1 pi` (2026-10-22): still exactly the 3 results at the 1:1 verses; the contractions at Matthew 1:6 and 1:20 are not flagged. |
 | `MENDA` | "No errors found." | "No errors found." | At the defaults this is a false clean result. Menda's text does use guillemets (confirmed in the Punctuation inventory), but none of them are in the defaults, so the check recognizes no quote marks at all. Ask the learner why that isn't good news. Because the configured run gives the same message, the result alone can't tell you the learner configured Menda: look at their Quote marks tab. |
-| `Waku` | "No errors found." | 7 (Scenario C's residuals, including John 17:26 "Closing quote mark is possibly missing before verse 18.1: —") | If the learner changed only the marks and left the Second and Third level continuers filled in (as the defaults have them) and the list `p p/q1 b/q1`, they get an **8th** result: Matthew 13:14 "Second-level quote mark found without a preceding first-level quote: “". Eight instead of seven means the defaults weren't fully corrected. |
+| `Waku` | "No errors found." | 1: `MRK 2:11` "Opening quote mark found without matching closing quote mark: —". After the learner inserts a `\p` partway through verse 12 and runs the check again: "No errors found." (verified 2026-11-10) | At the defaults this is a false clean result: the missing paragraph break at Mark 2:11–12 is already in the text and the check misses it. MRK 2:11 is a **real error** in the text's paragraphing, not in its marks. The em-dash speech at 2:11 has no closing mark (normal in Waku: an em-dash quote may end at the end of its paragraph), but before that paragraph ends, verse 12 has a second em dash that opens another speech, so the first is still open when the second starts. Both em dashes are correct and stay. The fix is a `\p` at the sentence in verse 12 that leads into the second em dash. Removing `—` from the First level Opening cell or deleting either dash would also clear the result; both are wrong, so treat either as a misconception to address. Listen for the learner asking the translation team whether and where a new paragraph starts, rather than deciding it themselves. Because the configured-and-fixed run gives the same message as the defaults, the result alone can't tell you the learner configured Waku: look at their Quote marks tab. It should show First level `“\|—` / *none* / `”`, Second level `“` / *none* / `”`, Third level `‘` / *none* / `’`, and Continuer required at empty. |
 
 **Reviewing Scenario B (`MENDA`).** Menda holds only John, so a run on John and a run on all
 books are the same run. Verified in Paratext 9.5:
@@ -374,4 +374,4 @@ After seeding, run the Quotation check and confirm all seven results (five seeds
 ## General Facilitation Notes
 
 - **Discovery-first ordering:** Each lesson shows the answer key *after* the discovery prompts, not before. Encourage learners to write down their prediction before scrolling to the expected configuration.
-- **Scenario C (Waku):** The em-dash scenario is the hardest. It is appropriate as a stretch exercise or for learners who have completed Lessons 1–4 confidently and want a challenge.
+- **Scenario C (Waku):** a stretch exercise, for learners who have completed Lessons 1–4 and Scenarios A and B confidently and want a challenge. It adds two things the other scenarios don't: a First level with two opening marks (`“` and, as an alternate, `—`), and a configured check that finds a real text error (a missing paragraph break, which only the translation team can place) rather than a configuration gap or an apostrophe collision.

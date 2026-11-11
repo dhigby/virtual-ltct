@@ -1,7 +1,7 @@
 ---
 title: Using the Biblical Terms Tool in Paratext 9
 slug: paratext-biblical-terms
-target_outcome_level: "2 - With Assistance"
+target_outcome_level: "3 - Independent"
 competencies:
   - Translation Tools
 content_type: content

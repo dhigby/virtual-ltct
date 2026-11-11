@@ -1287,15 +1287,14 @@ clear the list. Paratext won't accept an empty list while any continuer is still
   the dash. Both are wrong: <code>—</code> is a genuine Waku opening mark, and the dash belongs in the text.</li>
 <li>Ask the translation team. You can't tell where a paragraph starts in a language you don't
   read, so ask them whether a new paragraph starts between the two speeches, and where. In this
-  practice project, the team's answer is that a new paragraph starts at the sentence in verse 12
-  that leads into the second em dash.</li>
-<li>Insert a <code>\p</code> paragraph marker at that point in verse 12.</li>
-</ul>
-<blockquote>
-<p><strong>[AUTHOR: confirm the steps to insert a \p paragraph break mid-verse in Paratext 9.5]</strong></p>
-</blockquote>
-<ul>
-<li>Close the results panel and run the check again from <strong>☰ &gt; Tools &gt; Run basic checks...</strong>. Don't click <strong>Rerun</strong> on the open panel, because it doesn't pick up your text change. The check on all books now reports <strong>"No errors found."</strong></li>
+  practice project, the team's answer is that a new paragraph starts at verse 12.</li>
+<li>
+<p>Insert a <code>\p</code> paragraph marker there: in Mark 2, click immediately before the <code>\v 12</code> verse
+  marker and type <code>\p</code>.</p>
+</li>
+<li>
+<p>Close the results panel and run the check again from <strong>☰ &gt; Tools &gt; Run basic checks...</strong>. Don't click <strong>Rerun</strong> on the open panel, because it doesn't pick up your text change. The check on all books now reports <strong>"No errors found."</strong></p>
+</li>
 </ul>
 <p><img alt="The Results list for the Waku project, headed Waku; All Books; Checks run: Quotations, reading No errors found." src="../ss-05-waku-no-errors.png" /></p>
 <ul>
@@ -1319,7 +1318,7 @@ clear the list. Paratext won't accept an empty list while any continuer is still
 <ol>
 <li>The characters were entered in the wrong fields — the left-pointing guillemet (<code>‹</code>, U+2039) is in the Opening field when it should be in the Closing field, and vice versa. Swap them: Opening should be <code>›</code> (right-pointing, U+203A), Closing should be <code>‹</code> (left-pointing, U+2039). Confirm by checking the Example section — the correct order shows <code>›</code> as the inner opening and <code>‹</code> as the inner closing.</li>
 <li>The check will fire on every Second level opening mark (treating the right-pointing guillemet as an unexpected closing mark) and on every Second level closing mark (treating the left-pointing guillemet as an unexpected opening mark). The entire Second level configuration will appear as errors.</li>
-<li>It is a <strong>real error</strong> in the text, a single result in one verse. The error is a missing paragraph break, not a wrong mark. An em-dash quote may end at the end of its paragraph with no closing mark. The speech at 2:11 has none, and before its paragraph ends, verse 12 has a second em dash that opens another speech, so Paratext finds the first speech still open. Both em dashes are correct. Don't remove <code>—</code> from the First level Opening cell, and don't delete either dash. Either would make the result disappear, and both are wrong. You can't tell where a paragraph starts in a language you don't read, so ask the translation team whether a new paragraph starts there, and where. Insert a <code>\p</code> paragraph marker where they say: in the practice project, at the sentence in verse 12 that leads into the second em dash. Then close the results panel and run the check again (not <strong>Rerun</strong> on the open panel). You're finished when the check on all books reports "No errors found." That message means more than the one at the defaults because the configured check has shown it recognizes Waku's marks: it found the missing break. The check at the defaults reported "No errors found." with that same problem in the text, so its clean result told you nothing.</li>
+<li>It is a <strong>real error</strong> in the text, a single result in one verse. The error is a missing paragraph break, not a wrong mark. An em-dash quote may end at the end of its paragraph with no closing mark. The speech at 2:11 has none, and before its paragraph ends, verse 12 has a second em dash that opens another speech, so Paratext finds the first speech still open. Both em dashes are correct. Don't remove <code>—</code> from the First level Opening cell, and don't delete either dash. Either would make the result disappear, and both are wrong. You can't tell where a paragraph starts in a language you don't read, so ask the translation team whether a new paragraph starts there, and where. Insert a <code>\p</code> paragraph marker where they say: in the practice project, by typing <code>\p</code> immediately before the <code>\v 12</code> verse marker. Then close the results panel and run the check again (not <strong>Rerun</strong> on the open panel). You're finished when the check on all books reports "No errors found." That message means more than the one at the defaults because the configured check has shown it recognizes Waku's marks: it found the missing break. The check at the defaults reported "No errors found." with that same problem in the text, so its clean result told you nothing.</li>
 </ol>
 <hr />
 <h2 id="where-to-go-from-here">Where to Go from Here<a class="headerlink" href="#where-to-go-from-here" title="Permanent link">&para;</a></h2>

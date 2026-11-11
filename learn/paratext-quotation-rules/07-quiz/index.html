@@ -1002,14 +1002,17 @@ cell, then run the check on John. What do you see, and what is the fix?
 - B) Results only at John 19:21, where Third level reuses <code>«</code> and <code>»</code>
 - C) Second level results throughout; edit the text so <code>‹</code> opens and <code>›</code> closes
 - D) Second level results throughout; swap the two cells, check the Example</p>
-<p><strong>Question 19:</strong> <strong>Waku</strong> uses an em dash <code>—</code> (U+2014) as its First level opening, continuer
-and closing mark. With Waku correctly configured, the check still reports six "found as a word
-medial character" results on em dashes that the translation team confirms are parenthetical
-asides, not speech. What is the right handling?
-- A) Add a Project Note at each verse, and raise other punctuation for asides with the team
-- B) Add <code>—</code> (U+2014) to Word-medial punctuation so those dashes are read as part of words
-- C) Replace the parenthetical em dashes with brackets yourself so the count reaches zero
-- D) Set every quotation type to Quote marks are optional so the dashes are no longer flagged</p>
+<p><strong>Question 19:</strong> At Paratext's defaults, the check on <strong>Waku</strong> reported "No errors found". You
+then configure Waku to its conventions: First level Opening <code>“</code> (U+201C) with <code>—</code> (U+2014) as an
+alternate opening mark, no continuer, Closing <code>”</code> (U+201D); an em-dash speech may have no
+closing mark and end with its paragraph. The check on all books now reports one result, at Mark
+2:11: "Opening quote mark found without matching closing quote mark: —". The em-dash speech in
+2:11 has no closing mark, and verse 12, in the same paragraph, opens a second em-dash speech. The
+translation team confirms both em dashes belong in the text. What do you do?
+- A) Ask the team where verse 12's new paragraph starts, add <code>\p</code> there, and run the check fresh
+- B) Delete the <code>—</code> (U+2014) at 2:11, then close the results panel and run the check again
+- C) Leave the text, and document the result in a Project Note at Mark 2:11 for the consultant
+- D) Remove <code>—</code> from the First level Opening cell, so the check stops reporting the mark</p>
 <p><strong>Question 20:</strong> True or False: Once a project's Quote marks and Quotation types tabs correctly
 describe the language, the Quotations check run on every book will return zero results.
 - A) True

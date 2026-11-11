@@ -1384,7 +1384,7 @@ learner has not already configured.</p>
 <td>Scenario B</td>
 </tr>
 <tr>
-<td><code>Waku New Testament 2026-10-12.zip</code></td>
+<td><code>Waku New Testament 2026-11-11.zip</code></td>
 <td><code>Waku</code></td>
 <td>Paratext defaults</td>
 <td>Scenario C</td>
@@ -1566,7 +1566,7 @@ for a learner who can't use Send/Receive.</p>
 the 847 are one apostrophe clash. The learner should be reading the messages, not the count.</p>
 <hr />
 <h2 id="project-setup-velna-menda-and-waku-scenario-bank">Project Setup: <code>VELNA</code>, <code>MENDA</code>, and <code>Waku</code> (Scenario bank)<a class="headerlink" href="#project-setup-velna-menda-and-waku-scenario-bank" title="Permanent link">&para;</a></h2>
-<p>Each scenario-bank project needs enough text to produce meaningful check results, but no deliberate errors need to be seeded — learners correct these projects from Paratext's defaults, independently, having never seen them before.</p>
+<p>Each scenario-bank project needs enough text to produce meaningful check results, but no deliberate errors need to be seeded, apart from the missing paragraph break <code>Waku</code> must keep at Mark 2:11–12 (see the table) — learners correct these projects from Paratext's defaults, independently, having never seen them before.</p>
 <table>
 <thead>
 <tr>
@@ -1588,8 +1588,8 @@ the 847 are one apostrophe clash. The learner should be reading the messages, no
 </tr>
 <tr>
 <td><code>Waku</code></td>
-<td>Em dash as both opener and closer: <code>—...—</code>, with em dash continuation mark; Second level <code>“...”</code>; Third level <code>‘...’</code> (Scenario C)</td>
-<td>Matthew, Mark, Luke, John, Acts (stretch exercise; Acts is required — the scenario's check steps use its extended multi-paragraph speeches; Mark 13 carries most of the parenthetical em dashes and John 17 the same-character ambiguity that the scenario's seven residual results depend on)</td>
+<td>First level opens with <code>“</code> (U+201C) or, as an alternate, <code>—</code> (U+2014), and closes with <code>”</code> (U+201D), though an em-dash quote may have no closing mark and end at the end of its paragraph; Second level <code>“...”</code>; Third level <code>‘...’</code>; no continuers at any level (Scenario C)</td>
+<td>Matthew, Mark, Luke, John, Acts (stretch exercise). Mark 2:11–12 carries the missing paragraph break the scenario depends on: the em-dash speech at 2:11 has no closing mark, and the sentence in verse 12 that leads into a second em-dash speech stays joined to the 2:11 paragraph. It is the one real error learners find, and they fix it by inserting a <code>\p</code>. Keep that break missing when you rebuild the project.</td>
 </tr>
 </tbody>
 </table>
@@ -1620,8 +1620,8 @@ the 847 are one apostrophe clash. The learner should be reading the messages, no
 <tr>
 <td><code>Waku</code></td>
 <td>"No errors found."</td>
-<td>7 (Scenario C's residuals, including John 17:26 "Closing quote mark is possibly missing before verse 18.1: —")</td>
-<td>If the learner changed only the marks and left the Second and Third level continuers filled in (as the defaults have them) and the list <code>p p/q1 b/q1</code>, they get an <strong>8th</strong> result: Matthew 13:14 "Second-level quote mark found without a preceding first-level quote: “". Eight instead of seven means the defaults weren't fully corrected.</td>
+<td>1: <code>MRK 2:11</code> "Opening quote mark found without matching closing quote mark: —". After the learner inserts a <code>\p</code> partway through verse 12 and runs the check again: "No errors found." (verified 2026-11-10)</td>
+<td>At the defaults this is a false clean result: the missing paragraph break at Mark 2:11–12 is already in the text and the check misses it. MRK 2:11 is a <strong>real error</strong> in the text's paragraphing, not in its marks. The em-dash speech at 2:11 has no closing mark (normal in Waku: an em-dash quote may end at the end of its paragraph), but before that paragraph ends, verse 12 has a second em dash that opens another speech, so the first is still open when the second starts. Both em dashes are correct and stay. The fix is a <code>\p</code> at the sentence in verse 12 that leads into the second em dash. Removing <code>—</code> from the First level Opening cell or deleting either dash would also clear the result; both are wrong, so treat either as a misconception to address. Listen for the learner asking the translation team whether and where a new paragraph starts, rather than deciding it themselves. Because the configured-and-fixed run gives the same message as the defaults, the result alone can't tell you the learner configured Waku: look at their Quote marks tab. It should show First level <code>“\|—</code> / <em>none</em> / <code>”</code>, Second level <code>“</code> / <em>none</em> / <code>”</code>, Third level <code>‘</code> / <em>none</em> / <code>’</code>, and Continuer required at empty.</td>
 </tr>
 </tbody>
 </table>
@@ -1719,7 +1719,7 @@ must be distinct projects — do not reuse the <code>RUNDA</code> backup for <co
 <h2 id="general-facilitation-notes">General Facilitation Notes<a class="headerlink" href="#general-facilitation-notes" title="Permanent link">&para;</a></h2>
 <ul>
 <li><strong>Discovery-first ordering:</strong> Each lesson shows the answer key <em>after</em> the discovery prompts, not before. Encourage learners to write down their prediction before scrolling to the expected configuration.</li>
-<li><strong>Scenario C (Waku):</strong> The em-dash scenario is the hardest. It is appropriate as a stretch exercise or for learners who have completed Lessons 1–4 confidently and want a challenge.</li>
+<li><strong>Scenario C (Waku):</strong> a stretch exercise, for learners who have completed Lessons 1–4 and Scenarios A and B confidently and want a challenge. It adds two things the other scenarios don't: a First level with two opening marks (<code>“</code> and, as an alternate, <code>—</code>), and a configured check that finds a real text error (a missing paragraph break, which only the translation team can place) rather than a configuration gap or an apostrophe collision.</li>
 </ul>
 
 

@@ -39,6 +39,9 @@ Challenge activity again before moving on.
 - Gives the correct sequence: create a new project (main menu → New Project) → set
   language in project properties → set project type to standard translation → import
   books (Project menu → Manage books → Import books).
+- For the eight-participant workshop, creates **one** project and shares it with all eight
+  computers by Send/Receive from a flash drive or a local network drive — set up the day
+  before, so it doesn't depend on the internet.
 
 **Common wrong turn:** treating the BSB resource itself as something that can be "unlocked"
 or converted to editable — missing that a *new, separate* project has to be created and
@@ -54,8 +57,11 @@ the text imported into it.
   version get renumbered on merge.
 - Reassures the team without simply asserting "it's fine" — explains *why* it's fine, in
   language a non-technical translator would find genuinely convincing, not just soothing.
-- Recognizes this applies regardless of Paratext version (Paratext 7 onward), so this
-  isn't a version-specific bug the team should expect fixed later.
+- Checks the current text of the book, where the edit is still visible, rather than
+  reassuring from general principle alone.
+
+**Bonus:** recognizes this applies regardless of Paratext version (Paratext 7 onward), so
+this isn't a version-specific bug the team should expect fixed later.
 
 **Common wrong turn:** trying to explain this in terms of computer clocks or timestamps
 alone, without grasping that Mercurial's version numbering — not the date shown — is what
@@ -64,28 +70,64 @@ a chronology mismatch, not the whole explanation.)
 
 ### Scenario 3: The Suspicious Edit
 
-**What a strong answer looks like:**
+**Task 1 (explaining the change) — what a strong answer looks like:**
 
 - Correctly explains that Paratext's edit-access restrictions only apply while a user is
   working through Paratext itself — they cannot prevent a file from being altered by a
   crash, file-system corruption, or (for `.ptx` project files) a Windows System Restore
   that reverts the file because Microsoft treats `.ptx` as a system file extension.
-- Correctly recommends that the team member who experienced the crash should **not**
-  Send/Receive immediately, and instead should delete the project from their own
-  installation and then Send/Receive to pull a clean copy from the server.
-- Notes that project observers are the one exception — an observer's local text changes
-  are never sent out by Paratext.
 - Can explain — to a non-technical team leader — how and why project history can show a
-  mysterious edit credited to someone without editing permission, without that explanation
-  ever needing to invoke someone actually bypassing Paratext's permission settings. This is
+  mysterious edit credited to someone without editing permission, without implying that
+  Paratext's permissions failed. This is
   the scenario's core "what good looks like" criterion: the learner should be able to give
   this explanation clearly and confidently, not just recite the list of possible causes.
-- Recognizes this behavior applies across Paratext 9, 8, and 7 — it is not a version-9-only
-  quirk, so the learner shouldn't imply it would be fixed by upgrading or downgrading.
 
-**Common wrong turn:** recommending an immediate Send/Receive "to get back in sync," which
-is the exact action the source material warns against — it risks propagating the
-crash-corrupted files to the rest of the team.
+**Tasks 2–3 (recovering the team's copy) — what a strong answer looks like:**
+
+- Recognises that the change is already in project history, so the corrupted files have been
+  sent: deleting and resyncing is no longer enough, and the administrator recovers the
+  uncorrupted book files from project history.
+- Before "Undo Changes", has the administrator click the link for the changed book in the
+  history point that introduced the corruption, to open the Compare Versions dialog.
+- Recognises that the right-hand pane may not be the latest version: "Undo Changes" restores
+  whatever that user had before the corruption, and if they didn't have the latest book files,
+  that is an out-of-date copy.
+- If the right-hand pane isn't the latest, has the administrator look through the other
+  history points for the one holding the latest version of that book and use "Revert Books"
+  to restore it.
+- Finishes the recovery with a Send/Receive by the administrator, which replaces the
+  corrupted version of the book for all users. Knows that the user whose computer crashed
+  does not then need to delete their copy of the project and receive a new copy.
+- Knows that finding the best version may be easier in TortoiseHG, examining the Mercurial
+  repository directly (Lesson 4).
+- Leaves the choice of version to the administrator, who can read the text — the learner
+  points them to the project history and Compare Versions rather than judging the text
+  themselves. Bonus if they recall from Lesson 2 that history isn't always in strict
+  chronological order.
+- Demonstrates the "what good looks like" criterion: can explain the pitfall of using "Undo
+  Changes" to recover after corrupt files have reached the Send/Receive server.
+
+**Bonus:** recognizes that task 1's behavior applies across Paratext 9, 8 and 7 — not a
+version-9-only quirk that upgrading or downgrading would fix — while the recovery in tasks 2–3
+applies to Paratext 9 and 8, not 7.
+
+**Follow-on twist (task 4) — what a strong answer looks like:**
+
+- Correctly recommends that the second team member should **not** Send/Receive immediately,
+  and instead should delete the project from their own installation and then Send/Receive to
+  pull a clean copy from the server.
+- Notes that project observers are the one exception — an observer's local text changes
+  are never sent out by Paratext.
+
+**Common wrong turns:**
+
+- Clicking "Undo Changes" on the corrupting history point straight away and assuming the team
+  is back to the latest text. The corruption is gone, but if the user didn't have the latest
+  version before the crash, the team is now on that user's out-of-date copy, and newer work is
+  missing without anything looking wrong.
+- In the follow-on twist, recommending an immediate Send/Receive "to get back in sync," which
+  is the exact action the source material warns against — it risks propagating the
+  crash-corrupted files to the rest of the team.
 
 ### Scenario 4: The Vanishing Notes
 
@@ -98,13 +140,16 @@ crash-corrupted files to the rest of the team.
   user's actual Windows bitness), closing Paratext, opening the HG Workbench, and finding
   the deletion point (using the `removes("*.*")` revision-set query if it isn't obvious
   from recent history).
-- Gets the merge mechanics right: save the old file **keeping** its `@NN` suffix; strip the
-  first two lines (`<?xml version...?>` and `<CommentList>`) from the *new* file; strip the
-  last line (`</CommentList>`) from the *old* file; paste the old content above the new
-  file's remaining content; save.
+- Gets the merge mechanics right: work in a separate folder outside the project, with a copy
+  of the current notes file; save the old file there **keeping** its `@NN` suffix; strip the
+  first two lines (`<?xml version...?>` and `<CommentList>`) from the *recovered* file; strip
+  the last line (`</CommentList>`) from the *current* file; paste the recovered content after
+  the current file's content; save; copy the merged current file (not the `@NN` file) back
+  into the project folder; start Paratext; Send/Receive.
 - Knows to check the three specific XML lines (first line, second line, last line) if
   Paratext reports the merged file as corrupt afterward.
-- Notes this procedure applies to both Paratext 9 and Paratext 8.
+
+**Bonus:** notes this procedure applies to both Paratext 9 and Paratext 8.
 
 **Common wrong turn:** stripping the `@NN` suffix when saving the old file (as in the
 straight-restore case), which overwrites the current notes file and loses the very notes
@@ -120,19 +165,20 @@ the learner is trying to preserve, rather than setting up the merge correctly.
 - Gives the full sequence in order: Send/Receive any pending changes → turn off automatic
   Send/Receive for the main project → revert the desired books to the chosen history point
   → create the new project and import the reverted books → delete the reverted main
-  project ("Delete from this computer only") → Send/Receive to restore the current main
+  project ("Delete project from this computer only") → Send/Receive to restore the current main
   project from the server → re-enable automatic Send/Receive if it was on.
 - Correctly identifies the specific failure point: a Send/Receive — automatic or manual —
   happening anywhere between reverting the books and deleting the reverted copy could push
   the older, reverted state out to the rest of the team as if it were *new* work,
   overwriting other team members' more recent edits. This is exactly why the procedure
   turns off automatic Send/Receive before the revert and deletes the reverted copy with
-  "Delete from this computer only" before resyncing, and why those two steps have to happen
+  "Delete project from this computer only" before resyncing, and why those two steps have to happen
   in that order.
-- Demonstrates the scenario's "what good looks like" criterion: the learner can actually
-  create a second project containing content from an earlier stage of the main project's
-  history, not just describe the steps in the abstract.
-- Recognizes this procedure applies to Paratext 9.
+- Demonstrates the scenario's "what good looks like" criterion: the learner's plan would
+  produce a second project containing content from an earlier stage of the main project's
+  history, with every step in the right order and nothing a Send/Receive could push to the team.
+
+**Bonus:** recognizes this procedure applies to Paratext 9.
 
 **Common wrong turn:** deleting the reverted main project and expecting Send/Receive to
 "just work" without first confirming automatic Send/Receive was off during the reverted

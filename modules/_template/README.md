@@ -24,7 +24,7 @@ step before content gets uploaded into Cypher for Business.
 | `NN-scenario-bank.md` | Applied practice scenarios for learners, sequenced foundational → complex. |
 | `NN-mentor-guide.md` | Facilitator notes: what to look for in learner responses, how to give feedback, answer guidance for the scenario bank. |
 | `NN-quiz.md` | Assessment questions with an explicit pass threshold and an answer key, in the body — not frontmatter. |
-| `NN-video-script.md` | Script for the **overview video** — the companion to lesson 1 (talking points, on-screen/slide cues, runtime estimate) before the module is transcribed into Cypher. |
+| `NN-video-script.md` | Script for the **overview video** — shown on the course's front page (talking points, on-screen/slide cues, runtime estimate) before the module is transcribed into Cypher. |
 | `NN-lesson-<L>-video-script.md` | *Optional.* Script for a second video belonging to lesson `<L>`, e.g. `09-lesson-03-video-script.md`. Keep `-video-script.md` last in the name — the tooling identifies a script by that ending. |
 | `assets/` | Committed images: screenshots and diagrams, named `ss-<lesson number>-<what-it-shows>.png`. Every lesson carries at least one visual. |
 
@@ -33,7 +33,8 @@ use them (content first, then scenario bank, mentor guide, quiz, video script), 
 the existing convention in `coretech-computer-hardware`.
 
 **Every numbered lesson carries a visual** — a screenshot, a diagram, an image or a video.
-Lesson 1 is the course overview, so its visual is the overview video. See
+The overview video goes in the course's `README.md`, above its first `##` heading, not
+in lesson 1. See
 [`process/stages/03-draft.md`](../../process/stages/03-draft.md).
 
 ## What a real module's `README.md` frontmatter looks like

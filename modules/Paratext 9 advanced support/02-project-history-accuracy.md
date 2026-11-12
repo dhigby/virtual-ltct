@@ -7,6 +7,8 @@ project history can appear to show an edit being "undone" when nothing was actua
 to determine the real sequence of changes using the tools available rather than the history
 view's apparent order.
 
+**Watch the video:** [Paratext 9 Advanced Support, part 1 (Lessons 1–3)](https://vimeo.com/1222691505)
+
 ## Learning objectives
 
 - You will be able to diagnose why Paratext's chronological project-history view does not
@@ -62,12 +64,12 @@ If someone then runs Compare Versions on Matthew, comparing the history point fr
 was edited against the history point from when Matthew was edited, the edit to Matthew *appears
 to have been undone*:
 
-![Paratext Compare versions on MAT 1:1, comparing the 15:31 Mark history point (left) against the 15:30 Matthew history point (right). The Matthew edit appears to have been undone, because the history points are not in strict chronological order.](assets/ss-02-compare-versions-apparent-undo.png)
+![Paratext Compare versions on MAT 1:1, comparing the 15:31 Mark history point (left) against the 15:30 Matthew history point (right). The Matthew edit appears to have been undone, because the two points are on parallel lines of work.](assets/ss-02-compare-versions-apparent-undo.png)
 
-**This is an illusion.** Nothing was undone. History points in the repository are not always in
-strict chronological order, so comparing across them can make an earlier edit look like it was
-reversed by a later one, when really the two edits just landed in a different numeric sequence
-than you'd expect from their real-world timing.
+**This is an illusion.** Nothing was undone. Each edit was made on a parallel line of work, so
+comparing across them can make an earlier edit look like it was reversed by a later one. History
+points are also not always in strict chronological order, which can make this even more
+confusing. The edit supposedly deleted should still be visible in the current text.
 
 **A real case:** on one project, a user's computer clock was set to the wrong date — several
 months in the future. Mercurial was not fooled by the bad date. It kept track of the fact that

@@ -265,6 +265,8 @@ python scripts/ltct_admin.py intake ~/ltct-private/intake.csv --apply --confirm 
 
 One row per person, in the form managers send (see [Asking for new accounts](#asking-for-new-accounts)). A new address gets an account, an emailed password and their organisation. They sign in with their email address. Their organisation's cohort, and the courses it is enrolled in, follow in the same request. An address that already exists is matched, never duplicated. Someone already in another organisation, or suspended, is flagged and left alone: run `move` or `reactivate` deliberately. A row's `courses` column enrols them through the organisation's own enrolment, as a manager would.
 
+A site-team member can also add one account in the browser: **Site administration → Users → Accounts → Add a new user**. That makes the account and nothing more. It sets no organisation, so no cohort and no courses follow, and it asks for no identity protection. Use it for one-off accounts such as a stage-7 pilot learner; use `intake` for real learners.
+
 ### Enrol an organisation in a course
 
 ```bash

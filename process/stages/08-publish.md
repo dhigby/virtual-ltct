@@ -21,11 +21,15 @@ itself is automated: the markdown here is the source, and Moodle is a render of 
 
 1. **Record** the overview video using `NN-video-script.md` as the script, plus any
    per-lesson videos from their `NN-lesson-<L>-video-script.md` scripts.
+   [Making a course video](../video-production.md) shows how to build one with Claude
+   Motion and AI narration, with captions, instead of recording a presenter.
 2. **Upload** each video to Vimeo or Drive. Don't commit the video file itself; large
    binaries stay out of git.
-3. **Fill in the lesson links.** Each video's lesson is waiting on it with
-   `**Watch the video:** _To be recorded at stage 8._` — replace that with the real link,
-   `**Watch the video:** [<title>](<url>)`.
+3. **Fill in the video links.** The overview video's place is the course's `README.md`
+   (or lesson 1, in a course drafted before 2026-10-26); each other video's place is its
+   lesson. Each is waiting with `**Watch the video:** _To be recorded at stage 8._` —
+   replace that with the real link, `**Watch the video:** [<title>](<url>)`. The
+   publisher puts the overview video on the Moodle course description either way.
 4. **Publish to Moodle.**
 
    ```bash

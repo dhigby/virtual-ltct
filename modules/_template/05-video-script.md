@@ -4,7 +4,8 @@
 into Cypher for Business's video tooling. Keep it as plain markdown here; the actual
 recording/upload happens outside this repo.
 
-`NN-video-script.md` is the **overview video** — the companion to lesson 1, orienting a
+`NN-video-script.md` is the **overview video** — shown on the course's front page,
+before lesson 1, orienting a
 learner to the shape of the tool and the workflow before the hands-on lessons. It is not a
 read-aloud of the course. An optional second video for a later lesson goes in
 `NN-lesson-<L>-video-script.md`; keep `-video-script.md` last in the name, because that is

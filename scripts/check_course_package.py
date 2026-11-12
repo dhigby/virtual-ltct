@@ -228,8 +228,12 @@ def is_lesson(name):
 #                                    .claude/skills/training-content/references/
 #                                    markdown-styling.md, and recorded at stage 8
 #
-# Lesson 1 is the course overview, so its visual is the overview video rather than a
-# picture. That is reported separately because the fix is a different artifact.
+# The overview video belongs to the course, not to a lesson: a `**Watch the video:**` line
+# in README.md above its first `##`, the part the publisher sends to Moodle as the course
+# description, so someone sees it before they start (Doug, 2026-10-26). It is reported
+# separately because the fix is a different artifact. Courses drafted before then carry
+# it in lesson 1 instead, and that still counts -- as the overview and as lesson 1's
+# visual -- so no course already in flight has to change.
 #
 # WARNING, not error, for the same reason a missing screenshot file is: a half-drafted
 # lesson legitimately has no visual yet, and failing CI on the normal mid-draft state would
@@ -238,24 +242,36 @@ def is_lesson(name):
 WATCH_RE = re.compile(r"^\*\*Watch the video:\*\*", re.MULTILINE)
 
 
+def readme_intro(text):
+    """The part of a README above its first `##` -- what Moodle shows as the description."""
+    return text.split("\n## ", 1)[0]
+
+
 def lesson_visuals(folder):
-    """Return (lessons_missing_a_visual, overview_lesson_missing_its_video).
+    """Return (lessons_missing_a_visual, overview_video_missing).
 
     Both are lists of file names, in lesson order. Structured rather than prose so that
-    course_stage.py can report the shortfall without parsing warning strings.
+    course_stage.py can report the shortfall without parsing warning strings. The second
+    holds README.md when neither the README nor lesson 1 carries the overview video.
     """
+    readme = folder / "README.md"
+    in_readme = readme.exists() and WATCH_RE.search(
+        readme_intro(strip_code(readme.read_text(encoding="utf-8")))) is not None
     lessons = sorted((p for p in folder.glob("*.md") if is_lesson(p.name)),
                      key=lambda p: p.name)
-    missing, overview = [], []
+    missing, in_lesson_1 = [], False
     for i, p in enumerate(lessons):
         text = strip_code(p.read_text(encoding="utf-8"))
         has_image = bool(image_links(text)[0])
         has_video = WATCH_RE.search(text) is not None
-        if i == 0:
-            if not has_video:
-                overview.append(p.name)
-        elif not (has_image or has_video):
+        if i == 0 and has_video:
+            in_lesson_1 = True
+        if not (has_image or has_video):
             missing.append(p.name)
+    overview = [] if (in_readme or in_lesson_1 or not lessons) else ["README.md"]
+    if overview and missing[:1] == [lessons[0].name]:
+        # One fix at a time, as before the video moved: placing it in lesson 1 clears both.
+        missing = missing[1:]
     return missing, overview
 
 
@@ -264,9 +280,9 @@ def check_visuals(folder, slug):
     missing, overview = lesson_visuals(folder)
     warnings = []
     for name in overview:
-        warnings.append(f"{slug}/{name}: lesson 1 is the course overview -- it should carry "
-                        f"the overview video ('**Watch the video:** ...'), scripted at "
-                        f"stage 3d")
+        warnings.append(f"{slug}/{name}: the course needs its overview video -- a "
+                        f"'**Watch the video:** ...' line above the first '##' heading, "
+                        f"scripted at stage 3d")
     for name in missing:
         warnings.append(f"{slug}/{name}: no visual yet -- every lesson needs a screenshot, "
                         f"diagram, image or video (see process/stages/03-draft.md)")

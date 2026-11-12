@@ -90,15 +90,17 @@ Format: a table with "Check", "Status", and "Finding" columns. Mark as ✓ (pass
     captured yet (that is stage 3e's business, not yours), but the link and its alt text
     must be there;
   - a video line, `**Watch the video:** …`.
-  **Lesson 1 is the course overview, so its visual is the overview video** — it carries the
-  `**Watch the video:**` line, and `NN-video-script.md` exists to script it. A later lesson
+  **The overview video belongs to the course:** the course's `README.md` carries its
+  `**Watch the video:**` line above the first `##` heading, and `NN-video-script.md`
+  exists to script it. A course drafted before 2026-10-26 may carry it in lesson 1
+  instead; accept that, and count it as lesson 1's visual. A later lesson
   may also have its own optional script, named `NN-lesson-<L>-video-script.md`.
 - **Check (substance — advisory):** a visual has to earn its place. Flag one that merely
   decorates: a screenshot of a screen the prose never refers to, a diagram restating a
   sentence, or alt text that does not describe the state shown. Where a lesson teaches a
   sequence of clicks, say whether the shot shows the step the learner will struggle with.
 - **Finding:** list each lesson and the visual it carries. As *blocking*, name any lesson
-  with none, and lesson 1 if it has no overview video. As *advisory*, name any visual that
+  with none, and the course if neither its README nor lesson 1 has the overview video. As *advisory*, name any visual that
   does not pull its weight.
 
 > A course should not reach you with a bare lesson — `course_stage.py` holds it at stage 3e

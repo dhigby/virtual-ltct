@@ -15,7 +15,7 @@ Use `modules/_template/05-video-script.md` as the file skeleton.
 ## Which script you are writing
 
 **`NN-video-script.md` is the overview video, and it is the one every course needs.** It is
-the companion to lesson 1: it orients a learner to the shape of the tool and the workflow —
+shown on the course's front page, before lesson 1: it orients a learner to the shape of the tool and the workflow —
 why this matters, how the pieces fit, what they are about to do — *before* they work through
 the hands-on lessons. It is not a read-aloud of the course. Structure it as one short
 segment per lesson if that helps the learner see the arc, as

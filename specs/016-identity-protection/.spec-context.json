@@ -366,5 +366,6 @@
       "note": "Built, merged (#84, #96) and deployed to ltuse.net as local_ltuse 2026100900 on 2026-10-05; instance checks V1-V18 and SC-007 not run",
       "kind": "verification"
     }
-  ]
+  ],
+  "telemetryInstanceId": "066e2227-8419-4fd1-8e03-668295a73029"
 }

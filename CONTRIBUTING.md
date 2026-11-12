@@ -84,9 +84,12 @@ Which one depends on what the learner needs:
 | **Image** | A photo of real hardware or a field setup makes the point. |
 | **Video** | You're orienting them to a whole workflow before they try it. |
 
-**Lesson 1 is the course overview, so its visual is the overview video.** While the video
-is still unrecorded, the lesson carries this line, and whoever publishes the course
-replaces it with the real link:
+**The overview video goes on the course's front page, not in lesson 1.** Put it in the
+course's `README.md`, just under the title and above the first `##` heading, so it
+appears on the course description in Moodle. Lesson 1 needs its own visual like any
+other lesson. (A course drafted before 26 October 2026 may keep it in lesson 1.) While
+the video is still unrecorded, the README carries this line, and whoever publishes
+the course replaces it with the real link:
 
 ```markdown
 **Watch the video:** _To be recorded at stage 8._

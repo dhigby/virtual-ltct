@@ -163,6 +163,10 @@ Note what is deliberately **not** on this list. The published competency site is
   - **Authors show and hide their pilot.**
   - **Authors enrol trial students by exact email address**, on a local_ltuse page that acts only in Pilots courses and only through the manual method, so the trial stays out of the delivery reports. This is a narrow exception to the 2026-10-03 rule that ALTCs alone add learners. It does not use core's enrol screen, which searches every user on the site, and it never lists or suggests an account.
   - **Account creation stays with the site team.** A trial student with no account is created first, with no course.
+- **2026-10-26 — The overview video belongs to the course, not to lesson 1.** Until now the rule read "lesson 1 is the course overview, so its visual is the overview video", while every course built lesson 1 as a full lesson that opened with the video. Doug decided:
+  - **The video is on the course's front page.** It goes in the course's `README.md` above its first `##` heading, which the publisher sends to Moodle as the course description. It gives a learner the overview and what to expect, and lets someone see a course isn't for them before they start it. A separate intro module was rejected, because it would oblige more content when the video should be the intro's only content.
+  - **Nothing in flight changes.** A course drafted before this decision may keep the video in lesson 1: the checks accept it there, and the publisher copies it to the course description. Video scripts are unchanged, because the video's purpose is unchanged.
+  - **The catalogue shows it too.** When the public competency site lists courses (spec 017), each entry shows the course's overview video.
 
 ## Open questions
 

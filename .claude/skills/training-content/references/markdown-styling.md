@@ -77,7 +77,8 @@ under the same rules; don't use a ` ```mermaid ` fence, which has no renderer he
 **Watch the video:** _To be recorded at stage 8._
 ```
 
-Lesson 1 is the course overview, so its visual is the overview video.
+The course overview video goes in the course's `README.md`, above its first `##`
+heading, not in lesson 1; lesson 1 needs its own visual like any other lesson.
 
 ## Callout patterns
 
@@ -164,5 +165,5 @@ typography, color coding by content type, and responsive layout.
 - [ ] `---` (if used) only between major phases
 - [ ] No `[bracketed]` placeholder text left in final output
 - [ ] Concrete examples in the Content section, ending with Key Takeaways
-- [ ] At least one visual — screenshot, diagram, image or video (lesson 1: the overview video)
+- [ ] At least one visual — screenshot, diagram, image or video (the overview video is in the README, not here)
 - [ ] No "For Mentors" section in the lesson — that content goes in `NN-mentor-guide.md`

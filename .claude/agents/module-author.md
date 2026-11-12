@@ -69,8 +69,11 @@ different instructional style.
     **not** use a ` ```mermaid ` fence — no mkdocs config in this repo registers one, so
     it would publish as a block of code;
   - a **video**, written as `**Watch the video:** _To be recorded at stage 8._` until the
-    recording exists. **Lesson 1 is the course overview, so its visual is the overview
-    video** — always give lesson 1 that line; `video-script-writer` scripts it at 3d.
+    recording exists. **The overview video belongs to the course, not to lesson 1:**
+    put its line in the course's `README.md`, above the first `##` heading, and give
+    lesson 1 its own visual like any other lesson; `video-script-writer` scripts the
+    overview at 3d. If lesson 1 of a course you are revising already carries the
+    overview video, leave it there — that form still counts.
   A visual that merely decorates is worse than none: it costs reading time and teaches
   nothing. If a lesson genuinely has nothing worth showing, say so in your summary rather
   than padding it with a screenshot of a menu nobody needs.

@@ -108,8 +108,6 @@ At Third level Menda returns to **double guillemets** — `«` opens and `»` cl
 
 **Starting state:** Paratext's defaults. Run the Quotations check on all books before you change anything: it reports **"No errors found."**
 
-![The Quote marks tab for the Menda project, with Second level Opening set to › and Second level Closing set to ‹. The Example section at the bottom shows the marks in correct nested order.](assets/ss-05-menda-quote-marks.png)
-
 **Discovery prompts:**
 - Menda's text is full of dialogue, and the check at the defaults says "No errors found." Why isn't that good news? Which of Menda's quote marks appear anywhere in Paratext's default grid?
 - Why might it be confusing that the opening mark for Second level is the right-pointing single guillemet? What would happen if you entered it in the Closing field by mistake?
@@ -138,6 +136,8 @@ still set: a red **!** appears beside the field, its tooltip reads "Cannot be bl
 Continuer is specified.", and **OK** is disabled.
 
 Continuation: none. Apostrophe handling: not needed — Menda's Quote marks tab does not use U+2019, so no Word-medial punctuation setting is required.
+
+![The Quote marks tab for the Menda project. First level: Opening «, Quote Continuer *none*, Closing ». Second level: Opening ›, Quote Continuer *none*, Closing ‹. Third level: Opening «, Quote Continuer *none*, Closing ». The Continuer required at field is empty. In the Example section, › opens the inner quotation and ‹ closes it.](assets/ss-05-menda-quote-marks.png)
 
 **Quotation types tab:** unlike Tamba (Lesson 3), Menda needs **no customization at all** — leave
 it on **Use recommended settings**. Confirmed on a real Paratext 9.5 build: with the Quotation

@@ -183,7 +183,7 @@ A Paratext check (separate from the basic Quotation check) that verifies whether
 The second tab of the Quotation Rules dialog. Lists seven semantic speech categories (Normal, Quotation from another source, Self quote, Continued quotation, Potential, Indirect, Hypothetical). For each type you choose Use quote marks, Never use quote marks, or Quote marks are optional.
 
 **Real error**
-A check result where the translation text genuinely has a missing, extra, or wrong-level quotation mark. Fix by editing the verse directly.
+A check result where the translation text genuinely has a missing, extra, or wrong-level quotation mark. Fix by editing the verse directly. On a live project a real error goes back to the translation team, who decide the correction; it isn't yours to rewrite. In this course's practice projects you make the edit yourself.
 
 **Unicode code point**
 A unique number assigned to every character in the Unicode standard, written as U+ followed by four to six hex digits (e.g., U+00AB for «). Use the code point — not the visual appearance — to confirm that the correct character is entered in the Quote marks tab.

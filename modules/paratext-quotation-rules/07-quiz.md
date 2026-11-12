@@ -135,8 +135,8 @@ a straight `"` (U+0022). What do you do?
 
 **Question 14:** You have fixed every real error the check found in Matthew, but six results
 remain. All six read "Opening quote mark found without matching closing quote mark: “", each at a
-different verse, and the translation team confirms the marks in those verses are written the way
-they intend. What is your next step?
+different verse, and the translation team confirms the text in those verses, both its marks and
+its paragraphing, is as they intend. What is your next step?
 - A) Treat them as a configuration problem: find and adjust the setting
 - B) Classify them as Neither: leave all six and add a Project Note to each
 - C) Remove the flagged marks from those verses so that Matthew reaches zero

@@ -186,7 +186,7 @@ creates no apostrophe collision.
 - Waku's text is full of dialogue, its curly quotes look like the ones in Paratext's defaults, and the check at the defaults reports "No errors found." Does that mean the defaults are close enough? Compare the default grid with Waku's conventions level by level. Which level's marks match, which are swapped, and where in the default grid is the em dash?
 - Waku's First level has two opening marks. The Quote marks tab has one Opening cell per level. How does that one cell hold both?
 - Waku has no continuers at any level. What does that mean for the three continuer cells and for the **Continuer required at** list? Remember from Scenario B the order Paratext makes you do it in.
-- When the configured check reports a single result in one verse, which is more likely: a real error or a configuration problem? (Lesson 4, Exercise 4.1, step 6.)
+- When the configured check reports a single result in one verse, which is more likely: a real error or a configuration problem? (Lesson 4, Exercise 4.2, step 6.)
 - You can't read Waku. If a result points at an em dash, what can you check for yourself, and what do you take to the translation team?
 
 **Expected configuration:**
@@ -227,18 +227,24 @@ clear the list. Paratext won't accept an empty list while any continuer is still
 
 ![The Quotations check results panel for Waku across all books, showing a single result: MRK 2:11, Opening quote mark found without matching closing quote mark: —. Mark 2:11 is open in the text pane alongside.](assets/ss-05-waku-mrk-2-11.png)
 
-- Classify the result. It is a **real error** in the text, and the error is in the
-  paragraphing, not in the marks. An em-dash quote with no closing mark is normal in Waku,
-  because it ends at the end of its paragraph. The speech at 2:11 has no closing mark, and before
-  its paragraph ends, verse 12 has a second em dash that opens another speech. So the first
-  speech is still open when the second one starts. A paragraph break is missing between them.
-  Both em dashes are correct and stay.
+- Classify the result, starting with what you can see for yourself. Your configuration matches
+  Waku's conventions, and a single result in one verse points to the text rather than the
+  settings. In the text, the em-dash speech at 2:11 has no closing mark. That alone is normal in
+  Waku, because an em-dash quote may end at the end of its paragraph. But verse 12 has a second
+  em dash, and it comes before any new paragraph marker. So the first speech is still open when
+  the second one starts. You can see all of this from the tool and the markers, without reading
+  Waku.
+- List the possible explanations. There are three: a paragraph break is missing between the two
+  speeches; a closing `”` is missing from the first speech; or one of the em dashes shouldn't be
+  there. Any of the three would explain what you see, and you can't tell which it is in a language you
+  don't read.
+- Take the three explanations to the translation team and let them choose. In this practice
+  project, the team's answer is that both em dashes belong in the text and that a new paragraph
+  starts at verse 12. So the result is a **real error** in the text: a missing paragraph break.
 - Don't change the configuration to make the result go away, and don't delete either em dash.
   Removing `—` from the First level Opening cell would clear the result, and so would deleting
-  the dash. Both are wrong: `—` is a genuine Waku opening mark, and the dash belongs in the text.
-- Ask the translation team. You can't tell where a paragraph starts in a language you don't
-  read, so ask them whether a new paragraph starts between the two speeches, and where. In this
-  practice project, the team's answer is that a new paragraph starts at verse 12.
+  a dash. Both are wrong: `—` is an opening mark in Waku's conventions, and the team has
+  confirmed that both dashes belong in the text and that a new paragraph starts at verse 12.
 - Insert a `\p` paragraph marker there: in Mark 2, click immediately before the `\v 12` verse
   marker and type `\p`.
 
@@ -253,7 +259,7 @@ clear the list. Paratext won't accept an empty list while any continuer is still
 - Every project starts from Paratext's defaults, and the defaults can mislead in either direction: 264 results for Velna, "No errors found" for Menda and Waku. Correct every cell to the conventions, including the ones that must become *none*, before you trust any result.
 - Always verify entered characters with **Alt+X** in each cell (then **Alt+X** again to switch it back) — on unfamiliar languages it is easy to confuse visually similar characters, and neither the cell nor the Example section at the bottom of the Quote marks tab can tell them apart, because both show only shapes. Use the Example section to check that the marks sit together in the right order.
 - A level can have more than one opening mark: Waku's First level opens with `“` or, as an alternate, `—`, and its Opening cell shows `“|—`.
-- Once the configuration is right, read what is left. Some results survive a correct configuration, like Velna's apostrophes, and you verify and document them. Others are real errors in the text, like the missing paragraph break at Waku's Mark 2:11. The translation team decides where the paragraph starts, and you insert the `\p` there. Only after that does "No errors found." mean the text is clean.
+- Once the configuration is right, read what is left. Some results survive a correct configuration, like Velna's apostrophes, and you verify and document them. Others point to a real error in the text, like the result at Waku's Mark 2:11. You can see from the markers that one speech is still open when the next begins, but the translation team says which explanation is right. Here it is a missing paragraph break at verse 12, and you insert the `\p` there. Only after that does "No errors found." mean the text is clean.
 
 ## Scenario check-your-understanding
 
@@ -265,7 +271,7 @@ clear the list. Paratext won't accept an empty list while any continuer is still
 
 1. The characters were entered in the wrong fields — the left-pointing guillemet (`‹`, U+2039) is in the Opening field when it should be in the Closing field, and vice versa. Swap them: Opening should be `›` (right-pointing, U+203A), Closing should be `‹` (left-pointing, U+2039). Confirm by checking the Example section — the correct order shows `›` as the inner opening and `‹` as the inner closing.
 2. The check will fire on every Second level opening mark (treating the right-pointing guillemet as an unexpected closing mark) and on every Second level closing mark (treating the left-pointing guillemet as an unexpected opening mark). The entire Second level configuration will appear as errors.
-3. It is a **real error** in the text, a single result in one verse. The error is a missing paragraph break, not a wrong mark. An em-dash quote may end at the end of its paragraph with no closing mark. The speech at 2:11 has none, and before its paragraph ends, verse 12 has a second em dash that opens another speech, so Paratext finds the first speech still open. Both em dashes are correct. Don't remove `—` from the First level Opening cell, and don't delete either dash. Either would make the result disappear, and both are wrong. You can't tell where a paragraph starts in a language you don't read, so ask the translation team whether a new paragraph starts there, and where. Insert a `\p` paragraph marker where they say: in the practice project, by typing `\p` immediately before the `\v 12` verse marker. Then close the results panel and run the check again (not **Rerun** on the open panel). You're finished when the check on all books reports "No errors found." That message means more than the one at the defaults because the configured check has shown it recognizes Waku's marks: it found the missing break. The check at the defaults reported "No errors found." with that same problem in the text, so its clean result told you nothing.
+3. The configuration matches the conventions and this is a single result in one verse, so it points to the text rather than the settings. An em-dash quote may end at the end of its paragraph with no closing mark. The speech at 2:11 has none, and before its paragraph ends, verse 12 has a second em dash that opens another speech, so Paratext finds the first speech still open. That much you can see from the tool and the markers. What you can't tell, in a language you don't read, is the cause: a missing paragraph break, a missing closing `”`, or an em dash that shouldn't be there. Take those three explanations to the translation team. In the practice project, the team's answer is that both em dashes belong in the text and a new paragraph starts at verse 12, so it is a **real error** in the text: a missing paragraph break. Don't remove `—` from the First level Opening cell, and don't delete either dash. Either would make the result disappear, and both are wrong: `—` is an opening mark in Waku's conventions, and the team has confirmed the dashes. Insert a `\p` paragraph marker where the team says: in the practice project, by typing `\p` immediately before the `\v 12` verse marker. Then close the results panel and run the check again (not **Rerun** on the open panel). You're finished when the check on all books reports "No errors found." That message means more than the one at the defaults because the configured check has shown it recognizes Waku's marks: it found the missing break. The check at the defaults reported "No errors found." with that same problem in the text, so its clean result told you nothing.
 
 ---
 

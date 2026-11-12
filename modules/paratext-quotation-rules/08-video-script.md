@@ -58,7 +58,7 @@ Then you'll set them up yourself."
 | --- | --- |
 | Live navigation: click the project menu **☰ > Project settings > Quotation Rules**. (State shown in `assets/ss-02-project-menu-quotation-rules.png`.) Land on the **Quote marks** tab, still showing the defaults. | "Here's input one. Project menu, Project settings, Quotation Rules, and the Quote marks tab. This is where you tell Paratext the characters." |
 | Slow pan across the three-by-three grid, still at the defaults. Highlight the three rows, then the three columns. (Layout in `assets/ss-02-quote-marks-tab-defaults.png`.) | "Three rows are your nesting levels: first-level speech, a quote inside a quote, and a quote inside that. Three columns: the Opening mark, the Quote Continuer at a new paragraph, and the Closing mark. The middle column answers one question: when a speech runs across paragraphs, does this language repeat a mark at the head of each new paragraph? Your job here isn't to fill in a blank grid. You compare every cell with the team's conventions and change the ones that don't match. For Tamba, the whole first level already matches. Tamba repeats its opening mark at each new paragraph, and so does the default. But Tamba repeats nothing at the second and third levels, and the defaults do, so those two continuer cells have to change." |
-| Click the dropdown arrow (▼) on the Second level **Quote Continuer at new paragraph** cell so the list appears, and select *none*. Repeat for Third level. Then show the **Example** preview at the bottom reading `“…‘…’…”`. | "Always choose characters from the dropdown on each cell, never by typing. That's how you know you picked U+201C and not a straight keyboard quote. Choosing *none* counts as a change too. A cell you didn't look at is still Paratext's choice, not the team's. Each time, glance down at the Example preview. If the sample sentence shows the marks you expect, you got it right. It's your best safety check." |
+| Click the dropdown arrow (▼) on the Second level **Quote Continuer at new paragraph** cell so the list appears, and select *none*. Hold a beat on the Third level continuer cell, which Paratext sets to *none* at the same time; don't set it separately. Click into the First level **Opening** cell and press **Alt+X** so the cell shows its Unicode code, then press **Alt+X** again to switch it back to `“`. Then show the **Example** preview at the bottom reading `“…‘…’…”`. | "Choose characters from the dropdown on each cell rather than typing them. The exceptions are the Continuer required at list, and an alternate mark typed after a vertical line, which you'll meet in the Waku scenario. Choosing *none* counts as a change too, and Paratext sets the Third level continuer to *none* along with the Second. A cell you didn't look at is still Paratext's choice, not the team's. The dropdown and the Example preview show only shapes, so neither can tell look-alike characters apart. To confirm a character, click in the cell, press Alt+X to see its code, then Alt+X again to switch it back. Use the Example to check that the marks sit together in the order you expect." |
 | Click into the **Continuer required at** field and replace `p p/q1 b/q1` with `p p/q1 m/q1 pi b/q1`. Click **OK**. | "This small field matters far more than its size suggests. The continuer cell tells the check *which* character continues a speech. This list tells it *where* to expect that character, by naming the paragraph markers. You build the list by looking at where the project's text actually carries the continuer. Lesson 2 shows you how." |
 | Re-run the Quotations check on `TAMBA`, all NT books with **Choose Books**. The panel reads *"No errors found"*. | "Same project, same text, nothing typed into Scripture, and the five John 17 results are gone. One more thing, though: a clean check on its own doesn't prove the settings are right. The check can only report what the current text happens to trip over. Adding that one `pi` entry to the list is enough on its own to clear all five, even with the second- and third-level continuer cells still on Paratext's defaults, which are wrong for Tamba. The check would have gone quiet with them still wrong. Set what the team's conventions say, and don't stop just because the list is empty." |
 | Brief cut back to the `RUNDA` results panel at the defaults (`assets/ss-02-runda-default-results.png`), holding on the 1110 count and the repeated rows reading *"Closing quote [ ’ U+2019 ] found as a word medial character. Sometimes caused when a closing quote is incorrectly used as an apostrophe"*. Optional lower-third: **767 of 1110 — one message.** Then cut to the Runda Quote marks tab after correction, showing guillemets and a filled First level Continuer cell. (`assets/ss-02-runda-quote-marks.png`.) | "Different language, same grid. Remember Runda's flood at the defaults: 1110 results. Read the messages, not the count. 767 of them are this one message, a closing quote found as a word-medial character. In this text the same character, U+2019, is used for more than quotation marks, so most of the flood is that one message, repeated. On the tab itself, Runda uses French guillemets, and like Tamba it repeats its opening mark at each new paragraph, so its continuer cell holds « instead of “. None of those were in the defaults either. The tab doesn't change from language to language. Only the characters do." |
@@ -98,17 +98,18 @@ Then you'll set them up yourself."
 
 > ~45 seconds.
 
-**On-screen:** Return to the clean, zero-results panel from Segment 4. End on a simple
-closing slide: **Lessons 1-4 → Scenario Bank → submit to your mentor.**
+**On-screen:** Return to the final results panel from Segment 4: one result left, the
+Romans 1:1 apostrophe (`assets/ss-04-final-results.png`). End on a simple closing slide:
+**Lessons 1-4 → Scenario Bank → submit to your mentor.**
 
 **Voiceover:** "That's the whole process. Compare the defaults with the team's conventions,
 correct the marks, set the rules, run the check, and triage every result. Clear it to zero
 where the language allows, and document what's left in a Project Note where it doesn't.
 You've seen it, now build it. Open Lesson 1 and work through the four hands-on lessons on
 the practice projects at your own pace. Each one has discovery prompts and an answer key to
-check yourself against. Then take on the scenario bank. When you've configured all three
-languages, send your configurations and answers to your mentor for review. See you in
-Paratext."
+check yourself against. Then take on the scenario bank. When you've configured Velna and
+Menda, and Waku if you take on the stretch, send your configurations and answers to your
+mentor for review. See you in Paratext."
 
 ## Notes for the presenter
 
@@ -145,10 +146,14 @@ Paratext."
   *"Closing quote [ ’ U+2019 ] found as a word medial character…"*. In the voiceover,
   paraphrase it ("a closing quote found as a word-medial character") rather than reading the
   brackets and code point aloud.
-- **Live-demo caution:** always drive character entry with the dropdown (▼), never the
-  keyboard, on camera — it models the habit the course insists on and avoids accidentally
-  entering a straight quote. The one thing that is typed is the **Continuer required at**
-  list; type it exactly as given, with single spaces.
+- **Live-demo caution:** drive character entry with the dropdown (▼) on camera — it models
+  the habit the course teaches and avoids accidentally entering a straight quote. Two
+  things are typed. One is the **Continuer required at** list; type it exactly as given,
+  with single spaces. The other is an alternate mark, typed after a vertical line `|` in
+  the cell, as Scenario C does for Waku's First level Opening cell (`“|—`); this video
+  names it but doesn't demonstrate it. In the Segment 2 **Alt+X** demo, don't skip the
+  second press: if you click OK while the cell shows the code, Paratext saves that text as
+  the quote mark.
 - **Fresh runs only.** To show a changed result, close the results panel and run the check
   again from **Run basic checks**. **Rerun** on an open panel keeps showing the old results.
 - **Pronunciation / naming:** Tamba, Runda, Velna, Menda and Waku are course names for

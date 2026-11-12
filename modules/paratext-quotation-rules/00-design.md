@@ -4,8 +4,8 @@
 > drafted and Cypher-delivered *before* the production pipeline existed. It exists to bring
 > the course into the pipeline (opt into CI, document objectives ⇄ assessment alignment). The
 > content already exists in the numbered lesson files; this doc records the design those
-> lessons *actually* implement. Design approval (stage 2) is complete; it has **not** yet
-> been through SME fact-check (stage 5).
+> lessons *actually* implement. Design approval (stage 2) is complete; SME fact-check
+> (stage 5) is **in progress** and has **not** yet passed (as of 2026-11-11).
 
 ## Course overview
 
@@ -14,7 +14,7 @@
 | **Title** | Configuring Quotation Rules in Paratext |
 | **Competencies addressed** | Translation Tools |
 | **Target outcome level** | 2 - With Assistance |
-| **SME(s) consulted** | _(pending — retro-fit; SME fact-check not yet run)_ |
+| **SME(s) consulted** | Jenni Beadle — retro-fit, so no design-stage SME interview; SME fact-check (stage 5) in progress since early October 2026, not yet signed off as of 2026-11-11 |
 | **Design status** | Approved by Jenni Beadle on 2026-09-28 |
 
 Source component: `competencies/translation-tools.md` §2.0 Translation Tools —

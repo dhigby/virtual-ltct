@@ -53,7 +53,7 @@ always appear, never appear, or is either acceptable?
 
 Navigate to: ☰ > Project settings > Quotation Rules > **Quotation types** tab.
 
-![The Quotation types tab showing the seven type rows, each with a drop-down selector, and the Recommended/Custom settings controls at the top.](assets/ss-03-quotation-types-tab.png)
+![The Quotation types tab of the Quotation Rules dialog for the TAMBA project. The Enable the Quotation types check in Run basic checks checkbox is not ticked. Use recommended settings is selected and Custom settings is not. The seven type rows, each with a count in brackets and a dimmed drop-down, read: Normal (8229), Use quote marks; Quotation from another source (597), Use quote marks; Self quote (114), Use quote marks; Continued quotation (5564), Never use quote marks; Potential (2076), Quote marks are optional; Indirect (538), Quote marks are optional; Hypothetical (511), Never use quote marks. The help pane at the bottom begins: Only a project administrator can enable this tab.](assets/ss-03-quotation-types-tab.png)
 
 ### Enabling the check (administrator only)
 

@@ -55,7 +55,9 @@ disappear — that corrupts the translation to quiet a tool.*
 After configuration you will typically have two kinds of results:
 
 1. **Real errors** — a mark is genuinely missing, extra, or at the wrong level. Fix these in
-   the text.
+   the text. On a live project a real error goes back to the translation team, who decide the
+   correction; it isn't yours to rewrite. In this course's practice projects you make the edit
+   yourself.
 2. **Configuration problems** — the check flags something that reveals a gap in your inventory
    or rules. Fix these by refining the configuration, not by editing the text.
 
@@ -180,7 +182,8 @@ it means nothing left in the list still needs your action.
 2. Work through the results top-to-bottom.
 3. For each result: open the verse, classify it, take the appropriate action.
    - **Real error:** edit the verse text to fix the mark, then close the results panel and run
-     the check again.
+     the check again. (You make the edit yourself here because this is a practice project; on
+     a live project it goes back to the translation team.)
    - **Configuration problem:** adjust the Quote marks tab or Quotation types tab, then close
      the results panel and run the check again.
      Do not edit the text to make marks disappear — fix the configuration instead.

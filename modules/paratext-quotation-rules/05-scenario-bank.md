@@ -206,7 +206,10 @@ To enter both marks in the First level Opening cell:
 2. Type a vertical line `|` straight after it.
 3. Type `2014`, then press **Alt+X** to turn it into the em dash `—`.
 
-The vertical line separates the main mark from the alternate.
+The vertical line separates the main mark from the alternate. The em dash is in the cell's
+drop-down list too, but you can choose only one item from the list, so it can place only one
+character in a cell. When a cell holds two marks separated by `|`, the second mark cannot be
+placed from the drop-down and has to be typed.
 
 **What changes from the defaults:** almost every cell. At First level, the Opening keeps `“` but
 gains `—` as an alternate (`“` → `“|—`), the continuer is cleared from `“` to *none*, and the

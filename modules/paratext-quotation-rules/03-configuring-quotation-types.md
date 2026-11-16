@@ -58,8 +58,8 @@ Navigate to: ☰ > Project settings > Quotation Rules > **Quotation types** tab.
 ### Enabling the check (administrator only)
 
 At the top of the tab is the checkbox **Enable the Quotation types check in Run basic
-checks**. Only a project administrator can check this box — the status bar confirms: "Only a
-project administrator can enable this tab." Any user can configure the radio buttons and
+checks**. Only a project administrator can check this box — the yellow help pane at the bottom
+of the dialog confirms: "Only a project administrator can enable this tab." Any user can configure the radio buttons and
 drop-downs below; it is only the enable checkbox that requires administrator access. You are an
 administrator of every practice project in this course, so you tick it yourself in Exercise
 3.2.

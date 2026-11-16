@@ -141,7 +141,7 @@ Keep these reference tables open as you work through Lessons 1–4. The scenario
 | `’` | U+2019 | Right single quotation mark | Dropdown (▼) in Quote marks tab, or paste from Quick Reference |
 | `‹` | U+2039 | Single left-pointing angle quotation mark | Dropdown (▼) in Quote marks tab, or paste from Quick Reference |
 | `›` | U+203A | Single right-pointing angle quotation mark | Dropdown (▼) in Quote marks tab, or paste from Quick Reference |
-| `—` | U+2014 | Em dash | Dropdown (▼) in Quote marks tab, or Alt+0151 on Windows |
+| `—` | U+2014 | Em dash | Dropdown (▼) in Quote marks tab, or type `2014` then press Alt+X |
 | `"` | U+0022 | Quotation mark (straight) | Standard keyboard — avoid using as a quote mark |
 | `'` | U+0027 | Apostrophe (straight) | Standard keyboard — avoid using as a quote mark |
 
@@ -158,8 +158,8 @@ A check result caused by a gap or error in the Quote marks tab or Quotation type
 **First level / Second level / Third level**
 The nesting depth of a quotation. First level is primary speech; Second level is speech embedded within a First level quotation; Third level is speech embedded within a Second level quotation. Each level has its own Opening, Quote Continuer at new paragraph, and Closing characters on the Quote marks tab.
 
-**Label tooltip / status bar**
-In the Quote marks tab, the status bar at the bottom of the dialog shows a description when you hover over any row or column label (such as “Opening” or “Quotes within Quotes (Second level)”). Use this to understand what a field does. To verify the actual character in a cell, click in the cell and press **Alt+X** to show its Unicode code, then press **Alt+X** again to switch it back. This is the reliable way: look-alike characters can't be told apart by their shape. Don't skip the second press: if you click OK while the cell shows the code (for example `203A`), Paratext saves that text as the quote mark. To check the characters in the text itself, use the **Punctuation inventory** or **Characters inventory**: the upper pane lists each character with its Unicode value in a column of its own, always visible. The Example preview at the bottom of the dialog shows how the marks sit together, but only as shapes, so it can't confirm which character a cell holds.
+**Label tooltip / help pane**
+In the Quote marks tab, the yellow help pane at the bottom of the dialog shows a description when you hover over any row or column label (such as “Opening” or “Quotes within Quotes (Second level)”). Use this to understand what a field does. To verify the actual character in a cell, click in the cell and press **Alt+X** to show its Unicode code, then press **Alt+X** again to switch it back. This is the reliable way: look-alike characters can't be told apart by their shape. Don't skip the second press: if you click OK while the cell shows the code (for example `203A`), Paratext saves that text as the quote mark. To check the characters in the text itself, use the **Punctuation inventory** or **Characters inventory**: the upper pane lists each character with its Unicode value in a column of its own, always visible. The Example preview at the bottom of the dialog shows how the marks sit together, but only as shapes, so it can't confirm which character a cell holds.
 
 **Opening mark / Closing mark**
 The characters that begin and end a quotation at a given level. These are entered per-level in the Quote marks tab.

@@ -89,7 +89,7 @@ Second level until the First level is filled in.
 Below the grid the tab has a few additional settings — checkboxes such as **Closing quotes
 close** and **List all quote marks...**, and one text field, **Continuer required at**, which
 matters far more than its size suggests. Hover over any label to see its description in the
-status bar at the bottom of the dialog.
+yellow help pane at the bottom of the dialog.
 
 ### Continuer required at — the half of the continuer people miss
 
@@ -303,7 +303,7 @@ stop when the result list empties.
 configures, is not enabled yet and adds its own results once it is.)
 
 **TIP** Hover over any column or row label ("Opening", "Closing", "Quotes (First level)",
-etc.) to see a description of that field in the status bar at the bottom of the dialog.
+etc.) to see a description of that field in the yellow help pane at the bottom of the dialog.
 
 ### Exercise 2.2 — Correct the defaults for Runda
 
@@ -472,8 +472,24 @@ word-final possessive, not an actual unclosed quotation), and move on — there 
 will make the result disappear. When a word-final apostrophe drags in a second result at the
 start of the enclosing speech, check that the speech really does close where it should, then
 set both results aside together.
-Document this for whoever inherits the project, so a future checker doesn't waste time hunting
-for a fix that doesn't exist.
+
+**When you can't read the text:** Runda is the exception, because its text is English and you
+can see that *don’t* is a contraction. On a real project you usually can't read the words, so
+verify by position and structure instead:
+
+- **Between two letters:** a `’` with a letter on each side is word-medial. You can see that
+  without reading the language, and the check's own message says so: "found as a word medial
+  character".
+- **At the end of a word:** you can't judge this one by eye; it could be an apostrophe or a
+  closing quote mark. So make the same check as for the second result above: does the enclosing
+  speech open and close where the project's conventions say it should, with its opening mark
+  before this `’` and its closing mark after it, each at the right level? If the speech is
+  accounted for without this `’`, it is not a quote mark doing a quote mark's job.
+- **Still not accounted for:** take it to the translation team as a question. You don't decide
+  it.
+
+Either way, document the known false positives for whoever inherits the project, so a future
+checker doesn't waste time hunting for a fix that doesn't exist.
 
 **The real fix belongs to the team:** there is one way to make the collision go away —
 the ⚠ Paratext shows in both dialogs when `’` is in Word-medial punctuation ("Unique characters

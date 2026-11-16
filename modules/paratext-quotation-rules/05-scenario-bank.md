@@ -84,7 +84,7 @@ Indirect, Hypothetical — stays at its recommended default.
 **Check your work:**
 - After configuration, run the check on all books again and compare with the 264 you started from. Read the messages, not just the count: which kinds of result has your configuration cleared, and which are left?
 - Run the check on Luke. Verify that `«...»` speech boundaries are recognized correctly. Don't expect narrative passages to be free of results: Velna's text uses `’` for more than its Second level closing mark. It is also a glottal stop (at Matthew 1:1, Luke 1:1 and John 1:1, for example, though not at Mark 1:1) and appears in contractions (Matthew 1:6 and 1:20, for example), in narrative as well as in speech.
-- Confirm that the `’` used as a glottal stop or in a contraction is still flagged even after configuring Word-medial punctuation — that's the expected, confirmed outcome for this collision, not a sign of a missing setting. Verify each is a genuine apostrophe and move on.
+- Confirm that the `’` used as a glottal stop or in a contraction is still flagged even after configuring Word-medial punctuation — that's the expected, confirmed outcome for this collision, not a sign of a missing setting. You can't read Velna, so verify each one by position and structure, as in [Lesson 2, Exercise 2.3](02-setting-up-quote-marks.md): a `’` between two letters is word-medial; for a `’` at the end of a word, check that the enclosing speech opens and closes where Velna's conventions say it should without it. Then move on. On a live project, any `’` you still couldn't account for would go to the translation team as a question; you don't decide it.
 - Confirm the First level Quote Continuer (`«`) at the start of continued paragraphs is not flagged as an unexpected mark.
 - Enable the Quotation types check and run it on Matthew, Luke, and John. It should return clean once Continued quotation is set to Use quote marks — this check is separate from the apostrophe results above, which live in the Quotations check and remain regardless.
 
@@ -287,7 +287,7 @@ The Quotation check is one of the **Basic Checks** in Paratext 9.5 (run via **�
 The recommended sequence for a book heading toward CC:
 
 1. Run all Basic Checks (Quotations, Characters, Markers, Footnotes, and others).
-2. Clear each check to zero actionable results by fixing text errors and refining the configuration, verifying that every remaining result is a known false positive.
+2. Clear each check to zero actionable results by fixing text errors and refining the configuration, verifying that every remaining result is a known false positive or has been raised with the translation team.
 3. Where a residual result cannot be cleared by configuration (see Scenario A), document it with a Project Note so the consultant can verify it quickly.
 
 The Quotation check does not need to be perfect before work continues, but it must be clean before CC begins.
@@ -311,7 +311,7 @@ Open **☰ > Project settings > Quotation Rules** on the destination project. At
 A project with correctly configured Quotation Rules will:
 
 - Return no results in narrative passages with no speech, except where the text uses a quote-mark character for another purpose as well (as Velna's text uses `’` for a glottal stop and in contractions); those are the results covered by the next point.
-- Have every result on an apostrophe or possessive verified as a genuine apostrophe and documented as a known false positive (where `’` is also a quote mark, no setting removes these).
+- Have every result on an apostrophe or possessive verified as a genuine apostrophe and documented as a known false positive, or raised with the translation team (where `’` is also a quote mark, no setting removes these).
 - Flag only genuine mismatches — missing marks, extra marks, wrong-level marks — in speech sections.
 - Have any residual results (where the same character serves two linguistic purposes and configuration cannot distinguish them) documented in Project Notes (☰ > Insert > Project note...) so a consultant reviewer can verify them without asking for clarification.
 

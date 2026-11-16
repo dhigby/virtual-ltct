@@ -1006,7 +1006,7 @@ Second level until the First level is filled in.</p>
 <p>Below the grid the tab has a few additional settings — checkboxes such as <strong>Closing quotes
 close</strong> and <strong>List all quote marks...</strong>, and one text field, <strong>Continuer required at</strong>, which
 matters far more than its size suggests. Hover over any label to see its description in the
-status bar at the bottom of the dialog.</p>
+yellow help pane at the bottom of the dialog.</p>
 <h3 id="continuer-required-at-the-half-of-the-continuer-people-miss">Continuer required at — the half of the continuer people miss<a class="headerlink" href="#continuer-required-at-the-half-of-the-continuer-people-miss" title="Permanent link">&para;</a></h3>
 <p>The continuer cell in the grid tells Paratext <em>which character</em> continues a speech. It does
 <strong>not</strong> tell Paratext <em>where</em> to expect that character. Without that second piece, the check
@@ -1244,7 +1244,7 @@ stop when the result list empties.</p>
 <p>(This is only the Quotations check. The separate Quotation types check, which Lesson 3
 configures, is not enabled yet and adds its own results once it is.)</p>
 <p><strong>TIP</strong> Hover over any column or row label ("Opening", "Closing", "Quotes (First level)",
-etc.) to see a description of that field in the status bar at the bottom of the dialog.</p>
+etc.) to see a description of that field in the yellow help pane at the bottom of the dialog.</p>
 <h3 id="exercise-22-correct-the-defaults-for-runda">Exercise 2.2 — Correct the defaults for Runda<a class="headerlink" href="#exercise-22-correct-the-defaults-for-runda" title="Permanent link">&para;</a></h3>
 <p><strong>First, see what the defaults do.</strong> Open the <code>RUNDA</code> project. Like every practice project, it
 starts with Paratext's defaults. Run the Quotation check (☰ &gt; Tools &gt; Run basic checks,
@@ -1429,9 +1429,24 @@ Open the verse, confirm the flagged character really is an apostrophe (word-medi
 word-final possessive, not an actual unclosed quotation), and move on — there is no setting that
 will make the result disappear. When a word-final apostrophe drags in a second result at the
 start of the enclosing speech, check that the speech really does close where it should, then
-set both results aside together.
-Document this for whoever inherits the project, so a future checker doesn't waste time hunting
-for a fix that doesn't exist.</p>
+set both results aside together.</p>
+<p><strong>When you can't read the text:</strong> Runda is the exception, because its text is English and you
+can see that <em>don’t</em> is a contraction. On a real project you usually can't read the words, so
+verify by position and structure instead:</p>
+<ul>
+<li><strong>Between two letters:</strong> a <code>’</code> with a letter on each side is word-medial. You can see that
+  without reading the language, and the check's own message says so: "found as a word medial
+  character".</li>
+<li><strong>At the end of a word:</strong> you can't judge this one by eye; it could be an apostrophe or a
+  closing quote mark. So make the same check as for the second result above: does the enclosing
+  speech open and close where the project's conventions say it should, with its opening mark
+  before this <code>’</code> and its closing mark after it, each at the right level? If the speech is
+  accounted for without this <code>’</code>, it is not a quote mark doing a quote mark's job.</li>
+<li><strong>Still not accounted for:</strong> take it to the translation team as a question. You don't decide
+  it.</li>
+</ul>
+<p>Either way, document the known false positives for whoever inherits the project, so a future
+checker doesn't waste time hunting for a fix that doesn't exist.</p>
 <p><strong>The real fix belongs to the team:</strong> there is one way to make the collision go away —
 the ⚠ Paratext shows in both dialogs when <code>’</code> is in Word-medial punctuation ("Unique characters
 are recommended") is pointing at it. A different, unique character for the apostrophe (or, less

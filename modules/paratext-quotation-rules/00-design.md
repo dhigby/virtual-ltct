@@ -4,8 +4,8 @@
 > drafted and Cypher-delivered *before* the production pipeline existed. It exists to bring
 > the course into the pipeline (opt into CI, document objectives ⇄ assessment alignment). The
 > content already exists in the numbered lesson files; this doc records the design those
-> lessons *actually* implement. Design approval (stage 2) is complete; it has **not** yet
-> been through SME fact-check (stage 5).
+> lessons *actually* implement. Design approval (stage 2) is complete; SME fact-check
+> (stage 5) is **in progress** and has **not** yet passed (as of 2026-11-11).
 
 ## Course overview
 
@@ -14,7 +14,7 @@
 | **Title** | Configuring Quotation Rules in Paratext |
 | **Competencies addressed** | Translation Tools |
 | **Target outcome level** | 2 - With Assistance |
-| **SME(s) consulted** | _(pending — retro-fit; SME fact-check not yet run)_ |
+| **SME(s) consulted** | Jenni Beadle — retro-fit, so no design-stage SME interview; SME fact-check (stage 5) in progress since early October 2026, not yet signed off as of 2026-11-11 |
 | **Design status** | Approved by Jenni Beadle on 2026-09-28 |
 
 Source component: `competencies/translation-tools.md` §2.0 Translation Tools —
@@ -55,7 +55,7 @@ One row per numbered lesson file. Each stays ≤ 90 minutes.
 A 20-question quiz (80% = 16/20 to pass) covers objectives 1–7, grouped into five sections
 matching the five lessons — a mix of recall, scenario application, and true/false. The
 scenario bank (three independent language scenarios, ~30 minutes each) exercises objective 7
-as applied practice; Scenario C (Waku em-dash) is an optional stretch. Each lesson also
+as applied practice; Scenario C (Waku) is an optional stretch. Each lesson also
 carries a short set of formative "check your understanding" questions inline; the graded
 assessment is the consolidated quiz.
 
@@ -77,7 +77,7 @@ following field knowledge (to be confirmed at SME fact-check, stage 5):_
   field on the same tab. With the field empty, every continuer is read as a fresh opening mark
   that is never closed, and a long speech such as the Sermon on the Mount produces an unclosed
   quote result at every paragraph — confirmed against Paratext 9.5 (K. Nicholas, 2026-09-03).
-  The shipped Tamba Phase B project carries `p p/q1 m/q1 s1/pi pi/pi b/q1`; Lesson 2 has the
+  The shipped Tamba Phase B project carries `p p/q1 m/q1 pi b/q1`; Lesson 2 has the
   learner enter that value on Phase A so Lesson 3's expected results are reproducible. The
   list is derived from where the project's text actually places continuers, not from a fixed
   catalogue: Runda quotes poetry inside speech without repeating `«` on the `\q1` line, so its
@@ -89,16 +89,15 @@ following field knowledge (to be confirmed at SME fact-check, stage 5):_
   Continued-quotation claim is only testable once the types check is enabled.
 - The **Quotation types** check is a separate, administrator-enabled check that only checks
   first-level quotes in non-Deuterocanonical books.
-- Same-character open/close (em-dash conventions like Waku's) cannot always be
-  fully resolved by configuration; residual results must be documented in Project Notes for
-  the consultant rather than edited away.
 - The practice projects (TAMBA, RUNDA, VELNA, MENDA, Waku) start at Paratext 9.5's
   **default** Quotation Rules, not blank — a new project saves these defaults when it is
   created (verified; the basis of the 2026-10-12/13 rewrite). Quote marks (Opening /
   Continuer / Closing): First level `“ “ ”`, Second level `‘ ‘ ’`, Third level `“ “ ”`;
   Continuer required at `p p/q1 b/q1`; Quotation types at **Use recommended settings**.
   TAMBAB (Phase B) instead starts with Tamba's configuration. Two related behaviors:
-  **Copy quote mark settings...** does not copy the Continuer required at list, and Paratext
+  **Copy quote mark settings...** copies the whole Quote marks tab, Continuer required at list
+  included, though the Example box may still show the old project's marks afterwards
+  (confirmed against Paratext 9.5, K. Nicholas, 2026-10-22); and Paratext
   refuses an empty Continuer required at list while any continuer is set ("Cannot be blank
   if any Quote Continuer is specified.").
 - The practice projects use real languages, adapted for the course (decided 2026-10-09,

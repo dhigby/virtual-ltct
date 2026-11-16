@@ -107,7 +107,7 @@ Lessons 1–4 use the **Tamba New Testament** project: `TAMBA` for Lessons 1–3
 - Second and Third level have no continuer (set to *none*; the defaults fill them, so they must be changed). Nothing is repeated at the head of a new paragraph at those levels, and a Second level quotation can run across paragraph breaks unbroken: in Peter's Psalm 16 citation in Acts 2:25–28, an opening phrase is followed by a `\q1` line that opens both First and Second level (`“ ‘`), and the Second level closes with `’` in 2:28, with no Second level mark repeated at the breaks between.
 - Third level is used only in Matthew, John, and Revelation where a character quotes scripture inside dialogue.
 - When a speech quotes Scripture as poetry, the First level continuer `“` is repeated at the head of the first `\q1` line (e.g. Matthew 2:6 `\q1 “ ‘Oro iu, Betliem…`); the following `\q2`/`\q1` lines of the same poem carry no mark.
-- **Continuer required at:** `p p/q1 m/q1 s1/pi pi/pi b/q1` — every `\p` inside a speech, a `\q1` that follows `\p`, `\m` or `\b`, and an indented `\pi` that follows `\s1` or another `\pi`.
+- **Continuer required at:** `p p/q1 m/q1 pi b/q1` — every `\p` inside a speech, a `\q1` that follows `\p`, `\m` or `\b`, and every indented `\pi` inside a speech, whatever comes before it (a `\s1` heading, another `\pi` or anything else).
 - Phase A text contains no apostrophes, so the `’` collision described under Runda does not arise in Tamba.
 
 Lesson 2 also uses a second practice project, **Runda** (`RUNDA`), for the guillemet and apostrophe exercises:
@@ -141,7 +141,7 @@ Keep these reference tables open as you work through Lessons 1–4. The scenario
 | `’` | U+2019 | Right single quotation mark | Dropdown (▼) in Quote marks tab, or paste from Quick Reference |
 | `‹` | U+2039 | Single left-pointing angle quotation mark | Dropdown (▼) in Quote marks tab, or paste from Quick Reference |
 | `›` | U+203A | Single right-pointing angle quotation mark | Dropdown (▼) in Quote marks tab, or paste from Quick Reference |
-| `—` | U+2014 | Em dash | Dropdown (▼) in Quote marks tab, or Alt+0151 on Windows |
+| `—` | U+2014 | Em dash | Dropdown (▼) in Quote marks tab, or type `2014` then press Alt+X |
 | `"` | U+0022 | Quotation mark (straight) | Standard keyboard — avoid using as a quote mark |
 | `'` | U+0027 | Apostrophe (straight) | Standard keyboard — avoid using as a quote mark |
 
@@ -158,8 +158,8 @@ A check result caused by a gap or error in the Quote marks tab or Quotation type
 **First level / Second level / Third level**
 The nesting depth of a quotation. First level is primary speech; Second level is speech embedded within a First level quotation; Third level is speech embedded within a Second level quotation. Each level has its own Opening, Quote Continuer at new paragraph, and Closing characters on the Quote marks tab.
 
-**Label tooltip / status bar**
-In the Quote marks tab, the status bar at the bottom of the dialog shows a description when you hover over any row or column label (such as “Opening” or “Quotes within Quotes (Second level)”). Use this to understand what a field does. To verify the actual character in a cell, click in the cell and press **Alt+X** to show its Unicode code, then press **Alt+X** again to switch it back. This is the reliable way: look-alike characters can't be told apart by their shape. Don't skip the second press: if you click OK while the cell shows the code (for example `203A`), Paratext saves that text as the quote mark. To check the characters in the text itself, use the **Punctuation inventory** or **Characters inventory**: the upper pane lists each character with its Unicode value in a column of its own, always visible. The Example preview at the bottom of the dialog shows how the marks sit together, but only as shapes, so it can't confirm which character a cell holds.
+**Label tooltip / help pane**
+In the Quote marks tab, the yellow help pane at the bottom of the dialog shows a description when you hover over any row or column label (such as “Opening” or “Quotes within Quotes (Second level)”). Use this to understand what a field does. To verify the actual character in a cell, click in the cell and press **Alt+X** to show its Unicode code, then press **Alt+X** again to switch it back. This is the reliable way: look-alike characters can't be told apart by their shape. Don't skip the second press: if you click OK while the cell shows the code (for example `203A`), Paratext saves that text as the quote mark. To check the characters in the text itself, use the **Punctuation inventory** or **Characters inventory**: the upper pane lists each character with its Unicode value in a column of its own, always visible. The Example preview at the bottom of the dialog shows how the marks sit together, but only as shapes, so it can't confirm which character a cell holds.
 
 **Opening mark / Closing mark**
 The characters that begin and end a quotation at a given level. These are entered per-level in the Quote marks tab.
@@ -171,7 +171,7 @@ A note attached to a verse (☰ > Insert > Project note..., or via the notes lis
 A character placed at the start of a new paragraph to signal that a speaker’s speech from the previous paragraph continues. Entered in the middle column of the Quote marks tab grid. Paratext's defaults fill it at every level; set it to *none* at any level where the language doesn't repeat a mark at the head of a continued paragraph.
 
 **Quote marks tab**
-The first tab of the Quotation Rules dialog (☰ > Project settings > Quotation Rules). Contains a three-row, three-column grid for entering the Opening, Quote Continuer at new paragraph, and Closing characters at each nesting level, plus additional checkboxes below the grid (hover labels for descriptions), an Example preview section showing the configured marks in context, and the **Copy quote mark settings...** button (which copies the quote marks from another project but not the **Continuer required at** list). A new project opens with Paratext's defaults already in the grid (see [The Practice Projects](#the-practice-projects)).
+The first tab of the Quotation Rules dialog (☰ > Project settings > Quotation Rules). Contains a three-row, three-column grid for entering the Opening, Quote Continuer at new paragraph, and Closing characters at each nesting level, plus additional checkboxes below the grid (hover labels for descriptions), an Example preview section showing the configured marks in context, and the **Copy quote mark settings...** button (which copies the whole Quote marks tab from another project, **Continuer required at** list included; afterwards check the cells and the list, since the Example may still show the old project's marks). A new project opens with Paratext's defaults already in the grid (see [The Practice Projects](#the-practice-projects)).
 
 **Quotation Rules**
 The Paratext dialog (under the project menu **☰ > Project settings > Quotation Rules**) where both the Quote marks tab and the Quotation types tab are configured.
@@ -183,7 +183,7 @@ A Paratext check (separate from the basic Quotation check) that verifies whether
 The second tab of the Quotation Rules dialog. Lists seven semantic speech categories (Normal, Quotation from another source, Self quote, Continued quotation, Potential, Indirect, Hypothetical). For each type you choose Use quote marks, Never use quote marks, or Quote marks are optional.
 
 **Real error**
-A check result where the translation text genuinely has a missing, extra, or wrong-level quotation mark. Fix by editing the verse directly.
+A check result where the translation text genuinely has a missing, extra, or wrong-level quotation mark. Fix by editing the verse directly. On a live project a real error goes back to the translation team, who decide the correction; it isn't yours to rewrite. In this course's practice projects you make the edit yourself.
 
 **Unicode code point**
 A unique number assigned to every character in the Unicode standard, written as U+ followed by four to six hex digits (e.g., U+00AB for «). Use the code point — not the visual appearance — to confirm that the correct character is entered in the Quote marks tab.

@@ -118,7 +118,7 @@ honest explanation.
 4. Click **Choose Books** and select all NT books available in the `TAMBA` project, then click
    **OK**. This runs the check across the whole project.
 
-**NOTE** A yellow information bar at the bottom of the dialog reads *"The accuracy of the
+**NOTE** The yellow help pane at the bottom of the dialog reads *"The accuracy of the
 results of these checks is dependent upon the information you have provided in the inventories
 and quotation rules for your project."* That sentence is the point of this lesson.
 

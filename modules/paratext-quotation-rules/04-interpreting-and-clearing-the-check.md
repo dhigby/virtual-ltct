@@ -55,7 +55,9 @@ disappear — that corrupts the translation to quiet a tool.*
 After configuration you will typically have two kinds of results:
 
 1. **Real errors** — a mark is genuinely missing, extra, or at the wrong level. Fix these in
-   the text.
+   the text. On a live project a real error goes back to the translation team, who decide the
+   correction; it isn't yours to rewrite. In this course's practice projects you make the edit
+   yourself.
 2. **Configuration problems** — the check flags something that reveals a gap in your inventory
    or rules. Fix these by refining the configuration, not by editing the text.
 
@@ -180,7 +182,8 @@ it means nothing left in the list still needs your action.
 2. Work through the results top-to-bottom.
 3. For each result: open the verse, classify it, take the appropriate action.
    - **Real error:** edit the verse text to fix the mark, then close the results panel and run
-     the check again.
+     the check again. (You make the edit yourself here because this is a practice project; on
+     a live project it goes back to the translation team.)
    - **Configuration problem:** adjust the Quote marks tab or Quotation types tab, then close
      the results panel and run the check again.
      Do not edit the text to make marks disappear — fix the configuration instead.
@@ -233,7 +236,8 @@ Exercise 4.1: an "opened" message pointing to a following one. Open 22:35–38 i
 22:36 begins a new paragraph inside the speech, Tamba's First level Quote Continuer `“` should
 open it. If it is missing, or a look-alike such as a straight `"` sits there instead, that one
 mark is a **real error**: put in the `“` (U+201C), close the results panel, run the check
-again, and both results should clear together. (2) Once the team has confirmed the text, the
+again, and both results should clear together. (On a live project the correction goes back to
+the translation team.) (2) Once the team has confirmed the text, the
 remaining results are about the settings, not the text — review each to find the missing rule
 or setting (e.g. a Quotation types setting that doesn't match how the language uses marks
 there), adjust, and re-run until they clear. If any of them is the apostrophe collision from

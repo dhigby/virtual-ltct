@@ -1145,10 +1145,12 @@ always appear, never appear, or is either acceptable?</p>
 <h3 id="enabling-the-check-administrator-only">Enabling the check (administrator only)<a class="headerlink" href="#enabling-the-check-administrator-only" title="Permanent link">&para;</a></h3>
 <p>At the top of the tab is the checkbox <strong>Enable the Quotation types check in Run basic
 checks</strong>. Only a project administrator can check this box — the yellow help pane at the bottom
-of the dialog confirms: "Only a project administrator can enable this tab." Any user can configure the radio buttons and
-drop-downs below; it is only the enable checkbox that requires administrator access. You are an
-administrator of every practice project in this course, so you tick it yourself in Exercise
-3.2.</p>
+of the dialog confirms: "Only a project administrator can enable this tab." Configuring the
+rest of the tab is an administrator's job too: Paratext's help says configuring quotation types
+"can only be done by a project administrator." Until the box is ticked, the two radio buttons
+and the seven drop-downs below it are dimmed and can't be changed — you can read the settings,
+but clicking <strong>Custom settings</strong> does nothing. You are an administrator of every practice
+project in this course, so you tick it yourself in Exercise 3.2.</p>
 <p><strong>WARNING</strong> The Quotation types check only checks first-level quotes in non-Deuterocanonical
 books.</p>
 <h3 id="the-seven-quotation-types">The seven quotation types<a class="headerlink" href="#the-seven-quotation-types" title="Permanent link">&para;</a></h3>
@@ -1163,8 +1165,9 @@ default):</p>
   type.</li>
 </ul>
 <p>A count in parentheses appears next to each type name showing how many occurrences of that type
-are in your project scope — useful for gauging how much a given setting will affect your
-results.</p>
+are in the books in your project scope — useful for gauging how much a given setting will
+affect your results. If the project scope has no books in it, the count is the number of
+occurrences in all the books of the Bible.</p>
 <p><strong>NOTE</strong> Even if all types are set to Optional, quotes that do not correspond to any recognized
 quotation type will still be reported.</p>
 <table>
@@ -1273,7 +1276,8 @@ speech categories.</p>
   defaults produce incorrect results.</li>
 <li>Configuring types correctly reduces triage work in Lesson 4 by eliminating whole categories
   of expected exceptions before the check runs.</li>
-<li>Only a project administrator can enable the check; any user can configure the settings.</li>
+<li>Only a project administrator can enable the check and configure its settings; the settings
+  stay dimmed until the check is enabled.</li>
 </ul>
 <h2 id="challenge">Challenge<a class="headerlink" href="#challenge" title="Permanent link">&para;</a></h2>
 <p>You are configuring the <code>TAMBA</code> project's quotation types after a working session with the
@@ -1351,6 +1355,8 @@ match Tamba's conventions:
 Self quote already defaults to <strong>Use quote marks</strong> — which is exactly what Tamba needs (item 3),
 so it needs no change. Now make the changes, with the dialog still open:</p>
 <ul>
+<li>Tick <strong>Enable the Quotation types check in Run basic checks</strong> at the top of the tab. Do this
+  first: until it is ticked, the radio buttons and drop-downs are dimmed and can't be changed.</li>
 <li>Click <strong>Custom settings</strong> at the top of the tab. This switches all drop-downs to editable mode.</li>
 <li>Change <strong>Quotation from another source</strong> from <em>Use quote marks</em> to <strong>Quote marks are
   optional</strong>.</li>
@@ -1413,8 +1419,12 @@ so it needs no change. Now make the changes, with the dialog still open:</p>
 </tr>
 </tbody>
 </table>
-<p><strong>Before you re-run:</strong> if you haven't yet, tick <strong>Enable the Quotation types check in Run basic
-checks</strong> at the top of the tab — until it is ticked, these settings don't affect the results.</p>
+<p><strong>Before you re-run:</strong> confirm that <strong>Enable the Quotation types check in Run basic checks</strong>,
+which you ticked at the start of Step 2, is still ticked — while it is unticked, these settings
+don't affect the results. With it ticked, a <strong>Quotation types</strong> box appears in the Run basic
+checks dialog (it wasn't there in Lessons 1 and 2). It is a separate check from <strong>Quotations</strong>,
+and its results are reported only when that box is ticked, so tick both <strong>Quotations</strong> and
+<strong>Quotation types</strong> when you run the check.</p>
 <p><strong>Check your work:</strong>
 - Save and re-run the check. Phase A's self-quotes are already correctly marked, so leaving
   Self quote at its default produces no <em>new</em> flags on <code>TAMBA</code>. (If a self-quote were missing

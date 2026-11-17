@@ -86,7 +86,7 @@ Indirect, Hypothetical — stays at its recommended default.
 - Run the check on Luke. Verify that `«...»` speech boundaries are recognized correctly. Don't expect narrative passages to be free of results: Velna's text uses `’` for more than its Second level closing mark. It is also a glottal stop (at Matthew 1:1, Luke 1:1 and John 1:1, for example, though not at Mark 1:1) and appears in contractions (Matthew 1:6 and 1:20, for example), in narrative as well as in speech.
 - Confirm that the `’` used as a glottal stop or in a contraction is still flagged even after configuring Word-medial punctuation — that's the expected, confirmed outcome for this collision, not a sign of a missing setting. You can't read Velna, so verify each one by position and structure, as in [Lesson 2, Exercise 2.3](02-setting-up-quote-marks.md): a `’` between two letters is word-medial; for a `’` at the end of a word, check that the enclosing speech opens and closes where Velna's conventions say it should without it. Then move on. On a live project, any `’` you still couldn't account for would go to the translation team as a question; you don't decide it.
 - Confirm the First level Quote Continuer (`«`) at the start of continued paragraphs is not flagged as an unexpected mark.
-- Enable the Quotation types check and run it on Matthew, Luke, and John. It should return clean once Continued quotation is set to Use quote marks — this check is separate from the apostrophe results above, which live in the Quotations check and remain regardless.
+- Enable the Quotation types check, tick the **Quotation types** box that then appears in Run basic checks, and run it on Matthew, Luke, and John. It should return clean once Continued quotation is set to Use quote marks — this check is separate from the apostrophe results above, which live in the Quotations check and remain regardless.
 
 ---
 
@@ -153,7 +153,7 @@ is nothing to change.
 - If the check fires on every Second level opening mark, the Opening and Closing fields for Second level are likely reversed. Confirm which character is right-pointing (`›`) and which is left-pointing (`‹`).
 - After entering Second level, check the Example section at the bottom. If › opens and ‹ closes in the example, you have the correct order. The visual difference between `›` and `‹` is easy to miss — use the Example to confirm the order, and press **Alt+X** in each cell to confirm the character (203A in Opening, 2039 in Closing; press **Alt+X** again to switch it back) before clicking OK.
 - John 19:21 contains Menda's rare Third level quotation. Verify it passes once Third level is configured — if 19:21 is flagged, check that the Third level cells really hold `«` and `»`, not the default `“` and `”`.
-- Enable the Quotation types check and run it on John. It should return clean at recommended settings with no customization — if it doesn't, re-check your Quote marks tab entries first, since a character-level mistake there is more likely than a genuine need to customize types.
+- Enable the Quotation types check, tick the **Quotation types** box that then appears in Run basic checks, and run it on John. It should return clean at recommended settings with no customization — if it doesn't, re-check your Quote marks tab entries first, since a character-level mistake there is more likely than a genuine need to customize types.
 
 ---
 

@@ -300,7 +300,8 @@ match their conventions are what keep the check honest. Set what the conventions
 stop when the result list empties.
 
 (This is only the Quotations check. The separate Quotation types check, which Lesson 3
-configures, is not enabled yet and adds its own results once it is.)
+configures, is not enabled yet, so it has no box in the Run basic checks dialog. Once it is
+enabled and its box is ticked there, it adds its own results.)
 
 **TIP** Hover over any column or row label ("Opening", "Closing", "Quotes (First level)",
 etc.) to see a description of that field in the yellow help pane at the bottom of the dialog.

@@ -59,10 +59,12 @@ Navigate to: ☰ > Project settings > Quotation Rules > **Quotation types** tab.
 
 At the top of the tab is the checkbox **Enable the Quotation types check in Run basic
 checks**. Only a project administrator can check this box — the yellow help pane at the bottom
-of the dialog confirms: "Only a project administrator can enable this tab." Any user can configure the radio buttons and
-drop-downs below; it is only the enable checkbox that requires administrator access. You are an
-administrator of every practice project in this course, so you tick it yourself in Exercise
-3.2.
+of the dialog confirms: "Only a project administrator can enable this tab." Configuring the
+rest of the tab is an administrator's job too: Paratext's help says configuring quotation types
+"can only be done by a project administrator." Until the box is ticked, the two radio buttons
+and the seven drop-downs below it are dimmed and can't be changed — you can read the settings,
+but clicking **Custom settings** does nothing. You are an administrator of every practice
+project in this course, so you tick it yourself in Exercise 3.2.
 
 **WARNING** The Quotation types check only checks first-level quotes in non-Deuterocanonical
 books.
@@ -80,8 +82,9 @@ default):
   type.
 
 A count in parentheses appears next to each type name showing how many occurrences of that type
-are in your project scope — useful for gauging how much a given setting will affect your
-results.
+are in the books in your project scope — useful for gauging how much a given setting will
+affect your results. If the project scope has no books in it, the count is the number of
+occurrences in all the books of the Bible.
 
 **NOTE** Even if all types are set to Optional, quotes that do not correspond to any recognized
 quotation type will still be reported.
@@ -143,7 +146,8 @@ speech categories.
   defaults produce incorrect results.
 - Configuring types correctly reduces triage work in Lesson 4 by eliminating whole categories
   of expected exceptions before the check runs.
-- Only a project administrator can enable the check; any user can configure the settings.
+- Only a project administrator can enable the check and configure its settings; the settings
+  stay dimmed until the check is enabled.
 
 ## Challenge
 
@@ -201,6 +205,8 @@ match Tamba's conventions:
 Self quote already defaults to **Use quote marks** — which is exactly what Tamba needs (item 3),
 so it needs no change. Now make the changes, with the dialog still open:
 
+- Tick **Enable the Quotation types check in Run basic checks** at the top of the tab. Do this
+  first: until it is ticked, the radio buttons and drop-downs are dimmed and can't be changed.
 - Click **Custom settings** at the top of the tab. This switches all drop-downs to editable mode.
 - Change **Quotation from another source** from *Use quote marks* to **Quote marks are
   optional**.
@@ -220,8 +226,12 @@ The correct final settings for Tamba:
 | Indirect | **Never use quote marks** | Yes — default is Quote marks are optional | Reported speech is not marked |
 | Hypothetical | Never use quote marks | No | Hypothetical speech is not marked |
 
-**Before you re-run:** if you haven't yet, tick **Enable the Quotation types check in Run basic
-checks** at the top of the tab — until it is ticked, these settings don't affect the results.
+**Before you re-run:** confirm that **Enable the Quotation types check in Run basic checks**,
+which you ticked at the start of Step 2, is still ticked — while it is unticked, these settings
+don't affect the results. With it ticked, a **Quotation types** box appears in the Run basic
+checks dialog (it wasn't there in Lessons 1 and 2). It is a separate check from **Quotations**,
+and its results are reported only when that box is ticked, so tick both **Quotations** and
+**Quotation types** when you run the check.
 
 **Check your work:**
 - Save and re-run the check. Phase A's self-quotes are already correctly marked, so leaving

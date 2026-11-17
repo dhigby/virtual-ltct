@@ -325,8 +325,11 @@ books are the same run. Verified in Paratext 9.5:
   in pairs per verse: "Closing quote [ › U+203A ] found without matching opening. Caused by a
   missing opening quote, a missing continuer, or incorrectly defined continuer rules: ›" and
   "Opening quote mark found without matching closing quote mark: ‹". Note: with only the
-  Quotations check enabled (Quotation types off) the count is **125**. All counts in this
-  section assume both Quotations and Quotation types checks are enabled.
+  Quotations check run (Quotation types not enabled, or its box not ticked in Run basic checks)
+  the count is **125**. All counts in this section assume the Quotation types check is enabled
+  on the project and both **Quotations** and **Quotation types** are ticked in Run basic checks;
+  the Quotation types box appears in that dialog only once the check is enabled, and its results
+  are reported only when it is ticked.
 - **First level reversed** (`»` in Opening, `«` in Closing): **366 results** throughout John.
   The Example box gives it away immediately: the preview opens with `»` and ends with `«` (for
   example `»A man carrying … upstairs.«`). Send the learner to the Example box first — the

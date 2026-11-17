@@ -169,21 +169,30 @@ is nothing to change.
 | Level | Opening | Unicode | Closing | Unicode |
 |-------|---------|---------|---------|---------|
 | First level | `“`, or alternatively `—` | U+201C, alternate U+2014 | `”` (an em-dash quote may have none) | U+201D |
-| Second level | `“` | U+201C | `”` | U+201D |
-| Third level | `‘` | U+2018 | `’` | U+2019 |
+| Second level | `‘` | U+2018 | `’` | U+2019 |
+| Third level | `“` | U+201C | `”` | U+201D |
 
 Waku's First level has **two opening marks**: the curly `“` (U+201C) and, as an alternate, the
 **em dash** `—` (U+2014). A quote opened with `“` is closed by `”` (U+201D). A quote opened with
 `—` may also be closed by `”`, or it may have no closing mark at all: the quote then ends at the
 end of the paragraph. Waku uses **no quote continuers** at
 any level: a new paragraph inside a speech does not start with a quote mark. Waku's word-medial
-apostrophe is `ʼ` (U+02BC MODIFIER LETTER APOSTROPHE), so the Third level closer `’` (U+2019)
+apostrophe is `ʼ` (U+02BC MODIFIER LETTER APOSTROPHE), so the Second level closer `’` (U+2019)
 creates no apostrophe collision.
 
-**Starting state:** Paratext's defaults. Run the Quotations check on all books before you change anything: like Menda, it reports **"No errors found."**
+Waku's Third level uses `“ ”`, the same marks as its First level. That is allowed, because a
+Third level quote never sits directly inside a First level one: there is always a Second level
+`‘…’` between them.
+
+> **TIP:** The same marks may be used for alternating levels, just not for one level directly
+> inside the other. If Second level used `“ ”` as well, nothing would show which level a `“`
+> belonged to, for the check or for a reader.
+
+**Starting state:** Paratext's defaults. Run the Quotations check on all books before you change anything: it reports **202 results**. Most of them (191) read "Second-level quote mark found without a preceding first-level quote: ‘", starting at Matthew 2:6. The other 11 read "Third-level quote mark found without a preceding second-level quote: “" (Matthew 15:5 and Mark 12:36, for example).
 
 **Discovery prompts:**
-- Waku's text is full of dialogue, its curly quotes look like the ones in Paratext's defaults, and the check at the defaults reports "No errors found." Does that mean the defaults are close enough? Compare the default grid with Waku's conventions level by level. Which level's marks match, which are swapped, and where in the default grid is the em dash?
+- Most of the 202 results say a Second level `‘` has no First level quote around it. In Waku's conventions, `‘` only appears inside First level speech. So where is the First level these `‘` marks belong to? Compare the default grid with Waku's conventions level by level: which of Waku's First level opening marks is missing from the defaults? And why would a `“` inside one of those `‘` quotes then be reported as a Third level mark with no Second level around it?
+- Apart from the continuers, which of Waku's Opening and Closing cells already match the defaults? Would you still check each one?
 - Waku's First level has two opening marks. The Quote marks tab has one Opening cell per level. How does that one cell hold both?
 - Waku has no continuers at any level. What does that mean for the three continuer cells and for the **Continuer required at** list? Remember from Scenario B the order Paratext makes you do it in.
 - When the configured check reports a single result in one verse, which is more likely: a real error or a configuration problem? (Lesson 4, Exercise 4.2, step 6.)
@@ -194,8 +203,8 @@ creates no apostrophe collision.
 | Level | Opening | Quote Continuer at new paragraph | Closing |
 |-------|---------|----------------------------------|--------|
 | First level | `“` (U+201C), with `—` (U+2014) as an alternate opening mark | *none* | `”` (U+201D) |
-| Second level | `“` (U+201C) | *none* | `”` (U+201D) |
-| Third level | `‘` (U+2018) | *none* | `’` (U+2019) |
+| Second level | `‘` (U+2018) | *none* | `’` (U+2019) |
+| Third level | `“` (U+201C) | *none* | `”` (U+201D) |
 
 On the Quote marks tab, the First level Opening cell shows both marks as `“|—`: the main mark
 first, then the alternate.
@@ -211,18 +220,19 @@ drop-down list too, but you can choose only one item from the list, so it can pl
 character in a cell. When a cell holds two marks separated by `|`, the second mark cannot be
 placed from the drop-down and has to be typed.
 
-**What changes from the defaults:** almost every cell. At First level, the Opening keeps `“` but
-gains `—` as an alternate (`“` → `“|—`), the continuer is cleared from `“` to *none*, and the
-Closing `”` already matches. At Second level, the Opening and Closing change from `‘ ’` to `“ ”`
-and the continuer is cleared from `‘` to *none*. At Third level, the Opening and Closing change
-from `“ ”` to `‘ ’` and the continuer is cleared from `“` to *none*. The defaults put Waku's
-Second and Third level marks the wrong way round and don't contain the em dash at all.
+**What changes from the defaults:** fewer cells than in Scenarios A and B. At First level, the
+Opening keeps `“` but gains `—` as an alternate (`“` → `“|—`). All three continuers are cleared
+to *none* (from `“`, `‘` and `“`), and the **Continuer required at** list is emptied. Everything
+else already matches: the First level Closing `”`, the Second level `‘ ’` and the Third level
+`“ ”`. The one mark the defaults lack is the em dash, and that is enough for the 202 results.
+Matching cells are not a reason to skip them: check every cell against the conventions table
+rather than assume it is right.
 
 Continuer required at: empty. As with Menda, Waku has no continuer at any level, so the list
 has nothing to require. Do it in the same order: set all three continuers to *none* first, then
 clear the list. Paratext won't accept an empty list while any continuer is still set.
 
-![The Quote marks tab for the Waku project. First level: Opening “|—, Quote Continuer *none*, Closing ”. Second level: Opening “, Quote Continuer *none*, Closing ”. Third level: Opening ‘, Quote Continuer *none*, Closing ’. The Continuer required at field is empty.](assets/ss-05-waku-quote-marks.png)
+![The Quote marks tab for the Waku project. First level: Opening “|—, Quote Continuer *none*, Closing ”. Second level: Opening ‘, Quote Continuer *none*, Closing ’. Third level: Opening “, Quote Continuer *none*, Closing ”. The Continuer required at field is empty.](assets/ss-05-waku-quote-marks.png)
 
 **Check your work:**
 - Before you run anything, press **Alt+X** in each cell you changed to confirm the character (press **Alt+X** again to switch it back). In the First level Opening cell, confirm that both marks are there: `“` (201C) and `—` (2014). An en dash `–` (U+2013) or a hyphen looks very like an em dash.
@@ -255,11 +265,11 @@ clear the list. Paratext won't accept an empty list while any continuer is still
 
 ![The Results list for the Waku project, headed Waku; All Books; Checks run: Quotations, reading No errors found.](assets/ss-05-waku-no-errors.png)
 
-- Compare this "No errors found." with the one you got at the defaults. The words are the same. The difference is that the configured check proved it can see Waku's marks, because it found the missing paragraph break at Mark 2:11. The check at the defaults missed that same problem and still said "No errors found."
+- Compare this "No errors found." with the 202 results you started from. The flood at the defaults was about the settings, not the text: without the em dash, the check couldn't recognise Waku's em-dash speeches, so it had no way to report the speech left open at Mark 2:11. The final "No errors found." means something because the configured check proved it can see Waku's marks: it found that missing paragraph break.
 
 ## Scenario bank summary
 - The same four-step workflow (inventory → rules → check → triage) applies to every language, however unusual its quotation conventions.
-- Every project starts from Paratext's defaults, and the defaults can mislead in either direction: 264 results for Velna, "No errors found" for Menda and Waku. Correct every cell to the conventions, including the ones that must become *none*, before you trust any result.
+- Every project starts from Paratext's defaults, and the defaults can mislead in either direction: 264 results for Velna, 202 for Waku, "No errors found" for Menda. Correct every cell to the conventions, including the ones that must become *none*, before you trust any result.
 - Always verify entered characters with **Alt+X** in each cell (then **Alt+X** again to switch it back) — on unfamiliar languages it is easy to confuse visually similar characters, and neither the cell nor the Example section at the bottom of the Quote marks tab can tell them apart, because both show only shapes. Use the Example section to check that the marks sit together in the right order.
 - A level can have more than one opening mark: Waku's First level opens with `“` or, as an alternate, `—`, and its Opening cell shows `“|—`.
 - Once the configuration is right, read what is left. Some results survive a correct configuration, like Velna's apostrophes, and you verify and document them. Others point to a real error in the text, like the result at Waku's Mark 2:11. You can see from the markers that one speech is still open when the next begins, but the translation team says which explanation is right. Here it is a missing paragraph break at verse 12, and you insert the `\p` there. Only after that does "No errors found." mean the text is clean.
@@ -268,13 +278,13 @@ clear the list. Paratext won't accept an empty list while any continuer is still
 
 1. You enter Second level Opening as `‹` and Second level Closing as `›` for the Menda project, then run the check and find that every Second level opening mark generates a result. The Example section in the Quote marks tab shows the marks in reversed order from what you expect. What went wrong, and what is the fix?
 2. In Scenario B you enter Second level as Opening: U+2039, Closing: U+203A (reversed from the correct order). What will the check report?
-3. You configure Waku to its conventions and run the Quotations check on all books. It reports one result: `MRK 2:11`, "Opening quote mark found without matching closing quote mark: —". What kind of result is this, what do you do about it, and how do you know you're finished? Why does your final "No errors found." mean more than the "No errors found." you got at the defaults?
+3. You configure Waku to its conventions and run the Quotations check on all books. It reports one result: `MRK 2:11`, "Opening quote mark found without matching closing quote mark: —". What kind of result is this, what do you do about it, and how do you know you're finished? Why can you trust your final "No errors found." when the 202 results at the defaults told you nothing about the text?
 
 **Answers**
 
 1. The characters were entered in the wrong fields — the left-pointing guillemet (`‹`, U+2039) is in the Opening field when it should be in the Closing field, and vice versa. Swap them: Opening should be `›` (right-pointing, U+203A), Closing should be `‹` (left-pointing, U+2039). Confirm by checking the Example section — the correct order shows `›` as the inner opening and `‹` as the inner closing.
 2. The check will fire on every Second level opening mark (treating the right-pointing guillemet as an unexpected closing mark) and on every Second level closing mark (treating the left-pointing guillemet as an unexpected opening mark). The entire Second level configuration will appear as errors.
-3. The configuration matches the conventions and this is a single result in one verse, so it points to the text rather than the settings. An em-dash quote may end at the end of its paragraph with no closing mark. The speech at 2:11 has none, and before its paragraph ends, verse 12 has a second em dash that opens another speech, so Paratext finds the first speech still open. That much you can see from the tool and the markers. What you can't tell, in a language you don't read, is the cause: a missing paragraph break, a missing closing `”`, or an em dash that shouldn't be there. Take those three explanations to the translation team. In the practice project, the team's answer is that both em dashes belong in the text and a new paragraph starts at verse 12, so it is a **real error** in the text: a missing paragraph break. Don't remove `—` from the First level Opening cell, and don't delete either dash. Either would make the result disappear, and both are wrong: `—` is an opening mark in Waku's conventions, and the team has confirmed the dashes. Insert a `\p` paragraph marker where the team says: in the practice project, by typing `\p` immediately before the `\v 12` verse marker. Then close the results panel and run the check again (not **Rerun** on the open panel). You're finished when the check on all books reports "No errors found." That message means more than the one at the defaults because the configured check has shown it recognizes Waku's marks: it found the missing break. The check at the defaults reported "No errors found." with that same problem in the text, so its clean result told you nothing.
+3. The configuration matches the conventions and this is a single result in one verse, so it points to the text rather than the settings. An em-dash quote may end at the end of its paragraph with no closing mark. The speech at 2:11 has none, and before its paragraph ends, verse 12 has a second em dash that opens another speech, so Paratext finds the first speech still open. That much you can see from the tool and the markers. What you can't tell, in a language you don't read, is the cause: a missing paragraph break, a missing closing `”`, or an em dash that shouldn't be there. Take those three explanations to the translation team. In the practice project, the team's answer is that both em dashes belong in the text and a new paragraph starts at verse 12, so it is a **real error** in the text: a missing paragraph break. Don't remove `—` from the First level Opening cell, and don't delete either dash. Either would make the result disappear, and both are wrong: `—` is an opening mark in Waku's conventions, and the team has confirmed the dashes. Insert a `\p` paragraph marker where the team says: in the practice project, by typing `\p` immediately before the `\v 12` verse marker. Then close the results panel and run the check again (not **Rerun** on the open panel). You're finished when the check on all books reports "No errors found." You can trust that message because the configured check has shown it recognizes Waku's marks: it found the missing break. The 202 results at the defaults came from the settings: without the em dash in the First level Opening cell, the check couldn't recognise Waku's em-dash speeches, so every `‘` inside one looked like a Second level mark with no First level around it, and the open speech at Mark 2:11 couldn't be reported at all.
 
 ---
 

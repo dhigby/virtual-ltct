@@ -95,7 +95,7 @@
             
   <strong>Draft under review.</strong>
   Not published material, and not part of the LT Consultant competency framework.
-  Built from <code>main</code>.
+  Built from <code>course/paratext-quotation-rules</code>.
 
           </div>
           
@@ -1010,7 +1010,7 @@
 
 
   
-    <a href="https://github.com/dhigby/virtual-ltct/edit/main/modules/paratext-quotation-rules/07-quiz.md" title="Edit this page" class="md-content__button md-icon" rel="edit">
+    <a href="https://github.com/dhigby/virtual-ltct/edit/course/paratext-quotation-rules/modules/paratext-quotation-rules/07-quiz.md" title="Edit this page" class="md-content__button md-icon" rel="edit">
       
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M10 20H6V4h7v5h5v3.1l2-2V8l-6-6H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h4zm10.2-7c.1 0 .3.1.4.2l1.3 1.3c.2.2.2.6 0 .8l-1 1-2.1-2.1 1-1c.1-.1.2-.2.4-.2m0 3.9L14.1 23H12v-2.1l6.1-6.1z"/></svg>
     </a>
@@ -1167,8 +1167,9 @@ cell, then run the check on John. What do you see, and what is the fix?
 - B) Results only at John 19:21, where Third level reuses <code>«</code> and <code>»</code>
 - C) Second level results throughout; edit the text so <code>‹</code> opens and <code>›</code> closes
 - D) Second level results throughout; swap the two cells, check the Example</p>
-<p><strong>Question 19:</strong> At Paratext's defaults, the check on <strong>Waku</strong> reported "No errors found". You
-then configure Waku to its conventions: First level Opening <code>“</code> (U+201C) with <code>—</code> (U+2014) as an
+<p><strong>Question 19:</strong> At Paratext's defaults, the check on <strong>Waku</strong> reported 202 results, 191 of them
+"Second-level quote mark found without a preceding first-level quote: ‘". You then configure
+Waku to its conventions: First level Opening <code>“</code> (U+201C) with <code>—</code> (U+2014) as an
 alternate opening mark, no continuer, Closing <code>”</code> (U+201D); an em-dash speech may have no
 closing mark and end with its paragraph. The check on all books now reports one result, at Mark
 2:11: "Opening quote mark found without matching closing quote mark: —". The em-dash speech in
@@ -1207,7 +1208,7 @@ describe the language, the Quotations check run on every book will return zero r
 <li>C — Lesson 4 Exercise 4.2 note: clicking Rerun on the panel that is already open does not pick up your text changes; it keeps showing the old results, so a correct fix looks as if it failed. Close the results panel and run the check again from ☰ &gt; Tools &gt; Run basic checks... before deciding anything about your edits.</li>
 <li>B — Lesson 4 Exercise 4.2 step 5 and completion criteria: Romans is expected to stop at 1 result, the 1:1 apostrophe, which is neither a real error nor a configuration problem. Adding <code>’</code> to Word-medial punctuation does not clear it (Lesson 2 Exercise 2.3, Lesson 4 Exercise 4.1 item 5), and the apostrophe is correct as written, so there is no text edit. Verify it, document it, and Romans is done. Raising a unique apostrophe character with the translation team is worthwhile, but it is their orthography decision and Romans does not wait on it.</li>
 <li>D — Scenario B (Menda): with the Second level cells reversed, the check reports results in pairs throughout John, "Closing quote [ › U+203A ] found without matching opening…" and "Opening quote mark found without matching closing quote mark: ‹". Swap the cells so <code>›</code> opens and <code>‹</code> closes, confirm in the Example section, and with Third level also set to Menda's <code>«</code> <em>none</em> <code>»</code> the check reports "No errors found". Paratext does not pair single guillemets whichever way they point, and the text follows Menda's convention, so it is the configuration that changes, not the text; results only at John 19:21 come from Third level cells left at the defaults, not from reversed Second level cells.</li>
-<li>A — Scenario C (Waku): an em-dash speech with no closing mark ends at the end of its paragraph, but the speech opened at 2:11 is still open when verse 12 opens a second em-dash speech in the same paragraph. Both em dashes are correct; the real error is in the text's paragraphing, because a new paragraph should begin at verse 12, before the second speech (in the practice project, a <code>\p</code> typed immediately before <code>\v 12</code>). Where that paragraph starts is a question for the translation team, since you can't judge it in a language you don't read. Insert <code>\p</code> where they say, then close the results panel and run the check again rather than clicking Rerun on the open panel. The check then reports "No errors found", and this time it is a true zero, unlike the misleading "No errors found" at the defaults. Deleting the <code>—</code> at 2:11 makes the result go away but removes a correct speech opener; a Project Note is for a result that no correct configuration and no text fix can clear, and this one can be cleared; and taking <code>—</code> out of the Opening cell describes a language other than Waku's, and changing the settings doesn't fix an error in the text.</li>
+<li>A — Scenario C (Waku): an em-dash speech with no closing mark ends at the end of its paragraph, but the speech opened at 2:11 is still open when verse 12 opens a second em-dash speech in the same paragraph. Both em dashes are correct; the real error is in the text's paragraphing, because a new paragraph should begin at verse 12, before the second speech (in the practice project, a <code>\p</code> typed immediately before <code>\v 12</code>). Where that paragraph starts is a question for the translation team, since you can't judge it in a language you don't read. Insert <code>\p</code> where they say, then close the results panel and run the check again rather than clicking Rerun on the open panel. The check then reports "No errors found", and this time it is a true zero. The 202 results at the defaults came from the settings, not the text: the defaults don't include <code>—</code>, so the em-dash speeches weren't seen as First level and each <code>‘</code> inside them looked orphaned. Deleting the <code>—</code> at 2:11 makes the result go away but removes a correct speech opener; a Project Note is for a result that no correct configuration and no text fix can clear, and this one can be cleared; and taking <code>—</code> out of the Opening cell describes a language other than Waku's, and changing the settings doesn't fix an error in the text.</li>
 <li>B (False) — Lesson 4 Exercise 4.2 and Scenario A: a correct configuration can still leave results that need human review, such as the Romans 1:1 apostrophe in Tamba or Velna's word-medial <code>’</code> (U+2019) results, which no setting removes because <code>’</code> is also Velna's Second level closing mark. The target is zero actionable errors, which is not always a zero-length results list.</li>
 </ol>
 

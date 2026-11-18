@@ -6,7 +6,7 @@
 translation text as it existed at an earlier stage of the project — either from where the team
 stands right now, or from a point further back in project history.
 
-**Watch the video:** [Paratext 9 Advanced Support, part 2 (Lessons 4–5)](https://vimeo.com/1222710442)
+**Watch the video:** [Paratext 9 Advanced Support, part 2 (Lessons 4–5), from the Lesson Five chapter at 6:56](https://vimeo.com/1222710442#t=6m56s)
 
 ## Learning objectives
 

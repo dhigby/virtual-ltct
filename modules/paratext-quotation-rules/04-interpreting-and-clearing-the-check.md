@@ -107,6 +107,10 @@ and reasoning are what a mentor reviews.
 
 ### Exercise 4.1 — Triage a dirty result set
 
+Run the check on all books of `TAMBAB` with only **Quotations** ticked in Run basic checks.
+`TAMBAB` arrives with the Quotation types check enabled, so the dialog shows both boxes;
+ticking **Quotation types** as well would add the Lesson 3 "possibly" results to the list.
+
 The `TAMBAB` project has been seeded with five issues — but the check reports **seven** results,
 because one issue (#3) is a single broken mark whose damage is reported back as three separate,
 differently-worded results at three different verses. This is common: one broken mark in the middle of
@@ -172,7 +176,8 @@ actionable errors" does not mean a literal zero-length results list once Romans 
 it means nothing left in the list still needs your action.
 
 > **NOTE:** In this exercise, "re-run" means a full re-run: close the results panel, then run
-> the check again (**☰ > Tools > Run basic checks...**). Clicking **Rerun** on the panel that is
+> the check again (**☰ > Tools > Run basic checks...**, with only **Quotations** ticked).
+> Clicking **Rerun** on the panel that is
 > already open does not pick up your text changes. It keeps showing the old results, so a
 > correct fix looks as if it failed.
 
@@ -207,7 +212,8 @@ it means nothing left in the list still needs your action.
    the other verses in the cluster as needing their own fix.
 
 **Completion criteria:**
-- The Quotations check shows 0 results for every book except Romans.
+- The Quotations check, run with only **Quotations** ticked, shows 0 results for every book
+  except Romans.
 - Romans shows exactly 1 result (the 1:1 apostrophe), verified as a genuine word-medial
   apostrophe and documented rather than chased with further configuration changes.
 

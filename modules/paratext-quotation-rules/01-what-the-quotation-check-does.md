@@ -113,8 +113,8 @@ honest explanation.
 
 1. Open the `TAMBA` project.
 2. Click **☰ > Tools > Run basic checks...**
-3. In the dialog, tick **Quotations** only (leave "Quotation types" unticked — it is a
-   separate check).
+3. In the dialog, tick **Quotations** only. (A separate **Quotation types** box appears in
+   this dialog only after that check is enabled in Lesson 3, so it isn't there yet.)
 4. Click **Choose Books** and select all NT books available in the `TAMBA` project, then click
    **OK**. This runs the check across the whole project.
 

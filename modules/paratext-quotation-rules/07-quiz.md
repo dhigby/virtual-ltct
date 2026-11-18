@@ -91,22 +91,23 @@ paragraph when a speech runs on. The recommended setting for **Continued quotati
 - C) Leave it, and clear the First level continuer cell on the Quote marks tab
 - D) Leave it; the continuer cell on the Quote marks tab overrides this setting
 
-**Question 10:** The Tamba team tells you that when the narrator reports what someone said
-("He told them that the harvest was near"), they write it as plain narrative text, and that is
-how every such verse should stay. The recommended setting for **Indirect** is *Quote marks are
-optional*. What do you do?
-- A) Leave Indirect at Optional; with no marks in the text, there is nothing for it to flag
+**Question 10:** A translation team you support (not one of this course's practice projects)
+tells you that when the narrator reports what someone said ("He told them that the harvest was
+near"), they write it as plain narrative text with no quote marks, and they want the check to
+report any quote mark that turns up in such a verse. The Quotation types check is enabled, and
+**Indirect** is at the recommended *Quote marks are optional*. What do you do?
+- A) Leave Indirect at Optional; with no marks in those verses, there is nothing for it to flag
 - B) Choose Custom settings and set Indirect to Use quote marks, so each verse is checked
 - C) Leave Indirect at Optional, which flags any mark a translator adds to reported speech
 - D) Choose Custom settings and set Indirect to Never use quote marks
 
 **Question 11:** You have switched Tamba's Quotation types tab to **Custom settings** to change
-three types. The team confirms that a self-quote must be marked just like any other direct
-speech. **Self quote** currently shows *Use quote marks*. What do you do with it?
+two types. Nothing in Tamba's conventions calls for a different **Self quote** setting. Its row
+reads **Self quote (0)** and currently shows *Use quote marks*. What do you do with it?
 - A) Change it to Quote marks are optional, the safer choice on a custom tab
-- B) Change it to Never use quote marks, since Normal already checks direct speech
-- C) Leave it at Use quote marks, and go on to the three types that need changing
-- D) Change it to Quote marks are optional and note each self-quote for the consultant
+- B) Change it to Never use quote marks, since the count beside it is 0
+- C) Leave it at Use quote marks, and go on to the two types that need changing
+- D) Change it to Quote marks are optional, since every row on a custom tab needs a new value
 
 ---
 
@@ -213,8 +214,8 @@ describe the language, the Quotations check run on every book will return zero r
 7. A — Lesson 2 Exercise 2.2 and its table: "Expected continuers [«] are missing" at each place a listed marker occurs inside speech means the list is too long; the default `p/q1` names a marker Runda's text does not continue at. Runda's text carries `«` only at `\p`, so its list is `p` alone. The fix is in the field, not the text: the text is the authority and the list is your description of it. A too-short list shows a different symptom (unclosed-quote results inside a long speech), and clearing the continuer cell would break Runda's real continuers.
 8. C — Lesson 2 Exercise 2.3: Word-medial punctuation does not suppress the result once the character is also a configured quote mark, so every genuine apostrophe is still flagged on a fresh run. Paratext warns that unique characters are recommended, but it saves the setting. Treat each result as an expected false positive; the lasting fix is a different, unique apostrophe character, which is an orthography decision for the translation team to make, not you.
 9. B — Lesson 3 Exercise 3.2: with a First level continuer, a mark is expected at the head of each continued paragraph, so "Never use quote marks" would flag every expected continuer as an error. Switch to Custom settings and set Continued quotation to Use quote marks. The setting concerns Tamba's First level continuer, the Quote marks tab does not override it, and clearing the continuer cell would break the Quotations check configured in Lesson 2.
-10. D — Lesson 3 Exercise 3.2: Tamba never marks reported speech, and Optional does not flag errors for its type, so it would never catch a stray mark a translator adds there (the claim that it does is false, and "nothing to flag" misses that the setting's job is to catch marks that shouldn't be there). Switch to Custom settings and set Indirect to Never use quote marks so a stray mark gets caught. Use quote marks would flag every correctly unmarked verse.
-11. C — Lesson 3 Exercise 3.2: Self quote already defaults to Use quote marks, which is what Tamba needs, so it stays as it is while you change the other three types. Optional would stop the check flagging a self-quote whose marks are missing, and Never would flag correctly marked ones. Not every recommended default is wrong; check each type against the language's conventions rather than changing all seven.
+10. D — Lesson 3 Content (the three drop-down options): *Never use quote marks* expects no marks and reports any that are found; *Quote marks are optional* accepts either and does not flag errors for its type, so it would never report a mark added to reported speech (the claim that it does is false, and "nothing to flag" misses that this team wants such a mark caught). Switch to Custom settings and set Indirect to Never use quote marks. *Use quote marks* would report every correctly unmarked verse as missing its marks. This is a different team's convention, not Tamba's: Exercise 3.2 leaves Tamba's Indirect at the recommended Optional.
+11. C — Lesson 3 Exercise 3.2: Self quote stays at its default, Use quote marks, while you change the two types that do diverge (Quotation from another source and Continued quotation). Choosing Custom settings makes the drop-downs editable; it is not a reason to change them, and Optional is not "safer", since it stops the check reporting anything for that type. The number in brackets is the count of that type in the books in the project scope (Lesson 3 Content), so 0 means the setting has nothing to act on there; it is not a convention and not a reason to pick Never. Not every recommended default is wrong; check each type against the language's conventions rather than changing all seven.
 12. B — Lesson 4 Exercise 4.1 item 2: the `“` before the Isaiah citation is a stray mark, like a translator adding a dialogue opener by mistake, so it is a real error: delete it (on a live project, confirm with the translation team that it doesn't belong, as Lesson 4's self-assessment 3 does). The check treats the stray mark as a legitimate new opening and reports its close as missing wherever the next real closing mark falls, so adding a `”` where it points chases the symptom, not the cause. Optional is the correct Quotation from another source setting for Tamba, and a real error is fixed, not documented.
 13. D — Lesson 4 Exercise 4.1 item 3: 3:16 starts a new `\p` paragraph inside Jesus's First level speech, so it should open with Tamba's First level Quote Continuer `“` (U+201C). That one wrong character produces all three results; replace it, close the results panel and run the check again (not Rerun on the open panel), and all three clear together. `‘` is the Second level opening mark, not the continuer; the Quote marks tab describes the language's convention, not a stray character; and there is nothing to fix at 3:10 or 3:21.
 14. A — Lesson 4 Content, Exercise 4.2 and self-assessment 2: the same message repeated across many verses usually points to a configuration gap, and once the team has confirmed the text the remaining results are about the settings. Find the rule or setting (for an unclosed-quote message like this one, Lesson 2 points to a Continuer required at list that is too short), adjust it, then close the results panel and run the check again. Editing text to quiet the check is never right; Neither is for results that cannot be cleared by any combination of correct configuration and text — the apostrophe-as-quote-mark collision is one such case — but an unclosed-quote message that the team says isn't a text error is a configuration gap, not an unresolvable result; and you expand the scope only once Matthew is clean.

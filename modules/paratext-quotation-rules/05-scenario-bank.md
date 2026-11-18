@@ -77,8 +77,8 @@ Word-medial punctuation: add `’` (U+2019) in ☰ > Project settings > Language
 **Quotation types tab:** confirmed on a real Paratext 9.5 build: Velna needs exactly **one**
 change from recommended defaults — **Continued quotation = Use quote marks** (the First level
 continuer means a mark is expected at every continued paragraph, same reasoning as Tamba in
-Lesson 3). Unlike Tamba, Velna has no narrator-citation, self-quote, or indirect-speech
-exceptions, so every other type — Normal, Quotation from another source, Self quote, Potential,
+Lesson 3). Tamba's other customization was Quotation from another source, for its unmarked
+narrator citations. Velna has no such exception, so every other type — Normal, Quotation from another source, Self quote, Potential,
 Indirect, Hypothetical — stays at its recommended default.
 
 **Check your work:**

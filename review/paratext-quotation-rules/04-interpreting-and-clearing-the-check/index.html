@@ -1112,6 +1112,9 @@ gap</strong>; a one-off result usually points to a <strong>real error</strong> i
 issues. Your job is to triage them correctly, then clear a book to zero. Your filled-in tables
 and reasoning are what a mentor reviews.</p>
 <h3 id="exercise-41-triage-a-dirty-result-set">Exercise 4.1 — Triage a dirty result set<a class="headerlink" href="#exercise-41-triage-a-dirty-result-set" title="Permanent link">&para;</a></h3>
+<p>Run the check on all books of <code>TAMBAB</code> with only <strong>Quotations</strong> ticked in Run basic checks.
+<code>TAMBAB</code> arrives with the Quotation types check enabled, so the dialog shows both boxes;
+ticking <strong>Quotation types</strong> as well would add the Lesson 3 "possibly" results to the list.</p>
 <p>The <code>TAMBAB</code> project has been seeded with five issues — but the check reports <strong>seven</strong> results,
 because one issue (#3) is a single broken mark whose damage is reported back as three separate,
 differently-worded results at three different verses. This is common: one broken mark in the middle of
@@ -1241,7 +1244,8 @@ actionable errors" does not mean a literal zero-length results list once Romans 
 it means nothing left in the list still needs your action.</p>
 <blockquote>
 <p><strong>NOTE:</strong> In this exercise, "re-run" means a full re-run: close the results panel, then run
-the check again (<strong>☰ &gt; Tools &gt; Run basic checks...</strong>). Clicking <strong>Rerun</strong> on the panel that is
+the check again (<strong>☰ &gt; Tools &gt; Run basic checks...</strong>, with only <strong>Quotations</strong> ticked).
+Clicking <strong>Rerun</strong> on the panel that is
 already open does not pick up your text changes. It keeps showing the old results, so a
 correct fix looks as if it failed.</p>
 </blockquote>
@@ -1275,7 +1279,8 @@ correct fix looks as if it failed.</p>
    cluster clears together before treating any of
    the other verses in the cluster as needing their own fix.</p>
 <p><strong>Completion criteria:</strong>
-- The Quotations check shows 0 results for every book except Romans.
+- The Quotations check, run with only <strong>Quotations</strong> ticked, shows 0 results for every book
+  except Romans.
 - Romans shows exactly 1 result (the 1:1 apostrophe), verified as a genuine word-medial
   apostrophe and documented rather than chased with further configuration changes.</p>
 <p><img alt="The TAMBAB project in Paratext 9.5 after the four real errors are fixed, with Romans 1 open in the left pane. The Quotations check results panel on the right, headed 1 Item and TAMBAB; All Books; Checks run: Quotations, lists a single result: ROM 1:1, Closing quote [ ’ U+2019 ] found as a word medial character. Sometimes caused when a closing quote is incorrectly used as an apostrophe." src="../ss-04-final-results.png" /></p>

@@ -962,8 +962,9 @@
 <p><strong>Purpose:</strong> The Quote marks tab from Lesson 2 tells Paratext <em>which</em> characters are quote
 marks; it does not say <em>when</em> marks should appear. On a real project a language may mark
 narrator citations one way and self-quotes another. This lesson gives the check its second
-input — the rules that decide, per kind of speech, whether marks are expected — so it stops
-flagging correct text and starts catching real omissions.</p>
+input — the rules that decide, per kind of speech, whether marks are expected — so that what it
+reports follows the language's conventions rather than Paratext's defaults, and what is left is
+a list worth taking to the translation team.</p>
 <h2 id="learning-objectives">Learning objectives<a class="headerlink" href="#learning-objectives" title="Permanent link">&para;</a></h2>
 <p>By the end of this lesson you will be able to:</p>
 <ul>
@@ -990,15 +991,15 @@ you'll make these same calls for Tamba in Exercise 3.2, and meet them again in t
 self-assessment.</p>
 <h2 id="content">Content<a class="headerlink" href="#content" title="Permanent link">&para;</a></h2>
 <p><em>This is the second half of configuring the check for the <strong>Translation Tools</strong> competency.
-Lesson 2 was about characters; this lesson is about expectations. Getting the type settings
-right here eliminates whole categories of false positives before you ever begin triage in
-Lesson 4.</em></p>
+Lesson 2 was about characters; this lesson is about expectations. Matching the type settings to
+the language's conventions removes the results that come from a setting that doesn't fit. It
+doesn't empty the list: Exercise 3.2 shows you what is left and what to do with it.</em></p>
 <p>The <strong>Quotation types</strong> tab controls whether Paratext <em>expects</em> quotation marks for each
 semantic category of speech. This is independent of <em>which characters</em> are used (that is the
 Quote marks tab's job). The Quotation types tab answers: for this type of speech, should marks
 always appear, never appear, or is either acceptable?</p>
 <p>Navigate to: ☰ &gt; Project settings &gt; Quotation Rules &gt; <strong>Quotation types</strong> tab.</p>
-<p><img alt="The Quotation types tab of the Quotation Rules dialog for the TAMBA project. The Enable the Quotation types check in Run basic checks checkbox is not ticked. Use recommended settings is selected and Custom settings is not. The seven type rows, each with a count in brackets and a dimmed drop-down, read: Normal (8229), Use quote marks; Quotation from another source (597), Use quote marks; Self quote (114), Use quote marks; Continued quotation (5564), Never use quote marks; Potential (2076), Quote marks are optional; Indirect (538), Quote marks are optional; Hypothetical (511), Never use quote marks. The help pane at the bottom begins: Only a project administrator can enable this tab." src="../ss-03-quotation-types-tab.png" /></p>
+<p><img alt="The Quotation types tab of the Quotation Rules dialog for the TAMBA project. The Enable the Quotation types check in Run basic checks checkbox is not ticked. Use recommended settings is selected and Custom settings is not. The seven type rows, each with a count in brackets and a dimmed drop-down, read: Normal (2007), Use quote marks; Quotation from another source (253), Use quote marks; Self quote (0), Use quote marks; Continued quotation (251), Never use quote marks; Potential (245), Quote marks are optional; Indirect (406), Quote marks are optional; Hypothetical (66), Never use quote marks. The help pane at the bottom begins: Only a project administrator can enable this tab." src="../ss-03-quotation-types-tab.png" /></p>
 <h3 id="enabling-the-check-administrator-only">Enabling the check (administrator only)<a class="headerlink" href="#enabling-the-check-administrator-only" title="Permanent link">&para;</a></h3>
 <p>At the top of the tab is the checkbox <strong>Enable the Quotation types check in Run basic
 checks</strong>. Only a project administrator can check this box — the yellow help pane at the bottom
@@ -1112,9 +1113,9 @@ individually.</p>
 <p><strong>NOTE</strong> The values Paratext pre-fills under "Use recommended settings" are set by Paratext —
 verify what appears in your version before relying on the table above as the exact recommended
 defaults. (The table above reflects Paratext 9.5 defaults confirmed on a built <code>TAMBA</code> project.
-Don't assume Quotation from another source and Indirect default to "never": both lean toward
-marks expected or optional, which is why Tamba's Exercise 3.2 customization list below touches
-more rows than you might expect.)</p>
+Don't assume Quotation from another source and Indirect default to "never": the first defaults
+to marks expected and the second to optional. That is why Exercise 3.2 below changes Quotation
+from another source for Tamba and leaves Indirect as it is.)</p>
 <p><strong>TIP</strong> Complete the settings on both the Quote marks tab and the Quotation types tab before
 clicking <strong>OK</strong> — the OK button saves all changes from both tabs at once.</p>
 <p>If another project in your organization uses the same quotation type conventions, click <strong>Copy
@@ -1129,10 +1130,11 @@ speech categories.</p>
 <li>The Quotation types tab controls whether Paratext <em>expects</em> marks for each category of
   speech — separate from, and complementary to, the character configuration on the Quote marks
   tab.</li>
-<li>Use recommended settings as a starting point; switch to Custom settings only when the
-  defaults produce incorrect results.</li>
-<li>Configuring types correctly reduces triage work in Lesson 4 by eliminating whole categories
-  of expected exceptions before the check runs.</li>
+<li>Use recommended settings as a starting point; switch to Custom settings only where a
+  default doesn't match the language's conventions.</li>
+<li>Matching the types to the conventions removes the results that come from a setting that
+  doesn't fit. It doesn't promise an empty list: what remains is a list to review with the
+  translation team.</li>
 <li>Only a project administrator can enable the check and configure its settings; the settings
   stay dimmed until the check is enabled.</li>
 </ul>
@@ -1183,7 +1185,7 @@ tab.</p>
 </table>
 <p>Tamba's settings should match the recommended defaults above. Confirm this before moving on.</p>
 <h3 id="exercise-32-customize-quotation-types-for-tamba">Exercise 3.2 — Customize quotation types for Tamba<a class="headerlink" href="#exercise-32-customize-quotation-types-for-tamba" title="Permanent link">&para;</a></h3>
-<p>After reviewing Tamba's text with the translation team, you have determined the following four
+<p>After reviewing Tamba's text with the translation team, you have determined the following three
 things:</p>
 <ol>
 <li>Tamba does not mark narrator scripture citations with quote marks — these appear as plain
@@ -1194,34 +1196,53 @@ things:</p>
    First level quotes anyway — see the WARNING above.)</li>
 <li>When a speaker quotes their own earlier words (a self-quote), Tamba treats it the same as
    any other direct speech: it <strong>must</strong> be marked with quotation marks.</li>
-<li>Tamba never marks reported/indirect speech (e.g. "He told them that the harvest was near") —
-   no quote marks appear at all.</li>
 </ol>
-<p><strong>Step 1</strong> — Check the current recommended settings against items 1, 2, and 4. None of the three
-match Tamba's conventions:
+<p><strong>Step 1</strong> — Check the current recommended settings against items 1 and 2. Neither matches
+Tamba's conventions:
 - Quotation from another source = <strong>Use quote marks</strong> by default — Tamba doesn't mark narrator
-  citations, so this must change to <em>Quote marks are optional</em> (or the check will flag every
-  unmarked citation, including Luke 4:18, as a missing quote).
+  citations, so this must change to <em>Quote marks are optional</em> (or the check reports a missing
+  quote mark where a citation is unmarked).
 - Continued quotation = <strong>Never use quote marks</strong> by default — Tamba's First level continuer
   means a mark (<code>“</code>) is expected at the head of every continued paragraph; "Never use quote
-  marks" would flag that expected continuer as an error. This must change to <em>Use quote marks</em>.
-- Indirect = <strong>Quote marks are optional</strong> by default — that wouldn't flag a translator who
-  mistakenly adds marks to reported speech. Since Tamba's convention is that indirect speech is
-  <em>never</em> marked, set this to <em>Never use quote marks</em> so a stray mark there gets caught.</p>
-<p><strong>Step 2</strong> — Check the current recommended setting for <strong>Self quote</strong>. Unlike the other three,
-Self quote already defaults to <strong>Use quote marks</strong> — which is exactly what Tamba needs (item 3),
-so it needs no change. Now make the changes, with the dialog still open:</p>
+  marks" would flag that expected continuer as an error. This must change to <em>Use quote marks</em>.</p>
+<p><strong>Step 2</strong> — See what the recommended settings report before you change them.</p>
 <ul>
 <li>Tick <strong>Enable the Quotation types check in Run basic checks</strong> at the top of the tab. Do this
   first: until it is ticked, the radio buttons and drop-downs are dimmed and can't be changed.</li>
+<li>Leave <strong>Use recommended settings</strong> selected and click <strong>OK</strong>.</li>
+<li>Open <strong>☰ &gt; Tools &gt; Run basic checks...</strong> and choose all books. Now that the check is enabled,
+  a <strong>Quotation types</strong> box appears in this dialog (it wasn't there in Lessons 1 and 2). It is
+  a separate check from <strong>Quotations</strong>, and its results are reported only when that box is
+  ticked, so tick both <strong>Quotations</strong> and <strong>Quotation types</strong>. Run the check.</li>
+</ul>
+<p>The check reports <strong>25 results</strong>, of two kinds:</p>
+<ul>
+<li>"Quote mark found where it possibly should not occur [Continued quotation]: “" — at Matthew
+  5:3, 5:13, 11:21 and 13:18, for example.</li>
+<li>"Quote mark missing where it possibly should occur [Quotation from another source]" — at
+  Matthew 9:36, for example.</li>
+</ul>
+<p>Compare them with Step 1: the type named in square brackets is one of the two whose recommended
+setting doesn't match Tamba's conventions. All 25 come from the Quotation types check; the
+Quotations check has nothing to report on <code>TAMBA</code> once the Quote marks tab is set as in Lesson
+2. If your count is different, compare your Quote marks tab with Exercise 2.1 before going on.</p>
+<p><strong>Step 3</strong> — Check the recommended setting for <strong>Self quote</strong> against item 3. Open the
+Quotation types tab again. Self quote already reads <strong>Use quote marks</strong>, which is what item 3
+asks for, so it needs no change. Now read the count in brackets beside it, which Content
+explained above: with the check enabled, <code>TAMBA</code> shows <strong>Self quote (0)</strong>. Paratext finds no
+self-quotes in Tamba's books, so this setting has nothing to act on in this project, whatever
+it is set to. The habit still matters: check every default against the convention, leave it
+when it already fits, and use the counts to see how much text each setting can touch.</p>
+<p><strong>Step 4</strong> — Make the two changes, with the dialog still open:</p>
+<ul>
 <li>Click <strong>Custom settings</strong> at the top of the tab. This switches all drop-downs to editable mode.</li>
 <li>Change <strong>Quotation from another source</strong> from <em>Use quote marks</em> to <strong>Quote marks are
   optional</strong>.</li>
 <li>Change <strong>Continued quotation</strong> from <em>Never use quote marks</em> to <strong>Use quote marks</strong>.</li>
-<li>Change <strong>Indirect</strong> from <em>Quote marks are optional</em> to <strong>Never use quote marks</strong>.</li>
-<li>Leave <strong>Self quote</strong> at <em>Use quote marks</em> — it was already correct.</li>
+<li>Leave <strong>Self quote</strong> at <em>Use quote marks</em> and <strong>Indirect</strong> at <em>Quote marks are optional</em>.</li>
+<li>Click <strong>OK</strong>.</li>
 </ul>
-<p>The correct final settings for Tamba:</p>
+<p>The final settings for Tamba:</p>
 <table>
 <thead>
 <tr>
@@ -1236,7 +1257,7 @@ so it needs no change. Now make the changes, with the dialog still open:</p>
 <td>Normal</td>
 <td>Use quote marks</td>
 <td>No</td>
-<td>Tamba marks all direct speech</td>
+<td>Tamba's convention is to mark all direct speech</td>
 </tr>
 <tr>
 <td>Quotation from another source</td>
@@ -1248,7 +1269,7 @@ so it needs no change. Now make the changes, with the dialog still open:</p>
 <td>Self quote</td>
 <td>Use quote marks</td>
 <td>No — already the default</td>
-<td>Tamba treats self-quotes the same as Normal speech</td>
+<td>Tamba treats self-quotes the same as Normal speech (the count for <code>TAMBA</code> is 0, so nothing is affected)</td>
 </tr>
 <tr>
 <td>Continued quotation</td>
@@ -1264,45 +1285,87 @@ so it needs no change. Now make the changes, with the dialog still open:</p>
 </tr>
 <tr>
 <td>Indirect</td>
-<td><strong>Never use quote marks</strong></td>
-<td>Yes — default is Quote marks are optional</td>
-<td>Reported speech is not marked</td>
+<td>Quote marks are optional</td>
+<td>No</td>
+<td>Tamba's text marks some reported speech and not others, so neither Use nor Never fits; that is what Optional is for</td>
 </tr>
 <tr>
 <td>Hypothetical</td>
 <td>Never use quote marks</td>
 <td>No</td>
-<td>Hypothetical speech is not marked</td>
+<td>Tamba's convention is not to mark hypothetical speech</td>
 </tr>
 </tbody>
 </table>
 <p><strong>Before you re-run:</strong> confirm that <strong>Enable the Quotation types check in Run basic checks</strong>,
 which you ticked at the start of Step 2, is still ticked — while it is unticked, these settings
-don't affect the results. With it ticked, a <strong>Quotation types</strong> box appears in the Run basic
-checks dialog (it wasn't there in Lessons 1 and 2). It is a separate check from <strong>Quotations</strong>,
-and its results are reported only when that box is ticked, so tick both <strong>Quotations</strong> and
-<strong>Quotation types</strong> when you run the check.</p>
+don't affect the results. The <strong>Quotation types</strong> box in the Run basic checks dialog is a
+separate check from <strong>Quotations</strong>, and its results are reported only when that box is ticked,
+so tick both <strong>Quotations</strong> and <strong>Quotation types</strong> again when you run the check.</p>
 <p><strong>Check your work:</strong>
-- Save and re-run the check. Phase A's self-quotes are already correctly marked, so leaving
-  Self quote at its default produces no <em>new</em> flags on <code>TAMBA</code>. (If a self-quote were missing
-  its marks, this setting is what would catch it — that's exactly the behavior Exercise 4.1
-  exercises in Lesson 4.)
-- Confirm that Luke 4:18 (narrator Isaiah citation) is not flagged, now that Quotation from
-  another source = Optional means no marks are required there.
-- Check a verse with indirect speech and confirm it is not flagged, now that Indirect = Never
-  use quote marks matches Tamba's convention of leaving reported speech unmarked. Then confirm
-  that a <em>stray</em> mark deliberately added to an indirect-speech verse (try it on a scratch copy)
-  <em>is</em> flagged — that's the difference Optional wouldn't have caught.
-- Confirm that Matthew 5:4–7:27 (every paragraph reopening with the First level continuer <code>“</code>
-  as the sermon runs on) is <em>not</em> flagged, now that Continued quotation = Use quote marks
-  recognizes the continuer as expected rather than treating it as a stray mark.</p>
-<p><strong>✏️ Produce this (a mentor will review it).</strong> Write one sentence per type explaining <em>why</em>
-Tamba diverges from (or keeps) the recommended default — three diverge (Quotation from another
-source, Continued quotation, Indirect), one keeps the default (Self quote). With them, submit a
-screenshot of the <strong>Quotation types</strong> tab for <code>TAMBA</code>, showing the Enable the Quotation types
-check box and all seven types. Your mentor can't see your settings any other way, because your
-project stays on your computer. A mentor will compare your final settings to Tamba's
-conventions.</p>
+- Close the results panel and run the check again on all books from <strong>☰ &gt; Tools &gt; Run basic
+  checks...</strong>, with both boxes ticked. It now reports <strong>12 results</strong>, where the recommended
+  settings gave 25.
+- Confirm that the two kinds of result from Step 2 are gone: nothing reads "Quote mark found
+  where it possibly should not occur [Continued quotation]", and nothing reads "Quote mark
+  missing where it possibly should occur [Quotation from another source]". In Matthew 5, for
+  example, 5:3 and 5:13 are no longer listed.
+- Confirm that the 12 results left are of these four kinds:</p>
+<table>
+<thead>
+<tr>
+<th>Message</th>
+<th>Results</th>
+<th>Where</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>"Quote mark missing where it possibly should occur [Normal]"</td>
+<td>7</td>
+<td>LUK 4:18-19, LUK 6:40, LUK 13:5, LUK 24:29, JHN 7:24, JHN 13:32, ACT 16:35</td>
+</tr>
+<tr>
+<td>"Quote mark found where it possibly should not occur [Hypothetical]: “"</td>
+<td>3</td>
+<td>ROM 3:8, ROM 9:19, ROM 11:19</td>
+</tr>
+<tr>
+<td>"Quote mark missing where it possibly should occur [Continued quotation]"</td>
+<td>1</td>
+<td>ROM 16:22</td>
+</tr>
+<tr>
+<td>"Quote mark found in a verse where it is not used in other texts: “"</td>
+<td>1</td>
+<td>LUK 1:41</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>If your list is different, compare your Quotation types tab with the final settings table,
+  check that both boxes were ticked, and compare your Quote marks tab with Exercise 2.1.</li>
+</ul>
+<p><strong>What to do with the 12.</strong> Read the wording: most of these messages say "possibly". Each
+result marks a verse where what Paratext expects for that kind of speech differs from what the
+text has. It doesn't say which of the two is right, and you can't judge that in a language you
+don't read. So you don't edit the text to clear them. Group the results by message type and
+take the list to the translation team, with a question for each group; what happens next
+depends on their answers. In this course, list them for your mentor. A clean run is not the
+goal of this check. A reviewed list is.</p>
+<p><strong>✏️ Produce this (a mentor will review it).</strong> Submit three things:</p>
+<ul>
+<li>One sentence per type explaining <em>why</em> Tamba diverges from the recommended default or keeps
+  it — two diverge (Quotation from another source, Continued quotation), and two you checked
+  and kept (Self quote, Indirect).</li>
+<li>Your list of the 12 remaining results, grouped by message type, with the question you would
+  ask the translation team about each group.</li>
+<li>A screenshot of the <strong>Quotation types</strong> tab for <code>TAMBA</code>, showing the Enable the Quotation
+  types check box and all seven types. Your mentor can't see your settings any other way,
+  because your project stays on your computer.</li>
+</ul>
+<p>A mentor will compare your final settings to Tamba's conventions, and look at how you have
+grouped the results and framed your questions.</p>
 <h2 id="change">Change<a class="headerlink" href="#change" title="Permanent link">&para;</a></h2>
 <p><strong>Self-assessment — can you explain it to a colleague?</strong></p>
 <ol>
@@ -1316,7 +1379,8 @@ conventions.</p>
    correct action?</li>
 </ol>
 <p><em>You should be able to say:</em> (1) Indirect speech — set it to <strong>Never use quote marks</strong>: the
-check reports an error if marks appear unexpectedly and stays quiet when they are absent. (2)
+check reports an error if marks appear unexpectedly and stays quiet when they are absent.
+(Tamba is not that language: in Exercise 3.2 you left Indirect at <em>Quote marks are optional</em>.) (2)
 Yes, it conflicts — "Never use quote marks" expects no marks at the start of a continued
 paragraph, so a repeated opening mark would be flagged; change Continued quotation to <strong>Use
 quote marks</strong>, as you did for Tamba in Exercise 3.2, so the continuer is expected at every
@@ -1329,7 +1393,9 @@ from Paratext's recommended default.</p>
 <p><strong>Next step.</strong> You have now given the check both of its inputs — characters (Lesson 2) and
 expectations (this lesson). In <a href="../04-interpreting-and-clearing-the-check/">Lesson 4</a> you put a
 configured project to work: reading real results, telling real errors from configuration
-problems, and clearing the check to zero.</p>
+problems, and working the Quotations check down to zero actionable errors. Lesson 4 runs the
+Quotations check on its own, so the Quotation types results you listed here are not part of
+it.</p>
 <hr />
 <p>Previous: <a href="../02-setting-up-quote-marks/">Lesson 2 — Setting Up Quote Marks</a> · Next: <a href="../04-interpreting-and-clearing-the-check/">Lesson 4 — Interpreting and Clearing the Check</a></p>
 

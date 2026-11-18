@@ -40,9 +40,9 @@ itself is automated: the markdown here is the source, and Moodle is a render of 
    then pushes. The course is created **hidden**; make it visible in Moodle when you are
    ready for learners.
 
-   The publish is idempotent — every page and quiz is addressed by an identifier derived
-   from its source file's number — so re-running it after a correction updates the course
-   rather than creating a second one. Fixing a typo is: edit the markdown, merge,
+   Publishing again is safe. Each page and quiz gets an ID made from its file's number,
+   so a second publish finds the same page or quiz and updates it instead of making a new
+   one. Fixing a typo is: edit the markdown, merge,
    re-publish. A lesson you rename, renumber or remove is **retired** on the next publish:
    hidden and moved to a hidden "Retired" section at the end of the course, never
    deleted, so a learner's past attempt stays readable. The publish lists each one. Once learners are enrolled, don't republish in the middle of a cohort:

@@ -75,7 +75,7 @@ assumed knowledge the learner doesn't have.
      open offline, a quiz that wouldn't submit?
 9. Record the feedback as a comment on the tracker issue.
 10. The Author makes fixes; the fixes are merged. Re-run `/publish-to-moodle <slug>` to put
-    them in front of the learner — the publish is idempotent, so it updates the course
+    them in front of the learner. Publishing again is safe: it updates the same course
     rather than creating a second one, and leaves it shown. **Don't republish while a
     learner is part-way through the quiz:** a republish rebuilds the quiz, and an attempt
     they answered offline and haven't synced yet may not survive it. Agree a moment with

@@ -13,6 +13,11 @@ assumed knowledge the learner doesn't have.
 
 ## How
 
+The pilot has four steps, each with its own box on the tracker issue: **7a** publish
+and enrol, **7b** record feedback, **7c** revise, **7d** confirm.
+
+### Publish and enrol (7a)
+
 1. **Recruit one learner** at roughly the target audience's level — ideally a consultant
    or trainee who hasn't seen the material.
 2. **Publish the course to Moodle:**
@@ -63,9 +68,14 @@ assumed knowledge the learner doesn't have.
    same material, but gives no working quiz and no app. Use it only if Moodle is not
    available yet; it will be retired once a pilot has run cleanly on Moodle.
 
+   ✅ Tick **7a** on the tracker issue.
+
 7. Have them work through the lessons, scenario bank, and quiz as a learner would —
    including on a phone, if that is how their colleagues will take it.
-8. **Capture their experience.** Ask:
+
+### Feedback (7b)
+
+8. **Capture their experience.** Talk it through with them, or send them the questions:
    - Where did you get stuck or confused?
    - Did anything feel too fast, too slow, or too long?
    - Did the scenarios feel realistic?
@@ -73,22 +83,58 @@ assumed knowledge the learner doesn't have.
    - What would have helped you most?
    - Did anything fail to work on your device — images not loading, a page that wouldn't
      open offline, a quiz that wouldn't submit?
-9. Record the feedback as a comment on the tracker issue.
-10. The Author makes fixes; the fixes are merged. Re-run `/publish-to-moodle <slug>` to put
-    them in front of the learner. Publishing again is safe: it updates the same course
-    rather than creating a second one, and leaves it shown. **Don't republish while a
-    learner is part-way through the quiz:** a republish rebuilds the quiz, and an attempt
-    they answered offline and haven't synced yet may not survive it. Agree a moment with
-    the learners first.
-11. The Pilot Coordinator confirms the issues are addressed. A trial student who should not
-    keep the course can be removed on the Pilot learners page; stage 8 suspends the rest.
+9. **Open a Pilot feedback issue** (New issue → **Pilot feedback**), one per learner. Its
+   form asks the same questions. Put their answers in, then turn them into **findings**:
+   one checkbox per change the course needs, naming the file it is in. Link the course's
+   tracker issue in the form.
+
+   The repo is public: record what the learner *found*, never who they are.
+
+   ✅ Tick **7b** on the tracker issue.
+
+### Revisions (7c)
+
+10. **The Author fixes the findings.** The course branch was merged at stage 6, so start
+    a fresh one: run `/work-on <slug>` in Claude Code. It recreates `course/<slug>` from
+    the latest `main`. Make the fixes, run the authoring agents again where a lesson or
+    quiz needs reworking, and open a PR whose description says
+    `Pilot fixes for #<feedback issue>`. `/next-step` reports the course as **7c** while
+    that PR is open.
+
+    Fixes go through the same gates as the rest of the course. A wording or pacing fix
+    can be merged by the Pilot Coordinator. A fix that changes a **fact** goes past the
+    SME first (stage 5), and one that changes an **objective or the quiz's coverage**
+    goes past the Internal Reviewer (stage 6).
+
+11. Once the PR is merged, **tick each finding it fixed** on the Pilot feedback issue. A
+    finding you decide not to act on gets ticked too, with a one-line reason; it should
+    never just be left open.
+12. Re-run `/publish-to-moodle <slug>` to put the fixes in front of the learner.
+    Publishing again is safe: it updates the same course rather than creating a second
+    one, and leaves it shown. **Don't republish while a learner is part-way through the
+    quiz:** a republish rebuilds the quiz, and an attempt they answered offline and
+    haven't synced yet may not survive it. Agree a moment with the learners first.
+
+    If the fixes were large, ask the learner to look again at what changed, and add
+    anything new to the same issue as further findings.
+
+    ✅ Tick **7c** on the tracker issue once every finding is ticked and the fixes are
+    republished.
+
+### Confirm (7d)
+
+13. The Pilot Coordinator checks the republished course against the Pilot feedback issue
+    and closes it. A trial student who should not keep the course can be removed on the
+    Pilot learners page; stage 8 suspends the rest.
 
 ## Exit criteria
 
-- Pilot feedback is recorded on the tracker issue and resulting fixes are merged.
+- Every pilot learner has a Pilot feedback issue, every finding on it is ticked (fixed
+  or declined with a reason), and the issue is closed.
+- The fixes are merged to `main` and republished.
 - The Pilot Coordinator has confirmed the course is ready to publish.
 
 ## Then
 
-- ✅ Tick **"7. Piloted with one learner"** on the tracker issue.
+- ✅ Tick **7d** on the tracker issue.
 - Go to [Stage 8 — Record & publish](08-publish.md).

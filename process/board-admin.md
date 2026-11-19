@@ -89,6 +89,9 @@ Grant it under the board's **⋯ → Settings → Manage access**. Without it, t
 
 - `course-production` — applied by the [course-production issue template](../.github/ISSUE_TEMPLATE/course-production.yml).
 - `backfill` — for [backfill](backfill.md) PRs.
+- `pilot-feedback` — applied by the [pilot-feedback issue template](../.github/ISSUE_TEMPLATE/pilot-feedback.yml);
+  `/next-step` finds a course's pilot findings by it. **Not yet created** — run
+  `gh label create pilot-feedback --repo dhigby/virtual-ltct --color d876e3 --description "Stage-7 pilot findings for one course"`.
 
 (For a from-scratch rebuild:
 `gh label create course-production --repo dhigby/virtual-ltct --color 0e8a16 --description "Course production tracker"`

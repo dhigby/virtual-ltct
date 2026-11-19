@@ -5,10 +5,11 @@ This is the ONE implementation of stage detection. `/next-step`, `/work-on`, the
 session hooks and the status line all read it, so every contributor gets the same
 answer for the same course. See process/PROCESS.md for the pipeline itself.
 
-Repo evidence is the source of truth for stages 1-3 and 8 (files either exist or
-they don't). Stages 4-7 leave no trace in the repo, so they are inferred from PR
-state where available and otherwise reported as indeterminate -- the tracker issue
-is authoritative for those.
+Repo evidence is the source of truth for stages 1-3, 7 and 8 (files either exist or
+they don't; lessons on main mean the stage-6 merge happened, so the course is at the
+pilot). Stages 4-6 leave no trace in the repo, so they are inferred from PR state
+where available and otherwise reported as indeterminate (`4-5`) -- the tracker issue
+is authoritative for those, and for the pilot's sub-steps 7a-7d.
 
 Usage:
   python scripts/course_stage.py --slug <slug>        # one course, human-readable
@@ -151,6 +152,38 @@ def open_pr_for(branch):
         if pr.get("mergedAt"):
             return pr
     return None
+
+
+_MAIN_FILES = None
+
+
+def main_course_files():
+    """Paths under modules/ on main, read once. origin/main first, local main as fallback.
+
+    Returns an empty set if neither ref can be read, which makes package_on_main() say
+    False -- the old, indeterminate 4-7 answer, never a wrong confident one.
+    """
+    global _MAIN_FILES
+    if _MAIN_FILES is None:
+        _MAIN_FILES = set()
+        for ref in ("origin/main", "main"):
+            out = git("ls-tree", "-r", "--name-only", ref, "--", "modules/")
+            if out is not None:
+                _MAIN_FILES = set(out.splitlines())
+                break
+    return _MAIN_FILES
+
+
+def package_on_main(slug):
+    """True once a course's drafted lessons have been merged to main.
+
+    Only the stage-6 merge puts lessons on main: the stage-2 design PR carries the design
+    doc alone. So lessons on main mean internal review is over and the course is at the
+    pilot -- and a PR opened after that is a pilot revision, not a return to stage 6.
+    """
+    prefix = "modules/" + slug + "/"
+    return any(p.startswith(prefix) and "/" not in p[len(prefix):]
+               and is_lesson(p[len(prefix):]) for p in main_course_files())
 
 
 def course_folders():
@@ -343,21 +376,37 @@ def stage_for(folder, use_gh=True):
         return result(8, "8", "Online (published)", "process/stages/08-publish.md",
                       "Nothing -- this course is Online: " + where)
 
-    # --- Stages 4-7: no repo signal. PR state is the best available hint. ---
+    # --- Stage 7: the package is on main, so internal review is over ---
     pr = open_pr_for(branch_for(slug)) if use_gh else None
+    if package_on_main(slug):
+        done.append("4-6. Alignment, SME, internal review")
+        notes.append("Pilot progress (7a-7d) and its findings live on the tracker issue "
+                     "and its Pilot feedback issue.")
+        if pr and pr.get("state") == "OPEN":
+            notes.append("Open PR #" + str(pr["number"]) + ": " + pr["url"])
+            return result(7, "7c", "Pilot -- revisions", "process/stages/07-pilot.md",
+                          "Merge pilot-fix PR #" + str(pr["number"]) + ", re-run "
+                          "/publish-to-moodle " + slug + ", and tick each finding it fixes "
+                          "on the Pilot feedback issue.")
+        return result(7, "7", "Pilot", "process/stages/07-pilot.md",
+                      "Run the pilot per process/stages/07-pilot.md: publish to Moodle, "
+                      "enrol one learner, record their findings on a Pilot feedback issue, "
+                      "then fix each one on a fresh course branch (/work-on " + slug + ").")
+
+    # --- Stages 4-6: no repo signal. PR state is the best available hint. ---
     if pr and pr.get("state") == "OPEN":
         notes.append("Open PR #" + str(pr["number"]) + ": " + pr["url"])
         return result(6, "6", "Internal review", "process/stages/06-internal-review.md",
                       "An Internal Reviewer (not the Author) reviews PR #"
                       + str(pr["number"]) + " and merges it.")
 
-    notes.append("The full package is present. Stages 4-7 (alignment, SME fact-check, "
-                 "internal review, pilot) leave no repo trace -- confirm on the tracker "
-                 "issue.")
-    return result(4, "4-7", "Alignment / SME / internal review / pilot",
+    notes.append("The full package is present. Stages 4-5 (alignment, SME fact-check) "
+                 "leave no repo trace -- confirm on the tracker issue.")
+    return result(4, "4-5", "Alignment / SME fact-check",
                   "process/stages/04-alignment.md",
                   "Start with the alignment-reviewer agent (stage 4) if it hasn't run; "
-                  "otherwise check the tracker issue for which of stages 4-7 is open.")
+                  "otherwise the SME fact-check (stage 5) is next -- confirm on the "
+                  "tracker issue, then open the PR for internal review.")
 
 
 def print_one(info):

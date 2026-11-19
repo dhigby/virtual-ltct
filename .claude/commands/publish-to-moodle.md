@@ -30,10 +30,10 @@ Publishing belongs at **stage 7** (pilot) or **stage 8** (publish). If the cours
 earlier than that, say so and stop: the stages are gates, and a course that has not been
 fact-checked or reviewed should not be in front of a learner.
 
-Stages 4-7 leave no trace in the repo, so the script reports a course in any of them as
-**`4-7`**, with stage number 4. Don't treat that 4 as "too early". When the stage label is
-`4-7`, ask the user whether the course's tracker issue is at **Pilot** (its stage 6 box
-ticked and its PR merged). Go on only on a yes. If not, or if the PR is still open, stop.
+The script reports stage **7** once the course's lessons are on `main`, which only the
+stage-6 merge puts there. **`4-5`** and **6** are too early: stop. Stage **7c** means a
+pilot-fix PR is open. Publish only after it merges, so the learner gets the fix and not
+the branch.
 
 ## 3. Check the connection
 
@@ -121,6 +121,11 @@ At **stage 7**, the next steps are the author's, in this order
 4. Show the course with the button on the same page, then send the learner the Moodle
    course URL — never the `/review/<slug>/` URL, which contains the answer key and the
    mentor guide's scoring notes.
+5. Tick **7a** on the tracker issue. When the learner has been through the course, open a
+   **Pilot feedback** issue for their findings (07-pilot.md step 8).
+
+On a **republish** after pilot fixes, remind the user to tick each fixed finding on the
+Pilot feedback issue, and to tell the learner what changed.
 
 At **stage 8**, remind the user to record the published course URL in the module's
 `README.md` frontmatter under `external_links: moodle:`. That key is what

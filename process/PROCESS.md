@@ -44,7 +44,7 @@ Every content course moves through eight stages. Each has a one-page how-to unde
 | 4 | [Alignment check](stages/04-alignment.md) | Author | `alignment-reviewer` agent | Drafting |
 | 5 | [SME fact-check](stages/05-sme-factcheck.md) | SME | Verify tools/facts/field detail | SME Check |
 | 6 | [Internal review](stages/06-internal-review.md) | Internal Reviewer | Review PR + merge | Internal Review |
-| 7 | [Pilot](stages/07-pilot.md) | Pilot Coordinator | Run with one learner | Pilot |
+| 7 | [Pilot](stages/07-pilot.md) | Pilot Coordinator (+ Author for fixes) | Run with one learner, record feedback, revise | Pilot |
 | 8 | [Record & publish](stages/08-publish.md) | Publisher | Record the video(s), `/publish-to-moodle` | Publishing → Online |
 
 The stages are gates, not suggestions: don't start drafting before the design is
@@ -100,7 +100,9 @@ Fill in your team's actual people here:
 
 Each course has exactly **one** tracking issue on the board — the "Course production
 tracker." Its checklist mirrors the eight stages (with the draft stage split into its
-five sub-steps). Checking a box records progress; the [`/next-step`](../.claude/commands/next-step.md)
+five sub-steps, and the pilot into its four: publish, feedback, revise, confirm). A
+pilot's findings get their own **Pilot feedback** issue, linked from the tracker, so each
+one can be ticked off as its fix merges. Checking a box records progress; the [`/next-step`](../.claude/commands/next-step.md)
 command treats the actual files in the repo as the source of truth and will flag any
 checkbox that disagrees with reality.
 

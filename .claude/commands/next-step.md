@@ -33,14 +33,16 @@ hand, and do not second-guess it. It reports the current stage, everything alrea
 the next action, the stage's how-to page, and the branch's state. Add `--json` if you need
 to read individual fields.
 
-Stages 1–3 and 8 are detected from repo evidence and are reliable. Stages 4–7 (alignment,
-SME fact-check, internal review, pilot) leave no trace in the repo: the script infers stage
-6 from an open PR and otherwise reports `4-7` as indeterminate. For those, the **tracker
-issue is authoritative** — go to step 3.
+Stages 1–3, 7 and 8 are detected from repo evidence and are reliable: a course whose
+lessons are on `main` has been through the stage-6 merge, so it is at the pilot (`7`, or
+`7c` while a pilot-fix PR is open). Stages 4–6 (alignment, SME fact-check, internal review)
+leave no trace in the repo: the script infers stage 6 from an open PR and otherwise reports
+`4-5` as indeterminate. For those, and for which pilot sub-step (7a–7d) a course is on, the
+**tracker issue is authoritative** — go to step 3.
 
 ## 3. Cross-check the tracker and board (best-effort)
 
-Only needed when the script reports stage `4-7`, or when you want to flag drift. If `gh` is
+Only needed when the script reports stage `4-5` or `7`, or when you want to flag drift. If `gh` is
 unauthenticated or errors, say "board state unavailable (gh not authenticated) — using repo
 evidence only" and carry on. Never let a `gh` failure block the answer.
 
@@ -51,7 +53,16 @@ gh project item-list 1 --owner dhigby --format json                 # Module Sta
 ```
 
 If the issue search finds nothing, fall back to `scripts/_issues.json` for the slug → issue
-URL mapping. Look for the stage-5 `SME fact-check: pass` comment and the box 4–7 ticks.
+URL mapping. Look for the stage-5 `SME fact-check: pass` comment and the box 4–7d ticks.
+At stage 7, also find the course's **Pilot feedback** issue and count its unticked
+findings — that is the revision work still open:
+
+```bash
+gh issue list --repo dhigby/virtual-ltct --label pilot-feedback --search "<slug> in:body" --state all --json number,title,state,body
+```
+
+Report it as "N of M pilot findings fixed". 7c is done only when every finding is ticked,
+whether it was fixed or deliberately declined.
 
 ## 4. Output
 

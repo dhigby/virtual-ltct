@@ -9,6 +9,10 @@ together.
 To retrofit one of the 28 seeded issues: open the issue in the GitHub UI, click **Edit**,
 and paste the block below **beneath** the existing body (don't overwrite it).
 
+A tracker that already has the single **"7. Piloted with one learner"** box: replace that
+one line with the four 7a–7d lines below. Leave it ticked as-is only if the course was
+already published.
+
 ```markdown
 ### Production checklist
 
@@ -24,6 +28,9 @@ Run `/next-step <slug>` in Claude Code any time to see where this course is and 
 - [ ] [4. Alignment check passed](https://github.com/dhigby/virtual-ltct/blob/main/process/stages/04-alignment.md)
 - [ ] [5. SME fact-check passed](https://github.com/dhigby/virtual-ltct/blob/main/process/stages/05-sme-factcheck.md)
 - [ ] [6. Internal review passed](https://github.com/dhigby/virtual-ltct/blob/main/process/stages/06-internal-review.md)
-- [ ] [7. Piloted with one learner](https://github.com/dhigby/virtual-ltct/blob/main/process/stages/07-pilot.md)
+- [ ] [7a. Pilot published, learner enrolled](https://github.com/dhigby/virtual-ltct/blob/main/process/stages/07-pilot.md)
+- [ ] [7b. Pilot feedback recorded (Pilot feedback issue)](https://github.com/dhigby/virtual-ltct/blob/main/process/stages/07-pilot.md)
+- [ ] [7c. Revisions merged and republished](https://github.com/dhigby/virtual-ltct/blob/main/process/stages/07-pilot.md)
+- [ ] [7d. Pilot Coordinator confirms ready to publish](https://github.com/dhigby/virtual-ltct/blob/main/process/stages/07-pilot.md)
 - [ ] [8. Recorded & published](https://github.com/dhigby/virtual-ltct/blob/main/process/stages/08-publish.md)
 ```

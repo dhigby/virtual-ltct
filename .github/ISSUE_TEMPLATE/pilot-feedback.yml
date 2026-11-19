@@ -1,0 +1,76 @@
+name: Pilot feedback
+description: Record what a stage-7 pilot learner found, and track each finding to a fix
+title: "[Pilot feedback] <course slug>"
+labels: ["pilot-feedback"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        One issue per pilot learner, opened by the **Pilot Coordinator** once the learner has
+        worked through the course. How-to: [process/stages/07-pilot.md](https://github.com/dhigby/virtual-ltct/blob/main/process/stages/07-pilot.md).
+
+        **This repo is public.** Record what the learner *found*, not who they are: no
+        name, email, organisation or project. Their account and results stay in Moodle.
+  - type: input
+    id: slug
+    attributes:
+      label: Course folder slug
+      description: The folder under modules/. `/next-step` finds this issue by it.
+      placeholder: e.g. paratext-quotation-rules
+    validations:
+      required: true
+  - type: input
+    id: tracker
+    attributes:
+      label: Course production tracker
+      description: The tracker issue for this course, so the two are linked.
+      placeholder: "#123"
+    validations:
+      required: true
+  - type: dropdown
+    id: how
+    attributes:
+      label: How the learner took the course
+      multiple: true
+      options:
+        - Moodle, web browser
+        - Moodle, Android app
+        - Moodle app, offline for part of it
+        - /learn/ fallback page
+  - type: textarea
+    id: stuck
+    attributes:
+      label: Where did they get stuck or confused?
+  - type: textarea
+    id: pace
+    attributes:
+      label: Did anything feel too fast, too slow, or too long?
+  - type: textarea
+    id: scenarios
+    attributes:
+      label: Did the scenarios feel realistic?
+  - type: textarea
+    id: quiz
+    attributes:
+      label: Did the quiz test what the lessons taught?
+  - type: textarea
+    id: helped
+    attributes:
+      label: What would have helped them most?
+  - type: textarea
+    id: device
+    attributes:
+      label: Did anything fail to work on their device?
+      description: Images not loading, a page that wouldn't open offline, a quiz that wouldn't submit.
+  - type: textarea
+    id: findings
+    attributes:
+      label: Findings to act on
+      description: |
+        One checkbox per change the course needs, naming the file it is in. Tick a box when
+        its fix is merged, or when you decide not to make it (say why). Stage 7c is done
+        when every box is ticked.
+      value: |
+        - [ ] `NN-file.md`: what to change
+    validations:
+      required: true

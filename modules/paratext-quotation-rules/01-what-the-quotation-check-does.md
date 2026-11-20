@@ -12,6 +12,10 @@ that first conversation.
 > This lesson uses the **Tamba New Testament** (`TAMBA`) practice project. See the
 > [course README](README.md#the-practice-projects) for the Tamba quotation conventions and
 > [Prerequisites](README.md#prerequisites) for setup.
+>
+> **NOTE:** If `TAMBA` isn't in your **Paratext > Send/Receive projects...** list, your mentor
+> hasn't added you to it yet. Contact your mentor before going on; don't skip ahead or use
+> another project.
 
 **Watch the video:** _To be recorded at stage 8._
 

@@ -6,6 +6,10 @@
 > **Scenario C (Waku) is an optional stretch** for learners who complete A and B
 > confidently. Do them in any order. Each uses its own practice project — see the
 > [mentor guide](06-mentor-guide.md) for how the facilitator distributes them.
+>
+> **NOTE:** If `VELNA`, `MENDA` or `Waku` isn't in your **Paratext > Send/Receive projects...**
+> list, your mentor hasn't added you to it yet. Contact your mentor before starting that
+> scenario, and don't do it in another project.
 
 **Learning objectives:** By the end of this scenario bank you will be able to apply the complete inventory + rules + check + triage workflow independently to an unfamiliar language scenario, including edge cases not covered in Lessons 1–4.
 

@@ -76,6 +76,11 @@ projects...**, tick the project and click **Send/Receive**.
 | Lesson 4 | `TAMBAB`: the Phase B copy of Tamba, configured and seeded with errors |
 | Scenario bank | `VELNA`, `MENDA` and `Waku` |
 
+If you can't use Send/Receive (for example, you have no reliable internet connection), ask your
+mentor for a backup file of the project instead, and restore it on your own computer with
+**Paratext menu > Advanced > Restore project from file...**. Your mentor gives you each
+project's backup only when you reach the lesson that uses it, as in the table above.
+
 ---
 
 ## The Practice Projects

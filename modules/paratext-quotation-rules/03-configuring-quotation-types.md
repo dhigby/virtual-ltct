@@ -177,19 +177,21 @@ Tamba's settings should match the recommended defaults above. Confirm this befor
 
 ### Exercise 3.2 — Customize quotation types for Tamba
 
-After reviewing Tamba's text with the translation team, you have determined the following three
+After reviewing Tamba's text with the translation team, you have determined the following five
 things:
 
-1. Tamba does not mark narrator scripture citations with quote marks — these appear as plain
+1. Tamba marks all direct speech with quotation marks.
+2. Tamba does not mark narrator scripture citations with quote marks — these appear as plain
    narrative text.
-2. Tamba's First level uses a Quote Continuer at new paragraph: a long First level speech
+3. Tamba's First level uses a Quote Continuer at new paragraph: a long First level speech
    repeats the opening mark `“` at the head of each continued paragraph rather than closing and
    reopening. (Second and Third level have no continuer. The Quotation types check only checks
    First level quotes anyway — see the WARNING above.)
-3. When a speaker quotes their own earlier words (a self-quote), Tamba treats it the same as
+4. When a speaker quotes their own earlier words (a self-quote), Tamba treats it the same as
    any other direct speech: it **must** be marked with quotation marks.
+5. Tamba does not mark hypothetical speech with quotation marks.
 
-**Step 1** — Check the current recommended settings against items 1 and 2. Neither matches
+**Step 1** — Check the current recommended settings against items 2 and 3. Neither matches
 Tamba's conventions:
 - Quotation from another source = **Use quote marks** by default — Tamba doesn't mark narrator
   citations, so this must change to *Quote marks are optional* (or the check reports a missing
@@ -220,8 +222,8 @@ setting doesn't match Tamba's conventions. All 25 come from the Quotation types 
 Quotations check has nothing to report on `TAMBA` once the Quote marks tab is set as in Lesson
 2. If your count is different, compare your Quote marks tab with Exercise 2.1 before going on.
 
-**Step 3** — Check the recommended setting for **Self quote** against item 3. Open the
-Quotation types tab again. Self quote already reads **Use quote marks**, which is what item 3
+**Step 3** — Check the recommended setting for **Self quote** against item 4. Open the
+Quotation types tab again. Self quote already reads **Use quote marks**, which is what item 4
 asks for, so it needs no change. Now read the count in brackets beside it, which Content
 explained above: with the check enabled, `TAMBA` shows **Self quote (0)**. Paratext finds no
 self-quotes in Tamba's books, so this setting has nothing to act on in this project, whatever

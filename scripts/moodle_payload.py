@@ -102,6 +102,19 @@ IDNUMBER_MAX = 100   # VARCHAR(100) in course, course_modules and question
 CERTIFICATE_KEY = "certificate"   # ltct:<slug>:certificate, the certificate activity (spec 013)
 SRC_RE = re.compile(r"""(?P<attr>\b(?:src|href)\s*=\s*)(?P<q>["'])(?P<url>[^"']*)(?P=q)""")
 
+# A Vimeo link that starts part-way in: vimeo.com/<id>[/<unlisted hash>]#t=<time>.
+# Moodle's media_vimeo player rebuilds the embed from the video id alone and drops the
+# #t= (public/media/player/vimeo/classes/plugin.php, MOODLE_502_STABLE), so such a video
+# always played from 0:00. The publisher writes the player itself instead: an <iframe> the
+# media filter never touches, which survives because the publisher holds
+# moodle/site:trustcontent (moodle/site/settings/content-embeds.yaml). The link stays as
+# visible text, marked nomediaplugin so the filter does not add a second, 0:00 player.
+VIMEO_START_RE = re.compile(
+    r'<a href="https?://(?:www\.)?vimeo\.com/(?P<id>\d+)(?:/(?P<hash>[0-9a-f]+))?/?'
+    r'#t=(?P<t>\d+|(?=\d)(?:\d+h)?(?:\d+m)?(?:\d+s)?)">(?P<text>.*?)</a>',
+    re.S)
+TAG_RE = re.compile(r"<[^>]+>")
+
 # Every page is wrapped in this, so moodle/local_ltuse/styles.css can style published
 # content without reaching any other page on the Moodle site.
 PAGE_CLASS = "local-ltuse-page"
@@ -171,6 +184,25 @@ def recognition_for(folder, url_slug):
 def wrap(html):
     """Scope a page body so the plugin stylesheet can reach it and nothing else."""
     return '<div class="%s">\n%s\n</div>\n' % (PAGE_CLASS, html.rstrip())
+
+
+def vimeo_start_embeds(html):
+    """Give every Vimeo link with a #t= start time a player that keeps the start time.
+
+    Vimeo documents #t=<time> on the player URL ("About Player Parameters"); its unlisted
+    hash goes on as ?h=, as media_vimeo does. A link without #t= is left to the media
+    filter, as before.
+    """
+    def sub(m):
+        src = "https://player.vimeo.com/video/%s%s#t=%s" % (
+            m.group("id"), "?h=" + m.group("hash") if m.group("hash") else "", m.group("t"))
+        title = TAG_RE.sub("", m.group("text")).replace('"', "&quot;").strip()
+        link = m.group(0).replace("<a ", '<a class="nomediaplugin" ', 1)
+        return ('%s<br>\n<iframe src="%s" title="%s" '
+                'style="width:100%%;max-width:640px;aspect-ratio:16/9;border:0" '
+                'allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe>'
+                % (link, src, title))
+    return VIMEO_START_RE.sub(sub, html)
 
 
 def split_frontmatter(text):
@@ -585,6 +617,7 @@ class Payload:
                 used_assets.setdefault(src.name, src)
         html = self.rewrite(html, page_assets, module_ids)
         html = self._deaden(html, excluded_names)
+        html = vimeo_start_embeds(html)
 
         return {
             "kind": "page",

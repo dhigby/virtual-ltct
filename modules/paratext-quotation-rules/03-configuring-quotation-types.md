@@ -158,10 +158,9 @@ translation team. Each exercise produces settings a mentor can check against Tam
 
 ### Exercise 3.1 — Read Tamba's current quotation types
 
-Open the `TAMBA` project and navigate to ☰ > Project settings > Quotation Rules > Quotation types
-tab.
-
-**✏️** Before changing anything, record the current setting for each type:
+1. Open the `TAMBA` project.
+2. Go to ☰ > Project settings > Quotation Rules, and click the **Quotation types** tab.
+3. **✏️** Before changing anything, record the current setting for each type in this table:
 
 | Type | Current setting |
 | --- | --- |
@@ -191,24 +190,30 @@ things:
    any other direct speech: it **must** be marked with quotation marks.
 5. Tamba does not mark hypothetical speech with quotation marks.
 
-**Step 1** — Check the current recommended settings against items 2 and 3. Neither matches
-Tamba's conventions:
-- Quotation from another source = **Use quote marks** by default — Tamba doesn't mark narrator
-  citations, so this must change to *Quote marks are optional* (or the check reports a missing
-  quote mark where a citation is unmarked).
-- Continued quotation = **Never use quote marks** by default — Tamba's First level continuer
-  means a mark (`“`) is expected at the head of every continued paragraph; "Never use quote
-  marks" would flag that expected continuer as an error. This must change to *Use quote marks*.
+**Step 1** — Compare two of the recommended settings with items 2 and 3 above. Neither one fits
+Tamba:
+
+| Setting | Recommended setting (now) | Tamba needs | Why |
+| --- | --- | --- | --- |
+| Quotation from another source | Use quote marks | **Quote marks are optional** | Tamba doesn't put quote marks around Scripture the narrator cites (item 2). With *Use quote marks*, the check reports a missing quote mark for each of these citations. |
+| Continued quotation | Never use quote marks | **Use quote marks** | Tamba repeats `“` at the start of each continued paragraph (item 3). With *Never use quote marks*, the check reports each of those marks as an error. |
+
+Don't change anything yet. You make these two changes in Step 4.
 
 **Step 2** — See what the recommended settings report before you change them.
 
-- Tick **Enable the Quotation types check in Run basic checks** at the top of the tab. Do this
-  first: until it is ticked, the radio buttons and drop-downs are dimmed and can't be changed.
-- Leave **Use recommended settings** selected and click **OK**.
-- Open **☰ > Tools > Run basic checks...** and choose all books. Now that the check is enabled,
-  a **Quotation types** box appears in this dialog (it wasn't there in Lessons 1 and 2). It is
-  a separate check from **Quotations**, and its results are reported only when that box is
-  ticked, so tick both **Quotations** and **Quotation types**. Run the check.
+1. Tick **Enable the Quotation types check in Run basic checks** at the top of the tab. Do this
+   first: until it is ticked, the radio buttons and drop-downs are dimmed and can't be changed.
+2. Leave **Use recommended settings** selected.
+3. Click **OK**.
+4. Open **☰ > Tools > Run basic checks...**.
+5. Choose all books.
+6. Tick both **Quotations** and **Quotation types**.
+    - Now that the check is enabled, a **Quotation types** box appears in this dialog. It
+      wasn't there in Lessons 1 and 2.
+    - It is a separate check from **Quotations**, and its results are reported only when that
+      box is ticked.
+7. Run the check.
 
 The check reports **25 results**, of two kinds:
 
@@ -222,22 +227,27 @@ setting doesn't match Tamba's conventions. All 25 come from the Quotation types 
 Quotations check has nothing to report on `TAMBA` once the Quote marks tab is set as in Lesson
 2. If your count is different, compare your Quote marks tab with Exercise 2.1 before going on.
 
-**Step 3** — Check the recommended setting for **Self quote** against item 4. Open the
-Quotation types tab again. Self quote already reads **Use quote marks**, which is what item 4
-asks for, so it needs no change. Now read the count in brackets beside it, which Content
-explained above: with the check enabled, `TAMBA` shows **Self quote (0)**. Paratext finds no
-self-quotes in Tamba's books, so this setting has nothing to act on in this project, whatever
-it is set to. The habit still matters: check every default against the convention, leave it
-when it already fits, and use the counts to see how much text each setting can touch.
+**Step 3** — Check the recommended setting for **Self quote** against item 4.
+
+1. Open the Quotation types tab again.
+2. Look at **Self quote**. It already reads **Use quote marks**, which is what item 4 asks for,
+   so it needs no change.
+3. Read the count in brackets beside it (the Content section above explains these counts).
+   With the check enabled, `TAMBA` shows **Self quote (0)**. Paratext finds no self-quotes in
+   Tamba's books, so this setting has nothing to act on in this project, whatever it is set to.
+
+The habit still matters: check every default against the convention, leave it when it already
+fits, and use the counts to see how much text each setting can touch.
 
 **Step 4** — Make the two changes, with the dialog still open:
 
-- Click **Custom settings** at the top of the tab. This switches all drop-downs to editable mode.
-- Change **Quotation from another source** from *Use quote marks* to **Quote marks are
-  optional**.
-- Change **Continued quotation** from *Never use quote marks* to **Use quote marks**.
-- Leave **Self quote** at *Use quote marks* and **Indirect** at *Quote marks are optional*.
-- Click **OK**.
+1. Click **Custom settings** at the top of the tab. This switches all drop-downs to editable
+   mode.
+2. Change **Quotation from another source** from *Use quote marks* to **Quote marks are
+   optional**.
+3. Change **Continued quotation** from *Never use quote marks* to **Use quote marks**.
+4. Leave **Self quote** at *Use quote marks* and **Indirect** at *Quote marks are optional*.
+5. Click **OK**.
 
 The final settings for Tamba:
 
@@ -251,31 +261,42 @@ The final settings for Tamba:
 | Indirect | Quote marks are optional | No | Tamba's text marks some reported speech and not others, so neither Use nor Never fits; that is what Optional is for |
 | Hypothetical | Never use quote marks | No | Tamba's convention is not to mark hypothetical speech |
 
-**Before you re-run:** confirm that **Enable the Quotation types check in Run basic checks**,
-which you ticked at the start of Step 2, is still ticked — while it is unticked, these settings
-don't affect the results. The **Quotation types** box in the Run basic checks dialog is a
-separate check from **Quotations**, and its results are reported only when that box is ticked,
-so tick both **Quotations** and **Quotation types** again when you run the check.
+**Step 5** — Run the check again.
+
+1. Confirm that **Enable the Quotation types check in Run basic checks**, which you ticked at
+   the start of Step 2, is still ticked. While it is unticked, these settings don't affect the
+   results.
+2. Close the results panel.
+3. Open **☰ > Tools > Run basic checks...**.
+4. Choose all books.
+5. Tick both **Quotations** and **Quotation types** again. The **Quotation types** box is a
+   separate check from **Quotations**, and its results are reported only when that box is
+   ticked.
+6. Run the check.
 
 **Check your work:**
-- Close the results panel and run the check again on all books from **☰ > Tools > Run basic
-  checks...**, with both boxes ticked. It now reports **12 results**, where the recommended
-  settings gave 25.
-- Confirm that the two kinds of result from Step 2 are gone: nothing reads "Quote mark found
-  where it possibly should not occur [Continued quotation]", and nothing reads "Quote mark
-  missing where it possibly should occur [Quotation from another source]". In Matthew 5, for
-  example, 5:3 and 5:13 are no longer listed.
-- Confirm that the 12 results left are of these four kinds:
 
-  | Message | Results | Where |
-  | --- | --- | --- |
-  | "Quote mark missing where it possibly should occur [Normal]" | 7 | LUK 4:18-19, LUK 6:40, LUK 13:5, LUK 24:29, JHN 7:24, JHN 13:32, ACT 16:35 |
-  | "Quote mark found where it possibly should not occur [Hypothetical]: “" | 3 | ROM 3:8, ROM 9:19, ROM 11:19 |
-  | "Quote mark missing where it possibly should occur [Continued quotation]" | 1 | ROM 16:22 |
-  | "Quote mark found in a verse where it is not used in other texts: “" | 1 | LUK 1:41 |
+1. The check now reports **12 results**, where the recommended settings gave 25.
+2. Confirm that the two kinds of result from Step 2 are gone:
+    - nothing reads "Quote mark found where it possibly should not occur [Continued
+      quotation]"
+    - nothing reads "Quote mark missing where it possibly should occur [Quotation from another
+      source]"
 
-- If your list is different, compare your Quotation types tab with the final settings table,
-  check that both boxes were ticked, and compare your Quote marks tab with Exercise 2.1.
+    In Matthew 5, for example, 5:3 and 5:13 are no longer listed.
+3. Confirm that the 12 results left are of these four kinds:
+
+    | Message | Results | Where |
+    | --- | --- | --- |
+    | "Quote mark missing where it possibly should occur [Normal]" | 7 | LUK 4:18-19, LUK 6:40, LUK 13:5, LUK 24:29, JHN 7:24, JHN 13:32, ACT 16:35 |
+    | "Quote mark found where it possibly should not occur [Hypothetical]: “" | 3 | ROM 3:8, ROM 9:19, ROM 11:19 |
+    | "Quote mark missing where it possibly should occur [Continued quotation]" | 1 | ROM 16:22 |
+    | "Quote mark found in a verse where it is not used in other texts: “" | 1 | LUK 1:41 |
+
+4. If your list is different:
+    1. Compare your Quotation types tab with the final settings table.
+    2. Check that both boxes were ticked.
+    3. Compare your Quote marks tab with Exercise 2.1.
 
 **What to do with the 12.** Read the wording: most of these messages say "possibly". Each
 result marks a verse where what Paratext expects for that kind of speech differs from what the

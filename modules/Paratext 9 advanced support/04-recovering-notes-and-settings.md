@@ -6,7 +6,7 @@
 using TortoiseHG — going beyond what Paratext's own project history
 view can show you — when a plain text rollback won't bring these back.
 
-**Watch the video:** [Paratext 9 Advanced Support, part 2 (Lessons 4–5)](https://vimeo.com/1222710442)
+**Watch the video:** [Paratext 9 Advanced Support, Lesson 4](https://vimeo.com/1250102972)
 
 ## Learning objectives
 

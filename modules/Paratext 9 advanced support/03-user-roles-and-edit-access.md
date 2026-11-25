@@ -9,7 +9,7 @@ of an immediate Send/Receive — and, when corrupted files have *already* been s
 administrator's recovery from project history without landing the team on an out-of-date
 version.
 
-**Watch the video:** [Paratext 9 Advanced Support, Lesson 3](https://vimeo.com/1250102911)
+**Watch the video:** (about 3 minutes) [Paratext 9 Advanced Support, Lesson 3](https://vimeo.com/1250102911)
 
 ## Learning objectives
 

@@ -182,7 +182,7 @@ The first tab of the Quotation Rules dialog (☰ > Project settings > Quotation 
 The Paratext dialog (under the project menu **☰ > Project settings > Quotation Rules**) where both the Quote marks tab and the Quotation types tab are configured.
 
 **Quotation types check**
-A Paratext check (separate from the basic Quotation check) that verifies whether quotation marks appear or are absent according to the semantic type of speech in each verse. Configured on the Quotation types tab. Must be enabled by a project administrator; once enabled, it has its own **Quotation types** box in Run basic checks, which must be ticked for its results to be reported.
+A Paratext check (separate from the basic Quotation check) that verifies whether quotation marks appear or are absent according to the semantic type of speech in each verse. Configured on the Quotation types tab. Must be enabled by a project administrator; once enabled, it has its own **Quotation types** box in Run basic checks, which must be ticked for its results to be reported. Any team member can then run it, but only an administrator can change its settings.
 
 **Quotation types tab**
 The second tab of the Quotation Rules dialog. Lists seven semantic speech categories (Normal, Quotation from another source, Self quote, Continued quotation, Potential, Indirect, Hypothetical). For each type you choose Use quote marks, Never use quote marks, or Quote marks are optional.

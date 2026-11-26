@@ -1185,10 +1185,14 @@ scenario, and don't do it in another project.</p>
 </tr>
 </tbody>
 </table>
-<p><strong>What changes from the defaults:</strong> all three First level cells (<code>“ “ ”</code> → <code>« « »</code>); the Second
-level continuer, which must be cleared from <code>‘</code> to <em>none</em>; and all three Third level cells,
-which must be cleared from <code>“ “ ”</code> to <em>none</em>, because Velna has no Third level. The Second level
-Opening <code>‘</code> and Closing <code>’</code> already match.</p>
+<p><strong>What changes from the defaults:</strong></p>
+<ul>
+<li>All three First level cells: <code>“ “ ”</code> → <code>« « »</code>.</li>
+<li>The Second level continuer: clear it from <code>‘</code> to <em>none</em>.</li>
+<li>All three Third level cells: clear them from <code>“ “ ”</code> to <em>none</em>, because Velna has no Third
+  level.</li>
+</ul>
+<p>The Second level Opening <code>‘</code> and Closing <code>’</code> already match.</p>
 <p>Continuation: <code>«</code> at First level only. The verified configuration also replaces the default
 <strong>Continuer required at</strong> list (<code>p p/q1 b/q1</code>) with <code>p b/q1 pi</code> — the paragraph-marker
 contexts where the check must insist on the continuer. Copy it exactly; without the right list
@@ -1285,10 +1289,13 @@ Indirect, Hypothetical — stays at its recommended default.</p>
 </tr>
 </tbody>
 </table>
-<p><strong>What changes from the defaults:</strong> every cell. The six Opening and Closing cells change from
-the default curly quotes to guillemets, and all three continuer cells, which default to <code>“</code>,
-<code>‘</code> and <code>“</code>, must be cleared to <em>none</em>. The <strong>Continuer required at</strong> list changes too: clear it
-from <code>p p/q1 b/q1</code> to empty. None of Menda's marks are in the defaults, which is why
+<p><strong>What changes from the defaults:</strong> every cell, and the list.</p>
+<ul>
+<li>The six Opening and Closing cells: from the default curly quotes to guillemets.</li>
+<li>All three continuer cells: clear them from <code>“</code>, <code>‘</code> and <code>“</code> to <em>none</em>.</li>
+<li><strong>Continuer required at</strong>: clear it from <code>p p/q1 b/q1</code> to empty.</li>
+</ul>
+<p>None of Menda's marks are in the defaults, which is why
 the check at the defaults recognized no quote marks at all and reported "No errors found."</p>
 <p>Continuer required at: empty. Menda has no continuer at any level, so the list has nothing to
 require; set it to what the conventions say. Do it in this order: set all three continuers to
@@ -1419,10 +1426,13 @@ first, then the alternate.</p>
 drop-down list too, but you can choose only one item from the list, so it can place only one
 character in a cell. When a cell holds two marks separated by <code>|</code>, the second mark cannot be
 placed from the drop-down and has to be typed.</p>
-<p><strong>What changes from the defaults:</strong> fewer cells than in Scenarios A and B. At First level, the
-Opening keeps <code>“</code> but gains <code>—</code> as an alternate (<code>“</code> → <code>“|—</code>). All three continuers are cleared
-to <em>none</em> (from <code>“</code>, <code>‘</code> and <code>“</code>), and the <strong>Continuer required at</strong> list is emptied. Everything
-else already matches: the First level Closing <code>”</code>, the Second level <code>‘ ’</code> and the Third level
+<p><strong>What changes from the defaults:</strong> fewer cells than in Scenarios A and B.</p>
+<ul>
+<li>First level Opening: keeps <code>“</code> and gains <code>—</code> as an alternate (<code>“</code> → <code>“|—</code>).</li>
+<li>All three continuers: clear them from <code>“</code>, <code>‘</code> and <code>“</code> to <em>none</em>.</li>
+<li><strong>Continuer required at</strong>: empty it.</li>
+</ul>
+<p>Everything else already matches: the First level Closing <code>”</code>, the Second level <code>‘ ’</code> and the Third level
 <code>“ ”</code>. The one mark the defaults lack is the em dash, and that is enough for the 202 results.
 Matching cells are not a reason to skip them: check every cell against the conventions table
 rather than assume it is right.</p>

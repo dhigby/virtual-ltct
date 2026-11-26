@@ -6,6 +6,10 @@
 > **Scenario C (Waku) is an optional stretch** for learners who complete A and B
 > confidently. Do them in any order. Each uses its own practice project — see the
 > [mentor guide](06-mentor-guide.md) for how the facilitator distributes them.
+>
+> **NOTE:** If `VELNA`, `MENDA` or `Waku` isn't in your **Paratext > Send/Receive projects...**
+> list, your mentor hasn't added you to it yet. Contact your mentor before starting that
+> scenario, and don't do it in another project.
 
 **Learning objectives:** By the end of this scenario bank you will be able to apply the complete inventory + rules + check + triage workflow independently to an unfamiliar language scenario, including edge cases not covered in Lessons 1–4.
 
@@ -61,10 +65,14 @@ No Third level. First level opening mark `«` also appears at the start of conti
 | Second level | `‘` | *none* | `’` |
 | Third level | *none* | *none* | *none* |
 
-**What changes from the defaults:** all three First level cells (`“ “ ”` → `« « »`); the Second
-level continuer, which must be cleared from `‘` to *none*; and all three Third level cells,
-which must be cleared from `“ “ ”` to *none*, because Velna has no Third level. The Second level
-Opening `‘` and Closing `’` already match.
+**What changes from the defaults:**
+
+- All three First level cells: `“ “ ”` → `« « »`.
+- The Second level continuer: clear it from `‘` to *none*.
+- All three Third level cells: clear them from `“ “ ”` to *none*, because Velna has no Third
+  level.
+
+The Second level Opening `‘` and Closing `’` already match.
 
 Continuation: `«` at First level only. The verified configuration also replaces the default
 **Continuer required at** list (`p p/q1 b/q1`) with `p b/q1 pi` — the paragraph-marker
@@ -123,10 +131,13 @@ At Third level Menda returns to **double guillemets** — `«` opens and `»` cl
 | Second level | `›` | *none* | `‹` |
 | Third level | `«` | *none* | `»` |
 
-**What changes from the defaults:** every cell. The six Opening and Closing cells change from
-the default curly quotes to guillemets, and all three continuer cells, which default to `“`,
-`‘` and `“`, must be cleared to *none*. The **Continuer required at** list changes too: clear it
-from `p p/q1 b/q1` to empty. None of Menda's marks are in the defaults, which is why
+**What changes from the defaults:** every cell, and the list.
+
+- The six Opening and Closing cells: from the default curly quotes to guillemets.
+- All three continuer cells: clear them from `“`, `‘` and `“` to *none*.
+- **Continuer required at**: clear it from `p p/q1 b/q1` to empty.
+
+None of Menda's marks are in the defaults, which is why
 the check at the defaults recognized no quote marks at all and reported "No errors found."
 
 Continuer required at: empty. Menda has no continuer at any level, so the list has nothing to
@@ -220,10 +231,13 @@ drop-down list too, but you can choose only one item from the list, so it can pl
 character in a cell. When a cell holds two marks separated by `|`, the second mark cannot be
 placed from the drop-down and has to be typed.
 
-**What changes from the defaults:** fewer cells than in Scenarios A and B. At First level, the
-Opening keeps `“` but gains `—` as an alternate (`“` → `“|—`). All three continuers are cleared
-to *none* (from `“`, `‘` and `“`), and the **Continuer required at** list is emptied. Everything
-else already matches: the First level Closing `”`, the Second level `‘ ’` and the Third level
+**What changes from the defaults:** fewer cells than in Scenarios A and B.
+
+- First level Opening: keeps `“` and gains `—` as an alternate (`“` → `“|—`).
+- All three continuers: clear them from `“`, `‘` and `“` to *none*.
+- **Continuer required at**: empty it.
+
+Everything else already matches: the First level Closing `”`, the Second level `‘ ’` and the Third level
 `“ ”`. The one mark the defaults lack is the em dash, and that is enough for the 202 results.
 Matching cells are not a reason to skip them: check every cell against the conventions table
 rather than assume it is right.

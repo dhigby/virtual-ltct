@@ -8,6 +8,9 @@
 > not in `TAMBA`, which keeps your own Lesson 2–3 settings. See the
 > [mentor guide](06-mentor-guide.md) for how the facilitator stages Phase B.
 >
+> **NOTE:** If `TAMBAB` isn't in your Send/Receive list, your mentor hasn't added you to it
+> yet. Contact your mentor before going on; don't skip ahead or use another project.
+>
 > **WARNING:** Receive `TAMBAB` once. After that, never Send/Receive it: your fixes would go to
 > every other learner. Save your work instead; the check runs on your own copy. If Paratext
 > offers to Send/Receive (for example, after a permission change), cancel it.

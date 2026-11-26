@@ -67,6 +67,10 @@ and the seven drop-downs below it are dimmed and can't be changed — you can re
 but clicking **Custom settings** does nothing. You are an administrator of every practice
 project in this course, so you tick it yourself in Exercise 3.2.
 
+After an administrator has ticked the box and chosen the settings, other team members, such as
+translators, see this tab greyed out and can't change it. They can still tick **Quotation
+types** in Run basic checks and run the check.
+
 **WARNING** The Quotation types check only checks first-level quotes in non-Deuterocanonical
 books.
 
@@ -149,7 +153,7 @@ speech categories.
   doesn't fit. It doesn't promise an empty list: what remains is a list to review with the
   translation team.
 - Only a project administrator can enable the check and configure its settings; the settings
-  stay dimmed until the check is enabled.
+  stay dimmed until the check is enabled. Once it is enabled, any team member can run it.
 
 ## Challenge
 
@@ -177,36 +181,49 @@ Tamba's settings should match the recommended defaults above. Confirm this befor
 
 ### Exercise 3.2 — Customize quotation types for Tamba
 
-After reviewing Tamba's text with the translation team, you have determined the following three
+After reviewing Tamba's text with the translation team, you have determined the following five
 things:
 
-1. Tamba does not mark narrator scripture citations with quote marks — these appear as plain
+1. Tamba marks all direct speech with quotation marks.
+2. Tamba does not mark narrator scripture citations with quote marks — these appear as plain
    narrative text.
-2. Tamba's First level uses a Quote Continuer at new paragraph: a long First level speech
+3. Tamba's First level uses a Quote Continuer at new paragraph: a long First level speech
    repeats the opening mark `“` at the head of each continued paragraph rather than closing and
    reopening. (Second and Third level have no continuer. The Quotation types check only checks
    First level quotes anyway — see the WARNING above.)
-3. When a speaker quotes their own earlier words (a self-quote), Tamba treats it the same as
+4. When a speaker quotes their own earlier words (a self-quote), Tamba treats it the same as
    any other direct speech: it **must** be marked with quotation marks.
+5. Tamba does not mark hypothetical speech with quotation marks.
 
-**Step 1** — Check the current recommended settings against items 1 and 2. Neither matches
-Tamba's conventions:
-- Quotation from another source = **Use quote marks** by default — Tamba doesn't mark narrator
-  citations, so this must change to *Quote marks are optional* (or the check reports a missing
-  quote mark where a citation is unmarked).
-- Continued quotation = **Never use quote marks** by default — Tamba's First level continuer
-  means a mark (`“`) is expected at the head of every continued paragraph; "Never use quote
-  marks" would flag that expected continuer as an error. This must change to *Use quote marks*.
+**Step 1** — Check the current recommended settings against items 2 and 3. Neither matches
+Tamba's conventions, so both must change:
+
+- **Quotation from another source:** the default is Use quote marks; change it to **Quote marks
+  are optional**. Tamba doesn't mark narrator citations, so at the default the check reports a
+  missing quote mark wherever a citation is unmarked.
+- **Continued quotation:** the default is Never use quote marks; change it to **Use quote
+  marks**.
+  Tamba's First level continuer means a mark (`“`) is expected at the head of every continued
+  paragraph, and "Never use quote marks" would flag that expected continuer as an error.
+
+You make these changes in Step 4. First, see what the defaults report.
 
 **Step 2** — See what the recommended settings report before you change them.
 
-- Tick **Enable the Quotation types check in Run basic checks** at the top of the tab. Do this
-  first: until it is ticked, the radio buttons and drop-downs are dimmed and can't be changed.
-- Leave **Use recommended settings** selected and click **OK**.
-- Open **☰ > Tools > Run basic checks...** and choose all books. Now that the check is enabled,
-  a **Quotation types** box appears in this dialog (it wasn't there in Lessons 1 and 2). It is
-  a separate check from **Quotations**, and its results are reported only when that box is
-  ticked, so tick both **Quotations** and **Quotation types**. Run the check.
+Tick the Enable box first: until it is ticked, the radio buttons and drop-downs are dimmed and
+can't be changed. Once the check is enabled, a **Quotation types** box appears in the Run basic
+checks dialog (it wasn't there in Lessons 1 and 2). It is a separate check from **Quotations**,
+and its results are reported only when that box is ticked.
+
+1. At the top of the Quotation types tab, tick **Enable the Quotation types check in Run basic
+   checks**.
+2. Leave **Use recommended settings** selected.
+3. Click **OK**.
+4. Open **☰ > Tools > Run basic checks...**.
+5. Choose all books.
+6. Tick **Quotations**.
+7. Tick **Quotation types**.
+8. Run the check.
 
 The check reports **25 results**, of two kinds:
 
@@ -220,22 +237,24 @@ setting doesn't match Tamba's conventions. All 25 come from the Quotation types 
 Quotations check has nothing to report on `TAMBA` once the Quote marks tab is set as in Lesson
 2. If your count is different, compare your Quote marks tab with Exercise 2.1 before going on.
 
-**Step 3** — Check the recommended setting for **Self quote** against item 3. Open the
-Quotation types tab again. Self quote already reads **Use quote marks**, which is what item 3
+**Step 3** — Check the recommended setting for **Self quote** against item 4. Open the
+Quotation types tab again. Self quote already reads Use quote marks, which is what item 4
 asks for, so it needs no change. Now read the count in brackets beside it, which Content
 explained above: with the check enabled, `TAMBA` shows **Self quote (0)**. Paratext finds no
 self-quotes in Tamba's books, so this setting has nothing to act on in this project, whatever
 it is set to. The habit still matters: check every default against the convention, leave it
 when it already fits, and use the counts to see how much text each setting can touch.
 
-**Step 4** — Make the two changes, with the dialog still open:
+**Step 4** — Make the two changes from Step 1, with the dialog still open. **Custom settings**
+switches all the drop-downs to editable mode.
 
-- Click **Custom settings** at the top of the tab. This switches all drop-downs to editable mode.
-- Change **Quotation from another source** from *Use quote marks* to **Quote marks are
-  optional**.
-- Change **Continued quotation** from *Never use quote marks* to **Use quote marks**.
-- Leave **Self quote** at *Use quote marks* and **Indirect** at *Quote marks are optional*.
-- Click **OK**.
+1. At the top of the tab, click **Custom settings**.
+2. Set **Quotation from another source** to **Quote marks are optional** (it currently reads
+   Use quote marks).
+3. Set **Continued quotation** to **Use quote marks** (it currently reads Never use quote
+   marks).
+4. Leave **Self quote** at Use quote marks and **Indirect** at Quote marks are optional.
+5. Click **OK**.
 
 The final settings for Tamba:
 
@@ -249,11 +268,13 @@ The final settings for Tamba:
 | Indirect | Quote marks are optional | No | Tamba's text marks some reported speech and not others, so neither Use nor Never fits; that is what Optional is for |
 | Hypothetical | Never use quote marks | No | Tamba's convention is not to mark hypothetical speech |
 
-**Before you re-run:** confirm that **Enable the Quotation types check in Run basic checks**,
-which you ticked at the start of Step 2, is still ticked — while it is unticked, these settings
-don't affect the results. The **Quotation types** box in the Run basic checks dialog is a
-separate check from **Quotations**, and its results are reported only when that box is ticked,
-so tick both **Quotations** and **Quotation types** again when you run the check.
+**Before you re-run:** while the Enable box is unticked, these settings don't affect the
+results, and the Quotation types results are reported only when their own box is ticked in
+Run basic checks.
+
+1. Confirm that **Enable the Quotation types check in Run basic checks**, which you ticked at
+   the start of Step 2, is still ticked.
+2. When you run the check, tick both **Quotations** and **Quotation types** again.
 
 **Check your work:**
 - Close the results panel and run the check again on all books from **☰ > Tools > Run basic
@@ -312,7 +333,7 @@ grouped the results and framed your questions.
 
 *You should be able to say:* (1) Indirect speech — set it to **Never use quote marks**: the
 check reports an error if marks appear unexpectedly and stays quiet when they are absent.
-(Tamba is not that language: in Exercise 3.2 you left Indirect at *Quote marks are optional*.) (2)
+(Tamba is not that language: in Exercise 3.2 you left Indirect at Quote marks are optional.) (2)
 Yes, it conflicts — "Never use quote marks" expects no marks at the start of a continued
 paragraph, so a repeated opening mark would be flagged; change Continued quotation to **Use
 quote marks**, as you did for Tamba in Exercise 3.2, so the continuer is expected at every

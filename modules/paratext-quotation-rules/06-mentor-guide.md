@@ -262,7 +262,7 @@ Reverting doesn't remove users. That doesn't matter here, because the learner ke
 
 ![The Select which books to restore dialog. Buttons on the left read All Books, Old Testament, New Testament, Deuterocanon, Extra material and Deselect All; the list on the right shows Matthew, Luke, John, Acts and Romans.](assets/ss-06-project-history-revert-books-select-books.png)
 
-**When Send/Receive isn't an option.** If a learner has no reliable internet connection, give them the matching backup file to restore on their own computer instead (**Paratext menu > Advanced > Restore project from file...**). Ask Kevin for the specific file (see the backup table in Step 5). Don't hand out the `TAMBAB` backup until they reach Lesson 4.
+**When Send/Receive isn't an option.** If a learner has no reliable internet connection, give them the matching backup file to restore on their own computer instead (**Paratext menu > Advanced > Restore project from file...**). Ask Kevin for the specific file (see the backup table in Step 5). Give each project's backup only when the learner reaches the lesson that uses it, as in the README's Before…/Receive table: `TAMBA` before Lesson 1, `RUNDA` before Lesson 2, `TAMBAB` before Lesson 4, and `VELNA`, `MENDA` and `Waku` before the scenario bank. Never hand out the `TAMBAB` backup before Lesson 4 in particular: it holds the answers to Lessons 2 and 3.
 
 > **[Placeholder — Kevin/Jenni:** test restoring a backup on a computer where the learner is not a member of the project: does it open, and does Paratext then offer to Send/Receive it? Decide and verify this.**]**
 
